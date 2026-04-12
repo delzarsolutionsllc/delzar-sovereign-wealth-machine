@@ -1,0 +1,272 @@
+/* ============================================================
+   DELZAR SOLUTIONS — SOVEREIGN AUTHORITY DESIGN SYSTEM
+   Design Philosophy: Dark Editorial × Federal Gravitas
+   Colors: Deep Navy (#0A1628) × Gold (#C9A84C) × White
+   Typography: Playfair Display (display) + IBM Plex Sans (body)
+   ============================================================ */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Delzar Brand Tokens */
+  --delzar-navy: oklch(0.12 0.04 250);
+  --delzar-navy-light: oklch(0.18 0.04 250);
+  --delzar-gold: oklch(0.72 0.12 75);
+  --delzar-gold-light: oklch(0.82 0.10 75);
+  --delzar-gold-dim: oklch(0.72 0.12 75 / 0.15);
+}
+
+:root {
+  --radius: 0.5rem;
+  /* Dark theme as default — Sovereign Authority */
+  --background: oklch(0.12 0.04 250);
+  --foreground: oklch(0.96 0.005 65);
+  --card: oklch(0.16 0.04 250);
+  --card-foreground: oklch(0.96 0.005 65);
+  --popover: oklch(0.16 0.04 250);
+  --popover-foreground: oklch(0.96 0.005 65);
+  --primary: oklch(0.72 0.12 75);
+  --primary-foreground: oklch(0.12 0.04 250);
+  --secondary: oklch(0.20 0.04 250);
+  --secondary-foreground: oklch(0.85 0.005 65);
+  --muted: oklch(0.20 0.04 250);
+  --muted-foreground: oklch(0.60 0.01 65);
+  --accent: oklch(0.72 0.12 75 / 0.15);
+  --accent-foreground: oklch(0.72 0.12 75);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(1 0 0 / 0.08);
+  --input: oklch(1 0 0 / 0.10);
+  --ring: oklch(0.72 0.12 75);
+  --chart-1: oklch(0.72 0.12 75);
+  --chart-2: oklch(0.60 0.10 75);
+  --chart-3: oklch(0.50 0.08 75);
+  --chart-4: oklch(0.40 0.06 75);
+  --chart-5: oklch(0.30 0.04 75);
+  --sidebar: oklch(0.14 0.04 250);
+  --sidebar-foreground: oklch(0.96 0.005 65);
+  --sidebar-primary: oklch(0.72 0.12 75);
+  --sidebar-primary-foreground: oklch(0.12 0.04 250);
+  --sidebar-accent: oklch(0.20 0.04 250);
+  --sidebar-accent-foreground: oklch(0.96 0.005 65);
+  --sidebar-border: oklch(1 0 0 / 0.08);
+  --sidebar-ring: oklch(0.72 0.12 75);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+  h1, h2, h3 {
+    font-family: 'Playfair Display', serif;
+  }
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  [type="button"]:not(:disabled),
+  [type="submit"]:not(:disabled),
+  a[href],
+  select:not(:disabled) {
+    @apply cursor-pointer;
+  }
+}
+
+@layer components {
+  .container {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .flex {
+    min-height: 0;
+    min-width: 0;
+  }
+  @media (min-width: 640px) {
+    .container {
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+      max-width: 1280px;
+    }
+  }
+
+  /* Gold rule separator */
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, oklch(0.72 0.12 75), transparent);
+  }
+
+  /* Gold shimmer button */
+  .btn-gold {
+    background: linear-gradient(135deg, oklch(0.72 0.12 75), oklch(0.62 0.10 75));
+    color: oklch(0.12 0.04 250);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 0.75rem 2rem;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .btn-gold:hover {
+    background: linear-gradient(135deg, oklch(0.82 0.10 75), oklch(0.72 0.12 75));
+    transform: translateY(-1px);
+    box-shadow: 0 8px 32px oklch(0.72 0.12 75 / 0.3);
+  }
+
+  /* Ghost button */
+  .btn-ghost-gold {
+    background: transparent;
+    color: oklch(0.72 0.12 75);
+    border: 1px solid oklch(0.72 0.12 75 / 0.5);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 0.75rem 2rem;
+    transition: all 0.3s ease;
+  }
+  .btn-ghost-gold:hover {
+    background: oklch(0.72 0.12 75 / 0.1);
+    border-color: oklch(0.72 0.12 75);
+  }
+
+  /* Dark glassmorphism card */
+  .glass-card {
+    background: oklch(0.16 0.04 250 / 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid oklch(0.72 0.12 75 / 0.15);
+    transition: all 0.3s ease;
+  }
+  .glass-card:hover {
+    border-color: oklch(0.72 0.12 75 / 0.4);
+    box-shadow: 0 0 40px oklch(0.72 0.12 75 / 0.08);
+    transform: translateY(-2px);
+  }
+
+  /* Section label */
+  .section-label {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: oklch(0.72 0.12 75);
+  }
+
+  /* Stat number */
+  .stat-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: oklch(0.72 0.12 75);
+    line-height: 1;
+  }
+
+  /* Nav link */
+  .nav-link {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: oklch(0.75 0.005 65);
+    transition: color 0.2s ease;
+  }
+  .nav-link:hover {
+    color: oklch(0.72 0.12 75);
+  }
+}
+
+/* Scroll animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes goldPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.animate-gold-pulse {
+  animation: goldPulse 2s ease-in-out infinite;
+}
+
+/* Scroll reveal utility */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
