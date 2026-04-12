@@ -5,12 +5,15 @@
    ============================================================ */
 
 import { useEffect, useRef, useState } from "react";
+import { trpc } from "@/lib/trpc";
+import { Link } from "wouter";
 import { motion } from "framer-motion";
 import {
   Shield, Cpu, FileText, Users, TrendingUp, Globe,
-  ChevronRight, Mail, Phone, MapPin, Star, CheckCircle,
+  ChevronRight, Mail, MapPin, Star, CheckCircle,
   ArrowRight, Menu, X, ExternalLink
 } from "lucide-react";
+import Navbar from "@/components/Navbar";
 
 const HERO_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663524019622/WSYVqEy5pxMrF9UiLhg7gD/delzar-hero-bg-JsjZmxC7YThRrHed7v25nn.webp";
 const ABOUT_BG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663524019622/WSYVqEy5pxMrF9UiLhg7gD/delzar-about-bg-Kj6UqWMUbJLW4FiFfbrUAW.webp";
@@ -67,8 +70,9 @@ function useReveal() {
   return ref;
 }
 
-// ─── Navigation ─────────────────────────────────────────────
-function Navbar() {
+// ─── Navigation: Replaced by @/components/Navbar ────────────
+// (Navbar component is now in client/src/components/Navbar.tsx)
+function _NavbarLegacy_REMOVED() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -79,6 +83,11 @@ function Navbar() {
   }, []);
 
   const links = ["About", "Services", "Platform", "Intelligence", "Contact"];
+  const pageLinks = [
+    { label: "Opportunities", href: "/opportunities" },
+    { label: "Capability Statement", href: "/capability-generator" },
+    { label: "AI Co-Pilot", href: "/copilot" },
+  ];
 
   return (
     <nav
@@ -114,11 +123,16 @@ function Navbar() {
         </div>
 
         {/* Desktop Links */}
-        <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-8">
           {links.map((link) => (
             <a key={link} href={`#${link.toLowerCase()}`} className="nav-link">
               {link}
             </a>
+          ))}
+          {pageLinks.map((pl) => (
+            <Link key={pl.label} href={pl.href} className="nav-link" style={{ textDecoration: "none" }}>
+              {pl.label}
+            </Link>
           ))}
         </div>
 
@@ -899,10 +913,22 @@ function WhyUsSection() {
 function ContactSection() {
   const [form, setForm] = useState({ name: "", email: "", org: "", message: "" });
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState("");
+
+  const submitContact = trpc.contact.submit.useMutation({
+    onSuccess: () => setSubmitted(true),
+    onError: (err) => setError(err.message || "Submission failed. Please email dominique@delzarsolutionsllc.com directly."),
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError("");
+    submitContact.mutate({
+      name: form.name,
+      email: form.email,
+      organization: form.org || undefined,
+      message: form.message || undefined,
+    });
   };
 
   return (
@@ -1041,8 +1067,13 @@ function ContactSection() {
                   />
                 </div>
 
-                <button type="submit" className="btn-gold w-full flex items-center justify-center gap-2" style={{ borderRadius: "2px" }}>
-                  Request Intelligence Brief <ArrowRight size={14} />
+                {error && (
+                  <div style={{ fontFamily: "'IBM Plex Sans', sans-serif", fontSize: "0.8rem", color: "oklch(0.65 0.22 27)", padding: "0.75rem", background: "oklch(0.65 0.22 27 / 0.1)", borderRadius: "2px", border: "1px solid oklch(0.65 0.22 27 / 0.3)" }}>
+                    {error}
+                  </div>
+                )}
+                <button type="submit" disabled={submitContact.isPending} className="btn-gold w-full flex items-center justify-center gap-2" style={{ borderRadius: "2px", opacity: submitContact.isPending ? 0.7 : 1 }}>
+                  {submitContact.isPending ? "Submitting..." : <>Request Intelligence Brief <ArrowRight size={14} /></>}
                 </button>
               </form>
             )}

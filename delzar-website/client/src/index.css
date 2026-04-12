@@ -270,3 +270,127 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+/* ── Global overflow prevention ─────────────────────────────── */
+html, body {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+/* Prevent text from overflowing containers */
+* {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+/* ── Chat markdown styles ────────────────────────────────────── */
+.chat-markdown p {
+  margin-bottom: 0.5rem;
+}
+.chat-markdown p:last-child {
+  margin-bottom: 0;
+}
+.chat-markdown ul, .chat-markdown ol {
+  padding-left: 1.25rem;
+  margin-bottom: 0.5rem;
+}
+.chat-markdown li {
+  margin-bottom: 0.25rem;
+}
+.chat-markdown strong {
+  color: oklch(0.88 0.005 65);
+  font-weight: 700;
+}
+.chat-markdown code {
+  background: oklch(0.20 0.04 250);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.8em;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.chat-markdown h1, .chat-markdown h2, .chat-markdown h3 {
+  color: white;
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+  font-family: 'Playfair Display', serif;
+}
+.chat-markdown blockquote {
+  border-left: 2px solid oklch(0.72 0.12 75 / 0.5);
+  padding-left: 0.75rem;
+  color: oklch(0.65 0.005 65);
+  margin: 0.5rem 0;
+}
+
+/* ── Mobile responsive fixes ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .stat-number {
+    font-size: 2.5rem;
+  }
+  .btn-gold, .btn-ghost-gold {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.7rem;
+  }
+  /* Prevent hero text overflow on small screens */
+  h1 {
+    font-size: clamp(1.75rem, 8vw, 4.5rem) !important;
+  }
+}
+
+/* ── Focus ring accessibility ────────────────────────────────── */
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+  outline: 2px solid oklch(0.72 0.12 75);
+  outline-offset: 2px;
+}
+
+/* ── Image lazy loading fade ─────────────────────────────────── */
+img {
+  transition: opacity 0.3s ease;
+}
+img[loading="lazy"] {
+  opacity: 0;
+}
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* ── Skeleton loading animation ─────────────────────────────── */
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+.skeleton {
+  background: oklch(0.20 0.04 250);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+/* ── Scrollbar styling ───────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: oklch(0.10 0.04 250);
+}
+::-webkit-scrollbar-thumb {
+  background: oklch(0.25 0.04 250);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: oklch(0.72 0.12 75 / 0.5);
+}
+
+/* ── Print styles ────────────────────────────────────────────── */
+@media print {
+  .fixed, nav, footer {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
