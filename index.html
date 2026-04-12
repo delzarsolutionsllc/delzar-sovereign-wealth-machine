@@ -142,6 +142,90 @@ body{font-family:var(--sans);background:var(--dark);color:var(--text);min-height
 .sprint-item-text{font-size:.8rem;color:var(--text)}
 .sprint-item.done .sprint-item-text{text-decoration:line-through;color:var(--text-dim)}
 
+/* ===== FEDERAL INTEL FEED ===== */
+.intel-search-box{display:flex;gap:8px;margin-bottom:14px}
+.intel-search-box input{flex:1;background:var(--dark3);border:1px solid var(--dark4);border-radius:4px;padding:10px 14px;font-family:var(--mono);font-size:.8rem;color:var(--text);outline:none;transition:border-color .3s}
+.intel-search-box input:focus{border-color:var(--gold-dim)}
+.intel-search-box input::placeholder{color:#555}
+.intel-search-btn{background:linear-gradient(135deg,var(--gold-dim),var(--gold));color:#000;border:none;padding:10px 20px;border-radius:4px;font-family:var(--mono);font-size:.7rem;letter-spacing:1px;cursor:pointer;font-weight:700;transition:opacity .3s}
+.intel-search-btn:hover{opacity:.85}
+.intel-note{font-size:.6rem;color:var(--text-dim);text-align:right;margin-top:-8px;margin-bottom:10px;font-style:italic}
+.live-indicator{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.65rem;color:var(--green-bright);letter-spacing:2px;margin-left:12px}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--green-bright);animation:livePulse 1.5s ease-in-out infinite}
+@keyframes livePulse{0%,100%{opacity:1;box-shadow:0 0 4px var(--green-bright)}50%{opacity:.3;box-shadow:0 0 12px var(--green-bright)}}
+.contract-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.contract-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:14px;transition:border-color .3s,box-shadow .3s}
+.contract-card:hover{border-color:var(--gold-dim);box-shadow:0 0 15px rgba(212,175,55,.1)}
+.contract-agency{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);letter-spacing:1px;margin-bottom:4px}
+.contract-title{font-size:.85rem;font-weight:700;color:#fff;margin-bottom:8px}
+.contract-value{font-family:var(--mono);font-size:1rem;color:var(--gold);font-weight:700}
+.contract-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center}
+.setaside-badge{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:3px;background:rgba(0,170,0,.12);color:var(--green-bright);border:1px solid var(--green);letter-spacing:.5px;white-space:nowrap}
+.naics-badge{font-family:var(--mono);font-size:.55rem;padding:2px 8px;border-radius:3px;background:rgba(30,144,255,.1);color:var(--blue);border:1px solid rgba(30,144,255,.3);letter-spacing:.5px}
+.score-badge{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:3px;background:rgba(212,175,55,.15);color:var(--gold);border:1px solid var(--gold-dim);letter-spacing:1px;margin-left:auto}
+
+/* ===== FORGE PIPELINE ===== */
+.forge-scroll{display:flex;gap:12px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
+.forge-scroll::-webkit-scrollbar{height:4px}
+.forge-scroll::-webkit-scrollbar-track{background:var(--dark3);border-radius:2px}
+.forge-scroll::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
+.forge-card{min-width:220px;max-width:250px;background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:14px;flex-shrink:0;scroll-snap-align:start;transition:border-color .3s,box-shadow .3s}
+.forge-card:hover{border-color:var(--gold-dim);box-shadow:0 0 15px rgba(212,175,55,.1)}
+.forge-card.build-now{border-color:var(--red-bright);box-shadow:0 0 12px rgba(204,0,0,.15)}
+.forge-card-name{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:4px}
+.forge-card-desc{font-size:.7rem;color:var(--text-dim);margin-bottom:8px;font-style:italic}
+.forge-card-status{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:3px;letter-spacing:1px;display:inline-block;margin-bottom:6px}
+.forge-card-status.build-now-s{background:rgba(204,0,0,.15);color:var(--red-bright);border:1px solid var(--red-bright)}
+.forge-card-status.source-ready-s{background:rgba(30,144,255,.12);color:var(--blue);border:1px solid var(--blue)}
+.forge-card-status.planned-s{background:rgba(255,255,255,.05);color:#666;border:1px solid #444}
+.forge-card-detail{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);margin-top:4px}
+.forge-card-price{font-family:var(--mono);font-size:.8rem;color:var(--green-bright);margin-top:4px}
+.forge-mrr{text-align:center;margin-top:14px;font-family:var(--mono);padding:10px;background:var(--dark2);border:1px solid var(--gold-dim);border-radius:6px}
+.forge-mrr .big{font-size:1.3rem;color:var(--gold)}
+.forge-mrr .sub{font-size:.7rem;color:var(--text-dim);margin-top:2px}
+
+/* ===== DARK ECONOMY ===== */
+.dark-econ-container{display:flex;gap:24px;align-items:center;flex-wrap:wrap;justify-content:center}
+.dark-econ-rings{position:relative;width:340px;height:340px;flex-shrink:0}
+.ring{position:absolute;border-radius:50%;border:2px solid;display:flex;align-items:center;justify-content:center;text-align:center}
+.ring-outer{width:340px;height:340px;top:0;left:0;border-color:rgba(204,0,0,.4);background:rgba(204,0,0,.03);animation:ringPulse 4s ease-in-out infinite}
+.ring-middle{width:230px;height:230px;top:55px;left:55px;border-color:rgba(212,175,55,.4);background:rgba(212,175,55,.05)}
+.ring-inner{width:130px;height:130px;top:105px;left:105px;border-color:rgba(0,170,0,.4);background:rgba(0,170,0,.05)}
+@keyframes ringPulse{0%,100%{border-color:rgba(204,0,0,.3);box-shadow:0 0 15px rgba(204,0,0,.05)}50%{border-color:rgba(204,0,0,.6);box-shadow:0 0 30px rgba(204,0,0,.15)}}
+.ring-label{font-family:var(--mono);font-size:.55rem;color:var(--text-dim);letter-spacing:.5px;padding:8px;line-height:1.3;max-width:90%}
+.ring-label strong{display:block;color:#fff;font-size:.7rem;margin-bottom:2px}
+.ring-inner .ring-label strong{color:var(--green-bright)}
+.ring-middle .ring-label strong{color:var(--gold)}
+.ring-outer .ring-label strong{color:var(--red-bright)}
+.dark-econ-stat{flex:1;min-width:280px}
+.dark-econ-stat-box{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:16px;margin-bottom:12px}
+.dark-econ-stat-box p{font-size:.8rem;color:var(--text);line-height:1.5}
+.dark-econ-stat-box strong{color:var(--gold)}
+.dark-econ-powered{font-family:var(--mono);font-size:.6rem;color:var(--red-bright);letter-spacing:2px;text-align:center;margin-top:8px;opacity:.7}
+
+/* ===== SKILLS ARSENAL ===== */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.skill-card{background:var(--dark2);border:1px solid var(--gold-dim);border-radius:6px;padding:12px;transition:all .3s;display:flex;gap:10px;align-items:flex-start}
+.skill-card:hover{border-color:var(--gold);box-shadow:0 0 15px rgba(212,175,55,.15)}
+.skill-icon{font-size:1.3rem;flex-shrink:0;line-height:1}
+.skill-info{flex:1}
+.skill-name{font-size:.8rem;font-weight:700;color:#fff;margin-bottom:2px}
+.skill-desc{font-size:.65rem;color:var(--text-dim)}
+
+/* ===== COMMAND TERMINAL ===== */
+.terminal{background:#000;border:1px solid var(--dark3);border-radius:6px;padding:16px;font-family:var(--mono);overflow:hidden;position:relative;height:260px}
+.terminal-header{font-size:.6rem;color:var(--green-bright);letter-spacing:2px;margin-bottom:10px;opacity:.6}
+.terminal-scroll{display:flex;flex-direction:column;animation:termScroll 30s linear infinite}
+.terminal-line{font-size:.7rem;color:#00CC00;padding:3px 0;white-space:nowrap;opacity:.9}
+.terminal-line .ts{color:#006600}
+.terminal-line .cmd{color:#00AA00}
+.terminal-line .val{color:var(--gold)}
+.terminal-cursor{display:inline-block;width:8px;height:14px;background:#00CC00;animation:blink 1s step-end infinite;vertical-align:middle;margin-left:4px}
+@keyframes blink{50%{opacity:0}}
+@keyframes termScroll{0%{transform:translateY(0)}100%{transform:translateY(-50%)}}
+.terminal-fade-top{position:absolute;top:0;left:0;right:0;height:30px;background:linear-gradient(to bottom,#000,transparent);z-index:1;pointer-events:none}
+.terminal-fade-bottom{position:absolute;bottom:0;left:0;right:0;height:40px;background:linear-gradient(to top,#000,transparent);z-index:1;pointer-events:none}
+
 /* ===== FOOTER ===== */
 .footer{text-align:center;padding:24px 0 12px;border-top:1px solid var(--dark3);margin-top:20px}
 .footer p{font-size:.7rem;color:var(--text-dim);margin-bottom:4px;letter-spacing:1px}
@@ -158,10 +242,21 @@ body{font-family:var(--sans);background:var(--dark);color:var(--text);min-height
   .auto-item{flex-direction:column;align-items:flex-start;gap:6px}
   .auto-item .auto-name{min-width:unset}
   .chart{min-width:500px}
+  .contract-grid{grid-template-columns:1fr}
+  .skills-grid{grid-template-columns:1fr 1fr}
+  .dark-econ-rings{width:260px;height:260px}
+  .ring-outer{width:260px;height:260px}
+  .ring-middle{width:175px;height:175px;top:42px;left:42px}
+  .ring-inner{width:100px;height:100px;top:80px;left:80px}
 }
 @media(max-width:480px){
   .engine-grid{grid-template-columns:1fr}
   .chart{height:200px}
+  .skills-grid{grid-template-columns:1fr}
+  .dark-econ-rings{width:220px;height:220px}
+  .ring-outer{width:220px;height:220px}
+  .ring-middle{width:150px;height:150px;top:35px;left:35px}
+  .ring-inner{width:85px;height:85px;top:67px;left:67px}
 }
 </style>
 </head>
@@ -278,7 +373,175 @@ const SPRINT_DAYS=[
   {day:'DAYS 11-14',items:['Launch marketing site','Submit to MCP directories','Email EU AI startups','Set up analytics tracking']},
 ];
 
+const CONTRACTS=[
+  {agency:'IHS OKLAHOMA AREA',title:'Medical Equipment Supply',value:'$45K',setAside:'Buy Indian Set-Aside',naics:'339113',score:9},
+  {agency:'BIA EASTERN OK',title:'Facility Maintenance Services',value:'$28K',setAside:'Indian-Owned Preference',naics:'561210',score:8},
+  {agency:'CHEROKEE NATION',title:'Road Construction Materials',value:'$120K',setAside:'TERO Required',naics:'237310',score:10},
+  {agency:'TINKER AFB',title:'Hazmat Transportation Services',value:'$85K',setAside:'Small Business Set-Aside',naics:'484110',score:7},
+  {agency:'VA MUSKOGEE',title:'IT Infrastructure Support',value:'$67K',setAside:'8(a) Set-Aside',naics:'541512',score:8},
+];
+
+const FORGE_PRODUCTS=[
+  {name:'ComplianceGuard MCP',desc:'EU AI Act audit-logging',status:'BUILD NOW',statusCls:'build-now-s',price:'$19/mo',deadline:'Aug 2, 2026',tam:'Zero competition window',buildNow:true},
+  {name:'LeadFinder MCP',desc:'B2B lead generation',status:'SOURCE READY',statusCls:'source-ready-s',price:'$29/mo',tam:'Customer Data Platforms'},
+  {name:'DocGenius MCP',desc:'Universal document analysis',status:'PLANNED',statusCls:'planned-s',price:'$19/mo'},
+  {name:'TrendSpotter MCP',desc:'Cross-platform trend tracking',status:'PLANNED',statusCls:'planned-s',price:'$19/mo'},
+  {name:'RepoInsight MCP',desc:'Repository intelligence',status:'PLANNED',statusCls:'planned-s',price:'$19/mo'},
+  {name:'InvoiceBot MCP',desc:'Invoice processing automation',status:'PLANNED',statusCls:'planned-s',price:'$19/mo'},
+];
+
+const SKILLS=[
+  {icon:'\uD83C\uDFAF',name:'Bid-No-Bid Engine',desc:'10-criteria scoring matrix'},
+  {icon:'\uD83D\uDCC4',name:'Capability Statement Generator',desc:'Auto-generates per agency/NAICS'},
+  {icon:'\uD83D\uDCB0',name:'IIP Rebate Calculator',desc:'5% DoD rebate hook for primes'},
+  {icon:'\uD83D\uDD12',name:'CMMC Readiness Scanner',desc:'110-question NIST gap analysis'},
+  {icon:'\uD83C\uDFE0',name:'HUD/NAHASDA Intelligence',desc:'Tracks tribal housing grants before RFPs'},
+  {icon:'\uD83C\uDFED',name:'Digital Trail of Tears',desc:'7-phase multi-model intelligence sweep'},
+  {icon:'\uD83D\uDD2C',name:'Fractal Deep-Dive Engine',desc:'Exhaustive procurement analysis'},
+  {icon:'\uD83D\uDCA1',name:'Delzar Prompt Lab',desc:'8-mode prompt engineering tool'},
+  {icon:'\uD83D\uDCCA',name:'Predictive Spending Model',desc:'September surge forecasting'},
+  {icon:'\uD83E\uDD16',name:'FORGE Protocol',desc:'6-phase MCP product replication'},
+];
+
+const TERMINAL_LINES=[
+  {ts:'06:47',cmd:'HUNTER',text:'Scanning Tango API... 89 new opportunities found'},
+  {ts:'06:47',cmd:'HUNTER',text:'Scoring opportunities... 12 match Delzar criteria'},
+  {ts:'06:48',cmd:'HUNTER',text:'Top match: IHS Oklahoma \u2014 Medical Supply \u2014 $45K \u2014 Score: 9/10'},
+  {ts:'06:48',cmd:'HUNTER',text:'Generating capability statement for IHS Oklahoma...'},
+  {ts:'06:49',cmd:'HUNTER',text:'Draft email saved to Gmail'},
+  {ts:'06:49',cmd:'HUNTER',text:'Cherokee TERO committee meets in 4 days \u2014 reminder set'},
+  {ts:'06:50',cmd:'WAR ROOM',text:'September countdown: 142 days \u2014 Current intensity: MEDIUM-HIGH'},
+  {ts:'06:50',cmd:'WAR ROOM',text:'Pipeline value: $62,700/mo \u2014 Target: $100K/mo'},
+  {ts:'06:51',cmd:'FORGE',text:'ComplianceGuard MCP \u2014 112 days to EU AI Act deadline'},
+  {ts:'06:51',cmd:'FORGE',text:'LeadFinder MCP \u2014 Source ready, awaiting deployment'},
+  {ts:'06:52',cmd:'SYSTEM',text:'All engines nominal. Sovereign Wealth Machine operational.'},
+];
+
 // ===== COMPONENTS =====
+
+function FederalIntelFeed(){
+  return(
+    <div>
+      <div className="intel-search-box">
+        <input type="text" placeholder="Search Federal Contracts (Tango API)..." readOnly/>
+        <button className="intel-search-btn">SEARCH</button>
+      </div>
+      <div className="intel-note">(Connect API key in settings)</div>
+      <div className="contract-grid">
+        {CONTRACTS.map((c,i)=>(
+          <div className="contract-card" key={i}>
+            <div className="contract-agency">{c.agency}</div>
+            <div className="contract-title">{c.title}</div>
+            <div className="contract-value">{c.value}</div>
+            <div className="contract-meta">
+              <span className="setaside-badge">{c.setAside}</span>
+              <span className="naics-badge">NAICS {c.naics}</span>
+              <span className="score-badge">{c.score}/10</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ForgePipeline(){
+  return(
+    <div>
+      <div className="forge-scroll">
+        {FORGE_PRODUCTS.map((p,i)=>(
+          <div className={`forge-card ${p.buildNow?'build-now':''}`} key={i}>
+            <div className="forge-card-name">{p.name}</div>
+            <div className="forge-card-desc">{p.desc}</div>
+            <span className={`forge-card-status ${p.statusCls}`}>{p.status}</span>
+            <div className="forge-card-price">{p.price}</div>
+            {p.deadline&&<div className="forge-card-detail">Deadline: {p.deadline}</div>}
+            {p.tam&&<div className="forge-card-detail">TAM: {p.tam}</div>}
+          </div>
+        ))}
+      </div>
+      <div className="forge-mrr">
+        <div className="big">Projected Portfolio MRR: $108,000/year</div>
+        <div className="sub">6 MCP PRODUCTS AT SCALE</div>
+      </div>
+    </div>
+  );
+}
+
+function DarkEconomyTracker(){
+  return(
+    <div className="dark-econ-container">
+      <div className="dark-econ-rings">
+        <div className="ring ring-outer">
+          <div className="ring-label" style={{position:'absolute',top:'8px',left:'50%',transform:'translateX(-50%)'}}>
+            <strong>Dark Economy</strong>Unmapped &mdash; TERO gaps, tribal set-aside voids, invisible flows
+          </div>
+        </div>
+        <div className="ring ring-middle">
+          <div className="ring-label" style={{position:'absolute',top:'6px',left:'50%',transform:'translateX(-50%)'}}>
+            <strong>$17B Hidden</strong>Subcontracts, pass-throughs, secondary spending
+          </div>
+        </div>
+        <div className="ring ring-inner">
+          <div className="ring-label">
+            <strong>$420M/yr</strong>Visible Economy
+          </div>
+        </div>
+      </div>
+      <div className="dark-econ-stat">
+        <div className="dark-econ-stat-box">
+          <p><strong>Zero</strong> tribal set-asides found in Montgomery County despite proximity to tribal nations &mdash; <strong>MASSIVE uncontested entry point</strong></p>
+        </div>
+        <div className="dark-econ-stat-box">
+          <p>Standard federal contracts represent only the <strong>visible tip</strong>. Subcontracts, pass-throughs, and secondary tribal spending create a <strong>$17B hidden economy</strong> that most contractors never see.</p>
+        </div>
+        <div className="dark-econ-powered">Powered by Digital Trail of Tears Engine</div>
+      </div>
+    </div>
+  );
+}
+
+function SkillsArsenal(){
+  return(
+    <div className="skills-grid">
+      {SKILLS.map((s,i)=>(
+        <div className="skill-card" key={i}>
+          <div className="skill-icon">{s.icon}</div>
+          <div className="skill-info">
+            <div className="skill-name">{s.name}</div>
+            <div className="skill-desc">{s.desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CommandTerminal(){
+  const doubled=[...TERMINAL_LINES,...TERMINAL_LINES];
+  return(
+    <div className="terminal">
+      <div className="terminal-fade-top"></div>
+      <div className="terminal-header">DELZAR COMMAND TERMINAL v1.0</div>
+      <div style={{overflow:'hidden',height:'210px'}}>
+        <div className="terminal-scroll">
+          {doubled.map((l,i)=>(
+            <div className="terminal-line" key={i}>
+              <span className="ts">[{l.ts}]</span>{' '}
+              <span className="cmd">{l.cmd}</span>{' > '}
+              <span>{l.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="terminal-fade-bottom">
+        <div style={{position:'absolute',bottom:'8px',left:'16px',fontSize:'.7rem',color:'#00CC00'}}>
+          {'>'} <span className="terminal-cursor"></span>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function EngineCard({data}){
   return(
@@ -523,9 +786,34 @@ function App(){
         <SprintChecklist/>
       </div>
 
+      <div className="section">
+        <div className="section-title">Federal Intel Feed<span className="live-indicator"><span className="live-dot"></span>LIVE</span></div>
+        <FederalIntelFeed/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">FORGE Protocol Pipeline</div>
+        <ForgePipeline/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Dark Economy Intelligence</div>
+        <DarkEconomyTracker/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Skills Arsenal</div>
+        <SkillsArsenal/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Command Terminal</div>
+        <CommandTerminal/>
+      </div>
+
       <footer className="footer">
         <p>Delzar Solutions LLC &mdash; Cherokee Nation Citizen-Owned | TERO Certified | Federal &amp; Tribal Contracting</p>
-        <p className="gold">Built with Claude Code | Sovereign Wealth Machine v1.0 | April 2026</p>
+        <p className="gold">Built with Claude Code | Sovereign Wealth Machine v2.0 | April 2026</p>
       </footer>
     </div>
   );
