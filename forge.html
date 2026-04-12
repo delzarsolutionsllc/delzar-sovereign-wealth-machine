@@ -1,0 +1,1623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DELZAR FORGE - Command Center</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+:root {
+  --gold: #D4AF37;
+  --dark: #0D0D0D;
+  --dark2: #1A1A1A;
+  --dark3: #2A2A2A;
+  --red: #8B0000;
+  --green: #006600;
+  --blue: #4682B4;
+  --gold-dim: rgba(212,175,55,0.3);
+  --gold-glow: rgba(212,175,55,0.15);
+  --text: #E0E0E0;
+  --text-dim: #888;
+  --sidebar-w: 220px;
+  --statusbar-h: 48px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; width: 100%; overflow: hidden; }
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--dark);
+  color: var(--text);
+}
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--dark2); }
+::-webkit-scrollbar-thumb { background: var(--gold-dim); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
+/* PIN Lock */
+.pin-screen {
+  position: fixed; inset: 0; background: var(--dark);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  z-index: 9999;
+}
+.pin-monogram {
+  font-family: 'Courier New', monospace; font-size: 96px; font-weight: 700;
+  color: var(--gold); letter-spacing: 12px; margin-bottom: 8px;
+  text-shadow: 0 0 40px rgba(212,175,55,0.3);
+}
+.pin-title {
+  font-family: 'Courier New', monospace; font-size: 28px; color: var(--gold);
+  letter-spacing: 8px; margin-bottom: 8px;
+}
+.pin-subtitle {
+  font-family: 'Courier New', monospace; font-size: 12px; color: var(--red);
+  letter-spacing: 4px; margin-bottom: 48px; opacity: 0.8;
+}
+.pin-label {
+  font-family: 'Courier New', monospace; font-size: 14px; color: var(--gold-dim);
+  margin-bottom: 16px; letter-spacing: 2px;
+}
+.pin-inputs { display: flex; gap: 12px; margin-bottom: 24px; }
+.pin-inputs input {
+  width: 56px; height: 64px; text-align: center; font-size: 28px;
+  font-family: 'Courier New', monospace; background: var(--dark2);
+  border: 2px solid var(--gold-dim); border-radius: 8px; color: var(--gold);
+  outline: none; transition: border-color 0.2s;
+}
+.pin-inputs input:focus { border-color: var(--gold); box-shadow: 0 0 12px rgba(212,175,55,0.2); }
+.pin-error { color: var(--red); font-size: 13px; margin-top: 8px; font-family: 'Courier New', monospace; }
+.pin-success { color: var(--green); font-size: 13px; margin-top: 8px; font-family: 'Courier New', monospace; }
+
+/* Status Bar */
+.status-bar {
+  position: fixed; top: 0; left: 0; right: 0; height: var(--statusbar-h);
+  background: var(--dark2); border-bottom: 1px solid var(--gold-dim);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 100; font-size: 12px;
+}
+.status-logo {
+  font-family: 'Courier New', monospace; color: var(--gold);
+  font-weight: 700; font-size: 14px; letter-spacing: 2px; white-space: nowrap;
+}
+.status-counters { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.status-counter {
+  font-family: 'Courier New', monospace; color: var(--text-dim);
+  font-size: 11px; white-space: nowrap;
+}
+.status-counter span { color: var(--gold); font-weight: 700; }
+.status-clock {
+  font-family: 'Courier New', monospace; color: var(--gold); font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed; top: var(--statusbar-h); left: 0; bottom: 0;
+  width: var(--sidebar-w); background: var(--dark2);
+  border-right: 1px solid var(--gold-dim); display: flex; flex-direction: column;
+  z-index: 90; transition: transform 0.3s ease;
+}
+.sidebar.collapsed { transform: translateX(-100%); }
+.sidebar-logo {
+  padding: 20px; text-align: center; font-family: 'Courier New', monospace;
+  font-size: 32px; color: var(--gold); font-weight: 700; letter-spacing: 6px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+.sidebar-nav { flex: 1; padding: 8px 0; overflow-y: auto; }
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 12px 16px;
+  cursor: pointer; font-size: 13px; color: var(--text-dim);
+  border-left: 3px solid transparent; transition: all 0.2s;
+  user-select: none;
+}
+.sidebar-item:hover { background: var(--dark3); color: var(--text); }
+.sidebar-item.active {
+  border-left-color: var(--gold); color: var(--gold); background: var(--gold-glow);
+}
+.sidebar-item .icon { font-size: 16px; width: 24px; text-align: center; }
+.sidebar-footer {
+  padding: 16px; border-top: 1px solid var(--gold-dim);
+  font-size: 10px; color: var(--text-dim); text-align: center;
+  line-height: 1.6; font-family: 'Courier New', monospace;
+}
+.sidebar-footer .gold { color: var(--gold); }
+.hamburger {
+  display: none; position: fixed; top: 10px; right: 16px; z-index: 200;
+  background: var(--dark3); border: 1px solid var(--gold-dim); border-radius: 4px;
+  color: var(--gold); font-size: 22px; width: 36px; height: 36px; cursor: pointer;
+  line-height: 36px; text-align: center;
+}
+.sidebar-backdrop {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 85;
+}
+
+/* Main Content */
+.main-content {
+  margin-left: var(--sidebar-w); margin-top: var(--statusbar-h);
+  height: calc(100vh - var(--statusbar-h)); overflow-y: auto;
+  padding: 24px; animation: fadeSlideIn 0.3s ease;
+}
+
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Page header */
+.page-header {
+  font-family: 'Courier New', monospace; font-size: 22px; color: var(--gold);
+  letter-spacing: 3px; margin-bottom: 24px; padding-bottom: 12px;
+  border-bottom: 1px solid var(--gold-dim);
+}
+
+/* Cards */
+.card {
+  background: var(--dark2); border: 1px solid var(--dark3); border-radius: 8px;
+  padding: 16px; margin-bottom: 16px;
+}
+.card-gold-border { border-left: 3px solid var(--gold); }
+
+/* Badges */
+.badge {
+  display: inline-block; padding: 2px 8px; border-radius: 4px;
+  font-size: 10px; font-weight: 700; font-family: 'Courier New', monospace;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+.badge-bid { background: var(--green); color: #fff; }
+.badge-dropship { background: var(--blue); color: #fff; }
+.badge-sub { background: #8B4513; color: #fff; }
+.badge-match { background: #6B3FA0; color: #fff; }
+.badge-urgent { background: var(--red); color: #fff; animation: pulse 1.5s infinite; }
+.badge-normal { background: var(--dark3); color: var(--text-dim); }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px; border-radius: 4px; border: 1px solid var(--gold-dim);
+  background: var(--dark3); color: var(--gold); cursor: pointer;
+  font-family: 'Courier New', monospace; font-size: 12px; letter-spacing: 1px;
+  transition: all 0.2s; display: inline-flex; align-items: center; gap: 6px;
+}
+.btn:hover { background: var(--gold); color: var(--dark); border-color: var(--gold); }
+.btn-primary { background: var(--gold); color: var(--dark); border-color: var(--gold); font-weight: 700; }
+.btn-primary:hover { background: #c4a032; }
+.btn-sm { padding: 4px 10px; font-size: 11px; }
+
+/* Inputs */
+.input, .select, .textarea {
+  background: var(--dark3); border: 1px solid var(--gold-dim); border-radius: 4px;
+  color: var(--text); padding: 8px 12px; font-size: 13px; outline: none;
+  font-family: system-ui, sans-serif; transition: border-color 0.2s; width: 100%;
+}
+.input:focus, .select:focus, .textarea:focus { border-color: var(--gold); }
+.textarea { resize: vertical; min-height: 80px; }
+.label { font-size: 11px; color: var(--text-dim); margin-bottom: 4px; display: block; font-family: 'Courier New', monospace; letter-spacing: 1px; }
+
+/* Grid */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.flex-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+/* Tables */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th {
+  text-align: left; padding: 8px 12px; background: var(--dark3);
+  color: var(--gold); font-family: 'Courier New', monospace; font-size: 11px;
+  letter-spacing: 1px; border-bottom: 1px solid var(--gold-dim);
+}
+td { padding: 8px 12px; border-bottom: 1px solid var(--dark3); }
+tr:hover td { background: var(--gold-glow); }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 500;
+  display: flex; align-items: center; justify-content: center;
+}
+.modal {
+  background: var(--dark2); border: 1px solid var(--gold-dim); border-radius: 8px;
+  padding: 24px; width: 90%; max-width: 500px; max-height: 80vh; overflow-y: auto;
+}
+.modal-title {
+  font-family: 'Courier New', monospace; color: var(--gold); font-size: 16px;
+  letter-spacing: 2px; margin-bottom: 16px;
+}
+
+/* Toast */
+.toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 600; }
+.toast {
+  background: var(--dark2); border: 1px solid var(--gold); border-radius: 6px;
+  padding: 12px 20px; margin-top: 8px; color: var(--gold);
+  font-family: 'Courier New', monospace; font-size: 12px;
+  animation: toastIn 0.3s ease; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+@keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Progress bar */
+.progress-bar { height: 8px; background: var(--dark3); border-radius: 4px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width 0.4s ease; }
+
+/* Terminal */
+.terminal {
+  background: #0a0a0a; border: 1px solid var(--dark3); border-radius: 4px;
+  padding: 16px; font-family: 'Courier New', monospace; font-size: 12px;
+  line-height: 1.7; overflow-y: auto; max-height: 500px;
+}
+.term-green { color: #00ff41; }
+.term-gold { color: var(--gold); }
+.term-blue { color: #4fc3f7; }
+.term-red { color: #ff4444; }
+.term-dim { color: #555; }
+
+/* Concentric rings for Dark Economy */
+.rings-container { position: relative; width: 300px; height: 300px; margin: 0 auto 24px; }
+.ring {
+  position: absolute; border-radius: 50%; border: 2px solid;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; font-family: 'Courier New', monospace;
+}
+.ring-outer {
+  width: 300px; height: 300px; border-color: var(--red);
+  top: 0; left: 0; animation: ringPulse 3s infinite;
+}
+.ring-mid {
+  width: 200px; height: 200px; border-color: var(--gold-dim);
+  top: 50px; left: 50px;
+}
+.ring-inner {
+  width: 110px; height: 110px; border-color: var(--gold);
+  top: 95px; left: 95px; background: var(--gold-glow);
+}
+@keyframes ringPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(139,0,0,0.3); }
+  50% { box-shadow: 0 0 30px rgba(139,0,0,0.6); }
+}
+
+/* Wizard steps */
+.wizard-steps { display: flex; gap: 0; margin-bottom: 24px; }
+.wizard-step {
+  flex: 1; text-align: center; padding: 10px 4px; font-size: 11px;
+  font-family: 'Courier New', monospace; border-bottom: 3px solid var(--dark3);
+  color: var(--text-dim); letter-spacing: 1px;
+}
+.wizard-step.active { border-bottom-color: var(--gold); color: var(--gold); }
+.wizard-step.done { border-bottom-color: var(--green); color: var(--green); }
+
+/* Status dots */
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-green { background: #00ff41; box-shadow: 0 0 6px #00ff41; }
+.dot-gold { background: var(--gold); box-shadow: 0 0 6px var(--gold); }
+.dot-red { background: #ff4444; box-shadow: 0 0 6px #ff4444; }
+
+/* Tab bar */
+.tab-bar { display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--dark3); overflow-x: auto; }
+.tab-item {
+  padding: 10px 18px; cursor: pointer; font-family: 'Courier New', monospace;
+  font-size: 11px; letter-spacing: 1px; color: var(--text-dim);
+  border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;
+}
+.tab-item:hover { color: var(--text); }
+.tab-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+/* Checkbox */
+.checkbox-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; cursor: pointer; font-size: 13px; }
+.checkbox-row input[type="checkbox"] { accent-color: var(--gold); }
+
+/* Toggle */
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; }
+.toggle-switch {
+  width: 40px; height: 22px; background: var(--dark3); border-radius: 11px;
+  position: relative; border: 1px solid var(--gold-dim); transition: background 0.2s;
+}
+.toggle-switch.on { background: var(--gold-dim); border-color: var(--gold); }
+.toggle-switch::after {
+  content: ''; width: 16px; height: 16px; background: var(--text-dim); border-radius: 50%;
+  position: absolute; top: 2px; left: 2px; transition: all 0.2s;
+}
+.toggle-switch.on::after { left: 20px; background: var(--gold); }
+
+/* Print */
+@media print {
+  .status-bar, .sidebar, .hamburger, .sidebar-backdrop, .toast-container { display: none !important; }
+  .main-content { margin: 0 !important; padding: 0 !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .printable-document {
+    display: block !important; background: #fff !important; color: #000 !important;
+    padding: 40px !important; width: 100% !important;
+  }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .hamburger { display: block; }
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  .sidebar-backdrop.show { display: block; }
+  .main-content { margin-left: 0; padding: 16px; }
+  .status-counters { display: none; }
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .rings-container { width: 220px; height: 220px; }
+  .ring-outer { width: 220px; height: 220px; }
+  .ring-mid { width: 150px; height: 150px; top: 35px; left: 35px; }
+  .ring-inner { width: 80px; height: 80px; top: 70px; left: 70px; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+/* ================================================================
+   DELZAR FORGE — Command Center
+   Single-file React 18 Application
+   ================================================================ */
+
+const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+// ── STORAGE HELPERS ──
+const LS_PREFIX = 'delzar-forge-';
+const lsGet = (key, fallback) => { try { const v = localStorage.getItem(LS_PREFIX + key); return v ? JSON.parse(v) : fallback; } catch { return fallback; } };
+const lsSet = (key, val) => { localStorage.setItem(LS_PREFIX + key, JSON.stringify(val)); };
+
+// ── COMPANY DATA ──
+const COMPANY = {
+  name: "Delzar Solutions LLC",
+  founder: 'Dominique "DJ" Lovelace',
+  title: "Founder & CEO",
+  phone: "(918) 504-0592",
+  email: "dominique@delzarsolutionsllc.com",
+  website: "www.delzarsolutionsllc.com",
+  uei: "TKMXZNCBPS27",
+  tribal: "Cherokee Nation (Enrolled Citizen)",
+  iee: "Self-certified per DIAR 1480.201",
+  setAsides: ["Buy Indian Act", "8(a)", "Indian-Owned", "Small Business"],
+  location: "Tulsa, Oklahoma",
+  naics: { "541512": "Computer Systems Design", "561210": "Facilities Support", "561720": "Janitorial", "236220": "Commercial Construction", "484110": "General Freight Local", "484121": "General Freight Long-Distance" },
+  competencies: ["Federal & Tribal Procurement Intelligence", "AI-Powered Risk Analysis", "Logistics & Transportation (CDL Class A, HazMat, Tanker)", "IT Infrastructure & Cybersecurity", "Compliance Monitoring & Audit", "MCP Server Development"],
+  differentiators: ["Only firm combining AI procurement analysis with CDL logistics", "Cherokee Nation Tier 1 TERO preference", "66,000+ federal records analyzed ($163B+)", "Multi-model AI system (Claude + GPT + Gemini)"],
+  pastPerformance: "Per FAR 15.305(a)(2)(iv), our proposal warrants a neutral past performance evaluation.",
+  ieeStatement: "Delzar Solutions LLC is a proud Cherokee Nation citizen-owned IEE as defined in DIAR 1480.201, eligible for Buy Indian Act set-aside awards under 25 U.S.C. 47."
+};
+
+// ── BIDS DATA ──
+const BIDS = [
+  { id: "CN-164495", tribe: "Cherokee Nation", title: "RFB - Transport Modular Home Sections", closeDate: "2026-04-20", value: "$45K est.", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 Use your CDL", naics: "484110" },
+  { id: "CN-164491", tribe: "Cherokee Nation", title: "Pinktober Hoodies for Hard Rock Tulsa \u2014 2,400 units", closeDate: "2026-04-16", value: "$35K est.", play: "DROPSHIP", playLabel: "DROPSHIP \u2014 Find supplier, mark up 25%", naics: "315990" },
+  { id: "CN-164493", tribe: "Cherokee Nation", title: "Two Transit Cargo Vans - Human Services Elder Care", closeDate: "2026-04-24", value: "$65K est.", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 Vehicle procurement", naics: "336211" },
+  { id: "CN-164494", tribe: "Cherokee Nation", title: "Hard Rock Camera Coverage Upgrade", closeDate: "2026-04-17", value: "$30K est.", play: "MATCH_MAKE", playLabel: "MATCH-MAKE \u2014 Find IT sub", naics: "334310" },
+  { id: "CN-164492", tribe: "Cherokee Nation", title: "Housing Rehab - Sequoyah County", closeDate: "2026-04-28", value: "$80K est.", play: "SUB_CONTRACT", playLabel: "SUB-CONTRACT \u2014 Partner with crew", naics: "236118" },
+  { id: "CK-20261", tribe: "Chickasaw Nation", title: "Fleet Vehicle Maintenance Services", closeDate: "2026-04-25", value: "$120K est.", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 Fleet maintenance", naics: "811111" },
+  { id: "CK-20262", tribe: "Chickasaw Nation", title: "Office Supply Procurement \u2014 Quarterly", closeDate: "2026-05-01", value: "$18K est.", play: "DROPSHIP", playLabel: "DROPSHIP \u2014 Bulk office supplies", naics: "339940" },
+  { id: "CK-20263", tribe: "Chickasaw Nation", title: "IT Infrastructure Cabling \u2014 New Admin Building", closeDate: "2026-04-30", value: "$95K est.", play: "SUB_CONTRACT", playLabel: "SUB-CONTRACT \u2014 IT cabling crew", naics: "238210" },
+  { id: "MC-30261", tribe: "Muscogee Creek", title: "Janitorial Services \u2014 Okmulgee Campus", closeDate: "2026-05-05", value: "$42K/yr", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 Janitorial services", naics: "561720" },
+  { id: "MC-30262", tribe: "Muscogee Creek", title: "Emergency Generator Installation", closeDate: "2026-05-10", value: "$55K est.", play: "SUB_CONTRACT", playLabel: "SUB-CONTRACT \u2014 Electrical partner", naics: "238210" },
+  { id: "CN-164500", tribe: "Cherokee Nation", title: "Hazmat Waste Transport \u2014 Tahlequah Facility", closeDate: "2026-05-15", value: "$38K est.", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 HazMat CDL required", naics: "562112" },
+  { id: "CK-20264", tribe: "Chickasaw Nation", title: "Breakroom Supplies \u2014 Gaming Facilities", closeDate: "2026-05-02", value: "$12K est.", play: "DROPSHIP", playLabel: "DROPSHIP \u2014 Coffee, cups, supplies", naics: "722310" },
+  { id: "MC-30263", tribe: "Muscogee Creek", title: "PPE Supply \u2014 Healthcare Facilities", closeDate: "2026-05-08", value: "$25K est.", play: "DROPSHIP", playLabel: "DROPSHIP \u2014 Safety equipment", naics: "339113" },
+  { id: "CN-164501", tribe: "Cherokee Nation", title: "Courier & Document Delivery Services", closeDate: "2026-05-20", value: "$28K/yr", play: "BID_DIRECT", playLabel: "BID DIRECT \u2014 Courier route", naics: "492110" },
+  { id: "CK-20265", tribe: "Chickasaw Nation", title: "Cybersecurity Assessment \u2014 Tribal Networks", closeDate: "2026-05-12", value: "$75K est.", play: "MATCH_MAKE", playLabel: "MATCH-MAKE \u2014 Find cyber firm", naics: "541512" },
+];
+
+// ── CONTACTS DATA ──
+const DEFAULT_CONTACTS = [
+  { id: 1, name: "Ross Chaney", title: "Procurement Officer", org: "Cherokee Nation", type: "Tribal Buyer", email: "rchaney@cherokee.org", phone: "(918) 555-0101", tribe: "Cherokee Nation", notes: "Key contact for TERO bids", tags: "tero,procurement", status: "CONTACTED", lastContact: "2026-04-01", nextFollowUp: "2026-04-15" },
+  { id: 2, name: "Mindy Baker", title: "Contracts Manager", org: "Cherokee Nation Businesses", type: "Tribal Buyer", email: "mbaker@cnb.com", phone: "(918) 555-0102", tribe: "Cherokee Nation", notes: "Hard Rock procurement liaison", tags: "cnb,hardrock", status: "PITCHED", lastContact: "2026-04-05", nextFollowUp: "2026-04-18" },
+  { id: 3, name: "Warren Harjo", title: "TERO Director", org: "Muscogee Creek Nation", type: "Tribal Buyer", email: "wharjo@mcn.gov", phone: "(918) 555-0103", tribe: "Muscogee Creek", notes: "Controls all TERO certifications for MCN", tags: "tero,muscogee", status: "NOT_CONTACTED", lastContact: "", nextFollowUp: "2026-04-20" },
+  { id: 4, name: "Shelly Mcclain", title: "Small Business Liaison", org: "Chickasaw Nation Industries", type: "Tribal Buyer", email: "smcclain@chickasaw.net", phone: "(580) 555-0104", tribe: "Chickasaw Nation", notes: "CNI subcontracting opportunities", tags: "chickasaw,cni", status: "FOLLOW_UP", lastContact: "2026-03-28", nextFollowUp: "2026-04-12" },
+  { id: 5, name: "John Reyhan", title: "CEO", org: "Tango Intel", type: "Partner", email: "john@tangointel.com", phone: "(202) 555-0105", tribe: "", notes: "Tango API integration partner", tags: "api,intel,partner", status: "CONTACTED", lastContact: "2026-04-08", nextFollowUp: "2026-04-22" },
+  { id: 6, name: "Matt Jones", title: "Procurement Analyst", org: "Cherokee Nation", type: "Tribal Buyer", email: "mjones@cherokee.org", phone: "(918) 555-0106", tribe: "Cherokee Nation", notes: "Housing & construction RFPs", tags: "construction,housing", status: "CONTACTED", lastContact: "2026-04-03", nextFollowUp: "2026-04-17" },
+  { id: 7, name: "Nicholas Kedrowski", title: "VP Partnerships", org: "GovWin IHS", type: "Partner", email: "nkedrowski@govwin.com", phone: "(703) 555-0107", tribe: "", notes: "GovWin data integration discussion", tags: "govwin,data", status: "NOT_CONTACTED", lastContact: "", nextFollowUp: "2026-04-25" },
+  { id: 8, name: "Dave Z", title: "Founder", org: "MakeGov", type: "Partner", email: "dave@makegov.com", phone: "(512) 555-0108", tribe: "", notes: "MakeGov platform collaboration", tags: "makegov,platform", status: "PITCHED", lastContact: "2026-04-10", nextFollowUp: "2026-04-24" },
+];
+
+// ── DOCUMENTS DATA ──
+const DEFAULT_DOCS = [
+  { id: 1, title: "Cherokee Nation TERO Application", category: "TERO", status: "IN PROGRESS", description: "TERO certification application for Cherokee Nation procurement preference", url: "" },
+  { id: 2, title: "Manhattan Strategy Pitch Deck", category: "Pitch", status: "DRAFT", description: "Investor pitch deck for AI procurement intelligence platform", url: "" },
+  { id: 3, title: "Cherokee Nation Loan Application", category: "Loan", status: "NOT STARTED", description: "Small business loan application through Cherokee Nation programs", url: "" },
+  { id: 4, title: "Delzar Capability Statement v3", category: "CapStmt", status: "COMPLETE", description: "Current capability statement for tribal procurement submissions", url: "" },
+  { id: 5, title: "638 Compact Intelligence Dossier", category: "Dossier", status: "IN PROGRESS", description: "Research dossier on tribal 638 compact subcontracting opportunities", url: "" },
+  { id: 6, title: "Muscogee Creek TERO Registration", category: "TERO", status: "NOT STARTED", description: "TERO registration for Muscogee Creek Nation procurement", url: "" },
+  { id: 7, title: "Chickasaw Nation Vendor Application", category: "TERO", status: "NOT STARTED", description: "Vendor registration for Chickasaw Nation procurement system", url: "" },
+  { id: 8, title: "FORGE Protocol Documentation", category: "Dossier", status: "COMPLETE", description: "Technical documentation for the FORGE procurement intelligence system", url: "" },
+];
+
+// ── TERMINAL LOGS ──
+const TERMINAL_LOGS = [
+  { time: "04:00:01", agent: "SYSTEM", msg: "FORGE v2.1 initialized. All systems nominal.", color: "dim" },
+  { time: "04:00:03", agent: "SYSTEM", msg: "Loading procurement databases... 66,421 records indexed.", color: "dim" },
+  { time: "04:00:05", agent: "HUNTER", msg: "Scanning Cherokee Nation procurement portal...", color: "green" },
+  { time: "04:00:12", agent: "HUNTER", msg: "Found 7 active solicitations matching NAICS profile.", color: "green" },
+  { time: "04:00:14", agent: "HUNTER", msg: "CN-164495: Transport Modular Homes - CDL MATCH - Priority HIGH", color: "green" },
+  { time: "04:00:15", agent: "WAR ROOM", msg: "Analyzing bid CN-164495... Margin potential: 18-25%", color: "gold" },
+  { time: "04:00:18", agent: "HUNTER", msg: "Scanning Chickasaw Nation Industries portal...", color: "green" },
+  { time: "04:00:22", agent: "HUNTER", msg: "Found 5 active solicitations. 3 match profile.", color: "green" },
+  { time: "04:00:25", agent: "FORGE", msg: "MCP pipeline status: 5 active connections, 0 errors.", color: "blue" },
+  { time: "04:00:28", agent: "WAR ROOM", msg: "STRATEGY UPDATE: September surge pipeline at $752K.", color: "gold" },
+  { time: "04:00:30", agent: "SYSTEM", msg: "TERO registration tracker: 4/39 tribes complete.", color: "dim" },
+  { time: "04:00:32", agent: "ALERT", msg: "CN-164491 closes in 4 DAYS - Pinktober Hoodies - ACTION REQUIRED", color: "red" },
+  { time: "04:00:35", agent: "HUNTER", msg: "Scanning Muscogee Creek Nation procurement...", color: "green" },
+  { time: "04:00:38", agent: "HUNTER", msg: "Found 3 active solicitations. Janitorial services match.", color: "green" },
+  { time: "04:00:40", agent: "FORGE", msg: "Claude API: 2,847 tokens used today. Budget: nominal.", color: "blue" },
+  { time: "04:00:42", agent: "WAR ROOM", msg: "Competitive analysis: 12 firms tracked across 3 tribal markets.", color: "gold" },
+  { time: "04:00:45", agent: "SYSTEM", msg: "Dark economy scan: $17B in hidden tribal procurement identified.", color: "dim" },
+  { time: "04:00:48", agent: "HUNTER", msg: "Cross-referencing NAICS codes with SAM.gov registrations...", color: "green" },
+  { time: "04:00:50", agent: "ALERT", msg: "CN-164494 closes in 5 DAYS - Camera Upgrade - MATCH-MAKE needed", color: "red" },
+  { time: "04:00:52", agent: "FORGE", msg: "Tango API sync complete. 1,247 new federal records processed.", color: "blue" },
+  { time: "04:00:55", agent: "WAR ROOM", msg: "Revenue projection updated: Q3 target $185K, Q4 target $320K.", color: "gold" },
+  { time: "04:00:58", agent: "SYSTEM", msg: "Backup checkpoint created. All data persisted to localStorage.", color: "dim" },
+  { time: "04:01:00", agent: "HUNTER", msg: "Next scan cycle in 3600 seconds. Standing by.", color: "green" },
+  { time: "04:01:02", agent: "FORGE", msg: "FORGE PROTOCOL active. Monitoring 15 opportunities across 3 tribes.", color: "blue" },
+  { time: "04:01:05", agent: "WAR ROOM", msg: "Daily briefing compiled. 4 priority actions flagged.", color: "gold" },
+];
+
+// ── HELPER FUNCTIONS ──
+function daysUntil(dateStr) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(dateStr + 'T00:00:00');
+  return Math.ceil((target - now) / 86400000);
+}
+
+function daysUntilDate(y, m, d) {
+  const now = new Date(); now.setHours(0,0,0,0);
+  const target = new Date(y, m - 1, d);
+  return Math.ceil((target - now) / 86400000);
+}
+
+function playBadgeClass(play) {
+  if (play === 'BID_DIRECT') return 'badge-bid';
+  if (play === 'DROPSHIP') return 'badge-dropship';
+  if (play === 'SUB_CONTRACT') return 'badge-sub';
+  return 'badge-match';
+}
+
+function playLabel(play) {
+  if (play === 'BID_DIRECT') return 'BID DIRECT';
+  if (play === 'DROPSHIP') return 'DROPSHIP';
+  if (play === 'SUB_CONTRACT') return 'SUB-CONTRACT';
+  return 'MATCH-MAKE';
+}
+
+const STATUS_CYCLE = ['NOT_CONTACTED', 'CONTACTED', 'PITCHED', 'FOLLOW_UP', 'WON'];
+function statusColor(s) {
+  if (s === 'WON') return 'var(--green)';
+  if (s === 'PITCHED') return 'var(--blue)';
+  if (s === 'FOLLOW_UP') return 'var(--gold)';
+  if (s === 'CONTACTED') return 'var(--text-dim)';
+  return 'var(--dark3)';
+}
+
+// ================================================================
+// PIN LOCK SCREEN
+// ================================================================
+function PinLock({ onUnlock }) {
+  const stored = localStorage.getItem(LS_PREFIX + 'pin');
+  const [mode, setMode] = useState(stored ? 'enter' : 'create');
+  const [pin, setPin] = useState(['','','','']);
+  const [confirm, setConfirm] = useState(['','','','']);
+  const [phase, setPhase] = useState('first'); // first | confirm
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+  const refs = [useRef(), useRef(), useRef(), useRef()];
+  const cRefs = [useRef(), useRef(), useRef(), useRef()];
+
+  function handleInput(arr, setArr, inputRefs, idx, val) {
+    if (val.length > 1) val = val.slice(-1);
+    if (!/^\d?$/.test(val)) return;
+    const next = [...arr]; next[idx] = val; setArr(next); setError('');
+    if (val && idx < 3) inputRefs[idx + 1].current.focus();
+    // Check if complete
+    if (val && idx === 3) {
+      const code = next.join('');
+      if (mode === 'enter') {
+        if (btoa(code) === stored) {
+          setSuccess('ACCESS GRANTED');
+          sessionStorage.setItem(LS_PREFIX + 'session', '1');
+          setTimeout(() => onUnlock(), 600);
+        } else {
+          setError('INVALID PIN');
+          setArr(['','','','']);
+          setTimeout(() => inputRefs[0].current && inputRefs[0].current.focus(), 100);
+        }
+      } else if (phase === 'first') {
+        setSuccess('CONFIRM PIN');
+        setTimeout(() => { setPhase('confirm'); setSuccess(''); cRefs[0].current && cRefs[0].current.focus(); }, 600);
+      }
+    }
+  }
+
+  function handleConfirmComplete() {
+    const code = pin.join('');
+    const cCode = confirm.join('');
+    if (code === cCode) {
+      localStorage.setItem(LS_PREFIX + 'pin', btoa(code));
+      sessionStorage.setItem(LS_PREFIX + 'session', '1');
+      setSuccess('PIN CREATED \u2014 ACCESS GRANTED');
+      setTimeout(() => onUnlock(), 800);
+    } else {
+      setError('PINS DO NOT MATCH');
+      setPin(['','','','']); setConfirm(['','','','']); setPhase('first');
+      setTimeout(() => refs[0].current && refs[0].current.focus(), 100);
+    }
+  }
+
+  useEffect(() => {
+    if (phase === 'confirm' && confirm.every(c => c !== '')) handleConfirmComplete();
+  }, [confirm]);
+
+  useEffect(() => { refs[0].current && refs[0].current.focus(); }, []);
+
+  function handleKeyDown(arr, setArr, inputRefs, idx, e) {
+    if (e.key === 'Backspace' && !arr[idx] && idx > 0) {
+      inputRefs[idx - 1].current.focus();
+    }
+  }
+
+  return (
+    React.createElement("div", { className: "pin-screen" },
+      React.createElement("div", { className: "pin-monogram" }, "DZ"),
+      React.createElement("div", { className: "pin-title" }, "DELZAR FORGE"),
+      React.createElement("div", { className: "pin-subtitle" }, "CLASSIFIED \u2014 AUTHORIZED ACCESS ONLY"),
+      React.createElement("div", { className: "pin-label" },
+        mode === 'enter' ? 'ENTER PIN' : (phase === 'first' ? 'CREATE PIN' : 'CONFIRM PIN')
+      ),
+      (phase === 'first' || mode === 'enter') && React.createElement("div", { className: "pin-inputs" },
+        [0,1,2,3].map(i =>
+          React.createElement("input", {
+            key: i, ref: refs[i], type: "password", maxLength: 1, value: pin[i],
+            onChange: e => handleInput(pin, setPin, refs, i, e.target.value),
+            onKeyDown: e => handleKeyDown(pin, setPin, refs, i, e)
+          })
+        )
+      ),
+      phase === 'confirm' && React.createElement("div", { className: "pin-inputs" },
+        [0,1,2,3].map(i =>
+          React.createElement("input", {
+            key: 'c'+i, ref: cRefs[i], type: "password", maxLength: 1, value: confirm[i],
+            onChange: e => handleInput(confirm, setConfirm, cRefs, i, e.target.value),
+            onKeyDown: e => handleKeyDown(confirm, setConfirm, cRefs, i, e)
+          })
+        )
+      ),
+      error && React.createElement("div", { className: "pin-error" }, error),
+      success && React.createElement("div", { className: "pin-success" }, success)
+    )
+  );
+}
+
+// ================================================================
+// STATUS BAR
+// ================================================================
+function StatusBar() {
+  const [time, setTime] = useState('');
+  useEffect(() => {
+    function tick() {
+      const now = new Date();
+      const h = now.getHours().toString().padStart(2, '0');
+      const m = now.getMinutes().toString().padStart(2, '0');
+      setTime(h + ':' + m + ' CDT');
+    }
+    tick();
+    const iv = setInterval(tick, 10000);
+    return () => clearInterval(iv);
+  }, []);
+
+  const septDays = daysUntilDate(2026, 9, 1);
+  const euDays = daysUntilDate(2026, 8, 2); // EU AI Act Aug 2, 2026
+
+  return (
+    React.createElement("div", { className: "status-bar" },
+      React.createElement("div", { className: "status-logo" }, "\u25C6 DELZAR FORGE"),
+      React.createElement("div", { className: "status-counters" },
+        React.createElement("div", { className: "status-counter" }, React.createElement("span", null, septDays), " DAYS TO SEPT SURGE"),
+        React.createElement("div", { className: "status-counter" }, React.createElement("span", null, euDays), " DAYS TO EU AI ACT"),
+        React.createElement("div", { className: "status-counter" }, React.createElement("span", null, "5"), " ACTIVE BIDS"),
+        React.createElement("div", { className: "status-counter" }, React.createElement("span", null, "$752K"), " PIPELINE")
+      ),
+      React.createElement("div", { className: "status-clock" }, time)
+    )
+  );
+}
+
+// ================================================================
+// SIDEBAR
+// ================================================================
+const NAV_ITEMS = [
+  { icon: "\uD83C\uDFAF", label: "Procurement", page: "procurement" },
+  { icon: "\uD83D\uDCC4", label: "Cap Statement", page: "capstatement" },
+  { icon: "\uD83D\uDCCB", label: "Proposals", page: "proposals" },
+  { icon: "\uD83D\uDCCA", label: "Intel Dashboard", page: "intel" },
+  { icon: "\uD83D\uDC41\uFE0F", label: "Dark Economy", page: "darkeconomy" },
+  { icon: "\uD83D\uDC65", label: "Contacts", page: "contacts" },
+  { icon: "\uD83D\uDCC1", label: "Documents", page: "documents" },
+  { icon: "\uD83D\uDCBB", label: "Terminal", page: "terminal" },
+];
+
+function Sidebar({ activePage, onNavigate, open, onClose }) {
+  return (
+    React.createElement(React.Fragment, null,
+      React.createElement("div", { className: "sidebar-backdrop" + (open ? " show" : ""), onClick: onClose }),
+      React.createElement("div", { className: "sidebar" + (open ? " open" : "") },
+        React.createElement("div", { className: "sidebar-logo" }, "DZ"),
+        React.createElement("div", { className: "sidebar-nav" },
+          NAV_ITEMS.map(item =>
+            React.createElement("div", {
+              key: item.page,
+              className: "sidebar-item" + (activePage === item.page ? " active" : ""),
+              onClick: () => { onNavigate(item.page); onClose(); }
+            },
+              React.createElement("span", { className: "icon" }, item.icon),
+              React.createElement("span", null, item.label)
+            )
+          )
+        ),
+        React.createElement("div", { className: "sidebar-footer" },
+          React.createElement("div", { className: "gold" }, "Delzar Solutions LLC"),
+          React.createElement("div", null, "Cherokee Nation Citizen-Owned")
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// TOAST
+// ================================================================
+function ToastContainer({ toasts }) {
+  return React.createElement("div", { className: "toast-container" },
+    toasts.map((t, i) => React.createElement("div", { key: i, className: "toast" }, t))
+  );
+}
+
+// ================================================================
+// PAGE 1: PROCUREMENT
+// ================================================================
+function ProcurementPage() {
+  const [tribeFilter, setTribeFilter] = useState('ALL');
+  const [playFilter, setPlayFilter] = useState('ALL');
+  const [search, setSearch] = useState('');
+
+  const filtered = useMemo(() => {
+    return BIDS.filter(b => {
+      if (tribeFilter !== 'ALL' && b.tribe !== tribeFilter) return false;
+      if (playFilter !== 'ALL' && b.play !== playFilter) return false;
+      if (search && !b.title.toLowerCase().includes(search.toLowerCase()) && !b.id.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [tribeFilter, playFilter, search]);
+
+  const matrix = [
+    { play: "BID DIRECT", when: "You can deliver the work yourself", role: "Prime contractor", profit: "Full margin (15-30%)" },
+    { play: "DROPSHIP", when: "Commodity/supply procurement", role: "Reseller/broker", profit: "Markup (20-35%)" },
+    { play: "SUB-CONTRACT", when: "Specialized labor/equipment needed", role: "Prime or JV partner", profit: "Management fee (8-15%)" },
+    { play: "MATCH-MAKE", when: "Outside your capability", role: "Broker/finder", profit: "Referral fee (3-8%)" },
+  ];
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "PROCUREMENT AGGREGATOR"),
+      React.createElement("div", { className: "flex-row", style: { marginBottom: 16 } },
+        React.createElement("select", { className: "select", style: { width: 180 }, value: tribeFilter, onChange: e => setTribeFilter(e.target.value) },
+          React.createElement("option", { value: "ALL" }, "All Tribes"),
+          React.createElement("option", { value: "Cherokee Nation" }, "Cherokee Nation"),
+          React.createElement("option", { value: "Chickasaw Nation" }, "Chickasaw Nation"),
+          React.createElement("option", { value: "Muscogee Creek" }, "Muscogee Creek")
+        ),
+        React.createElement("select", { className: "select", style: { width: 180 }, value: playFilter, onChange: e => setPlayFilter(e.target.value) },
+          React.createElement("option", { value: "ALL" }, "All Play Types"),
+          React.createElement("option", { value: "BID_DIRECT" }, "BID DIRECT"),
+          React.createElement("option", { value: "DROPSHIP" }, "DROPSHIP"),
+          React.createElement("option", { value: "SUB_CONTRACT" }, "SUB-CONTRACT"),
+          React.createElement("option", { value: "MATCH_MAKE" }, "MATCH-MAKE")
+        ),
+        React.createElement("input", { className: "input", style: { maxWidth: 260 }, placeholder: "Search bids...", value: search, onChange: e => setSearch(e.target.value) })
+      ),
+      React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 12, marginBottom: 32 } },
+        filtered.map(bid => {
+          const dl = daysUntil(bid.closeDate);
+          const urgent = dl <= 5;
+          return React.createElement("div", { key: bid.id, className: "card card-gold-border" },
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 } },
+              React.createElement("div", null,
+                React.createElement("span", { style: { fontFamily: "'Courier New', monospace", fontSize: 11, color: 'var(--text-dim)' } }, bid.id),
+                React.createElement("span", { style: { marginLeft: 8, fontSize: 11, color: 'var(--text-dim)' } }, bid.tribe)
+              ),
+              React.createElement("div", { style: { display: 'flex', gap: 6 } },
+                React.createElement("span", { className: "badge " + playBadgeClass(bid.play) }, playLabel(bid.play)),
+                React.createElement("span", { className: "badge " + (urgent ? "badge-urgent" : "badge-normal") }, dl + "d left")
+              )
+            ),
+            React.createElement("div", { style: { fontWeight: 600, fontSize: 14, marginBottom: 8, lineHeight: 1.4 } }, bid.title),
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--text-dim)' } },
+              React.createElement("span", null, bid.value),
+              React.createElement("span", null, "NAICS: " + bid.naics)
+            ),
+            React.createElement("div", { style: { fontSize: 11, color: 'var(--gold)', marginTop: 8, fontFamily: "'Courier New', monospace" } }, bid.playLabel)
+          );
+        })
+      ),
+      React.createElement("div", { className: "page-header", style: { fontSize: 16 } }, "STRATEGY DECISION MATRIX"),
+      React.createElement("div", { className: "table-wrap" },
+        React.createElement("table", null,
+          React.createElement("thead", null,
+            React.createElement("tr", null,
+              React.createElement("th", null, "PLAY TYPE"),
+              React.createElement("th", null, "WHEN TO USE"),
+              React.createElement("th", null, "YOUR ROLE"),
+              React.createElement("th", null, "PROFIT MODEL")
+            )
+          ),
+          React.createElement("tbody", null,
+            matrix.map((r, i) =>
+              React.createElement("tr", { key: i },
+                React.createElement("td", { style: { fontWeight: 700, color: 'var(--gold)' } }, r.play),
+                React.createElement("td", null, r.when),
+                React.createElement("td", null, r.role),
+                React.createElement("td", null, r.profit)
+              )
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 2: CAPABILITY STATEMENT
+// ================================================================
+function CapStatementPage() {
+  const [targetAgency, setTargetAgency] = useState(lsGet('cap-agency', ''));
+  const [agencyType, setAgencyType] = useState(lsGet('cap-agtype', 'Tribal'));
+  const [primaryNaics, setPrimaryNaics] = useState(lsGet('cap-naics', '541512'));
+  const [selComps, setSelComps] = useState(lsGet('cap-comps', COMPANY.competencies));
+  const [includeIEE, setIncludeIEE] = useState(lsGet('cap-iee', true));
+  const [includeCDL, setIncludeCDL] = useState(lsGet('cap-cdl', true));
+
+  function toggleComp(c) {
+    setSelComps(prev => prev.includes(c) ? prev.filter(x => x !== c) : [...prev, c]);
+  }
+  function save() {
+    lsSet('cap-agency', targetAgency); lsSet('cap-agtype', agencyType);
+    lsSet('cap-naics', primaryNaics); lsSet('cap-comps', selComps);
+    lsSet('cap-iee', includeIEE); lsSet('cap-cdl', includeCDL);
+  }
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "CAPABILITY STATEMENT GENERATOR"),
+      React.createElement("div", { style: { display: 'flex', gap: 24, flexWrap: 'wrap' } },
+        /* Left form */
+        React.createElement("div", { style: { flex: '0 0 360px', minWidth: 280 } },
+          React.createElement("div", { className: "card" },
+            React.createElement("label", { className: "label" }, "TARGET AGENCY"),
+            React.createElement("input", { className: "input", value: targetAgency, onChange: e => setTargetAgency(e.target.value), placeholder: "e.g. Cherokee Nation Health Services", style: { marginBottom: 12 } }),
+            React.createElement("label", { className: "label" }, "AGENCY TYPE"),
+            React.createElement("select", { className: "select", value: agencyType, onChange: e => setAgencyType(e.target.value), style: { marginBottom: 12 } },
+              React.createElement("option", null, "Tribal"),
+              React.createElement("option", null, "Federal"),
+              React.createElement("option", null, "State"),
+              React.createElement("option", null, "Commercial")
+            ),
+            React.createElement("label", { className: "label" }, "PRIMARY NAICS"),
+            React.createElement("select", { className: "select", value: primaryNaics, onChange: e => setPrimaryNaics(e.target.value), style: { marginBottom: 12 } },
+              Object.entries(COMPANY.naics).map(([k,v]) =>
+                React.createElement("option", { key: k, value: k }, k + " - " + v)
+              )
+            ),
+            React.createElement("label", { className: "label" }, "CORE COMPETENCIES"),
+            React.createElement("div", { style: { marginBottom: 12 } },
+              COMPANY.competencies.map(c =>
+                React.createElement("label", { key: c, className: "checkbox-row" },
+                  React.createElement("input", { type: "checkbox", checked: selComps.includes(c), onChange: () => toggleComp(c) }),
+                  c
+                )
+              )
+            ),
+            React.createElement("div", { style: { display: 'flex', gap: 16, marginBottom: 12 } },
+              React.createElement("label", { className: "toggle", onClick: () => setIncludeIEE(!includeIEE) },
+                React.createElement("div", { className: "toggle-switch" + (includeIEE ? " on" : "") }),
+                "Include IEE"
+              ),
+              React.createElement("label", { className: "toggle", onClick: () => setIncludeCDL(!includeCDL) },
+                React.createElement("div", { className: "toggle-switch" + (includeCDL ? " on" : "") }),
+                "Include CDL"
+              )
+            ),
+            React.createElement("div", { className: "flex-row" },
+              React.createElement("button", { className: "btn btn-primary", onClick: () => { save(); window.print(); } }, "PRINT"),
+              React.createElement("button", { className: "btn", onClick: save }, "SAVE")
+            )
+          )
+        ),
+        /* Right preview */
+        React.createElement("div", { style: { flex: 1, minWidth: 340 } },
+          React.createElement("div", { className: "card printable-document", style: { background: 'var(--dark)', border: '2px solid var(--gold)' } },
+            /* Header */
+            React.createElement("div", { style: { background: 'var(--gold)', padding: '16px 20px', marginBottom: 16, borderRadius: '4px 4px 0 0', margin: '-16px -16px 16px' } },
+              React.createElement("div", { style: { fontSize: 20, fontWeight: 700, color: 'var(--dark)', fontFamily: "'Courier New', monospace", letterSpacing: 2 } }, COMPANY.name),
+              React.createElement("div", { style: { fontSize: 12, color: 'var(--dark)', opacity: 0.8 } }, "CAPABILITY STATEMENT" + (targetAgency ? " | " + targetAgency : ""))
+            ),
+            /* Two columns */
+            React.createElement("div", { style: { display: 'flex', gap: 20, flexWrap: 'wrap' } },
+              React.createElement("div", { style: { flex: 1, minWidth: 200 } },
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', marginBottom: 6, fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "CORE COMPETENCIES"),
+                selComps.map(c => React.createElement("div", { key: c, style: { fontSize: 12, marginBottom: 4, paddingLeft: 8, borderLeft: '2px solid var(--gold-dim)' } }, c)),
+                includeCDL && React.createElement("div", { style: { fontSize: 12, marginBottom: 4, paddingLeft: 8, borderLeft: '2px solid var(--gold-dim)' } }, "CDL Class A (HazMat, Tanker endorsements)"),
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', margin: '12px 0 6px', fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "DIFFERENTIATORS"),
+                COMPANY.differentiators.map(d => React.createElement("div", { key: d, style: { fontSize: 12, marginBottom: 4, paddingLeft: 8, borderLeft: '2px solid var(--gold-dim)' } }, d))
+              ),
+              React.createElement("div", { style: { flex: 1, minWidth: 200 } },
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', marginBottom: 6, fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "COMPANY DATA"),
+                React.createElement("div", { style: { fontSize: 12, marginBottom: 3 } }, "UEI: " + COMPANY.uei),
+                React.createElement("div", { style: { fontSize: 12, marginBottom: 3 } }, "Tribal: " + COMPANY.tribal),
+                React.createElement("div", { style: { fontSize: 12, marginBottom: 3 } }, "Location: " + COMPANY.location),
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', margin: '12px 0 6px', fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "NAICS CODES"),
+                Object.entries(COMPANY.naics).map(([k,v]) =>
+                  React.createElement("div", { key: k, style: { fontSize: 12, marginBottom: 2 } }, k + " \u2014 " + v)
+                ),
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', margin: '12px 0 6px', fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "SET-ASIDES"),
+                COMPANY.setAsides.map(s => React.createElement("span", { key: s, className: "badge", style: { background: 'var(--dark3)', color: 'var(--gold)', margin: '0 4px 4px 0' } }, s)),
+                includeIEE && React.createElement("div", { style: { fontSize: 11, marginTop: 12, padding: 8, background: 'var(--gold-glow)', borderRadius: 4, borderLeft: '3px solid var(--gold)' } }, COMPANY.ieeStatement),
+                React.createElement("div", { style: { fontSize: 11, fontWeight: 700, color: 'var(--gold)', margin: '12px 0 6px', fontFamily: "'Courier New', monospace", letterSpacing: 1 } }, "PAST PERFORMANCE"),
+                React.createElement("div", { style: { fontSize: 12 } }, COMPANY.pastPerformance)
+              )
+            ),
+            /* Footer */
+            React.createElement("div", { style: { marginTop: 16, paddingTop: 12, borderTop: '2px solid var(--gold)', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, fontSize: 11 } },
+              React.createElement("div", null, COMPANY.founder + " | " + COMPANY.title),
+              React.createElement("div", null, COMPANY.phone + " | " + COMPANY.email),
+              React.createElement("div", null, COMPANY.website)
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 3: PROPOSALS
+// ================================================================
+const TEMPLATES = {
+  Transport: "1. SCOPE OF WORK\n[Describe transport/logistics scope]\n\n2. TECHNICAL APPROACH\n- Fleet assets and CDL qualifications\n- Route planning and scheduling\n- Safety protocols and compliance\n\n3. STAFFING PLAN\n- Driver qualifications (CDL-A, HazMat, Tanker)\n- Support personnel\n\n4. QUALITY CONTROL\n- Inspection procedures\n- GPS tracking and reporting\n\n5. SCHEDULE\n- Mobilization timeline\n- Delivery milestones",
+  IT: "1. SCOPE OF WORK\n[Describe IT scope]\n\n2. TECHNICAL APPROACH\n- System architecture and design\n- Implementation methodology\n- Security framework\n\n3. STAFFING PLAN\n- Technical team qualifications\n- Certifications held\n\n4. QUALITY ASSURANCE\n- Testing protocols\n- Performance benchmarks\n\n5. SCHEDULE\n- Phase 1: Assessment\n- Phase 2: Implementation\n- Phase 3: Training & Handoff",
+  "Procurement Intel": "1. SCOPE OF WORK\n[Describe procurement intelligence scope]\n\n2. TECHNICAL APPROACH\n- AI-powered analysis methodology\n- Data sources and integration\n- Reporting framework\n\n3. DELIVERABLES\n- Intelligence reports\n- Dashboard access\n- Alert system\n\n4. DATA SECURITY\n- Handling procedures\n- Compliance standards\n\n5. TIMELINE\n- Setup and configuration\n- Ongoing delivery schedule",
+  Construction: "1. SCOPE OF WORK\n[Describe construction scope]\n\n2. TECHNICAL APPROACH\n- Construction methodology\n- Materials and equipment\n- Subcontractor management\n\n3. SAFETY PLAN\n- OSHA compliance\n- Site safety protocols\n- PPE requirements\n\n4. QUALITY CONTROL\n- Inspection schedule\n- Standards compliance\n\n5. SCHEDULE\n- Mobilization\n- Phase milestones\n- Final inspection",
+  General: "1. SCOPE OF WORK\n[Describe scope]\n\n2. TECHNICAL APPROACH\n[Describe your approach]\n\n3. STAFFING\n[Key personnel]\n\n4. QUALITY\n[QC procedures]\n\n5. SCHEDULE\n[Timeline and milestones]"
+};
+
+function ProposalPage() {
+  const [step, setStep] = useState(lsGet('prop-step', 0));
+  const [sol, setSol] = useState(lsGet('prop-sol', { num: '', title: '', agency: '', naics: '', deadline: '', value: '', setAside: 'Buy Indian Act' }));
+  const [compInfo, setCompInfo] = useState(lsGet('prop-comp', { ...COMPANY }));
+  const [techTemplate, setTechTemplate] = useState(lsGet('prop-template', 'General'));
+  const [techText, setTechText] = useState(lsGet('prop-tech', TEMPLATES.General));
+  const [lineItems, setLineItems] = useState(lsGet('prop-lines', [{ desc: '', qty: 1, unit: 'EA', price: 0 }]));
+  const [checklist, setChecklist] = useState(lsGet('prop-checks', {}));
+  const steps = ['Solicitation', 'Company', 'Technical', 'Pricing', 'Compliance'];
+
+  function autoSave() {
+    lsSet('prop-step', step); lsSet('prop-sol', sol); lsSet('prop-comp', compInfo);
+    lsSet('prop-template', techTemplate); lsSet('prop-tech', techText);
+    lsSet('prop-lines', lineItems); lsSet('prop-checks', checklist);
+  }
+  useEffect(autoSave, [step, sol, compInfo, techTemplate, techText, lineItems, checklist]);
+
+  function updateSol(k, v) { setSol(prev => ({ ...prev, [k]: v })); }
+  function addLine() { setLineItems(prev => [...prev, { desc: '', qty: 1, unit: 'EA', price: 0 }]); }
+  function removeLine(i) { setLineItems(prev => prev.filter((_, idx) => idx !== i)); }
+  function updateLine(i, k, v) { setLineItems(prev => prev.map((item, idx) => idx === i ? { ...item, [k]: v } : item)); }
+  const total = lineItems.reduce((s, l) => s + (l.qty * l.price), 0);
+
+  function getCheckItems() {
+    const base = ['Cover letter signed', 'Technical approach complete', 'Pricing schedule complete', 'SAM.gov registration current', 'UEI number verified'];
+    if (sol.setAside === 'Buy Indian Act') return [...base, 'IEE self-certification included', 'Tribal enrollment verification', 'DIAR 1480.201 compliance statement'];
+    if (sol.setAside === '8(a)') return [...base, '8(a) certification letter', 'SBA approval documentation'];
+    return base;
+  }
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "PROPOSAL BUILDER"),
+      React.createElement("div", { className: "wizard-steps" },
+        steps.map((s, i) => React.createElement("div", { key: s, className: "wizard-step" + (i === step ? " active" : "") + (i < step ? " done" : ""), onClick: () => setStep(i) }, (i + 1) + ". " + s))
+      ),
+      /* Step 0: Solicitation */
+      step === 0 && React.createElement("div", { className: "card" },
+        React.createElement("div", { className: "grid-2" },
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "SOLICITATION #"),
+            React.createElement("input", { className: "input", value: sol.num, onChange: e => updateSol('num', e.target.value), style: { marginBottom: 12 } })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "TITLE"),
+            React.createElement("input", { className: "input", value: sol.title, onChange: e => updateSol('title', e.target.value), style: { marginBottom: 12 } })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "AGENCY"),
+            React.createElement("input", { className: "input", value: sol.agency, onChange: e => updateSol('agency', e.target.value), style: { marginBottom: 12 } })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "NAICS"),
+            React.createElement("select", { className: "select", value: sol.naics, onChange: e => updateSol('naics', e.target.value), style: { marginBottom: 12 } },
+              React.createElement("option", { value: "" }, "Select..."),
+              Object.entries(COMPANY.naics).map(([k,v]) => React.createElement("option", { key: k, value: k }, k + " - " + v))
+            )
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "DEADLINE"),
+            React.createElement("input", { className: "input", type: "date", value: sol.deadline, onChange: e => updateSol('deadline', e.target.value), style: { marginBottom: 12 } })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "ESTIMATED VALUE"),
+            React.createElement("input", { className: "input", value: sol.value, onChange: e => updateSol('value', e.target.value), style: { marginBottom: 12 } })
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "label" }, "SET-ASIDE TYPE"),
+            React.createElement("select", { className: "select", value: sol.setAside, onChange: e => updateSol('setAside', e.target.value), style: { marginBottom: 12 } },
+              React.createElement("option", null, "Buy Indian Act"),
+              React.createElement("option", null, "8(a)"),
+              React.createElement("option", null, "Small Business"),
+              React.createElement("option", null, "Full & Open"),
+              React.createElement("option", null, "Indian-Owned")
+            )
+          )
+        )
+      ),
+      /* Step 1: Company */
+      step === 1 && React.createElement("div", { className: "card" },
+        React.createElement("div", { className: "grid-2" },
+          ['name', 'founder', 'title', 'phone', 'email', 'website', 'uei', 'tribal', 'location'].map(k =>
+            React.createElement("div", { key: k },
+              React.createElement("label", { className: "label" }, k.toUpperCase()),
+              React.createElement("input", { className: "input", value: compInfo[k] || '', readOnly: true, style: { marginBottom: 12, opacity: 0.7 } })
+            )
+          )
+        )
+      ),
+      /* Step 2: Technical */
+      step === 2 && React.createElement("div", { className: "card" },
+        React.createElement("label", { className: "label" }, "TEMPLATE"),
+        React.createElement("select", { className: "select", value: techTemplate, onChange: e => { setTechTemplate(e.target.value); setTechText(TEMPLATES[e.target.value]); }, style: { marginBottom: 12, maxWidth: 300 } },
+          Object.keys(TEMPLATES).map(t => React.createElement("option", { key: t }, t))
+        ),
+        React.createElement("label", { className: "label" }, "TECHNICAL APPROACH"),
+        React.createElement("textarea", { className: "textarea", value: techText, onChange: e => setTechText(e.target.value), style: { minHeight: 300, fontFamily: "'Courier New', monospace" } })
+      ),
+      /* Step 3: Pricing */
+      step === 3 && React.createElement("div", { className: "card" },
+        React.createElement("table", null,
+          React.createElement("thead", null,
+            React.createElement("tr", null,
+              React.createElement("th", null, "DESCRIPTION"),
+              React.createElement("th", { style: { width: 70 } }, "QTY"),
+              React.createElement("th", { style: { width: 80 } }, "UNIT"),
+              React.createElement("th", { style: { width: 100 } }, "PRICE"),
+              React.createElement("th", { style: { width: 100 } }, "EXTENDED"),
+              React.createElement("th", { style: { width: 40 } }, "")
+            )
+          ),
+          React.createElement("tbody", null,
+            lineItems.map((li, i) =>
+              React.createElement("tr", { key: i },
+                React.createElement("td", null, React.createElement("input", { className: "input", value: li.desc, onChange: e => updateLine(i, 'desc', e.target.value) })),
+                React.createElement("td", null, React.createElement("input", { className: "input", type: "number", value: li.qty, onChange: e => updateLine(i, 'qty', Number(e.target.value)) })),
+                React.createElement("td", null, React.createElement("select", { className: "select", value: li.unit, onChange: e => updateLine(i, 'unit', e.target.value) },
+                  ['EA', 'HR', 'DAY', 'MO', 'LOT', 'MI'].map(u => React.createElement("option", { key: u }, u))
+                )),
+                React.createElement("td", null, React.createElement("input", { className: "input", type: "number", step: "0.01", value: li.price, onChange: e => updateLine(i, 'price', Number(e.target.value)) })),
+                React.createElement("td", { style: { fontFamily: "'Courier New', monospace", color: 'var(--gold)' } }, "$" + (li.qty * li.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })),
+                React.createElement("td", null, React.createElement("button", { className: "btn btn-sm", onClick: () => removeLine(i) }, "X"))
+              )
+            ),
+            React.createElement("tr", null,
+              React.createElement("td", { colSpan: 4 }, React.createElement("button", { className: "btn btn-sm", onClick: addLine }, "+ ADD LINE")),
+              React.createElement("td", { style: { fontFamily: "'Courier New', monospace", color: 'var(--gold)', fontWeight: 700, fontSize: 16 } }, "$" + total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })),
+              React.createElement("td", null)
+            )
+          )
+        )
+      ),
+      /* Step 4: Compliance */
+      step === 4 && React.createElement("div", { className: "card" },
+        React.createElement("div", { style: { marginBottom: 16 } },
+          getCheckItems().map(item =>
+            React.createElement("label", { key: item, className: "checkbox-row" },
+              React.createElement("input", { type: "checkbox", checked: !!checklist[item], onChange: () => setChecklist(prev => ({ ...prev, [item]: !prev[item] })) }),
+              item
+            )
+          )
+        ),
+        React.createElement("div", { style: { padding: 12, background: 'var(--gold-glow)', borderRadius: 4, borderLeft: '3px solid var(--gold)', fontSize: 12, fontFamily: "'Courier New', monospace" } },
+          Object.values(checklist).filter(Boolean).length + "/" + getCheckItems().length + " items complete"
+        ),
+        React.createElement("div", { style: { marginTop: 16 } },
+          React.createElement("button", { className: "btn btn-primary", onClick: () => window.print() }, "GENERATE DOCUMENT")
+        )
+      ),
+      /* Nav */
+      React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', marginTop: 16 } },
+        React.createElement("button", { className: "btn", disabled: step === 0, onClick: () => setStep(step - 1) }, "BACK"),
+        React.createElement("button", { className: "btn btn-primary", disabled: step === 4, onClick: () => setStep(step + 1) }, "NEXT")
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 4: INTEL DASHBOARD
+// ================================================================
+function IntelPage() {
+  const FY_MONTHS = ['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep'];
+  const spendData = [40,25,30,55,45,60,70,50,65,75,85,100]; // relative intensity
+  const revenueStreams = [
+    { name: 'GovCon Dropship', data: [0,0,5,8,12,15,18,22,25,30,45,60], color: 'var(--gold)' },
+    { name: 'Intel-as-a-Service', data: [0,0,0,2,5,8,10,12,15,18,25,35], color: 'var(--blue)' },
+    { name: 'Tribal Procurement', data: [0,0,3,5,8,12,15,20,25,30,40,55], color: 'var(--green)' },
+    { name: 'MCP SaaS', data: [0,0,0,0,2,4,6,8,10,15,20,30], color: '#8B4513' },
+  ];
+
+  const [teroCount, setTeroCount] = useState(lsGet('tero-count', 4));
+  const teroTribes = [
+    'Cherokee Nation', 'Chickasaw Nation', 'Muscogee Creek', 'Choctaw Nation',
+    'Osage Nation', 'Seminole Nation', 'Quapaw Nation', 'Miami Tribe',
+    'Citizen Potawatomi', 'Absentee Shawnee'
+  ];
+  const [teroStatus, setTeroStatus] = useState(lsGet('tero-status', {
+    'Cherokee Nation': 'COMPLETE', 'Chickasaw Nation': 'IN PROGRESS',
+    'Muscogee Creek': 'IN PROGRESS', 'Choctaw Nation': 'IN PROGRESS'
+  }));
+
+  function cycleTero(tribe) {
+    const cycle = ['NOT STARTED', 'IN PROGRESS', 'COMPLETE'];
+    const cur = teroStatus[tribe] || 'NOT STARTED';
+    const next = cycle[(cycle.indexOf(cur) + 1) % 3];
+    const ns = { ...teroStatus, [tribe]: next };
+    setTeroStatus(ns); lsSet('tero-status', ns);
+    setTeroCount(Object.values(ns).filter(v => v === 'COMPLETE').length);
+    lsSet('tero-count', Object.values(ns).filter(v => v === 'COMPLETE').length);
+  }
+
+  const pipeline = [
+    { name: 'Cherokee Nation', value: '$120K/mo', score: 92, status: 'Active' },
+    { name: 'Chickasaw Nation', value: '$85K/mo', score: 78, status: 'Prospecting' },
+    { name: 'Muscogee Creek', value: '$65K/mo', score: 71, status: 'Prospecting' },
+    { name: 'City of Tulsa', value: '$45K/mo', score: 65, status: 'Research' },
+    { name: 'Choctaw Nation', value: '$110K/mo', score: 60, status: 'Research' },
+    { name: 'Osage Nation', value: '$40K/mo', score: 55, status: 'Research' },
+  ];
+
+  const engines = [
+    { name: 'GovCon Dropship', status: 'ACTIVE', color: 'var(--green)' },
+    { name: 'Intel-as-a-Service', status: 'BUILDING', color: 'var(--gold)' },
+    { name: 'Tribal Procurement', status: 'ACTIVE', color: 'var(--green)' },
+    { name: 'MCP SaaS', status: 'BUILDING', color: 'var(--gold)' },
+    { name: 'Cherokee Loans', status: 'PENDING', color: 'var(--blue)' },
+    { name: 'AI Automation', status: 'ACTIVE', color: 'var(--green)' },
+  ];
+
+  const maxSpend = Math.max(...spendData);
+  const currentMonthIdx = 6; // April = index 6 in Oct-Sep FY
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "INTEL DASHBOARD"),
+      React.createElement("div", { className: "grid-2", style: { marginBottom: 24 } },
+        /* Spending Calendar */
+        React.createElement("div", { className: "card" },
+          React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "FEDERAL SPENDING CALENDAR (FY26)"),
+          FY_MONTHS.map((m, i) =>
+            React.createElement("div", { key: m, style: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 } },
+              React.createElement("div", { style: { width: 30, fontSize: 10, fontFamily: "'Courier New', monospace", color: i === currentMonthIdx ? 'var(--gold)' : 'var(--text-dim)' } }, m),
+              React.createElement("div", { style: { flex: 1, height: 14, background: 'var(--dark3)', borderRadius: 2, overflow: 'hidden', border: i === currentMonthIdx ? '1px solid var(--gold)' : 'none' } },
+                React.createElement("div", { style: { width: (spendData[i] / maxSpend * 100) + '%', height: '100%', background: i === 11 ? 'var(--gold)' : (spendData[i] > 70 ? 'var(--green)' : 'var(--blue)'), borderRadius: 2 } })
+              ),
+              React.createElement("div", { style: { width: 30, fontSize: 10, textAlign: 'right', fontFamily: "'Courier New', monospace", color: 'var(--text-dim)' } }, spendData[i] + '%')
+            )
+          )
+        ),
+        /* Revenue Tracker */
+        React.createElement("div", { className: "card" },
+          React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "REVENUE TRACKER (FY26)"),
+          React.createElement("div", { style: { display: 'flex', gap: 8, marginBottom: 8, flexWrap: 'wrap' } },
+            revenueStreams.map(s =>
+              React.createElement("div", { key: s.name, style: { display: 'flex', alignItems: 'center', gap: 4, fontSize: 10 } },
+                React.createElement("div", { style: { width: 10, height: 10, background: s.color, borderRadius: 2 } }),
+                s.name
+              )
+            )
+          ),
+          React.createElement("div", { style: { display: 'flex', alignItems: 'flex-end', gap: 2, height: 140 } },
+            FY_MONTHS.map((m, mi) => {
+              const total = revenueStreams.reduce((s, st) => s + st.data[mi], 0);
+              const maxTotal = 180;
+              return React.createElement("div", { key: m, style: { flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' } },
+                React.createElement("div", { style: { width: '100%', display: 'flex', flexDirection: 'column-reverse', height: 120, border: mi === 11 ? '1px solid var(--gold)' : 'none', boxShadow: mi === 11 ? '0 0 8px var(--gold-dim)' : 'none', borderRadius: 2 } },
+                  revenueStreams.map(st =>
+                    React.createElement("div", { key: st.name, style: { width: '100%', height: (st.data[mi] / maxTotal * 120) + 'px', background: st.color, minHeight: st.data[mi] > 0 ? 2 : 0 } })
+                  )
+                ),
+                React.createElement("div", { style: { fontSize: 8, color: 'var(--text-dim)', marginTop: 2, fontFamily: "'Courier New', monospace" } }, m)
+              );
+            })
+          )
+        ),
+        /* TERO Progress */
+        React.createElement("div", { className: "card" },
+          React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "TERO REGISTRATION PROGRESS"),
+          React.createElement("div", { style: { fontSize: 24, fontWeight: 700, color: 'var(--gold)', fontFamily: "'Courier New', monospace", marginBottom: 8 } }, teroCount + "/39"),
+          React.createElement("div", { className: "progress-bar", style: { marginBottom: 16 } },
+            React.createElement("div", { className: "progress-fill", style: { width: (teroCount / 39 * 100) + '%' } })
+          ),
+          teroTribes.map(tribe =>
+            React.createElement("div", { key: tribe, style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 0', borderBottom: '1px solid var(--dark3)', cursor: 'pointer' }, onClick: () => cycleTero(tribe) },
+              React.createElement("span", { style: { fontSize: 12 } }, tribe),
+              React.createElement("span", { className: "badge", style: {
+                background: (teroStatus[tribe] || 'NOT STARTED') === 'COMPLETE' ? 'var(--green)' : (teroStatus[tribe] === 'IN PROGRESS' ? 'var(--gold-dim)' : 'var(--dark3)'),
+                color: (teroStatus[tribe] || 'NOT STARTED') === 'COMPLETE' ? '#fff' : 'var(--text-dim)'
+              } }, teroStatus[tribe] || 'NOT STARTED')
+            )
+          )
+        ),
+        /* Tulsa Pipeline */
+        React.createElement("div", { className: "card" },
+          React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "TULSA PIPELINE"),
+          pipeline.map(p =>
+            React.createElement("div", { key: p.name, className: "card", style: { padding: 10, marginBottom: 8 } },
+              React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', marginBottom: 4 } },
+                React.createElement("span", { style: { fontWeight: 600, fontSize: 13 } }, p.name),
+                React.createElement("span", { style: { color: 'var(--gold)', fontFamily: "'Courier New', monospace", fontSize: 12 } }, p.value)
+              ),
+              React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
+                React.createElement("div", { className: "progress-bar", style: { flex: 1, marginRight: 8 } },
+                  React.createElement("div", { className: "progress-fill", style: { width: p.score + '%' } })
+                ),
+                React.createElement("span", { style: { fontSize: 10, color: 'var(--text-dim)' } }, p.score + "%"),
+                React.createElement("span", { className: "badge", style: { marginLeft: 8, background: p.status === 'Active' ? 'var(--green)' : 'var(--dark3)', color: p.status === 'Active' ? '#fff' : 'var(--text-dim)' } }, p.status)
+              )
+            )
+          )
+        )
+      ),
+      /* Engine Status */
+      React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "ENGINE STATUS"),
+      React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 } },
+        engines.map(e =>
+          React.createElement("div", { key: e.name, className: "card", style: { textAlign: 'center', padding: 12 } },
+            React.createElement("div", { className: "status-dot", style: { background: e.color, boxShadow: '0 0 6px ' + e.color, margin: '0 auto 8px' } }),
+            React.createElement("div", { style: { fontSize: 11, fontWeight: 600, marginBottom: 4 } }, e.name),
+            React.createElement("div", { style: { fontSize: 10, color: e.color, fontFamily: "'Courier New', monospace" } }, e.status)
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 5: DARK ECONOMY
+// ================================================================
+function DarkEconomyPage() {
+  const [notes, setNotes] = useState(lsGet('dark-notes', ''));
+  const compacts = [
+    { tribe: 'Cherokee Nation', value: '$1.2B', subs: 47, unmapped: 68 },
+    { tribe: 'Chickasaw Nation', value: '$890M', subs: 32, unmapped: 74 },
+    { tribe: 'Choctaw Nation', value: '$1.1B', subs: 41, unmapped: 71 },
+    { tribe: 'Muscogee Creek', value: '$650M', subs: 28, unmapped: 79 },
+    { tribe: 'Osage Nation', value: '$380M', subs: 15, unmapped: 85 },
+  ];
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "DARK ECONOMY INTELLIGENCE"),
+      /* Rings */
+      React.createElement("div", { className: "rings-container" },
+        React.createElement("div", { className: "ring ring-outer" },
+          React.createElement("div", { style: { position: 'absolute', bottom: 8, fontSize: 10, color: 'var(--red)', fontFamily: "'Courier New', monospace" } }, "DARK \u2014 Unmapped")
+        ),
+        React.createElement("div", { className: "ring ring-mid" },
+          React.createElement("div", { style: { position: 'absolute', bottom: 8, fontSize: 10, color: 'var(--text-dim)', fontFamily: "'Courier New', monospace" } }, "HIDDEN \u2014 $17B")
+        ),
+        React.createElement("div", { className: "ring ring-inner" },
+          React.createElement("div", { style: { fontSize: 14, color: 'var(--gold)', fontWeight: 700, fontFamily: "'Courier New', monospace" } }, "$420M"),
+          React.createElement("div", { style: { fontSize: 9, color: 'var(--text-dim)' } }, "VISIBLE")
+        )
+      ),
+      /* 638 Compacts */
+      React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "638 COMPACT INTELLIGENCE"),
+      React.createElement("div", { className: "table-wrap", style: { marginBottom: 24 } },
+        React.createElement("table", null,
+          React.createElement("thead", null,
+            React.createElement("tr", null,
+              React.createElement("th", null, "TRIBE"),
+              React.createElement("th", null, "COMPACT VALUE"),
+              React.createElement("th", null, "KNOWN SUBS"),
+              React.createElement("th", null, "UNMAPPED %")
+            )
+          ),
+          React.createElement("tbody", null,
+            compacts.map(c =>
+              React.createElement("tr", { key: c.tribe },
+                React.createElement("td", { style: { fontWeight: 600 } }, c.tribe),
+                React.createElement("td", { style: { color: 'var(--gold)', fontFamily: "'Courier New', monospace" } }, c.value),
+                React.createElement("td", null, c.subs),
+                React.createElement("td", null,
+                  React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 8 } },
+                    React.createElement("div", { className: "progress-bar", style: { flex: 1, maxWidth: 120 } },
+                      React.createElement("div", { className: "progress-fill", style: { width: c.unmapped + '%', background: 'var(--red)' } })
+                    ),
+                    React.createElement("span", { style: { fontSize: 11, fontFamily: "'Courier New', monospace" } }, c.unmapped + '%')
+                  )
+                )
+              )
+            )
+          )
+        )
+      ),
+      /* Subcontract Cascade */
+      React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "SUBCONTRACT CASCADE"),
+      React.createElement("div", { style: { display: 'flex', alignItems: 'center', gap: 0, overflowX: 'auto', padding: '16px 0', marginBottom: 24 } },
+        [
+          { label: 'FEDERAL AGENCY', sub: 'IHS / BIA', color: 'var(--blue)' },
+          { label: 'PRIME', sub: 'Tribal Enterprise', color: 'var(--gold)' },
+          { label: 'SUB TIER 1', sub: 'Regional Firm', color: 'var(--green)' },
+          { label: 'SUB TIER 2', sub: 'DELZAR', color: 'var(--gold)' },
+        ].map((node, i, arr) =>
+          React.createElement(React.Fragment, { key: i },
+            React.createElement("div", { style: { padding: '12px 16px', background: 'var(--dark2)', border: '2px solid ' + node.color, borderRadius: 8, textAlign: 'center', minWidth: 130 } },
+              React.createElement("div", { style: { fontSize: 10, color: node.color, fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 4 } }, node.label),
+              React.createElement("div", { style: { fontSize: 12, fontWeight: 600 } }, node.sub)
+            ),
+            i < arr.length - 1 && React.createElement("div", { style: { fontSize: 18, color: 'var(--gold)', padding: '0 8px' } }, "\u2192")
+          )
+        )
+      ),
+      /* Notes */
+      React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 8 } }, "INTELLIGENCE NOTES"),
+      React.createElement("textarea", { className: "textarea", value: notes, onChange: e => { setNotes(e.target.value); lsSet('dark-notes', e.target.value); }, style: { minHeight: 120, fontFamily: "'Courier New', monospace" }, placeholder: "Record intelligence observations here..." })
+    )
+  );
+}
+
+// ================================================================
+// PAGE 6: CONTACTS CRM
+// ================================================================
+function ContactsPage() {
+  const [contacts, setContacts] = useState(lsGet('contacts', DEFAULT_CONTACTS));
+  const [showModal, setShowModal] = useState(false);
+  const [search, setSearch] = useState('');
+  const [editContact, setEditContact] = useState(null);
+  const blank = { id: Date.now(), name: '', title: '', org: '', type: 'Tribal Buyer', email: '', phone: '', tribe: '', notes: '', tags: '', status: 'NOT_CONTACTED', lastContact: '', nextFollowUp: '' };
+  const [form, setForm] = useState(blank);
+
+  function saveContacts(c) { setContacts(c); lsSet('contacts', c); }
+  function openAdd() { setForm({ ...blank, id: Date.now() }); setEditContact(null); setShowModal(true); }
+  function openEdit(c) { setForm({ ...c }); setEditContact(c.id); setShowModal(true); }
+  function saveForm() {
+    if (editContact) {
+      saveContacts(contacts.map(c => c.id === editContact ? form : c));
+    } else {
+      saveContacts([...contacts, form]);
+    }
+    setShowModal(false);
+  }
+  function cycleStatus(id) {
+    saveContacts(contacts.map(c => {
+      if (c.id !== id) return c;
+      const idx = STATUS_CYCLE.indexOf(c.status);
+      return { ...c, status: STATUS_CYCLE[(idx + 1) % STATUS_CYCLE.length] };
+    }));
+  }
+
+  const today = new Date().toISOString().split('T')[0];
+  const filtered = contacts.filter(c => {
+    if (!search) return true;
+    const s = search.toLowerCase();
+    return (c.name + c.org + c.email + c.tribe + c.tags + c.notes).toLowerCase().includes(s);
+  });
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "CONTACT CRM"),
+      React.createElement("div", { className: "flex-row", style: { marginBottom: 16 } },
+        React.createElement("button", { className: "btn btn-primary", onClick: openAdd }, "+ ADD CONTACT"),
+        React.createElement("input", { className: "input", style: { maxWidth: 300 }, placeholder: "Search contacts...", value: search, onChange: e => setSearch(e.target.value) })
+      ),
+      React.createElement("div", { className: "table-wrap" },
+        React.createElement("table", null,
+          React.createElement("thead", null,
+            React.createElement("tr", null,
+              React.createElement("th", null, "NAME"),
+              React.createElement("th", null, "ORG"),
+              React.createElement("th", null, "TYPE"),
+              React.createElement("th", null, "STATUS"),
+              React.createElement("th", null, "LAST CONTACT"),
+              React.createElement("th", null, "FOLLOW-UP"),
+              React.createElement("th", null, "")
+            )
+          ),
+          React.createElement("tbody", null,
+            filtered.map(c => {
+              const overdue = c.nextFollowUp && c.nextFollowUp <= today && c.status !== 'WON';
+              return React.createElement("tr", { key: c.id, style: overdue ? { background: 'rgba(139,0,0,0.1)' } : {} },
+                React.createElement("td", { style: { fontWeight: 600 } }, c.name),
+                React.createElement("td", null, c.org),
+                React.createElement("td", null, React.createElement("span", { style: { fontSize: 11, color: 'var(--text-dim)' } }, c.type)),
+                React.createElement("td", null,
+                  React.createElement("span", { className: "badge", style: { background: statusColor(c.status), color: '#fff', cursor: 'pointer' }, onClick: () => cycleStatus(c.id) }, c.status.replace('_', ' '))
+                ),
+                React.createElement("td", { style: { fontSize: 12 } }, c.lastContact || '\u2014'),
+                React.createElement("td", { style: { fontSize: 12, color: overdue ? '#ff4444' : 'inherit', fontWeight: overdue ? 700 : 400 } }, c.nextFollowUp || '\u2014'),
+                React.createElement("td", null, React.createElement("button", { className: "btn btn-sm", onClick: () => openEdit(c) }, "EDIT"))
+              );
+            })
+          )
+        )
+      ),
+      /* Modal */
+      showModal && React.createElement("div", { className: "modal-overlay", onClick: () => setShowModal(false) },
+        React.createElement("div", { className: "modal", onClick: e => e.stopPropagation() },
+          React.createElement("div", { className: "modal-title" }, editContact ? "EDIT CONTACT" : "ADD CONTACT"),
+          ['name', 'title', 'org', 'email', 'phone', 'tribe', 'notes', 'tags'].map(field =>
+            React.createElement("div", { key: field, style: { marginBottom: 10 } },
+              React.createElement("label", { className: "label" }, field.toUpperCase()),
+              field === 'notes' ?
+                React.createElement("textarea", { className: "textarea", value: form[field], onChange: e => setForm(prev => ({ ...prev, [field]: e.target.value })) }) :
+                React.createElement("input", { className: "input", value: form[field], onChange: e => setForm(prev => ({ ...prev, [field]: e.target.value })) })
+            )
+          ),
+          React.createElement("div", { style: { marginBottom: 10 } },
+            React.createElement("label", { className: "label" }, "TYPE"),
+            React.createElement("select", { className: "select", value: form.type, onChange: e => setForm(prev => ({ ...prev, type: e.target.value })) },
+              ['Tribal Buyer', 'Federal Buyer', 'Partner', 'Subcontractor', 'Investor', 'Other'].map(t => React.createElement("option", { key: t }, t))
+            )
+          ),
+          React.createElement("div", { className: "grid-2", style: { marginBottom: 10 } },
+            React.createElement("div", null,
+              React.createElement("label", { className: "label" }, "LAST CONTACT"),
+              React.createElement("input", { className: "input", type: "date", value: form.lastContact, onChange: e => setForm(prev => ({ ...prev, lastContact: e.target.value })) })
+            ),
+            React.createElement("div", null,
+              React.createElement("label", { className: "label" }, "NEXT FOLLOW-UP"),
+              React.createElement("input", { className: "input", type: "date", value: form.nextFollowUp, onChange: e => setForm(prev => ({ ...prev, nextFollowUp: e.target.value })) })
+            )
+          ),
+          React.createElement("div", { className: "flex-row" },
+            React.createElement("button", { className: "btn btn-primary", onClick: saveForm }, "SAVE"),
+            React.createElement("button", { className: "btn", onClick: () => setShowModal(false) }, "CANCEL")
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 7: DOCUMENTS
+// ================================================================
+function DocumentsPage() {
+  const [docs, setDocs] = useState(lsGet('docs', DEFAULT_DOCS));
+  const [activeTab, setActiveTab] = useState('ALL');
+  const [showModal, setShowModal] = useState(false);
+  const [form, setForm] = useState({ id: 0, title: '', category: 'TERO', status: 'NOT STARTED', description: '', url: '' });
+  const tabs = ['ALL', 'TERO', 'Loan', 'Pitch', 'CapStmt', 'Dossier', 'Generated'];
+
+  function saveDocs(d) { setDocs(d); lsSet('docs', d); }
+  function openAdd() { setForm({ id: Date.now(), title: '', category: 'TERO', status: 'NOT STARTED', description: '', url: '' }); setShowModal(true); }
+  function addDoc() { saveDocs([...docs, form]); setShowModal(false); }
+
+  const filtered = activeTab === 'ALL' ? docs : docs.filter(d => d.category === activeTab);
+
+  function statusBg(s) {
+    if (s === 'COMPLETE') return 'var(--green)';
+    if (s === 'IN PROGRESS') return 'var(--gold-dim)';
+    if (s === 'DRAFT') return 'var(--blue)';
+    return 'var(--dark3)';
+  }
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "DOCUMENT VAULT"),
+      React.createElement("div", { className: "flex-row", style: { marginBottom: 16 } },
+        React.createElement("button", { className: "btn btn-primary", onClick: openAdd }, "+ ADD DOCUMENT")
+      ),
+      React.createElement("div", { className: "tab-bar" },
+        tabs.map(t => React.createElement("div", { key: t, className: "tab-item" + (activeTab === t ? " active" : ""), onClick: () => setActiveTab(t) }, t))
+      ),
+      React.createElement("div", { style: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12 } },
+        filtered.map(doc =>
+          React.createElement("div", {
+            key: doc.id, className: "card card-gold-border", style: { cursor: doc.url ? 'pointer' : 'default' },
+            onClick: () => doc.url && window.open(doc.url, '_blank')
+          },
+            React.createElement("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 } },
+              React.createElement("span", { className: "badge", style: { background: 'var(--dark3)', color: 'var(--gold)' } }, doc.category),
+              React.createElement("span", { className: "badge", style: { background: statusBg(doc.status), color: '#fff' } }, doc.status)
+            ),
+            React.createElement("div", { style: { fontWeight: 600, fontSize: 14, marginBottom: 8 } }, doc.title),
+            React.createElement("div", { style: { fontSize: 12, color: 'var(--text-dim)', lineHeight: 1.5 } }, doc.description),
+            doc.url && React.createElement("div", { style: { fontSize: 10, color: 'var(--blue)', marginTop: 8 } }, "Click to open")
+          )
+        )
+      ),
+      showModal && React.createElement("div", { className: "modal-overlay", onClick: () => setShowModal(false) },
+        React.createElement("div", { className: "modal", onClick: e => e.stopPropagation() },
+          React.createElement("div", { className: "modal-title" }, "ADD DOCUMENT"),
+          React.createElement("div", { style: { marginBottom: 10 } },
+            React.createElement("label", { className: "label" }, "TITLE"),
+            React.createElement("input", { className: "input", value: form.title, onChange: e => setForm(prev => ({ ...prev, title: e.target.value })) })
+          ),
+          React.createElement("div", { style: { marginBottom: 10 } },
+            React.createElement("label", { className: "label" }, "CATEGORY"),
+            React.createElement("select", { className: "select", value: form.category, onChange: e => setForm(prev => ({ ...prev, category: e.target.value })) },
+              ['TERO', 'Loan', 'Pitch', 'CapStmt', 'Dossier', 'Generated'].map(c => React.createElement("option", { key: c }, c))
+            )
+          ),
+          React.createElement("div", { style: { marginBottom: 10 } },
+            React.createElement("label", { className: "label" }, "URL"),
+            React.createElement("input", { className: "input", value: form.url, onChange: e => setForm(prev => ({ ...prev, url: e.target.value })), placeholder: "https://..." })
+          ),
+          React.createElement("div", { style: { marginBottom: 10 } },
+            React.createElement("label", { className: "label" }, "DESCRIPTION"),
+            React.createElement("textarea", { className: "textarea", value: form.description, onChange: e => setForm(prev => ({ ...prev, description: e.target.value })) })
+          ),
+          React.createElement("div", { className: "flex-row" },
+            React.createElement("button", { className: "btn btn-primary", onClick: addDoc }, "SAVE"),
+            React.createElement("button", { className: "btn", onClick: () => setShowModal(false) }, "CANCEL")
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// PAGE 8: TERMINAL
+// ================================================================
+function TerminalPage() {
+  const termRef = useRef(null);
+  const [logs, setLogs] = useState(TERMINAL_LOGS);
+
+  useEffect(() => {
+    if (termRef.current) termRef.current.scrollTop = termRef.current.scrollHeight;
+  }, [logs]);
+
+  useEffect(() => {
+    const msgs = [
+      { agent: "SYSTEM", msg: "Heartbeat check... all systems operational.", color: "dim" },
+      { agent: "HUNTER", msg: "Monitoring procurement feeds... no new postings.", color: "green" },
+      { agent: "FORGE", msg: "MCP connection pool: 5 active, 0 stale.", color: "blue" },
+      { agent: "WAR ROOM", msg: "Pipeline value unchanged: $752K across 15 opportunities.", color: "gold" },
+      { agent: "ALERT", msg: "Approaching deadline: review Pinktober Hoodies bid.", color: "red" },
+    ];
+    let idx = 0;
+    const iv = setInterval(() => {
+      const now = new Date();
+      const t = now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0') + ':' + now.getSeconds().toString().padStart(2,'0');
+      setLogs(prev => [...prev.slice(-40), { ...msgs[idx % msgs.length], time: t }]);
+      idx++;
+    }, 8000);
+    return () => clearInterval(iv);
+  }, []);
+
+  const colorClass = c => {
+    if (c === 'green') return 'term-green';
+    if (c === 'gold') return 'term-gold';
+    if (c === 'blue') return 'term-blue';
+    if (c === 'red') return 'term-red';
+    return 'term-dim';
+  };
+
+  const agents = [
+    { name: 'HUNTER', desc: 'Procurement Scanner', schedule: 'Every 60 min', status: 'ACTIVE', lastRun: '04:00:48' },
+    { name: 'WAR ROOM', desc: 'Strategy Analyzer', schedule: 'Every 120 min', status: 'ACTIVE', lastRun: '04:00:55' },
+    { name: 'FORGE', desc: 'MCP Coordinator', schedule: 'Continuous', status: 'ACTIVE', lastRun: '04:01:02' },
+    { name: 'SENTINEL', desc: 'Compliance Monitor', schedule: 'Daily 06:00', status: 'STANDBY', lastRun: '03:00:00' },
+  ];
+
+  const systems = [
+    { name: 'Tango API', status: 'ONLINE' },
+    { name: 'Google Drive', status: 'ONLINE' },
+    { name: 'Manus', status: 'ONLINE' },
+    { name: 'Claude', status: 'ONLINE' },
+  ];
+
+  return (
+    React.createElement("div", null,
+      React.createElement("div", { className: "page-header" }, "COMMAND TERMINAL"),
+      React.createElement("div", { className: "terminal", ref: termRef, style: { height: 'calc(100vh - 380px)', minHeight: 300 } },
+        logs.map((log, i) =>
+          React.createElement("div", { key: i },
+            React.createElement("span", { className: "term-dim" }, "[" + log.time + "] "),
+            React.createElement("span", { className: colorClass(log.color), style: { fontWeight: 700 } }, "[" + log.agent + "] "),
+            React.createElement("span", { className: colorClass(log.color) }, log.msg)
+          )
+        )
+      ),
+      React.createElement("div", { style: { marginTop: 20 } },
+        React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "AGENT STATUS"),
+        React.createElement("div", { className: "grid-4" },
+          agents.map(a =>
+            React.createElement("div", { key: a.name, className: "card", style: { textAlign: 'center' } },
+              React.createElement("div", { style: { fontWeight: 700, color: 'var(--gold)', fontFamily: "'Courier New', monospace", marginBottom: 4 } }, a.name),
+              React.createElement("div", { style: { fontSize: 11, color: 'var(--text-dim)', marginBottom: 6 } }, a.desc),
+              React.createElement("div", { style: { fontSize: 10, marginBottom: 4 } }, a.schedule),
+              React.createElement("div", { className: "badge", style: { background: a.status === 'ACTIVE' ? 'var(--green)' : 'var(--dark3)', color: '#fff', marginBottom: 4 } }, a.status),
+              React.createElement("div", { style: { fontSize: 10, color: 'var(--text-dim)' } }, "Last: " + a.lastRun)
+            )
+          )
+        )
+      ),
+      React.createElement("div", { style: { marginTop: 16 } },
+        React.createElement("div", { style: { fontSize: 12, color: 'var(--gold)', fontFamily: "'Courier New', monospace", letterSpacing: 1, marginBottom: 12 } }, "SYSTEM HEALTH"),
+        React.createElement("div", { style: { display: 'flex', gap: 24, flexWrap: 'wrap' } },
+          systems.map(s =>
+            React.createElement("div", { key: s.name, style: { display: 'flex', alignItems: 'center', gap: 8 } },
+              React.createElement("span", { className: "status-dot dot-green" }),
+              React.createElement("span", { style: { fontSize: 12, fontFamily: "'Courier New', monospace" } }, s.name),
+              React.createElement("span", { style: { fontSize: 10, color: 'var(--green)' } }, s.status)
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+// ================================================================
+// APP ROOT
+// ================================================================
+function App() {
+  const [unlocked, setUnlocked] = useState(sessionStorage.getItem(LS_PREFIX + 'session') === '1');
+  const [page, setPage] = useState('procurement');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [toasts, setToasts] = useState([]);
+
+  function toast(msg) {
+    setToasts(prev => [...prev, msg]);
+    setTimeout(() => setToasts(prev => prev.slice(1)), 3000);
+  }
+
+  if (!unlocked) {
+    return React.createElement(PinLock, { onUnlock: () => setUnlocked(true) });
+  }
+
+  function renderPage() {
+    switch(page) {
+      case 'procurement': return React.createElement(ProcurementPage, null);
+      case 'capstatement': return React.createElement(CapStatementPage, null);
+      case 'proposals': return React.createElement(ProposalPage, null);
+      case 'intel': return React.createElement(IntelPage, null);
+      case 'darkeconomy': return React.createElement(DarkEconomyPage, null);
+      case 'contacts': return React.createElement(ContactsPage, null);
+      case 'documents': return React.createElement(DocumentsPage, null);
+      case 'terminal': return React.createElement(TerminalPage, null);
+      default: return React.createElement(ProcurementPage, null);
+    }
+  }
+
+  return (
+    React.createElement("div", null,
+      React.createElement(StatusBar, null),
+      React.createElement("button", { className: "hamburger", onClick: () => setSidebarOpen(!sidebarOpen) }, sidebarOpen ? "\u2715" : "\u2630"),
+      React.createElement(Sidebar, { activePage: page, onNavigate: setPage, open: sidebarOpen, onClose: () => setSidebarOpen(false) }),
+      React.createElement("div", { className: "main-content", key: page },
+        renderPage()
+      ),
+      React.createElement(ToastContainer, { toasts: toasts })
+    )
+  );
+}
+
+// ── MOUNT ──
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(React.createElement(App, null));
+</script>
+</body>
+</html>
