@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Delzar Sovereign Wealth Machine | Command Center</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+/* ===== RESET & BASE ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#D4AF37;--gold-dim:#8B7523;--dark:#0D0D0D;--dark2:#1A1A1A;--dark3:#2A2A2A;--dark4:#333;
+  --red:#8B0000;--red-bright:#CC0000;--green:#006600;--green-bright:#00AA00;
+  --blue:#1E90FF;--purple:#9B59B6;--orange:#E67E22;--yellow:#DAA520;
+  --text:#E0E0E0;--text-dim:#888;--mono:'Consolas','Courier New',monospace;
+  --sans:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* ===== PARTICLE BACKGROUND ===== */
+#particle-canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.15}
+
+/* ===== LAYOUT ===== */
+.app{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:16px}
+.header{text-align:center;padding:24px 0 16px;border-bottom:1px solid var(--gold-dim);margin-bottom:20px}
+.header h1{font-family:var(--mono);font-size:2.2rem;letter-spacing:6px;color:var(--gold);text-shadow:0 0 20px rgba(212,175,55,.3)}
+.header .logo{font-size:3rem;font-weight:900;letter-spacing:12px;margin-bottom:4px}
+.header .subtitle{font-size:.85rem;color:var(--text-dim);letter-spacing:3px;text-transform:uppercase;margin-top:4px}
+.header .tagline{font-size:.7rem;color:var(--gold-dim);letter-spacing:2px;margin-top:2px}
+
+.section{margin-bottom:24px}
+.section-title{font-family:var(--mono);font-size:1rem;color:var(--gold);letter-spacing:3px;text-transform:uppercase;padding-bottom:8px;border-bottom:1px solid var(--dark3);margin-bottom:14px;display:flex;align-items:center;gap:10px}
+.section-title::before{content:'';display:inline-block;width:8px;height:8px;background:var(--gold);clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%)}
+
+/* ===== ENGINE CARDS ===== */
+.engine-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.engine-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:14px;position:relative;overflow:hidden;transition:border-color .3s,box-shadow .3s}
+.engine-card:hover{border-color:var(--gold-dim);box-shadow:0 0 15px rgba(212,175,55,.1)}
+.engine-card .card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+.engine-card .card-label{font-family:var(--mono);font-size:.65rem;color:var(--gold-dim);letter-spacing:2px}
+.engine-card .card-title{font-size:.95rem;font-weight:700;color:#fff;margin-bottom:6px}
+.engine-card .card-target{font-family:var(--mono);font-size:.75rem;color:var(--green-bright)}
+.engine-card .card-edge{font-size:.7rem;color:var(--text-dim);margin-top:6px;font-style:italic}
+
+.status-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.status-dot.green{background:var(--green-bright);box-shadow:0 0 8px var(--green-bright)}
+.status-dot.yellow{background:var(--yellow);box-shadow:0 0 8px var(--yellow)}
+.status-dot.red{background:var(--red-bright);box-shadow:0 0 8px var(--red-bright)}
+.status-dot.blue{background:var(--blue);box-shadow:0 0 8px var(--blue)}
+.status-dot.gray{background:#666;box-shadow:0 0 8px #666}
+.status-dot.pulse{animation:pulse 2s ease-in-out infinite}
+
+.status-badge{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.status-badge.setup{background:rgba(218,165,32,.15);color:var(--yellow);border:1px solid var(--yellow)}
+.status-badge.ready{background:rgba(0,170,0,.12);color:var(--green-bright);border:1px solid var(--green-bright)}
+.status-badge.registering{background:rgba(30,144,255,.12);color:var(--blue);border:1px solid var(--blue)}
+.status-badge.build{background:rgba(155,89,182,.12);color:var(--purple);border:1px solid var(--purple)}
+.status-badge.connected{background:rgba(0,170,0,.12);color:var(--green-bright);border:1px solid var(--green-bright)}
+
+.multiplier-card{border-color:var(--gold-dim)!important;background:linear-gradient(135deg,var(--dark2),rgba(212,175,55,.05))}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(1.3)}}
+
+/* ===== REVENUE CHART ===== */
+.chart-container{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:16px;overflow-x:auto}
+.chart{display:flex;align-items:flex-end;gap:6px;height:260px;padding:0 4px;min-width:600px}
+.chart-bar-group{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end}
+.chart-stack{display:flex;flex-direction:column-reverse;width:100%;max-width:60px;position:relative}
+.chart-segment{transition:height 1.5s ease-out;min-height:0;border-radius:2px 2px 0 0}
+.chart-segment.govcon{background:var(--gold)}
+.chart-segment.intel{background:var(--blue)}
+.chart-segment.tribal{background:var(--red-bright)}
+.chart-segment.saas{background:var(--purple)}
+.chart-month{font-family:var(--mono);font-size:.6rem;color:var(--text-dim);margin-top:6px;text-align:center}
+.chart-total-label{font-family:var(--mono);font-size:.55rem;color:var(--text-dim);margin-top:2px;text-align:center}
+.chart-legend{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.chart-legend-item{display:flex;align-items:center;gap:6px;font-size:.7rem;color:var(--text-dim)}
+.chart-legend-swatch{width:12px;height:12px;border-radius:2px}
+
+.september-glow{animation:septGlow 2s ease-in-out infinite;position:relative}
+.september-glow::after{content:'';position:absolute;inset:-3px;border:1px solid var(--red-bright);border-radius:4px;animation:septGlow 2s ease-in-out infinite}
+@keyframes septGlow{0%,100%{box-shadow:0 0 8px rgba(204,0,0,.4)}50%{box-shadow:0 0 20px rgba(204,0,0,.8)}}
+
+.year-total{text-align:center;margin-top:16px;font-family:var(--mono);font-size:1.6rem;color:var(--gold);text-shadow:0 0 12px rgba(212,175,55,.3)}
+.year-total span{font-size:.75rem;color:var(--text-dim);display:block;letter-spacing:2px}
+
+/* ===== SPENDING CALENDAR ===== */
+.calendar-bar{display:flex;height:40px;border-radius:4px;overflow:hidden;margin-bottom:8px}
+.calendar-segment{display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.55rem;color:#fff;letter-spacing:1px;transition:all .3s}
+.cal-medium{background:var(--yellow);color:#000}
+.cal-med-high{background:var(--orange)}
+.cal-high{background:#D4500A}
+.cal-very-high{background:#CC2200}
+.cal-maximum{background:var(--red-bright);animation:maxPulse 1.5s ease-in-out infinite}
+@keyframes maxPulse{0%,100%{background-color:#8B0000;box-shadow:inset 0 0 10px rgba(255,0,0,.3)}50%{background-color:#CC0000;box-shadow:inset 0 0 20px rgba(255,0,0,.6)}}
+.cal-stat{font-family:var(--mono);font-size:.75rem;color:var(--red-bright);text-align:center;margin-top:6px}
+
+/* ===== TERO TABLE ===== */
+.tero-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.tero-table th{font-family:var(--mono);font-size:.65rem;color:var(--gold-dim);text-align:left;padding:8px 10px;border-bottom:1px solid var(--dark3);letter-spacing:1px}
+.tero-table td{padding:8px 10px;border-bottom:1px solid rgba(255,255,255,.04)}
+.tero-table tr:hover{background:rgba(212,175,55,.03)}
+.tero-status{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:3px;letter-spacing:1px}
+.tero-status.complete{background:rgba(0,170,0,.15);color:var(--green-bright);border:1px solid var(--green)}
+.tero-status.inprogress{background:rgba(218,165,32,.15);color:var(--yellow);border:1px solid var(--yellow)}
+.tero-status.notstarted{background:rgba(255,255,255,.05);color:#666;border:1px solid #444}
+
+/* ===== PIPELINE CARDS ===== */
+.pipeline-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.pipeline-card{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:12px;transition:all .3s}
+.pipeline-card:hover{border-color:var(--blue);box-shadow:0 0 12px rgba(30,144,255,.15)}
+.pipeline-card.pitch-ready{border-color:var(--green);box-shadow:0 0 10px rgba(0,170,0,.15)}
+.pipeline-card .target-name{font-weight:700;font-size:.9rem;color:#fff;margin-bottom:4px}
+.pipeline-card .target-value{font-family:var(--mono);font-size:.85rem;color:var(--green-bright)}
+.pipeline-card .target-score{font-family:var(--mono);font-size:.65rem;color:var(--text-dim);margin-top:4px}
+.pipeline-total{text-align:center;margin-top:14px;font-family:var(--mono);padding:10px;background:var(--dark2);border:1px solid var(--gold-dim);border-radius:6px}
+.pipeline-total .big{font-size:1.3rem;color:var(--gold)}
+.pipeline-total .sub{font-size:.7rem;color:var(--text-dim);margin-top:2px}
+
+/* ===== AUTOMATION LIST ===== */
+.auto-list{display:flex;flex-direction:column;gap:6px}
+.auto-item{display:flex;align-items:center;gap:12px;background:var(--dark2);border:1px solid var(--dark3);border-radius:4px;padding:10px 14px;transition:border-color .3s}
+.auto-item:hover{border-color:var(--dark4)}
+.auto-item .auto-name{font-weight:700;font-size:.85rem;color:#fff;min-width:160px}
+.auto-item .auto-desc{font-size:.7rem;color:var(--text-dim);flex:1}
+.auto-item .auto-status{font-family:var(--mono);font-size:.6rem;padding:2px 8px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.auto-status.tobuild{background:rgba(218,165,32,.15);color:var(--yellow);border:1px solid var(--yellow)}
+.auto-status.planned{background:rgba(255,255,255,.05);color:#666;border:1px solid #444}
+.auto-status.sourceready{background:rgba(30,144,255,.12);color:var(--blue);border:1px solid var(--blue)}
+
+/* ===== SPRINT CHECKLIST ===== */
+.sprint-days{display:flex;flex-direction:column;gap:10px}
+.sprint-day{background:var(--dark2);border:1px solid var(--dark3);border-radius:6px;padding:12px 14px}
+.sprint-day-header{font-family:var(--mono);font-size:.7rem;color:var(--gold);letter-spacing:2px;margin-bottom:8px}
+.sprint-item{display:flex;align-items:center;gap:10px;padding:5px 0;cursor:pointer;user-select:none;transition:opacity .2s}
+.sprint-item:hover{opacity:.85}
+.sprint-checkbox{width:18px;height:18px;border:2px solid var(--dark4);border-radius:3px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;font-size:.7rem}
+.sprint-checkbox.checked{border-color:var(--green-bright);background:var(--green);color:#fff}
+.sprint-item-text{font-size:.8rem;color:var(--text)}
+.sprint-item.done .sprint-item-text{text-decoration:line-through;color:var(--text-dim)}
+
+/* ===== FOOTER ===== */
+.footer{text-align:center;padding:24px 0 12px;border-top:1px solid var(--dark3);margin-top:20px}
+.footer p{font-size:.7rem;color:var(--text-dim);margin-bottom:4px;letter-spacing:1px}
+.footer .gold{color:var(--gold-dim)}
+
+/* ===== RESPONSIVE ===== */
+@media(max-width:768px){
+  html{font-size:13px}
+  .app{padding:10px}
+  .header h1{font-size:1.4rem;letter-spacing:3px}
+  .header .logo{font-size:2rem;letter-spacing:6px}
+  .engine-grid{grid-template-columns:1fr 1fr}
+  .pipeline-grid{grid-template-columns:1fr}
+  .auto-item{flex-direction:column;align-items:flex-start;gap:6px}
+  .auto-item .auto-name{min-width:unset}
+  .chart{min-width:500px}
+}
+@media(max-width:480px){
+  .engine-grid{grid-template-columns:1fr}
+  .chart{height:200px}
+}
+</style>
+</head>
+<body>
+<canvas id="particle-canvas"></canvas>
+<div id="root"></div>
+
+<script>
+// ===== PARTICLE GRID BACKGROUND =====
+(function(){
+  const c=document.getElementById('particle-canvas'),ctx=c.getContext('2d');
+  let w,h,particles=[];
+  function resize(){w=c.width=window.innerWidth;h=c.height=window.innerHeight}
+  window.addEventListener('resize',resize);resize();
+  for(let i=0;i<60;i++)particles.push({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5});
+  function draw(){
+    ctx.clearRect(0,0,w,h);
+    // Grid lines
+    ctx.strokeStyle='rgba(212,175,55,.04)';ctx.lineWidth=.5;
+    for(let x=0;x<w;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke()}
+    for(let y=0;y<h;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke()}
+    // Particles
+    particles.forEach((p,i)=>{
+      p.x+=p.vx;p.y+=p.vy;
+      if(p.x<0||p.x>w)p.vx*=-1;
+      if(p.y<0||p.y>h)p.vy*=-1;
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(212,175,55,.5)';ctx.fill();
+      // Connect nearby particles
+      for(let j=i+1;j<particles.length;j++){
+        const dx=p.x-particles[j].x,dy=p.y-particles[j].y,dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<150){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(particles[j].x,particles[j].y);
+        ctx.strokeStyle=`rgba(212,175,55,${.12*(1-dist/150)})`;ctx.lineWidth=.5;ctx.stroke()}
+      }
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+
+<script type="text/babel">
+const {useState,useEffect,useRef,useCallback}=React;
+
+// ===== DATA =====
+const ENGINES=[
+  {id:'E1',label:'ENGINE 1',title:'GovCon Dropship',status:'SETUP',statusClass:'setup',dotColor:'yellow',target:'$50-100K/mo',edge:'Buy Indian Act Monopoly'},
+  {id:'E2',label:'ENGINE 2',title:'Intel-as-a-Service',status:'PITCH READY',statusClass:'ready',dotColor:'green',target:'$15-25K/mo',edge:'20 Tulsa Targets Ranked'},
+  {id:'E3',label:'ENGINE 3',title:'Tribal Procurement',status:'REGISTERING',statusClass:'registering',dotColor:'blue',target:'Contract-Dependent',edge:'Tier 1 Cherokee TERO'},
+  {id:'E4',label:'ENGINE 4',title:'MCP SaaS',status:'BUILD PHASE',statusClass:'build',dotColor:'yellow',target:'$19/mo + $500/hr',edge:'EU AI Act Aug 2 2026'},
+];
+const MULTIPLIERS=[
+  {id:'MA',label:'MULTIPLIER A',title:'Cherokee Capital',status:'APP READY',statusClass:'ready',dotColor:'green',target:'$25K - $5M',edge:'2% Interest',isMult:true},
+  {id:'MB',label:'MULTIPLIER B',title:'AI Stack',status:'CONNECTED',statusClass:'connected',dotColor:'green',target:'Full Stack',edge:'Tango + Manus + Claude + FORGE',isMult:true},
+];
+
+const MONTHS=['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar'];
+const REV_DATA={
+  govcon:[2000,5000,8000,15000,20000,75000,25000,20000,20000,15000,15000,15000],
+  intel:[0,2500,2500,5000,10000,15000,18000,20000,20000,22000,22000,25000],
+  tribal:[0,0,0,5000,5000,10000,12000,15000,15000,15000,18000,18000],
+  saas:[0,0,19,57,114,190,285,380,494,608,741,893],
+};
+const YEAR_TOTAL=Object.values(REV_DATA).flat().reduce((a,b)=>a+b,0);
+
+const FISCAL_MONTHS=[
+  {label:'Oct',cls:'cal-medium'},{label:'Nov',cls:'cal-medium'},{label:'Dec',cls:'cal-medium'},
+  {label:'Jan',cls:'cal-medium'},{label:'Feb',cls:'cal-medium'},{label:'Mar',cls:'cal-medium'},
+  {label:'Apr',cls:'cal-med-high'},{label:'May',cls:'cal-med-high'},{label:'Jun',cls:'cal-med-high'},
+  {label:'Jul',cls:'cal-high'},{label:'Aug',cls:'cal-very-high'},{label:'Sep',cls:'cal-maximum'},
+];
+
+const TERO_DATA=[
+  {rank:1,tribe:'Cherokee Nation',volume:'$2.16B',status:'IN PROGRESS'},
+  {rank:2,tribe:'Chickasaw Nation',volume:'$3B',status:'NOT STARTED'},
+  {rank:3,tribe:'Choctaw Nation',volume:'$2B',status:'NOT STARTED'},
+  {rank:4,tribe:'Citizen Potawatomi Nation',volume:'$1B',status:'NOT STARTED'},
+  {rank:5,tribe:'Muscogee Creek Nation',volume:'$500M',status:'NOT STARTED'},
+  {rank:6,tribe:'Osage Nation',volume:'$350M',status:'NOT STARTED'},
+  {rank:7,tribe:'Seminole Nation',volume:'$280M',status:'NOT STARTED'},
+  {rank:8,tribe:'Tulalip Tribes',volume:'$200M',status:'NOT STARTED'},
+  {rank:9,tribe:'Navajo Nation',volume:'$180M',status:'NOT STARTED'},
+  {rank:10,tribe:'Poarch Band of Creek',volume:'$150M',status:'NOT STARTED'},
+];
+
+const TARGETS=[
+  {name:'Manhattan Construction',value:'$2,500/mo',note:'PITCH READY',highlight:true},
+  {name:'Williams Companies',value:'$15K/mo',note:'Score 47/50'},
+  {name:'BOK Financial',value:'$18K/mo',note:'Score 46/50'},
+  {name:'Saint Francis Health',value:'$6.2K/mo',note:'Score 45/50'},
+  {name:'Cherokee Nation Enterprises',value:'$12K/mo',note:'Score 44/50'},
+  {name:'American Airlines Tulsa',value:'$9K/mo',note:'Score 43/50'},
+];
+
+const AUTOMATIONS=[
+  {name:'Autonomous Hunter',desc:'Scans Tango API daily, auto-generates capability statements',status:'TO BUILD',cls:'tobuild',dot:'yellow'},
+  {name:'Money Tracer MCP',desc:'7-phase multi-model intelligence engine',status:'TO BUILD',cls:'tobuild',dot:'yellow'},
+  {name:'Pitch Factory',desc:'Auto-generates PPTX + PDF pitch decks',status:'TO BUILD',cls:'tobuild',dot:'yellow'},
+  {name:'ComplianceGuard MCP',desc:'EU AI Act audit-logging middleware',status:'TO BUILD',cls:'tobuild',dot:'yellow'},
+  {name:'September War Room',desc:'Intensity escalation Jul-Sep',status:'PLANNED',cls:'planned',dot:'gray'},
+  {name:'LeadFinder MCP',desc:'B2B lead generation server',status:'SOURCE READY',cls:'sourceready',dot:'blue'},
+  {name:'FORGE Replicator',desc:'Auto-discover MCP market gaps',status:'PLANNED',cls:'planned',dot:'gray'},
+];
+
+const SPRINT_DAYS=[
+  {day:'DAY 1',items:['Review entire framework document','Download Cherokee TERO application','Check Opportunity Zone status for office']},
+  {day:'DAY 2',items:['Gather TERO supporting documents','Fill out Cherokee loan application','Register with Chickasaw Nation']},
+  {day:'DAY 3',items:['Mail TERO application packet','Print pitch document for Manhattan','Submit Cherokee loan application']},
+  {day:'DAY 4',items:['Walk into Manhattan Construction office','Register on SAM.gov','Follow up on TERO status']},
+  {day:'DAY 5',items:['Call Muscogee TERO office','Register with Tulalip Tribes','Register on CherokeeBids portal']},
+  {day:'DAYS 6-7',items:['Build ComplianceGuard MCP skeleton','Set up project repo and CI/CD','Draft API specification']},
+  {day:'DAY 8',items:['ID top 10 dropship products','Set up distributor accounts','Price comparison analysis']},
+  {day:'DAYS 9-10',items:['Deploy ComplianceGuard to Fly.io','End-to-end testing','Write documentation']},
+  {day:'DAYS 11-14',items:['Launch marketing site','Submit to MCP directories','Email EU AI startups','Set up analytics tracking']},
+];
+
+// ===== COMPONENTS =====
+
+function EngineCard({data}){
+  return(
+    <div className={`engine-card ${data.isMult?'multiplier-card':''}`}>
+      <div className="card-header">
+        <span className="card-label">{data.label}</span>
+        <span className={`status-dot ${data.dotColor} ${data.dotColor==='green'?'pulse':''}`}></span>
+      </div>
+      <div className="card-title">{data.title}</div>
+      <span className={`status-badge ${data.statusClass}`}>{data.status}</span>
+      <div className="card-target">{data.target}</div>
+      <div className="card-edge">{data.edge}</div>
+    </div>
+  );
+}
+
+function RevenueChart(){
+  const [animated,setAnimated]=useState(false);
+  const [countVal,setCountVal]=useState(0);
+  const ref=useRef(null);
+
+  useEffect(()=>{
+    const obs=new IntersectionObserver(([e])=>{if(e.isIntersecting){setAnimated(true);obs.disconnect()}},{threshold:.2});
+    if(ref.current)obs.observe(ref.current);
+    return()=>obs.disconnect();
+  },[]);
+
+  useEffect(()=>{
+    if(!animated)return;
+    const dur=2000,start=performance.now();
+    function tick(now){
+      const p=Math.min((now-start)/dur,1);
+      const ease=1-Math.pow(1-p,3);
+      setCountVal(Math.round(YEAR_TOTAL*ease));
+      if(p<1)requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  },[animated]);
+
+  const maxTotal=Math.max(...MONTHS.map((_,i)=>REV_DATA.govcon[i]+REV_DATA.intel[i]+REV_DATA.tribal[i]+REV_DATA.saas[i]));
+
+  return(
+    <div className="chart-container" ref={ref}>
+      <div className="chart">
+        {MONTHS.map((m,i)=>{
+          const g=REV_DATA.govcon[i],n=REV_DATA.intel[i],t=REV_DATA.tribal[i],s=REV_DATA.saas[i];
+          const total=g+n+t+s;
+          const scale=220/maxTotal;
+          const isSep=i===5;
+          return(
+            <div className="chart-bar-group" key={m}>
+              <div className={`chart-stack ${isSep?'september-glow':''}`}>
+                {s>0&&<div className="chart-segment saas" style={{height:animated?`${s*scale}px`:'0px'}}></div>}
+                {t>0&&<div className="chart-segment tribal" style={{height:animated?`${t*scale}px`:'0px'}}></div>}
+                {n>0&&<div className="chart-segment intel" style={{height:animated?`${n*scale}px`:'0px'}}></div>}
+                {g>0&&<div className="chart-segment govcon" style={{height:animated?`${g*scale}px`:'0px'}}></div>}
+              </div>
+              <div className="chart-month">{m}</div>
+              <div className="chart-total-label">${(total/1000).toFixed(total<1000?2:0)}K</div>
+            </div>
+          );
+        })}
+      </div>
+      <div className="chart-legend">
+        <div className="chart-legend-item"><div className="chart-legend-swatch" style={{background:'var(--gold)'}}></div>GovCon Dropship</div>
+        <div className="chart-legend-item"><div className="chart-legend-swatch" style={{background:'var(--blue)'}}></div>Intel Sales</div>
+        <div className="chart-legend-item"><div className="chart-legend-swatch" style={{background:'var(--red-bright)'}}></div>Tribal Contracts</div>
+        <div className="chart-legend-item"><div className="chart-legend-swatch" style={{background:'var(--purple)'}}></div>MCP SaaS</div>
+      </div>
+      <div className="year-total">
+        <span>YEAR 1 PROJECTED REVENUE</span>
+        ${countVal.toLocaleString()}
+      </div>
+    </div>
+  );
+}
+
+function SpendingCalendar(){
+  return(
+    <div style={{background:'var(--dark2)',border:'1px solid var(--dark3)',borderRadius:'6px',padding:'16px'}}>
+      <div style={{fontFamily:'var(--mono)',fontSize:'.7rem',color:'var(--text-dim)',marginBottom:'10px',letterSpacing:'1px',textAlign:'center'}}>
+        FEDERAL FISCAL YEAR (OCT - SEP) &mdash; OKLAHOMA SPENDING INTENSITY
+      </div>
+      <div className="calendar-bar">
+        {FISCAL_MONTHS.map(m=>(
+          <div className={`calendar-segment ${m.cls}`} key={m.label} style={{flex:1}}>{m.label}</div>
+        ))}
+      </div>
+      <div className="cal-stat">$1.52B in September (3.7x normal) &mdash; TARGET WINDOW</div>
+    </div>
+  );
+}
+
+function TEROTracker(){
+  return(
+    <div style={{overflowX:'auto'}}>
+      <table className="tero-table">
+        <thead><tr><th>#</th><th>TRIBE</th><th>ANNUAL PROCUREMENT</th><th>REGISTRATION STATUS</th></tr></thead>
+        <tbody>
+          {TERO_DATA.map(t=>{
+            const cls=t.status==='COMPLETE'?'complete':t.status==='IN PROGRESS'?'inprogress':'notstarted';
+            return(
+              <tr key={t.rank}>
+                <td style={{fontFamily:'var(--mono)',color:'var(--gold-dim)'}}>{t.rank}</td>
+                <td style={{fontWeight:600}}>{t.tribe}</td>
+                <td style={{fontFamily:'var(--mono)',color:'var(--green-bright)'}}>{t.volume}</td>
+                <td><span className={`tero-status ${cls}`}>{t.status}</span></td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function Pipeline(){
+  return(
+    <div>
+      <div className="pipeline-grid">
+        {TARGETS.map(t=>(
+          <div className={`pipeline-card ${t.highlight?'pitch-ready':''}`} key={t.name}>
+            <div className="target-name">{t.name}</div>
+            <div className="target-value">{t.value}</div>
+            <div className="target-score">{t.note}</div>
+          </div>
+        ))}
+      </div>
+      <div className="pipeline-total">
+        <div className="big">$62,700/mo = $752,400 ARR</div>
+        <div className="sub">TOTAL TULSA PIPELINE VALUE</div>
+      </div>
+    </div>
+  );
+}
+
+function AutomationStack(){
+  return(
+    <div className="auto-list">
+      {AUTOMATIONS.map(a=>(
+        <div className="auto-item" key={a.name}>
+          <span className={`status-dot ${a.dot}`}></span>
+          <span className="auto-name">{a.name}</span>
+          <span className="auto-desc">{a.desc}</span>
+          <span className={`auto-status ${a.cls}`}>{a.status}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function SprintChecklist(){
+  const storageKey='delzar-sprint-v1';
+  const [checked,setChecked]=useState(()=>{
+    try{return JSON.parse(localStorage.getItem(storageKey))||{}}catch(e){return{}}
+  });
+
+  const toggle=useCallback((dayIdx,itemIdx)=>{
+    setChecked(prev=>{
+      const key=`${dayIdx}-${itemIdx}`;
+      const next={...prev,[key]:!prev[key]};
+      localStorage.setItem(storageKey,JSON.stringify(next));
+      return next;
+    });
+  },[]);
+
+  const totalItems=SPRINT_DAYS.reduce((a,d)=>a+d.items.length,0);
+  const doneItems=Object.values(checked).filter(Boolean).length;
+
+  return(
+    <div>
+      <div style={{fontFamily:'var(--mono)',fontSize:'.75rem',color:'var(--text-dim)',marginBottom:'12px',textAlign:'right'}}>
+        {doneItems} / {totalItems} COMPLETE ({Math.round(doneItems/totalItems*100)}%)
+      </div>
+      <div className="sprint-days">
+        {SPRINT_DAYS.map((d,di)=>(
+          <div className="sprint-day" key={di}>
+            <div className="sprint-day-header">{d.day}</div>
+            {d.items.map((item,ii)=>{
+              const key=`${di}-${ii}`;
+              const isDone=!!checked[key];
+              return(
+                <div className={`sprint-item ${isDone?'done':''}`} key={ii} onClick={()=>toggle(di,ii)}>
+                  <div className={`sprint-checkbox ${isDone?'checked':''}`}>{isDone?'\u2713':''}</div>
+                  <span className="sprint-item-text">{item}</span>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ===== MAIN APP =====
+function App(){
+  return(
+    <div className="app">
+      <header className="header">
+        <div className="logo" style={{color:'var(--gold)'}}>DZ</div>
+        <h1>DELZAR SOVEREIGN WEALTH MACHINE</h1>
+        <div className="subtitle">Command Center Dashboard</div>
+        <div className="tagline">Cherokee Nation Citizen-Owned | Delzar Solutions LLC</div>
+      </header>
+
+      <div className="section">
+        <div className="section-title">Engine Status</div>
+        <div className="engine-grid">
+          {ENGINES.map(e=><EngineCard key={e.id} data={e}/>)}
+          {MULTIPLIERS.map(m=><EngineCard key={m.id} data={m}/>)}
+        </div>
+      </div>
+
+      <div className="section">
+        <div className="section-title">12-Month Revenue Projection</div>
+        <RevenueChart/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Federal Spending Surge Calendar</div>
+        <SpendingCalendar/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">TERO Registration Tracker</div>
+        <TEROTracker/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Tulsa Targets Pipeline</div>
+        <Pipeline/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">Automation Stack Status</div>
+        <AutomationStack/>
+      </div>
+
+      <div className="section">
+        <div className="section-title">14-Day Sprint Checklist</div>
+        <SprintChecklist/>
+      </div>
+
+      <footer className="footer">
+        <p>Delzar Solutions LLC &mdash; Cherokee Nation Citizen-Owned | TERO Certified | Federal &amp; Tribal Contracting</p>
+        <p className="gold">Built with Claude Code | Sovereign Wealth Machine v1.0 | April 2026</p>
+      </footer>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
