@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+{% if not o %}<p>Not found.</p>{% else %}
+<h2>{{ o.title }}</h2>
+<table>
+  <tr><td>Solicitation</td><td>{{ o.solicitation_no or "-" }}</td></tr>
+  <tr><td>Instrument</td><td>{{ o.piid_type or "-" }}</td></tr>
+  <tr><td>Agency / office</td><td>{{ o.agency }} / {{ o.office }}</td></tr>
+  <tr><td>Set-aside</td><td>{{ o.set_aside or "none" }}</td></tr>
+  <tr><td>NAICS / PSC</td><td>{{ o.naics }} / {{ o.psc }}</td></tr>
+  <tr><td>Place</td><td>{{ o.place_city }}, {{ o.place_state }} {{ o.place_zip or "" }}</td></tr>
+  <tr><td>Posted / due</td><td>{{ o.posted_date }} → {{ o.response_deadline }}</td></tr>
+  <tr><td>POC</td><td>{{ o.poc_name or "" }} {{ o.poc_email or "" }}</td></tr>
+  <tr><td>Attachments</td><td>{{ o.attachment_count }}</td></tr>
+  <tr><td>Link</td><td>{% if o.url %}<a href="{{ o.url }}" style="color:var(--accent)">{{ o.url }}</a>{% endif %}</td></tr>
+</table>
+<h2>Score: {{ o.score }} — the work</h2>
+<table>
+  {% for k, v in breakdown.items() %}
+  <tr><td>{{ k }}</td><td>{{ v }}</td></tr>
+  {% endfor %}
+</table>
+{% endif %}
+{% endblock %}

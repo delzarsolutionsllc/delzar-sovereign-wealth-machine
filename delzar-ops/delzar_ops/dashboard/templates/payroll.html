@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Certified payroll status</h2>
+{% for row in contracts %}
+  <h3>{{ row.c.contract_no }} <span class="dim">{{ row.c.title }} ({{ row.c.status }})</span></h3>
+  {% if row.owed %}
+    <p class="OVERDUE">OWED: {{ row.owed|length }} week(s) —
+      {% for w in row.owed %}{{ w }} {% endfor %}
+      &nbsp; Run: <code>delzar payroll generate {{ row.c.contract_no }}</code></p>
+  {% elif row.c.status == "active" %}
+    <p class="pos">Current.</p>
+  {% endif %}
+  {% if row.payrolls %}
+  <table>
+    <tr><th>#</th><th>week ending</th><th>type</th><th>pdf</th></tr>
+    {% for p in row.payrolls %}
+    <tr><td>{{ p.payroll_number }}{% if p.is_final %} (FINAL){% endif %}</td>
+        <td>{{ p.week_ending }}</td>
+        <td>{% if p.is_zero_activity %}<span class="badge">zero activity</span>{% else %}work{% endif %}</td>
+        <td class="dim">{{ p.pdf_path or "" }}</td></tr>
+    {% endfor %}
+  </table>
+  {% endif %}
+{% else %}
+  <p class="dim">No contracts yet. <code>delzar payroll contract-add</code></p>
+{% endfor %}
+{% endblock %}
