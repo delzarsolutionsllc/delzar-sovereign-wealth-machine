@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>BPA grid</h2>
+{% for office, services in grid.items() %}
+  <h3>{{ office }}</h3>
+  <table>
+    {% for svc, holders in services.items() %}
+    <tr><td>{{ svc }}</td><td>{{ holders|join(", ") }}</td></tr>
+    {% endfor %}
+  </table>
+{% else %}<p class="dim">Grid empty — seed and edit bpa_grid.csv.</p>{% endfor %}
+
+<h2>Establishment waves</h2>
+{% if waves %}
+  <p>{{ waves.wave_count or waves.waves|length }} wave(s), avg gap {{ waves.avg_gap_days }}d.
+  {% if waves.predicted_next %}<b>Predicted next window: {{ waves.window }}</b>{% endif %}</p>
+{% else %}<p class="dim">Not enough establishment dates on record.</p>{% endif %}
+
+<h2>Recompete calendar</h2>
+<table>
+  <tr><th>expires</th><th class="num">days</th><th>holder</th><th>office / service</th></tr>
+  {% for r in recompetes %}
+  <tr><td>{{ r.expires }}</td><td class="num">{{ r.days_out }}</td><td>{{ r.holder }}</td>
+      <td class="dim">{{ r.field_office }} / {{ r.service_type }}</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Thin cells (fewest avg bidders first)</h2>
+<table>
+  <tr><th>category</th><th class="num">awards</th><th class="num">avg bidders</th></tr>
+  {% for c in cells %}
+  <tr><td>{{ c.category }}</td><td class="num">{{ c.awards }}</td><td class="num">{{ c.avg_bids }}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

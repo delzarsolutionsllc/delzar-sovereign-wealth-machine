@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Bids</h2>
+{% if stats %}
+<p>Win rate: <b>{{ (stats.win_rate * 100)|round }}%</b> ({{ stats.won }}/{{ stats.decided }})
+{% if stats.avg_delta_from_winner is not none %}
+ &nbsp;|&nbsp; avg delta vs winner on losses: {{ (stats.avg_delta_from_winner * 100)|round(1) }}%
+{% endif %}</p>
+{% else %}<p class="dim">Win-rate stats unlock after 5 decided bids.</p>{% endif %}
+<table>
+  <tr><th>#</th><th>title</th><th>solicitation</th><th class="num">bid</th>
+      <th class="num">direct cost</th><th>model</th><th>outcome</th><th class="num">winner</th></tr>
+  {% for b in bids %}
+  <tr><td>{{ b.id }}</td><td>{{ b.title[:50] }}</td><td class="dim">{{ b.solicitation_no or "" }}</td>
+      <td class="num">{% if b.bid_price %}${{ "%.0f"|format(b.bid_price) }}{% endif %}</td>
+      <td class="num">${{ "%.0f"|format(b.total_direct_cost or 0) }}</td>
+      <td>{{ b.model_chosen or "-" }}</td>
+      <td class="{{ 'pos' if b.outcome == 'won' else ('neg' if b.outcome == 'lost' else 'dim') }}">{{ b.outcome }}</td>
+      <td class="num">{% if b.winning_price %}${{ "%.0f"|format(b.winning_price) }}{% endif %}</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}

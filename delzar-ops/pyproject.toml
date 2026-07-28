@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "delzar-ops"
+version = "0.1.0"
+description = "DELZAR OPS - Federal contracting operations system for Delzar Solutions LLC"
+requires-python = ">=3.11"
+dependencies = [
+    "typer>=0.9",
+    "reportlab>=4.0",
+    "fastapi>=0.104",
+    "jinja2>=3.1",
+    "apscheduler>=3.10",
+    "httpx>=0.25",
+    "uvicorn>=0.24",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+delzar = "delzar_ops.cli:app"
+
+[tool.setuptools.packages.find]
+include = ["delzar_ops*"]
+
+[tool.setuptools.package-data]
+delzar_ops = ["regulatory.json", "migrations/*.sql", "dashboard/templates/*.html", "seed/data/*.csv"]
