@@ -21,6 +21,7 @@ def create_app() -> FastAPI:
 
     def render(name: str, **ctx) -> HTMLResponse:
         ctx.setdefault("today", date.today().isoformat())
+        ctx.setdefault("active", name.removesuffix(".html"))
         return HTMLResponse(env.get_template(name).render(**ctx))
 
     @app.get("/", response_class=HTMLResponse)
