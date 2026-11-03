@@ -1,0 +1,28 @@
+{
+  "_description": "Vendor assessments for Lab 15. answers: yes | partial | no (unanswered = no). contract.clauses lists what the signed paperwork actually contains.",
+  "vendors": [
+    { "id": "VN-1", "name": "CloudPayroll Inc", "service": "SaaS payroll processing", "relationship": "vendor",
+      "data": "regulated", "access": "portal", "criticality": "high",
+      "answers": { "Q01": "yes", "Q02": "yes", "Q03": "yes", "Q04": "yes", "Q05": "yes", "Q06": "yes", "Q07": "yes", "Q08": "yes", "Q09": "yes", "Q10": "yes", "Q11": "yes" },
+      "contract": { "clauses": ["MSA", "NDA", "SLA", "right_to_audit", "breach_notification", "data_return_destruction", "DPA"],
+                    "sla": { "uptime": 99.95, "breach_notification_hours": 48 } } },
+    { "id": "VN-2", "name": "CoolAir HVAC Services", "service": "Remote monitoring of building HVAC", "relationship": "vendor",
+      "data": "public", "access": "network", "criticality": "medium",
+      "answers": { "Q01": "no", "Q02": "partial", "Q03": "no", "Q04": "yes", "Q05": "no", "Q06": "no", "Q07": "no", "Q08": "yes", "Q09": "partial", "Q10": "no", "Q11": "yes" },
+      "contract": { "clauses": ["MSA", "NDA", "SLA"], "sla": { "uptime": 99.5, "breach_notification_hours": 72 } } },
+    { "id": "VN-3", "name": "QuickInsights Analytics", "service": "Customer analytics on exported CRM data", "relationship": "vendor",
+      "data": "confidential", "access": "portal", "criticality": "high",
+      "answers": { "Q01": "no", "Q02": "yes", "Q03": "partial", "Q04": "yes", "Q06": "no", "Q09": "partial", "Q11": "yes" },
+      "contract": { "clauses": ["MSA", "NDA", "SLA", "breach_notification"], "sla": { "uptime": 99.0, "breach_notification_hours": 120 } } },
+    { "id": "VN-4", "name": "Riverbend Co-Marketing", "service": "Joint marketing partnership", "relationship": "partner",
+      "data": "internal", "access": "portal", "criticality": "medium",
+      "answers": { "Q01": "yes", "Q02": "yes", "Q03": "yes", "Q04": "yes", "Q05": "partial", "Q06": "no", "Q07": "yes", "Q08": "yes", "Q09": "yes", "Q10": "partial", "Q11": "yes" },
+      "contract": { "clauses": ["MSA", "NDA", "MOU"], "sla": { "uptime": 99.5, "breach_notification_hours": 72 } } },
+    { "id": "VN-5", "name": "NetOps MSP", "service": "Managed network operations (24x7 admin access)", "relationship": "vendor",
+      "data": "confidential", "access": "privileged", "criticality": "high",
+      "answers": { "Q01": "yes", "Q02": "yes", "Q03": "yes", "Q04": "yes", "Q05": "yes", "Q06": "yes", "Q07": "partial", "Q08": "yes", "Q09": "yes", "Q10": "yes", "Q11": "no" },
+      "contract": { "clauses": ["MSA", "NDA", "SLA", "right_to_audit", "breach_notification", "data_return_destruction", "security_requirements_schedule"],
+                    "sla": { "uptime": 99.95, "breach_notification_hours": 24 } },
+      "notes": "The MSP's owner is the brother-in-law of our IT director; this was not disclosed during selection." }
+  ]
+}

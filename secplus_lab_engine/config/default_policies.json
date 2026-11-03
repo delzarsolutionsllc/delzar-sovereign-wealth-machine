@@ -355,5 +355,49 @@
     "restore_hours_per_tb": 1.5,
     "host_rebuild_hours": 4,
     "test_max_age_days": 365
+  },
+
+  "vendor_risk": {
+    "data_sensitivity": { "public": 1, "internal": 2, "confidential": 3, "regulated": 4 },
+    "access_level": { "none": 1, "portal": 2, "network": 3, "privileged": 4 },
+    "criticality": { "low": 1, "medium": 2, "high": 3 },
+    "inherent_bands": { "high": 18, "medium": 8 },
+    "residual_bands": { "low": 8, "medium": 16 },
+    "max_control_reduction": 0.7,
+    "questionnaire": {
+      "Q01": { "weight": 15, "text": "Independent assessment (SOC 2 Type II or ISO 27001) within 12 months" },
+      "Q02": { "weight": 10, "text": "MFA enforced for all staff and administrative access" },
+      "Q03": { "weight": 10, "text": "Customer data encrypted at rest and in transit" },
+      "Q04": { "weight": 5,  "text": "Annual security awareness training" },
+      "Q05": { "weight": 10, "text": "Incident response plan tested in the last 12 months" },
+      "Q06": { "weight": 10, "text": "Third-party penetration test in the last 12 months" },
+      "Q07": { "weight": 10, "text": "Subprocessors (fourth parties) disclosed and assessed (supply chain analysis)" },
+      "Q08": { "weight": 5,  "text": "Background checks for staff with access to customer data" },
+      "Q09": { "weight": 10, "text": "Vulnerability management with defined remediation SLAs" },
+      "Q10": { "weight": 10, "text": "Business continuity / disaster recovery tested" },
+      "Q11": { "weight": 5,  "text": "No undisclosed conflicts of interest with our staff" }
+    },
+    "independent_assessment_question": "Q01",
+    "conflict_of_interest_question": "Q11",
+    "required_clauses": {
+      "all":                 ["MSA", "NDA"],
+      "confidential":        ["SLA", "right_to_audit", "breach_notification", "data_return_destruction"],
+      "regulated":           ["SLA", "right_to_audit", "breach_notification", "data_return_destruction", "DPA"],
+      "network":             ["security_requirements_schedule"],
+      "privileged":          ["security_requirements_schedule", "right_to_audit"],
+      "partner":             ["BPA"]
+    },
+    "sla_min_uptime": { "low": 99.0, "medium": 99.5, "high": 99.9 },
+    "max_breach_notification_hours": 72,
+    "monitoring_cadence": { "high": "quarterly reviews + continuous monitoring", "medium": "annual reassessment", "low": "reassess every 2 years or on contract renewal" },
+    "agreement_types": {
+      "SLA": "Service-level agreement: measurable service commitments such as uptime and response times, with remedies",
+      "MSA": "Master service agreement: the umbrella legal terms that govern all future work orders",
+      "SOW/WO": "Statement of work / work order: the specific deliverables, scope and timeline for one engagement",
+      "NDA": "Non-disclosure agreement: obligation to keep shared information confidential",
+      "MOU": "Memorandum of understanding: a statement of shared intent, usually NOT legally binding",
+      "MOA": "Memorandum of agreement: a more formal, conditional agreement between parties on specific responsibilities",
+      "BPA": "Business partnership agreement: how partners share profits, losses, decisions and responsibilities"
+    }
   }
 }
