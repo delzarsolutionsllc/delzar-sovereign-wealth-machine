@@ -1,0 +1,25 @@
+{
+  "_description": "Simulated HR feed (the authoritative source of truth for identity). Lab 1 replays these events in order.",
+  "events": [
+    { "type": "joiner", "identity": { "user_id": "u1001", "name": "Alice Nguyen",   "department": "HR",          "role": "hr_specialist",     "clearance": "confidential", "manager": "u0001" } },
+    { "type": "joiner", "identity": { "user_id": "u1002", "name": "Bob Martinez",   "department": "Procurement", "role": "procurement_clerk", "clearance": "internal",     "manager": "u0002" } },
+    { "type": "joiner", "identity": { "user_id": "u1003", "name": "Carol Smith",    "department": "Engineering", "role": "developer",         "clearance": "confidential", "manager": "u0003" } },
+    { "type": "joiner", "identity": { "user_id": "u1004", "name": "Dan Okafor",     "department": "Finance",     "role": "accounts_payable",  "clearance": "confidential", "manager": "u0002" } },
+    { "type": "joiner", "identity": { "user_id": "u1005", "name": "Erin Walsh",     "department": "IT",          "role": "it_admin",          "clearance": "secret",       "manager": "u0004" } },
+
+    { "type": "mover",  "user_id": "u1002", "new_role": "procurement_mgr", "new_department": "Procurement", "revoke_previous": false, "note": "Promotion. Ticket forgot to remove the old clerk role (privilege creep)." },
+    { "type": "mover",  "user_id": "u1003", "new_role": "release_manager", "new_department": "Engineering", "revoke_previous": false, "note": "Lateral move. Kept developer access 'just in case'." },
+    { "type": "grant",  "user_id": "u1004", "extra_role": "procurement_mgr", "note": "Temporary coverage while a manager is on leave. Never expired." },
+    { "type": "grant",  "user_id": "u1005", "extra_role": "security_auditor", "note": "Asked to help with the quarterly audit." },
+
+    { "type": "leaver", "user_id": "u1001", "reason": "voluntary_resignation", "last_day": "2026-11-02" },
+    { "type": "leaver", "user_id": "u1005", "reason": "termination_for_cause", "last_day": "2026-11-03" }
+  ],
+  "access_checks": [
+    { "user_id": "u1002", "action": "po:approve",      "resource": { "name": "PO-7781",          "classification": "internal",     "department": "Procurement" }, "hour": 10 },
+    { "user_id": "u1004", "action": "hr_records:read", "resource": { "name": "salary-band-2026", "classification": "confidential", "department": "HR" },          "hour": 14 },
+    { "user_id": "u1003", "action": "deploy:production","resource": { "name": "payroll-app",     "classification": "confidential", "department": "Engineering" }, "hour": 23 },
+    { "user_id": "u1005", "action": "server:admin",    "resource": { "name": "dc01",             "classification": "secret",       "department": "IT" },          "hour": 9 },
+    { "user_id": "u1001", "action": "hr_records:read", "resource": { "name": "employee-ssn-db",  "classification": "confidential", "department": "HR" },          "hour": 11 }
+  ]
+}

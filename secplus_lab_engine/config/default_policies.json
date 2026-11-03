@@ -1,0 +1,150 @@
+{
+  "_meta": {
+    "description": "Baseline security policies for the Security+ SY0-701 lab engine. Edit freely to run your own scenarios.",
+    "version": "1.0.0"
+  },
+
+  "identity_governance": {
+    "clearance_levels": { "public": 0, "internal": 1, "confidential": 2, "secret": 3 },
+    "roles": {
+      "employee":          ["email:send", "intranet:read", "timesheet:submit"],
+      "procurement_clerk": ["email:send", "intranet:read", "po:create", "vendor:read"],
+      "procurement_mgr":   ["email:send", "intranet:read", "po:approve", "vendor:read", "vendor:create"],
+      "accounts_payable":  ["email:send", "intranet:read", "invoice:pay", "vendor:read"],
+      "hr_specialist":     ["email:send", "intranet:read", "hr_records:read", "hr_records:write"],
+      "it_admin":          ["email:send", "intranet:read", "ad:user_create", "ad:user_disable", "server:admin"],
+      "security_auditor":  ["email:send", "intranet:read", "logs:read", "audit:report"],
+      "developer":         ["email:send", "intranet:read", "repo:write", "deploy:staging"],
+      "release_manager":   ["email:send", "intranet:read", "deploy:production", "change:approve"]
+    },
+    "sod_conflicts": [
+      { "id": "SOD-01", "a": "po:create",     "b": "po:approve",       "risk": "Fraudulent purchase orders: one person can create AND approve spend." },
+      { "id": "SOD-02", "a": "vendor:create", "b": "invoice:pay",      "risk": "Ghost-vendor fraud: create a fake vendor then pay it." },
+      { "id": "SOD-03", "a": "repo:write",    "b": "deploy:production","risk": "Unreviewed code pushed straight to production." },
+      { "id": "SOD-04", "a": "server:admin",  "b": "audit:report",     "risk": "Admin can audit (and hide) their own actions." },
+      { "id": "SOD-05", "a": "po:create",     "b": "invoice:pay",      "risk": "Create a PO and pay it without independent check." }
+    ],
+    "abac_rules": {
+      "require_clearance_gte_classification": true,
+      "require_department_match_for": ["confidential", "secret"],
+      "business_hours": { "start": 7, "end": 19 },
+      "restrict_outside_hours_for": ["secret"],
+      "allowed_employment_status": ["active"]
+    },
+    "leaver_sla_hours": 24
+  },
+
+  "zero_trust": {
+    "token_ttl_seconds": 900,
+    "signing_key": "lab-only-demo-key-change-me",
+    "thresholds": { "allow": 70, "step_up": 50 },
+    "weights": {
+      "device_unhealthy": 30,
+      "device_unmanaged": 20,
+      "ip_bad_reputation": 40,
+      "ip_suspicious_reputation": 15,
+      "outside_business_hours": 10,
+      "no_mfa": 25,
+      "geo_anomaly": 20,
+      "high_user_risk": 30
+    },
+    "min_device_health": 70,
+    "business_hours": { "start": 7, "end": 19 },
+    "resource_sensitivity": {
+      "intranet":         { "min_score": 50, "requires_mfa": false },
+      "hr-database":      { "min_score": 80, "requires_mfa": true },
+      "finance-ledger":   { "min_score": 85, "requires_mfa": true },
+      "source-repo":      { "min_score": 75, "requires_mfa": true },
+      "prod-db":          { "min_score": 90, "requires_mfa": true }
+    },
+    "entitlements": {
+      "alice":   ["intranet", "hr-database"],
+      "bob":     ["intranet", "finance-ledger"],
+      "carol":   ["intranet", "source-repo", "prod-db"],
+      "mallory": ["intranet"]
+    }
+  },
+
+  "log_inspection": {
+    "failed_logon_event_id": 4625,
+    "successful_logon_event_id": 4624,
+    "log_cleared_event_ids": [1102, 104],
+    "privileged_logon_event_id": 4672,
+    "brute_force_threshold": 5,
+    "brute_force_window_minutes": 10,
+    "impossible_travel_kmh": 900,
+    "port_scan_distinct_ports": 10,
+    "continuous_log_hosts": ["DC01", "FW01"],
+    "max_log_gap_minutes": 30,
+    "threat_intel": {
+      "bad_ips": ["185.220.101.45", "45.155.205.233", "103.75.190.12"],
+      "bad_user_agent_patterns": ["sqlmap", "nikto", "masscan", "nmap", "python-requests/2.0", "curl/7.1"],
+      "bad_file_hashes": [
+        "44d88612fea8a8f36de82e1278abb02f",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ]
+    },
+    "integrity_salt": "lab-log-salt-2026"
+  },
+
+  "change_management": {
+    "maintenance_windows": [
+      { "day": "Saturday", "start": "00:00", "end": "06:00" },
+      { "day": "Sunday",   "start": "00:00", "end": "06:00" }
+    ],
+    "blackout_dates": ["2026-11-27", "2026-12-24", "2026-12-25", "2026-12-31"],
+    "cab_quorum": 2,
+    "cab_members": ["cab_chair", "sec_architect", "ops_lead", "app_owner"],
+    "max_risk_for_auto_approve": 3,
+    "systems": {
+      "web-frontend":   { "owner": "app_owner", "legacy": false, "depends_on": ["api-gateway"],          "tags": ["tls1.2"] },
+      "api-gateway":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["auth-service", "erp-legacy"], "tags": ["tls1.2"] },
+      "auth-service":   { "owner": "sec_architect", "legacy": false, "depends_on": ["ldap"],             "tags": ["tls1.2"] },
+      "ldap":           { "owner": "ops_lead",  "legacy": false, "depends_on": [],                       "tags": ["port:636"] },
+      "erp-legacy":     { "owner": "app_owner", "legacy": true,  "depends_on": ["db-oracle"],            "tags": ["requires:tls1.0", "requires:smbv1", "port:1521"] },
+      "db-oracle":      { "owner": "ops_lead",  "legacy": true,  "depends_on": [],                       "tags": ["port:1521"] },
+      "payroll-app":    { "owner": "app_owner", "legacy": false, "depends_on": ["db-oracle", "auth-service"], "tags": ["tls1.2"] },
+      "file-server":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] }
+    },
+    "irreversible_actions": ["db_schema_migrate", "firmware_flash", "data_purge", "key_rotation_destroy_old"]
+  },
+
+  "ai_governance": {
+    "agents": {
+      "patch-bot-01":    { "type": "patching",  "allowed_actions": ["apply_patch", "restart_service", "read_inventory"] },
+      "fw-agent-07":     { "type": "firewall",  "allowed_actions": ["firewall_rule_add", "firewall_rule_modify", "read_inventory"] },
+      "iam-helper-02":   { "type": "identity",  "allowed_actions": ["grant_privilege", "revoke_privilege", "read_inventory"] },
+      "soc-triage-03":   { "type": "soc",       "allowed_actions": ["isolate_host", "read_logs", "open_ticket"] }
+    },
+    "immutable_firewall_rules": [0],
+    "privileged_roles": ["admin", "domain_admin", "root", "global_admin"],
+    "protected_controls": ["mfa", "edr", "audit_logging", "siem_forwarder", "backup_job"],
+    "confidence_threshold": 0.80,
+    "max_actions_per_agent_per_window": 5,
+    "rate_window_seconds": 60,
+    "quarantine_after_blocks": 3,
+    "human_approvers": ["sec_architect", "cab_chair"],
+    "dangerous_command_patterns": [
+      "rm\\s+-rf\\s+/(\\s|$)",
+      "curl[^|]*\\|\\s*(ba)?sh",
+      "wget[^|]*\\|\\s*(ba)?sh",
+      "chmod\\s+777",
+      "base64\\s+(-d|--decode).*\\|\\s*(ba)?sh",
+      "mkfs\\.",
+      "dd\\s+if=.*of=/dev/sd",
+      "Set-MpPreference\\s+-DisableRealtimeMonitoring",
+      "net\\s+user\\s+\\S+\\s+\\S+\\s+/add"
+    ],
+    "prompt_injection_patterns": [
+      "ignore (all |any )?(previous|prior) instructions",
+      "disregard (the )?(policy|guardrails|rules)",
+      "you are now",
+      "developer mode",
+      "system override",
+      "pretend (to be|you are)"
+    ],
+    "asset_inventory": ["web-frontend", "api-gateway", "auth-service", "ldap", "erp-legacy", "db-oracle", "payroll-app", "file-server", "ws-0142", "ws-0177"],
+    "patch_catalog": ["KB5031356", "KB5032189", "KB5033375", "CVE-2024-3094-fix", "openssl-3.0.13"],
+    "approved_cab_tickets": ["CAB-2026-1101", "CAB-2026-1102", "CAB-2026-1107"]
+  }
+}

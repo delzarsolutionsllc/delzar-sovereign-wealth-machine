@@ -1,0 +1,17 @@
+{
+  "_description": "Access requests for Lab 2. Each one flows Subject -> PEP -> (PE + PA in the control plane) -> PEP -> Resource.",
+  "requests": [
+    { "id": "REQ-01", "subject": "alice",   "resource": "hr-database",    "action": "read",  "hour": 10, "mfa": true,  "device": { "id": "LT-ALICE-01", "managed": true,  "health_score": 95 }, "ip": "10.20.1.15",     "ip_reputation": "good",       "geo": "Tulsa, US",     "usual_geo": "Tulsa, US",  "user_risk": "low",  "note": "Normal workday access from a healthy corporate laptop." },
+    { "id": "REQ-02", "subject": "bob",     "resource": "finance-ledger", "action": "write", "hour": 22, "mfa": false, "device": { "id": "BYOD-BOB-PHONE", "managed": false, "health_score": 60 }, "ip": "73.14.88.201",   "ip_reputation": "suspicious", "geo": "Denver, US",    "usual_geo": "Tulsa, US",  "user_risk": "low",  "note": "Late-night write from an unmanaged phone without MFA." },
+    { "id": "REQ-03", "subject": "carol",   "resource": "prod-db",        "action": "read",  "hour": 14, "mfa": true,  "device": { "id": "LT-CAROL-02", "managed": true,  "health_score": 65 }, "ip": "10.20.4.33",     "ip_reputation": "good",       "geo": "Tulsa, US",     "usual_geo": "Tulsa, US",  "user_risk": "low",  "note": "Engineer reading prod DB, but EDR reports the laptop is missing patches (health 65) — step-up, not silent allow." },
+    { "id": "REQ-04", "subject": "alice"  , "resource": "hr-database",    "action": "read",  "hour": 3,  "mfa": true,  "device": { "id": "UNKNOWN-7F2A", "managed": false, "health_score": 20 }, "ip": "185.220.101.45", "ip_reputation": "bad",        "geo": "Unknown (Tor)", "usual_geo": "Tulsa, US",  "user_risk": "high", "note": "Attacker using ALICE's stolen password + an MFA-fatigue push approval, from a Tor exit node on an unknown device." },
+    { "id": "REQ-05", "subject": "carol",   "resource": "source-repo",    "action": "write", "hour": 20, "mfa": true,  "device": { "id": "LT-CAROL-02", "managed": true,  "health_score": 92 }, "ip": "98.12.44.10",    "ip_reputation": "good",       "geo": "Austin, US",    "usual_geo": "Tulsa, US",  "user_risk": "low",  "note": "Travelling engineer working late — adaptive identity should step-up, not block." }
+  ],
+  "pep_attacks": [
+    { "id": "ATK-01", "description": "Replay an expired token after the TTL window", "kind": "expired" },
+    { "id": "ATK-02", "description": "Use a valid hr-database token against finance-ledger (scope abuse / lateral movement)", "kind": "scope" },
+    { "id": "ATK-03", "description": "Forge a token by editing the claims (signature mismatch)", "kind": "forged" },
+    { "id": "ATK-04", "description": "Use a token after the session was revoked by the PA", "kind": "revoked" },
+    { "id": "ATK-05", "description": "Direct request to the resource with no token at all (bypass attempt)", "kind": "none" }
+  ]
+}

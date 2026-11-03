@@ -1,0 +1,149 @@
+{
+  "_description": "Requests for Change (RFCs) for Lab 4. Target systems and dependencies come from config/default_policies.json -> change_management.systems (the CMDB).",
+  "rfcs": [
+    {
+      "id": "RFC-2026-0420",
+      "title": "Monthly OS patch on web-frontend",
+      "requested_by": "ops_lead",
+      "approvals": ["cab_chair", "sec_architect", "app_owner"],
+      "target_systems": ["web-frontend"],
+      "window": { "start": "2026-11-08T02:00:00", "end": "2026-11-08T04:00:00" },
+      "estimated_minutes": 30,
+      "tested_in_staging": true,
+      "emergency": false,
+      "change_steps": [
+        { "step": 1, "action": "snapshot",        "target": "web-frontend" },
+        { "step": 2, "action": "apply_patch",     "target": "web-frontend", "patch": "KB5032189" },
+        { "step": 3, "action": "restart_service", "target": "web-frontend" },
+        { "step": 4, "action": "verify",          "target": "web-frontend" }
+      ],
+      "firewall_changes": { "allow": [], "deny": [] },
+      "backout_plan": {
+        "estimated_minutes": 20,
+        "steps": [
+          { "undo_of": 3, "action": "restart_service" },
+          { "undo_of": 2, "action": "uninstall_patch" }
+        ],
+        "verification": ["HTTP 200 on /health", "synthetic login transaction succeeds"]
+      }
+    },
+    {
+      "id": "RFC-2026-0412",
+      "title": "Upgrade OpenSSL on api-gateway and disable TLS 1.0",
+      "requested_by": "sec_architect",
+      "approvals": ["cab_chair", "ops_lead"],
+      "target_systems": ["api-gateway"],
+      "window": { "start": "2026-11-07T01:00:00", "end": "2026-11-07T03:00:00" },
+      "estimated_minutes": 45,
+      "tested_in_staging": true,
+      "emergency": false,
+      "change_steps": [
+        { "step": 1, "action": "snapshot",        "target": "api-gateway" },
+        { "step": 2, "action": "apply_patch",     "target": "api-gateway", "patch": "openssl-3.0.13" },
+        { "step": 3, "action": "config_change",   "target": "api-gateway", "setting": "ssl_protocols TLSv1.2 TLSv1.3", "effects": ["disable:tls1.0"] },
+        { "step": 4, "action": "restart_service", "target": "api-gateway" },
+        { "step": 5, "action": "verify",          "target": "api-gateway" }
+      ],
+      "firewall_changes": { "allow": [], "deny": [] },
+      "backout_plan": {
+        "estimated_minutes": 25,
+        "steps": [
+          { "undo_of": 4, "action": "restart_service" },
+          { "undo_of": 3, "action": "restore_config" },
+          { "undo_of": 2, "action": "uninstall_patch" }
+        ],
+        "verification": ["TLS handshake test from web-frontend", "ERP order sync completes"]
+      }
+    },
+    {
+      "id": "RFC-2026-0415",
+      "title": "Block Oracle listener port 1521 to shrink attack surface",
+      "requested_by": "ops_lead",
+      "approvals": ["ops_lead"],
+      "target_systems": ["db-oracle"],
+      "window": { "start": "2026-11-04T14:00:00", "end": "2026-11-04T14:30:00" },
+      "estimated_minutes": 10,
+      "tested_in_staging": false,
+      "emergency": false,
+      "change_steps": [
+        { "step": 1, "action": "firewall_deny", "target": "db-oracle", "rule": "port:1521" }
+      ],
+      "firewall_changes": { "allow": [], "deny": ["port:1521"] },
+      "backout_plan": {
+        "estimated_minutes": 5,
+        "steps": [ { "undo_of": 1, "action": "firewall_remove_deny" } ],
+        "verification": ["telnet db-oracle 1521 from erp-legacy"]
+      }
+    },
+    {
+      "id": "RFC-2026-0423",
+      "title": "Payroll database schema migration v2 -> v3",
+      "requested_by": "ops_lead",
+      "approvals": ["cab_chair", "sec_architect", "app_owner"],
+      "target_systems": ["payroll-app"],
+      "window": { "start": "2026-11-07T00:00:00", "end": "2026-11-07T04:00:00" },
+      "estimated_minutes": 90,
+      "tested_in_staging": true,
+      "emergency": false,
+      "change_steps": [
+        { "step": 1, "action": "backup",            "target": "payroll-app" },
+        { "step": 2, "action": "stop_service",      "target": "payroll-app" },
+        { "step": 3, "action": "db_schema_migrate", "target": "payroll-app" },
+        { "step": 4, "action": "start_service",     "target": "payroll-app" },
+        { "step": 5, "action": "verify",            "target": "payroll-app" }
+      ],
+      "firewall_changes": { "allow": [], "deny": [] },
+      "backout_plan": {
+        "estimated_minutes": 60,
+        "steps": [
+          { "undo_of": 4, "action": "stop_service" },
+          { "undo_of": 2, "action": "start_service" }
+        ],
+        "verification": ["payroll dry-run for 5 sample employees"]
+      },
+      "fail_forward_plan": {
+        "hotfix_steps": ["Apply forward-compatible view shim for v2 queries", "Patch ORM mapping", "Re-run payroll dry-run"],
+        "on_call": "payroll-dev-team"
+      }
+    },
+    {
+      "id": "RFC-2026-0430",
+      "title": "EMERGENCY: patch xz/liblzma backdoor (CVE-2024-3094) on auth-service",
+      "requested_by": "ops_lead",
+      "approvals": ["cab_chair", "sec_architect"],
+      "target_systems": ["auth-service"],
+      "window": { "start": "2026-11-04T15:00:00", "end": "2026-11-04T16:00:00" },
+      "estimated_minutes": 20,
+      "tested_in_staging": false,
+      "emergency": true,
+      "change_steps": [
+        { "step": 1, "action": "snapshot",        "target": "auth-service" },
+        { "step": 2, "action": "apply_patch",     "target": "auth-service", "patch": "CVE-2024-3094-fix" },
+        { "step": 3, "action": "restart_service", "target": "auth-service" }
+      ],
+      "firewall_changes": { "allow": [], "deny": [] },
+      "backout_plan": null
+    },
+    {
+      "id": "RFC-2026-0431",
+      "title": "Disable SMBv1 on file-server",
+      "requested_by": "sec_architect",
+      "approvals": ["cab_chair", "ops_lead"],
+      "target_systems": ["file-server"],
+      "window": { "start": "2026-11-27T01:00:00", "end": "2026-11-27T02:00:00" },
+      "estimated_minutes": 15,
+      "tested_in_staging": true,
+      "emergency": false,
+      "change_steps": [
+        { "step": 1, "action": "snapshot",      "target": "file-server" },
+        { "step": 2, "action": "config_change", "target": "file-server", "setting": "Set-SmbServerConfiguration -EnableSMB1Protocol $false", "effects": ["disable:smbv1"] }
+      ],
+      "firewall_changes": { "allow": [], "deny": [] },
+      "backout_plan": {
+        "estimated_minutes": 10,
+        "steps": [ { "undo_of": 2, "action": "restart_service" } ],
+        "verification": ["map \\\\file-server\\share from a workstation"]
+      }
+    }
+  ]
+}

@@ -20,6 +20,7 @@ A unified operating system for building sovereign wealth through 4 revenue engin
 ```
 delzar-sovereign-wealth-machine/
 ├── index.html                    # Command Center Dashboard (12-section React app)
+├── secplus_lab_engine/           # Security+ SY0-701 offline Python lab engine + AI agent governor
 ├── complianceguard-mcp/          # EU AI Act compliance MCP server (8 tools)
 │   ├── src/index.ts              # Full TypeScript implementation
 │   ├── package.json
