@@ -1,0 +1,51 @@
+{
+  "_description": "Firewall rule sets for Lab 11. Rules are evaluated top-down, first match wins. src/dst may be a zone name, a CIDR or 'any'. A zone with an empty CIDR list ('internet') means public address space.",
+  "rulesets": [
+    {
+      "name": "edge-fw (current)",
+      "zones": {
+        "internet":   [],
+        "dmz":        ["172.16.10.0/24"],
+        "internal":   ["10.10.0.0/16"],
+        "database":   ["10.20.0.0/24"],
+        "management": ["10.99.0.0/24"],
+        "guest":      ["192.168.50.0/24"]
+      },
+      "rules": [
+        { "id": 1,  "action": "allow", "src": "internet",         "dst": "dmz",              "proto": "tcp", "ports": "443",       "log": true,  "comment": "Public website (HTTPS)" },
+        { "id": 2,  "action": "allow", "src": "internet",         "dst": "172.16.10.20/32",  "proto": "tcp", "ports": "443",       "log": true,  "comment": "Web server 20 (added later)" },
+        { "id": 3,  "action": "allow", "src": "dmz",              "dst": "database",         "proto": "tcp", "ports": "1521",      "log": true,  "comment": "Web tier to Oracle" },
+        { "id": 4,  "action": "deny",  "src": "185.220.101.0/24", "dst": "dmz",              "proto": "tcp", "ports": "443",       "log": false, "comment": "Block Tor exit nodes" },
+        { "id": 5,  "action": "allow", "src": "internet",         "dst": "internal",         "proto": "tcp", "ports": "3389",      "log": true,  "comment": "Vendor remote support" },
+        { "id": 6,  "action": "allow", "src": "guest",            "dst": "any",              "proto": "any", "ports": "any",       "log": false, "comment": "Guest Wi-Fi" },
+        { "id": 7,  "action": "allow", "src": "internal",         "dst": "internet",         "proto": "any", "ports": "53,80,443", "log": true,  "comment": "Outbound browsing + DNS" },
+        { "id": 8,  "action": "allow", "src": "management",       "dst": "any",              "proto": "tcp", "ports": "22,443,3389","log": true, "comment": "Admin jump hosts" },
+        { "id": 9,  "action": "allow", "src": "internal",         "dst": "dmz",              "proto": "tcp", "ports": "23",        "log": true,  "comment": "" },
+        { "id": 10, "action": "allow", "src": "10.0.0.0/8",       "dst": "database",         "proto": "tcp", "ports": "1433,1521", "log": true,  "comment": "App servers to databases" },
+        { "id": 11, "action": "allow", "src": "any",              "dst": "any",              "proto": "any", "ports": "any",       "log": false, "comment": "TEMP troubleshooting - remove Friday" }
+      ]
+    },
+    {
+      "name": "edge-fw (remediated)",
+      "zones": {
+        "internet":   [],
+        "dmz":        ["172.16.10.0/24"],
+        "internal":   ["10.10.0.0/16"],
+        "database":   ["10.20.0.0/24"],
+        "management": ["10.99.0.0/24"],
+        "guest":      ["192.168.50.0/24"]
+      },
+      "rules": [
+        { "id": 1, "action": "deny",  "src": "185.220.101.0/24", "dst": "any",      "proto": "any", "ports": "any",         "log": true, "comment": "Block Tor exit nodes BEFORE any allow (TI feed)" },
+        { "id": 2, "action": "allow", "src": "internet",         "dst": "dmz",      "proto": "tcp", "ports": "80,443",      "log": true, "comment": "Public website (CHG-1201)" },
+        { "id": 3, "action": "allow", "src": "dmz",              "dst": "database", "proto": "tcp", "ports": "1521",        "log": true, "comment": "Web tier to Oracle (CHG-1202)" },
+        { "id": 4, "action": "allow", "src": "internal",         "dst": "internet", "proto": "any", "ports": "53,80,443",   "log": true, "comment": "Outbound browsing + DNS via proxy" },
+        { "id": 5, "action": "allow", "src": "internal",         "dst": "dmz",      "proto": "tcp", "ports": "22,443",      "log": true, "comment": "Admin + app access to DMZ" },
+        { "id": 6, "action": "allow", "src": "10.10.5.0/24",     "dst": "database", "proto": "tcp", "ports": "1521",        "log": true, "comment": "App server subnet only (CHG-1203)" },
+        { "id": 7, "action": "allow", "src": "management",       "dst": "any",      "proto": "tcp", "ports": "22,443,3389", "log": true, "comment": "MFA jump hosts (vendor support goes here)" },
+        { "id": 8, "action": "allow", "src": "guest",            "dst": "internet", "proto": "any", "ports": "53,80,443",   "log": true, "comment": "Guest Wi-Fi: internet only" },
+        { "id": 9, "action": "deny",  "src": "any",              "dst": "any",      "proto": "any", "ports": "any",         "log": true, "comment": "Explicit default deny" }
+      ]
+    }
+  ]
+}

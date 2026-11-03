@@ -196,5 +196,37 @@
     "document_extensions": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".jpg", ".png"],
     "banner_score": 2,
     "quarantine_score": 7
+  },
+
+  "firewall_audit": {
+    "untrusted_zones": ["internet", "guest"],
+    "broad_prefix_max": 12,
+    "cleartext_ports": { "21": "FTP", "23": "Telnet", "69": "TFTP", "161": "SNMPv1/v2c" },
+    "remote_admin_ports": { "22": "SSH", "139": "NetBIOS", "445": "SMB", "3389": "RDP", "5900": "VNC" },
+    "segmentation_policy": {
+      "allowed_flows": [
+        { "from": "internet",   "to": "dmz",      "ports": "80,443" },
+        { "from": "dmz",        "to": "database", "ports": "1521" },
+        { "from": "internal",   "to": "internet", "ports": "53,80,443" },
+        { "from": "internal",   "to": "dmz",      "ports": "22,443" },
+        { "from": "internal",   "to": "database", "ports": "1521" },
+        { "from": "guest",      "to": "internet", "ports": "53,80,443" },
+        { "from": "management", "to": "*",        "ports": "22,443,3389" }
+      ],
+      "never_allowed": [
+        { "from": "internet", "to": "internal",   "why": "the internet must reach internal systems only through the DMZ" },
+        { "from": "internet", "to": "database",   "why": "databases are never internet-reachable" },
+        { "from": "internet", "to": "management", "why": "management plane must be isolated" },
+        { "from": "guest",    "to": "internal",   "why": "guest Wi-Fi is untrusted" },
+        { "from": "guest",    "to": "database",   "why": "guest Wi-Fi is untrusted" },
+        { "from": "guest",    "to": "management", "why": "guest Wi-Fi is untrusted" },
+        { "from": "dmz",      "to": "internal",   "why": "a compromised DMZ host must not pivot inward" },
+        { "from": "dmz",      "to": "management", "why": "management plane must be isolated" }
+      ]
+    },
+    "weights": {
+      "ANY_ANY": 25, "SEGMENTATION_VIOLATION": 15, "SHADOWED": 12, "MISSING_DEFAULT_DENY": 12,
+      "INSECURE_PROTOCOL": 10, "ANY_SERVICE": 8, "OVERLY_BROAD": 5, "REDUNDANT": 4, "NO_LOGGING": 3, "UNDOCUMENTED": 2
+    }
   }
 }
