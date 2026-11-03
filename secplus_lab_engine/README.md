@@ -7,10 +7,33 @@ It's meant for building first-principles skill: work through each operation by h
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 16 labs, a random scenario generator and a timed, domain-weighted practice exam
-* 483 pytest tests, run in CI on Python 3.10–3.13
+* 17 labs, a random scenario generator and a timed, domain-weighted practice exam
+* A **course web app** you can open from your desktop or from claude.ai
+* 565 pytest tests, run in CI on Python 3.10–3.13
 
 ---
+
+## Open it as an app
+
+**On your computer (offline, live engine):**
+
+1. Install Python 3.10+ ([python.org](https://www.python.org/downloads/)) and download this repository (GitHub → *Code* → *Download ZIP*, then unzip).
+2. Double-click the launcher for your system in `launch/`:
+   * Windows: `Start Security+ Lab (Windows).bat`
+   * macOS: `Start Security+ Lab (macOS).command` (first time: right-click → *Open*)
+   * Linux: `launch/start-secplus-lab.sh`
+3. Your browser opens the course. Keep the small terminal window open while you study; close it to stop.
+
+To put a launcher **on your desktop**, run once from this folder:
+
+```bash
+python main.py install-shortcut     # creates "Security+ Lab Engine" on your desktop
+python main.py web                  # or start it directly
+```
+
+**Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
+
+Inside the app every lab has three tabs: **Lesson**, **Run the scenario** and **Practice** (instant feedback; number keys answer). There's also a timed **Practice exam** and **My progress**, which lists your weakest objectives first.
 
 > **Technical handbook:** [`docs/HANDBOOK.pdf`](docs/HANDBOOK.pdf) explains the architecture, every lab's decision logic, the data formats and how to extend the engine. It includes a ready-to-paste prompt for another AI. To regenerate it from `docs/handbook.html`, run `NODE_PATH=$(npm root -g) node docs/render_handbook.js "$PWD/docs/handbook.html" docs/HANDBOOK.pdf` (needs Playwright).
 
@@ -29,12 +52,12 @@ python main.py                       # interactive menu
 python main.py list                  # list labs
 python main.py lab 1                 # run a lab's example scenario
 python main.py lab 3 --file my.json  # run a lab against your own scenario data
-python main.py all                   # run all sixteen labs
+python main.py all                   # run all seventeen labs
 python main.py challenge 4           # quiz mode: predict each verdict before it is revealed
 python main.py challenge all         # quiz every lab
 python main.py lab 4 --challenge     # same as "challenge 4"
 python main.py progress              # your scores per SY0-701 objective, weakest first
-python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15)
+python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17)
 python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
 python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
 python main.py exam --count 30 --minutes 30 --seed 3
@@ -82,6 +105,7 @@ You answer, and the engine reveals its own verdict with the reasoning. The quest
 | 14 | **Resilience & Recovery Planner** (`labs/lab14_resilience_planner.py`) | 3.4 | Computes achieved RTO/RPO for host failure (clustering failover vs rebuild + full/differential/incremental restore) and site loss (offsite copy + hot/warm/cold site, replication); checks RAID fault tolerance, UPS + generator runtime and restore/DR test currency; recommends the cheapest catalog option that closes each gap |
 | 15 | **Third-Party / Vendor Risk Assessor** (`labs/lab15_vendor_risk.py`) | 5.3 | Inherent risk = data sensitivity × access level × criticality; weighted questionnaire (unanswered = no) reduces it to residual risk; required clauses depend on exposure (MSA/NDA, SLA, right-to-audit, breach notification, DPA, security schedule, BPA); hard REJECT for unverifiable sensitive vendors and undisclosed conflicts of interest; SLA uptime/notification checks; monitoring cadence; agreement-type (SLA/MSA/SOW/NDA/MOU/MOA/BPA) drills |
 | 16 | **Security Control Classifier** (`labs/lab16_control_classifier.py`) | 1.1 | Classifies control descriptions by category (technical/managerial/operational/physical) and type (preventive/detective/corrective/deterrent/compensating/directive) with whole-word weighted phrases; a unique winner is required, otherwise "Unclassified"; shows evidence and agreement with an answer key (19/19 on the sample) |
+| 17 | **PKI & Certificate Validator** (`labs/lab17_pki_validator.py`) | 1.4 | Browser-style TLS chain validation: path building + CA flags + trusted roots (incomplete chain, self-signed, untrusted root, leaf-as-CA), validity windows and 398-day limit, SAN/wildcard hostname matching (one label only), key length and SHA-2 signatures, serverAuth EKU, CRL/OCSP revocation with soft/hard-fail policy, SPKI pinning (detects TLS interception); generator applies random faults to healthy chains |
 
 ---
 
@@ -107,17 +131,24 @@ secplus_lab_engine/
 │   ├── sample_threat_scenarios.json # Lab 13 incident scenarios with indicators
 │   ├── sample_resilience.json      # Lab 14 systems: RTO/RPO targets vs current design
 │   ├── sample_vendors.json         # Lab 15 vendor questionnaires + contracts
-│   └── sample_controls.json        # Lab 16 control descriptions + answer key
+│   ├── sample_controls.json        # Lab 16 control descriptions + answer key
+│   └── sample_certificates.json    # Lab 17 TLS chains + CRL/OCSP data
 ├── labs/                         # one module per lab (+ registry in __init__.py)
 ├── utils/
 │   ├── crypto_helpers.py         # SHA-256, salting, PBKDF2, HMAC, hash chains
 │   ├── challenge.py              # challenge mode + progress.json tracking
 │   ├── scenario_generator.py     # seeded random scenarios (--random)
 │   ├── exam.py                   # timed, domain-weighted practice exam
+│   ├── webserver.py              # local server for the web app (127.0.0.1 only)
+│   ├── desktop.py                # desktop shortcut installer
 │   ├── terminal_ui.py            # rich / plain-text rendering, Insight panel
 │   └── loader.py                 # config & data loading
+├── webapi.py                     # JSON API shared by the local server and the bundle builder
+├── web/                          # index.html (course app) + course_data.json (hosted bundle)
+├── tools/build_web_bundle.py     # rebuilds web/course_data.json
+├── launch/                       # double-click launchers for Windows / macOS / Linux
 ├── docs/                         # HANDBOOK.pdf (+ HTML source and render script)
-└── tests/                        # pytest suite: one file per lab 9–16, generator/exam, labs 1–8
+└── tests/                        # pytest suite: one file per lab 9–17, web app, generator/exam, labs 1–8
 ```
 
 ## Practise with your own scenarios
@@ -137,6 +168,7 @@ The labs are data-driven, so the best way to learn is to **break the sample data
 * **Lab 10**: Change E-02's DKIM selector to one that isn't published. Which verdict flips, and why does SPF not save it?
 * **Lab 11**: Move rule 4 (the Tor block) above rule 1. Which finding disappears?
 * **Lab 13**: Give T-07 the indicator `political_message`. Is the actor still decisive?
+* **Lab 17**: Set `revocation_hard_fail` to `true`. Which connection flips to UNTRUSTED, and why is soft-fail risky?
 
 Then run your changes with `python main.py lab N --file your_copy.json`.
 

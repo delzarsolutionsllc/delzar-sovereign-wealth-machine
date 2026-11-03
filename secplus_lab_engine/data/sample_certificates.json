@@ -1,0 +1,76 @@
+{
+  "_description": "TLS connections for Lab 17. Each 'chain' is what the server presented (leaf first). Certificates are structured records instead of ASN.1 so every trust rule is visible. 'revocation' holds the CRL entries (by issuer) and OCSP answers (by serial) the client could obtain.",
+  "as_of": "2026-11-03",
+  "scenarios": [
+    { "id": "P-01", "title": "Healthy e-commerce site", "hostname": "shop.delzarsolutions.com",
+      "chain": [
+        { "subject": "shop.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1001", "not_before": "2026-06-01", "not_after": "2027-06-30",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false,
+          "san": ["shop.delzarsolutions.com", "www.shop.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "a1f3c9e2b7d4401f8c2a" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "1001": "good", "0101": "good" } } },
+    { "id": "P-02", "title": "API certificate nobody renewed", "hostname": "api.delzarsolutions.com",
+      "chain": [
+        { "subject": "api.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1002", "not_before": "2025-11-01", "not_after": "2026-10-31",
+          "key_type": "EC", "key_bits": 256, "sig_alg": "ecdsa-with-SHA256", "is_ca": false, "san": ["api.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "b2e4" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "1002": "good", "0101": "good" } } },
+    { "id": "P-03", "title": "Wildcard stretched one level too far", "hostname": "dev.portal.delzarsolutions.com",
+      "chain": [
+        { "subject": "*.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1003", "not_before": "2026-03-01", "not_after": "2027-03-31",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["*.delzarsolutions.com", "delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "c3d5" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "1003": "good", "0101": "good" } } },
+    { "id": "P-04", "title": "Server forgot to send its intermediate", "hostname": "partners.acme-partner.com",
+      "chain": [
+        { "subject": "partners.acme-partner.com", "issuer": "GlobalTrust TLS CA 3", "serial": "7001", "not_before": "2026-05-01", "not_after": "2027-05-01",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["partners.acme-partner.com"], "eku": ["serverAuth"], "spki_sha256": "d4e6" } ],
+      "revocation": { "ocsp": { "7001": "good" } } },
+    { "id": "P-05", "title": "Self-signed admin console", "hostname": "admin.internal",
+      "chain": [
+        { "subject": "admin.internal", "issuer": "admin.internal", "serial": "0001", "not_before": "2025-01-01", "not_after": "2035-01-01",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": true, "san": ["admin.internal"], "eku": ["serverAuth"], "spki_sha256": "e5f7" } ],
+      "revocation": {} },
+    { "id": "P-06", "title": "Certificate revoked after key compromise", "hostname": "vpn.delzarsolutions.com",
+      "chain": [
+        { "subject": "vpn.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1006", "not_before": "2026-04-01", "not_after": "2027-04-30",
+          "key_type": "RSA", "key_bits": 3072, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["vpn.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "f6a8" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "crl": { "Delzar Issuing CA 1": ["0999", "1006"] }, "ocsp": { "0101": "good" } } },
+    { "id": "P-07", "title": "Legacy appliance with old crypto", "hostname": "printer.delzarsolutions.com",
+      "chain": [
+        { "subject": "printer.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1007", "not_before": "2026-02-01", "not_after": "2027-02-01",
+          "key_type": "RSA", "key_bits": 1024, "sig_alg": "sha1WithRSAEncryption", "is_ca": false, "san": ["printer.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "a7b9" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "1007": "good", "0101": "good" } } },
+    { "id": "P-08", "title": "Mobile banking app behind a TLS-inspection proxy", "hostname": "bank.delzarsolutions.com",
+      "pinned_spki": ["9b1c7d2e44aa", "9b1c7d2e44bb"],
+      "chain": [
+        { "subject": "bank.delzarsolutions.com", "issuer": "Delzar TLS Inspection CA", "serial": "5008", "not_before": "2026-11-01", "not_after": "2026-12-01",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["bank.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "0dd1e57ab1e5" },
+        { "subject": "Delzar TLS Inspection CA", "issuer": "Delzar Root CA G2", "serial": "0105", "not_before": "2025-01-01", "not_after": "2028-01-01",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0105" } ],
+      "revocation": { "ocsp": { "5008": "good", "0105": "good" } } },
+    { "id": "P-09", "title": "Renewal due, revocation server unreachable", "hostname": "mail.delzarsolutions.com",
+      "chain": [
+        { "subject": "mail.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1009", "not_before": "2025-11-10", "not_after": "2026-11-20",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["mail.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "b8ca" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "1009": "unknown", "0101": "good" } } },
+    { "id": "P-10", "title": "A leaf certificate used to sign another", "hostname": "store.delzarsolutions.com",
+      "chain": [
+        { "subject": "store.delzarsolutions.com", "issuer": "shop.delzarsolutions.com", "serial": "2010", "not_before": "2026-06-01", "not_after": "2027-06-01",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["store.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "c9db" },
+        { "subject": "shop.delzarsolutions.com", "issuer": "Delzar Issuing CA 1", "serial": "1001", "not_before": "2026-06-01", "not_after": "2027-06-30",
+          "key_type": "RSA", "key_bits": 2048, "sig_alg": "sha256WithRSAEncryption", "is_ca": false, "san": ["shop.delzarsolutions.com"], "eku": ["serverAuth"], "spki_sha256": "a1f3c9e2b7d4401f8c2a" },
+        { "subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01", "not_after": "2030-01-01",
+          "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption", "is_ca": true, "spki_sha256": "c0ffee0101" } ],
+      "revocation": { "ocsp": { "2010": "good", "1001": "good", "0101": "good" } } }
+  ]
+}
