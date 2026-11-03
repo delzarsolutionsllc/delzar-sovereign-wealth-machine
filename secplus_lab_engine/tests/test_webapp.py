@@ -202,9 +202,11 @@ def test_anki_export(tmp_path):
     pytest.importorskip("genanki")
     import sqlite3
     import zipfile
-    from tools.export_anki import build_package, collect
+    from tools.export_anki import build_package, collect, question_key
     qs = collect(variants=0)
-    assert len({(q["prompt"], q["context"]) for q in qs}) == len(qs)          # de-duplicated
+    assert len({question_key(q) for q in qs}) == len(qs)                     # de-duplicated
+    # same prompt + context with different choices are different questions and are all kept
+    assert len({(q["prompt"], q["context"]) for q in qs}) < len(qs)
     pkg, n_cards, n_decks = build_package(variants=0)
     out = tmp_path / "deck.apkg"
     pkg.write_to_file(str(out))
@@ -218,3 +220,68 @@ def test_anki_export(tmp_path):
     g1 = sorted(n.guid for d in pkg.decks for n in d.notes)
     g2 = sorted(n.guid for d in pkg2.decks for n in d.notes)
     assert g1 == g2
+
+
+# =========================================================================== #
+# CTFd export
+# =========================================================================== #
+def _ctfd_accepts(flags, submission):
+    """CTFd's static-flag check: exact match, or case-insensitive when data says so."""
+    for f in flags:
+        if f["data"] == "case_insensitive" and f["content"].lower() == submission.strip().lower():
+            return True
+        if f["content"] == submission.strip():
+            return True
+    return False
+
+
+@pytest.mark.parametrize("variants", [0, 2])
+def test_ctfd_export_round_trip(tmp_path, variants):
+    import csv
+    import string as _s
+    import sys as _sys
+    from tools.export_anki import collect
+    from tools.export_ctfd import CSV_FIELDS, build_challenges, write_all
+    chals = build_challenges(variants=variants)
+    assert len(chals) == len(collect(variants)) and len({c["name"] for c in chals}) == len(chals)
+    write_all(tmp_path, chals, 100, 25)
+    csv.field_size_limit(_sys.maxsize)
+    with (tmp_path / "challenges.csv").open(newline="", encoding="utf-8") as fh:
+        rows = list(csv.DictReader(fh))
+    assert len(rows) == len(chals) and list(rows[0]) == CSV_FIELDS
+    from tools.export_anki import question_key
+    questions = {question_key(q): q for q in collect(variants)}
+    for row, c in zip(rows, chals):
+        # what CTFd's load_challenges_csv does: JSON flag/hint lists, comma-split tags
+        flags = json.loads(row["flags"])
+        assert all(isinstance(f, dict) and f["type"] == "static" for f in flags)
+        assert all(isinstance(h, dict) and int(h["cost"]) >= 0 for h in json.loads(row["hints"]))
+        assert row["tags"].split(",") == c["tags"] and row["category"].startswith("D")
+        assert int(row["value"]) == 100 and row["type"] == "standard" and row["state"] == "visible"
+        # play it: the right answer (text, and letter when offered) wins; every wrong choice loses
+        q = c["_question"]
+        assert questions[question_key(q)] == q
+        assert _ctfd_accepts(flags, q["answer"]) and _ctfd_accepts(flags, q["answer"].upper())
+        for i, choice in enumerate(q["choices"]):
+            if choice != q["answer"]:
+                assert not _ctfd_accepts(flags, choice)
+                if len(flags) > 1:
+                    assert not _ctfd_accepts(flags, _s.ascii_uppercase[i])
+    ymls = sorted(tmp_path.glob("challenges/*/challenge.yml"))
+    assert len(ymls) == len(chals)
+    spec = json.loads(ymls[0].read_text().split("\n", 1)[1])           # JSON is valid YAML
+    assert {"name", "category", "description", "value", "flags", "hints", "version"} <= set(spec)
+
+
+def test_ctfd_letters_dropped_when_ambiguous():
+    from tools.export_ctfd import describe, flags
+    q = {"objective": "1.4", "lab": 17, "context": "", "prompt": "Pick", "choices": ["A", "B", "Neither"],
+         "answer": "B", "explanation": "x"}
+    assert flags(q, False) == [{"type": "static", "content": "B", "data": "case_insensitive"}]
+    assert "Submit the exact answer text" in describe(q, False)
+
+
+def test_ctfd_mc_plugin_mode():
+    from tools.export_ctfd import build_challenges
+    c = build_challenges(mc_plugin=True)[0]
+    assert c["type"] == "multiple_choice" and "* () " in c["description"] and len(c["flags"]) == 1

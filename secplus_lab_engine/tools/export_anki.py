@@ -70,6 +70,13 @@ def _model():
         css=CSS, sort_field_index=2)
 
 
+def question_key(q: dict) -> tuple:
+    """Identity of a question. The same prompt can come with different choices
+    (e.g. 'which do you collect first?' over different evidence pairs), so the
+    choices are part of it."""
+    return (q["prompt"], q["context"], *q["choices"])
+
+
 def collect(variants: int = 12) -> list[dict]:
     """Unique questions from the course bundle (sample + generated variants)."""
     bundle = build(variants)
@@ -77,7 +84,7 @@ def collect(variants: int = 12) -> list[dict]:
     for lab_n, lab in bundle["labs"].items():
         for src in [lab["sample"], *lab["variants"]]:
             for q in src["questions"]:
-                key = (q["prompt"], q["context"])
+                key = question_key(q)
                 if key in seen:
                     continue
                 seen.add(key)
@@ -100,8 +107,8 @@ def build_package(variants: int = 12):
             model=model,
             fields=[f"{esc(obj)} {esc(OBJECTIVE_NAMES.get(obj, ''))} · Lab {q['lab']}", esc(q["context"]), esc(q["prompt"]),
                     "".join(f"<li>{esc(c)}</li>" for c in q["choices"]), esc(q["answer"]), esc(q["explanation"]),
-                    esc(q["prompt"] + "|" + q["context"])],
-            guid=genanki.guid_for(q["prompt"], q["context"]),
+                    esc("|".join(question_key(q)))],
+            guid=genanki.guid_for(*question_key(q)),
             tags=[f"SY0-701::{obj.replace('.', '_')}", f"lab{q['lab']}"])
         decks[name].add_note(note)
     return genanki.Package(list(decks.values())), len(questions), len(decks)

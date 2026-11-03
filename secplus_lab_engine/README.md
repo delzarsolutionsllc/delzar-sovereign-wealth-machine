@@ -33,7 +33,16 @@ python main.py web                  # or start it directly
 
 **Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
 
-**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 1,500 cards sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
+**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 1,600 cards sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
+
+**Your own scoreboard (CTFd):** `python tools/export_ctfd.py` turns every challenge question into a scored [CTFd](https://github.com/CTFd/CTFd) challenge (about 320, 100 points each), with the five exam domains as categories so the scoreboard shows your strength per domain. It writes `dist/ctfd/challenges.csv` and `dist/ctfd/challenges/*/challenge.yml` (for ctfcli). To play:
+
+```
+docker run -p 8000:8000 ctfd/ctfd          # then open http://localhost:8000 and finish setup
+# Admin Panel -> Config -> Backup -> Import CSV -> type "Challenges" -> dist/ctfd/challenges.csv
+```
+
+Submit the letter or the answer text. Each challenge has a free hint that points to its lab and a 25-point hint that shows the explanation. Options: `--variants 3` adds generated scenarios, `--attempts`, `--points`, `--hint-cost`, and `--mc-plugin` for hosted CTFd's multiple-choice type. Full steps are in `dist/ctfd/README.txt`.
 
 Inside the app every lab has three tabs: **Lesson**, **Run the scenario** and **Practice** (instant feedback; number keys answer). There's also a timed **Practice exam** and **My progress**, which lists your weakest objectives first.
 
