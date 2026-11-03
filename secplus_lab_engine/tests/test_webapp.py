@@ -187,3 +187,12 @@ def test_committed_bundle_matches_labs():
     from utils.loader import ROOT
     data = json.loads((ROOT / "web" / "course_data.json").read_text())
     assert set(data["labs"]) == {str(n) for n in LABS}, "re-run: python tools/build_web_bundle.py"
+
+
+def test_single_file_desktop_app():
+    from tools.build_desktop_app import build_html
+    html = build_html(variants=1)
+    assert html.startswith("<!doctype html>") and "window.SECPLUS_BUNDLE = " in html
+    data_script = html.split("<script>window.SECPLUS_BUNDLE = ", 1)[1].split("</script>", 1)[0]
+    json.loads(data_script.rstrip(";").replace("<\\/", "</"))      # the embedded bundle is intact JSON
+    assert "<title>Security+ Lab Engine</title>" in html

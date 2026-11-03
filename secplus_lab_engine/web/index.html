@@ -193,6 +193,7 @@ async function post(method, args = {}) {
 const Engine = {
   async catalog() {
     if (LIVE) return post("catalog");
+    if (window.SECPLUS_BUNDLE) { BUNDLE = window.SECPLUS_BUNDLE; return BUNDLE.catalog; }   // single-file desktop app
     const r = await fetch("course_data.json");
     if (!r.ok) throw new Error("course_data.json could not be loaded");
     BUNDLE = await r.json();
@@ -306,8 +307,9 @@ function renderRail() {
 }
 function renderMode() {
   put($("#mode"), 
-    el("div", {}, el("b", { text: LIVE ? "Live engine" : "Hosted course" })),
-    el("div", { text: LIVE ? "Running on this computer. Random scenarios are unlimited." : "Pre-built scenarios and question banks. Run it on your computer for the live engine." }),
+    el("div", {}, el("b", { text: LIVE ? "Live engine" : window.SECPLUS_BUNDLE ? "Desktop app" : "Hosted course" })),
+    el("div", { text: LIVE ? "Running on this computer. Random scenarios are unlimited."
+      : window.SECPLUS_BUNDLE ? "Desktop app: works offline from this one file." : "Pre-built scenarios and question banks. Run it on your computer for the live engine." }),
     el("div", { text: `Progress is saved to ${Progress.where}.` }));
 }
 function markNav(view, lab) {
