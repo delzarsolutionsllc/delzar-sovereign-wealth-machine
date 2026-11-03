@@ -1,6 +1,34 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Compliance ({{ alerts|length }} open)</h2>
+{% set overdue = alerts|selectattr("severity", "equalto", "OVERDUE")|list %}
+<div class="cards">
+  <div class="card {{ 'alert' if overdue else ('warn' if alerts) }}">
+    <div class="label">Compliance items open</div>
+    <div class="value {{ 'neg' if overdue }}">{{ alerts|length }}</div>
+    <div class="sub">{{ overdue|length }} overdue</div>
+  </div>
+  <div class="card">
+    <div class="label">Active contracts</div>
+    <div class="value">{{ contracts|length }}</div>
+    <div class="sub">${{ "{:,.0f}".format(contracts|sum(attribute="amount")) }} total</div>
+  </div>
+  <div class="card">
+    <div class="label">Cash on hand</div>
+    <div class="value">${{ "{:,.0f}".format(cash) }}</div>
+  </div>
+  <div class="card {{ 'alert' if low_point[1] < 0 }}">
+    <div class="label">90-day low point</div>
+    <div class="value {{ 'neg' if low_point[1] < 0 else 'pos' }}">${{ "{:,.0f}".format(low_point[1]) }}</div>
+    <div class="sub">week of {{ low_point[0] }}</div>
+  </div>
+  <div class="card">
+    <div class="label">Instruments outstanding</div>
+    <div class="value">${{ "{:,.0f}".format(instruments) }}</div>
+    <div class="sub">payment protection stacks</div>
+  </div>
+</div>
+
+<h2>Compliance</h2>
 {% if alerts %}
 <table>
   <tr><th>severity</th><th>due</th><th>item</th><th>contract</th></tr>
@@ -10,32 +38,32 @@
       <td class="dim">{{ a.contract_no or "" }}</td></tr>
   {% endfor %}
 </table>
-{% else %}<p class="pos">Nothing due.</p>{% endif %}
+{% else %}<div class="empty">Nothing due. Stay ready.</div>{% endif %}
 
-<h2>Cash</h2>
-<p>On hand: <b>${{ "%.2f"|format(cash) }}</b> &nbsp;|&nbsp;
-   90-day low: <span class="{{ 'neg' if low_point[1] < 0 else 'pos' }}">${{ "%.2f"|format(low_point[1]) }}</span>
-   (week of {{ low_point[0] }}) &nbsp;|&nbsp;
-   protection instruments outstanding: ${{ "%.2f"|format(instruments) }}</p>
-
-<h2>Active contracts ({{ contracts|length }})</h2>
+<h2>Active contracts</h2>
+{% if contracts %}
 <table>
-  <tr><th>contract</th><th>title</th><th class="num">amount</th></tr>
+  <tr><th>contract</th><th>title</th><th>place</th><th class="num">amount</th></tr>
   {% for c in contracts %}
   <tr><td>{{ c.contract_no }}</td><td>{{ c.title }}</td>
-      <td class="num">${{ "%.0f"|format(c.amount) }}</td></tr>
+      <td class="dim">{{ c.place_of_performance or "" }}</td>
+      <td class="num">${{ "{:,.0f}".format(c.amount) }}</td></tr>
   {% endfor %}
 </table>
+{% else %}<div class="empty">No active contracts. When you win one: <code>delzar payroll contract-add</code></div>{% endif %}
 
 <h2>Top opportunities</h2>
+{% if opportunities %}
 <table>
-  <tr><th class="num">score</th><th>title</th><th>set-aside</th><th>place</th><th>due</th></tr>
+  <tr><th class="num">score</th><th>title</th><th>set-aside</th><th>naics</th><th>place</th><th>due</th></tr>
   {% for o in opportunities %}
   <tr><td class="num"><a href="/opportunity/{{ o.notice_id }}">{{ o.score or 0 }}</a></td>
-      <td>{{ (o.title or "")[:70] }}</td>
-      <td><span class="badge">{{ o.set_aside or "-" }}</span></td>
+      <td>{{ (o.title or "")[:64] }}</td>
+      <td><span class="badge {{ 'good' if o.set_aside in ('IEE','ISBEE','SBA') }}">{{ o.set_aside or "open" }}</span></td>
+      <td class="dim">{{ o.naics or "" }}</td>
       <td class="dim">{{ o.place_city }}, {{ o.place_state }}</td>
       <td>{{ (o.response_deadline or "?")[:10] }}</td></tr>
   {% endfor %}
 </table>
+{% else %}<div class="empty">No opportunities yet. Run <code>delzar watch poll</code> (needs the free SAM.gov key).</div>{% endif %}
 {% endblock %}

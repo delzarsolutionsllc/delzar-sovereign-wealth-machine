@@ -1,6 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
-<h2>Cash on hand: ${{ "%.2f"|format(cash) }}</h2>
+{% set total_open = aging|sum(attribute="amount") %}
+<div class="cards">
+  <div class="card">
+    <div class="label">Cash on hand</div>
+    <div class="value">${{ "{:,.0f}".format(cash) }}</div>
+  </div>
+  <div class="card">
+    <div class="label">Receivables outstanding</div>
+    <div class="value">${{ "{:,.0f}".format(total_open) }}</div>
+    <div class="sub">{{ aging|length }} open invoice(s)</div>
+  </div>
+  {% set low = projections|min(attribute="ending_cash") %}
+  <div class="card {{ 'alert' if low.ending_cash < 0 }}">
+    <div class="label">90-day low point</div>
+    <div class="value {{ 'neg' if low.ending_cash < 0 else 'pos' }}">${{ "{:,.0f}".format(low.ending_cash) }}</div>
+    <div class="sub">week of {{ low.week_start }}</div>
+  </div>
+</div>
 
 <h2>Receivables aging</h2>
 {% if aging %}
@@ -8,21 +25,21 @@
   <tr><th>contract</th><th>invoice</th><th class="num">amount</th><th class="num">age</th><th>bucket</th></tr>
   {% for r in aging %}
   <tr><td>{{ r.contract_no or "?" }}</td><td>{{ r.invoice_no or "-" }}</td>
-      <td class="num">${{ "%.2f"|format(r.amount) }}</td>
+      <td class="num">${{ "{:,.2f}".format(r.amount) }}</td>
       <td class="num">{{ r.age_days }}d</td>
       <td class="{{ 'neg' if r.bucket != '0-30' else '' }}">{{ r.bucket }}</td></tr>
   {% endfor %}
 </table>
-{% else %}<p class="dim">No open receivables.</p>{% endif %}
+{% else %}<div class="empty">No open receivables.</div>{% endif %}
 
 <h2>90-day projection</h2>
 <table>
   <tr><th>week of</th><th class="num">in</th><th class="num">out</th><th class="num">ending cash</th></tr>
   {% for p in projections %}
   <tr><td>{{ p.week_start }}</td>
-      <td class="num pos">{% if p.inflows %}+${{ "%.0f"|format(p.inflows) }}{% endif %}</td>
-      <td class="num">{% if p.outflows %}-${{ "%.0f"|format(p.outflows) }}{% endif %}</td>
-      <td class="num {{ 'neg' if p.ending_cash < 0 }}">${{ "%.0f"|format(p.ending_cash) }}</td></tr>
+      <td class="num pos">{% if p.inflows %}+${{ "{:,.0f}".format(p.inflows) }}{% endif %}</td>
+      <td class="num">{% if p.outflows %}-${{ "{:,.0f}".format(p.outflows) }}{% endif %}</td>
+      <td class="num {{ 'neg' if p.ending_cash < 0 }}">${{ "{:,.0f}".format(p.ending_cash) }}</td></tr>
   {% endfor %}
 </table>
 {% endblock %}
