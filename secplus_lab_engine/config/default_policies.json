@@ -174,5 +174,27 @@
         "mfa_on_access_path": 0.3
       }
     }
+  },
+
+  "email_security": {
+    "org_domain": "delzarsolutions.com",
+    "inbound_mx": "mx1.delzarsolutions.com",
+    "protected_domains": ["delzarsolutions.com", "microsoft.com", "paypal.com", "docusign.com"],
+    "brand_owned_domains": { "microsoft.com": ["microsoftonline.com", "office.com", "live.com", "outlook.com"] },
+    "executives": ["Dana Whitfield", "Marcus Lee"],
+    "lookalike_max_distance": 2,
+    "phishing_keywords": {
+      "urgent": 1, "immediately": 1, "within 24 hours": 1, "confidential": 1,
+      "password": 2, "verify your account": 2, "account will be suspended": 2, "sign in": 1,
+      "wire transfer": 2, "bank details": 2, "change of account": 2, "gift card": 3, "invoice overdue": 1
+    },
+    "payment_keywords": ["wire transfer", "bank details", "change of account", "gift card"],
+    "credential_keywords": ["password", "verify your account", "account will be suspended", "sign in"],
+    "url_shorteners": ["bit.ly", "tinyurl.com", "t.co", "is.gd"],
+    "suspicious_tlds": [".xyz", ".top", ".zip", ".click", ".rest"],
+    "dangerous_extensions": [".exe", ".scr", ".js", ".vbs", ".bat", ".cmd", ".iso", ".lnk", ".hta", ".ps1", ".docm", ".xlsm"],
+    "document_extensions": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".jpg", ".png"],
+    "banner_score": 2,
+    "quarantine_score": 7
   }
 }
