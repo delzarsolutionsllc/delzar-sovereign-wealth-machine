@@ -1,0 +1,56 @@
+{
+  "_description": "Raw inbound messages for Lab 10 plus an OFFLINE DNS table (SPF, DMARC, published DKIM selectors). DKIM bh= values are real SHA-256 body hashes; signatures (b=) are simulated.",
+  "dns": {
+    "spf": {
+      "acme-partner.com": "v=spf1 ip4:198.51.100.0/24 -all",
+      "sendgrid.net": "v=spf1 ip4:167.89.0.0/17 -all",
+      "delzarsolutions.com": "v=spf1 ip4:203.0.113.0/26 include:sendgrid.net -all",
+      "micros0ft-support.com": "v=spf1 ip4:185.220.101.0/24 -all",
+      "gmail.com": "v=spf1 ip4:209.85.128.0/17 ~all"
+    },
+    "dmarc": {
+      "acme-partner.com": "v=DMARC1; p=reject; rua=mailto:dmarc@acme-partner.com",
+      "delzarsolutions.com": "v=DMARC1; p=reject; rua=mailto:dmarc@delzarsolutions.com",
+      "micros0ft-support.com": "v=DMARC1; p=none",
+      "gmail.com": "v=DMARC1; p=none"
+    },
+    "dkim_keys": [
+      "s1._domainkey.acme-partner.com",
+      "em1._domainkey.delzarsolutions.com",
+      "k1._domainkey.micros0ft-support.com",
+      "20230601._domainkey.gmail.com"
+    ]
+  },
+  "messages": [
+    {
+      "id": "E-01",
+      "note": "Legitimate partner mail: SPF, DKIM and DMARC all pass and align.",
+      "raw": "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=acme-partner.com; s=s1; h=from:to:subject:date; bh=c84DzydL5w1S6kDGz+v9b04rNQPIOgNTbuVtMcITxeE=; b=SIMULATEDSIGNATURE\nReceived: from mail.acme-partner.com (mail.acme-partner.com [198.51.100.10]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <bounce@acme-partner.com>\nFrom: \"Acme Partner News\" <news@acme-partner.com>\nTo: team@delzarsolutions.com\nSubject: Acme partner newsletter - November\nDate: Mon, 2 Nov 2026 09:00:00 +0000\nContent-Type: text/plain; charset=utf-8\n\nHello partners,\n\nOur November roadmap is live: https://www.acme-partner.com/news/november\n\nThanks,\nAcme\n"
+    },
+    {
+      "id": "E-02",
+      "note": "Sent through a third-party ESP: SPF passes for sendgrid.net but is NOT aligned; aligned DKIM carries DMARC.",
+      "raw": "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=delzarsolutions.com; s=em1; h=from:to:subject:date; bh=CKFJvs4ecpPJG/oVM6VjIKrBeCV0XSoG24J1irDXIhs=; b=SIMULATEDSIGNATURE\nReceived: from o1.sendgrid.net (o1.sendgrid.net [167.89.12.34]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <bounces+123@sendgrid.net>\nFrom: \"Delzar Events\" <events@delzarsolutions.com>\nTo: team@delzarsolutions.com\nSubject: Webinar: Zero Trust in 30 minutes\nDate: Mon, 2 Nov 2026 10:00:00 +0000\nContent-Type: text/plain; charset=utf-8\n\nJoin our internal webinar on Thursday.\nRegister: https://events.delzarsolutions.com/zt-webinar\n"
+    },
+    {
+      "id": "E-03",
+      "note": "Lookalike domain that passes SPF, DKIM and DMARC: authentication is not the same as trust.",
+      "raw": "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=micros0ft-support.com; s=k1; h=from:to:subject:date; bh=cZRT3cOAxGtkIZBzIhrqdZpXpWfuxqI1rJpe+AMpnDQ=; b=SIMULATEDSIGNATURE\nReceived: from smtp.micros0ft-support.com (smtp.micros0ft-support.com [185.220.101.45]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <no-reply@micros0ft-support.com>\nFrom: \"Microsoft 365\" <no-reply@micros0ft-support.com>\nTo: asmith@delzarsolutions.com\nSubject: Your password expires today\nDate: Mon, 2 Nov 2026 11:00:00 +0000\nContent-Type: text/html; charset=utf-8\n\n<p>Your password expires today. Verify your account immediately or your account will be suspended.</p>\n<p><a href=\"http://login.micros0ft-support.xyz/owa\">https://login.microsoftonline.com/</a></p>\n"
+    },
+    {
+      "id": "E-04",
+      "note": "Business email compromise: CEO display name from free mail, Reply-To elsewhere, payment pressure, no links.",
+      "raw": "DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=gmail.com; s=20230601; h=from:to:subject:date; bh=WkpD9eODS62mTaWrBOGQsUmFwsbUCWEKWOaB9GsHSpE=; b=SIMULATEDSIGNATURE\nReceived: from mail-sor-f41.google.com (mail-sor-f41.google.com [209.85.220.41]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <dana.whitfield.ceo@gmail.com>\nFrom: \"Dana Whitfield (CEO)\" <dana.whitfield.ceo@gmail.com>\nReply-To: dana.ceo@protonmail.com\nTo: ap@delzarsolutions.com\nSubject: Confidential - urgent payment\nDate: Mon, 2 Nov 2026 12:00:00 +0000\nContent-Type: text/plain; charset=utf-8\n\nI'm in meetings all day. Our supplier sent a change of account notice.\nPlease process a wire transfer to the new bank details today and keep this confidential.\nDana\n"
+    },
+    {
+      "id": "E-05",
+      "note": "Malware delivery: unauthenticated sender and an executable disguised with a double extension.",
+      "raw": "Received: from vps-77.vendor-billing.biz (vps-77.vendor-billing.biz [103.75.190.12]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <accounts@vendor-billing.biz>\nFrom: \"Accounts\" <accounts@vendor-billing.biz>\nTo: ap@delzarsolutions.com\nSubject: Invoice overdue - Q4\nDate: Mon, 2 Nov 2026 13:00:00 +0000\nMIME-Version: 1.0\nContent-Type: multipart/mixed; boundary=\"b1\"\n\n--b1\nContent-Type: text/plain; charset=utf-8\n\nPlease see the attached invoice.\n\n--b1\nContent-Type: application/octet-stream\nContent-Disposition: attachment; filename=\"invoice_Q4.pdf.exe\"\nContent-Transfer-Encoding: base64\n\nTVqQAAMAAAAEAAAA\n--b1--\n"
+    },
+    {
+      "id": "E-06",
+      "note": "Exact-domain spoof of our own domain with a forged Authentication-Results header; DMARC p=reject.",
+      "raw": "Received: from unknown-host (unknown-host [45.155.205.233]) by mx1.delzarsolutions.com with ESMTPS; Mon, 2 Nov 2026 09:00:00 +0000\nReturn-Path: <helpdesk@delzarsolutions.com>\nFrom: \"IT Helpdesk\" <helpdesk@delzarsolutions.com>\nAuthentication-Results: mx.attacker.example; spf=pass; dkim=pass; dmarc=pass\nTo: jdoe@delzarsolutions.com\nSubject: Mailbox quota exceeded\nDate: Mon, 2 Nov 2026 14:00:00 +0000\nContent-Type: text/plain; charset=utf-8\n\nYour mailbox is full. Sign in to keep receiving mail: http://203.0.113.250/quota\n"
+    }
+  ]
+}

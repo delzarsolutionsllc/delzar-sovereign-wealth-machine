@@ -1,0 +1,38 @@
+{
+  "_description": "Incident scenario for Lab 7. 'actions' is the catalog of possible response steps; 'playbooks' are ordered lists of action ids to grade. volatility_rank follows RFC 3227 (1 = most volatile).",
+  "incident": {
+    "id": "IR-2026-0042",
+    "summary": "EDR flags malware (invoice_Q4.pdf.exe) on WS-0142 beaconing to 45.155.205.233. The same IP brute-forced and logged in as jdoe, who then cleared the DC01 Security log.",
+    "hosts": ["WS-0142", "DC01"],
+    "accounts": ["jdoe", "bwhite"]
+  },
+  "actions": {
+    "prep_playbook":      { "phase": "preparation",     "desc": "Maintain IR plan, contact list, jump kit and tested playbooks" },
+    "triage_alert":       { "phase": "detection",       "desc": "Triage the EDR alert and correlate it with SIEM data" },
+    "declare_incident":   { "phase": "detection",       "desc": "Declare an incident, assign an incident commander, open a case" },
+    "capture_netconns":   { "phase": "analysis",        "desc": "Live response: record running processes, ARP cache and network connections", "evidence": { "source": "process table / network state", "host": "WS-0142", "volatility_rank": 2, "hashed": true } },
+    "capture_memory":     { "phase": "analysis",        "desc": "Capture a RAM image of WS-0142 and hash it (SHA-256)", "evidence": { "source": "RAM", "host": "WS-0142", "volatility_rank": 2, "hashed": true } },
+    "collect_temp":       { "phase": "analysis",        "desc": "Collect the pagefile, swap and temp files", "evidence": { "source": "swap / temp files", "host": "WS-0142", "volatility_rank": 3, "hashed": true } },
+    "image_disk":         { "phase": "analysis",        "desc": "Forensic disk image through a write blocker and hash it", "evidence": { "source": "disk", "host": "WS-0142", "volatility_rank": 4, "hashed": true } },
+    "pull_siem_logs":     { "phase": "analysis",        "desc": "Export firewall/SIEM/DC logs for the incident window and hash them", "evidence": { "source": "remote logs", "host": "SIEM", "volatility_rank": 5, "hashed": true } },
+    "copy_usb_unhashed":  { "phase": "analysis",        "desc": "Copy suspicious files to a personal USB stick to look at later", "evidence": { "source": "disk", "host": "WS-0142", "volatility_rank": 4, "hashed": false }, "anti_pattern": "No hash, no write blocker, personal media: chain of custody is broken" },
+    "scope_analysis":     { "phase": "analysis",        "desc": "Scope the incident: find every affected host and account" },
+    "legal_hold":         { "phase": "analysis",        "desc": "Place a legal hold; notify legal/privacy counsel" },
+    "isolate_host":       { "phase": "containment",     "desc": "Network-isolate WS-0142 via EDR (power stays ON)" },
+    "disable_account":    { "phase": "containment",     "desc": "Disable jdoe and revoke all sessions/tokens" },
+    "block_ioc":          { "phase": "containment",     "desc": "Block the IOC IP/domain at the firewall and DNS" },
+    "power_off":          { "phase": "containment",     "desc": "Pull the power plug on WS-0142", "destroys_up_to_rank": 3, "anti_pattern": "Destroys volatile evidence (RAM, network state, temp files)" },
+    "remove_persistence": { "phase": "eradication",     "desc": "Remove malware and persistence; patch the exploited weakness" },
+    "reset_creds":        { "phase": "eradication",     "desc": "Reset credentials for every exposed account (incl. service accounts)" },
+    "reimage":            { "phase": "eradication",     "desc": "Reimage WS-0142 from the golden image", "destroys_up_to_rank": 4, "requires": ["image_disk", "legal_hold"] },
+    "restore_service":    { "phase": "recovery",        "desc": "Return WS-0142 to service; restore user data from known-good backup" },
+    "monitor":            { "phase": "recovery",        "desc": "Heightened monitoring for re-infection for 30 days" },
+    "lessons":            { "phase": "lessons_learned", "desc": "Lessons-learned review: update playbooks and controls, write the final report" }
+  },
+  "playbooks": {
+    "rookie": ["triage_alert", "power_off", "copy_usb_unhashed", "reimage", "restore_service", "capture_memory", "disable_account"],
+    "expert": ["prep_playbook", "triage_alert", "declare_incident", "capture_netconns", "capture_memory", "collect_temp",
+               "isolate_host", "legal_hold", "scope_analysis", "image_disk", "pull_siem_logs", "disable_account", "block_ioc",
+               "remove_persistence", "reset_creds", "reimage", "restore_service", "monitor", "lessons"]
+  }
+}

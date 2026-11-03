@@ -1,0 +1,420 @@
+{
+  "_meta": {
+    "description": "Baseline security policies for the Security+ SY0-701 lab engine. Edit freely to run your own scenarios.",
+    "version": "1.0.0"
+  },
+
+  "identity_governance": {
+    "clearance_levels": { "public": 0, "internal": 1, "confidential": 2, "secret": 3 },
+    "roles": {
+      "employee":          ["email:send", "intranet:read", "timesheet:submit"],
+      "procurement_clerk": ["email:send", "intranet:read", "po:create", "vendor:read"],
+      "procurement_mgr":   ["email:send", "intranet:read", "po:approve", "vendor:read", "vendor:create"],
+      "accounts_payable":  ["email:send", "intranet:read", "invoice:pay", "vendor:read"],
+      "hr_specialist":     ["email:send", "intranet:read", "hr_records:read", "hr_records:write"],
+      "it_admin":          ["email:send", "intranet:read", "ad:user_create", "ad:user_disable", "server:admin"],
+      "security_auditor":  ["email:send", "intranet:read", "logs:read", "audit:report"],
+      "developer":         ["email:send", "intranet:read", "repo:write", "deploy:staging"],
+      "release_manager":   ["email:send", "intranet:read", "deploy:production", "change:approve"]
+    },
+    "sod_conflicts": [
+      { "id": "SOD-01", "a": "po:create",     "b": "po:approve",       "risk": "Fraudulent purchase orders: one person can create AND approve spend." },
+      { "id": "SOD-02", "a": "vendor:create", "b": "invoice:pay",      "risk": "Ghost-vendor fraud: create a fake vendor then pay it." },
+      { "id": "SOD-03", "a": "repo:write",    "b": "deploy:production","risk": "Unreviewed code pushed straight to production." },
+      { "id": "SOD-04", "a": "server:admin",  "b": "audit:report",     "risk": "Admin can audit (and hide) their own actions." },
+      { "id": "SOD-05", "a": "po:create",     "b": "invoice:pay",      "risk": "Create a PO and pay it without independent check." }
+    ],
+    "abac_rules": {
+      "require_clearance_gte_classification": true,
+      "require_department_match_for": ["confidential", "secret"],
+      "business_hours": { "start": 7, "end": 19 },
+      "restrict_outside_hours_for": ["secret"],
+      "allowed_employment_status": ["active"]
+    },
+    "leaver_sla_hours": 24
+  },
+
+  "zero_trust": {
+    "token_ttl_seconds": 900,
+    "step_up": { "bonus": 15, "ttl_divisor": 3 },
+    "signing_key": "lab-only-demo-key-change-me",
+    "thresholds": { "allow": 70, "step_up": 50 },
+    "weights": {
+      "device_unhealthy": 30,
+      "device_unmanaged": 20,
+      "ip_bad_reputation": 40,
+      "ip_suspicious_reputation": 15,
+      "outside_business_hours": 10,
+      "no_mfa": 25,
+      "geo_anomaly": 20,
+      "high_user_risk": 30
+    },
+    "min_device_health": 70,
+    "business_hours": { "start": 7, "end": 19 },
+    "resource_sensitivity": {
+      "intranet":         { "min_score": 50, "requires_mfa": false },
+      "hr-database":      { "min_score": 80, "requires_mfa": true },
+      "finance-ledger":   { "min_score": 85, "requires_mfa": true },
+      "source-repo":      { "min_score": 75, "requires_mfa": true },
+      "prod-db":          { "min_score": 90, "requires_mfa": true }
+    },
+    "entitlements": {
+      "alice":   ["intranet", "hr-database"],
+      "bob":     ["intranet", "finance-ledger"],
+      "carol":   ["intranet", "source-repo", "prod-db"],
+      "mallory": ["intranet"]
+    }
+  },
+
+  "log_inspection": {
+    "failed_logon_event_id": 4625,
+    "successful_logon_event_id": 4624,
+    "log_cleared_event_ids": [1102, 104],
+    "privileged_logon_event_id": 4672,
+    "brute_force_threshold": 5,
+    "brute_force_window_minutes": 10,
+    "impossible_travel_kmh": 900,
+    "port_scan_distinct_ports": 10,
+    "continuous_log_hosts": ["DC01", "FW01"],
+    "max_log_gap_minutes": 30,
+    "threat_intel": {
+      "bad_ips": ["185.220.101.45", "45.155.205.233", "103.75.190.12"],
+      "bad_user_agent_patterns": ["sqlmap", "nikto", "masscan", "nmap", "python-requests/2.0", "curl/7.1"],
+      "bad_file_hashes": [
+        "44d88612fea8a8f36de82e1278abb02f",
+        "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      ]
+    },
+    "integrity_salt": "lab-log-salt-2026",
+    "manifest_hmac_key": "lab-only-evidence-sealing-key"
+  },
+
+  "change_management": {
+    "maintenance_windows": [
+      { "day": "Saturday", "start": "00:00", "end": "06:00" },
+      { "day": "Sunday",   "start": "00:00", "end": "06:00" }
+    ],
+    "blackout_dates": ["2026-11-27", "2026-12-24", "2026-12-25", "2026-12-31"],
+    "cab_quorum": 2,
+    "cab_members": ["cab_chair", "sec_architect", "ops_lead", "app_owner"],
+    "max_risk_for_auto_approve": 3,
+    "systems": {
+      "web-frontend": { "criticality": 4, "exposure": "internet", "owner": "app_owner", "legacy": false, "depends_on": ["api-gateway"],          "tags": ["tls1.2"] },
+      "api-gateway": { "criticality": 4, "exposure": "internet", "owner": "ops_lead",  "legacy": false, "depends_on": ["auth-service", "erp-legacy"], "tags": ["tls1.2"] },
+      "auth-service": { "criticality": 5, "exposure": "privileged", "owner": "sec_architect", "legacy": false, "depends_on": ["ldap"],             "tags": ["tls1.2"] },
+      "ldap": { "criticality": 5, "exposure": "privileged", "owner": "ops_lead",  "legacy": false, "depends_on": [],                       "tags": ["port:636"] },
+      "erp-legacy": { "criticality": 4, "exposure": "internal", "owner": "app_owner", "legacy": true,  "depends_on": ["db-oracle"],            "tags": ["requires:tls1.0", "requires:smbv1", "port:1521"] },
+      "db-oracle": { "criticality": 5, "exposure": "internal", "owner": "ops_lead",  "legacy": true,  "depends_on": [],                       "tags": ["port:1521"] },
+      "payroll-app": { "criticality": 4, "exposure": "internal", "owner": "app_owner", "legacy": false, "depends_on": ["db-oracle", "auth-service"], "tags": ["tls1.2"] },
+      "file-server": { "criticality": 3, "exposure": "internal", "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] },
+      "edge-fw": { "criticality": 5, "exposure": "internet", "owner": "sec_architect", "legacy": false, "depends_on": [],                   "tags": ["firewall"] }
+    },
+    "irreversible_actions": ["db_schema_migrate", "firmware_flash", "data_purge", "key_rotation_destroy_old"]
+  },
+
+  "ai_governance": {
+    "agents": {
+      "patch-bot-01":    { "type": "patching",  "allowed_actions": ["apply_patch", "restart_service", "read_inventory"] },
+      "fw-agent-07":     { "type": "firewall",  "allowed_actions": ["firewall_rule_add", "firewall_rule_modify", "read_inventory"] },
+      "iam-helper-02":   { "type": "identity",  "allowed_actions": ["grant_privilege", "revoke_privilege", "read_inventory"] },
+      "soc-triage-03":   { "type": "soc",       "allowed_actions": ["isolate_host", "read_logs", "open_ticket", "disable_account", "block_ip"] }
+    },
+    "immutable_firewall_rules": [0],
+    "always_hitl_actions": ["disable_account"],
+    "privileged_roles": ["admin", "domain_admin", "root", "global_admin"],
+    "protected_controls": ["mfa", "edr", "audit_logging", "siem_forwarder", "backup_job"],
+    "confidence_threshold": 0.80,
+    "max_actions_per_agent_per_window": 5,
+    "rate_window_seconds": 60,
+    "quarantine_after_blocks": 3,
+    "human_approvers": ["sec_architect", "cab_chair"],
+    "dangerous_command_patterns": [
+      "rm\\s+-rf\\s+/(\\s|$)",
+      "curl[^|]*\\|\\s*(ba)?sh",
+      "wget[^|]*\\|\\s*(ba)?sh",
+      "chmod\\s+777",
+      "base64\\s+(-d|--decode).*\\|\\s*(ba)?sh",
+      "mkfs\\.",
+      "dd\\s+if=.*of=/dev/sd",
+      "Set-MpPreference\\s+-DisableRealtimeMonitoring",
+      "net\\s+user\\s+\\S+\\s+\\S+\\s+/add"
+    ],
+    "prompt_injection_patterns": [
+      "ignore (all |any )?(previous|prior) instructions",
+      "disregard (the )?(policy|guardrails|rules)",
+      "you are now",
+      "developer mode",
+      "system override",
+      "pretend (to be|you are)"
+    ],
+    "asset_inventory": ["web-frontend", "api-gateway", "auth-service", "ldap", "erp-legacy", "db-oracle", "payroll-app", "file-server", "ws-0142", "ws-0177", "edge-fw"],
+    "patch_catalog": ["KB5031356", "KB5032189", "KB5033375", "CVE-2024-3094-fix", "openssl-3.0.13"],
+    "approved_cab_tickets": ["CAB-2026-1101", "CAB-2026-1102", "CAB-2026-1107"]
+  },
+
+  "vulnerability_management": {
+    "criticality_multiplier": { "1": 0.6, "2": 0.8, "3": 1.0, "4": 1.2, "5": 1.5 },
+    "exposure_multiplier": { "internet": 1.3, "privileged": 1.2, "internal": 1.0 },
+    "kev_multiplier": 1.5,
+    "unknown_asset_defaults": { "criticality": 5, "exposure": "internet" },
+    "priority_thresholds": { "P1": 12, "P2": 8, "P3": 4 },
+    "sla_days": { "P1": 7, "P2": 30, "P3": 90, "P4": 180 },
+    "kev_max_sla_days": 14,
+    "cvss_bands": [ [9.0, "Critical"], [7.0, "High"], [4.0, "Medium"], [0.1, "Low"], [0.0, "None"] ],
+    "exceptions": {
+      "authorized_approvers": ["sec_architect", "cab_chair"],
+      "max_duration_days": 180,
+      "max_residual_score": 8,
+      "compensating_control_reduction": {
+        "network_isolation": 0.6,
+        "virtual_patch_waf": 0.5,
+        "disable_vulnerable_feature": 0.7,
+        "application_allow_list": 0.4,
+        "enhanced_monitoring": 0.2,
+        "mfa_on_access_path": 0.3
+      }
+    }
+  },
+
+  "email_security": {
+    "org_domain": "delzarsolutions.com",
+    "inbound_mx": "mx1.delzarsolutions.com",
+    "protected_domains": ["delzarsolutions.com", "microsoft.com", "paypal.com", "docusign.com"],
+    "brand_owned_domains": { "microsoft.com": ["microsoftonline.com", "office.com", "live.com", "outlook.com"] },
+    "executives": ["Dana Whitfield", "Marcus Lee"],
+    "lookalike_max_distance": 2,
+    "phishing_keywords": {
+      "urgent": 1, "immediately": 1, "within 24 hours": 1, "confidential": 1,
+      "password": 2, "verify your account": 2, "account will be suspended": 2, "sign in": 1,
+      "wire transfer": 2, "bank details": 2, "change of account": 2, "gift card": 3, "invoice overdue": 1
+    },
+    "payment_keywords": ["wire transfer", "bank details", "change of account", "gift card"],
+    "credential_keywords": ["password", "verify your account", "account will be suspended", "sign in"],
+    "url_shorteners": ["bit.ly", "tinyurl.com", "t.co", "is.gd"],
+    "suspicious_tlds": [".xyz", ".top", ".zip", ".click", ".rest"],
+    "dangerous_extensions": [".exe", ".scr", ".js", ".vbs", ".bat", ".cmd", ".iso", ".lnk", ".hta", ".ps1", ".docm", ".xlsm"],
+    "document_extensions": [".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt", ".jpg", ".png"],
+    "banner_score": 2,
+    "quarantine_score": 7
+  },
+
+  "firewall_audit": {
+    "untrusted_zones": ["internet", "guest"],
+    "broad_prefix_max": 12,
+    "cleartext_ports": { "21": "FTP", "23": "Telnet", "69": "TFTP", "161": "SNMPv1/v2c" },
+    "remote_admin_ports": { "22": "SSH", "139": "NetBIOS", "445": "SMB", "3389": "RDP", "5900": "VNC" },
+    "segmentation_policy": {
+      "allowed_flows": [
+        { "from": "internet",   "to": "dmz",      "ports": "80,443" },
+        { "from": "dmz",        "to": "database", "ports": "1521" },
+        { "from": "internal",   "to": "internet", "ports": "53,80,443" },
+        { "from": "internal",   "to": "dmz",      "ports": "22,443" },
+        { "from": "internal",   "to": "database", "ports": "1521" },
+        { "from": "guest",      "to": "internet", "ports": "53,80,443" },
+        { "from": "management", "to": "*",        "ports": "22,443,3389" }
+      ],
+      "never_allowed": [
+        { "from": "internet", "to": "internal",   "why": "the internet must reach internal systems only through the DMZ" },
+        { "from": "internet", "to": "database",   "why": "databases are never internet-reachable" },
+        { "from": "internet", "to": "management", "why": "management plane must be isolated" },
+        { "from": "guest",    "to": "internal",   "why": "guest Wi-Fi is untrusted" },
+        { "from": "guest",    "to": "database",   "why": "guest Wi-Fi is untrusted" },
+        { "from": "guest",    "to": "management", "why": "guest Wi-Fi is untrusted" },
+        { "from": "dmz",      "to": "internal",   "why": "a compromised DMZ host must not pivot inward" },
+        { "from": "dmz",      "to": "management", "why": "management plane must be isolated" }
+      ]
+    },
+    "weights": {
+      "ANY_ANY": 25, "SEGMENTATION_VIOLATION": 15, "SHADOWED": 12, "MISSING_DEFAULT_DENY": 12,
+      "INSECURE_PROTOCOL": 10, "ANY_SERVICE": 8, "OVERLY_BROAD": 5, "REDUNDANT": 4, "NO_LOGGING": 3, "UNDOCUMENTED": 2
+    }
+  },
+
+  "hardening_baselines": {
+    "severity_weight": { "high": 10, "medium": 5, "low": 2 },
+    "compliant_min_percent": 90,
+    "profiles": {
+      "windows_server": [
+        { "id": "W-01", "category": "Password policy", "title": "Minimum password length ≥ 14", "setting": "password_min_length", "op": "ge", "value": 14, "severity": "high",
+          "remediation": "GPO: Computer Config > Windows Settings > Security Settings > Account Policies > Password Policy > Minimum password length = 14" },
+        { "id": "W-02", "category": "Password policy", "title": "Password history ≥ 24", "setting": "password_history", "op": "ge", "value": 24, "severity": "medium",
+          "remediation": "GPO: Enforce password history = 24 passwords remembered" },
+        { "id": "W-03", "category": "Account lockout", "title": "Lockout threshold 1–5 attempts", "setting": "lockout_threshold", "op": "between", "value": [1, 5], "severity": "medium",
+          "remediation": "GPO: Account Lockout Policy > Account lockout threshold = 5" },
+        { "id": "W-04", "category": "Network", "title": "SMBv1 disabled", "setting": "smbv1_enabled", "op": "eq", "value": false, "severity": "high",
+          "remediation": "Set-SmbServerConfiguration -EnableSMB1Protocol $false (and remove the SMB1 feature)" },
+        { "id": "W-05", "category": "Network", "title": "Host firewall enabled (all profiles)", "setting": "firewall_enabled", "op": "eq", "value": true, "severity": "high",
+          "remediation": "Set-NetFirewallProfile -All -Enabled True" },
+        { "id": "W-06", "category": "Audit", "title": "Audit logon events = Success and Failure", "setting": "audit_logon", "op": "eq", "value": "success_failure", "severity": "medium",
+          "remediation": "auditpol /set /subcategory:\"Logon\" /success:enable /failure:enable" },
+        { "id": "W-07", "category": "Services", "title": "Unnecessary/risky services not running", "setting": "services_running", "op": "excludes", "value": ["TlntSvr", "RemoteRegistry", "Spooler", "SNMP"], "severity": "high",
+          "remediation": "Stop and disable the service (Set-Service <name> -StartupType Disabled); Print Spooler must be off on servers that don't print (PrintNightmare)" },
+        { "id": "W-08", "category": "Remote access", "title": "RDP requires Network Level Authentication", "setting": "rdp_nla_required", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "GPO: Remote Desktop Session Host > Security > Require user authentication using NLA = Enabled" },
+        { "id": "W-09", "category": "Accounts", "title": "Built-in Guest account disabled", "setting": "guest_account_enabled", "op": "eq", "value": false, "severity": "medium",
+          "remediation": "net user Guest /active:no" },
+        { "id": "W-10", "category": "Endpoint", "title": "EDR agent installed and running", "setting": "edr_running", "op": "eq", "value": true, "severity": "high",
+          "remediation": "Reinstall the EDR sensor from the management console and verify check-in" },
+        { "id": "W-11", "category": "Patching", "title": "Automatic security updates enabled", "setting": "auto_updates", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "Enroll in WSUS/Intune update ring; enable automatic security updates" },
+        { "id": "W-12", "category": "Audit", "title": "Security log size ≥ 1024 MB", "setting": "security_log_max_mb", "op": "ge", "value": 1024, "severity": "low",
+          "remediation": "wevtutil sl Security /ms:1073741824" }
+      ],
+      "linux_server": [
+        { "id": "L-01", "category": "Remote access", "title": "SSH root login disabled", "setting": "ssh_permit_root_login", "op": "eq", "value": "no", "severity": "high",
+          "remediation": "Set 'PermitRootLogin no' in /etc/ssh/sshd_config; systemctl reload sshd" },
+        { "id": "L-02", "category": "Remote access", "title": "SSH password authentication disabled (keys only)", "setting": "ssh_password_auth", "op": "eq", "value": "no", "severity": "medium",
+          "remediation": "Set 'PasswordAuthentication no' in /etc/ssh/sshd_config" },
+        { "id": "L-03", "category": "Password policy", "title": "Minimum password length ≥ 14", "setting": "pass_min_len", "op": "ge", "value": 14, "severity": "high",
+          "remediation": "Set minlen = 14 in /etc/security/pwquality.conf" },
+        { "id": "L-04", "category": "Services", "title": "Legacy/insecure services absent", "setting": "services_running", "op": "excludes", "value": ["telnet", "rsh", "vsftpd", "tftp", "rpcbind"], "severity": "high",
+          "remediation": "systemctl disable --now <service>; remove the package" },
+        { "id": "L-05", "category": "Audit", "title": "auditd and rsyslog running", "setting": "services_running", "op": "includes", "value": ["auditd", "rsyslog"], "severity": "high",
+          "remediation": "dnf install audit rsyslog && systemctl enable --now auditd rsyslog" },
+        { "id": "L-06", "category": "Network", "title": "Host firewall enabled", "setting": "firewall_enabled", "op": "eq", "value": true, "severity": "high",
+          "remediation": "systemctl enable --now firewalld (default zone drop/public with only required services)" },
+        { "id": "L-07", "category": "Mandatory access control", "title": "SELinux enforcing", "setting": "selinux_mode", "op": "eq", "value": "enforcing", "severity": "medium",
+          "remediation": "Set SELINUX=enforcing in /etc/selinux/config and relabel" },
+        { "id": "L-08", "category": "Patching", "title": "Automatic security updates enabled", "setting": "auto_updates", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "dnf install dnf-automatic; enable dnf-automatic-install.timer (security only)" },
+        { "id": "L-09", "category": "File permissions", "title": "No world-writable files outside /tmp", "setting": "world_writable_files", "op": "le", "value": 0, "severity": "medium",
+          "remediation": "find / -xdev -type f -perm -0002 -exec chmod o-w {} +" },
+        { "id": "L-10", "category": "File systems", "title": "/tmp mounted noexec", "setting": "tmp_noexec", "op": "eq", "value": true, "severity": "low",
+          "remediation": "Add noexec,nosuid,nodev to the /tmp entry in /etc/fstab and remount" }
+      ]
+    }
+  },
+
+  "threat_classification": {
+    "min_margin": 2,
+    "actors": {
+      "Nation-state":       { "high_funding": 3, "advanced_tools": 3, "long_dwell_time": 3, "targets_government_or_defense": 3, "espionage_data_theft": 2, "zero_day_used": 2 },
+      "Organized crime":    { "demands_payment": 3, "threatens_to_leak_unless_paid": 3, "ransomware": 3, "sells_data": 3, "financial_data_targeted": 2, "high_funding": 1 },
+      "Hacktivist":         { "public_claim": 3, "political_message": 3, "defacement_or_ddos": 3, "leaks_publicly": 2 },
+      "Insider threat":     { "authorized_access_abused": 4, "recently_disgruntled": 3, "internal_origin": 3, "after_hours_access": 1 },
+      "Unskilled attacker": { "public_exploit_tools": 3, "noisy_attack": 3, "low_sophistication": 3, "bragging": 2 },
+      "Shadow IT":          { "unapproved_service": 4, "no_malicious_intent": 4, "internal_origin": 1 }
+    },
+    "motivation_rules": [
+      ["critical_infrastructure_sabotage", "War"],
+      ["espionage_data_theft", "Espionage"],
+      ["threatens_to_leak_unless_paid", "Blackmail"],
+      ["political_message", "Philosophical/political beliefs"],
+      ["recently_disgruntled", "Revenge"],
+      ["demands_payment", "Financial gain"],
+      ["sells_data", "Financial gain"],
+      ["no_malicious_intent", "Convenience (no malicious intent)"],
+      ["bragging", "Disruption/chaos"],
+      ["noisy_attack", "Disruption/chaos"]
+    ],
+    "vectors": {
+      "watering_hole":             { "vector": "Watering hole (compromised trusted website)", "mitigation": "Patch browsers/plugins, DNS/web filtering, isolate browsing" },
+      "phishing_email":            { "vector": "Message-based: email phishing", "mitigation": "Email gateway with DMARC enforcement + security awareness training" },
+      "sms_link":                  { "vector": "Message-based: SMS (smishing)", "mitigation": "Mobile threat defense + awareness training on SMS links" },
+      "phone_call_helpdesk":       { "vector": "Voice call (vishing / pretexting)", "mitigation": "Help-desk caller verification procedure before any reset" },
+      "usb_drop":                  { "vector": "Removable device", "mitigation": "Disable USB mass storage + application allow list" },
+      "vendor_update_compromised": { "vector": "Supply chain: software vendor", "mitigation": "Vendor risk management + code-signing/SBOM verification" },
+      "unpatched_public_service":  { "vector": "Vulnerable software / open service port", "mitigation": "Patch management + reduce exposed attack surface" },
+      "default_credentials":       { "vector": "Default credentials", "mitigation": "Hardening: change default credentials, disable unused accounts" },
+      "rogue_access_point":        { "vector": "Unsecure network: wireless", "mitigation": "802.1X/WPA3-Enterprise + wireless IDS for rogue APs" },
+      "valid_internal_account":    { "vector": "Valid account / authorized access", "mitigation": "Least privilege + separation of duties + UEBA monitoring" },
+      "unsanctioned_saas":         { "vector": "Unsanctioned cloud service", "mitigation": "CASB discovery/blocking + acceptable use policy" }
+    },
+    "actor_addons": {
+      "Nation-state": "Assume persistence: threat hunting, segmentation, and intel sharing (ISAC)",
+      "Organized crime": "Offline/immutable backups and an extortion response plan",
+      "Hacktivist": "DDoS protection and monitoring of public-facing assets",
+      "Insider threat": "Offboarding/JML hygiene and data loss prevention",
+      "Unskilled attacker": "Basic hygiene closes most of the doors (patching, defaults, MFA)",
+      "Shadow IT": "Give people a sanctioned alternative so they stop working around IT"
+    }
+  },
+
+  "resilience": {
+    "site_types": {
+      "hot":  { "rto_hours": 1,   "annual_cost": 500000, "desc": "fully equipped, data replicated, ready to run" },
+      "warm": { "rto_hours": 24,  "annual_cost": 150000, "desc": "hardware and network ready, data must be restored" },
+      "cold": { "rto_hours": 168, "annual_cost": 40000,  "desc": "space and power only; equipment must be procured and installed" }
+    },
+    "replication": {
+      "synchronous":  { "rpo_hours": 0,    "annual_cost": 120000, "note": "zero data loss; latency limits distance" },
+      "asynchronous": { "rpo_hours": 0.25, "annual_cost": 40000,  "note": "seconds-to-minutes of loss; any distance" }
+    },
+    "clustering": {
+      "active-active":  { "failover_hours": 0,    "annual_cost": 60000 },
+      "active-passive": { "failover_hours": 0.25, "annual_cost": 30000 }
+    },
+    "raid": {
+      "RAID0":  { "tolerates": 0, "efficiency": 1.0 },
+      "RAID1":  { "tolerates": 1, "efficiency": 0.5 },
+      "RAID5":  { "tolerates": 1, "efficiency": 0.75 },
+      "RAID6":  { "tolerates": 2, "efficiency": 0.67 },
+      "RAID10": { "tolerates": 1, "efficiency": 0.5 }
+    },
+    "backup_restore_multiplier": { "full": 1.0, "differential": 1.5, "incremental": 2.5 },
+    "restore_hours_per_tb": 1.5,
+    "host_rebuild_hours": 4,
+    "test_max_age_days": 365
+  },
+
+  "vendor_risk": {
+    "data_sensitivity": { "public": 1, "internal": 2, "confidential": 3, "regulated": 4 },
+    "access_level": { "none": 1, "portal": 2, "network": 3, "privileged": 4 },
+    "criticality": { "low": 1, "medium": 2, "high": 3 },
+    "inherent_bands": { "high": 18, "medium": 8 },
+    "residual_bands": { "low": 8, "medium": 16 },
+    "max_control_reduction": 0.7,
+    "questionnaire": {
+      "Q01": { "weight": 15, "text": "Independent assessment (SOC 2 Type II or ISO 27001) within 12 months" },
+      "Q02": { "weight": 10, "text": "MFA enforced for all staff and administrative access" },
+      "Q03": { "weight": 10, "text": "Customer data encrypted at rest and in transit" },
+      "Q04": { "weight": 5,  "text": "Annual security awareness training" },
+      "Q05": { "weight": 10, "text": "Incident response plan tested in the last 12 months" },
+      "Q06": { "weight": 10, "text": "Third-party penetration test in the last 12 months" },
+      "Q07": { "weight": 10, "text": "Subprocessors (fourth parties) disclosed and assessed (supply chain analysis)" },
+      "Q08": { "weight": 5,  "text": "Background checks for staff with access to customer data" },
+      "Q09": { "weight": 10, "text": "Vulnerability management with defined remediation SLAs" },
+      "Q10": { "weight": 10, "text": "Business continuity / disaster recovery tested" },
+      "Q11": { "weight": 5,  "text": "No undisclosed conflicts of interest with our staff" }
+    },
+    "independent_assessment_question": "Q01",
+    "conflict_of_interest_question": "Q11",
+    "required_clauses": {
+      "all":                 ["MSA", "NDA"],
+      "confidential":        ["SLA", "right_to_audit", "breach_notification", "data_return_destruction"],
+      "regulated":           ["SLA", "right_to_audit", "breach_notification", "data_return_destruction", "DPA"],
+      "network":             ["security_requirements_schedule"],
+      "privileged":          ["security_requirements_schedule", "right_to_audit"],
+      "partner":             ["BPA"]
+    },
+    "sla_min_uptime": { "low": 99.0, "medium": 99.5, "high": 99.9 },
+    "max_breach_notification_hours": 72,
+    "monitoring_cadence": { "high": "quarterly reviews + continuous monitoring", "medium": "annual reassessment", "low": "reassess every 2 years or on contract renewal" },
+    "agreement_types": {
+      "SLA": "Service-level agreement: measurable service commitments such as uptime and response times, with remedies",
+      "MSA": "Master service agreement: the umbrella legal terms that govern all future work orders",
+      "SOW/WO": "Statement of work / work order: the specific deliverables, scope and timeline for one engagement",
+      "NDA": "Non-disclosure agreement: obligation to keep shared information confidential",
+      "MOU": "Memorandum of understanding: a statement of shared intent, usually NOT legally binding",
+      "MOA": "Memorandum of agreement: a more formal, conditional agreement between parties on specific responsibilities",
+      "BPA": "Business partnership agreement: how partners share profits, losses, decisions and responsibilities"
+    }
+  },
+
+  "control_classification": {
+    "categories": {
+      "Technical":   { "firewall": 3, "splash screen": 3, "system logs": 3, "backups": 3, "endpoint protection": 3, "encryption": 3, "mfa": 3, "siem": 3, "software": 1, "server": 1 },
+      "Managerial":  { "policy": 2, "compliance policy": 3, "separation of duties": 3, "managers review": 3, "a manager reviews": 3, "threat of demotion": 3, "risk assessment": 3 },
+      "Operational": { "security guards": 3, "patrol": 3, "staff follow the procedure": 3, "contact law enforcement": 3, "training": 2, "awareness": 2 },
+      "Physical":    { "door locks": 3, "motion detectors": 3, "fire extinguisher": 3, "generator": 3, "posted warning signs": 3, "sign on the door": 3, "fence": 3, "bollards": 3, "data center": 1, "server room": 1 }
+    },
+    "types": {
+      "Preventive":   { "block": 3, "blocks": 3, "prevent": 3, "prevents": 3, "keep unauthorized": 3, "denies": 3 },
+      "Detective":    { "logs": 3, "record": 2, "review": 2, "reviews": 2, "alarm": 3, "detectors": 2, "detect": 3, "find unusual": 3, "spot": 3, "alerts": 3 },
+      "Corrective":   { "recover": 3, "restore": 3, "put out": 3, "rolls the system back": 3, "clean state": 2 },
+      "Deterrent":    { "warns": 3, "warning": 3, "prosecuted": 2, "discourages": 3, "deter": 3 },
+      "Compensating": { "instead": 4, "cannot be patched": 4, "too small": 3, "unavailable": 3, "primary": 2, "alternative": 4 },
+      "Directive":    { "must": 3, "policy states": 3, "authorized personnel only": 4, "shall": 3 }
+    }
+  }
+}

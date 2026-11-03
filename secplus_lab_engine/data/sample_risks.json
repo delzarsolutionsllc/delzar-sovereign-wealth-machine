@@ -1,0 +1,50 @@
+{
+  "_description": "Risk scenarios and BIA data for Lab 6. Money in USD per year unless noted. AV = asset value, EF = exposure factor (0-1), ARO = annualized rate of occurrence.",
+  "risk_appetite_ale": 10000,
+  "risks": [
+    {
+      "id": "R-01", "title": "Customer database breach via SQL injection", "owner": "app_owner",
+      "asset_value": 2000000, "exposure_factor": 0.40, "aro": 0.25, "activity_optional": false,
+      "controls": [
+        { "name": "WAF + parameterized queries + DB encryption", "annual_cost": 60000, "new_aro": 0.05 }
+      ],
+      "insurance": { "annual_premium": 90000, "coverage": 0.8 }
+    },
+    {
+      "id": "R-02", "title": "Laptop theft exposing local data", "owner": "ops_lead",
+      "asset_value": 3000, "exposure_factor": 1.0, "aro": 12, "activity_optional": false,
+      "controls": [
+        { "name": "Full-disk encryption + remote wipe (MDM)", "annual_cost": 8000, "new_ef": 0.3 }
+      ]
+    },
+    {
+      "id": "R-03", "title": "Flood destroys primary data center", "owner": "cab_chair",
+      "asset_value": 5000000, "exposure_factor": 0.60, "aro": 0.01, "activity_optional": false,
+      "controls": [
+        { "name": "Relocate to a hardened facility", "annual_cost": 400000, "new_aro": 0.001 }
+      ],
+      "insurance": { "annual_premium": 12000, "coverage": 0.9 }
+    },
+    {
+      "id": "R-04", "title": "Defacement of a static marketing microsite", "owner": "app_owner",
+      "asset_value": 20000, "exposure_factor": 0.5, "aro": 0.5, "activity_optional": true,
+      "controls": [
+        { "name": "Managed WAF subscription", "annual_cost": 15000, "new_aro": 0.05 }
+      ]
+    },
+    {
+      "id": "R-05", "title": "Legacy anonymous FTP used for partner file exchange", "owner": "ops_lead",
+      "asset_value": 500000, "exposure_factor": 0.80, "aro": 0.9, "activity_optional": true,
+      "avoidance": { "description": "Retire FTP; move partners to the existing SFTP portal", "annual_cost": 50000 },
+      "controls": [
+        { "name": "Bolt-on DLP + IDS + dedicated monitoring for FTP", "annual_cost": 500000, "new_aro": 0.1 }
+      ]
+    }
+  ],
+  "bia": [
+    { "system": "payroll-app",  "rto_hours": 8,  "rpo_hours": 4,  "backup_interval_hours": 24, "restore_time_hours": 6,  "mtbf_hours": 4380, "mttr_hours": 6,  "availability_target": 0.999 },
+    { "system": "web-frontend", "rto_hours": 1,  "rpo_hours": 24, "backup_interval_hours": 12, "restore_time_hours": 0.5,"mtbf_hours": 8760, "mttr_hours": 0.5,"availability_target": 0.999 },
+    { "system": "erp-legacy",   "rto_hours": 4,  "rpo_hours": 1,  "backup_interval_hours": 1,  "restore_time_hours": 12, "mtbf_hours": 720,  "mttr_hours": 12, "availability_target": 0.995 },
+    { "system": "auth-service", "rto_hours": 0.5,"rpo_hours": 0.25,"backup_interval_hours": 0.25,"restore_time_hours": 0.25,"mtbf_hours": 17520,"mttr_hours": 0.25,"availability_target": 0.9999 }
+  ]
+}

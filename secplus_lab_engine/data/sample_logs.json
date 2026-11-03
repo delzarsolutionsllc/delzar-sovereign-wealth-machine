@@ -1,0 +1,76 @@
+{
+  "_description": "Raw multi-source log stream for Lab 3. Format: <ISO8601> <host> <source> key=value ... (FW=firewall, WinEvt=Windows Security log, HTTP=web server, EDR=endpoint). One malformed line is included on purpose.",
+  "raw_stream": [
+    "2026-11-02T08:00:00Z DC01 WinEvt EventID=4624 user=asmith src=10.20.1.15 logon_type=2",
+    "2026-11-02T08:01:00Z FW01 FW action=ALLOW proto=TCP src=10.20.1.15:50110 dst=172.217.4.14:443",
+    "2026-11-02T08:02:00Z WEB01 HTTP src=98.12.44.10 method=GET path=\"/index.html\" status=200 ua=\"Mozilla/5.0 (Windows NT 10.0; Win64; x64)\"",
+    "2026-11-02T08:05:00Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:05:20Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:05:40Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:06:00Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:06:20Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:06:40Z DC01 WinEvt EventID=4625 user=jdoe src=45.155.205.233 logon_type=10 status=0xC000006A",
+    "2026-11-02T08:07:30Z DC01 WinEvt EventID=4624 user=jdoe src=45.155.205.233 logon_type=10",
+    "2026-11-02T08:08:00Z DC01 WinEvt EventID=4672 user=jdoe src=45.155.205.233 privileges=\"SeDebugPrivilege SeBackupPrivilege\"",
+    "2026-11-02T08:10:00Z DC01 WinEvt EventID=4625 user=mlee src=103.75.190.12 logon_type=3 status=0xC000006A",
+    "2026-11-02T08:10:15Z DC01 WinEvt EventID=4625 user=kpatel src=103.75.190.12 logon_type=3 status=0xC000006A",
+    "2026-11-02T08:10:30Z DC01 WinEvt EventID=4625 user=rgarcia src=103.75.190.12 logon_type=3 status=0xC000006A",
+    "2026-11-02T08:10:45Z DC01 WinEvt EventID=4625 user=tchen src=103.75.190.12 logon_type=3 status=0xC000006A",
+    "2026-11-02T08:11:00Z DC01 WinEvt EventID=4625 user=svc_sql src=103.75.190.12 logon_type=3 status=0xC000006A",
+    "2026-11-02T08:12:00Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40000 dst=10.20.0.5:21",
+    "2026-11-02T08:12:02Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40001 dst=10.20.0.5:22",
+    "2026-11-02T08:12:04Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40002 dst=10.20.0.5:23",
+    "2026-11-02T08:12:06Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40003 dst=10.20.0.5:25",
+    "2026-11-02T08:12:08Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40004 dst=10.20.0.5:53",
+    "2026-11-02T08:12:10Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40005 dst=10.20.0.5:80",
+    "2026-11-02T08:12:12Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40006 dst=10.20.0.5:110",
+    "2026-11-02T08:12:14Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40007 dst=10.20.0.5:139",
+    "2026-11-02T08:12:16Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40008 dst=10.20.0.5:443",
+    "2026-11-02T08:12:18Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40009 dst=10.20.0.5:445",
+    "2026-11-02T08:12:20Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40010 dst=10.20.0.5:1433",
+    "2026-11-02T08:12:22Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40011 dst=10.20.0.5:3306",
+    "2026-11-02T08:12:24Z FW01 FW action=DENY proto=TCP src=103.75.190.12:40012 dst=10.20.0.5:3389",
+    "2026-11-02T08:15:00Z WEB01 HTTP src=185.220.101.45 method=GET path=\"/products?id=1' OR 1=1--\" status=500 ua=\"sqlmap/1.7.2#stable (https://sqlmap.org)\"",
+    "2026-11-02T08:15:05Z WEB01 HTTP src=185.220.101.45 method=GET path=\"/products?id=1 UNION SELECT username,password FROM users\" status=500 ua=\"sqlmap/1.7.2#stable (https://sqlmap.org)\"",
+    "2026-11-02T08:16:00Z WEB01 HTTP src=185.220.101.45 method=GET path=\"/admin/\" status=403 ua=\"Mozilla/5.00 (Nikto/2.5.0)\"",
+    "2026-11-02T08:20:00Z WS-0142 EDR alert=malware_detected user=bwhite file=\"invoice_Q4.pdf.exe\" md5=44d88612fea8a8f36de82e1278abb02f sha256=275a021bbfb6489e54d471899f7db9d1663fc695ec2fe2a2c4538aabf651fd0f c2=update-check.xyz",
+    "2026-11-02T08:21:00Z FW01 FW action=ALLOW proto=TCP src=10.20.3.142:51544 dst=45.155.205.233:8443",
+    "2026-11-02T08:25:00Z DC01 WinEvt EventID=1102 user=jdoe src=45.155.205.233 msg=\"The audit log was cleared\"",
+    "2026-11-02T08:40:00Z VPN01 WinEvt EventID=4624 user=asmith src=95.165.12.80 logon_type=10",
+    "2026-11-02T09:15:00Z DC01 WinEvt EventID=4624 user=svc_backup src=10.20.0.9 logon_type=5",
+    "2026-11-02T09:16:00Z WEB01 HTTP src=98.12.44.10 method=GET path=\"/contact\" status=200 ua=\"Mozilla/5.0 (Macintosh; Intel Mac OS X 14_1)\"",
+    "garbage line without structure"
+  ],
+  "geoip": {
+    "10.20.1.15": {
+      "city": "Tulsa, US",
+      "lat": 36.154,
+      "lon": -95.993
+    },
+    "95.165.12.80": {
+      "city": "Moscow, RU",
+      "lat": 55.755,
+      "lon": 37.617
+    },
+    "45.155.205.233": {
+      "city": "Amsterdam, NL",
+      "lat": 52.37,
+      "lon": 4.895
+    },
+    "103.75.190.12": {
+      "city": "Hanoi, VN",
+      "lat": 21.028,
+      "lon": 105.834
+    },
+    "185.220.101.45": {
+      "city": "Tor exit (DE)",
+      "lat": 50.11,
+      "lon": 8.682
+    },
+    "98.12.44.10": {
+      "city": "Austin, US",
+      "lat": 30.267,
+      "lon": -97.743
+    }
+  }
+}

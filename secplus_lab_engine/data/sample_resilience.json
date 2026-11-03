@@ -1,0 +1,31 @@
+{
+  "_description": "Systems for Lab 14: business targets (RTO/RPO, disk/power/site requirements) and the resilience currently in place. Options and costs come from config 'resilience'.",
+  "as_of": "2026-11-03",
+  "systems": [
+    { "name": "payroll-app",
+      "targets": { "rto_hours": 8, "rpo_hours": 4, "disk_failures": 1, "power_outage_hours": 4, "survive_site_loss": true },
+      "current": { "site": "cold", "replication": null, "clustering": null, "raid": "RAID5",
+                   "backup": { "type": "differential", "frequency_hours": 24, "offsite": true }, "data_tb": 2,
+                   "ups_minutes": 15, "generator_hours": 8, "last_restore_test": "2026-06-01", "last_dr_test": "2025-01-10" } },
+    { "name": "web-frontend",
+      "targets": { "rto_hours": 1, "rpo_hours": 24, "disk_failures": 1, "power_outage_hours": 8, "survive_site_loss": true },
+      "current": { "site": "hot", "replication": "asynchronous", "clustering": "active-active", "raid": "RAID10",
+                   "backup": { "type": "full", "frequency_hours": 24, "offsite": true }, "data_tb": 0.2,
+                   "ups_minutes": 30, "generator_hours": 24, "last_restore_test": "2026-09-15", "last_dr_test": "2026-08-20" } },
+    { "name": "auth-service",
+      "targets": { "rto_hours": 1, "rpo_hours": 0.25, "disk_failures": 1, "power_outage_hours": 4, "survive_site_loss": true },
+      "current": { "site": "hot", "replication": "asynchronous", "clustering": "active-passive", "raid": "RAID0",
+                   "backup": { "type": "incremental", "frequency_hours": 1, "offsite": true }, "data_tb": 0.1,
+                   "ups_minutes": 10, "generator_hours": 0, "last_restore_test": "2026-10-01", "last_dr_test": "2026-07-01" } },
+    { "name": "erp-legacy",
+      "targets": { "rto_hours": 4, "rpo_hours": 1, "disk_failures": 2, "power_outage_hours": 4, "survive_site_loss": true },
+      "current": { "site": null, "replication": null, "clustering": null, "raid": "RAID6",
+                   "backup": { "type": "incremental", "frequency_hours": 24, "offsite": false }, "data_tb": 3,
+                   "ups_minutes": 20, "generator_hours": 8, "last_restore_test": null, "last_dr_test": null } },
+    { "name": "file-server",
+      "targets": { "rto_hours": 24, "rpo_hours": 24, "disk_failures": 1, "power_outage_hours": 2, "survive_site_loss": false },
+      "current": { "site": null, "replication": null, "clustering": null, "raid": "RAID1",
+                   "backup": { "type": "full", "frequency_hours": 24, "offsite": true }, "data_tb": 1,
+                   "ups_minutes": 15, "generator_hours": 4, "last_restore_test": "2026-10-10", "last_dr_test": "2026-05-05" } }
+  ]
+}
