@@ -49,10 +49,10 @@
   <table class="meta">
     <tr><td>Repository</td><td><code>delzarsolutionsllc/delzar-sovereign-wealth-machine</code></td></tr>
     <tr><td>Location in repo</td><td><code>secplus_lab_engine/</code> (+ <code>.github/workflows/secplus-lab-engine.yml</code>)</td></tr>
-    <tr><td>Branch / Pull request</td><td><code>ccr-2689f707-karox1</code> · PR #4 (draft, open, mergeable)</td></tr>
-    <tr><td>Commits</td><td><code>6081f9b</code> labs 1–5 · <code>bb6d70d</code> challenge mode, CI, labs 6–8 · <code>e404421</code>…<code>6e51caa</code> labs 9–16 (one commit each) · <code>ee18cc2</code> scenario generator + exam</td></tr>
-    <tr><td>Size</td><td>~8,400 lines of Python · 16 labs · 16 sample scenario files · 1 policy file (13 sections) · 284 sample challenge questions</td></tr>
-    <tr><td>Quality status</td><td>483 pytest tests passing · GitHub Actions green on Python 3.10, 3.11, 3.12, 3.13</td></tr>
+    <tr><td>Branch / Pull requests</td><td><code>ccr-2689f707-karox1</code> · PR #4 merged (labs 1–16) · follow-up PR for Lab 17 + web app</td></tr>
+    <tr><td>Commits</td><td><code>6081f9b</code> labs 1–5 · <code>bb6d70d</code> challenge mode, CI, labs 6–8 · <code>e404421</code>…<code>6e51caa</code> labs 9–16 (one commit each) · <code>ee18cc2</code> scenario generator + exam · merged as PR #4 (<code>021ec0e</code>) · then Lab 17 (<code>5392ffd</code>) and the course web app (<code>2bc7104</code>)</td></tr>
+    <tr><td>Size</td><td>~9,600 lines of Python + a course web app · 17 labs · 17 sample scenario files · 1 policy file (14 sections) · 318 sample challenge questions (2,100+ in the hosted bundle)</td></tr>
+    <tr><td>Quality status</td><td>565 pytest tests passing · GitHub Actions green on Python 3.10, 3.11, 3.12, 3.13</td></tr>
     <tr><td>Runtime requirements</td><td>Python 3.10+ standard library only. <code>rich</code> optional (colour); <code>pytest</code> for tests. Fully offline.</td></tr>
     <tr><td>Document date</td><td>2026-11-03</td></tr>
   </table>
@@ -82,6 +82,8 @@
     <li>Lab 14 — Resilience &amp; Recovery Planner</li>
     <li>Lab 15 — Vendor Risk Assessor</li>
     <li>Lab 16 — Security Control Classifier</li>
+    <li>Lab 17 — PKI &amp; Certificate Validator</li>
+    <li>Course web app &amp; desktop launcher</li>
     <li>Random scenarios &amp; practice exam</li>
     <li>Challenge mode &amp; progress tracking</li>
     <li>Shared utilities</li>
@@ -99,9 +101,9 @@
 <h2>1. How to use this document</h2>
 <p>This handbook describes everything built so far: the purpose, the architecture, each lab's engine and decision rules, data formats, configuration, tests, and how to add more. Every function signature, file name and sample result was taken from the code as it stands, not written from memory.</p>
 <div class="callout"><b>If you are an AI reading this</b>
-The project is a modular Python CLI. Every lab follows the same <b>module contract</b> (Section 3.3). To extend it, follow that contract, keep to the standard library, load all policy from <code>config/default_policies.json</code> and scenarios from <code>data/*.json</code>, add pytest tests, and register the lab in <code>labs/__init__.py</code>. Section 27 has recipes and a full lab skeleton. Section 29 is a ready-made prompt.</div>
+The project is a modular Python CLI. Every lab follows the same <b>module contract</b> (Section 3.3). To extend it, follow that contract, keep to the standard library, load all policy from <code>config/default_policies.json</code> and scenarios from <code>data/*.json</code>, add pytest tests, and register the lab in <code>labs/__init__.py</code>. Section 29 has recipes and a full lab skeleton. Section 31 is a ready-made prompt.</div>
 <div class="callout warn"><b>If you are the learner</b>
-Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>python main.py lab N</code>), then quiz yourself (<code>python main.py challenge N</code>) before reading its "Decision logic" table.</div>
+Easiest start: open the course web app (Section 22). Otherwise read Sections 2–4 first, then one lab section at a time. Run that lab (<code>python main.py lab N</code>), then quiz yourself (<code>python main.py challenge N</code>) before reading its "Decision logic" table.</div>
 
 <!-- ======================================================= 2 -->
 <h2>2. Purpose &amp; learning philosophy</h2>
@@ -112,7 +114,7 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
   <li><b>How an AI agent should be governed</b> in that same domain: least privilege, human-in-the-loop, audit trails.</li>
 </ol>
 <p>Every lab ends with an <b>"Exam &amp; Architectural Insight" panel</b> with five parts: the SY0-701 objective, key concepts, manual failure modes, AI-governance guidance and exam tips.</p>
-<p><b>The arc of the project:</b> Labs 1–4, 6–7 and 9–16 teach individual controls. Lab 5 shows how to put guardrails on automation. Lab 8 wires them all together into the architecture the learner is building toward: <i>detect → AI agent proposes → governor decides → human approves → the owning control executes</i>.</p>
+<p><b>The arc of the project:</b> Labs 1–4, 6–7 and 9–17 teach individual controls. Lab 5 shows how to put guardrails on automation. Lab 8 wires them all together into the architecture the learner is building toward: <i>detect → AI agent proposes → governor decides → human approves → the owning control executes</i>.</p>
 
 <h3>SY0-701 coverage</h3>
 <table>
@@ -151,17 +153,26 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
 │   ├── sample_threat_scenarios.json Lab 13 incident scenarios with indicators
 │   ├── sample_resilience.json      Lab 14 systems: targets vs current design
 │   ├── sample_vendors.json         Lab 15 questionnaires + contracts
-│   └── sample_controls.json        Lab 16 control descriptions + answer key
+│   ├── sample_controls.json        Lab 16 control descriptions + answer key
+│   └── sample_certificates.json    Lab 17 TLS chains + CRL/OCSP data
 ├── labs/
 │   ├── __init__.py              LABS registry: {number: (module, default data file)}
-│   ├── lab1_jml_governance.py … lab16_control_classifier.py
+│   ├── lab1_jml_governance.py … lab17_pki_validator.py
 ├── utils/
 │   ├── crypto_helpers.py        SHA-256, salt, PBKDF2, HMAC, canonical JSON, hash chains
 │   ├── terminal_ui.py           UI class: rich or plain-text tables/panels/status lines
 │   ├── loader.py                load_policies(), load_data(), load_json()
 │   ├── challenge.py             Question, run_challenge(), Progress, pick_distractors()/choices_with()
-│   ├── scenario_generator.py    seeded random scenarios for labs 2, 6, 9, 11–15
-│   └── exam.py                  domain-weighted timed practice exam
+│   ├── scenario_generator.py    seeded random scenarios for labs 2, 6, 9, 11–15, 17
+│   ├── exam.py                  domain-weighted timed practice exam
+│   ├── webserver.py             local web server for the course app (127.0.0.1 only)
+│   └── desktop.py               desktop shortcut installer (Windows / macOS / Linux)
+├── webapi.py                    JSON API shared by the local server and the bundle builder
+├── web/
+│   ├── index.html               the course web app (works live or hosted)
+│   └── course_data.json         pre-built course for the hosted version
+├── tools/build_web_bundle.py    rebuilds web/course_data.json
+├── launch/                      double-click launchers (Windows .bat, macOS .command, Linux .sh)
 └── tests/
     ├── conftest.py              fixtures: policies, quiet_ui, data loader
     ├── test_labs.py             labs 1–5, crypto, demos, CLI
@@ -204,14 +215,16 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
 <p>Run from inside <code>secplus_lab_engine/</code> (or call <code>main.py</code> by path; it fixes <code>sys.path</code> itself).</p>
 <table>
   <tr><th>Command</th><th>What it does</th></tr>
-  <tr><td><code>python main.py</code> / <code>menu</code></td><td>Interactive menu: <code>1-16</code> run a lab · <code>C3</code> challenge lab 3 · <code>R9</code> challenge on a random scenario · <code>E</code> practice exam · <code>P</code> progress · <code>A</code> all · <code>T</code> tests · <code>Q</code> quit</td></tr>
+  <tr><td><code>python main.py</code> / <code>menu</code></td><td>Interactive menu: <code>1-17</code> run a lab · <code>C3</code> challenge lab 3 · <code>R9</code> challenge on a random scenario · <code>E</code> practice exam · <code>P</code> progress · <code>W</code> web app · <code>A</code> all · <code>T</code> tests · <code>Q</code> quit</td></tr>
   <tr><td><code>python main.py list</code></td><td>Table of labs, objectives and default data files</td></tr>
   <tr><td><code>python main.py lab N [--file X.json]</code></td><td>Run lab N's scenario (optionally your own data file)</td></tr>
   <tr><td><code>python main.py lab N --challenge</code></td><td>Quiz mode for lab N</td></tr>
   <tr><td><code>python main.py challenge N|all [--seed S] [--file X.json]</code></td><td>Quiz mode; <code>--seed</code> fixes question order</td></tr>
   <tr><td><code>python main.py progress</code></td><td>Scores per objective (weakest first) + last 5 sessions</td></tr>
-  <tr><td><code>python main.py all</code></td><td>Run all sixteen labs back-to-back</td></tr>
-  <tr><td><code>python main.py lab N --random [--seed S]</code></td><td>Run a lab on a generated scenario (labs 2, 6, 9, 11–15)</td></tr>
+  <tr><td><code>python main.py all</code></td><td>Run all seventeen labs back-to-back</td></tr>
+  <tr><td><code>python main.py web [--port 8765] [--no-browser]</code></td><td>Open the course web app in your browser (live engine, offline)</td></tr>
+  <tr><td><code>python main.py install-shortcut [--desktop DIR]</code></td><td>Put a double-click launcher on your desktop</td></tr>
+  <tr><td><code>python main.py lab N --random [--seed S]</code></td><td>Run a lab on a generated scenario (labs 2, 6, 9, 11–15, 17)</td></tr>
   <tr><td><code>python main.py challenge N|all --random [--seed S]</code></td><td>Quiz on generated scenarios so answers can't be memorised</td></tr>
   <tr><td><code>python main.py exam [--count 90] [--minutes 90] [--seed S] [--fixed]</code></td><td>Timed, domain-weighted practice exam</td></tr>
   <tr><td><code>python main.py test [pytest args]</code></td><td>Run the pytest suite</td></tr>
@@ -639,15 +652,68 @@ classify(control, cfg) -> ControlResult(category, type, category_evidence, type_
 <p>19/19 agree with the answer key, covering the full category × type matrix (e.g. splash screen = technical deterrent, managers reviewing login reports = managerial detective, generator = physical compensating, "Authorized personnel only" = physical directive) plus one vague control left Unclassified. Challenge: 36 questions.</p>
 </section>
 
+<!-- ======================================================= LAB 17 -->
+<section class="lab">
+<h2>21. Lab 17 — PKI &amp; Certificate Validator</h2>
+<p><span class="pill">1.4 PKI &amp; certificates</span> File: <code>labs/lab17_pki_validator.py</code> · Data: <code>sample_certificates.json</code> · Config: <code>pki</code></p>
+<h4>Engine API</h4>
+<pre>hostname_matches(host, pattern) -> bool        # exact, or a wildcard covering exactly ONE leftmost label
+validate(scenario, cfg, as_of) -> Validation(verdict, primary, issues[Issue(code, level, message)])
+validate_all(data, policies) -> list[Validation]
+Certificate record: subject, issuer, serial, not_before, not_after, key_type, key_bits, sig_alg, is_ca, san[], eku[], spki_sha256</pre>
+<h4>Checks (severity)</h4>
+<table>
+  <tr><th>Code</th><th>Level</th><th>Trigger</th></tr>
+  <tr><td>REVOKED (10)</td><td class="v-bad">error</td><td>OCSP says revoked, or the serial is on the issuer's CRL</td></tr>
+  <tr><td>PIN_MISMATCH (9)</td><td class="v-bad">error</td><td>the app pins SPKI hashes and no presented key matches (TLS interception)</td></tr>
+  <tr><td>SELF_SIGNED / UNTRUSTED_ROOT (8)</td><td class="v-bad">error</td><td>chain ends at a self-signed cert that is not in the trust store</td></tr>
+  <tr><td>INCOMPLETE_CHAIN / NOT_A_CA (7)</td><td class="v-bad">error</td><td>issuer ≠ next subject, missing intermediate, or a CA:FALSE cert signed another</td></tr>
+  <tr><td>EXPIRED / NOT_YET_VALID (6)</td><td class="v-bad">error</td><td>any cert outside notBefore..notAfter</td></tr>
+  <tr><td>HOSTNAME_MISMATCH (5)</td><td class="v-bad">error</td><td>host not covered by SAN (CN only if no SAN)</td></tr>
+  <tr><td>WEAK_SIGNATURE / WEAK_KEY (4) · WRONG_KEY_USAGE (3)</td><td class="v-bad">error</td><td>SHA-1/MD5, RSA &lt; 2048 or EC &lt; 256, EKU without serverAuth</td></tr>
+  <tr><td>REVOCATION_UNKNOWN (2)</td><td class="v-warn">warning*</td><td>no OCSP answer and no CRL (*error when <code>revocation_hard_fail</code>)</td></tr>
+  <tr><td>VALIDITY_TOO_LONG · EXPIRING_SOON (1)</td><td class="v-warn">warning</td><td>leaf valid &gt; 398 days · expires within 30 days</td></tr>
+</table>
+<p>Verdict: UNTRUSTED (any error) / TRUSTED_WITH_WARNINGS / TRUSTED. Trust anchors are not re-checked for key or signature strength.</p>
+<h4>Sample outcome</h4>
+<p>P-01 TRUSTED · P-02 EXPIRED · P-03 HOSTNAME_MISMATCH (<code>*.delzarsolutions.com</code> does not cover <code>dev.portal…</code>) · P-04 INCOMPLETE_CHAIN · P-05 SELF_SIGNED · P-06 REVOKED (CRL) · P-07 WEAK_KEY + WEAK_SIGNATURE · P-08 PIN_MISMATCH (TLS-inspection proxy chains to a trusted root, but the banking app pins its keys) · P-09 TRUSTED_WITH_WARNINGS (OCSP unknown, soft-fail; expires in 17 days) · P-10 NOT_A_CA. The generator applies 0–2 random faults to healthy chains. Challenge: 34 questions (verdict, most serious problem, wildcard matching, PKI terms).</p>
+</section>
+
+<!-- ======================================================= WEB APP -->
+<section class="lab">
+<h2>22. The course web app &amp; desktop launcher</h2>
+<p>One page, <code>web/index.html</code>, presents the whole engine as a course: a <b>course map</b> (domains → labs), and for each lab a <b>Lesson</b> (its docstring + Exam &amp; Architectural Insight), <b>Run the scenario</b> (the engine's report, sample or random) and <b>Practice</b> (instant feedback, number keys to answer). It also has a timed, domain-weighted <b>Practice exam</b> and <b>My progress</b> (objectives, weakest first). The page runs two ways:</p>
+<table>
+  <tr><th></th><th>On your computer</th><th>Hosted on claude.ai</th></tr>
+  <tr><td>Start</td><td><code>python main.py web</code>, a desktop shortcut, or a file in <code>launch/</code></td><td>Open the private artifact link (pin it in the claude.ai sidebar)</td></tr>
+  <tr><td>Engine</td><td>Live: the server calls <code>webapi.dispatch()</code></td><td>Pre-built: <code>web/course_data.json</code> from <code>tools/build_web_bundle.py</code></td></tr>
+  <tr><td>Random scenarios</td><td>Unlimited (any seed)</td><td>12 generated variants per generator lab</td></tr>
+  <tr><td>Progress</td><td><code>progress.json</code> (shared with the CLI)</td><td>Private per-user document (<code>db</code> + <code>user</code> capabilities); falls back to browser storage</td></tr>
+  <tr><td>Needs</td><td>Python 3.10+, no internet</td><td>A browser; no Python</td></tr>
+</table>
+<h4>Local server security (<code>utils/webserver.py</code>)</h4>
+<ul>
+  <li>Binds to <code>127.0.0.1</code> only; requests whose Host header is not localhost get 403 (defeats DNS rebinding).</li>
+  <li>API calls must be <code>POST</code> with <code>Content-Type: application/json</code> (forces a CORS preflight for foreign pages) and no CORS headers are ever sent, so other websites can't drive it.</li>
+  <li>Only <code>/</code> is served as a file; the API accepts a fixed method list and never takes file paths from the browser.</li>
+</ul>
+<h4>Desktop shortcut (<code>utils/desktop.py</code>)</h4>
+<pre>python main.py install-shortcut          # Windows: "Security+ Lab Engine.bat"   (py launcher, else python)
+                                         # macOS:   "Security+ Lab Engine.command" (opens Terminal)
+                                         # Linux:   security-plus-lab-engine.desktop
+python tools/build_web_bundle.py         # rebuild the hosted bundle after changing labs/data/policy</pre>
+<p>The tests cover the API, the server's security rules (foreign Host, non-JSON POST, unknown methods, path probes, no CORS), the three launchers and the bundle. A Playwright run drives both modes end to end (lesson, scenario, a full quiz, progress, a timed exam, phone width in dark mode) with no console errors.</p>
+</section>
+
 <!-- ======================================================= GEN + EXAM -->
 <section class="lab">
-<h2>21. Random scenarios &amp; the practice exam</h2>
-<h3>21.1 Scenario generator (<code>utils/scenario_generator.py</code>)</h3>
-<p><code>generate(lab, policies, seed) -&gt; data</code> builds a fresh scenario in exactly the lab's sample-file format, drawing only from the policy file (roles, CMDB, catalogs) and fixed text banks. The same seed always gives the same scenario. Supported labs: <b>2, 6, 9, 11, 12, 13, 14, 15</b>. Story-driven labs (logs, SOC pipeline, IR playbooks, emails, CAB stories) keep their hand-crafted samples. The tests generate 25 scenarios per lab and require every quiz to be valid and uniquely answerable; a stress run of 200 seeds × 8 labs had zero failures.</p>
+<h2>23. Random scenarios &amp; the practice exam</h2>
+<h3>23.1 Scenario generator (<code>utils/scenario_generator.py</code>)</h3>
+<p><code>generate(lab, policies, seed) -&gt; data</code> builds a fresh scenario in exactly the lab's sample-file format, drawing only from the policy file (roles, CMDB, catalogs) and fixed text banks. The same seed always gives the same scenario. Supported labs: <b>2, 6, 9, 11, 12, 13, 14, 15, 17</b>. Story-driven labs (logs, SOC pipeline, IR playbooks, emails, CAB stories) keep their hand-crafted samples. The tests generate 25 scenarios per lab and require every quiz to be valid and uniquely answerable; a stress run of 200 seeds × 8 labs had zero failures.</p>
 <pre>python main.py challenge 9 --random --seed 42      python main.py lab 12 --random      menu: R9</pre>
-<h3>21.2 Exam simulator (<code>utils/exam.py</code>)</h3>
+<h3>23.2 Exam simulator (<code>utils/exam.py</code>)</h3>
 <ul>
-  <li><b>Pool:</b> every lab's questions on sample data plus 3 generated scenarios per supported lab, de-duplicated (≈ 580 questions with randomisation, ≈ 280 fixed).</li>
+  <li><b>Pool:</b> every lab's questions on sample data plus 3 generated scenarios per supported lab, de-duplicated (≈ 650 questions with randomisation, ≈ 315 fixed).</li>
   <li><b>Allocation:</b> official weights 12/22/18/28/20 % by largest remainder (90 → 11/20/16/25/18); a domain short of questions passes its share to the others.</li>
   <li><b>Runner:</b> timed (default 90 min, injectable clock), no feedback until the end, unanswered questions count as wrong. Results show a per-domain table, an <i>approximate</i> scaled score (100 + 8 × %, pass 750; CompTIA's real scaling is not public) and the first 15 misses with explanations. Scores go to <code>progress.json</code>.</li>
 </ul>
@@ -656,8 +722,8 @@ classify(control, cfg) -> ControlResult(category, type, category_evidence, type_
 
 <!-- ======================================================= 22 -->
 <section class="lab">
-<h2>22. Challenge mode &amp; progress tracking</h2>
-<p>File: <code>utils/challenge.py</code>. Questions are <b>computed by running each engine</b>, so they always match the current policy and data. 284 questions across the 16 labs on sample data, unlimited with <code>--random</code>. <code>pick_distractors()</code>/<code>choices_with()</code> choose wrong options deterministically and accept an <code>exclude</code> list so a distractor is never a second correct answer. Choices may not be bare numbers, because a typed digit selects an option by number.</p>
+<h2>24. Challenge mode &amp; progress tracking</h2>
+<p>File: <code>utils/challenge.py</code>. Questions are <b>computed by running each engine</b>, so they always match the current policy and data. 318 questions across the 17 labs on sample data, unlimited with <code>--random</code>. <code>pick_distractors()</code>/<code>choices_with()</code> choose wrong options deterministically and accept an <code>exclude</code> list so a distractor is never a second correct answer. Choices may not be bare numbers, because a typed digit selects an option by number.</p>
 <pre>@dataclass Question(prompt, choices, answer, explanation, objective, context="")   # answer must be in choices
 run_challenge(ui, lab_number, questions, ask=None, progress=None, shuffle=True, seed=None) -> ChallengeResult
     # accepts option number or exact text; shows PASS/FAIL + "Why"; EOF/Ctrl-C ends early, scoring answered only
@@ -665,7 +731,7 @@ class Progress(path=progress.json): record(objective, correct) · record_session
     # rows sorted weakest first; status PASS ≥85%, WARN ≥65%, FAIL below (LOW/MEDIUM if &lt;3 attempts)</pre>
 <p>A test answers every lab's questions with the engine's own answers and requires 100%. That catches unanswerable or ambiguous questions.</p>
 
-<h2>23. Shared utilities</h2>
+<h2>25. Shared utilities</h2>
 <table>
   <tr><th>Module</th><th>Contents</th></tr>
   <tr><td><code>crypto_helpers.py</code></td><td><code>sha256_hex</code>, <code>generate_salt</code> (128-bit), <code>salted_sha256</code>, <code>stretch_password</code> (PBKDF2-HMAC-SHA256, 100k iterations), <code>file_sha256</code>, <code>constant_time_equals</code>, <code>hmac_sign</code>/<code>hmac_verify</code>, <code>canonical_json</code>, <code>build_hash_chain</code>/<code>verify_hash_chain</code> (returns valid, first_broken_index, length_delta)</td></tr>
@@ -673,7 +739,7 @@ class Progress(path=progress.json): record(objective, correct) · record_session
   <tr><td><code>loader.py</code></td><td><code>ROOT</code>, <code>CONFIG_DIR</code>, <code>DATA_DIR</code>, <code>load_json</code>, <code>load_policies(path=None)</code>, <code>load_data(name)</code></td></tr>
 </table>
 
-<h2>24. Policy configuration reference</h2>
+<h2>26. Policy configuration reference</h2>
 <p>File: <code>config/default_policies.json</code>. Swap the whole file with <code>--policies</code>.</p>
 <table>
   <tr><th>Section</th><th>Keys</th></tr>
@@ -689,13 +755,14 @@ class Progress(path=progress.json): record(objective, correct) · record_session
   <tr><td><code>resilience</code></td><td>site_types · replication · clustering · raid · backup_restore_multiplier · restore_hours_per_tb · host_rebuild_hours · test_max_age_days</td></tr>
   <tr><td><code>vendor_risk</code></td><td>sensitivity/access/criticality scales · inherent/residual bands · questionnaire · required_clauses · sla_min_uptime · max_breach_notification_hours · monitoring_cadence · agreement_types</td></tr>
   <tr><td><code>control_classification</code></td><td>categories{label: {phrase: weight}} · types{label: {phrase: weight}}</td></tr>
+  <tr><td><code>pki</code></td><td>trusted_roots · min_key_bits · allowed_signature_algorithms · max_leaf_validity_days · expiry_warning_days · revocation_hard_fail · severity · warning_codes · concepts</td></tr>
   <tr><td><code>ai_governance</code></td><td>agents{id: {type, allowed_actions}} (4) · immutable_firewall_rules · always_hitl_actions · privileged_roles · protected_controls · confidence_threshold 0.80 · max_actions_per_agent_per_window 5 · rate_window_seconds 60 · quarantine_after_blocks 3 · human_approvers · dangerous_command_patterns · prompt_injection_patterns · asset_inventory · patch_catalog · approved_cab_tickets</td></tr>
 </table>
 <div class="callout warn"><b>Note</b>All keys, salts and data are fictional placeholders for the lab only. This is a training simulator, not a production control.</div>
 
-<h2>25. Testing &amp; CI</h2>
+<h2>27. Testing &amp; CI</h2>
 <ul>
-  <li><b>483 tests</b>: one file per lab 9–16, <code>tests/test_generator_exam.py</code> (200 generated scenarios + exam), <code>tests/test_labs.py</code> (crypto vectors, Labs 1–5 engines, demo headline numbers, CLI) and <code>tests/test_extensions.py</code> (challenge framework, step-up, session revocation, suspend, HITL class, key separation, Labs 6–8, CLI challenge/progress).</li>
+  <li><b>565 tests</b>: one file per lab 9–17, <code>tests/test_webapp.py</code> (API, server security, shortcuts, bundle), <code>tests/test_generator_exam.py</code> (200 generated scenarios + exam), <code>tests/test_labs.py</code> (crypto vectors, Labs 1–5 engines, demo headline numbers, CLI) and <code>tests/test_extensions.py</code> (challenge framework, step-up, session revocation, suspend, HITL class, key separation, Labs 6–8, CLI challenge/progress).</li>
   <li>Parametrised tests run every lab in <code>LABS</code>, so a new lab is smoke-tested automatically.</li>
   <li><b>CI</b> (<code>.github/workflows/secplus-lab-engine.yml</code>): triggers on changes under <code>secplus_lab_engine/**</code>; matrix Python 3.10–3.13; installs requirements, runs pytest, runs <code>main.py all</code> with rich, then uninstalls rich and runs <code>--plain all</code>. All jobs currently green.</li>
 </ul>
@@ -703,7 +770,7 @@ class Progress(path=progress.json): record(objective, correct) · record_session
 
 <!-- ======================================================= 26 -->
 <section class="lab">
-<h2>26. Design decisions &amp; known limitations</h2>
+<h2>28. Design decisions &amp; known limitations</h2>
 <h3>Decisions worth knowing</h3>
 <ul>
   <li><b>The "AI agent" in Lab 8 is deterministic</b> (<code>soc_agent_propose</code>), so results are reproducible and testable. It is designed to be swapped for a real model; every guardrail still applies.</li>
@@ -720,15 +787,15 @@ class Progress(path=progress.json): record(objective, correct) · record_session
   <li>The Lab 4 rehearsal models only a few state attributes (patches, config version, running, firewall lists, schema).</li>
   <li>The sample scenarios are fixed. Challenge mode re-asks the same questions in a different order, so you can memorise the answers (a random scenario generator is on the roadmap).</li>
   <li>CI runs twice per PR push (push + pull_request triggers). Harmless, and can be trimmed.</li>
-  <li>All five SY0-701 domains now have labs. Objectives still without a dedicated lab: 1.4 PKI/certificates beyond hashing, 3.1 architecture models (cloud, IaC, containers), 3.3 data protection, 4.2 asset management, 4.4 monitoring tools, 5.4–5.6 compliance, audits and awareness programs.</li>
+  <li>All five SY0-701 domains now have labs. Objectives still without a dedicated lab: 3.1 architecture models (cloud, IaC, containers), 3.3 data protection, 4.2 asset management, 4.4 monitoring tools, 5.4–5.6 compliance, audits and awareness programs.</li>
   <li>Labs 1, 3, 4, 5, 7, 8, 10 and 16 have no random generator yet, so their challenge questions repeat.</li>
-  <li>Lab 10 models DKIM body integrity and key presence, not RSA signature verification; the organisational domain uses the last two labels (no public-suffix list offline).</li>
+  <li>Lab 17 validates structured certificate records rather than parsing real X.509/ASN.1, and does not verify signatures cryptographically. Lab 10 models DKIM body integrity and key presence, not RSA signature verification; the organisational domain uses the last two labels (no public-suffix list offline).</li>
 </ul>
 </section>
 
 <!-- ======================================================= 27 -->
 <section class="lab">
-<h2>27. How to extend (recipes)</h2>
+<h2>29. How to extend (recipes)</h2>
 <h3>18.1 Add a new lab</h3>
 <ol>
   <li>Create <code>labs/labN_topic.py</code> following the contract (skeleton below).</li>
@@ -788,26 +855,25 @@ def build_challenges(policies: dict, data: dict) -> list:
 </section>
 
 <!-- ======================================================= 28 -->
-<h2>28. Roadmap: what to build next</h2>
-<p class="small">Done since the first edition: random scenario generator, vulnerability triage, email security, firewall auditor, secure baselines, vendor risk, exam simulator, plus threat actors, resilience and control classification.</p>
+<h2>30. Roadmap: what to build next</h2>
+<p class="small">Done since the first edition: PKI &amp; certificate lab (17), course web app + desktop launcher, random scenario generator, vulnerability triage, email security, firewall auditor, secure baselines, vendor risk, exam simulator, plus threat actors, resilience and control classification.</p>
 <table>
   <tr><th>#</th><th>Idea</th><th>Objectives</th><th>Notes</th></tr>
-  <tr><td>1</td><td>PKI &amp; certificate lab</td><td>1.4</td><td>Chain validation, expiry, CRL/OCSP, SAN/wildcard scope, key escrow, certificate pinning</td></tr>
-  <tr><td>2</td><td>Data protection classifier</td><td>3.3</td><td>Data types/states, classification labels, DLP rules, tokenization vs masking vs encryption</td></tr>
-  <tr><td>3</td><td>Cloud / IaC misconfiguration scanner</td><td>3.1</td><td>Public buckets, open security groups, IAM wildcards in Terraform-style JSON</td></tr>
-  <tr><td>4</td><td>Monitoring &amp; alert tuning lab</td><td>4.4</td><td>True/false positives, thresholds, alert fatigue; feed rejected Lab 8 alerts back as tuning</td></tr>
-  <tr><td>5</td><td>Compliance &amp; audit evidence lab</td><td>5.4, 5.5</td><td>Map controls (Lab 16) to requirements, find missing evidence, attestation</td></tr>
-  <tr><td>6</td><td>Generators for remaining labs</td><td>all</td><td>Logs (3), RFCs (4), agent actions (5), IR playbooks (7), emails (10), controls (16)</td></tr>
-  <tr><td>7</td><td>Optional real-LLM mode</td><td>4.7</td><td>Model-written proposals in Labs 5/8 to test guardrails against real hallucinations and injection</td></tr>
-  <tr><td>8</td><td>Spaced repetition</td><td>all</td><td>Use progress.json to re-ask weak objectives more often</td></tr>
+  <tr><td>1</td><td>Data protection classifier</td><td>3.3</td><td>Data types/states, classification labels, DLP rules, tokenization vs masking vs encryption</td></tr>
+  <tr><td>2</td><td>Cloud / IaC misconfiguration scanner</td><td>3.1</td><td>Public buckets, open security groups, IAM wildcards in Terraform-style JSON</td></tr>
+  <tr><td>3</td><td>Monitoring &amp; alert tuning lab</td><td>4.4</td><td>True/false positives, thresholds, alert fatigue; feed rejected Lab 8 alerts back as tuning</td></tr>
+  <tr><td>4</td><td>Compliance &amp; audit evidence lab</td><td>5.4, 5.5</td><td>Map controls (Lab 16) to requirements, find missing evidence, attestation</td></tr>
+  <tr><td>5</td><td>Generators for remaining labs</td><td>all</td><td>Logs (3), RFCs (4), agent actions (5), IR playbooks (7), emails (10), controls (16)</td></tr>
+  <tr><td>6</td><td>Optional real-LLM mode</td><td>4.7</td><td>Model-written proposals in Labs 5/8 to test guardrails against real hallucinations and injection</td></tr>
+  <tr><td>7</td><td>Spaced repetition</td><td>all</td><td>Use progress.json to re-ask weak objectives more often</td></tr>
 </table>
 
 <!-- ======================================================= 29 -->
 <section class="lab">
-<h2>29. Ready-to-paste prompt for another AI</h2>
+<h2>31. Ready-to-paste prompt for another AI</h2>
 <p>Attach this PDF (and ideally the <code>secplus_lab_engine/</code> folder), then paste:</p>
 <pre>You are extending an existing offline Python 3.10+ project called "secplus_lab_engine": a
-Security+ SY0-701 lab simulator with 16 labs, challenge mode, a random scenario generator, a
+Security+ SY0-701 lab simulator with 17 labs, a course web app, challenge mode, a random scenario generator, a
 domain-weighted practice exam and an AI-agent guardrail governor.
 The attached handbook describes its architecture, module contract, APIs, data formats and tests.
 
@@ -824,14 +890,14 @@ Rules:
 6. Make challenge distractors genuinely wrong (no second correct answer).
 7. End every demo with ui.insight(INSIGHT), including how an AI agent should be governed.
 
-Task: build Lab 17 — PKI &amp; Certificate Validator (SY0-701 1.4). Validate certificate chains
-against a trusted root list, expiry/not-yet-valid dates, revocation (CRL/OCSP data in the scenario),
-hostname matching with SAN and wildcard rules, key size and signature algorithm policy; add a
-seeded generator in utils/scenario_generator.py and a challenge set. Show each new/changed file
-in full, then the tests.</pre>
-<p class="small">Swap the "Task" paragraph for any roadmap item in Section 28, e.g. "add a generator for Lab 10 emails" or "add an optional LLM-backed soc_agent_propose behind a --llm flag".</p>
+Task: build Lab 18 — Data Protection Classifier (SY0-701 3.3). Classify data types (regulated,
+trade secret, IP, PII, financial) and states (at rest / in transit / in use); apply a labelling
+policy; recommend the protection method (encryption, hashing, masking, tokenization, obfuscation,
+segmentation, geographic restrictions) and flag DLP rule violations. Add a seeded generator, a
+challenge set, and rebuild web/course_data.json so the lab appears in the course web app.</pre>
+<p class="small">Swap the "Task" paragraph for any roadmap item in Section 30, e.g. "add a generator for Lab 10 emails" or "add an optional LLM-backed soc_agent_propose behind a --llm flag".</p>
 
-<h2>30. Glossary</h2>
+<h2>32. Glossary</h2>
 <div class="twocol">
 <table>
   <tr><td><b>ABAC</b></td><td>Attribute-based access control</td></tr>
