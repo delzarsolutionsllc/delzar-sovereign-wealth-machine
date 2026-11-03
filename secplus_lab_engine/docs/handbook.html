@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Security+ SY0-701 Lab Engine — Technical Handbook</title>
+<style>
+  @page { size: Letter; margin: 0.75in 0.7in 0.8in 0.7in; }
+  :root { --ink:#1b1f24; --muted:#59636e; --accent:#0b5cad; --accent2:#0e7a4f; --warn:#a15c00; --bad:#b42318; --line:#d6dbe1; --code:#f4f6f8; }
+  * { box-sizing: border-box; }
+  body { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--ink); font-size: 10.2pt; line-height: 1.45; margin: 0; }
+  h1 { font-size: 22pt; margin: 0 0 6pt; color: var(--accent); }
+  h2 { font-size: 15pt; color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 3pt; margin: 22pt 0 8pt; break-after: avoid; }
+  h3 { font-size: 12pt; margin: 14pt 0 5pt; break-after: avoid; }
+  h4 { font-size: 10.5pt; margin: 10pt 0 3pt; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; break-after: avoid; }
+  p { margin: 0 0 6pt; }
+  ul, ol { margin: 0 0 7pt; padding-left: 18pt; }
+  li { margin: 1.5pt 0; }
+  code { font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; font-size: 8.6pt; background: var(--code); padding: 0 2.5pt; border-radius: 2pt; }
+  pre { font-family: "DejaVu Sans Mono", Menlo, Consolas, monospace; font-size: 8.2pt; background: var(--code); border: 1px solid var(--line); border-left: 3px solid var(--accent); padding: 6pt 8pt; white-space: pre-wrap; word-break: break-word; margin: 4pt 0 8pt; break-inside: avoid; line-height: 1.35; }
+  pre code { background: none; padding: 0; font-size: inherit; }
+  table { width: 100%; border-collapse: collapse; margin: 4pt 0 9pt; font-size: 9pt; break-inside: auto; }
+  th, td { border: 1px solid var(--line); padding: 3.5pt 5pt; text-align: left; vertical-align: top; }
+  th { background: #eaf1f9; font-weight: 600; }
+  tr { break-inside: avoid; }
+  .cover { height: 9.2in; display: flex; flex-direction: column; justify-content: center; break-after: page; }
+  .cover .kicker { color: var(--muted); font-size: 11pt; letter-spacing: .08em; text-transform: uppercase; margin-bottom: 10pt; }
+  .cover h1 { font-size: 30pt; line-height: 1.15; }
+  .cover .sub { font-size: 13pt; color: var(--muted); margin: 10pt 0 26pt; }
+  .meta td { border: none; border-bottom: 1px solid var(--line); padding: 4pt 6pt; font-size: 10pt; }
+  .meta td:first-child { width: 30%; color: var(--muted); }
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--accent2); background: #f2faf6; padding: 7pt 10pt; margin: 6pt 0 10pt; break-inside: avoid; }
+  .callout.warn { border-left-color: var(--warn); background: #fdf7ee; }
+  .callout b:first-child { display: block; margin-bottom: 2pt; }
+  .toc ol { columns: 2; column-gap: 24pt; font-size: 10pt; }
+  .pill { display: inline-block; font-size: 8pt; padding: 0 5pt; border-radius: 8pt; background: #eaf1f9; color: var(--accent); margin-right: 3pt; }
+  .v-ok { color: var(--accent2); font-weight: 600; } .v-warn { color: var(--warn); font-weight: 600; } .v-bad { color: var(--bad); font-weight: 600; }
+  .lab { break-before: page; }
+  .small { font-size: 8.6pt; color: var(--muted); }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================= COVER -->
+<section class="cover">
+  <div class="kicker">Technical Handbook · Hand-off Document</div>
+  <h1>Security+ SY0-701 Lab Engine<br>&amp; AI Agent Governor</h1>
+  <div class="sub">What was built, how every part works, and how to extend it.<br>Written for you, and for any AI you hand it to.</div>
+  <table class="meta">
+    <tr><td>Repository</td><td><code>delzarsolutionsllc/delzar-sovereign-wealth-machine</code></td></tr>
+    <tr><td>Location in repo</td><td><code>secplus_lab_engine/</code> (+ <code>.github/workflows/secplus-lab-engine.yml</code>)</td></tr>
+    <tr><td>Branch / Pull request</td><td><code>ccr-2689f707-karox1</code> · PR #4 (draft, open, mergeable)</td></tr>
+    <tr><td>Commits</td><td><code>6081f9b</code> labs 1–5 · <code>bb6d70d</code> challenge mode, CI, step-up MFA, labs 6–8</td></tr>
+    <tr><td>Size</td><td>~4,850 lines of Python · 8 labs · 8 sample scenario files · 1 policy file</td></tr>
+    <tr><td>Quality status</td><td>119 pytest tests passing · GitHub Actions green on Python 3.10, 3.11, 3.12, 3.13</td></tr>
+    <tr><td>Runtime requirements</td><td>Python 3.10+ standard library only. <code>rich</code> optional (colour); <code>pytest</code> for tests. Fully offline.</td></tr>
+    <tr><td>Document date</td><td>2026-11-03</td></tr>
+  </table>
+</section>
+
+<!-- ======================================================= TOC -->
+<section class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li>How to use this document</li>
+    <li>Purpose &amp; learning philosophy</li>
+    <li>Architecture &amp; repository map</li>
+    <li>Command-line reference</li>
+    <li>Lab 1 — Joiner/Mover/Leaver &amp; Access Governance</li>
+    <li>Lab 2 — Zero Trust (PE / PA / PEP)</li>
+    <li>Lab 3 — Log Forensics &amp; Hash Verification</li>
+    <li>Lab 4 — Change Control &amp; Impact Analysis</li>
+    <li>Lab 5 — AI Agent Guardrail Governor</li>
+    <li>Lab 6 — Risk Management &amp; BIA</li>
+    <li>Lab 7 — Incident Response &amp; Chain of Custody</li>
+    <li>Lab 8 — End-to-End SOC Pipeline</li>
+    <li>Challenge mode &amp; progress tracking</li>
+    <li>Shared utilities</li>
+    <li>Policy configuration reference</li>
+    <li>Testing &amp; CI</li>
+    <li>Design decisions &amp; known limitations</li>
+    <li>How to extend (recipes + lab skeleton)</li>
+    <li>Roadmap: what to build next</li>
+    <li>Ready-to-paste prompt for another AI</li>
+    <li>Glossary</li>
+  </ol>
+</section>
+
+<!-- ======================================================= 1 -->
+<h2>1. How to use this document</h2>
+<p>This handbook describes everything built so far: the purpose, the architecture, each lab's engine and decision rules, data formats, configuration, tests, and how to add more. Every function signature, file name and sample result was taken from the code as it stands, not written from memory.</p>
+<div class="callout"><b>If you are an AI reading this</b>
+The project is a modular Python CLI. Every lab follows the same <b>module contract</b> (Section 3.3). To extend it, follow that contract, keep to the standard library, load all policy from <code>config/default_policies.json</code> and scenarios from <code>data/*.json</code>, add pytest tests, and register the lab in <code>labs/__init__.py</code>. Section 18 has recipes and a full lab skeleton. Section 20 is a ready-made prompt.</div>
+<div class="callout warn"><b>If you are the learner</b>
+Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>python main.py lab N</code>), then quiz yourself (<code>python main.py challenge N</code>) before reading its "Decision logic" table.</div>
+
+<!-- ======================================================= 2 -->
+<h2>2. Purpose &amp; learning philosophy</h2>
+<p><b>Goal:</b> master the <i>manual</i> security operations behind CompTIA Security+ SY0-701 before designing <i>automated AI agents</i> that perform them. Each lab simulates one operational domain realistically enough to show:</p>
+<ol>
+  <li><b>How the control works</b>: the actual decision logic, not just definitions.</li>
+  <li><b>Where manual processes fail</b>: privilege creep, untested rollback plans, evidence destroyed by pulling the plug.</li>
+  <li><b>How an AI agent should be governed</b> in that same domain: least privilege, human-in-the-loop, audit trails.</li>
+</ol>
+<p>Every lab ends with an <b>"Exam &amp; Architectural Insight" panel</b> with five parts: the SY0-701 objective, key concepts, manual failure modes, AI-governance guidance and exam tips.</p>
+<p><b>The arc of the project:</b> Labs 1–4 and 6–7 teach individual controls. Lab 5 shows how to put guardrails on automation. Lab 8 wires them all together into the architecture the learner is building toward: <i>detect → AI agent proposes → governor decides → human approves → the owning control executes</i>.</p>
+
+<h3>SY0-701 coverage</h3>
+<table>
+  <tr><th>Domain</th><th>Objectives covered</th><th>Labs</th></tr>
+  <tr><td>1 General Security Concepts</td><td>1.2 Zero Trust · 1.3 Change management · 1.4 Cryptography (hashing, salting, HMAC)</td><td>2, 4, 3, 8</td></tr>
+  <tr><td>2 Threats, Vulnerabilities &amp; Mitigations</td><td>2.4 Indicators of malicious activity</td><td>1, 3</td></tr>
+  <tr><td>3 Security Architecture</td><td><i>Not yet covered</i> (see Roadmap)</td><td>—</td></tr>
+  <tr><td>4 Security Operations</td><td>4.6 IAM · 4.7 Automation &amp; orchestration · 4.8 Incident response · 4.9 Investigation data sources</td><td>1, 2, 5, 7, 8, 3</td></tr>
+  <tr><td>5 Security Program Management</td><td>5.1 Governance (SoD, oversight) · 5.2 Risk management &amp; BIA</td><td>1, 4, 5, 6</td></tr>
+</table>
+
+<!-- ======================================================= 3 -->
+<h2>3. Architecture &amp; repository map</h2>
+<h3>3.1 Directory tree</h3>
+<pre>secplus_lab_engine/
+├── main.py                      CLI entrypoint: argparse subcommands + interactive menu
+├── requirements.txt             rich (optional), pytest
+├── README.md                    user-facing docs
+├── .gitignore                   __pycache__, .pytest_cache, .venv, progress.json
+├── config/
+│   └── default_policies.json    ALL policy: RBAC/SoD, Zero Trust weights, threat intel,
+│                                CMDB + maintenance windows, AI agent guardrails
+├── data/                        scenario inputs (one per lab; editable)
+│   ├── sample_identities.json      Lab 1  HR feed events + access checks
+│   ├── sample_access_requests.json Lab 2  access requests, step-up outcomes, PEP attacks
+│   ├── sample_logs.json            Lab 3  raw multi-source log stream + offline GeoIP
+│   ├── sample_rfcs.json            Lab 4  six Requests for Change
+│   ├── sample_agent_actions.json   Lab 5  20 agent proposals + human reviews
+│   ├── sample_risks.json           Lab 6  five risk scenarios + BIA targets
+│   ├── sample_incident.json        Lab 7  incident, action catalog, rookie/expert playbooks
+│   └── sample_pipeline.json        Lab 8  directory, live sessions, simulated human decisions
+├── labs/
+│   ├── __init__.py              LABS registry: {number: (module, default data file)}
+│   ├── lab1_jml_governance.py … lab8_soc_pipeline.py
+├── utils/
+│   ├── crypto_helpers.py        SHA-256, salt, PBKDF2, HMAC, canonical JSON, hash chains
+│   ├── terminal_ui.py           UI class: rich or plain-text tables/panels/status lines
+│   ├── loader.py                load_policies(), load_data(), load_json()
+│   └── challenge.py             Question, run_challenge(), Progress (progress.json)
+└── tests/
+    ├── conftest.py              fixtures: policies, quiet_ui, data loader
+    ├── test_labs.py             labs 1–5, crypto, demos, CLI
+    └── test_extensions.py       challenge mode, step-up, labs 6–8, CLI challenge/progress
+.github/workflows/secplus-lab-engine.yml   CI: pytest + smoke tests, Python 3.10–3.13</pre>
+
+<h3>3.2 Design principles</h3>
+<ul>
+  <li><b>Offline and standard-library only.</b> No network, no API keys. <code>rich</code> is optional; <code>UI(plain=True)</code> renders ASCII.</li>
+  <li><b>Policy as data.</b> Thresholds, roles, weights, inventories and guardrails live in <code>config/default_policies.json</code>; scenarios live in <code>data/</code>. Logic lives in Python. Changing JSON changes outcomes, and challenge answers follow automatically.</li>
+  <li><b>Pure engines, thin demos.</b> Each lab has testable engine classes and functions (no printing) plus a <code>run_demo()</code> that renders through the UI facade.</li>
+  <li><b>Deny by default, explain everything.</b> Every decision returns its reasons (strings), which feed the tables, challenge explanations and tests.</li>
+  <li><b>Tamper evidence.</b> Audit trails (log manifests, governor ledger, custody ledger) use salted SHA-256 hash chains and HMAC.</li>
+  <li><b>Deterministic.</b> Injectable clocks and seeds make results reproducible for tests and quizzes.</li>
+</ul>
+
+<h3>3.3 The lab module contract</h3>
+<p>Every <code>labs/labN_*.py</code> module exposes exactly these names, which <code>main.py</code> and the tests rely on:</p>
+<table>
+  <tr><th>Name</th><th>Type</th><th>Purpose</th></tr>
+  <tr><td><code>TITLE</code></td><td>str</td><td>Display title, e.g. "Lab 6 — Risk Management Calculator &amp; BIA"</td></tr>
+  <tr><td><code>OBJECTIVES</code></td><td>str</td><td>SY0-701 objectives shown under the title</td></tr>
+  <tr><td><code>INSIGHT</code></td><td>dict</td><td>Keys: <code>objective</code> (str), <code>concepts</code>, <code>failure_modes</code>, <code>ai_governance</code>, <code>exam_tips</code> (lists of str)</td></tr>
+  <tr><td><code>run_demo(ui, policies, data)</code></td><td>→ dict</td><td>Runs the sample scenario, renders it, ends with <code>ui.insight(INSIGHT)</code>, returns a summary dict (used by tests)</td></tr>
+  <tr><td><code>build_challenges(policies, data)</code></td><td>→ list[Question]</td><td>Generates quiz questions <i>by running the engine</i> on the scenario</td></tr>
+</table>
+<p>Registration in <code>labs/__init__.py</code>: <code>LABS = {N: (module, "sample_file.json"), …}</code>. The CLI, menu, "all", challenge mode and the parametrised tests pick up new labs automatically.</p>
+
+<h3>3.4 Runtime data flow</h3>
+<pre>main.py ──load_policies()──▶ config/default_policies.json
+   │      load_data(file) ──▶ data/sample_*.json   (or --file custom.json)
+   ├─ lab N            → module.run_demo(ui, policies, data) → tables/panels → Insight panel → summary
+   ├─ challenge N      → module.build_challenges(policies, data) → run_challenge() → progress.json
+   └─ progress         → Progress().rows()  (weakest objective first)</pre>
+
+<!-- ======================================================= 4 -->
+<h2>4. Command-line reference</h2>
+<p>Run from inside <code>secplus_lab_engine/</code> (or call <code>main.py</code> by path; it fixes <code>sys.path</code> itself).</p>
+<table>
+  <tr><th>Command</th><th>What it does</th></tr>
+  <tr><td><code>python main.py</code> / <code>menu</code></td><td>Interactive menu: <code>1-8</code> run a lab · <code>C3</code> challenge lab 3 · <code>P</code> progress · <code>A</code> all · <code>T</code> tests · <code>Q</code> quit</td></tr>
+  <tr><td><code>python main.py list</code></td><td>Table of labs, objectives and default data files</td></tr>
+  <tr><td><code>python main.py lab N [--file X.json]</code></td><td>Run lab N's scenario (optionally your own data file)</td></tr>
+  <tr><td><code>python main.py lab N --challenge</code></td><td>Quiz mode for lab N</td></tr>
+  <tr><td><code>python main.py challenge N|all [--seed S] [--file X.json]</code></td><td>Quiz mode; <code>--seed</code> fixes question order</td></tr>
+  <tr><td><code>python main.py progress</code></td><td>Scores per objective (weakest first) + last 5 sessions</td></tr>
+  <tr><td><code>python main.py all</code></td><td>Run all eight labs back-to-back</td></tr>
+  <tr><td><code>python main.py test [pytest args]</code></td><td>Run the pytest suite</td></tr>
+  <tr><td>Global flags</td><td><code>--plain</code> (no colour) · <code>--policies FILE</code> (alternate policy JSON) · <code>-v</code> (debug logging)</td></tr>
+</table>
+
+<!-- ======================================================= LAB 1 -->
+<section class="lab">
+<h2>5. Lab 1 — Joiner/Mover/Leaver &amp; Access Governance</h2>
+<p><span class="pill">4.6 IAM</span><span class="pill">5.1 SoD</span><span class="pill">2.4 privilege creep</span> File: <code>labs/lab1_jml_governance.py</code> · Data: <code>sample_identities.json</code></p>
+<h4>What it simulates</h4>
+<p>A miniature Identity Governance &amp; Administration (IGA) platform driven by an HR feed. Joiners get birthright access from their role. Movers should lose their old role's permissions; leaving them in place shows privilege creep. Leavers are disabled, fully revoked and get a deprovisioning ticket. Every access request passes a status gate, then RBAC, then ABAC.</p>
+<h4>Engine API</h4>
+<pre>class IdentityGovernance(policy: dict, clock=None)
+  joiner(record) -> Identity                 # validates fields, role and clearance; provisions role perms
+  mover(user_id, new_role, new_department=None, revoke_previous=True) -> dict
+                                             # revoke_previous=False simulates creep: old role becomes an extra role
+  grant_extra_role(user_id, role)            # ad-hoc "temporary" grant (creep source)
+  leaver(user_id, reason) -> DeprovisionTicket
+  suspend(user_id, reason)                   # IR use: disable but KEEP entitlements (used by Lab 8)
+  check_rbac(user_id, permission) -> bool
+  check_abac(user_id, resource, hour) -> (bool, reasons)
+  evaluate_access(user_id, action, resource, hour=12) -> AccessDecision   # gate: STATUS | RBAC | ABAC | ALLOW
+  detect_sod(user_id=None) -> list[SoDConflict]
+  access_review() -> list[dict]              # orphaned access, privilege creep
+Dataclasses: Identity, AccessDecision, SoDConflict, DeprovisionTicket</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Rule</th><th>Behaviour</th></tr>
+  <tr><td>Status gate</td><td>Only <code>allowed_employment_status</code> (default <code>active</code>) may access anything</td></tr>
+  <tr><td>RBAC</td><td>Permission must be in the union of the user's role permissions</td></tr>
+  <tr><td>ABAC: clearance</td><td>clearance level ≥ resource classification level (public 0 → secret 3)</td></tr>
+  <tr><td>ABAC: department</td><td>For <code>confidential</code>/<code>secret</code> data, user department must equal the data owner's</td></tr>
+  <tr><td>ABAC: time</td><td><code>secret</code> data only inside business hours (07–19)</td></tr>
+  <tr><td>SoD</td><td>Flags a user holding both permissions of any <code>sod_conflicts</code> pair (e.g. <code>po:create</code> + <code>po:approve</code>)</td></tr>
+  <tr><td>Leaver SLA</td><td>Reason containing "cause" → priority P1, due in 1 hour, "cut access BEFORE notification"; otherwise P3, due in <code>leaver_sla_hours</code> (24)</td></tr>
+</table>
+<h4>Data format (<code>sample_identities.json</code>)</h4>
+<pre>{ "events": [
+    {"type":"joiner","identity":{"user_id","name","department","role","clearance","manager"}},
+    {"type":"mover","user_id","new_role","new_department","revoke_previous":false,"note"},
+    {"type":"grant","user_id","extra_role","note"},
+    {"type":"leaver","user_id","reason","last_day"} ],
+  "access_checks": [ {"user_id","action","resource":{"name","classification","department"},"hour"} ] }</pre>
+<h4>Sample outcome</h4>
+<p>5 identities · <b>4 SoD conflicts</b> (SOD-01 PO create+approve, SOD-02 ghost vendor, SOD-03 code→prod, SOD-04 admin audits self) · 2 deprovisioning tickets (one P1) · 3 of 5 access checks denied · 3 privilege-creep review findings. Challenge mode: 12 questions (which SoD rule, ticket priority, ALLOW/DENY).</p>
+</section>
+
+<!-- ======================================================= LAB 2 -->
+<section class="lab">
+<h2>6. Lab 2 — Zero Trust Access Evaluator (PE / PA / PEP)</h2>
+<p><span class="pill">1.2 Zero Trust</span><span class="pill">4.6 conditional access</span> File: <code>labs/lab2_zero_trust_evaluator.py</code> · Data: <code>sample_access_requests.json</code></p>
+<h4>What it simulates</h4>
+<p>The NIST SP 800-207 model. In the <b>control plane</b>, the Policy Engine (PE) scores each request and the Policy Administrator (PA) issues or revokes short-lived signed tokens. In the <b>data plane</b>, the Policy Enforcement Point (PEP) checks every request before it reaches the resource.</p>
+<h4>Engine API</h4>
+<pre>class PolicyEngine(policy).evaluate(req: AccessRequest) -> PolicyDecision(verdict, trust_score, required_score, reasons)
+class PolicyAdministrator(signing_key, ttl_seconds, clock)
+  issue(req, decision, ttl=None) -> token | None      # only for ALLOW
+  revoke(token) · revoke_subject(subject) -> count · verify(token) -> (ok, reason, claims)
+  decode_unverified(token) -> claims                   # token = base64url(canonical JSON claims) + "." + HMAC-SHA256
+class PolicyEnforcementPoint(admin, resources).handle(token, resource, action="read") -> EnforcementResult
+class ZeroTrustGateway(policy, clock)                  # wires PE + PA + PEP
+  request_access(req) -> (decision, token|None)
+  complete_step_up(req, decision, mfa_passed) -> (final_decision, token|None)
+Token claims: jti, sub, scope (one resource), act (one action), dev, iat, exp</pre>
+<h4>Trust algorithm (score starts at 100)</h4>
+<table>
+  <tr><th>Signal</th><th>Penalty</th><th>Signal</th><th>Penalty</th></tr>
+  <tr><td>IP reputation bad</td><td>−40 and <b>always DENY</b></td><td>No MFA</td><td>−25</td></tr>
+  <tr><td>IP reputation suspicious</td><td>−15</td><td>User risk high (UEBA)</td><td>−30</td></tr>
+  <tr><td>Device health &lt; 70</td><td>−30</td><td>Geo ≠ usual geo</td><td>−20</td></tr>
+  <tr><td>Device unmanaged</td><td>−20</td><td>Outside 07–19</td><td>−10</td></tr>
+</table>
+<p><b>Checked first:</b> an unknown resource → DENY; subject not entitled to the resource → DENY. Then: bad IP → DENY. If the resource requires MFA and none is presented → STEP_UP if score ≥ 50, else DENY. Score ≥ the resource's <code>min_score</code> → ALLOW; ≥ 50 → STEP_UP; otherwise DENY.</p>
+<p><b>Step-up (adaptive identity):</b> a failed MFA gives DENY and flags the subject as risky. A passed MFA re-evaluates with MFA present and adds 15. If that reaches the requirement, the result is ALLOW with a token TTL of 900/3 = <b>300 s</b>; otherwise DENY. MFA proves <i>who</i> is asking but cannot repair an unhealthy device.</p>
+<p><b>PEP checks, in order:</b> no token → malformed → HMAC signature → revoked → expired → scope ≠ resource → action mismatch.</p>
+<h4>Sample outcome</h4>
+<p>REQ-01 ALLOW · REQ-02 DENY (unmanaged BYOD, no MFA, 22:00) · REQ-03 STEP_UP then DENY (laptop health 65) · REQ-04 DENY (Alice's stolen creds from a Tor exit node) · REQ-05 STEP_UP then ALLOW with a 300 s token · all <b>5 PEP attacks blocked</b> (expired, scope abuse, forged, revoked, no token). Challenge: 10 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 3 -->
+<section class="lab">
+<h2>7. Lab 3 — Log Forensic Inspector &amp; Hash Verifier</h2>
+<p><span class="pill">4.9 data sources</span><span class="pill">2.4 indicators</span><span class="pill">1.4 hashing</span> File: <code>labs/lab3_log_inspector.py</code> · Data: <code>sample_logs.json</code></p>
+<h4>Pipeline</h4>
+<ol>
+  <li><b>Parse</b> raw lines <code>&lt;ISO8601&gt; &lt;host&gt; &lt;source&gt; key=value key="quoted value"</code> (shlex) into <code>LogEvent</code>. Sources: <code>FW</code>, <code>WinEvt</code>, <code>HTTP</code>, <code>EDR</code>. Malformed lines are counted as parse errors, not dropped silently.</li>
+  <li><b>Enrich</b> with an offline GeoIP table (<code>geoip</code> in the data file).</li>
+  <li><b>Detect</b> with correlation rules → <code>Finding(rule, severity, summary, evidence_lines, mitre)</code>, sorted CRITICAL → LOW.</li>
+  <li><b>Extract IOCs</b> by regex: public vs RFC1918 IPs, SHA-256/SHA-1/MD5, user agents, domains.</li>
+  <li><b>Verify integrity</b>: a salted SHA-256 hash chain over the lines plus an HMAC-signed manifest.</li>
+</ol>
+<h4>Detection rules</h4>
+<table>
+  <tr><th>Function</th><th>Rule</th><th>Logic</th><th>MITRE</th></tr>
+  <tr><td><code>detect_brute_force</code></td><td>BRUTE_FORCE(_SUCCESS)</td><td>≥5 × Event 4625 for one user+IP within 10 min; CRITICAL if a later 4624 comes from the same user+IP</td><td>T1110.001</td></tr>
+  <tr><td><code>detect_password_spray</code></td><td>PASSWORD_SPRAY</td><td>one IP with 4625s against ≥4 distinct accounts</td><td>T1110.003</td></tr>
+  <tr><td><code>detect_impossible_travel</code></td><td>IMPOSSIBLE_TRAVEL</td><td>consecutive 4624s for one user: distance &gt;500 km and speed &gt;900 km/h (haversine)</td><td>T1078</td></tr>
+  <tr><td><code>detect_port_scan</code></td><td>PORT_SCAN</td><td>one source → ≥10 distinct destination ports on FW</td><td>T1046</td></tr>
+  <tr><td><code>detect_threat_intel</code></td><td>TI_MATCH_IP / _USER_AGENT / _FILE_HASH</td><td>matches the bad IPs, UA patterns (sqlmap, nikto…) and hashes in config</td><td>—</td></tr>
+  <tr><td><code>detect_sqli</code></td><td>SQL_INJECTION</td><td>regex on HTTP <code>path</code> (<code>' OR 1=1</code>, <code>UNION SELECT</code>, …)</td><td>T1190</td></tr>
+  <tr><td><code>detect_log_clearing</code></td><td>AUDIT_LOG_CLEARED</td><td>Event ID 1102 / 104</td><td>T1070.001</td></tr>
+  <tr><td><code>detect_time_gaps</code></td><td>LOGGING_GAP</td><td>&gt;30 min of silence on hosts in <code>continuous_log_hosts</code> (DC01, FW01)</td><td>T1562.002</td></tr>
+</table>
+<p>To add a rule, write <code>detect_x(events, cfg) -&gt; list[Finding]</code> and append it to <code>ALL_RULES</code>.</p>
+<h4>Integrity model</h4>
+<pre>link[i]  = SHA256( salt || link[i-1] || canonical_json(line[i]) ),  link[-1] = "0"*64
+manifest = {count, chain, head, signature = HMAC(manifest_hmac_key, canonical_json({count,chain,head}))}
+verify_manifest() -> VALID | TAMPERED (edit / delete / insert, with first broken index) | MANIFEST_FORGED</pre>
+<h4>Sample outcome</h4>
+<p>38 events, 1 malformed line, <b>14 findings (3 CRITICAL)</b>: jdoe brute-force success, EICAR malware hash, Security log cleared, password spray, Tulsa→Moscow impossible travel, port scan, SQLi and sqlmap/Nikto, TI IP matches, and a 50-minute DC01 logging gap. The integrity tests detect a deleted line, an edited IP, an injected line and a forged manifest. Challenge: 12 questions (identify the activity from raw lines; distractors exclude any rule that also fired on those same lines).</p>
+</section>
+
+<!-- ======================================================= LAB 4 -->
+<section class="lab">
+<h2>8. Lab 4 — Change Control &amp; Impact Analyzer (CAB)</h2>
+<p><span class="pill">1.3 change management</span><span class="pill">5.1 governance</span> File: <code>labs/lab4_change_management.py</code> · Data: <code>sample_rfcs.json</code></p>
+<h4>Engine API</h4>
+<pre>class ChangeAdvisoryBoard(policy)
+  dependents_of(system) -> set     # transitive "who depends on me" (blast radius)
+  neighbours(system) -> set        # direct deps + direct dependents
+  generate_backout_plan(rfc) -> list[str]   # reverse-order undo runbook via UNDO_MAP
+  review(rfc, rehearse=True) -> ReviewResult(decision, risk_score, strategy, blockers, conditions,
+                                             observations, blast_radius, generated_backout, rehearsal)
+rehearse_change(rfc, systems, fail_at_step=None) -> {failed_at_step, executed, restored, diffs}</pre>
+<h4>Review checks</h4>
+<table>
+  <tr><th>Check</th><th>Blocker (→ REJECT)</th><th>Condition</th></tr>
+  <tr><td>Schedule</td><td>outside Sat/Sun 00:00–06:00 (non-emergency); blackout date; end ≤ start</td><td>emergency outside window → ECAB + post-implementation review</td></tr>
+  <tr><td>Approvals</td><td>requester approved own change (SoD); fewer than 2 independent CAB approvals</td><td>system owner not among approvers</td></tr>
+  <tr><td>Testing</td><td>no staging test (non-emergency)</td><td>untested emergency</td></tr>
+  <tr><td>Impact</td><td>step effect <code>disable:X</code> breaks a neighbour tagged <code>requires:X</code>; a deny-list rule cuts off dependents; target not in CMDB</td><td>compensating control declared; allow-list additions</td></tr>
+  <tr><td>Backout</td><td>missing plan (non-emergency); reversible step with no undo; irreversible step with no prior backup; irreversible with no fail-forward plan; change + backout time exceeds window</td><td>missing plan (emergency) → auto-generated; no verification steps; fail-forward readiness</td></tr>
+  <tr><td>Rehearsal</td><td>executing the RFC's own backout does not restore the simulated state</td><td>—</td></tr>
+</table>
+<p>Decision: any blocker → <b>REJECT</b>; risk ≤ 3 with no conditions → <b>APPROVE</b>; otherwise <b>APPROVE_WITH_CONDITIONS</b>. Strategy: ROLLBACK, FAIL_FORWARD (irreversible step plus hotfix plan), or NONE.</p>
+<h4>RFC format</h4>
+<pre>{id, title, requested_by, approvals[], target_systems[], window{start,end}, estimated_minutes,
+ tested_in_staging, emergency, compensating_controls{system: text}?,
+ change_steps[{step, action, target, patch?|rule?|setting?, effects?["disable:tls1.0"]}],
+ firewall_changes{allow[], deny["port:1521"]},
+ backout_plan{estimated_minutes, steps[{undo_of, action}], verification[]} | null,
+ fail_forward_plan{hotfix_steps[], on_call}?}
+actions: snapshot backup verify notify health_check | apply_patch config_change firewall_deny firewall_allow
+         stop_service start_service restart_service | irreversible: db_schema_migrate firmware_flash data_purge</pre>
+<h4>Sample outcome</h4>
+<table>
+  <tr><th>RFC</th><th>Decision</th><th>Why</th></tr>
+  <tr><td>0420 web-frontend patch</td><td class="v-ok">APPROVE</td><td>in window, quorum, tested, backout rehearsal PASS</td></tr>
+  <tr><td>0412 OpenSSL + disable TLS 1.0</td><td class="v-bad">REJECT</td><td>breaks legacy <code>erp-legacy</code>, which requires TLS 1.0</td></tr>
+  <tr><td>0415 block port 1521</td><td class="v-bad">REJECT</td><td>6 blockers: Wednesday 14:00, self-approval, no quorum, untested, cuts off Oracle dependents</td></tr>
+  <tr><td>0423 payroll schema migration</td><td class="v-warn">APPROVE_WITH_CONDITIONS</td><td>irreversible → FAIL_FORWARD with on-call hotfix</td></tr>
+  <tr><td>0430 EMERGENCY xz patch</td><td class="v-warn">APPROVE_WITH_CONDITIONS</td><td>ECAB, untested, auto-generated backout</td></tr>
+  <tr><td>0431 disable SMBv1</td><td class="v-bad">REJECT</td><td>Black Friday blackout; backout rehearsal FAILS (restarts instead of restoring config)</td></tr>
+</table>
+</section>
+
+<!-- ======================================================= LAB 5 -->
+<section class="lab">
+<h2>9. Lab 5 — AI Agent Supervisor &amp; Guardrail Governor</h2>
+<p><span class="pill">4.7 automation</span><span class="pill">4.6 non-human PAM</span><span class="pill">5.1 HITL</span> File: <code>labs/lab5_ai_agent_governor.py</code> · Data: <code>sample_agent_actions.json</code></p>
+<h4>Model</h4>
+<p>Agents never act on production directly. Every proposed <code>AgentAction(id, agent_id, action, target, parameters, justification, cab_ticket, confidence, t)</code> goes to the <code>AgentGovernor</code>, which returns <b>ALLOW</b>, <b>REQUIRE_HUMAN_APPROVAL</b> (HITL) or <b>BLOCK</b>. The strictest verdict among all violations wins.</p>
+<pre>class AgentGovernor(policy)
+  evaluate(action) -> GovernorDecision(action_id, agent_id, verdict, violations[], final, reviewer)
+  human_review(action_id, reviewer, approve, reason) -> GovernorDecision
+       # only HITL items; reviewer must be in human_approvers; agents can't approve; BLOCK is never overridable
+  release_quarantine(agent_id, reviewer)
+  ledger_chain(salt) / verify_ledger(chain, salt)      # hash-chained decision ledger</pre>
+<h4>Checks (in order)</h4>
+<table>
+  <tr><th>Code</th><th>Verdict</th><th>Trigger</th></tr>
+  <tr><td>AGENT_QUARANTINED / UNKNOWN_AGENT</td><td class="v-bad">BLOCK</td><td>kill switch engaged / unregistered identity ("shadow AI")</td></tr>
+  <tr><td>OUT_OF_SCOPE_ACTION</td><td class="v-bad">BLOCK</td><td>action not in the agent's <code>allowed_actions</code></td></tr>
+  <tr><td>HALLUCINATED_ASSET / _PATCH / _TICKET</td><td class="v-bad">BLOCK</td><td>target not in <code>asset_inventory</code> (for apply_patch, restart_service, isolate_host, run_command); patch not in catalog; CAB ticket not approved</td></tr>
+  <tr><td>IMMUTABLE_RULE</td><td class="v-bad">BLOCK</td><td>firewall rule id in <code>immutable_firewall_rules</code> ([0])</td></tr>
+  <tr><td>OVERLY_PERMISSIVE_RULE</td><td class="v-warn">HITL</td><td>src any + port any</td></tr>
+  <tr><td>SELF_ESCALATION / PRIV_GRANT_NO_CAB</td><td class="v-bad">BLOCK</td><td>granting to an agent identity / privileged role without an approved CAB ticket</td></tr>
+  <tr><td>PROTECTED_CONTROL / AUDIT_TAMPERING</td><td class="v-bad">BLOCK</td><td>touching mfa, edr, audit_logging, siem_forwarder, backup_job / deleting or modifying logs</td></tr>
+  <tr><td>DANGEROUS_COMMAND</td><td class="v-bad">BLOCK</td><td>regexes: <code>rm -rf /</code>, <code>curl|sh</code>, <code>chmod 777</code>, disabling Defender, …</td></tr>
+  <tr><td>PROMPT_INJECTION</td><td class="v-bad">BLOCK</td><td>"ignore previous instructions", "developer mode", … in the justification</td></tr>
+  <tr><td>RATE_LIMIT</td><td class="v-bad">BLOCK</td><td>more than 5 actions per agent in 60 s</td></tr>
+  <tr><td>LOW_CONFIDENCE / CRITICAL_ASSET / HUMAN_REQUIRED_CLASS / NO_JUSTIFICATION</td><td class="v-warn">HITL</td><td>confidence &lt; 0.80 / disruptive action on a tier-0 asset / action in <code>always_hitl_actions</code> (disable_account) / empty rationale</td></tr>
+</table>
+<p>Quarantine: 3 BLOCKs puts the agent in quarantine (kill switch); only a human approver can release it.</p>
+<h4>Sample outcome</h4>
+<p>20 actions → 8 ALLOW · 2 HITL · <b>10 BLOCK</b>. patch-bot-01 is quarantined after an invented server and patch, a <code>curl | bash</code>, and a restart storm. Human review: A09 approved; A04 rejected; an override of rule 0 refused; an agent approving itself refused; an unauthorised user refused. Editing the ledger after the fact is detected. Challenge: 20 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 6 -->
+<section class="lab">
+<h2>10. Lab 6 — Risk Management Calculator &amp; BIA</h2>
+<p><span class="pill">5.2 risk management</span> File: <code>labs/lab6_risk_management.py</code> · Data: <code>sample_risks.json</code></p>
+<h4>Formulas &amp; API</h4>
+<pre>sle(AV, EF) = AV × EF          ale(SLE, ARO) = SLE × ARO        availability(MTBF, MTTR) = MTBF / (MTBF + MTTR)
+assess(risk, appetite_ale) -> RiskAssessment(sle, ale, likelihood, impact, options[], treatment, rationale, residual_ale)
+check_bia(entry) -> BIAResult(rpo_ok, rto_ok, availability, availability_ok, issues)
+band(value, bands) -> 1..5     ARO_BANDS ≤0.05/0.2/1/5 ; SLE_BANDS ≤$10k/$100k/$500k/$2M</pre>
+<h4>Treatment logic</h4>
+<ol>
+  <li>ALE ≤ risk appetite ($10,000) → <b>ACCEPT</b> (the risk owner signs).</li>
+  <li>Otherwise compute net annual benefit: MITIGATE = ALE − ALE_after − control cost; TRANSFER = ALE × coverage − premium; AVOID = ALE − cost of stopping (only if <code>activity_optional</code>).</li>
+  <li>Choose the best positive option. If none is positive → <b>EXCEPTION</b> (leadership sign-off with an expiry date).</li>
+</ol>
+<h4>Sample outcome (total ALE $631,000 → residual $58,800)</h4>
+<table>
+  <tr><th>Risk</th><th>ALE</th><th>Treatment</th></tr>
+  <tr><td>R-01 Customer DB breach (AV $2M, EF 40%, ARO 0.25)</td><td>$200,000</td><td>MITIGATE (WAF + encryption)</td></tr>
+  <tr><td>R-02 Laptop theft (AV $3k, EF 100%, ARO 12)</td><td>$36,000</td><td>MITIGATE (FDE + MDM)</td></tr>
+  <tr><td>R-03 Data-center flood (AV $5M, EF 60%, ARO 0.01)</td><td>$30,000</td><td>TRANSFER (insurance beats $400k relocation)</td></tr>
+  <tr><td>R-04 Microsite defacement</td><td>$5,000</td><td>ACCEPT (within appetite)</td></tr>
+  <tr><td>R-05 Legacy anonymous FTP</td><td>$360,000</td><td>AVOID (retire FTP → SFTP portal)</td></tr>
+</table>
+<p>BIA: payroll-app <b>fails RPO</b> (24 h backups vs 4 h RPO); erp-legacy <b>fails RTO</b> (12 h restore vs 4 h). The demo also prints a 5×5 likelihood × impact heat map. Challenge: 14 questions (compute ALE, choose treatment, BIA verdict).</p>
+</section>
+
+<!-- ======================================================= LAB 7 -->
+<section class="lab">
+<h2>11. Lab 7 — Incident Response Runner &amp; Chain of Custody</h2>
+<p><span class="pill">4.8 incident response</span><span class="pill">4.9</span> File: <code>labs/lab7_incident_response.py</code> · Data: <code>sample_incident.json</code></p>
+<h4>Model</h4>
+<p>A playbook is an ordered list of action ids from a catalog. Each action has a <code>phase</code> (preparation, detection, analysis, containment, eradication, recovery, lessons_learned) and may have <code>evidence{source, host, volatility_rank 1–6, hashed}</code>, <code>destroys_up_to_rank</code>, <code>requires[]</code> and <code>anti_pattern</code>. <code>grade_playbook(name, playbook, catalog, incident_id)</code> returns <code>PlaybookGrade(score, grade, issues, custody, ledger, ledger_chain)</code>.</p>
+<table>
+  <tr><th>Issue code</th><th>Penalty</th><th>Trigger</th></tr>
+  <tr><td>EVIDENCE_DESTROYED</td><td>−20</td><td>power-off/reimage destroys uncollected evidence; or collecting evidence already destroyed</td></tr>
+  <tr><td>CHAIN_OF_CUSTODY</td><td>−15</td><td>evidence acquired without a hash</td></tr>
+  <tr><td>MISSING_PREREQ</td><td>−15</td><td>e.g. reimage before <code>image_disk</code> and <code>legal_hold</code></td></tr>
+  <tr><td>NO_CONTAINMENT</td><td>−15</td><td>no containment step at all</td></tr>
+  <tr><td>ORDER_OF_VOLATILITY</td><td>−10</td><td>more volatile evidence collected after less volatile (RFC 3227)</td></tr>
+  <tr><td>PHASE_ORDER</td><td>−10</td><td>eradication/recovery before containment; recovery before eradication; containment after recovery; anything after lessons learned</td></tr>
+  <tr><td>NO_LESSONS_LEARNED / ANTI_PATTERN / UNKNOWN_ACTION</td><td>−10 / −10 / −5</td><td>missing review / flagged bad practice / not in catalog</td></tr>
+</table>
+<p>Grade: A ≥ 90, B ≥ 80, C ≥ 70, D ≥ 60, otherwise F. Volatility ranks: 1 registers/cache, 2 RAM/process/network state, 3 swap/temp, 4 disk, 5 remote logs, 6 archives/backups.</p>
+<h4>Sample outcome</h4>
+<p><b>Rookie: 0/100 (F)</b>: pulled the plug, copied files to a personal USB unhashed, reimaged with no disk image or legal hold, tried to capture RAM after power-off, disabled the account after recovery, no lessons learned. <b>Expert: 100/100 (A)</b>: 5 evidence items hashed in volatility order and a 10-entry custody ledger; editing who collected EV-001 breaks the chain. Challenge: 16 questions (phase identification, what to collect first, grade the playbook).</p>
+</section>
+
+<!-- ======================================================= LAB 8 -->
+<section class="lab">
+<h2>12. Lab 8 — End-to-End SOC Pipeline</h2>
+<p><span class="pill">4.7 SOAR</span><span class="pill">4.8</span><span class="pill">1.3</span><span class="pill">4.6</span><span class="pill">1.2</span> File: <code>labs/lab8_soc_pipeline.py</code> · Data: <code>sample_pipeline.json</code> (+ <code>sample_logs.json</code>, <code>sample_incident.json</code>)</p>
+<pre>Lab 3 Detect ──▶ AI SOC agent proposes ──▶ Lab 5 Governor ──▶ human (HITL)
+                                               │
+          disable_account              block_ip                    isolate_host
+   Lab 1 suspend + Lab 2         Lab 4 emergency RFC → CAB    Lab 7 capture volatile evidence,
+   PA.revoke_subject()           review + rehearsed backout   hash it, THEN isolate</pre>
+<h4>API</h4>
+<pre>soc_agent_propose(findings, events_by_line, agent_id) -> list[Proposal]   # deterministic stand-in for an LLM
+run_pipeline(policies, data, logs, incident) -> PipelineResult(rows, rfc_decision, suspended,
+                                                               sessions_revoked, isolated, custody_records)</pre>
+<p>Agent mapping: BRUTE_FORCE_SUCCESS → disable_account + block_ip · IMPOSSIBLE_TRAVEL → disable_account (confidence 0.71) · TI_MATCH_FILE_HASH → isolate_host · PASSWORD_SPRAY / SQL_INJECTION / PORT_SCAN → block_ip (deduplicated) · AUDIT_LOG_CLEARED → <b>overreach</b>: modify firewall rule 0. Proposals are spaced 15 s apart (the agent paces itself). All approved IP blocks are batched into one emergency RFC (<code>RFC-AUTO-0001</code>, requested by the agent, approved by the emergency CAB).</p>
+<h4>Sample outcome</h4>
+<table>
+  <tr><th>Finding</th><th>Proposal</th><th>Governor</th><th>Human</th><th>Outcome</th></tr>
+  <tr><td>Brute-force success</td><td>disable jdoe</td><td class="v-warn">HITL</td><td>approve</td><td>suspended; 2 sessions revoked</td></tr>
+  <tr><td>Brute-force success</td><td>block 45.155.205.233</td><td class="v-ok">ALLOW</td><td>—</td><td>RFC → APPROVE_WITH_CONDITIONS, rehearsal PASS</td></tr>
+  <tr><td>Malware hash</td><td>isolate ws-0142</td><td class="v-ok">ALLOW</td><td>—</td><td>2 volatile evidence items hashed before isolation</td></tr>
+  <tr><td>Log cleared</td><td>modify rule 0</td><td class="v-bad">BLOCK</td><td>—</td><td>OUT_OF_SCOPE_ACTION; IMMUTABLE_RULE</td></tr>
+  <tr><td>Password spray / SQLi</td><td>block 2 IPs</td><td class="v-ok">ALLOW</td><td>—</td><td>same RFC</td></tr>
+  <tr><td>Impossible travel</td><td>disable asmith</td><td class="v-warn">HITL</td><td>reject</td><td>false positive (travel VPN) → tune the rule</td></tr>
+</table>
+<p>Challenge: 8 questions ("where does this proposal end up?", "what must happen before isolation?").</p>
+</section>
+
+<!-- ======================================================= 13 -->
+<section class="lab">
+<h2>13. Challenge mode &amp; progress tracking</h2>
+<p>File: <code>utils/challenge.py</code>. Questions are <b>computed by running each engine</b>, so they always match the current policy and data. 99 questions in total across the 8 labs.</p>
+<pre>@dataclass Question(prompt, choices, answer, explanation, objective, context="")   # answer must be in choices
+run_challenge(ui, lab_number, questions, ask=None, progress=None, shuffle=True, seed=None) -> ChallengeResult
+    # accepts option number or exact text; shows PASS/FAIL + "Why"; EOF/Ctrl-C ends early, scoring answered only
+class Progress(path=progress.json): record(objective, correct) · record_session(result) · save() · rows()
+    # rows sorted weakest first; status PASS ≥85%, WARN ≥65%, FAIL below (LOW/MEDIUM if &lt;3 attempts)</pre>
+<p>A test answers every lab's questions with the engine's own answers and requires 100%. That catches unanswerable or ambiguous questions.</p>
+
+<h2>14. Shared utilities</h2>
+<table>
+  <tr><th>Module</th><th>Contents</th></tr>
+  <tr><td><code>crypto_helpers.py</code></td><td><code>sha256_hex</code>, <code>generate_salt</code> (128-bit), <code>salted_sha256</code>, <code>stretch_password</code> (PBKDF2-HMAC-SHA256, 100k iterations), <code>file_sha256</code>, <code>constant_time_equals</code>, <code>hmac_sign</code>/<code>hmac_verify</code>, <code>canonical_json</code>, <code>build_hash_chain</code>/<code>verify_hash_chain</code> (returns valid, first_broken_index, length_delta)</td></tr>
+  <tr><td><code>terminal_ui.py</code></td><td><code>UI(plain=False, quiet=False)</code>: <code>header</code>, <code>section</code>, <code>status(label, verdict, detail)</code> (verdict colour from <code>STATUS_STYLES</code>), <code>bullet</code>, <code>table</code>, <code>panel</code>, <code>insight(INSIGHT)</code>, <code>ask</code>. Falls back to ASCII when rich is missing.</td></tr>
+  <tr><td><code>loader.py</code></td><td><code>ROOT</code>, <code>CONFIG_DIR</code>, <code>DATA_DIR</code>, <code>load_json</code>, <code>load_policies(path=None)</code>, <code>load_data(name)</code></td></tr>
+</table>
+
+<h2>15. Policy configuration reference</h2>
+<p>File: <code>config/default_policies.json</code>. Swap the whole file with <code>--policies</code>.</p>
+<table>
+  <tr><th>Section</th><th>Keys</th></tr>
+  <tr><td><code>identity_governance</code></td><td>clearance_levels · roles{role: [perms]} (9 roles) · sod_conflicts[{id,a,b,risk}] (5) · abac_rules{require_clearance_gte_classification, require_department_match_for, business_hours, restrict_outside_hours_for, allowed_employment_status} · leaver_sla_hours</td></tr>
+  <tr><td><code>zero_trust</code></td><td>token_ttl_seconds (900) · step_up{bonus 15, ttl_divisor 3} · signing_key · thresholds{allow 70, step_up 50} · weights{…} · min_device_health 70 · business_hours · resource_sensitivity{res: {min_score, requires_mfa}} · entitlements{subject: [resources]}</td></tr>
+  <tr><td><code>log_inspection</code></td><td>Event IDs (4625, 4624, 1102/104, 4672) · brute_force_threshold 5 / window 10 min · impossible_travel_kmh 900 · port_scan_distinct_ports 10 · continuous_log_hosts · max_log_gap_minutes 30 · threat_intel{bad_ips, bad_user_agent_patterns, bad_file_hashes} · integrity_salt · manifest_hmac_key</td></tr>
+  <tr><td><code>change_management</code></td><td>maintenance_windows · blackout_dates · cab_quorum 2 · cab_members · max_risk_for_auto_approve 3 · systems{name: {owner, legacy, depends_on, tags}} (the CMDB, 9 systems incl. edge-fw) · irreversible_actions</td></tr>
+  <tr><td><code>ai_governance</code></td><td>agents{id: {type, allowed_actions}} (4) · immutable_firewall_rules · always_hitl_actions · privileged_roles · protected_controls · confidence_threshold 0.80 · max_actions_per_agent_per_window 5 · rate_window_seconds 60 · quarantine_after_blocks 3 · human_approvers · dangerous_command_patterns · prompt_injection_patterns · asset_inventory · patch_catalog · approved_cab_tickets</td></tr>
+</table>
+<div class="callout warn"><b>Note</b>All keys, salts and data are fictional placeholders for the lab only. This is a training simulator, not a production control.</div>
+
+<h2>16. Testing &amp; CI</h2>
+<ul>
+  <li><b>119 tests</b>: <code>tests/test_labs.py</code> (crypto vectors, Labs 1–5 engines, demo headline numbers, CLI) and <code>tests/test_extensions.py</code> (challenge framework, step-up, session revocation, suspend, HITL class, key separation, Labs 6–8, CLI challenge/progress).</li>
+  <li>Parametrised tests run every lab in <code>LABS</code>, so a new lab is smoke-tested automatically.</li>
+  <li><b>CI</b> (<code>.github/workflows/secplus-lab-engine.yml</code>): triggers on changes under <code>secplus_lab_engine/**</code>; matrix Python 3.10–3.13; installs requirements, runs pytest, runs <code>main.py all</code> with rich, then uninstalls rich and runs <code>--plain all</code>. All jobs currently green.</li>
+</ul>
+</section>
+
+<!-- ======================================================= 17 -->
+<section class="lab">
+<h2>17. Design decisions &amp; known limitations</h2>
+<h3>Decisions worth knowing</h3>
+<ul>
+  <li><b>The "AI agent" in Lab 8 is deterministic</b> (<code>soc_agent_propose</code>), so results are reproducible and testable. It is designed to be swapped for a real model; every guardrail still applies.</li>
+  <li><b>Agent pacing:</b> Lab 8 spaces proposals 15 s apart. At 5 s, Lab 5's rate limiter blocked legitimate incident response. Lab 5 still demonstrates a runaway agent.</li>
+  <li><b>disable_account always requires a human</b> (<code>always_hitl_actions</code>), however confident the agent is.</li>
+  <li><b>Rate limiting counts attempted actions, including blocked ones.</b> This is a defensible choice; you could argue for counting only executed actions.</li>
+  <li><b>BLOCK is never overridable</b> through <code>human_review</code>: a human must change policy, not approve an exception at runtime.</li>
+  <li><b>Key separation:</b> the evidence-sealing key is separate from the Zero Trust token key.</li>
+</ul>
+<h3>Known limitations</h3>
+<ul>
+  <li>Simulated environments only: no real AD, firewall, SIEM or EDR integration.</li>
+  <li>The log parser expects the lab's <code>key=value</code> format, not real EVTX/syslog/CEF.</li>
+  <li>The Lab 4 rehearsal models only a few state attributes (patches, config version, running, firewall lists, schema).</li>
+  <li>The sample scenarios are fixed. Challenge mode re-asks the same questions in a different order, so you can memorise the answers (a random scenario generator is on the roadmap).</li>
+  <li>CI runs twice per PR push (push + pull_request triggers). Harmless, and can be trimmed.</li>
+  <li>SY0-701 Domain 3 (architecture) and objectives 2.2, 2.3, 4.1–4.5, 5.3–5.6 are not yet covered.</li>
+</ul>
+</section>
+
+<!-- ======================================================= 18 -->
+<section class="lab">
+<h2>18. How to extend (recipes)</h2>
+<h3>18.1 Add a new lab</h3>
+<ol>
+  <li>Create <code>labs/labN_topic.py</code> following the contract (skeleton below).</li>
+  <li>Put thresholds in a new section of <code>config/default_policies.json</code>; put the scenario in <code>data/sample_topic.json</code>.</li>
+  <li>Register it in <code>labs/__init__.py</code>: import it and add <code>N: (labN_topic, "sample_topic.json")</code>.</li>
+  <li>Add engine tests in <code>tests/</code>. The parametrised demo and challenge tests cover it automatically: they need ≥5 valid questions and 100% on self-answer.</li>
+  <li>Update <code>README.md</code> (labs table, data files, practice ideas).</li>
+</ol>
+<pre>"""Lab N — Title.  Security+ SY0-701 objectives: X.Y ...  Run: python main.py lab N"""
+from __future__ import annotations
+from dataclasses import dataclass, field
+
+TITLE = "Lab N — Title"
+OBJECTIVES = "SY0-701 X.Y Topic"
+
+@dataclass
+class Result:
+    item_id: str
+    verdict: str                       # use words in terminal_ui.STATUS_STYLES for colour
+    reasons: list[str] = field(default_factory=list)
+
+def evaluate(item: dict, cfg: dict) -> Result:
+    """Pure decision logic: no printing, deterministic, returns reasons."""
+    reasons = []
+    if item["value"] > cfg["threshold"]:
+        reasons.append(f"value {item['value']} > threshold {cfg['threshold']}")
+    return Result(item["id"], "FAIL" if reasons else "PASS", reasons or ["within policy"])
+
+INSIGHT = {"objective": "SY0-701 X.Y ...", "concepts": [...], "failure_modes": [...],
+           "ai_governance": [...], "exam_tips": [...]}
+
+def run_demo(ui, policies: dict, data: dict) -> dict:
+    cfg = policies["topic"]
+    results = [evaluate(i, cfg) for i in data["items"]]
+    ui.section("Step 1 — Evaluate")
+    ui.table("Results", ["ID", "Verdict", "Reasons"], [[r.item_id, r.verdict, "; ".join(r.reasons)] for r in results])
+    ui.insight(INSIGHT)
+    return {"fail": sum(r.verdict == "FAIL" for r in results)}
+
+def build_challenges(policies: dict, data: dict) -> list:
+    from utils.challenge import Question
+    cfg = policies["topic"]
+    return [Question(prompt=f"{i['id']}: PASS or FAIL?", context=str(i), choices=["PASS", "FAIL"],
+                     answer=evaluate(i, cfg).verdict, explanation="; ".join(evaluate(i, cfg).reasons),
+                     objective="X.Y") for i in data["items"]]</pre>
+<h3>18.2 Smaller extensions</h3>
+<table>
+  <tr><th>Goal</th><th>Where</th></tr>
+  <tr><td>New log detection rule</td><td><code>detect_x(events, cfg) -&gt; list[Finding]</code> in Lab 3, append to <code>ALL_RULES</code>, add to <code>FRIENDLY</code> for challenges</td></tr>
+  <tr><td>New agent guardrail</td><td>Add a check inside <code>AgentGovernor._check</code> using <code>add(code, BLOCK|HITL, msg)</code>; add config keys under <code>ai_governance</code></td></tr>
+  <tr><td>New agent or permission</td><td><code>ai_governance.agents</code> in config</td></tr>
+  <tr><td>New CMDB system / legacy dependency</td><td><code>change_management.systems</code> with <code>tags</code> like <code>requires:tls1.0</code> or <code>port:1521</code></td></tr>
+  <tr><td>New change action</td><td><code>UNDO_MAP</code> and <code>_apply()</code> in Lab 4 (and <code>irreversible_actions</code> if it can't be undone)</td></tr>
+  <tr><td>New IR action</td><td><code>actions</code> catalog in <code>sample_incident.json</code> (phase, evidence, destroys_up_to_rank, requires, anti_pattern)</td></tr>
+  <tr><td>Plug in a real LLM agent</td><td>Replace <code>soc_agent_propose()</code> in Lab 8 with a model call that returns <code>AgentAction</code>s; keep it opt-in so the core stays offline</td></tr>
+</table>
+</section>
+
+<!-- ======================================================= 19 -->
+<h2>19. Roadmap: what to build next</h2>
+<table>
+  <tr><th>#</th><th>Idea</th><th>Objectives</th><th>Notes</th></tr>
+  <tr><td>1</td><td>Random scenario generator</td><td>all</td><td>New logs/RFCs/agent actions each run so challenge answers can't be memorised; seedable</td></tr>
+  <tr><td>2</td><td>Vulnerability triage lab</td><td>4.3, 2.3</td><td>CVSS × asset criticality × known-exploited status; SLAs; exceptions; compensating controls</td></tr>
+  <tr><td>3</td><td>Email security analyzer</td><td>4.5, 2.2</td><td>Parse raw headers: SPF/DKIM/DMARC alignment, spoofing, phishing indicators</td></tr>
+  <tr><td>4</td><td>Firewall rule auditor</td><td>3.2, 4.5</td><td>Shadowed/redundant rules, any/any, missing implicit deny, segmentation</td></tr>
+  <tr><td>5</td><td>PKI &amp; certificate lab</td><td>1.4</td><td>Chain validation, expiry, CRL/OCSP, SAN/wildcard scope, key escrow</td></tr>
+  <tr><td>6</td><td>Secure baseline / hardening checker</td><td>4.1</td><td>Compare host configs against a CIS-style baseline; drift detection</td></tr>
+  <tr><td>7</td><td>Third-party / vendor risk</td><td>5.3</td><td>Questionnaire scoring, SLA/MSA/BPA checks, right-to-audit</td></tr>
+  <tr><td>8</td><td>Optional real-LLM mode</td><td>4.7</td><td>Model-written proposals in Lab 5/8 to test the guardrails against real hallucinations and injection</td></tr>
+  <tr><td>9</td><td>Exam simulator</td><td>all</td><td>Timed, mixed-domain run of 90 questions drawn from every lab, scored like the real exam</td></tr>
+</table>
+
+<!-- ======================================================= 20 -->
+<section class="lab">
+<h2>20. Ready-to-paste prompt for another AI</h2>
+<p>Attach this PDF (and ideally the <code>secplus_lab_engine/</code> folder), then paste:</p>
+<pre>You are extending an existing offline Python 3.10+ project called "secplus_lab_engine": a
+Security+ SY0-701 lab simulator with 8 labs, challenge mode and an AI-agent guardrail governor.
+The attached handbook describes its architecture, module contract, APIs, data formats and tests.
+
+Rules:
+1. Follow the lab module contract exactly: TITLE, OBJECTIVES, INSIGHT (objective, concepts,
+   failure_modes, ai_governance, exam_tips), run_demo(ui, policies, data) -> dict,
+   build_challenges(policies, data) -> list[Question].
+2. Standard library only (rich optional through utils/terminal_ui.UI). No network calls.
+3. Policy/thresholds go in config/default_policies.json (new section); scenarios go in
+   data/sample_*.json. Engines are pure (no printing) and return reasons for every decision.
+4. Register the lab in labs/__init__.py LABS = {N: (module, "sample_file.json")}.
+5. Write pytest tests for the engine logic; the existing parametrised tests require
+   >= 5 challenge questions, unique choices, and 100% when answered with the engine's own answers.
+6. Make challenge distractors genuinely wrong (no second correct answer).
+7. End every demo with ui.insight(INSIGHT), including how an AI agent should be governed.
+
+Task: build Lab 9 — Vulnerability Triage (SY0-701 4.3 / 2.3). Prioritise findings by CVSS,
+asset criticality (from the change_management.systems CMDB), known-exploited status and exposure;
+assign remediation SLAs; handle exceptions with compensating controls and expiry dates; and
+generate a challenge set. Show me each new/changed file in full, then the tests.</pre>
+<p class="small">Swap the "Task" paragraph for any roadmap item, e.g. "build the random scenario generator" or "add an optional LLM-backed soc_agent_propose behind a --llm flag".</p>
+
+<h2>21. Glossary</h2>
+<div class="twocol">
+<table>
+  <tr><td><b>ABAC</b></td><td>Attribute-based access control</td></tr>
+  <tr><td><b>ALE / SLE / ARO / EF / AV</b></td><td>Annualised loss expectancy / single loss expectancy / annualised rate of occurrence / exposure factor / asset value</td></tr>
+  <tr><td><b>BIA</b></td><td>Business impact analysis (RTO, RPO, MTTR, MTBF)</td></tr>
+  <tr><td><b>CAB / ECAB</b></td><td>(Emergency) Change Advisory Board</td></tr>
+  <tr><td><b>CMDB</b></td><td>Configuration management database (systems + dependencies)</td></tr>
+  <tr><td><b>HITL</b></td><td>Human-in-the-loop (REQUIRE_HUMAN_APPROVAL)</td></tr>
+  <tr><td><b>HMAC</b></td><td>Keyed hash: integrity + authenticity</td></tr>
+  <tr><td><b>IGA</b></td><td>Identity governance &amp; administration</td></tr>
+</table>
+<table>
+  <tr><td><b>IOC</b></td><td>Indicator of compromise</td></tr>
+  <tr><td><b>JML</b></td><td>Joiner / Mover / Leaver lifecycle</td></tr>
+  <tr><td><b>PE / PA / PEP</b></td><td>Policy Engine / Policy Administrator / Policy Enforcement Point</td></tr>
+  <tr><td><b>RBAC</b></td><td>Role-based access control</td></tr>
+  <tr><td><b>RFC</b></td><td>Request for Change (Lab 4) · RFC 3227 = evidence collection guideline (Lab 7)</td></tr>
+  <tr><td><b>RPO / RTO</b></td><td>Max tolerable data loss / downtime</td></tr>
+  <tr><td><b>SoD</b></td><td>Separation of duties</td></tr>
+  <tr><td><b>SOAR</b></td><td>Security orchestration, automation &amp; response</td></tr>
+</table>
+</div>
+</section>
+
+</body>
+</html>

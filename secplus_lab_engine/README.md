@@ -11,6 +11,8 @@ It's meant for building first-principles skill: work through each operation by h
 
 ---
 
+> **Technical handbook:** [`docs/HANDBOOK.pdf`](docs/HANDBOOK.pdf) explains the architecture, every lab's decision logic, the data formats and how to extend the engine. It includes a ready-to-paste prompt for another AI. To regenerate it from `docs/handbook.html`, run `NODE_PATH=$(npm root -g) node docs/render_handbook.js "$PWD/docs/handbook.html" docs/HANDBOOK.pdf` (needs Playwright).
+
 ## Install
 
 ```bash
