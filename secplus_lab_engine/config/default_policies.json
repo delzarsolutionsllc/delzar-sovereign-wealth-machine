@@ -99,15 +99,15 @@
     "cab_members": ["cab_chair", "sec_architect", "ops_lead", "app_owner"],
     "max_risk_for_auto_approve": 3,
     "systems": {
-      "web-frontend":   { "owner": "app_owner", "legacy": false, "depends_on": ["api-gateway"],          "tags": ["tls1.2"] },
-      "api-gateway":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["auth-service", "erp-legacy"], "tags": ["tls1.2"] },
-      "auth-service":   { "owner": "sec_architect", "legacy": false, "depends_on": ["ldap"],             "tags": ["tls1.2"] },
-      "ldap":           { "owner": "ops_lead",  "legacy": false, "depends_on": [],                       "tags": ["port:636"] },
-      "erp-legacy":     { "owner": "app_owner", "legacy": true,  "depends_on": ["db-oracle"],            "tags": ["requires:tls1.0", "requires:smbv1", "port:1521"] },
-      "db-oracle":      { "owner": "ops_lead",  "legacy": true,  "depends_on": [],                       "tags": ["port:1521"] },
-      "payroll-app":    { "owner": "app_owner", "legacy": false, "depends_on": ["db-oracle", "auth-service"], "tags": ["tls1.2"] },
-      "file-server":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] },
-      "edge-fw":        { "owner": "sec_architect", "legacy": false, "depends_on": [],                   "tags": ["firewall"] }
+      "web-frontend": { "criticality": 4, "exposure": "internet", "owner": "app_owner", "legacy": false, "depends_on": ["api-gateway"],          "tags": ["tls1.2"] },
+      "api-gateway": { "criticality": 4, "exposure": "internet", "owner": "ops_lead",  "legacy": false, "depends_on": ["auth-service", "erp-legacy"], "tags": ["tls1.2"] },
+      "auth-service": { "criticality": 5, "exposure": "privileged", "owner": "sec_architect", "legacy": false, "depends_on": ["ldap"],             "tags": ["tls1.2"] },
+      "ldap": { "criticality": 5, "exposure": "privileged", "owner": "ops_lead",  "legacy": false, "depends_on": [],                       "tags": ["port:636"] },
+      "erp-legacy": { "criticality": 4, "exposure": "internal", "owner": "app_owner", "legacy": true,  "depends_on": ["db-oracle"],            "tags": ["requires:tls1.0", "requires:smbv1", "port:1521"] },
+      "db-oracle": { "criticality": 5, "exposure": "internal", "owner": "ops_lead",  "legacy": true,  "depends_on": [],                       "tags": ["port:1521"] },
+      "payroll-app": { "criticality": 4, "exposure": "internal", "owner": "app_owner", "legacy": false, "depends_on": ["db-oracle", "auth-service"], "tags": ["tls1.2"] },
+      "file-server": { "criticality": 3, "exposure": "internal", "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] },
+      "edge-fw": { "criticality": 5, "exposure": "internet", "owner": "sec_architect", "legacy": false, "depends_on": [],                   "tags": ["firewall"] }
     },
     "irreversible_actions": ["db_schema_migrate", "firmware_flash", "data_purge", "key_rotation_destroy_old"]
   },
@@ -150,5 +150,29 @@
     "asset_inventory": ["web-frontend", "api-gateway", "auth-service", "ldap", "erp-legacy", "db-oracle", "payroll-app", "file-server", "ws-0142", "ws-0177", "edge-fw"],
     "patch_catalog": ["KB5031356", "KB5032189", "KB5033375", "CVE-2024-3094-fix", "openssl-3.0.13"],
     "approved_cab_tickets": ["CAB-2026-1101", "CAB-2026-1102", "CAB-2026-1107"]
+  },
+
+  "vulnerability_management": {
+    "criticality_multiplier": { "1": 0.6, "2": 0.8, "3": 1.0, "4": 1.2, "5": 1.5 },
+    "exposure_multiplier": { "internet": 1.3, "privileged": 1.2, "internal": 1.0 },
+    "kev_multiplier": 1.5,
+    "unknown_asset_defaults": { "criticality": 5, "exposure": "internet" },
+    "priority_thresholds": { "P1": 12, "P2": 8, "P3": 4 },
+    "sla_days": { "P1": 7, "P2": 30, "P3": 90, "P4": 180 },
+    "kev_max_sla_days": 14,
+    "cvss_bands": [ [9.0, "Critical"], [7.0, "High"], [4.0, "Medium"], [0.1, "Low"], [0.0, "None"] ],
+    "exceptions": {
+      "authorized_approvers": ["sec_architect", "cab_chair"],
+      "max_duration_days": 180,
+      "max_residual_score": 8,
+      "compensating_control_reduction": {
+        "network_isolation": 0.6,
+        "virtual_patch_waf": 0.5,
+        "disable_vulnerable_feature": 0.7,
+        "application_allow_list": 0.4,
+        "enhanced_monitoring": 0.2,
+        "mfa_on_access_path": 0.3
+      }
+    }
   }
 }

@@ -18,6 +18,7 @@ from . import (
     lab6_risk_management,
     lab7_incident_response,
     lab8_soc_pipeline,
+    lab9_vulnerability_triage,
 )
 
 # lab number -> (module, default data file)
@@ -30,4 +31,5 @@ LABS = {
     6: (lab6_risk_management, "sample_risks.json"),
     7: (lab7_incident_response, "sample_incident.json"),
     8: (lab8_soc_pipeline, "sample_pipeline.json"),
+    9: (lab9_vulnerability_triage, "sample_vulns.json"),
 }

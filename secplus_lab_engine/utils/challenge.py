@@ -170,3 +170,24 @@ def _resolve(raw: str, choices: list[str]) -> str | None:
         if raw.lower() == c.lower():
             return c
     return None
+
+
+def pick_distractors(answer: str, pool, k: int = 3, exclude=(), key: str = "") -> list[str]:
+    """
+    Choose ``k`` wrong options deterministically.
+
+    ``exclude`` must list every option that would ALSO be correct for this
+    question, so a distractor is never a second right answer. ``key`` varies
+    the selection between questions while keeping it reproducible.
+    """
+    banned = {answer, *exclude}
+    candidates = sorted({p for p in pool if p not in banned})
+    if not candidates:
+        return []
+    start = sum(map(ord, key)) % len(candidates)
+    return [candidates[(start + i) % len(candidates)] for i in range(min(k, len(candidates)))]
+
+
+def choices_with(answer: str, pool, k: int = 3, exclude=(), key: str = "") -> list[str]:
+    """Sorted answer + distractors, ready for ``Question.choices``."""
+    return sorted([answer, *pick_distractors(answer, pool, k, exclude, key)])
