@@ -33,6 +33,8 @@ python main.py web                  # or start it directly
 
 **Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
 
+**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 1,500 cards sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
+
 Inside the app every lab has three tabs: **Lesson**, **Run the scenario** and **Practice** (instant feedback; number keys answer). There's also a timed **Practice exam** and **My progress**, which lists your weakest objectives first.
 
 > **Technical handbook:** [`docs/HANDBOOK.pdf`](docs/HANDBOOK.pdf) explains the architecture, every lab's decision logic, the data formats and how to extend the engine. It includes a ready-to-paste prompt for another AI. To regenerate it from `docs/handbook.html`, run `NODE_PATH=$(npm root -g) node docs/render_handbook.js "$PWD/docs/handbook.html" docs/HANDBOOK.pdf` (needs Playwright).
