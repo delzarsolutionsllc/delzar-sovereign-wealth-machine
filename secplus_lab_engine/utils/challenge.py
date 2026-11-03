@@ -38,6 +38,9 @@ class Question:
     def __post_init__(self) -> None:
         if self.answer not in self.choices:
             raise ValueError(f"answer '{self.answer}' not among choices {self.choices}")
+        if any(c.strip().isdigit() for c in self.choices):
+            # A typed digit selects an option by NUMBER, so a choice like "2" would be ambiguous.
+            raise ValueError(f"choices must not be bare numbers (use e.g. '2 disks'): {self.choices}")
 
 
 @dataclass

@@ -328,5 +328,32 @@
       "Unskilled attacker": "Basic hygiene closes most of the doors (patching, defaults, MFA)",
       "Shadow IT": "Give people a sanctioned alternative so they stop working around IT"
     }
+  },
+
+  "resilience": {
+    "site_types": {
+      "hot":  { "rto_hours": 1,   "annual_cost": 500000, "desc": "fully equipped, data replicated, ready to run" },
+      "warm": { "rto_hours": 24,  "annual_cost": 150000, "desc": "hardware and network ready, data must be restored" },
+      "cold": { "rto_hours": 168, "annual_cost": 40000,  "desc": "space and power only; equipment must be procured and installed" }
+    },
+    "replication": {
+      "synchronous":  { "rpo_hours": 0,    "annual_cost": 120000, "note": "zero data loss; latency limits distance" },
+      "asynchronous": { "rpo_hours": 0.25, "annual_cost": 40000,  "note": "seconds-to-minutes of loss; any distance" }
+    },
+    "clustering": {
+      "active-active":  { "failover_hours": 0,    "annual_cost": 60000 },
+      "active-passive": { "failover_hours": 0.25, "annual_cost": 30000 }
+    },
+    "raid": {
+      "RAID0":  { "tolerates": 0, "efficiency": 1.0 },
+      "RAID1":  { "tolerates": 1, "efficiency": 0.5 },
+      "RAID5":  { "tolerates": 1, "efficiency": 0.75 },
+      "RAID6":  { "tolerates": 2, "efficiency": 0.67 },
+      "RAID10": { "tolerates": 1, "efficiency": 0.5 }
+    },
+    "backup_restore_multiplier": { "full": 1.0, "differential": 1.5, "incremental": 2.5 },
+    "restore_hours_per_tb": 1.5,
+    "host_rebuild_hours": 4,
+    "test_max_age_days": 365
   }
 }

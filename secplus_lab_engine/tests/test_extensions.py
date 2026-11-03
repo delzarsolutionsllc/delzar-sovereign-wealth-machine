@@ -31,6 +31,10 @@ class TestChallengeFramework:
         with pytest.raises(ValueError):
             Question("q", ["a", "b"], "c", "x", "1.1")
 
+    def test_question_rejects_bare_numeric_choices(self):
+        with pytest.raises(ValueError):
+            Question("q", ["1", "2"], "1", "x", "1.1")
+
     def test_scoring_by_number_and_text(self, quiet_ui, tmp_path):
         qs = [Question("q1", ["yes", "no"], "yes", "e", "1.1"),
               Question("q2", ["yes", "no"], "no", "e", "1.1"),
