@@ -283,5 +283,50 @@
           "remediation": "Add noexec,nosuid,nodev to the /tmp entry in /etc/fstab and remount" }
       ]
     }
+  },
+
+  "threat_classification": {
+    "min_margin": 2,
+    "actors": {
+      "Nation-state":       { "high_funding": 3, "advanced_tools": 3, "long_dwell_time": 3, "targets_government_or_defense": 3, "espionage_data_theft": 2, "zero_day_used": 2 },
+      "Organized crime":    { "demands_payment": 3, "threatens_to_leak_unless_paid": 3, "ransomware": 3, "sells_data": 3, "financial_data_targeted": 2, "high_funding": 1 },
+      "Hacktivist":         { "public_claim": 3, "political_message": 3, "defacement_or_ddos": 3, "leaks_publicly": 2 },
+      "Insider threat":     { "authorized_access_abused": 4, "recently_disgruntled": 3, "internal_origin": 3, "after_hours_access": 1 },
+      "Unskilled attacker": { "public_exploit_tools": 3, "noisy_attack": 3, "low_sophistication": 3, "bragging": 2 },
+      "Shadow IT":          { "unapproved_service": 4, "no_malicious_intent": 4, "internal_origin": 1 }
+    },
+    "motivation_rules": [
+      ["critical_infrastructure_sabotage", "War"],
+      ["espionage_data_theft", "Espionage"],
+      ["threatens_to_leak_unless_paid", "Blackmail"],
+      ["political_message", "Philosophical/political beliefs"],
+      ["recently_disgruntled", "Revenge"],
+      ["demands_payment", "Financial gain"],
+      ["sells_data", "Financial gain"],
+      ["no_malicious_intent", "Convenience (no malicious intent)"],
+      ["bragging", "Disruption/chaos"],
+      ["noisy_attack", "Disruption/chaos"]
+    ],
+    "vectors": {
+      "watering_hole":             { "vector": "Watering hole (compromised trusted website)", "mitigation": "Patch browsers/plugins, DNS/web filtering, isolate browsing" },
+      "phishing_email":            { "vector": "Message-based: email phishing", "mitigation": "Email gateway with DMARC enforcement + security awareness training" },
+      "sms_link":                  { "vector": "Message-based: SMS (smishing)", "mitigation": "Mobile threat defense + awareness training on SMS links" },
+      "phone_call_helpdesk":       { "vector": "Voice call (vishing / pretexting)", "mitigation": "Help-desk caller verification procedure before any reset" },
+      "usb_drop":                  { "vector": "Removable device", "mitigation": "Disable USB mass storage + application allow list" },
+      "vendor_update_compromised": { "vector": "Supply chain: software vendor", "mitigation": "Vendor risk management + code-signing/SBOM verification" },
+      "unpatched_public_service":  { "vector": "Vulnerable software / open service port", "mitigation": "Patch management + reduce exposed attack surface" },
+      "default_credentials":       { "vector": "Default credentials", "mitigation": "Hardening: change default credentials, disable unused accounts" },
+      "rogue_access_point":        { "vector": "Unsecure network: wireless", "mitigation": "802.1X/WPA3-Enterprise + wireless IDS for rogue APs" },
+      "valid_internal_account":    { "vector": "Valid account / authorized access", "mitigation": "Least privilege + separation of duties + UEBA monitoring" },
+      "unsanctioned_saas":         { "vector": "Unsanctioned cloud service", "mitigation": "CASB discovery/blocking + acceptable use policy" }
+    },
+    "actor_addons": {
+      "Nation-state": "Assume persistence: threat hunting, segmentation, and intel sharing (ISAC)",
+      "Organized crime": "Offline/immutable backups and an extortion response plan",
+      "Hacktivist": "DDoS protection and monitoring of public-facing assets",
+      "Insider threat": "Offboarding/JML hygiene and data loss prevention",
+      "Unskilled attacker": "Basic hygiene closes most of the doors (patching, defaults, MFA)",
+      "Shadow IT": "Give people a sanctioned alternative so they stop working around IT"
+    }
   }
 }
