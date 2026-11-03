@@ -50,9 +50,9 @@
     <tr><td>Repository</td><td><code>delzarsolutionsllc/delzar-sovereign-wealth-machine</code></td></tr>
     <tr><td>Location in repo</td><td><code>secplus_lab_engine/</code> (+ <code>.github/workflows/secplus-lab-engine.yml</code>)</td></tr>
     <tr><td>Branch / Pull request</td><td><code>ccr-2689f707-karox1</code> · PR #4 (draft, open, mergeable)</td></tr>
-    <tr><td>Commits</td><td><code>6081f9b</code> labs 1–5 · <code>bb6d70d</code> challenge mode, CI, step-up MFA, labs 6–8</td></tr>
-    <tr><td>Size</td><td>~4,850 lines of Python · 8 labs · 8 sample scenario files · 1 policy file</td></tr>
-    <tr><td>Quality status</td><td>119 pytest tests passing · GitHub Actions green on Python 3.10, 3.11, 3.12, 3.13</td></tr>
+    <tr><td>Commits</td><td><code>6081f9b</code> labs 1–5 · <code>bb6d70d</code> challenge mode, CI, labs 6–8 · <code>e404421</code>…<code>6e51caa</code> labs 9–16 (one commit each) · <code>ee18cc2</code> scenario generator + exam</td></tr>
+    <tr><td>Size</td><td>~8,400 lines of Python · 16 labs · 16 sample scenario files · 1 policy file (13 sections) · 284 sample challenge questions</td></tr>
+    <tr><td>Quality status</td><td>483 pytest tests passing · GitHub Actions green on Python 3.10, 3.11, 3.12, 3.13</td></tr>
     <tr><td>Runtime requirements</td><td>Python 3.10+ standard library only. <code>rich</code> optional (colour); <code>pytest</code> for tests. Fully offline.</td></tr>
     <tr><td>Document date</td><td>2026-11-03</td></tr>
   </table>
@@ -74,6 +74,15 @@
     <li>Lab 6 — Risk Management &amp; BIA</li>
     <li>Lab 7 — Incident Response &amp; Chain of Custody</li>
     <li>Lab 8 — End-to-End SOC Pipeline</li>
+    <li>Lab 9 — Vulnerability Triage</li>
+    <li>Lab 10 — Email Security Analyzer</li>
+    <li>Lab 11 — Firewall &amp; Segmentation Auditor</li>
+    <li>Lab 12 — Secure Baseline Checker</li>
+    <li>Lab 13 — Threat Actor Classifier</li>
+    <li>Lab 14 — Resilience &amp; Recovery Planner</li>
+    <li>Lab 15 — Vendor Risk Assessor</li>
+    <li>Lab 16 — Security Control Classifier</li>
+    <li>Random scenarios &amp; practice exam</li>
     <li>Challenge mode &amp; progress tracking</li>
     <li>Shared utilities</li>
     <li>Policy configuration reference</li>
@@ -90,7 +99,7 @@
 <h2>1. How to use this document</h2>
 <p>This handbook describes everything built so far: the purpose, the architecture, each lab's engine and decision rules, data formats, configuration, tests, and how to add more. Every function signature, file name and sample result was taken from the code as it stands, not written from memory.</p>
 <div class="callout"><b>If you are an AI reading this</b>
-The project is a modular Python CLI. Every lab follows the same <b>module contract</b> (Section 3.3). To extend it, follow that contract, keep to the standard library, load all policy from <code>config/default_policies.json</code> and scenarios from <code>data/*.json</code>, add pytest tests, and register the lab in <code>labs/__init__.py</code>. Section 18 has recipes and a full lab skeleton. Section 20 is a ready-made prompt.</div>
+The project is a modular Python CLI. Every lab follows the same <b>module contract</b> (Section 3.3). To extend it, follow that contract, keep to the standard library, load all policy from <code>config/default_policies.json</code> and scenarios from <code>data/*.json</code>, add pytest tests, and register the lab in <code>labs/__init__.py</code>. Section 27 has recipes and a full lab skeleton. Section 29 is a ready-made prompt.</div>
 <div class="callout warn"><b>If you are the learner</b>
 Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>python main.py lab N</code>), then quiz yourself (<code>python main.py challenge N</code>) before reading its "Decision logic" table.</div>
 
@@ -103,16 +112,16 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
   <li><b>How an AI agent should be governed</b> in that same domain: least privilege, human-in-the-loop, audit trails.</li>
 </ol>
 <p>Every lab ends with an <b>"Exam &amp; Architectural Insight" panel</b> with five parts: the SY0-701 objective, key concepts, manual failure modes, AI-governance guidance and exam tips.</p>
-<p><b>The arc of the project:</b> Labs 1–4 and 6–7 teach individual controls. Lab 5 shows how to put guardrails on automation. Lab 8 wires them all together into the architecture the learner is building toward: <i>detect → AI agent proposes → governor decides → human approves → the owning control executes</i>.</p>
+<p><b>The arc of the project:</b> Labs 1–4, 6–7 and 9–16 teach individual controls. Lab 5 shows how to put guardrails on automation. Lab 8 wires them all together into the architecture the learner is building toward: <i>detect → AI agent proposes → governor decides → human approves → the owning control executes</i>.</p>
 
 <h3>SY0-701 coverage</h3>
 <table>
   <tr><th>Domain</th><th>Objectives covered</th><th>Labs</th></tr>
-  <tr><td>1 General Security Concepts</td><td>1.1 Security control categories & types · 1.2 Zero Trust · 1.3 Change management · 1.4 Cryptography (hashing, salting, HMAC)</td><td>2, 3, 4, 8, 16</td></tr>
-  <tr><td>2 Threats, Vulnerabilities &amp; Mitigations</td><td>2.1 Threat actors & motivations · 2.2 Threat vectors & attack surfaces · 2.3 Types of vulnerabilities · 2.4 Indicators of malicious activity · 2.5 Mitigation techniques</td><td>1, 3, 9, 10, 13</td></tr>
-  <tr><td>3 Security Architecture</td><td>3.2 Secure enterprise infrastructure (zones, screened subnet, firewalls) · 3.4 Resilience & recovery</td><td>11, 14</td></tr>
-  <tr><td>4 Security Operations</td><td>4.1 Secure baselines & hardening · 4.3 Vulnerability management · 4.5 Enterprise security capabilities (email security, firewall rules, ACLs) · 4.6 IAM · 4.7 Automation &amp; orchestration · 4.8 Incident response · 4.9 Investigation data sources</td><td>1, 2, 3, 5, 7, 8, 9, 10, 11, 12</td></tr>
-  <tr><td>5 Security Program Management</td><td>5.1 Governance (SoD, oversight) · 5.2 Risk management &amp; BIA · 5.3 Third-party risk assessment & management</td><td>1, 4, 5, 6, 15</td></tr>
+  <tr><td>1 General Security Concepts</td><td>1.1 Security control categories &amp; types · 1.2 Zero Trust · 1.3 Change management · 1.4 Cryptography (hashing, salting, HMAC)</td><td>2, 3, 4, 8, 16</td></tr>
+  <tr><td>2 Threats, Vulnerabilities &amp; Mitigations</td><td>2.1 Threat actors &amp; motivations · 2.2 Threat vectors &amp; attack surfaces · 2.3 Types of vulnerabilities · 2.4 Indicators of malicious activity · 2.5 Mitigation techniques</td><td>1, 3, 9, 10, 13</td></tr>
+  <tr><td>3 Security Architecture</td><td>3.2 Secure enterprise infrastructure (zones, screened subnet, firewalls) · 3.4 Resilience &amp; recovery</td><td>11, 14</td></tr>
+  <tr><td>4 Security Operations</td><td>4.1 Secure baselines &amp; hardening · 4.3 Vulnerability management · 4.5 Enterprise security capabilities (email security, firewall rules, ACLs) · 4.6 IAM · 4.7 Automation &amp; orchestration · 4.8 Incident response · 4.9 Investigation data sources</td><td>1, 2, 3, 5, 7, 8, 9, 10, 11, 12</td></tr>
+  <tr><td>5 Security Program Management</td><td>5.1 Governance (SoD, oversight) · 5.2 Risk management &amp; BIA · 5.3 Third-party risk assessment &amp; management</td><td>1, 4, 5, 6, 15</td></tr>
 </table>
 
 <!-- ======================================================= 3 -->
@@ -134,19 +143,31 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
 │   ├── sample_agent_actions.json   Lab 5  20 agent proposals + human reviews
 │   ├── sample_risks.json           Lab 6  five risk scenarios + BIA targets
 │   ├── sample_incident.json        Lab 7  incident, action catalog, rookie/expert playbooks
-│   └── sample_pipeline.json        Lab 8  directory, live sessions, simulated human decisions
+│   ├── sample_pipeline.json        Lab 8  directory, live sessions, simulated human decisions
+│   ├── sample_vulns.json           Lab 9  scan findings + exceptions
+│   ├── sample_emails.json          Lab 10 raw messages + offline DNS (SPF/DMARC/DKIM keys)
+│   ├── sample_firewall.json        Lab 11 current vs remediated rule sets
+│   ├── sample_hosts.json           Lab 12 host config snapshots + previous scan
+│   ├── sample_threat_scenarios.json Lab 13 incident scenarios with indicators
+│   ├── sample_resilience.json      Lab 14 systems: targets vs current design
+│   ├── sample_vendors.json         Lab 15 questionnaires + contracts
+│   └── sample_controls.json        Lab 16 control descriptions + answer key
 ├── labs/
 │   ├── __init__.py              LABS registry: {number: (module, default data file)}
-│   ├── lab1_jml_governance.py … lab8_soc_pipeline.py
+│   ├── lab1_jml_governance.py … lab16_control_classifier.py
 ├── utils/
 │   ├── crypto_helpers.py        SHA-256, salt, PBKDF2, HMAC, canonical JSON, hash chains
 │   ├── terminal_ui.py           UI class: rich or plain-text tables/panels/status lines
 │   ├── loader.py                load_policies(), load_data(), load_json()
-│   └── challenge.py             Question, run_challenge(), Progress (progress.json)
+│   ├── challenge.py             Question, run_challenge(), Progress, pick_distractors()/choices_with()
+│   ├── scenario_generator.py    seeded random scenarios for labs 2, 6, 9, 11–15
+│   └── exam.py                  domain-weighted timed practice exam
 └── tests/
     ├── conftest.py              fixtures: policies, quiet_ui, data loader
     ├── test_labs.py             labs 1–5, crypto, demos, CLI
-    └── test_extensions.py       challenge mode, step-up, labs 6–8, CLI challenge/progress
+    ├── test_extensions.py       challenge mode, step-up, labs 6–8, CLI challenge/progress
+    ├── test_lab9_vuln.py … test_lab16_controls.py   one file per new lab
+    └── test_generator_exam.py   generator determinism/validity, exam allocation/timer/CLI
 .github/workflows/secplus-lab-engine.yml   CI: pytest + smoke tests, Python 3.10–3.13</pre>
 
 <h3>3.2 Design principles</h3>
@@ -183,13 +204,16 @@ Read Sections 2–4 first, then one lab section at a time. Run that lab (<code>p
 <p>Run from inside <code>secplus_lab_engine/</code> (or call <code>main.py</code> by path; it fixes <code>sys.path</code> itself).</p>
 <table>
   <tr><th>Command</th><th>What it does</th></tr>
-  <tr><td><code>python main.py</code> / <code>menu</code></td><td>Interactive menu: <code>1-8</code> run a lab · <code>C3</code> challenge lab 3 · <code>P</code> progress · <code>A</code> all · <code>T</code> tests · <code>Q</code> quit</td></tr>
+  <tr><td><code>python main.py</code> / <code>menu</code></td><td>Interactive menu: <code>1-16</code> run a lab · <code>C3</code> challenge lab 3 · <code>R9</code> challenge on a random scenario · <code>E</code> practice exam · <code>P</code> progress · <code>A</code> all · <code>T</code> tests · <code>Q</code> quit</td></tr>
   <tr><td><code>python main.py list</code></td><td>Table of labs, objectives and default data files</td></tr>
   <tr><td><code>python main.py lab N [--file X.json]</code></td><td>Run lab N's scenario (optionally your own data file)</td></tr>
   <tr><td><code>python main.py lab N --challenge</code></td><td>Quiz mode for lab N</td></tr>
   <tr><td><code>python main.py challenge N|all [--seed S] [--file X.json]</code></td><td>Quiz mode; <code>--seed</code> fixes question order</td></tr>
   <tr><td><code>python main.py progress</code></td><td>Scores per objective (weakest first) + last 5 sessions</td></tr>
-  <tr><td><code>python main.py all</code></td><td>Run all eight labs back-to-back</td></tr>
+  <tr><td><code>python main.py all</code></td><td>Run all sixteen labs back-to-back</td></tr>
+  <tr><td><code>python main.py lab N --random [--seed S]</code></td><td>Run a lab on a generated scenario (labs 2, 6, 9, 11–15)</td></tr>
+  <tr><td><code>python main.py challenge N|all --random [--seed S]</code></td><td>Quiz on generated scenarios so answers can't be memorised</td></tr>
+  <tr><td><code>python main.py exam [--count 90] [--minutes 90] [--seed S] [--fixed]</code></td><td>Timed, domain-weighted practice exam</td></tr>
   <tr><td><code>python main.py test [pytest args]</code></td><td>Run the pytest suite</td></tr>
   <tr><td>Global flags</td><td><code>--plain</code> (no colour) · <code>--policies FILE</code> (alternate policy JSON) · <code>-v</code> (debug logging)</td></tr>
 </table>
@@ -452,10 +476,188 @@ run_pipeline(policies, data, logs, incident) -> PipelineResult(rows, rfc_decisio
 <p>Challenge: 8 questions ("where does this proposal end up?", "what must happen before isolation?").</p>
 </section>
 
-<!-- ======================================================= 13 -->
+<!-- ======================================================= LAB 9 -->
 <section class="lab">
-<h2>13. Challenge mode &amp; progress tracking</h2>
-<p>File: <code>utils/challenge.py</code>. Questions are <b>computed by running each engine</b>, so they always match the current policy and data. 99 questions in total across the 8 labs.</p>
+<h2>13. Lab 9 — Vulnerability Triage &amp; Remediation</h2>
+<p><span class="pill">4.3 vuln mgmt</span><span class="pill">2.3 vuln types</span> File: <code>labs/lab9_vulnerability_triage.py</code> · Data: <code>sample_vulns.json</code> · Config: <code>vulnerability_management</code> (+ CMDB <code>criticality</code>/<code>exposure</code>)</p>
+<h4>Engine API</h4>
+<pre>cvss_rating(cvss, bands) -> Critical | High | Medium | Low | None
+priority_for(score, thresholds) -> P1..P4
+combined_reduction(controls, table) -> (1 − Π(1 − rᵢ), unknown_controls)
+review_exception(exc, score, as_of, cfg) -> ExceptionReview(status, residual_score, reasons)
+triage(finding, cmdb, cfg, as_of) -> TriageResult(score, priority, sla_days, due, overdue, status, reasons, actions, …)
+triage_all(data, policies) -> list[TriageResult]   # sorted by score, highest first</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Rule</th><th>Behaviour</th></tr>
+  <tr><td>Score</td><td>CVSS × criticality multiplier (tier 1–5: 0.6–1.5) × KEV 1.5 × exposure (internet 1.3, privileged 1.2, internal 1.0)</td></tr>
+  <tr><td>Priority / SLA</td><td>P1 ≥ 12 (7 days) · P2 ≥ 8 (30) · P3 ≥ 4 (90) · P4 (180); known-exploited (KEV) capped at 14 days</td></tr>
+  <tr><td>Unknown asset</td><td>Not in the CMDB → worst case (criticality 5, internet-facing) + "register the asset" action</td></tr>
+  <tr><td>Exception</td><td>ACCEPTED only if: authorised approver, not expired, ≤ 180 days, recognised compensating controls, residual ≤ 8; otherwise REJECTED (all reasons listed) or EXPIRED</td></tr>
+  <tr><td>Actions</td><td>Patch + RESCAN to validate; no patch → compensating controls now; overdue → escalate</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>9 findings → 4 P1 (xz backdoor on auth-service, firewall zero-day, overdue PHP-CGI injection, unmanaged <code>ws-9999</code>), 3 P2, 2 P3. Exceptions: erp-legacy ACCEPTED (68% reduction, residual 3.11); auth-service REJECTED (unauthorised approver, residual 21.6); payroll EXPIRED. Challenge: 25 questions (priority, vulnerability type, exception verdict, CVSS band).</p>
+</section>
+
+<!-- ======================================================= LAB 10 -->
+<section class="lab">
+<h2>14. Lab 10 — Email Security Analyzer</h2>
+<p><span class="pill">4.5 email security</span><span class="pill">2.2 message vectors</span> File: <code>labs/lab10_email_security.py</code> · Data: <code>sample_emails.json</code> (raw messages + offline DNS) · Config: <code>email_security</code></p>
+<h4>Engine API</h4>
+<pre>spf_check(ip, domain, dns) -> pass | fail | softfail | neutral | none | permerror   # ip4: and include: (depth ≤ 5)
+dkim_body_hash(body) -> base64 SHA-256 (simple canonicalisation)
+dkim_check(msg, body, dns) -> (pass | fail | none, d=)                               # bh= match + published selector
+lookalike_of(domain, protected, max_distance, owned) -> imitated domain | None       # Levenshtein, homoglyphs, brand-in-name
+analyze(item, cfg, dns) -> EmailReport(spf, dkim, dmarc, dmarc_policy, score, verdict, category, indicators, …)</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Step</th><th>Behaviour</th></tr>
+  <tr><td>Trust boundary</td><td>Connecting IP taken only from OUR MX's <code>Received</code> line; sender-supplied <code>Authentication-Results</code> never trusted (claimed pass vs our fail = +2 "forged header")</td></tr>
+  <tr><td>DMARC</td><td>pass if (SPF pass AND envelope domain aligned) OR (DKIM pass AND d= aligned) with the From organisational domain</td></tr>
+  <tr><td>Indicators</td><td>SPF fail/none, DKIM fail/none, no DMARC policy, lookalike From (+4), exec/brand display-name impersonation (+3), Reply-To mismatch (+2), pressure words (weighted), link text ≠ href (+3), raw-IP / shortener / punycode / suspicious TLD / lookalike links, dangerous or double-extension attachments (+4 each)</td></tr>
+  <tr><td>Verdict</td><td>DMARC fail + p=reject → REJECT; p=quarantine, dangerous attachment or score ≥ 7 → QUARANTINE; score ≥ 2 → DELIVER_WITH_BANNER; else DELIVER</td></tr>
+  <tr><td>Category</td><td>Malware delivery &gt; Domain spoofing &gt; Business email compromise &gt; Credential phishing &gt; Legitimate / Suspicious</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>E-01 partner newsletter DELIVER · E-02 ESP-sent mail DELIVER (SPF not aligned, DKIM aligned → DMARC pass) · E-03 <code>micros0ft-support.com</code> passes SPF/DKIM/DMARC yet QUARANTINE (credential phishing) · E-04 CEO display name from Gmail QUARANTINE (BEC) · E-05 <code>invoice_Q4.pdf.exe</code> QUARANTINE (malware) · E-06 exact-domain spoof with a forged Authentication-Results header REJECT. Challenge: 18 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 11 -->
+<section class="lab">
+<h2>15. Lab 11 — Firewall Rule &amp; Network Segmentation Auditor</h2>
+<p><span class="pill">3.2 secure infrastructure</span><span class="pill">4.5 firewall rules</span> File: <code>labs/lab11_firewall_auditor.py</code> · Data: <code>sample_firewall.json</code> · Config: <code>firewall_audit</code></p>
+<h4>Engine API</h4>
+<pre>parse_ports("80,443" | "1000-2000" | "any") -> [(lo, hi)]
+resolve(spec, zones) -> [(zone, network)]          # zone name | CIDR | any; CIDRs spanning zones expand
+rule_covers(a, b, zones) -> bool                     # proto ⊇, ports ⊇, src ⊇, dst ⊇
+audit(ruleset, cfg) -> Audit(score, grade, findings[Finding(rule_id, code, penalty, detail, fix)])</pre>
+<h4>Findings (penalty)</h4>
+<table>
+  <tr><th>Code</th><th>Trigger</th></tr>
+  <tr><td>ANY_ANY (25)</td><td>allow any → any on any port</td></tr>
+  <tr><td>SEGMENTATION_VIOLATION (15)</td><td>zone flow in <code>never_allowed</code> (internet→internal, guest→internal, DMZ→internal…) or not an approved flow/port</td></tr>
+  <tr><td>SHADOWED (12) / REDUNDANT (4)</td><td>an earlier rule fully covers this one with the opposite / same action</td></tr>
+  <tr><td>MISSING_DEFAULT_DENY (12)</td><td>no explicit final <code>deny any any any</code></td></tr>
+  <tr><td>INSECURE_PROTOCOL (10)</td><td>cleartext ports anywhere (FTP, Telnet, TFTP, SNMPv1/2c); remote-admin ports (RDP, SMB, SSH, VNC) from untrusted zones</td></tr>
+  <tr><td>ANY_SERVICE (8) / OVERLY_BROAD (5)</td><td>all ports allowed / CIDR of /12 or larger</td></tr>
+  <tr><td>NO_LOGGING (3) / UNDOCUMENTED (2)</td><td>deny or default deny without logging / no comment</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>"edge-fw (current)": 15 findings → <b>0/100 (F)</b> (Tor-block deny shadowed by an earlier allow, RDP from internet to internal, guest any-service, Telnet, /8 to databases, a "TEMP" any/any, no default deny). "edge-fw (remediated)": <b>100/100 (A)</b>. Challenge: 21 questions ("most severe problem of rule N", default deny present?).</p>
+</section>
+
+<!-- ======================================================= LAB 12 -->
+<section class="lab">
+<h2>16. Lab 12 — Secure Baseline &amp; Hardening Checker</h2>
+<p><span class="pill">4.1 baselines &amp; hardening</span> File: <code>labs/lab12_baseline_checker.py</code> · Data: <code>sample_hosts.json</code> · Config: <code>hardening_baselines</code> (12 Windows + 10 Linux checks)</p>
+<h4>Engine API</h4>
+<pre>evaluate_check(check, settings) -> (PASS | FAIL | MISSING, actual)   # ops: eq ge le between includes excludes; fail closed
+check_host(host, cfg, as_of) -> HostReport(compliance %, verdict, results, regressed, remediated)
+check_all(data, policies) -> list[HostReport]</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Rule</th><th>Behaviour</th></tr>
+  <tr><td>Status</td><td>PASS / FAIL / MISSING (setting not reported = non-compliant) / EXCEPTION (ticketed, unexpired deviation, excluded from score)</td></tr>
+  <tr><td>Compliance</td><td>severity-weighted (high 10, medium 5, low 2); COMPLIANT only if ≥ 90% AND no failed high-severity check</td></tr>
+  <tr><td>Drift</td><td>vs previous approved scan: REGRESSED (pass → fail), REMEDIATED (fail → pass)</td></tr>
+  <tr><td>Fail closed</td><td>unknown operator or wrong value type → FAIL</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>DC01 NON_COMPLIANT 75.6% (Print Spooler re-enabled → drift; 12-char passwords) · WEB01 0% (firewall and EDR turned off since last scan) · lnx-app-01 COMPLIANT 100% (ticketed /tmp exception) · lnx-db-01 30.6% (root SSH, auditd gone, SELinux unreported, expired exception). Challenge: 15 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 13 -->
+<section class="lab">
+<h2>17. Lab 13 — Threat Actor &amp; Attack Vector Classifier</h2>
+<p><span class="pill">2.1 actors &amp; motivations</span><span class="pill">2.2 vectors</span><span class="pill">2.5 mitigations</span> File: <code>labs/lab13_threat_classifier.py</code> · Data: <code>sample_threat_scenarios.json</code> · Config: <code>threat_classification</code></p>
+<h4>Engine API</h4>
+<pre>score_actors(indicators, actors) -> {actor: score}
+classify(scenario, cfg) -> Classification(actor, actor_reasons, motivation, motivation_reason, vector, mitigation, addon, unknown_indicators)</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Output</th><th>Rule</th></tr>
+  <tr><td>Actor</td><td>Sum of indicator weights per profile (nation-state, organized crime, hacktivist, insider, unskilled attacker, shadow IT); winner must lead by ≥ 2, else <b>Undetermined</b></td></tr>
+  <tr><td>Motivation</td><td>First matching rule in an ordered list (war, espionage, <i>blackmail before financial gain</i>, political, revenge, …)</td></tr>
+  <tr><td>Vector → mitigation</td><td>Initial-access indicator → 2.2 vector → 2.5 mitigation, plus an actor-specific add-on</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>8 scenarios, all decisive: defense-contractor watering hole → nation-state/espionage; ransomware via phishing → organized crime/financial gain; defaced city site → hacktivist; admin wiping backups → insider/revenge; IP cameras with admin/admin → unskilled attacker; public file share → shadow IT; USB drop → organized crime; help-desk vishing + "pay or we publish" → organized crime/<b>blackmail</b>. Challenge: 32 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 14 -->
+<section class="lab">
+<h2>18. Lab 14 — Resilience &amp; Recovery Planner</h2>
+<p><span class="pill">3.4 resilience &amp; recovery</span> File: <code>labs/lab14_resilience_planner.py</code> · Data: <code>sample_resilience.json</code> · Config: <code>resilience</code> (site, replication, clustering, RAID catalogs)</p>
+<h4>Engine API</h4>
+<pre>plan(system, cfg, as_of) -> Plan(host_rto, host_rpo, site_rto, site_rpo, restore_hours, verdict, gaps, recommendations)
+cheapest(options, ok) -> (name, option) | None      raid_for(required, raid) -> best-capacity RAID level</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Event / check</th><th>Computation</th></tr>
+  <tr><td>Restore time</td><td>data TB × 1.5 h/TB × multiplier (full 1.0, differential 1.5, incremental 2.5)</td></tr>
+  <tr><td>Host failure</td><td>RTO = cluster failover (active-active 0, active-passive 15 min) or 4 h rebuild + restore; RPO = replication lag or backup interval</td></tr>
+  <tr><td>Site loss</td><td>Needs an offsite copy AND a site (hot 1 h, warm 24 h, cold 168 h); RTO = site + restore unless data is replicated</td></tr>
+  <tr><td>RAID / power / testing</td><td>RAID tolerance ≥ required disks (RAID0 0, 1/5/10 one, 6 two); UPS + generator ≥ outage; restore and DR tests within 365 days</td></tr>
+  <tr><td>Fix</td><td>Cheapest catalog option that closes each gap</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>web-frontend and file-server MEET_TARGETS. payroll-app: 24 h backups vs 4 h RPO, cold site 172.5 h vs 8 h → back up every 4 h, active-passive cluster, hot site. auth-service: RAID0 and 10 minutes of UPS → RAID5 + generator. erp-legacy: no offsite copy and no recovery site (∞), never tested. Challenge: 19 questions.</p>
+</section>
+
+<!-- ======================================================= LAB 15 -->
+<section class="lab">
+<h2>19. Lab 15 — Third-Party / Vendor Risk Assessor</h2>
+<p><span class="pill">5.3 third-party risk</span> File: <code>labs/lab15_vendor_risk.py</code> · Data: <code>sample_vendors.json</code> · Config: <code>vendor_risk</code></p>
+<h4>Engine API</h4>
+<pre>questionnaire_score(answers, questionnaire) -> (0–100 %, gaps)     # yes 1, partial 0.5, no/unanswered 0
+required_clauses(vendor, rules) -> [clauses]                         # by data class, access, relationship
+assess(vendor, cfg) -> VendorAssessment(inherent, residual, decision, missing_clauses, reject_reasons, conditions, monitoring)</pre>
+<h4>Decision logic</h4>
+<table>
+  <tr><th>Rule</th><th>Behaviour</th></tr>
+  <tr><td>Inherent</td><td>data sensitivity (1–4) × access (1–4) × criticality (1–3); high ≥ 18, medium ≥ 8</td></tr>
+  <tr><td>Residual</td><td>inherent × (1 − 0.7 × questionnaire %); low ≤ 8, medium ≤ 16, high above</td></tr>
+  <tr><td>REJECT</td><td>sensitive data with neither right-to-audit nor an independent assessment · undisclosed conflict of interest · residual HIGH</td></tr>
+  <tr><td>CONDITIONS</td><td>missing required clause (an MOU never replaces a BPA), SLA uptime below need, breach notice &gt; 72 h, residual MEDIUM</td></tr>
+  <tr><td>Monitoring</td><td>cadence by inherent band (quarterly / annual / every 2 years)</td></tr>
+</table>
+<h4>Sample outcome</h4>
+<p>CloudPayroll APPROVE (inherent 24 → residual 7.2) · HVAC contractor with network access APPROVE_WITH_CONDITIONS (needs a security requirements schedule; the Target-breach lesson) · analytics vendor REJECT (unverifiable) · co-marketing partner CONDITIONS (MOU instead of BPA) · MSP REJECT (undisclosed conflict of interest). Challenge: 19 questions, including agreement-type definitions.</p>
+</section>
+
+<!-- ======================================================= LAB 16 -->
+<section class="lab">
+<h2>20. Lab 16 — Security Control Classifier</h2>
+<p><span class="pill">1.1 control categories &amp; types</span> File: <code>labs/lab16_control_classifier.py</code> · Data: <code>sample_controls.json</code> · Config: <code>control_classification</code></p>
+<h4>Engine API</h4>
+<pre>pick(text, table) -> (label | Unclassified, evidence, scores)   # whole-word weighted phrases; unique winner required
+classify(control, cfg) -> ControlResult(category, type, category_evidence, type_evidence, scores)</pre>
+<h4>Decision logic</h4>
+<p>Category (technical / managerial / operational / physical) and type (preventive / detective / corrective / deterrent / compensating / directive) are scored independently. Compensating cues ("instead", "cannot be patched", "unavailable") outweigh the preventive wording they often contain. A tie or zero evidence → <b>Unclassified</b> for a human. The sample's <code>expected_*</code> fields are an answer key used only by the tests and the demo's agreement check.</p>
+<h4>Sample outcome</h4>
+<p>19/19 agree with the answer key, covering the full category × type matrix (e.g. splash screen = technical deterrent, managers reviewing login reports = managerial detective, generator = physical compensating, "Authorized personnel only" = physical directive) plus one vague control left Unclassified. Challenge: 36 questions.</p>
+</section>
+
+<!-- ======================================================= GEN + EXAM -->
+<section class="lab">
+<h2>21. Random scenarios &amp; the practice exam</h2>
+<h3>21.1 Scenario generator (<code>utils/scenario_generator.py</code>)</h3>
+<p><code>generate(lab, policies, seed) -&gt; data</code> builds a fresh scenario in exactly the lab's sample-file format, drawing only from the policy file (roles, CMDB, catalogs) and fixed text banks. The same seed always gives the same scenario. Supported labs: <b>2, 6, 9, 11, 12, 13, 14, 15</b>. Story-driven labs (logs, SOC pipeline, IR playbooks, emails, CAB stories) keep their hand-crafted samples. The tests generate 25 scenarios per lab and require every quiz to be valid and uniquely answerable; a stress run of 200 seeds × 8 labs had zero failures.</p>
+<pre>python main.py challenge 9 --random --seed 42      python main.py lab 12 --random      menu: R9</pre>
+<h3>21.2 Exam simulator (<code>utils/exam.py</code>)</h3>
+<ul>
+  <li><b>Pool:</b> every lab's questions on sample data plus 3 generated scenarios per supported lab, de-duplicated (≈ 580 questions with randomisation, ≈ 280 fixed).</li>
+  <li><b>Allocation:</b> official weights 12/22/18/28/20 % by largest remainder (90 → 11/20/16/25/18); a domain short of questions passes its share to the others.</li>
+  <li><b>Runner:</b> timed (default 90 min, injectable clock), no feedback until the end, unanswered questions count as wrong. Results show a per-domain table, an <i>approximate</i> scaled score (100 + 8 × %, pass 750; CompTIA's real scaling is not public) and the first 15 misses with explanations. Scores go to <code>progress.json</code>.</li>
+</ul>
+<pre>python main.py exam                                 python main.py exam --count 30 --minutes 30 --seed 7 --fixed</pre>
+</section>
+
+<!-- ======================================================= 22 -->
+<section class="lab">
+<h2>22. Challenge mode &amp; progress tracking</h2>
+<p>File: <code>utils/challenge.py</code>. Questions are <b>computed by running each engine</b>, so they always match the current policy and data. 284 questions across the 16 labs on sample data, unlimited with <code>--random</code>. <code>pick_distractors()</code>/<code>choices_with()</code> choose wrong options deterministically and accept an <code>exclude</code> list so a distractor is never a second correct answer. Choices may not be bare numbers, because a typed digit selects an option by number.</p>
 <pre>@dataclass Question(prompt, choices, answer, explanation, objective, context="")   # answer must be in choices
 run_challenge(ui, lab_number, questions, ask=None, progress=None, shuffle=True, seed=None) -> ChallengeResult
     # accepts option number or exact text; shows PASS/FAIL + "Why"; EOF/Ctrl-C ends early, scoring answered only
@@ -463,7 +665,7 @@ class Progress(path=progress.json): record(objective, correct) · record_session
     # rows sorted weakest first; status PASS ≥85%, WARN ≥65%, FAIL below (LOW/MEDIUM if &lt;3 attempts)</pre>
 <p>A test answers every lab's questions with the engine's own answers and requires 100%. That catches unanswerable or ambiguous questions.</p>
 
-<h2>14. Shared utilities</h2>
+<h2>23. Shared utilities</h2>
 <table>
   <tr><th>Module</th><th>Contents</th></tr>
   <tr><td><code>crypto_helpers.py</code></td><td><code>sha256_hex</code>, <code>generate_salt</code> (128-bit), <code>salted_sha256</code>, <code>stretch_password</code> (PBKDF2-HMAC-SHA256, 100k iterations), <code>file_sha256</code>, <code>constant_time_equals</code>, <code>hmac_sign</code>/<code>hmac_verify</code>, <code>canonical_json</code>, <code>build_hash_chain</code>/<code>verify_hash_chain</code> (returns valid, first_broken_index, length_delta)</td></tr>
@@ -471,29 +673,37 @@ class Progress(path=progress.json): record(objective, correct) · record_session
   <tr><td><code>loader.py</code></td><td><code>ROOT</code>, <code>CONFIG_DIR</code>, <code>DATA_DIR</code>, <code>load_json</code>, <code>load_policies(path=None)</code>, <code>load_data(name)</code></td></tr>
 </table>
 
-<h2>15. Policy configuration reference</h2>
+<h2>24. Policy configuration reference</h2>
 <p>File: <code>config/default_policies.json</code>. Swap the whole file with <code>--policies</code>.</p>
 <table>
   <tr><th>Section</th><th>Keys</th></tr>
   <tr><td><code>identity_governance</code></td><td>clearance_levels · roles{role: [perms]} (9 roles) · sod_conflicts[{id,a,b,risk}] (5) · abac_rules{require_clearance_gte_classification, require_department_match_for, business_hours, restrict_outside_hours_for, allowed_employment_status} · leaver_sla_hours</td></tr>
   <tr><td><code>zero_trust</code></td><td>token_ttl_seconds (900) · step_up{bonus 15, ttl_divisor 3} · signing_key · thresholds{allow 70, step_up 50} · weights{…} · min_device_health 70 · business_hours · resource_sensitivity{res: {min_score, requires_mfa}} · entitlements{subject: [resources]}</td></tr>
   <tr><td><code>log_inspection</code></td><td>Event IDs (4625, 4624, 1102/104, 4672) · brute_force_threshold 5 / window 10 min · impossible_travel_kmh 900 · port_scan_distinct_ports 10 · continuous_log_hosts · max_log_gap_minutes 30 · threat_intel{bad_ips, bad_user_agent_patterns, bad_file_hashes} · integrity_salt · manifest_hmac_key</td></tr>
-  <tr><td><code>change_management</code></td><td>maintenance_windows · blackout_dates · cab_quorum 2 · cab_members · max_risk_for_auto_approve 3 · systems{name: {owner, legacy, depends_on, tags}} (the CMDB, 9 systems incl. edge-fw) · irreversible_actions</td></tr>
+  <tr><td><code>change_management</code></td><td>maintenance_windows · blackout_dates · cab_quorum 2 · cab_members · max_risk_for_auto_approve 3 · systems{name: {owner, legacy, depends_on, tags}} (the CMDB, 9 systems incl. edge-fw, each with criticality + exposure) · irreversible_actions</td></tr>
+  <tr><td><code>vulnerability_management</code></td><td>criticality/exposure/KEV multipliers · priority_thresholds · sla_days · kev_max_sla_days · cvss_bands · exceptions{authorized_approvers, max_duration_days, max_residual_score, compensating_control_reduction}</td></tr>
+  <tr><td><code>email_security</code></td><td>org_domain · inbound_mx · protected_domains · brand_owned_domains · executives · phishing/payment/credential keywords · url_shorteners · suspicious_tlds · dangerous/document extensions · banner/quarantine scores</td></tr>
+  <tr><td><code>firewall_audit</code></td><td>untrusted_zones · broad_prefix_max · cleartext_ports · remote_admin_ports · segmentation_policy{allowed_flows, never_allowed} · weights</td></tr>
+  <tr><td><code>hardening_baselines</code></td><td>severity_weight · compliant_min_percent · profiles{windows_server[12], linux_server[10]} (id, setting, op, value, severity, remediation)</td></tr>
+  <tr><td><code>threat_classification</code></td><td>min_margin · actors{indicator weights} · motivation_rules (ordered) · vectors{vector, mitigation} · actor_addons</td></tr>
+  <tr><td><code>resilience</code></td><td>site_types · replication · clustering · raid · backup_restore_multiplier · restore_hours_per_tb · host_rebuild_hours · test_max_age_days</td></tr>
+  <tr><td><code>vendor_risk</code></td><td>sensitivity/access/criticality scales · inherent/residual bands · questionnaire · required_clauses · sla_min_uptime · max_breach_notification_hours · monitoring_cadence · agreement_types</td></tr>
+  <tr><td><code>control_classification</code></td><td>categories{label: {phrase: weight}} · types{label: {phrase: weight}}</td></tr>
   <tr><td><code>ai_governance</code></td><td>agents{id: {type, allowed_actions}} (4) · immutable_firewall_rules · always_hitl_actions · privileged_roles · protected_controls · confidence_threshold 0.80 · max_actions_per_agent_per_window 5 · rate_window_seconds 60 · quarantine_after_blocks 3 · human_approvers · dangerous_command_patterns · prompt_injection_patterns · asset_inventory · patch_catalog · approved_cab_tickets</td></tr>
 </table>
 <div class="callout warn"><b>Note</b>All keys, salts and data are fictional placeholders for the lab only. This is a training simulator, not a production control.</div>
 
-<h2>16. Testing &amp; CI</h2>
+<h2>25. Testing &amp; CI</h2>
 <ul>
-  <li><b>119 tests</b>: <code>tests/test_labs.py</code> (crypto vectors, Labs 1–5 engines, demo headline numbers, CLI) and <code>tests/test_extensions.py</code> (challenge framework, step-up, session revocation, suspend, HITL class, key separation, Labs 6–8, CLI challenge/progress).</li>
+  <li><b>483 tests</b>: one file per lab 9–16, <code>tests/test_generator_exam.py</code> (200 generated scenarios + exam), <code>tests/test_labs.py</code> (crypto vectors, Labs 1–5 engines, demo headline numbers, CLI) and <code>tests/test_extensions.py</code> (challenge framework, step-up, session revocation, suspend, HITL class, key separation, Labs 6–8, CLI challenge/progress).</li>
   <li>Parametrised tests run every lab in <code>LABS</code>, so a new lab is smoke-tested automatically.</li>
   <li><b>CI</b> (<code>.github/workflows/secplus-lab-engine.yml</code>): triggers on changes under <code>secplus_lab_engine/**</code>; matrix Python 3.10–3.13; installs requirements, runs pytest, runs <code>main.py all</code> with rich, then uninstalls rich and runs <code>--plain all</code>. All jobs currently green.</li>
 </ul>
 </section>
 
-<!-- ======================================================= 17 -->
+<!-- ======================================================= 26 -->
 <section class="lab">
-<h2>17. Design decisions &amp; known limitations</h2>
+<h2>26. Design decisions &amp; known limitations</h2>
 <h3>Decisions worth knowing</h3>
 <ul>
   <li><b>The "AI agent" in Lab 8 is deterministic</b> (<code>soc_agent_propose</code>), so results are reproducible and testable. It is designed to be swapped for a real model; every guardrail still applies.</li>
@@ -510,13 +720,15 @@ class Progress(path=progress.json): record(objective, correct) · record_session
   <li>The Lab 4 rehearsal models only a few state attributes (patches, config version, running, firewall lists, schema).</li>
   <li>The sample scenarios are fixed. Challenge mode re-asks the same questions in a different order, so you can memorise the answers (a random scenario generator is on the roadmap).</li>
   <li>CI runs twice per PR push (push + pull_request triggers). Harmless, and can be trimmed.</li>
-  <li>SY0-701 Domain 3 (architecture) and objectives 2.2, 2.3, 4.1–4.5, 5.3–5.6 are not yet covered.</li>
+  <li>All five SY0-701 domains now have labs. Objectives still without a dedicated lab: 1.4 PKI/certificates beyond hashing, 3.1 architecture models (cloud, IaC, containers), 3.3 data protection, 4.2 asset management, 4.4 monitoring tools, 5.4–5.6 compliance, audits and awareness programs.</li>
+  <li>Labs 1, 3, 4, 5, 7, 8, 10 and 16 have no random generator yet, so their challenge questions repeat.</li>
+  <li>Lab 10 models DKIM body integrity and key presence, not RSA signature verification; the organisational domain uses the last two labels (no public-suffix list offline).</li>
 </ul>
 </section>
 
-<!-- ======================================================= 18 -->
+<!-- ======================================================= 27 -->
 <section class="lab">
-<h2>18. How to extend (recipes)</h2>
+<h2>27. How to extend (recipes)</h2>
 <h3>18.1 Add a new lab</h3>
 <ol>
   <li>Create <code>labs/labN_topic.py</code> following the contract (skeleton below).</li>
@@ -575,27 +787,28 @@ def build_challenges(policies: dict, data: dict) -> list:
 </table>
 </section>
 
-<!-- ======================================================= 19 -->
-<h2>19. Roadmap: what to build next</h2>
+<!-- ======================================================= 28 -->
+<h2>28. Roadmap: what to build next</h2>
+<p class="small">Done since the first edition: random scenario generator, vulnerability triage, email security, firewall auditor, secure baselines, vendor risk, exam simulator, plus threat actors, resilience and control classification.</p>
 <table>
   <tr><th>#</th><th>Idea</th><th>Objectives</th><th>Notes</th></tr>
-  <tr><td>1</td><td>Random scenario generator</td><td>all</td><td>New logs/RFCs/agent actions each run so challenge answers can't be memorised; seedable</td></tr>
-  <tr><td>2</td><td>Vulnerability triage lab</td><td>4.3, 2.3</td><td>CVSS × asset criticality × known-exploited status; SLAs; exceptions; compensating controls</td></tr>
-  <tr><td>3</td><td>Email security analyzer</td><td>4.5, 2.2</td><td>Parse raw headers: SPF/DKIM/DMARC alignment, spoofing, phishing indicators</td></tr>
-  <tr><td>4</td><td>Firewall rule auditor</td><td>3.2, 4.5</td><td>Shadowed/redundant rules, any/any, missing implicit deny, segmentation</td></tr>
-  <tr><td>5</td><td>PKI &amp; certificate lab</td><td>1.4</td><td>Chain validation, expiry, CRL/OCSP, SAN/wildcard scope, key escrow</td></tr>
-  <tr><td>6</td><td>Secure baseline / hardening checker</td><td>4.1</td><td>Compare host configs against a CIS-style baseline; drift detection</td></tr>
-  <tr><td>7</td><td>Third-party / vendor risk</td><td>5.3</td><td>Questionnaire scoring, SLA/MSA/BPA checks, right-to-audit</td></tr>
-  <tr><td>8</td><td>Optional real-LLM mode</td><td>4.7</td><td>Model-written proposals in Lab 5/8 to test the guardrails against real hallucinations and injection</td></tr>
-  <tr><td>9</td><td>Exam simulator</td><td>all</td><td>Timed, mixed-domain run of 90 questions drawn from every lab, scored like the real exam</td></tr>
+  <tr><td>1</td><td>PKI &amp; certificate lab</td><td>1.4</td><td>Chain validation, expiry, CRL/OCSP, SAN/wildcard scope, key escrow, certificate pinning</td></tr>
+  <tr><td>2</td><td>Data protection classifier</td><td>3.3</td><td>Data types/states, classification labels, DLP rules, tokenization vs masking vs encryption</td></tr>
+  <tr><td>3</td><td>Cloud / IaC misconfiguration scanner</td><td>3.1</td><td>Public buckets, open security groups, IAM wildcards in Terraform-style JSON</td></tr>
+  <tr><td>4</td><td>Monitoring &amp; alert tuning lab</td><td>4.4</td><td>True/false positives, thresholds, alert fatigue; feed rejected Lab 8 alerts back as tuning</td></tr>
+  <tr><td>5</td><td>Compliance &amp; audit evidence lab</td><td>5.4, 5.5</td><td>Map controls (Lab 16) to requirements, find missing evidence, attestation</td></tr>
+  <tr><td>6</td><td>Generators for remaining labs</td><td>all</td><td>Logs (3), RFCs (4), agent actions (5), IR playbooks (7), emails (10), controls (16)</td></tr>
+  <tr><td>7</td><td>Optional real-LLM mode</td><td>4.7</td><td>Model-written proposals in Labs 5/8 to test guardrails against real hallucinations and injection</td></tr>
+  <tr><td>8</td><td>Spaced repetition</td><td>all</td><td>Use progress.json to re-ask weak objectives more often</td></tr>
 </table>
 
-<!-- ======================================================= 20 -->
+<!-- ======================================================= 29 -->
 <section class="lab">
-<h2>20. Ready-to-paste prompt for another AI</h2>
+<h2>29. Ready-to-paste prompt for another AI</h2>
 <p>Attach this PDF (and ideally the <code>secplus_lab_engine/</code> folder), then paste:</p>
 <pre>You are extending an existing offline Python 3.10+ project called "secplus_lab_engine": a
-Security+ SY0-701 lab simulator with 8 labs, challenge mode and an AI-agent guardrail governor.
+Security+ SY0-701 lab simulator with 16 labs, challenge mode, a random scenario generator, a
+domain-weighted practice exam and an AI-agent guardrail governor.
 The attached handbook describes its architecture, module contract, APIs, data formats and tests.
 
 Rules:
@@ -611,19 +824,21 @@ Rules:
 6. Make challenge distractors genuinely wrong (no second correct answer).
 7. End every demo with ui.insight(INSIGHT), including how an AI agent should be governed.
 
-Task: build Lab 9 — Vulnerability Triage (SY0-701 4.3 / 2.3). Prioritise findings by CVSS,
-asset criticality (from the change_management.systems CMDB), known-exploited status and exposure;
-assign remediation SLAs; handle exceptions with compensating controls and expiry dates; and
-generate a challenge set. Show me each new/changed file in full, then the tests.</pre>
-<p class="small">Swap the "Task" paragraph for any roadmap item, e.g. "build the random scenario generator" or "add an optional LLM-backed soc_agent_propose behind a --llm flag".</p>
+Task: build Lab 17 — PKI &amp; Certificate Validator (SY0-701 1.4). Validate certificate chains
+against a trusted root list, expiry/not-yet-valid dates, revocation (CRL/OCSP data in the scenario),
+hostname matching with SAN and wildcard rules, key size and signature algorithm policy; add a
+seeded generator in utils/scenario_generator.py and a challenge set. Show each new/changed file
+in full, then the tests.</pre>
+<p class="small">Swap the "Task" paragraph for any roadmap item in Section 28, e.g. "add a generator for Lab 10 emails" or "add an optional LLM-backed soc_agent_propose behind a --llm flag".</p>
 
-<h2>21. Glossary</h2>
+<h2>30. Glossary</h2>
 <div class="twocol">
 <table>
   <tr><td><b>ABAC</b></td><td>Attribute-based access control</td></tr>
   <tr><td><b>ALE / SLE / ARO / EF / AV</b></td><td>Annualised loss expectancy / single loss expectancy / annualised rate of occurrence / exposure factor / asset value</td></tr>
   <tr><td><b>BIA</b></td><td>Business impact analysis (RTO, RPO, MTTR, MTBF)</td></tr>
   <tr><td><b>CAB / ECAB</b></td><td>(Emergency) Change Advisory Board</td></tr>
+  <tr><td><b>CVSS / KEV</b></td><td>Common Vulnerability Scoring System / Known Exploited Vulnerabilities catalog</td></tr>
   <tr><td><b>CMDB</b></td><td>Configuration management database (systems + dependencies)</td></tr>
   <tr><td><b>HITL</b></td><td>Human-in-the-loop (REQUIRE_HUMAN_APPROVAL)</td></tr>
   <tr><td><b>HMAC</b></td><td>Keyed hash: integrity + authenticity</td></tr>
@@ -636,6 +851,7 @@ generate a challenge set. Show me each new/changed file in full, then the tests.
   <tr><td><b>RBAC</b></td><td>Role-based access control</td></tr>
   <tr><td><b>RFC</b></td><td>Request for Change (Lab 4) · RFC 3227 = evidence collection guideline (Lab 7)</td></tr>
   <tr><td><b>RPO / RTO</b></td><td>Max tolerable data loss / downtime</td></tr>
+  <tr><td><b>SPF / DKIM / DMARC</b></td><td>Sender IP authorisation / message signature / alignment + policy</td></tr>
   <tr><td><b>SoD</b></td><td>Separation of duties</td></tr>
   <tr><td><b>SOAR</b></td><td>Security orchestration, automation &amp; response</td></tr>
 </table>

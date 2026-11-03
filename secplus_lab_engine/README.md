@@ -1,13 +1,14 @@
 # Security+ SY0-701 Lab Engine & AI Agent Governor
 
-An **offline, CLI-driven Python lab** for practising the manual security operations behind CompTIA Security+ SY0-701, from identity lifecycle and Zero Trust to log forensics, change control and **governing autonomous AI agents**.
+An **offline, CLI-driven Python lab** for practising the manual security operations behind CompTIA Security+ SY0-701, across **all five exam domains**: identity, Zero Trust, log forensics, change control, vulnerability triage, email security, firewall auditing, hardening, threat actors, resilience, vendor risk, control types, and **governing autonomous AI agents**.
 
 It's meant for building first-principles skill: work through each operation by hand and see exactly where manual processes fail. Only then design the guardrails that automated agents must operate within.
 
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 119 pytest tests, run in CI on Python 3.10–3.13
+* 16 labs, a random scenario generator and a timed, domain-weighted practice exam
+* 483 pytest tests, run in CI on Python 3.10–3.13
 
 ---
 
@@ -28,11 +29,15 @@ python main.py                       # interactive menu
 python main.py list                  # list labs
 python main.py lab 1                 # run a lab's example scenario
 python main.py lab 3 --file my.json  # run a lab against your own scenario data
-python main.py all                   # run all eight labs
+python main.py all                   # run all sixteen labs
 python main.py challenge 4           # quiz mode: predict each verdict before it is revealed
 python main.py challenge all         # quiz every lab
 python main.py lab 4 --challenge     # same as "challenge 4"
 python main.py progress              # your scores per SY0-701 objective, weakest first
+python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15)
+python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
+python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
+python main.py exam --count 30 --minutes 30 --seed 3
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file
@@ -85,7 +90,7 @@ You answer, and the engine reveals its own verdict with the reasoning. The quest
 ```
 secplus_lab_engine/
 ├── main.py                       # CLI entrypoint & interactive menu
-├── config/default_policies.json  # RBAC/SoD, Zero Trust weights, TI feed, CMDB, AI guardrails
+├── config/default_policies.json  # all policy: RBAC/SoD, Zero Trust, TI feed, CMDB, AI guardrails, baselines, catalogs…
 ├── data/
 │   ├── sample_identities.json      # Lab 1 HR feed + access checks
 │   ├── sample_access_requests.json # Lab 2 requests + PEP attack cases
@@ -94,14 +99,25 @@ secplus_lab_engine/
 │   ├── sample_agent_actions.json   # Lab 5 agent proposals + human reviews
 │   ├── sample_risks.json           # Lab 6 risk scenarios + BIA targets
 │   ├── sample_incident.json        # Lab 7 incident, action catalog, rookie/expert playbooks
-│   └── sample_pipeline.json        # Lab 8 directory, live sessions, simulated human decisions
+│   ├── sample_pipeline.json        # Lab 8 directory, live sessions, simulated human decisions
+│   ├── sample_vulns.json           # Lab 9 scan findings + exceptions
+│   ├── sample_emails.json          # Lab 10 raw messages + offline DNS (SPF/DMARC/DKIM keys)
+│   ├── sample_firewall.json        # Lab 11 current vs remediated rule sets
+│   ├── sample_hosts.json           # Lab 12 host config snapshots + previous scan
+│   ├── sample_threat_scenarios.json # Lab 13 incident scenarios with indicators
+│   ├── sample_resilience.json      # Lab 14 systems: RTO/RPO targets vs current design
+│   ├── sample_vendors.json         # Lab 15 vendor questionnaires + contracts
+│   └── sample_controls.json        # Lab 16 control descriptions + answer key
 ├── labs/                         # one module per lab (+ registry in __init__.py)
 ├── utils/
 │   ├── crypto_helpers.py         # SHA-256, salting, PBKDF2, HMAC, hash chains
 │   ├── challenge.py              # challenge mode + progress.json tracking
+│   ├── scenario_generator.py     # seeded random scenarios (--random)
+│   ├── exam.py                   # timed, domain-weighted practice exam
 │   ├── terminal_ui.py            # rich / plain-text rendering, Insight panel
 │   └── loader.py                 # config & data loading
-└── tests/                        # pytest suite (test_labs.py, test_extensions.py)
+├── docs/                         # HANDBOOK.pdf (+ HTML source and render script)
+└── tests/                        # pytest suite: one file per lab 9–16, generator/exam, labs 1–8
 ```
 
 ## Practise with your own scenarios
@@ -116,6 +132,11 @@ The labs are data-driven, so the best way to learn is to **break the sample data
 * **Lab 6**: Raise R-03's flood ARO to 0.1. Does insurance still beat relocation?
 * **Lab 7**: Write your own playbook into `playbooks` and try to score 100. Then remove `legal_hold` and see what breaks.
 * **Lab 8**: Empty `human_reviews` and watch every user-impacting action wait in the queue. Replace `soc_agent_propose()` with your own logic (or a real model) and see which guardrails it trips.
+
+* **Lab 9**: Make `ws-9999` a CMDB asset with criticality 1. Does it drop out of P1?
+* **Lab 10**: Change E-02's DKIM selector to one that isn't published. Which verdict flips, and why does SPF not save it?
+* **Lab 11**: Move rule 4 (the Tor block) above rule 1. Which finding disappears?
+* **Lab 13**: Give T-07 the indicator `political_message`. Is the actor still decisive?
 
 Then run your changes with `python main.py lab N --file your_copy.json`.
 
