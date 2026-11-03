@@ -416,5 +416,32 @@
       "Compensating": { "instead": 4, "cannot be patched": 4, "too small": 3, "unavailable": 3, "primary": 2, "alternative": 4 },
       "Directive":    { "must": 3, "policy states": 3, "authorized personnel only": 4, "shall": 3 }
     }
+  },
+
+  "pki": {
+    "trusted_roots": ["Delzar Root CA G2", "GlobalTrust Root R1"],
+    "min_key_bits": { "RSA": 2048, "EC": 256 },
+    "allowed_signature_algorithms": ["sha256WithRSAEncryption", "sha384WithRSAEncryption", "ecdsa-with-SHA256", "ecdsa-with-SHA384"],
+    "max_leaf_validity_days": 398,
+    "expiry_warning_days": 30,
+    "revocation_hard_fail": false,
+    "severity": {
+      "REVOKED": 10, "PIN_MISMATCH": 9, "UNTRUSTED_ROOT": 8, "SELF_SIGNED": 8, "INCOMPLETE_CHAIN": 7, "NOT_A_CA": 7,
+      "EXPIRED": 6, "NOT_YET_VALID": 6, "HOSTNAME_MISMATCH": 5, "WEAK_SIGNATURE": 4, "WEAK_KEY": 4, "WRONG_KEY_USAGE": 3,
+      "REVOCATION_UNKNOWN": 2, "VALIDITY_TOO_LONG": 1, "EXPIRING_SOON": 1
+    },
+    "warning_codes": ["EXPIRING_SOON", "VALIDITY_TOO_LONG", "REVOCATION_UNKNOWN"],
+    "concepts": {
+      "CRL": "A list, published by a CA, of serial numbers it has revoked; clients download it periodically",
+      "OCSP": "A protocol that asks the CA's responder for the real-time status of ONE certificate",
+      "OCSP stapling": "The web server fetches its own signed OCSP response and attaches it to the TLS handshake",
+      "CSR": "A request containing the public key and subject details that is sent to a CA to obtain a certificate",
+      "Wildcard certificate": "A certificate whose name like *.example.com covers exactly one level of subdomains",
+      "SAN": "The certificate extension that lists every DNS name (and IP) the certificate is valid for",
+      "Root of trust": "A self-signed CA certificate that clients trust directly because it is in their trust store",
+      "Key escrow": "A trusted third party holds a copy of private keys so data can be recovered",
+      "Certificate pinning": "An application only accepts a specific certificate or public key for a site, even if another CA-signed one is presented",
+      "Self-signed certificate": "A certificate signed by its own key, not by a CA the client already trusts"
+    }
   }
 }

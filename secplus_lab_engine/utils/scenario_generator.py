@@ -256,7 +256,69 @@ def gen_lab15(rng: random.Random, policies: dict) -> dict:
     return {"vendors": vendors}
 
 
-GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15}
+# --------------------------------------------------------------------------- #
+# Lab 17 — TLS certificate chains
+# --------------------------------------------------------------------------- #
+def _fault(name: str, sc: dict, rng: random.Random) -> None:
+    leaf, chain = sc["chain"][0], sc["chain"]
+    if name == "expired":
+        leaf["not_before"], leaf["not_after"] = _d(400), _d(rng.randint(1, 30))
+    elif name == "not_yet_valid":
+        leaf["not_before"] = _d(-rng.randint(2, 20))
+    elif name == "hostname":
+        sc["hostname"] = rng.choice(["a.b." + sc["domain"], "other-" + sc["domain"], "dev.portal." + sc["domain"]])
+    elif name == "missing_intermediate":
+        del chain[1:]
+    elif name == "self_signed":
+        del chain[1:]
+        leaf["issuer"], leaf["is_ca"] = leaf["subject"], True
+    elif name == "untrusted_root":
+        if len(chain) < 2:            # an earlier fault already removed the intermediate
+            return
+        chain[1]["issuer"] = "Shady Root CA"
+        chain.append({**chain[1], "subject": "Shady Root CA", "issuer": "Shady Root CA", "serial": "9999"})
+    elif name == "revoked":
+        sc["revocation"] = {"crl": {leaf["issuer"]: [leaf["serial"]]},
+                            "ocsp": {c["serial"]: "good" for c in chain[1:]}}
+    elif name == "weak_key":
+        leaf["key_bits"] = 1024
+    elif name == "weak_sig":
+        leaf["sig_alg"] = rng.choice(["sha1WithRSAEncryption", "md5WithRSAEncryption"])
+    elif name == "eku":
+        leaf["eku"] = ["clientAuth"]
+    elif name == "no_revocation":
+        sc["revocation"] = {"ocsp": {leaf["serial"]: "unknown"}}
+    elif name == "pin":
+        sc["pinned_spki"] = ["feedfacecafe"]
+    elif name == "long_validity":
+        leaf["not_before"], leaf["not_after"] = _d(100), _d(-500)
+
+
+def gen_lab17(rng: random.Random, policies: dict) -> dict:
+    faults = ["expired", "not_yet_valid", "hostname", "missing_intermediate", "self_signed", "untrusted_root", "revoked",
+              "weak_key", "weak_sig", "eku", "no_revocation", "pin", "long_validity"]
+    scenarios = []
+    for i in range(1, rng.randint(5, 8) + 1):
+        domain = rng.choice(["delzarsolutions.com", "example.org", "acme-partner.com"])
+        host = f"{rng.choice(['www', 'api', 'shop', 'mail', 'vpn'])}.{domain}"
+        serial = str(3000 + i)
+        sc = {"id": f"P-{i:02d}", "title": "Generated connection", "hostname": host, "domain": domain,
+              "chain": [
+                  {"subject": host, "issuer": "Delzar Issuing CA 1", "serial": serial, "not_before": _d(60), "not_after": _d(-300),
+                   "key_type": "RSA", "key_bits": rng.choice([2048, 3072]), "sig_alg": "sha256WithRSAEncryption", "is_ca": False,
+                   "san": [host, f"*.{domain}"] if rng.random() < 0.3 else [host], "eku": ["serverAuth"], "spki_sha256": f"{rng.getrandbits(48):012x}"},
+                  {"subject": "Delzar Issuing CA 1", "issuer": "Delzar Root CA G2", "serial": "0101", "not_before": "2024-01-01",
+                   "not_after": "2030-01-01", "key_type": "RSA", "key_bits": 4096, "sig_alg": "sha384WithRSAEncryption",
+                   "is_ca": True, "spki_sha256": "c0ffee0101"}],
+              "revocation": {"ocsp": {serial: "good", "0101": "good"}}}
+        for f in rng.sample(faults, rng.choice([0, 1, 1, 1, 2])):
+            _fault(f, sc, rng)
+        del sc["domain"]
+        scenarios.append(sc)
+    return {"as_of": AS_OF, "scenarios": scenarios}
+
+
+GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17}
 
 
 def generate(lab: int, policies: dict, seed: int | None = None) -> dict:
