@@ -228,5 +228,60 @@
       "ANY_ANY": 25, "SEGMENTATION_VIOLATION": 15, "SHADOWED": 12, "MISSING_DEFAULT_DENY": 12,
       "INSECURE_PROTOCOL": 10, "ANY_SERVICE": 8, "OVERLY_BROAD": 5, "REDUNDANT": 4, "NO_LOGGING": 3, "UNDOCUMENTED": 2
     }
+  },
+
+  "hardening_baselines": {
+    "severity_weight": { "high": 10, "medium": 5, "low": 2 },
+    "compliant_min_percent": 90,
+    "profiles": {
+      "windows_server": [
+        { "id": "W-01", "category": "Password policy", "title": "Minimum password length ≥ 14", "setting": "password_min_length", "op": "ge", "value": 14, "severity": "high",
+          "remediation": "GPO: Computer Config > Windows Settings > Security Settings > Account Policies > Password Policy > Minimum password length = 14" },
+        { "id": "W-02", "category": "Password policy", "title": "Password history ≥ 24", "setting": "password_history", "op": "ge", "value": 24, "severity": "medium",
+          "remediation": "GPO: Enforce password history = 24 passwords remembered" },
+        { "id": "W-03", "category": "Account lockout", "title": "Lockout threshold 1–5 attempts", "setting": "lockout_threshold", "op": "between", "value": [1, 5], "severity": "medium",
+          "remediation": "GPO: Account Lockout Policy > Account lockout threshold = 5" },
+        { "id": "W-04", "category": "Network", "title": "SMBv1 disabled", "setting": "smbv1_enabled", "op": "eq", "value": false, "severity": "high",
+          "remediation": "Set-SmbServerConfiguration -EnableSMB1Protocol $false (and remove the SMB1 feature)" },
+        { "id": "W-05", "category": "Network", "title": "Host firewall enabled (all profiles)", "setting": "firewall_enabled", "op": "eq", "value": true, "severity": "high",
+          "remediation": "Set-NetFirewallProfile -All -Enabled True" },
+        { "id": "W-06", "category": "Audit", "title": "Audit logon events = Success and Failure", "setting": "audit_logon", "op": "eq", "value": "success_failure", "severity": "medium",
+          "remediation": "auditpol /set /subcategory:\"Logon\" /success:enable /failure:enable" },
+        { "id": "W-07", "category": "Services", "title": "Unnecessary/risky services not running", "setting": "services_running", "op": "excludes", "value": ["TlntSvr", "RemoteRegistry", "Spooler", "SNMP"], "severity": "high",
+          "remediation": "Stop and disable the service (Set-Service <name> -StartupType Disabled); Print Spooler must be off on servers that don't print (PrintNightmare)" },
+        { "id": "W-08", "category": "Remote access", "title": "RDP requires Network Level Authentication", "setting": "rdp_nla_required", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "GPO: Remote Desktop Session Host > Security > Require user authentication using NLA = Enabled" },
+        { "id": "W-09", "category": "Accounts", "title": "Built-in Guest account disabled", "setting": "guest_account_enabled", "op": "eq", "value": false, "severity": "medium",
+          "remediation": "net user Guest /active:no" },
+        { "id": "W-10", "category": "Endpoint", "title": "EDR agent installed and running", "setting": "edr_running", "op": "eq", "value": true, "severity": "high",
+          "remediation": "Reinstall the EDR sensor from the management console and verify check-in" },
+        { "id": "W-11", "category": "Patching", "title": "Automatic security updates enabled", "setting": "auto_updates", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "Enroll in WSUS/Intune update ring; enable automatic security updates" },
+        { "id": "W-12", "category": "Audit", "title": "Security log size ≥ 1024 MB", "setting": "security_log_max_mb", "op": "ge", "value": 1024, "severity": "low",
+          "remediation": "wevtutil sl Security /ms:1073741824" }
+      ],
+      "linux_server": [
+        { "id": "L-01", "category": "Remote access", "title": "SSH root login disabled", "setting": "ssh_permit_root_login", "op": "eq", "value": "no", "severity": "high",
+          "remediation": "Set 'PermitRootLogin no' in /etc/ssh/sshd_config; systemctl reload sshd" },
+        { "id": "L-02", "category": "Remote access", "title": "SSH password authentication disabled (keys only)", "setting": "ssh_password_auth", "op": "eq", "value": "no", "severity": "medium",
+          "remediation": "Set 'PasswordAuthentication no' in /etc/ssh/sshd_config" },
+        { "id": "L-03", "category": "Password policy", "title": "Minimum password length ≥ 14", "setting": "pass_min_len", "op": "ge", "value": 14, "severity": "high",
+          "remediation": "Set minlen = 14 in /etc/security/pwquality.conf" },
+        { "id": "L-04", "category": "Services", "title": "Legacy/insecure services absent", "setting": "services_running", "op": "excludes", "value": ["telnet", "rsh", "vsftpd", "tftp", "rpcbind"], "severity": "high",
+          "remediation": "systemctl disable --now <service>; remove the package" },
+        { "id": "L-05", "category": "Audit", "title": "auditd and rsyslog running", "setting": "services_running", "op": "includes", "value": ["auditd", "rsyslog"], "severity": "high",
+          "remediation": "dnf install audit rsyslog && systemctl enable --now auditd rsyslog" },
+        { "id": "L-06", "category": "Network", "title": "Host firewall enabled", "setting": "firewall_enabled", "op": "eq", "value": true, "severity": "high",
+          "remediation": "systemctl enable --now firewalld (default zone drop/public with only required services)" },
+        { "id": "L-07", "category": "Mandatory access control", "title": "SELinux enforcing", "setting": "selinux_mode", "op": "eq", "value": "enforcing", "severity": "medium",
+          "remediation": "Set SELINUX=enforcing in /etc/selinux/config and relabel" },
+        { "id": "L-08", "category": "Patching", "title": "Automatic security updates enabled", "setting": "auto_updates", "op": "eq", "value": true, "severity": "medium",
+          "remediation": "dnf install dnf-automatic; enable dnf-automatic-install.timer (security only)" },
+        { "id": "L-09", "category": "File permissions", "title": "No world-writable files outside /tmp", "setting": "world_writable_files", "op": "le", "value": 0, "severity": "medium",
+          "remediation": "find / -xdev -type f -perm -0002 -exec chmod o-w {} +" },
+        { "id": "L-10", "category": "File systems", "title": "/tmp mounted noexec", "setting": "tmp_noexec", "op": "eq", "value": true, "severity": "low",
+          "remediation": "Add noexec,nosuid,nodev to the /tmp entry in /etc/fstab and remount" }
+      ]
+    }
   }
 }

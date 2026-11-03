@@ -21,6 +21,7 @@ from . import (
     lab9_vulnerability_triage,
     lab10_email_security,
     lab11_firewall_auditor,
+    lab12_baseline_checker,
 )
 
 # lab number -> (module, default data file)
@@ -36,4 +37,5 @@ LABS = {
     9: (lab9_vulnerability_triage, "sample_vulns.json"),
     10: (lab10_email_security, "sample_emails.json"),
     11: (lab11_firewall_auditor, "sample_firewall.json"),
+    12: (lab12_baseline_checker, "sample_hosts.json"),
 }
