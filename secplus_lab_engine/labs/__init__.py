@@ -25,6 +25,7 @@ from . import (
     lab13_threat_classifier,
     lab14_resilience_planner,
     lab15_vendor_risk,
+    lab16_control_classifier,
 )
 
 # lab number -> (module, default data file)
@@ -44,4 +45,5 @@ LABS = {
     13: (lab13_threat_classifier, "sample_threat_scenarios.json"),
     14: (lab14_resilience_planner, "sample_resilience.json"),
     15: (lab15_vendor_risk, "sample_vendors.json"),
+    16: (lab16_control_classifier, "sample_controls.json"),
 }
