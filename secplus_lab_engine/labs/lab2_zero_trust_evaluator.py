@@ -35,6 +35,7 @@ Run it
 from __future__ import annotations
 
 import base64
+import dataclasses
 import json
 import secrets
 import time
@@ -197,7 +198,7 @@ class PolicyAdministrator:
         self.revoked: set[str] = set()
         self.issued: dict[str, dict] = {}
 
-    def issue(self, req: AccessRequest, decision: PolicyDecision) -> str | None:
+    def issue(self, req: AccessRequest, decision: PolicyDecision, ttl: int | None = None) -> str | None:
         """Return a signed token for ALLOW verdicts, otherwise ``None``."""
         if decision.verdict != "ALLOW":
             return None
@@ -209,10 +210,16 @@ class PolicyAdministrator:
             "act": req.action,
             "dev": req.device.id,
             "iat": now,
-            "exp": now + self.ttl,
+            "exp": now + (ttl or self.ttl),
         }
         self.issued[claims["jti"]] = claims
         return self._encode(claims)
+
+    def revoke_subject(self, subject: str) -> int:
+        """Revoke every token ever issued to ``subject`` (account compromise). Returns count."""
+        jtis = [j for j, c in self.issued.items() if c["sub"] == subject and j not in self.revoked]
+        self.revoked.update(jtis)
+        return len(jtis)
 
     def revoke(self, token: str) -> None:
         claims = self.decode_unverified(token)
@@ -275,6 +282,8 @@ class ZeroTrustGateway:
     """Convenience wrapper wiring PE + PA + PEP together."""
 
     def __init__(self, policy: dict, clock: Callable[[], float] = time.time):
+        self.policy = policy
+        self.risky_subjects: set[str] = set()
         self.pe = PolicyEngine(policy)
         self.pa = PolicyAdministrator(policy["signing_key"], policy["token_ttl_seconds"], clock)
         payloads = {name: f"<{name} records>" for name in policy["resource_sensitivity"]}
@@ -283,6 +292,36 @@ class ZeroTrustGateway:
     def request_access(self, req: AccessRequest) -> tuple[PolicyDecision, str | None]:
         decision = self.pe.evaluate(req)
         return decision, self.pa.issue(req, decision)
+
+    def complete_step_up(
+        self, req: AccessRequest, decision: PolicyDecision, mfa_passed: bool
+    ) -> tuple[PolicyDecision, str | None]:
+        """
+        Finish a STEP_UP verdict (adaptive identity).
+
+        * MFA failed or was denied → DENY and raise the user's risk (it may be
+          an MFA-fatigue attack or stolen credentials).
+        * MFA passed → re-evaluate with MFA present plus an assurance bonus.
+          Fresh MFA proves *who* is asking. It cannot fix *what* they are asking
+          from, so an unhealthy device can still fail.
+        * Success issues a token with a SHORTER lifetime than a normal one.
+        """
+        if decision.verdict != "STEP_UP":
+            raise ValueError(f"{req.id} is {decision.verdict}, not STEP_UP")
+        cfg = self.policy.get("step_up", {"bonus": 15, "ttl_divisor": 3})
+        if not mfa_passed:
+            self.risky_subjects.add(req.subject)
+            return PolicyDecision(req.id, "DENY", decision.trust_score, decision.required_score,
+                                  ["step-up MFA failed/denied; user risk raised (possible MFA fatigue or stolen creds)"]), None
+        reeval = self.pe.evaluate(dataclasses.replace(req, mfa=True))
+        score = min(100, reeval.trust_score + cfg["bonus"])
+        reasons = reeval.reasons + [f"fresh MFA step-up (+{cfg['bonus']}) → {score}"]
+        if reeval.verdict == "DENY" or score < reeval.required_score:
+            reasons.append(f"still below {reeval.required_score}: remediate the device/context, MFA alone is not enough")
+            return PolicyDecision(req.id, "DENY", score, reeval.required_score, reasons), None
+        final = PolicyDecision(req.id, "ALLOW", score, reeval.required_score, reasons)
+        ttl = max(60, self.policy["token_ttl_seconds"] // cfg["ttl_divisor"])
+        return final, self.pa.issue(req, final, ttl=ttl)
 
 
 # --------------------------------------------------------------------------- #
@@ -342,6 +381,24 @@ def run_demo(ui, policies: dict, data: dict, clock: Callable[[], float] | None =
         claims = gw.pa.decode_unverified(tok)
         ui.status(f"{rid} token for {req.subject} -> {req.resource}", "GRANTED", f"jti={claims['jti']} ttl={zt_policy['token_ttl_seconds']}s")
 
+    ui.section("Adaptive identity — completing STEP_UP challenges")
+    step_rows = []
+    outcomes = data.get("step_up_outcomes", {})
+    for raw, dec in zip(data["requests"], decisions):
+        if dec.verdict != "STEP_UP":
+            continue
+        req = AccessRequest.from_dict(raw)
+        passed = outcomes.get(req.id, True)
+        final, tok = gw.complete_step_up(req, dec, passed)
+        detail = final.reasons[-1]
+        if tok:
+            c = gw.pa.decode_unverified(tok)
+            detail += f" · token ttl={c['exp'] - c['iat']}s"
+        step_rows.append([req.id, req.subject, "passed" if passed else "FAILED", f"{final.trust_score}/{final.required_score}",
+                          final.verdict, detail])
+    ui.table("Step-up results", ["Req", "Subject", "MFA", "Score/Need", "Final", "Detail"],
+             step_rows or [["-", "-", "-", "-", "-", "no STEP_UP verdicts"]])
+
     ui.section("Data plane — PEP enforcement (legit traffic + attacks)")
     results = []
     if "REQ-01" in tokens:
@@ -378,6 +435,56 @@ def run_demo(ui, policies: dict, data: dict, clock: Callable[[], float] | None =
     return {
         "allow": sum(d.verdict == "ALLOW" for d in decisions),
         "step_up": sum(d.verdict == "STEP_UP" for d in decisions),
+        "step_up_granted": sum(r[4] == "ALLOW" for r in step_rows),
         "deny": sum(d.verdict == "DENY" for d in decisions),
         "attacks_blocked": sum(1 for r in results[1:] if r[2] == "BLOCK"),
     }
+
+
+# --------------------------------------------------------------------------- #
+# Challenge mode
+# --------------------------------------------------------------------------- #
+_ATTACK_ANSWERS = {
+    "expired": "Expiry (exp claim)",
+    "scope": "Scope check",
+    "forged": "HMAC signature check",
+    "revoked": "Revocation list",
+    "none": "No token presented",
+}
+
+
+def build_challenges(policies: dict, data: dict) -> list:
+    """Predict the Policy Engine verdict, then which PEP check stops each attack."""
+    from utils.challenge import Question
+
+    zt = policies["zero_trust"]
+    pe = PolicyEngine(zt)
+    qs: list = []
+    for raw in data["requests"]:
+        req = AccessRequest.from_dict(raw)
+        d = pe.evaluate(req)
+        need = zt["resource_sensitivity"].get(req.resource, {})
+        qs.append(Question(
+            prompt=f"{req.id}: what does the Policy Engine decide for {req.subject} → {req.resource} ({req.action})?",
+            context=(f"{req.note}\nMFA={req.mfa}  device={req.device.id} managed={req.device.managed} "
+                     f"health={req.device.health_score}  ip={req.ip} ({req.ip_reputation})  geo={req.geo} "
+                     f"(usual {req.usual_geo})  hour={req.hour:02d}:00  user_risk={req.user_risk}\n"
+                     f"Resource needs score ≥ {need.get('min_score')} (MFA required: {need.get('requires_mfa')}); "
+                     f"step-up floor = {zt['thresholds']['step_up']}"),
+            choices=["ALLOW", "STEP_UP", "DENY"],
+            answer=d.verdict,
+            explanation=f"Trust score {d.trust_score}/{d.required_score}. " + "; ".join(d.reasons),
+            objective="1.2",
+        ))
+    for atk in data.get("pep_attacks", []):
+        if atk["kind"] not in _ATTACK_ANSWERS:
+            continue
+        qs.append(Question(
+            prompt=f"{atk['id']}: {atk['description']}. Which PEP check stops it?",
+            choices=sorted(_ATTACK_ANSWERS.values()),
+            answer=_ATTACK_ANSWERS[atk["kind"]],
+            explanation="The PEP re-validates every request: signature first, then revocation, expiry, "
+                        "scope and action. Nothing is trusted because of where it came from.",
+            objective="1.2",
+        ))
+    return qs

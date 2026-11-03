@@ -552,7 +552,7 @@ class TestDemos:
         s1 = LABS[1][0].run_demo(quiet_ui, policies, data("sample_identities.json"))
         assert s1["sod_conflicts"] == 4 and s1["tickets"] == 2
         s2 = LABS[2][0].run_demo(quiet_ui, policies, data("sample_access_requests.json"))
-        assert s2 == {"allow": 1, "step_up": 2, "deny": 2, "attacks_blocked": 5}
+        assert s2 == {"allow": 1, "step_up": 2, "step_up_granted": 1, "deny": 2, "attacks_blocked": 5}
         s3 = LABS[3][0].run_demo(quiet_ui, policies, data("sample_logs.json"))
         assert s3["integrity"]["Untouched evidence"] == "VALID"
         assert all(v != "VALID" for k, v in s3["integrity"].items() if k != "Untouched evidence")

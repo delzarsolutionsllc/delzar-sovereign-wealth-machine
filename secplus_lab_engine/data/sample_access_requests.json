@@ -7,6 +7,7 @@
     { "id": "REQ-04", "subject": "alice"  , "resource": "hr-database",    "action": "read",  "hour": 3,  "mfa": true,  "device": { "id": "UNKNOWN-7F2A", "managed": false, "health_score": 20 }, "ip": "185.220.101.45", "ip_reputation": "bad",        "geo": "Unknown (Tor)", "usual_geo": "Tulsa, US",  "user_risk": "high", "note": "Attacker using ALICE's stolen password + an MFA-fatigue push approval, from a Tor exit node on an unknown device." },
     { "id": "REQ-05", "subject": "carol",   "resource": "source-repo",    "action": "write", "hour": 20, "mfa": true,  "device": { "id": "LT-CAROL-02", "managed": true,  "health_score": 92 }, "ip": "98.12.44.10",    "ip_reputation": "good",       "geo": "Austin, US",    "usual_geo": "Tulsa, US",  "user_risk": "low",  "note": "Travelling engineer working late — adaptive identity should step-up, not block." }
   ],
+  "step_up_outcomes": { "REQ-03": true, "REQ-05": true },
   "pep_attacks": [
     { "id": "ATK-01", "description": "Replay an expired token after the TTL window", "kind": "expired" },
     { "id": "ATK-02", "description": "Use a valid hr-database token against finance-ledger (scope abuse / lateral movement)", "kind": "scope" },

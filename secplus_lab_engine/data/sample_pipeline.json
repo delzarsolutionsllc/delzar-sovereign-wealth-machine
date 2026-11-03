@@ -1,0 +1,18 @@
+{
+  "_description": "End-to-end SOC pipeline (Lab 8). Uses the Lab 3 log stream as input and simulates the humans in the loop: Governor reviewers and the emergency CAB.",
+  "logs_file": "sample_logs.json",
+  "incident_file": "sample_incident.json",
+  "agent_id": "soc-triage-03",
+  "now": "2026-11-03T04:00:00",
+  "directory": [
+    { "user_id": "jdoe",   "name": "John Doe",    "department": "Finance", "role": "accounts_payable", "clearance": "confidential" },
+    { "user_id": "asmith", "name": "Ann Smith",   "department": "Sales",   "role": "employee",         "clearance": "internal" },
+    { "user_id": "bwhite", "name": "Bill White",  "department": "Finance", "role": "employee",         "clearance": "internal" }
+  ],
+  "active_sessions": ["jdoe", "jdoe", "asmith"],
+  "human_reviews": {
+    "disable_account:jdoe":   { "reviewer": "sec_architect", "approve": true,  "reason": "Brute force ended in success, followed by log clearing. Confirmed compromise." },
+    "disable_account:asmith": { "reviewer": "sec_architect", "approve": false, "reason": "False positive: asmith confirmed travel; 95.165.12.80 is the new travel-VPN egress. Tune the impossible-travel rule." }
+  },
+  "emergency_cab_approvals": ["cab_chair", "sec_architect"]
+}

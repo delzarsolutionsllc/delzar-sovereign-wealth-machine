@@ -248,6 +248,17 @@ class IdentityGovernance:
         self._audit("LEAVER", user_id, f"ticket={ticket_id} revoked={len(revoked_perms)} perms")
         return ticket
 
+    def suspend(self, user_id: str, reason: str) -> None:
+        """
+        Incident response: disable the account immediately but KEEP its
+        entitlements on record (unlike a leaver), so it can be investigated
+        and restored if the alert turns out to be a false positive.
+        """
+        ident = self.get(user_id)
+        ident.status = "disabled"
+        ident.history.append(f"SUSPENDED ({reason})")
+        self._audit("SUSPEND", user_id, reason)
+
     # ------------------------------------------------------------ evaluation
     def check_rbac(self, user_id: str, permission: str) -> bool:
         """RBAC: is the permission granted by any role the user holds?"""
@@ -421,3 +432,66 @@ def run_demo(ui, policies: dict, data: dict, clock=None) -> dict:
         "denied": sum(1 for d in decisions if not d.allowed),
         "review_findings": len(review),
     }
+
+
+# --------------------------------------------------------------------------- #
+# Challenge mode
+# --------------------------------------------------------------------------- #
+def build_challenges(policies: dict, data: dict, clock=None) -> list:
+    """Turn the HR feed into predict-the-outcome questions."""
+    from utils.challenge import Question
+
+    iga = IdentityGovernance(policies["identity_governance"], clock=clock)
+    for ev in data["events"]:
+        if ev["type"] == "joiner":
+            iga.joiner(ev["identity"])
+        elif ev["type"] == "mover":
+            iga.mover(ev["user_id"], ev["new_role"], ev.get("new_department"), ev.get("revoke_previous", True))
+        elif ev["type"] == "grant":
+            iga.grant_extra_role(ev["user_id"], ev["extra_role"])
+
+    qs: list = []
+    rules = {r["id"]: r for r in iga.sod_rules}
+    rule_label = lambda r: f"{r['id']}: {r['a']} + {r['b']}"  # noqa: E731
+    for ident in iga.directory.values():
+        hits = iga.detect_sod(ident.user_id)
+        answer = rule_label(rules[hits[0].rule_id]) if hits else "No conflict"
+        hit_ids = {h.rule_id for h in hits}
+        distractors = [rule_label(r) for r in iga.sod_rules if r["id"] not in hit_ids][:3]
+        qs.append(Question(
+            prompt=f"Which separation-of-duties rule does {ident.name} ({ident.user_id}) violate?",
+            context=f"Roles: {ident.all_roles}\nPermissions: {sorted(ident.permissions)}",
+            choices=sorted([answer, *distractors]) if hits else sorted(distractors) + ["No conflict"],
+            answer=answer,
+            explanation=(f"{hits[0].risk}" if hits else "No two permissions on the SoD list are held together."),
+            objective="5.1",
+        ))
+
+    leavers = [ev for ev in data["events"] if ev["type"] == "leaver"]
+    for ev in leavers:
+        tk = iga.leaver(ev["user_id"], ev.get("reason", "voluntary_resignation"))
+        qs.append(Question(
+            prompt=f"{tk.name} leaves ({tk.reason.replace('_', ' ')}). What priority/SLA should the deprovisioning ticket get?",
+            choices=["P1 — within 1 hour, before notification", f"P3 — within {iga.leaver_sla_hours} hours"],
+            answer="P1 — within 1 hour, before notification" if tk.priority == "P1"
+            else f"P3 — within {iga.leaver_sla_hours} hours",
+            explanation="Terminations for cause are cut off before the person is told, so they can't retaliate or "
+                        "exfiltrate data. Voluntary leavers follow the normal SLA.",
+            objective="4.6",
+        ))
+
+    for c in data["access_checks"]:
+        ident = iga.get(c["user_id"])
+        d = iga.evaluate_access(c["user_id"], c["action"], c["resource"], c.get("hour", 12))
+        r = c["resource"]
+        qs.append(Question(
+            prompt=f"Is {ident.name} ALLOWED to '{c['action']}' on {r['name']}?",
+            context=(f"Status={ident.status}, role={ident.role}, extra={ident.extra_roles}, clearance={ident.clearance}, "
+                     f"dept={ident.department}\nResource: classification={r['classification']}, owner dept={r.get('department')}, "
+                     f"time={c.get('hour', 12):02d}:00"),
+            choices=["ALLOW", "DENY"],
+            answer="ALLOW" if d.allowed else "DENY",
+            explanation=f"Decided at the {d.gate} gate: {'; '.join(d.reasons)}.",
+            objective="4.6",
+        ))
+    return qs

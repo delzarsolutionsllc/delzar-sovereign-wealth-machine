@@ -6,6 +6,7 @@ Each lab module exposes:
 * ``TITLE`` / ``OBJECTIVES`` – display strings
 * ``INSIGHT``                – content for the Exam & Architectural Insight panel
 * ``run_demo(ui, policies, data)`` – runs the example scenario, returns a summary dict
+* ``build_challenges(policies, data)`` – predict-the-outcome questions for challenge mode
 """
 
 from . import (
@@ -14,6 +15,9 @@ from . import (
     lab3_log_inspector,
     lab4_change_management,
     lab5_ai_agent_governor,
+    lab6_risk_management,
+    lab7_incident_response,
+    lab8_soc_pipeline,
 )
 
 # lab number -> (module, default data file)
@@ -23,4 +27,7 @@ LABS = {
     3: (lab3_log_inspector, "sample_logs.json"),
     4: (lab4_change_management, "sample_rfcs.json"),
     5: (lab5_ai_agent_governor, "sample_agent_actions.json"),
+    6: (lab6_risk_management, "sample_risks.json"),
+    7: (lab7_incident_response, "sample_incident.json"),
+    8: (lab8_soc_pipeline, "sample_pipeline.json"),
 }

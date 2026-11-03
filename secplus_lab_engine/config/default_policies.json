@@ -36,6 +36,7 @@
 
   "zero_trust": {
     "token_ttl_seconds": 900,
+    "step_up": { "bonus": 15, "ttl_divisor": 3 },
     "signing_key": "lab-only-demo-key-change-me",
     "thresholds": { "allow": 70, "step_up": 50 },
     "weights": {
@@ -84,7 +85,8 @@
         "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
       ]
     },
-    "integrity_salt": "lab-log-salt-2026"
+    "integrity_salt": "lab-log-salt-2026",
+    "manifest_hmac_key": "lab-only-evidence-sealing-key"
   },
 
   "change_management": {
@@ -104,7 +106,8 @@
       "erp-legacy":     { "owner": "app_owner", "legacy": true,  "depends_on": ["db-oracle"],            "tags": ["requires:tls1.0", "requires:smbv1", "port:1521"] },
       "db-oracle":      { "owner": "ops_lead",  "legacy": true,  "depends_on": [],                       "tags": ["port:1521"] },
       "payroll-app":    { "owner": "app_owner", "legacy": false, "depends_on": ["db-oracle", "auth-service"], "tags": ["tls1.2"] },
-      "file-server":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] }
+      "file-server":    { "owner": "ops_lead",  "legacy": false, "depends_on": ["ldap"],                 "tags": ["port:445"] },
+      "edge-fw":        { "owner": "sec_architect", "legacy": false, "depends_on": [],                   "tags": ["firewall"] }
     },
     "irreversible_actions": ["db_schema_migrate", "firmware_flash", "data_purge", "key_rotation_destroy_old"]
   },
@@ -114,9 +117,10 @@
       "patch-bot-01":    { "type": "patching",  "allowed_actions": ["apply_patch", "restart_service", "read_inventory"] },
       "fw-agent-07":     { "type": "firewall",  "allowed_actions": ["firewall_rule_add", "firewall_rule_modify", "read_inventory"] },
       "iam-helper-02":   { "type": "identity",  "allowed_actions": ["grant_privilege", "revoke_privilege", "read_inventory"] },
-      "soc-triage-03":   { "type": "soc",       "allowed_actions": ["isolate_host", "read_logs", "open_ticket"] }
+      "soc-triage-03":   { "type": "soc",       "allowed_actions": ["isolate_host", "read_logs", "open_ticket", "disable_account", "block_ip"] }
     },
     "immutable_firewall_rules": [0],
+    "always_hitl_actions": ["disable_account"],
     "privileged_roles": ["admin", "domain_admin", "root", "global_admin"],
     "protected_controls": ["mfa", "edr", "audit_logging", "siem_forwarder", "backup_job"],
     "confidence_threshold": 0.80,
@@ -143,7 +147,7 @@
       "system override",
       "pretend (to be|you are)"
     ],
-    "asset_inventory": ["web-frontend", "api-gateway", "auth-service", "ldap", "erp-legacy", "db-oracle", "payroll-app", "file-server", "ws-0142", "ws-0177"],
+    "asset_inventory": ["web-frontend", "api-gateway", "auth-service", "ldap", "erp-legacy", "db-oracle", "payroll-app", "file-server", "ws-0142", "ws-0177", "edge-fw"],
     "patch_catalog": ["KB5031356", "KB5032189", "KB5033375", "CVE-2024-3094-fix", "openssl-3.0.13"],
     "approved_cab_tickets": ["CAB-2026-1101", "CAB-2026-1102", "CAB-2026-1107"]
   }

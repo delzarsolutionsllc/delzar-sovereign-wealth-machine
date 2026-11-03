@@ -1,0 +1,40 @@
+name: secplus-lab-engine
+
+on:
+  push:
+    paths:
+      - "secplus_lab_engine/**"
+      - ".github/workflows/secplus-lab-engine.yml"
+  pull_request:
+    paths:
+      - "secplus_lab_engine/**"
+      - ".github/workflows/secplus-lab-engine.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        working-directory: secplus_lab_engine
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Run test suite
+        run: python -m pytest tests -q
+      - name: Smoke-test every lab (rich output)
+        run: python main.py all > /dev/null
+      - name: Smoke-test plain mode without rich installed
+        run: |
+          python -m pip uninstall -y rich
+          python main.py --plain all > /dev/null

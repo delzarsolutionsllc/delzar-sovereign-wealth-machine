@@ -195,6 +195,8 @@ class AgentGovernor:
             add("LOW_CONFIDENCE", HITL, f"confidence {a.confidence:.2f} < {self.p['confidence_threshold']:.2f}")
         if a.target in CRITICAL_ASSETS and a.action in {"isolate_host", "restart_service", "apply_patch"}:
             add("CRITICAL_ASSET", HITL, f"'{a.target}' is a tier-0 asset — disruptive action needs a human")
+        if a.action in self.p.get("always_hitl_actions", []):
+            add("HUMAN_REQUIRED_CLASS", HITL, f"'{a.action}' always needs human approval (user-impacting)")
         if not a.justification.strip():
             add("NO_JUSTIFICATION", HITL, "agent supplied no rationale — cannot be audited")
         return v
@@ -339,3 +341,32 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
         "block": verdicts.count(BLOCK),
         "quarantined": sorted(gov.quarantined),
     }
+
+
+# --------------------------------------------------------------------------- #
+# Challenge mode
+# --------------------------------------------------------------------------- #
+def build_challenges(policies: dict, data: dict) -> list:
+    """Predict the Governor's verdict for each proposed action, in sequence."""
+    from utils.challenge import Question
+
+    gov = AgentGovernor(policies["ai_governance"])
+    qs: list = []
+    for raw in data["actions"]:
+        a = AgentAction.from_dict(raw)
+        prior_blocks = gov.block_count.get(a.agent_id, 0)
+        quarantined = a.agent_id in gov.quarantined
+        d = gov.evaluate(a)
+        agent = gov.agents.get(a.agent_id)
+        qs.append(Question(
+            prompt=f"{a.id}: {a.agent_id} proposes '{a.action}' on '{a.target}'. Governor verdict?",
+            context=(f"params={a.parameters} cab_ticket={a.cab_ticket} confidence={a.confidence} t={a.t:.0f}s\n"
+                     f"justification: \"{a.justification}\"\n"
+                     f"agent allow-list: {agent['allowed_actions'] if agent else 'NOT REGISTERED'} · "
+                     f"prior blocks={prior_blocks} · quarantined={quarantined}"),
+            choices=[ALLOW, HITL, BLOCK],
+            answer=d.verdict,
+            explanation="; ".join(f"{v.code}: {v.message}" for v in d.violations) or "Inside every boundary.",
+            objective="4.7",
+        ))
+    return qs

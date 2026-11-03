@@ -419,7 +419,8 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
              [[k, "\n".join(v) if v else "-"] for k, v in iocs.items()])
 
     ui.section("Step 4 — Log integrity (salted SHA-256 hash chain + HMAC manifest)")
-    salt, key = cfg["integrity_salt"], policies["zero_trust"]["signing_key"]
+    # Evidence sealing uses its OWN key, separate from Zero Trust token signing (key separation).
+    salt, key = cfg["integrity_salt"], cfg["manifest_hmac_key"]
     manifest = create_manifest(lines, salt, key)
     ui.print(f"  Sealed {manifest['count']} lines. Chain head: {manifest['head'][:32]}…")
     edited = list(lines)
@@ -449,3 +450,73 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
         "critical": sum(f.severity == "CRITICAL" for f in findings),
         "integrity": integrity,
     }
+
+
+# --------------------------------------------------------------------------- #
+# Challenge mode
+# --------------------------------------------------------------------------- #
+FRIENDLY = {
+    "BRUTE_FORCE_SUCCESS": "Brute force that succeeded (account compromise)",
+    "BRUTE_FORCE": "Brute force (no success yet)",
+    "PASSWORD_SPRAY": "Password spraying",
+    "IMPOSSIBLE_TRAVEL": "Impossible travel",
+    "PORT_SCAN": "Port scan / reconnaissance",
+    "TI_MATCH_IP": "Known-bad IP (threat intel match)",
+    "TI_MATCH_USER_AGENT": "Attack-tool user agent",
+    "TI_MATCH_FILE_HASH": "Known malware hash",
+    "SQL_INJECTION": "SQL injection",
+    "AUDIT_LOG_CLEARED": "Anti-forensics: audit log cleared",
+    "LOGGING_GAP": "Missing logs (logging gap)",
+}
+
+
+def build_challenges(policies: dict, data: dict) -> list:
+    """Show raw evidence lines and ask which activity they indicate."""
+    from utils.challenge import Question
+
+    cfg = policies["log_inspection"]
+    lines = data["raw_stream"]
+    events, _ = parse_stream(lines, data.get("geoip", {}))
+    findings = run_detections(events, cfg)
+    qs: list = []
+    seen: set[str] = set()
+    labels = sorted(set(FRIENDLY.values()))
+    for f in findings:
+        if f.rule in seen or f.rule not in FRIENDLY:
+            continue
+        seen.add(f.rule)
+        answer = FRIENDLY[f.rule]
+        # Distractors must be genuinely wrong: drop any rule that also fired on these same lines.
+        also_true = {FRIENDLY.get(g.rule) for g in findings if set(g.evidence_lines) & set(f.evidence_lines)}
+        if f.rule == "BRUTE_FORCE_SUCCESS":
+            also_true.add(FRIENDLY["BRUTE_FORCE"])
+        pool = [l for l in labels if l not in also_true]
+        start = sum(map(ord, f.rule)) % len(pool)  # deterministic but varied
+        distractors = [pool[(start + k) % len(pool)] for k in range(3)]
+        evidence = "\n".join(lines[n - 1] for n in f.evidence_lines[:5])
+        qs.append(Question(
+            prompt="What do these log lines indicate?",
+            context=evidence + (f"\n… ({len(f.evidence_lines) - 5} more lines)" if len(f.evidence_lines) > 5 else ""),
+            choices=sorted([answer, *distractors]),
+            answer=answer,
+            explanation=f"[{f.severity}] {f.summary}" + (f" (MITRE {f.mitre})" if f.mitre else ""),
+            objective="2.4" if f.rule not in {"AUDIT_LOG_CLEARED", "LOGGING_GAP"} else "4.9",
+        ))
+    qs.append(Question(
+        prompt="An attacker deletes one line from a sealed log set. What does hash-chain verification report?",
+        choices=["VALID", "TAMPERED", "MANIFEST_FORGED"],
+        answer="TAMPERED",
+        explanation="The recomputed chain diverges from the sealed manifest at the deleted position. "
+                    "MANIFEST_FORGED is only reported when the manifest's own HMAC fails.",
+        objective="1.4",
+    ))
+    qs.append(Question(
+        prompt="Why is the log manifest HMAC-signed instead of only SHA-256 hashed?",
+        choices=["HMAC is faster", "A plain hash can be recomputed by the attacker; an HMAC needs the secret key",
+                 "SHA-256 is broken", "HMAC encrypts the logs"],
+        answer="A plain hash can be recomputed by the attacker; an HMAC needs the secret key",
+        explanation="Hashing gives integrity. Keyed hashing (HMAC) adds authenticity, because only the key holder "
+                    "could have produced the tag.",
+        objective="1.4",
+    ))
+    return qs

@@ -427,3 +427,54 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
              [[r.rfc_id, r.title, r.decision, r.risk_score, r.strategy, len(r.blockers)] for r in results])
     ui.insight(INSIGHT)
     return {r.rfc_id: r.decision for r in results}
+
+
+# --------------------------------------------------------------------------- #
+# Challenge mode
+# --------------------------------------------------------------------------- #
+def _rfc_brief(rfc: dict) -> str:
+    w = rfc.get("window") or {}
+    try:
+        start = datetime.fromisoformat(w["start"])
+        end = datetime.fromisoformat(w["end"])
+        when = f"{start:%A %Y-%m-%d %H:%M}–{end:%H:%M}"
+    except (KeyError, ValueError):
+        when = "no window"
+    steps = ", ".join(f"{s['step']}:{s['action']}@{s.get('target')}" + (f"{s['effects']}" if s.get("effects") else "")
+                      for s in rfc.get("change_steps", []))
+    bo = rfc.get("backout_plan") or {}
+    return (f"Requested by {rfc.get('requested_by')} · approvals {rfc.get('approvals')} · window {when}\n"
+            f"tested_in_staging={rfc.get('tested_in_staging')} emergency={rfc.get('emergency')} "
+            f"firewall={rfc.get('firewall_changes')}\nSteps: {steps}\n"
+            f"Backout steps: {[ (b.get('undo_of'), b.get('action')) for b in bo.get('steps', [])] or 'NONE'}"
+            + (" · fail-forward plan attached" if rfc.get("fail_forward_plan") else ""))
+
+
+def build_challenges(policies: dict, data: dict) -> list:
+    """Predict the CAB decision (and recovery strategy) for each RFC."""
+    from utils.challenge import Question
+
+    cab = ChangeAdvisoryBoard(policies["change_management"])
+    qs: list = []
+    for rfc in data["rfcs"]:
+        r = cab.review(rfc)
+        why = "; ".join(r.blockers or r.conditions or ["no blockers or conditions"])
+        qs.append(Question(
+            prompt=f"{r.rfc_id} '{r.title}': what should the CAB decide?",
+            context=_rfc_brief(rfc) + "\n(Maintenance windows: Sat/Sun 00:00–06:00; CAB quorum 2; "
+                                      f"blackouts {cab.p.get('blackout_dates')})",
+            choices=["APPROVE", "APPROVE_WITH_CONDITIONS", "REJECT"],
+            answer=r.decision,
+            explanation=why,
+            objective="1.3",
+        ))
+        if r.strategy == "FAIL_FORWARD":
+            qs.append(Question(
+                prompt=f"{r.rfc_id} contains an irreversible step. Which recovery strategy applies?",
+                choices=["ROLLBACK", "FAIL_FORWARD", "NONE"],
+                answer="FAIL_FORWARD",
+                explanation="Irreversible steps (schema migrations, data purges) can't be undone. You restore from "
+                            "backup or fix forward with a prepared hotfix and the on-call team present.",
+                objective="1.3",
+            ))
+    return qs
