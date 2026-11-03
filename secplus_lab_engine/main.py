@@ -16,6 +16,8 @@ Usage
     python main.py challenge 9 --random --seed 42   # fresh generated scenario (labs with a generator)
     python main.py lab 12 --random      # run a lab on a generated scenario
     python main.py exam                 # timed 90-question practice exam weighted by SY0-701 domain
+    python main.py web                  # open the course web app in your browser (live engine, offline)
+    python main.py install-shortcut     # put a double-click launcher on your desktop
     python main.py lab 4 --file x.json  # run a lab against your own data
     python main.py all                  # run every lab back-to-back
     python main.py test                 # run the pytest suite
@@ -124,7 +126,7 @@ def interactive_menu(ui: UI, policies: dict) -> None:
         list_labs(ui)
         ui.print(f"  [bold]1-{len(LABS)}[/bold] run a lab   [bold]C<n>[/bold] challenge (e.g. C3)   "
                  "[bold]R<n>[/bold] challenge on a random scenario   [bold]E[/bold] practice exam   [bold]P[/bold] progress   "
-                 "[bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
+                 "[bold]W[/bold] web app   [bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
         try:
             choice = ui.ask(">").strip().lower()
         except (EOFError, KeyboardInterrupt):
@@ -145,6 +147,9 @@ def interactive_menu(ui: UI, policies: dict) -> None:
             challenge_lab(ui, int(choice[1:]), policies, randomize=True)
         elif choice in {"e", "exam"}:
             exam(ui, policies)
+        elif choice in {"w", "web"}:
+            from utils.webserver import serve
+            serve(open_browser=True, policies=policies)
         elif choice.isdigit() and int(choice) in LABS:
             run_lab(ui, int(choice), policies)
         else:
@@ -181,6 +186,11 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("--seed", type=int, help="make the exam reproducible")
     ex.add_argument("--fixed", action="store_true", help="use bundled sample data only (no generated scenarios)")
     sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
+    w = sub.add_parser("web", help="open the course web app in your browser (runs locally)")
+    w.add_argument("--port", type=int, default=8765, help="local port (default 8765; a free one is used if busy)")
+    w.add_argument("--no-browser", action="store_true", help="don't open a browser window")
+    sc = sub.add_parser("install-shortcut", help="create a desktop launcher for the web app")
+    sc.add_argument("--desktop", metavar="DIR", help="folder to put the shortcut in (default: your desktop)")
     sub.add_parser("all", help="run every lab")
     t = sub.add_parser("test", help="run the pytest suite")
     t.add_argument("pytest_args", nargs=argparse.REMAINDER)
@@ -213,6 +223,13 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("challenge target must be a lab number or 'all'")
     elif args.command == "progress":
         show_progress(ui)
+    elif args.command == "web":
+        from utils.webserver import serve
+        serve(args.port, open_browser=not args.no_browser, policies=policies)
+    elif args.command == "install-shortcut":
+        from utils.desktop import install_shortcut
+        path = install_shortcut(Path(args.desktop) if args.desktop else None)
+        ui.print(f"Created {path}\nDouble-click it to open the Security+ Lab Engine in your browser.", style="green")
     elif args.command == "exam":
         exam(ui, policies, args.count, args.minutes, args.seed, randomize=not args.fixed)
     elif args.command == "all":

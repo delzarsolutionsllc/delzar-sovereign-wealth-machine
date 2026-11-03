@@ -1,0 +1,583 @@
+<title>Security+ Lab Engine</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<!--SECPLUS_MODE-->
+<style>
+/* Layout: course map rail (domains → labs) beside a working pane with Lesson / Scenario / Practice tabs.
+   Subject: a SOC analyst's study console — certificate-blue accent, mono for anything an engine prints. */
+:root {
+  --bg: #f3f5f8; --surface: #ffffff; --sunken: #e9edf2; --ink: #17202b; --muted: #566273; --line: #d6dde6;
+  --accent: #1b5a8c; --accent-soft: #dce8f3; --on-accent: #ffffff;
+  --pass: #1d7348; --pass-soft: #dcefe4; --warn: #94600a; --warn-soft: #f6ead2; --fail: #ad2a22; --fail-soft: #f7e0de;
+  --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --radius: 8px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0e131a; --surface: #151c25; --sunken: #111820; --ink: #e3e9f0; --muted: #9aa8b8; --line: #283442;
+  --accent: #74b2e6; --accent-soft: #1a2c3d; --on-accent: #0b1622;
+  --pass: #63c993; --pass-soft: #15291f; --warn: #e2a74e; --warn-soft: #2c2312; --fail: #f08a80; --fail-soft: #33191a;
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #0e131a; --surface: #151c25; --sunken: #111820; --ink: #e3e9f0; --muted: #9aa8b8; --line: #283442;
+  --accent: #74b2e6; --accent-soft: #1a2c3d; --on-accent: #0b1622;
+  --pass: #63c993; --pass-soft: #15291f; --warn: #e2a74e; --warn-soft: #2c2312; --fail: #f08a80; --fail-soft: #33191a;
+  color-scheme: dark; }
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
+a { color: var(--accent); }
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 1.9rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.05rem; }
+code, pre, .mono { font-family: var(--mono); }
+.label { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.muted { color: var(--muted); }
+
+.app { display: grid; grid-template-columns: 290px minmax(0, 1fr); min-height: 100%; }
+.rail { background: var(--surface); border-right: 1px solid var(--line); padding-block: 20px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px;
+  position: sticky; top: env(safe-area-inset-top, 0px); height: 100vh; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
+.brand { display: flex; flex-direction: column; gap: 2px; }
+.brand b { font-family: var(--display); font-size: 1.2rem; }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav a, .lablink { display: flex; gap: 10px; align-items: baseline; padding: 6px 8px; border-radius: 6px; color: var(--ink); text-decoration: none; }
+.nav a:hover, .lablink:hover { background: var(--sunken); }
+.nav a.on, .lablink.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.lablink .num { font-family: var(--mono); font-size: .78rem; color: var(--muted); min-width: 1.6em; text-align: right; }
+.lablink.on .num { color: var(--accent); }
+.domain { display: flex; flex-direction: column; gap: 2px; }
+.domain-head { display: flex; justify-content: space-between; align-items: baseline; padding: 0 8px 4px; }
+.mode { margin-top: auto; font-size: .8rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 12px; }
+.mode b { color: var(--ink); font-weight: 600; }
+.maptoggle { display: none; }
+
+.main { min-width: 0; padding-block: 28px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: var(--mono); font-size: .75rem; padding: 2px 8px; border-radius: 99px; background: var(--sunken); color: var(--muted); border: 1px solid var(--line); }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.tab { background: none; border: 0; padding: 10px 14px; border-bottom: 2px solid transparent; color: var(--muted); cursor: pointer; font-weight: 500; }
+.tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+.btns { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 500; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn:disabled { opacity: .5; cursor: default; }
+.console { background: var(--sunken); border: 1px solid var(--line); border-radius: 6px; padding: 14px; margin: 0; overflow-x: auto; font-size: .78rem; line-height: 1.45; max-height: 70vh; white-space: pre; }
+.lesson { max-width: 68ch; display: flex; flex-direction: column; gap: 10px; }
+.lesson p, .lesson ul { margin: 0; } .lesson ul { padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.lesson pre { background: var(--sunken); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; overflow-x: auto; font-size: .82rem; margin: 0; }
+.lesson h3 { margin-top: 8px; }
+.insight { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.insight section { border-top: 2px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.insight section.gov { border-top-color: var(--accent); }
+.insight ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+
+.q-head { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: baseline; }
+.bar { height: 6px; background: var(--sunken); border-radius: 99px; overflow: hidden; }
+.bar > i { display: block; height: 100%; background: var(--accent); }
+.ctx { background: var(--sunken); border: 1px solid var(--line); border-radius: 6px; padding: 12px; margin: 0; font-size: .8rem; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 42vh; overflow-y: auto; }
+.prompt { font-size: 1.08rem; font-weight: 600; }
+.choices { display: flex; flex-direction: column; gap: 8px; }
+.choice { text-align: left; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 10px 12px; cursor: pointer; display: flex; gap: 10px; align-items: baseline; }
+.choice .k { font-family: var(--mono); color: var(--muted); font-size: .8rem; min-width: 1.2em; }
+.choice:hover:not(:disabled) { border-color: var(--accent); }
+.choice.picked { border-color: var(--accent); background: var(--accent-soft); }
+.choice.right { border-color: var(--pass); background: var(--pass-soft); }
+.choice.wrong { border-color: var(--fail); background: var(--fail-soft); }
+.verdict { border-left: 3px solid var(--line); padding: 8px 12px; background: var(--sunken); border-radius: 0 6px 6px 0; }
+.verdict.ok { border-left-color: var(--pass); } .verdict.no { border-left-color: var(--fail); }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: .75rem; font-weight: 600; letter-spacing: .03em; }
+.pill.PASS { background: var(--pass-soft); color: var(--pass); } .pill.WARN, .pill.MEDIUM { background: var(--warn-soft); color: var(--warn); }
+.pill.FAIL, .pill.LOW { background: var(--fail-soft); color: var(--fail); }
+
+.grid5 { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+.dcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; display: flex; flex-direction: column; gap: 6px; text-decoration: none; color: var(--ink); }
+.dcard:hover { border-color: var(--accent); }
+.dcard .w { font-family: var(--mono); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; font-variant-numeric: tabular-nums; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.meter { width: 110px; height: 6px; background: var(--sunken); border-radius: 99px; overflow: hidden; display: inline-block; vertical-align: middle; }
+.meter > i { display: block; height: 100%; }
+.scale { position: relative; height: 34px; }
+.scale .track { position: absolute; top: 14px; left: 0; right: 0; height: 6px; border-radius: 99px; background: var(--sunken); }
+.scale .pass { position: absolute; top: 6px; width: 2px; height: 22px; background: var(--ink); }
+.scale .you { position: absolute; top: 10px; width: 14px; height: 14px; border-radius: 50%; transform: translateX(-7px); }
+.timer { font-family: var(--mono); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
+.timer.low { color: var(--fail); }
+.form { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; }
+.form label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+.form select, .form input[type=number] { padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+.notice { padding: 10px 12px; border-radius: 6px; background: var(--warn-soft); color: var(--warn); }
+.loading { color: var(--muted); font-style: italic; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right, 0px)); gap: 12px; }
+  .maptoggle { display: inline-flex; }
+  .rail:not(.open) .domains, .rail:not(.open) .mode { display: none; }
+  .railtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+}
+@media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
+</style>
+
+<div class="app">
+  <aside class="rail" id="rail">
+    <div class="railtop">
+      <div class="brand"><span class="label">CompTIA SY0-701</span><b>Security+ Lab Engine</b></div>
+      <button class="btn maptoggle" id="maptoggle" aria-expanded="false" aria-controls="domains">Course map</button>
+    </div>
+    <nav class="nav" aria-label="Main">
+      <a href="#home" data-view="home">Overview</a>
+      <a href="#exam" data-view="exam">Practice exam</a>
+      <a href="#progress" data-view="progress">My progress</a>
+    </nav>
+    <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
+    <div class="mode" id="mode"></div>
+  </aside>
+  <main class="main"><div class="wrap" id="view"><p class="loading">Loading course…</p></div></main>
+</div>
+
+<script>
+"use strict";
+/* ------------------------------------------------------------------ helpers */
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, attrs = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+    else if (k === "html") n.innerHTML = v; else if (k.startsWith("on")) n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v === true ? "" : v);
+  }
+  for (const c of kids.flat()) if (c != null && c !== false) n.append(c instanceof Node ? c : document.createTextNode(String(c)));
+  return n;
+};
+const put = (node, ...kids) => node.replaceChildren(...kids.flat().filter(c => c != null && c !== false));
+function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function shuffle(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+const newSeed = () => Math.floor(Math.random() * 1e9);
+const pct = (c, t) => (t ? Math.round(100 * c / t) : 0);
+
+const OBJ = {
+  "1.1": "Security controls", "1.2": "Security concepts / Zero Trust", "1.3": "Change management", "1.4": "Cryptography & PKI",
+  "2.1": "Threat actors & motivations", "2.2": "Threat vectors & attack surfaces", "2.3": "Types of vulnerabilities",
+  "2.4": "Indicators of malicious activity", "2.5": "Mitigation techniques",
+  "3.1": "Architecture models", "3.2": "Secure enterprise infrastructure", "3.3": "Data protection", "3.4": "Resilience & recovery",
+  "4.1": "Secure baselines & hardening", "4.2": "Asset management", "4.3": "Vulnerability management", "4.4": "Alerting & monitoring",
+  "4.5": "Enterprise security capabilities", "4.6": "Identity & access management", "4.7": "Automation & orchestration",
+  "4.8": "Incident response", "4.9": "Investigation data sources",
+  "5.1": "Security governance", "5.2": "Risk management", "5.3": "Third-party risk", "5.4": "Compliance", "5.5": "Audits & assessments", "5.6": "Security awareness",
+};
+
+/* ------------------------------------------------------------------ engine adapter
+   Live mode (python main.py web): every call goes to the local engine.
+   Hosted mode: the same calls are answered from course_data.json.          */
+const LIVE = typeof window.SECPLUS_API === "string";
+let BUNDLE = null, CATALOG = null;
+
+async function post(method, args = {}) {
+  const r = await fetch(`${window.SECPLUS_API}/${method}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(args) });
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(body.error || `Request failed (${r.status})`);
+  return body;
+}
+
+const Engine = {
+  async catalog() {
+    if (LIVE) return post("catalog");
+    const r = await fetch("course_data.json");
+    if (!r.ok) throw new Error("course_data.json could not be loaded");
+    BUNDLE = await r.json();
+    return BUNDLE.catalog;
+  },
+  async run(lab, random, seed) {
+    if (LIVE) return post("run", { lab, random, seed });
+    const L = BUNDLE.labs[lab];
+    if (!random || !L.variants.length) return { text: L.sample.run, seed: null };
+    const v = L.variants[seed % L.variants.length];
+    return { text: v.run, seed: v.seed };
+  },
+  async challenge(lab, random, seed) {
+    if (LIVE) return post("challenge", { lab, random, seed });
+    const L = BUNDLE.labs[lab];
+    const src = random && L.variants.length ? L.variants[seed % L.variants.length] : L.sample;
+    return { questions: shuffle(src.questions, mulberry32(seed || 1)), seed: src.seed ?? null };
+  },
+  async exam(count, seed, fixed) {
+    if (LIVE) return post("exam", { count, seed, fixed });
+    return buildExamLocal(count, seed);
+  },
+};
+
+function buildExamLocal(count, seed) {
+  const rnd = mulberry32(seed);
+  const pool = {}; const seen = new Set();
+  CATALOG.domains.forEach(d => pool[d.id] = []);
+  for (const L of Object.values(BUNDLE.labs)) {
+    for (const src of [L.sample, ...L.variants]) for (const q of src.questions) {
+      const key = q.prompt + "\u0000" + q.context, d = q.objective.split(".")[0];
+      if (seen.has(key) || !pool[d]) continue; seen.add(key); pool[d].push(q);
+    }
+  }
+  // largest-remainder allocation by official weight, shortfall moved to other domains
+  const raw = Object.fromEntries(CATALOG.domains.map(d => [d.id, count * d.weight]));
+  const alloc = Object.fromEntries(Object.entries(raw).map(([d, v]) => [d, Math.floor(v)]));
+  let left = count - Object.values(alloc).reduce((a, b) => a + b, 0);
+  Object.keys(raw).sort((a, b) => (raw[b] - alloc[b]) - (raw[a] - alloc[a])).slice(0, left).forEach(d => alloc[d]++);
+  const shortfall = {};
+  for (const d in alloc) if (alloc[d] > pool[d].length) { shortfall[d] = alloc[d] - pool[d].length; alloc[d] = pool[d].length; }
+  let spare = count - Object.values(alloc).reduce((a, b) => a + b, 0);
+  const byWeight = CATALOG.domains.slice().sort((a, b) => b.weight - a.weight).map(d => d.id);
+  while (spare > 0) { const room = byWeight.filter(d => alloc[d] < pool[d].length); if (!room.length) break; for (const d of room) { if (!spare) break; alloc[d]++; spare--; } }
+  let qs = []; for (const d in alloc) qs = qs.concat(shuffle(pool[d], rnd).slice(0, alloc[d]));
+  return { questions: shuffle(qs, rnd), allocation: alloc, shortfall };
+}
+
+/* ------------------------------------------------------------------ progress store
+   Live: progress.json on this computer. Hosted: your private document in this
+   page's store (claude.ai account), else this browser's storage, else memory.   */
+const EMPTY = () => ({ objectives: {}, sessions: [] });
+function rating(p, n) { if (n < 3) return p < 50 ? "LOW" : "MEDIUM"; return p >= 85 ? "PASS" : p >= 65 ? "WARN" : "FAIL"; }
+function rowsOf(data) {
+  return Object.entries(data.objectives).map(([o, s]) => [o, s.attempted, s.correct, pct(s.correct, s.attempted) + "%", rating(pct(s.correct, s.attempted), s.attempted)])
+    .sort((a, b) => parseFloat(a[3]) - parseFloat(b[3]) || a[0].localeCompare(b[0]));
+}
+const Progress = {
+  where: LIVE ? "progress.json on this computer" : "this browser",
+  cache: null, remote: null,
+  async init() {
+    if (LIVE) return;
+    try { this.cache = JSON.parse(localStorage.getItem("secplus-progress") || "null"); } catch { this.cache = null; }
+    if (!window.claude || typeof window.claude.use !== "function") return;
+    try {
+      const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
+      const id = db && user ? await user.id() : null;
+      if (!id) return;
+      const ref = db.doc("data/users/" + id + "/progress");
+      const snap = await ref.get();
+      this.remote = ref; this.where = "your claude.ai account (private to you)";
+      if (snap.exists) this.cache = JSON.parse(JSON.stringify(snap.data()));
+      renderMode();
+      const h = location.hash || "#home";
+      if (h === "#home" || h === "#progress") route();      // refresh views that show scores; never interrupt a quiz
+    } catch { /* stay on browser storage */ }
+  },
+  async get() {
+    if (LIVE) return post("progress_get");
+    const d = this.cache || EMPTY();
+    return { ...d, rows: rowsOf(d) };
+  },
+  async record(results, label) {
+    if (LIVE) return post("progress_record", { results, label });
+    const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
+    let correct = 0;
+    for (const r of results) { const s = d.objectives[r.objective] ||= { attempted: 0, correct: 0 }; s.attempted++; if (r.correct) { s.correct++; correct++; } }
+    d.sessions.push({ ts: new Date().toISOString().slice(0, 19), lab: String(label), score: `${correct}/${results.length}` });
+    d.sessions = d.sessions.slice(-50);
+    await this.save(d);
+    return { ...d, rows: rowsOf(d) };
+  },
+  async reset() { if (LIVE) return post("progress_reset"); await this.save(EMPTY()); return { ...EMPTY(), rows: [] }; },
+  async save(d) {
+    this.cache = d;
+    try { localStorage.setItem("secplus-progress", JSON.stringify(d)); } catch { /* storage blocked */ }
+    if (this.remote) { try { await this.remote.set(d); } catch { /* keep local copy */ } }
+  },
+};
+
+/* ------------------------------------------------------------------ rail */
+function renderRail() {
+  const box = $("#domains"); put(box);
+  for (const d of CATALOG.domains) {
+    const labs = CATALOG.labs.filter(l => l.primary_domain === d.id);
+    box.append(el("div", { class: "domain" },
+      el("div", { class: "domain-head" }, el("span", { class: "label", text: `Domain ${d.id} · ${d.name}` })),
+      labs.map(l => el("a", { class: "lablink", href: `#lab-${l.n}`, "data-lab": l.n },
+        el("span", { class: "num", text: l.n }), el("span", { text: l.title.replace(/^Lab \d+ — /, "") })))));
+  }
+}
+function renderMode() {
+  put($("#mode"), 
+    el("div", {}, el("b", { text: LIVE ? "Live engine" : "Hosted course" })),
+    el("div", { text: LIVE ? "Running on this computer. Random scenarios are unlimited." : "Pre-built scenarios and question banks. Run it on your computer for the live engine." }),
+    el("div", { text: `Progress is saved to ${Progress.where}.` }));
+}
+function markNav(view, lab) {
+  document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("on", a.dataset.view === view));
+  document.querySelectorAll(".lablink").forEach(a => a.classList.toggle("on", String(a.dataset.lab) === String(lab)));
+}
+
+/* ------------------------------------------------------------------ views */
+const view = () => $("#view");
+
+async function viewHome() {
+  markNav("home");
+  const prog = await Progress.get();
+  const byDomain = {};
+  for (const [o, s] of Object.entries(prog.objectives)) { const d = o.split(".")[0]; (byDomain[d] ||= { a: 0, c: 0 }); byDomain[d].a += s.attempted; byDomain[d].c += s.correct; }
+  const weakest = prog.rows.find(r => r[1] >= 1);
+  const suggestion = weakest ? CATALOG.labs.find(l => l.objectives.includes(weakest[0])) : CATALOG.labs[0];
+  put(view(), 
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "Course overview" }),
+      el("h1", { text: "Practise every SY0-701 domain on working security engines" }),
+      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the 100–900 scale).` }),
+      el("div", { class: "btns" },
+        el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
+        el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
+    el("div", { class: "grid5" }, CATALOG.domains.map(d => {
+      const s = byDomain[d.id], labs = CATALOG.labs.filter(l => l.domains.includes(d.id));
+      return el("a", { class: "dcard", href: `#lab-${(labs.find(l => l.primary_domain === d.id) || labs[0]).n}` },
+        el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
+        el("span", { class: "w", text: `${Math.round(d.weight * 100)}%` }), el("span", { class: "muted", text: "of the exam" }),
+        el("span", { class: "muted", text: `${labs.length} labs · ` + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
+    })));
+}
+
+async function viewLab(n, tab = "lesson") {
+  const lab = CATALOG.labs.find(l => l.n === n);
+  if (!lab) return viewHome();
+  markNav(null, n);
+  const tabs = [["lesson", "Lesson"], ["scenario", "Run the scenario"], ["practice", "Practice"]];
+  const body = el("div", { class: "panel", id: "labbody" });
+  const tabbar = el("div", { class: "tabs", role: "tablist" }, tabs.map(([k, t]) =>
+    el("button", { class: "tab" + (k === tab ? " on" : ""), role: "tab", "aria-selected": String(k === tab), onclick: () => viewLab(n, k), text: t })));
+  put(view(), 
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: `Lab ${lab.n} · Domain ${lab.domains.join(", ")}` }),
+      el("h1", { text: lab.title.replace(/^Lab \d+ — /, "") }),
+      el("div", { class: "chips" }, lab.objectives.replace(/^SY0-701\s*/, "").split(" · ").map(o => el("span", { class: "chip", text: o })))),
+    tabbar, body);
+  if (tab === "lesson") renderLesson(lab, body);
+  else if (tab === "scenario") renderScenario(lab, body);
+  else renderPracticeStart(lab, body);
+}
+
+function renderLesson(lab, body) {
+  const ins = lab.insight;
+  const sec = (title, items, cls) => el("section", { class: cls || null }, el("h3", { text: title }), el("ul", {}, items.map(i => el("li", { text: i }))));
+  put(body, 
+    el("div", { class: "lesson", html: lab.lesson_html }),
+    el("h2", { text: "Exam & architectural insight" }),
+    el("p", { class: "muted", text: ins.objective }),
+    el("div", { class: "insight" },
+      sec("Key concepts", ins.concepts), sec("Where manual work fails", ins.failure_modes),
+      sec("Governing an AI agent here", ins.ai_governance, "gov"), sec("Exam tips", ins.exam_tips)),
+    el("div", { class: "btns" },
+      el("button", { class: "btn primary", onclick: () => viewLab(lab.n, "scenario"), text: "Run the scenario" }),
+      el("button", { class: "btn", onclick: () => viewLab(lab.n, "practice"), text: "Practise this lab" })));
+}
+
+async function renderScenario(lab, body, random = false) {
+  put(body, el("p", { class: "loading", text: "Running the engine…" }));
+  try {
+    const r = await Engine.run(lab.n, random, random ? newSeed() : null);
+    put(body, 
+      el("div", { class: "btns" },
+        el("button", { class: "btn" + (random ? "" : " primary"), onclick: () => renderScenario(lab, body, false), text: "Sample scenario" }),
+        lab.has_generator ? el("button", { class: "btn" + (random ? " primary" : ""), onclick: () => renderScenario(lab, body, true), text: "New random scenario" }) : null,
+        el("span", { class: "muted", text: random ? `Generated scenario${r.seed != null ? " · seed " + r.seed : ""}` : `Data: data/${lab.data_file}` })),
+      el("p", { class: "muted", text: "This is the engine's own report. Read the decisions and their reasons, then switch to Practice and predict them." }),
+      el("pre", { class: "console", text: r.text }));
+  } catch (e) { put(body, el("p", { class: "notice", text: e.message })); }
+}
+
+function renderPracticeStart(lab, body) {
+  put(body, 
+    el("h2", { text: "Predict the engine's decisions" }),
+    el("p", { class: "muted", text: "Each question comes from a real decision the engine makes. Answer, then read why. Number keys pick an option; Enter moves on." }),
+    el("div", { class: "btns" },
+      el("button", { class: "btn primary", onclick: () => startQuiz(lab, body, false), text: "Practise on the sample scenario" }),
+      lab.has_generator ? el("button", { class: "btn", onclick: () => startQuiz(lab, body, true), text: "Practise on a random scenario" }) : null));
+}
+
+/* ------------------------------------------------------------------ quiz (practice) */
+let keyHandler = null;
+function setKeys(fn) { if (keyHandler) document.removeEventListener("keydown", keyHandler); keyHandler = fn; if (fn) document.addEventListener("keydown", fn); }
+
+async function startQuiz(lab, body, random) {
+  put(body, el("p", { class: "loading", text: "Building questions…" }));
+  let qs;
+  try { qs = (await Engine.challenge(lab.n, random, newSeed())).questions; } catch (e) { return put(body, el("p", { class: "notice", text: e.message })); }
+  const results = []; let i = 0;
+  const show = () => {
+    if (i >= qs.length) return finish();
+    const q = qs[i]; let answered = false;
+    const next = el("button", { class: "btn primary", hidden: true, text: i + 1 < qs.length ? "Next question" : "See my score", onclick: () => { i++; show(); } });
+    const fb = el("div", { class: "verdict", hidden: true });
+    const buttons = q.choices.map((c, k) => el("button", { class: "choice", onclick: () => pick(k) }, el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
+    function pick(k) {
+      if (answered) return; answered = true;
+      const ok = q.choices[k] === q.answer;
+      results.push({ objective: q.objective, correct: ok });
+      buttons.forEach((b, j) => { b.disabled = true; if (q.choices[j] === q.answer) b.classList.add("right"); else if (j === k) b.classList.add("wrong"); });
+      fb.className = "verdict " + (ok ? "ok" : "no");
+      put(fb, el("b", { text: ok ? "Correct. " : `Not quite. The engine says: ${q.answer}. ` }), el("span", { text: q.explanation }));
+      fb.hidden = false; next.hidden = false; next.focus();
+    }
+    setKeys(ev => {
+      if (ev.target.closest && ev.target.closest("input,select,textarea")) return;
+      const k = parseInt(ev.key, 10);
+      if (!answered && k >= 1 && k <= q.choices.length) { ev.preventDefault(); pick(k - 1); }
+      else if (answered && ev.key === "Enter") { ev.preventDefault(); next.click(); }
+    });
+    put(body, 
+      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length} · objective ${q.objective} ${OBJ[q.objective] || ""}` }),
+        el("span", { class: "muted", text: `${results.filter(r => r.correct).length} correct so far` })),
+      el("div", { class: "bar" }, el("i", { style: `width:${pct(i, qs.length)}%` })),
+      q.context ? el("pre", { class: "ctx", text: q.context }) : null,
+      el("div", { class: "prompt", text: q.prompt }),
+      el("div", { class: "choices" }, buttons), fb, el("div", { class: "btns" }, next));
+  };
+  const finish = async () => {
+    setKeys(null);
+    const c = results.filter(r => r.correct).length, p = pct(c, results.length);
+    put(body, el("p", { class: "loading", text: "Saving your score…" }));
+    let saved = true; try { await Progress.record(results, `lab ${lab.n}`); } catch { saved = false; }
+    put(body, 
+      el("span", { class: "label", text: "Practice complete" }),
+      el("h2", { text: `${c} of ${results.length} correct (${p}%)` }),
+      el("p", { class: "muted", text: p >= 85 ? "Solid. Try a random scenario to make sure it isn't memory." : p >= 65 ? "Close. Re-read the lesson's decision rules, then go again." : "Read the lesson and run the scenario once more before retrying." }),
+      saved ? null : el("p", { class: "notice", text: "Your score could not be saved this time." }),
+      el("div", { class: "btns" },
+        el("button", { class: "btn primary", onclick: () => startQuiz(lab, body, random), text: "Practise again" }),
+        lab.has_generator ? el("button", { class: "btn", onclick: () => startQuiz(lab, body, true), text: "Random scenario" }) : null,
+        el("button", { class: "btn", onclick: () => viewLab(lab.n, "lesson"), text: "Back to the lesson" }),
+        el("a", { class: "btn", href: "#progress", text: "My progress" })));
+  };
+  show();
+}
+
+/* ------------------------------------------------------------------ exam */
+let examTimer = null;
+function viewExam() {
+  markNav("exam"); clearInterval(examTimer); setKeys(null);
+  const count = el("select", { id: "exam-count" }, [30, 60, 90].map(n => el("option", { value: n, selected: n === 90, text: `${n} questions` })));
+  const mins = el("input", { id: "exam-minutes", type: "number", min: 5, max: 180, value: 90 });
+  count.addEventListener("change", () => { mins.value = count.value; });
+  put(view(), el("section", { class: "panel" },
+    el("span", { class: "label", text: "Practice exam" }),
+    el("h1", { text: "A timed, mixed-domain exam" }),
+    el("p", { class: "muted", text: "Questions are drawn from every lab and weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong." }),
+    el("div", { class: "form" }, el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
+      el("button", { class: "btn primary", text: "Start the exam", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 90)) }))));
+}
+
+async function startExam(count, minutes) {
+  put(view(), el("p", { class: "loading", text: "Assembling your exam…" }));
+  let ex; try { ex = await Engine.exam(count, newSeed(), false); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+  const qs = ex.questions, answers = new Array(qs.length).fill(null);
+  const deadline = Date.now() + minutes * 60000; let i = 0;
+  const timer = el("span", { class: "timer" });
+  const tick = () => { const s = Math.max(0, Math.round((deadline - Date.now()) / 1000)); timer.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")} left`; timer.classList.toggle("low", s < 120); if (s <= 0) done(true); };
+  const panel = el("section", { class: "panel" });
+  const show = () => {
+    const q = qs[i];
+    const buttons = q.choices.map((c, k) => el("button", { class: "choice" + (answers[i] === c ? " picked" : ""), onclick: () => { answers[i] = c; if (i + 1 < qs.length) { i++; show(); } else show(); } },
+      el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
+    setKeys(ev => { const k = parseInt(ev.key, 10); if (k >= 1 && k <= q.choices.length) { ev.preventDefault(); buttons[k - 1].click(); } });
+    const answeredCount = answers.filter(a => a != null).length;
+    put(panel, 
+      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length}` }), timer),
+      el("div", { class: "bar" }, el("i", { style: `width:${pct(answeredCount, qs.length)}%` })),
+      q.context ? el("pre", { class: "ctx", text: q.context }) : null,
+      el("div", { class: "prompt", text: q.prompt }), el("div", { class: "choices" }, buttons),
+      el("div", { class: "btns" },
+        el("button", { class: "btn", disabled: i === 0, onclick: () => { i--; show(); }, text: "Previous" }),
+        el("button", { class: "btn", disabled: i + 1 >= qs.length, onclick: () => { i++; show(); }, text: "Skip" }),
+        el("span", { class: "muted", text: `${answeredCount} of ${qs.length} answered` }),
+        el("button", { class: "btn primary", onclick: () => done(false), text: "Finish and score" })));
+  };
+  let finished = false;
+  async function done(timedOut) {
+    if (finished) return; finished = true; clearInterval(examTimer); setKeys(null);
+    const results = qs.map((q, k) => ({ objective: q.objective, correct: answers[k] === q.answer }));
+    const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(100 + 8 * p);
+    const passed = scaled >= CATALOG.pass_scaled;
+    try { await Progress.record(results, "exam"); } catch { /* shown below */ }
+    const dom = {}; qs.forEach((q, k) => { const d = q.objective.split(".")[0]; (dom[d] ||= [0, 0]); dom[d][1]++; if (results[k].correct) dom[d][0]++; });
+    const missed = qs.map((q, k) => [q, answers[k]]).filter(([q, a]) => a !== q.answer);
+    put(view(), 
+      el("section", { class: "panel" },
+        el("span", { class: "label", text: timedOut ? "Time is up" : "Exam complete" }),
+        el("h1", { text: `${correct} of ${qs.length} correct · approx. ${scaled} / 900 · ${passed ? "PASS" : "below the pass mark"}` }),
+        el("div", { class: "scale", role: "img", "aria-label": `Scaled score ${scaled}, pass mark ${CATALOG.pass_scaled}` },
+          el("div", { class: "track" }), el("div", { class: "pass", style: `left:${(CATALOG.pass_scaled - 100) / 8}%` }),
+          el("div", { class: "you", style: `left:${(scaled - 100) / 8}%; background: var(${passed ? "--pass" : "--fail"})` })),
+        el("p", { class: "muted", text: `The black mark is the pass score (${CATALOG.pass_scaled}). This scale is an approximation: CompTIA's real scaled scoring is not public.` }),
+        el("div", { class: "tablewrap" }, el("table", {},
+          el("thead", {}, el("tr", {}, ["Domain", "Weight", "Correct", "Score"].map(h => el("th", { text: h })))),
+          el("tbody", {}, CATALOG.domains.map(d => { const [c, t] = dom[d.id] || [0, 0]; return el("tr", {}, el("td", { text: `${d.id} ${d.name}` }), el("td", { text: `${Math.round(d.weight * 100)}%` }), el("td", { text: `${c}/${t}` }), el("td", { text: t ? `${pct(c, t)}%` : "–" })); }))))),
+      el("section", { class: "panel" }, el("h2", { text: `Review (${missed.length} missed)` }),
+        missed.length ? el("div", { class: "choices" }, missed.slice(0, 40).map(([q, a]) =>
+          el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
+            el("div", { text: `Answer: ${q.answer}${a ? " · you chose: " + a : " · not answered"}` }), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
+        el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: viewExam, text: "New exam" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
+  }
+  put(view(), panel); show(); tick(); examTimer = setInterval(tick, 1000);
+}
+
+/* ------------------------------------------------------------------ progress */
+async function viewProgress() {
+  markNav("progress"); setKeys(null);
+  const prog = await Progress.get();
+  const confirmBox = el("span", { class: "btns", hidden: true },
+    el("span", { class: "muted", text: "Delete all scores?" }),
+    el("button", { class: "btn", text: "Yes, reset", onclick: async () => { await Progress.reset(); viewProgress(); } }),
+    el("button", { class: "btn", text: "Keep them", onclick: () => { confirmBox.hidden = true; } }));
+  const color = s => `var(--${s === "PASS" ? "pass" : s === "WARN" || s === "MEDIUM" ? "warn" : "fail"})`;
+  put(view(), 
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "My progress" }),
+      el("h1", { text: "Objectives, weakest first" }),
+      el("p", { class: "muted", text: `Saved to ${Progress.where}. Fewer than 3 answers on an objective is too little to judge, so it shows LOW or MEDIUM.` }),
+      prog.rows.length ? el("div", { class: "tablewrap" }, el("table", {},
+        el("thead", {}, el("tr", {}, ["Objective", "Answered", "Correct", "Score", "Status", ""].map(h => el("th", { text: h })))),
+        el("tbody", {}, prog.rows.map(([o, a, c, p, s]) => {
+          const lab = CATALOG.labs.find(l => l.objectives.includes(o));
+          return el("tr", {}, el("td", { text: `${o} ${OBJ[o] || ""}` }), el("td", { text: a }), el("td", { text: c }),
+            el("td", {}, el("span", { class: "meter" }, el("i", { style: `width:${parseFloat(p)}%; background:${color(s)}` })), " ", p),
+            el("td", {}, el("span", { class: "pill " + s, text: s })), el("td", {}, lab ? el("a", { href: `#lab-${lab.n}`, text: `Lab ${lab.n}` }) : ""));
+        }))))
+        : el("p", { text: "No scores yet. Open any lab and choose Practice, or take a practice exam." })),
+    el("section", { class: "panel" }, el("h2", { text: "Recent sessions" }),
+      prog.sessions.length ? el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, el("tr", {}, ["When (UTC)", "Activity", "Score"].map(h => el("th", { text: h })))),
+        el("tbody", {}, prog.sessions.slice().reverse().slice(0, 15).map(s => el("tr", {}, el("td", { text: s.ts.replace("T", " ") }), el("td", { text: s.lab }), el("td", { text: s.score })))))) : el("p", { class: "muted", text: "Nothing yet." }),
+      el("div", { class: "btns" }, el("button", { class: "btn", text: "Reset my progress", onclick: () => { confirmBox.hidden = false; } }), confirmBox)));
+}
+
+/* ------------------------------------------------------------------ router & boot */
+function route() {
+  clearInterval(examTimer); setKeys(null);
+  const h = (location.hash || "#home").slice(1);
+  $("#rail").classList.remove("open"); $("#maptoggle").setAttribute("aria-expanded", "false");
+  const m = h.match(/^lab-(\d+)$/);
+  if (m) return viewLab(parseInt(m[1], 10));
+  if (h === "exam") return viewExam();
+  if (h === "progress") return viewProgress();
+  return viewHome();
+}
+
+$("#maptoggle").addEventListener("click", () => { const r = $("#rail"); r.classList.toggle("open"); $("#maptoggle").setAttribute("aria-expanded", String(r.classList.contains("open"))); });
+
+(async function boot() {
+  try {
+    CATALOG = await Engine.catalog();
+    renderRail(); renderMode(); route();
+    window.addEventListener("hashchange", route);
+    Progress.init();
+  } catch (e) {
+    put(view(), el("section", { class: "panel" }, el("h2", { text: "The course could not load" }),
+      el("p", { class: "notice", text: e.message }),
+      el("p", { class: "muted", text: LIVE ? "Check the terminal window running `python main.py web` for errors." : "Reload the page. If it keeps failing, run the course locally with `python main.py web`." })));
+  }
+})();
+</script>
