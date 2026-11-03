@@ -196,3 +196,25 @@ def test_single_file_desktop_app():
     data_script = html.split("<script>window.SECPLUS_BUNDLE = ", 1)[1].split("</script>", 1)[0]
     json.loads(data_script.rstrip(";").replace("<\\/", "</"))      # the embedded bundle is intact JSON
     assert "<title>Security+ Lab Engine</title>" in html
+
+
+def test_anki_export(tmp_path):
+    pytest.importorskip("genanki")
+    import sqlite3
+    import zipfile
+    from tools.export_anki import build_package, collect
+    qs = collect(variants=0)
+    assert len({(q["prompt"], q["context"]) for q in qs}) == len(qs)          # de-duplicated
+    pkg, n_cards, n_decks = build_package(variants=0)
+    out = tmp_path / "deck.apkg"
+    pkg.write_to_file(str(out))
+    with zipfile.ZipFile(out) as z:
+        z.extract("collection.anki2", tmp_path)
+    db = sqlite3.connect(tmp_path / "collection.anki2")
+    assert db.execute("select count(*) from notes").fetchone()[0] == n_cards == len(qs)
+    assert n_decks >= 15
+    # stable GUIDs: a second export produces the same note ids for the same questions
+    pkg2, _, _ = build_package(variants=0)
+    g1 = sorted(n.guid for d in pkg.decks for n in d.notes)
+    g2 = sorted(n.guid for d in pkg2.decks for n in d.notes)
+    assert g1 == g2
