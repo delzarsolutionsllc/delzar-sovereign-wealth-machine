@@ -1,6 +1,6 @@
 # Accessibility audit (WCAG 2.2 AA)
 
-Audit of the IdentityOps Lab web app (`web/index.html`, as published by `tools/build_site.py`), 2026-11-05.
+Audit of the Delzar Certification Academy web app (`web/index.html`, as published by `tools/build_site.py`), 2026-11-05.
 
 ## Automated: axe-core 4.10.2, 0 violations
 

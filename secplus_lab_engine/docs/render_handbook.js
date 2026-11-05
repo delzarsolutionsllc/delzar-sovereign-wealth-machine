@@ -7,7 +7,7 @@ const { chromium } = require('playwright');
     path: process.argv[3], format: 'Letter', printBackground: true, preferCSSPageSize: true,
     displayHeaderFooter: true,
     headerTemplate: '<div></div>',
-    footerTemplate: '<div style="font-size:7.5pt;color:#59636e;width:100%;padding:0 0.7in;display:flex;justify-content:space-between;font-family:Helvetica,Arial,sans-serif"><span>IdentityOps Lab — Technical Handbook</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>',
+    footerTemplate: '<div style="font-size:7.5pt;color:#59636e;width:100%;padding:0 0.7in;display:flex;justify-content:space-between;font-family:Helvetica,Arial,sans-serif"><span>Delzar Certification Academy — Technical Handbook</span><span><span class="pageNumber"></span> / <span class="totalPages"></span></span></div>',
   });
   await browser.close();
 })();

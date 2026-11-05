@@ -16,7 +16,7 @@ This note compares six ways to turn the Lab Engine into something useful beyond 
 
   OBSERVED. Source: https://www.comptia.org/en-us/legal/trademarks/
 
-  "Security+ Lab Engine" therefore needs a new name before anything goes public. One option is "IdentityOps Lab: practice aligned to the CompTIA Security+ SY0-701 exam objectives". The repo currently has no "not affiliated with CompTIA" notice.
+  "Security+ Lab Engine" therefore needs a new name before anything goes public. One option is "Delzar Certification Academy: practice aligned to the CompTIA Security+ SY0-701 exam objectives". The repo currently has no "not affiliated with CompTIA" notice.
 
 ## Comparison
 

@@ -156,7 +156,7 @@ def write_csv(challenges: list[dict], path: Path) -> None:
 
 def challenge_yml(c: dict) -> str:
     """ctfcli challenge.yml. Written as JSON, which every YAML parser reads as YAML."""
-    spec = {"name": c["name"], "author": "IdentityOps Lab", "category": c["category"],
+    spec = {"name": c["name"], "author": "Delzar Certification Academy", "category": c["category"],
             "description": c["description"], "value": c["value"], "type": c["type"], "state": c["state"],
             "attempts": c["max_attempts"], "flags": c["flags"], "tags": c["tags"], "hints": c["hints"],
             "version": "0.1"}

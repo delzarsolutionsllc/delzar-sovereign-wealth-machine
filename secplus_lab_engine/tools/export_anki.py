@@ -70,7 +70,7 @@ def _watch_html(objective: str) -> str:
 def _model():
     import genanki
     return genanki.Model(
-        MODEL_ID, "IdentityOps Lab question",
+        MODEL_ID, "Delzar Certification Academy question",
         fields=[{"name": "Objective"}, {"name": "Context"}, {"name": "Prompt"}, {"name": "Choices"},
                 {"name": "Answer"}, {"name": "Explanation"}, {"name": "Key"}],
         templates=[{

@@ -25,7 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import portfolio, quizzes, review, sync, videos
+from utils import glossary, portfolio, quizzes, review, sync, videos
 from utils.terminal_ui import UI
 
 
@@ -151,6 +151,7 @@ def catalog(policies: dict) -> dict:
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
             "career_tracks": portfolio.career(),
             "objective_quizzes": quizzes.catalog(), "quiz_set_size": quizzes.SET_SIZE,
+            "glossary": glossary.catalog(),
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
 
@@ -264,7 +265,7 @@ def progress_import(data, replace: bool = False, path=None) -> dict:
 # --------------------------------------------------------------------------- #
 def quiz(quiz_id: str, seed=None) -> dict:
     q = quizzes.find(quiz_id)
-    topic = {r["id"]: r.get("topic") for r in _bank()}
+    topic = {r["id"]: r.get("topic") for r in quizzes.records(quiz_id)}
     return {"quiz": {k: v for k, v in q.items() if k != "qids"}, "objective": quiz_id.split("-")[0],
             "questions": [{**_q(x), "topic": topic.get(x.qid)} for x in quizzes.questions(quiz_id, seed)]}
 
@@ -277,7 +278,15 @@ def quiz_record(quiz_id: str, results: list[dict], today=None, path=None) -> dic
     allowed = set(q["qids"])
     if any(not isinstance(r, dict) or r.get("qid") not in allowed for r in results):
         raise ValueError("every result needs the qid of a question in this quiz")
-    progress_record(results, f"quiz {quiz_id}", path, today)
+    if quizzes.is_glossary(quiz_id):
+        # vocabulary drills: logged as a session and a quiz score, not counted toward objective scores
+        from datetime import datetime, timezone
+        p = Progress(path) if path is not None else Progress()
+        p.data["sessions"].append({"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"), "lab": f"quiz {quiz_id}",
+                                   "score": f"{sum(bool(r.get('correct')) for r in results)}/{len(results)}"})
+        p.save()
+    else:
+        progress_record(results, f"quiz {quiz_id}", path, today)
     p = Progress(path) if path is not None else Progress()
     day = _today(today).isoformat()
     slot = quizzes.record(p.data, quiz_id, sum(bool(r.get("correct")) for r in results), len(results), day)
@@ -339,7 +348,7 @@ EXAM_TARGET = {
 }
 
 METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
-           "case_study", "review_session", "review_answer", "progress_export", "progress_import", "quiz", "quiz_record"}
+           "case_study", "review_session", "review_answer", "progress_export", "progress_import", "quiz", "quiz_record", "glossary"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -378,6 +387,8 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         return quiz(str(a.get("quiz", "")), seed)
     if method == "quiz_record":
         return quiz_record(str(a.get("quiz", "")), a.get("results"), a.get("today"), progress_path)
+    if method == "glossary":
+        return list(glossary.entries())
     if method == "case_study":
         return portfolio.case_study(int(a["lab"]), policies)
     if method == "progress_watch":

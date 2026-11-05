@@ -93,6 +93,10 @@ def catalog() -> dict:
 
 
 def find(quiz_id: str) -> dict:
+    """An objective quiz (``2.4-set1``, ``2.4-t3``) or a glossary quiz (``g3-acr-1``)."""
+    if str(quiz_id or "").startswith("g"):
+        from utils import glossary
+        return glossary.find(quiz_id)
     m = QUIZ_ID.match(str(quiz_id or ""))
     quiz = next((q for q in catalog().get(m.group(1), {}).get("quizzes", []) if q["id"] == quiz_id), None) if m else None
     if not quiz:
@@ -100,13 +104,26 @@ def find(quiz_id: str) -> dict:
     return quiz
 
 
+def is_glossary(quiz_id: str) -> bool:
+    return str(quiz_id or "").startswith("g")
+
+
+def records(quiz_id: str) -> list[dict]:
+    """The quiz's question records (exam bank or generated glossary questions), in catalogue order."""
+    if is_glossary(quiz_id):
+        from utils import glossary
+        return glossary.as_records(quiz_id)
+    from utils.exam_bank import load_bank
+    by_id = {r["id"]: r for r in load_bank()}
+    return [by_id[i] for i in find(quiz_id)["qids"]]
+
+
 def questions(quiz_id: str, seed=None) -> list:
     """The quiz's questions as challenge ``Question`` objects: order and options shuffled by ``seed``."""
     from utils.exam import _shuffled_choices
-    from utils.exam_bank import as_question, load_bank
-    by_id = {r["id"]: r for r in load_bank()}
+    from utils.exam_bank import as_question
     rng = random.Random(seed)
-    qs = [_shuffled_choices(as_question(by_id[i]), rng) for i in find(quiz_id)["qids"]]
+    qs = [_shuffled_choices(as_question(r), rng) for r in records(quiz_id)]
     rng.shuffle(qs)
     return qs
 

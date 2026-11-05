@@ -27,7 +27,7 @@ import re
 from datetime import date, datetime, timedelta, timezone
 
 FORMAT = 1
-APP = "IdentityOps Lab"
+APP = "Delzar Certification Academy"
 MAX_SESSIONS = 50
 _ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 _OBJ = re.compile(r"^[1-5]\.[1-9]$")
@@ -65,7 +65,7 @@ def clean(raw) -> dict:
     if isinstance(raw, dict) and isinstance(raw.get("progress"), dict):
         raw = raw["progress"]
     if not isinstance(raw, dict) or not any(k in raw for k in ("objectives", "srs", "sessions", "watched", "quizzes")):
-        raise ValueError("this file does not contain IdentityOps Lab progress")
+        raise ValueError("this file does not contain Delzar Certification Academy progress")
     out = empty()
     for o, s in (raw.get("objectives") or {}).items() if isinstance(raw.get("objectives"), dict) else []:
         if _OBJ.match(str(o)) and isinstance(s, dict):

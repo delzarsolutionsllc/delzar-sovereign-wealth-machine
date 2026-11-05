@@ -61,7 +61,7 @@ def test_srs_tie_goes_to_more_misses():
 
 
 def test_clean_drops_bad_data_and_accepts_envelope():
-    raw = {"app": "IdentityOps Lab", "format": 1, "progress": {
+    raw = {"app": "Delzar Certification Academy", "format": 1, "progress": {
         "objectives": {"1.1": {"attempted": "5", "correct": 9}, "bad": {"attempted": 1}, "9.9": {}, "2.2": "x"},
         "srs": {"Q1": card("2026-11-10", 3), "<script>": card("2026-11-10", 3), "Q2": {"due": "soon"}},
         "sessions": [{"ts": "2026-11-01T10:00:00", "lab": "x" * 100, "score": 1}, "junk"],
@@ -82,7 +82,7 @@ def test_api_export_import_roundtrip(tmp_path):
     a, b = tmp_path / "a.json", tmp_path / "b.json"
     a.write_text(json.dumps(A)); b.write_text(json.dumps(B))
     exported = webapi.dispatch("progress_export", {}, progress_path=a)
-    assert exported["app"] == "IdentityOps Lab" and exported["format"] == sync.FORMAT
+    assert exported["app"] == "Delzar Certification Academy" and exported["format"] == sync.FORMAT
     got = webapi.dispatch("progress_import", {"data": exported}, progress_path=b)
     assert got["objectives"]["1.1"]["attempted"] == 10 and "3.3" in got["objectives"]
     again = webapi.dispatch("progress_import", {"data": exported}, progress_path=b)

@@ -48,6 +48,9 @@ def build(variants: int = 12, seed_base: int = 1000) -> dict:
         bundle["labs"][str(n)] = entry
     from utils.exam_bank import load_bank
     bundle["exam_bank"] = [dict(q) for q in load_bank()]          # every field (id, type-specific keys)
+    from utils import glossary
+    bundle["glossary"] = list(glossary.entries())                 # the entries, with their playlist video
+    bundle["glossary_questions"] = list(glossary.questions().values())
     return bundle
 
 
