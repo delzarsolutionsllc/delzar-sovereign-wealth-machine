@@ -52,12 +52,12 @@
       "stem": "An admin adds a person, sets the password directly and selects the option that requires the user to change it at first sign-in. What status will the new account show?",
       "choices": [
         "Active",
-        "Password expired",
+        "Password reset",
         "Staged",
         "Pending user action"
       ],
       "answer": "Active",
-      "explanation": "When an admin sets the password at creation, with or without a first sign-in change, Okta lists the account as Active. Pending user action applies when the user still has to set a password from the activation email."
+      "explanation": "Okta's user status table lists an account as Active when an admin adds the person and sets the password, including when the user must change it at first sign-in. Pending user action applies when the user still has to activate from the email, and Password reset follows an admin-requested reset."
     },
     {
       "id": "D1-005",
@@ -903,15 +903,15 @@
       "id": "D1-065",
       "objective": "1.2",
       "topic": "Group Rule Conditions and Expressions",
-      "stem": "An admin created a custom attribute with display name Cost Center and variable name costCenter. How is it referenced in a group rule expression?",
+      "stem": "A string array attribute named projectCodes holds each user's project codes. Which group rule expression adds users whose codes include FALCON?",
       "choices": [
-        "user.costCenter",
-        "user.Cost Center",
-        "custom.costCenter",
-        "profile[Cost Center]"
+        "Arrays.contains(user.projectCodes, \"FALCON\")",
+        "user.projectCodes == \"FALCON\"",
+        "isMemberOfGroupName(\"FALCON\")",
+        "user.profile.projectCodes eq \"FALCON\""
       ],
-      "answer": "user.costCenter",
-      "explanation": "Expressions use the attribute's variable name on the user object, so user.costCenter. The display name is only a label and can include spaces that expressions cannot use."
+      "answer": "Arrays.contains(user.projectCodes, \"FALCON\")",
+      "explanation": "Arrays.contains checks whether an array attribute holds a given value and is supported in group rule expressions. Comparing the whole array to one string with == does not test membership, isMemberOfGroupName checks group membership rather than an attribute, and eq is filter syntax, not expression syntax."
     },
     {
       "id": "D1-066",
@@ -987,15 +987,15 @@
       "id": "D1-071",
       "objective": "1.2",
       "topic": "Using Groups for Access and Policy",
-      "stem": "A new service desk analyst should automatically gain help desk admin rights when added to the Service Desk group. What should the Super Administrator do?",
+      "stem": "A user belongs to Sales and Support, and both groups are assigned to the same app with a different value for the app's single-valued Role attribute. What decides which Role value the user receives?",
       "choices": [
-        "Add the role as a custom attribute on each analyst's profile",
-        "Assign the Service Desk group to the Okta Admin Console app",
-        "Assign the Help Desk Administrator role to the Service Desk group",
-        "Create a group rule that grants the Help Desk Administrator role to Service Desk"
+        "The group the user was added to most recently",
+        "The group that has the most members",
+        "The group priority order set for the app's group assignments",
+        "The alphabetical order of the two group names"
       ],
-      "answer": "Assign the Help Desk Administrator role to the Service Desk group",
-      "explanation": "Admin roles can be assigned to a group, so every member holds the role. Group rules cannot grant roles or add users to admin groups."
+      "answer": "The group priority order set for the app's group assignments",
+      "explanation": "When a user is a member of more than one group assigned to an app, group priority on the app's group assignments determines which group's profile and role data the user gets. Join date, group size and names play no part."
     },
     {
       "id": "D1-072",
@@ -1191,7 +1191,7 @@
         "Group Administrator constrained to the HR group"
       ],
       "answer": "Application Administrator constrained to the HR apps",
-      "explanation": "The Application Administrator role can be limited to specific apps, which matches the task. Organization Administrators do not manage app integrations in the standard role table."
+      "explanation": "The Application Administrator role can be constrained to specific apps, which matches the task exactly. A Super Administrator could also do it but holds every right in the org; Okta's role comparison does not give Organization Administrators the right to add and configure apps, and a Group Administrator cannot manage apps at all."
     },
     {
       "id": "D1-086",
@@ -1205,7 +1205,7 @@
         "Organization Administrator"
       ],
       "answer": "Organization Administrator",
-      "explanation": "Only Super and Organization Administrators can manage group rules, so Organization Administrator is the lowest standard role that works. Group roles can view rules but cannot create them."
+      "explanation": "Only Super and Organization Administrators can edit group rules, so Organization Administrator is the lowest standard role that works. Group Administrators who manage all groups can at most search for and view rules, and Group Membership and Application Administrators cannot manage rules."
     },
     {
       "id": "D1-087",
@@ -1466,12 +1466,12 @@
       "stem": "A custom role must manage every user in the org, now and in the future. Which resource setting fits BEST?",
       "choices": [
         "Applications resource set to all apps",
-        "Groups resource listing the Everyone group",
+        "Customizations resource set to all brands",
         "Users resource constrained to all users",
         "Users resource listing each user by name"
       ],
       "answer": "Users resource constrained to all users",
-      "explanation": "The Users resource offers an option for all users in the org, which also covers future users. Listing names would miss new hires."
+      "explanation": "The Users resource offers an option for all users in the org, which also covers users created later. Listing names would miss new hires, and Applications or Customizations resources cover other kinds of objects, not users."
     },
     {
       "id": "D1-106",
