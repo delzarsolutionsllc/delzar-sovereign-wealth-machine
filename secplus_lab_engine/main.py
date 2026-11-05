@@ -399,7 +399,7 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "install-shortcut":
         from utils.desktop import install_shortcut
         path = install_shortcut(Path(args.desktop) if args.desktop else None)
-        ui.print(f"Created {path}\nDouble-click it to open the Security+ Lab Engine in your browser.", style="green")
+        ui.print(f"Created {path}\nDouble-click it to open IdentityOps Lab in your browser.", style="green")
     elif args.command == "exam":
         if args.domain:
             domain_test(ui, policies, args.domain, args.count or 30, args.minutes, args.seed, randomize=not args.fixed,

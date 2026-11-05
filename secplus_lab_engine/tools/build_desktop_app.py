@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Build a single-file desktop app: dist/Security+ Lab Engine.html
+Build a single-file desktop app: dist/IdentityOps Lab.html
 
 The course page with the whole course bundle embedded, so it opens by
 double-click (file://), works offline and needs no Python. Progress is kept
@@ -37,7 +37,7 @@ def build_html(variants: int = 12) -> str:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="Build the single-file desktop app")
     ap.add_argument("--variants", type=int, default=12)
-    ap.add_argument("--out", default=str(ROOT / "dist" / "Security+ Lab Engine.html"))
+    ap.add_argument("--out", default=str(ROOT / "dist" / "IdentityOps Lab.html"))
     a = ap.parse_args(argv)
     out = Path(a.out)
     out.parent.mkdir(parents=True, exist_ok=True)

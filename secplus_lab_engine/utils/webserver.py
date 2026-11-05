@@ -104,7 +104,7 @@ def serve(port: int = 8765, open_browser: bool = True, policies: dict | None = N
     except OSError:
         httpd = make_server(0, policies)                      # port busy: pick a free one
     url = f"http://127.0.0.1:{httpd.server_address[1]}/"
-    print(f"Security+ Lab Engine is running at {url}")
+    print(f"IdentityOps Lab is running at {url}")
     print("Leave this window open while you study. Press Ctrl+C to stop.")
     if open_browser:
         threading.Timer(0.6, lambda: webbrowser.open(url)).start()

@@ -36,8 +36,8 @@ if str(ROOT) not in sys.path:
 
 from tools.build_web_bundle import build  # noqa: E402
 
-APP_NAME = "Security+ Lab Engine"
-SHORT_NAME = "Sec+ Labs"
+APP_NAME = "IdentityOps Lab"
+SHORT_NAME = "IdentityOps"
 THEME = "#1d5c8f"
 BACKGROUND = "#f4f6f9"
 ICON_SIZES = (192, 512)
@@ -45,7 +45,7 @@ ICON_SIZES = (192, 512)
 HEAD = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="{theme}">
-<meta name="description" content="Offline Security+ (SY0-701) labs, exam-style practice and an IAM career track. Not affiliated with CompTIA.">
+<meta name="description" content="IdentityOps Lab: offline security and IAM labs with exam-style practice aligned to the CompTIA Security+ SY0-701 objectives. Not affiliated with CompTIA.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -60,7 +60,7 @@ if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol)) {{
 </body></html>
 """
 
-SERVICE_WORKER = """/* Security+ Lab Engine service worker, version {version}.
+SERVICE_WORKER = """/* IdentityOps Lab service worker, version {version}.
    Precaches the app so it works offline; course pages are network-first so updates
    show up when online, everything else is cache-first. Fonts are cached on first use. */
 const CACHE = "secplus-{version}";
@@ -158,7 +158,7 @@ def manifest() -> dict:
     return {
         "name": APP_NAME, "short_name": SHORT_NAME, "id": "./", "start_url": "./", "scope": "./",
         "display": "standalone", "background_color": BACKGROUND, "theme_color": THEME,
-        "description": "Offline Security+ (SY0-701) labs, exam-style practice, daily review and an IAM career track. "
+        "description": "Offline security and IAM labs, exam-style practice aligned to the CompTIA Security+ SY0-701 objectives, daily review and an IAM career track. "
                        "Not affiliated with or endorsed by CompTIA.",
         "categories": ["education"],
         "icons": [{"src": f"icons/icon-{s}.png", "sizes": f"{s}x{s}", "type": "image/png", "purpose": "any"}

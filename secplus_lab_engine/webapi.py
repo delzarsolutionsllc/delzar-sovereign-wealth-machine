@@ -147,6 +147,7 @@ def catalog(policies: dict) -> dict:
                      "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)],
                      "briefing": portfolio.briefing(n), "career": portfolio.career_tags(n)})
     return {"labs": labs, "pass_scaled": PASS_SCALED, "domain_test_target": DOMAIN_TEST_TARGET,
+            "exam_target": EXAM_TARGET,
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
             "career_tracks": portfolio.career(),
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
@@ -286,6 +287,15 @@ def review_answer(qid: str, correct: bool, today=None, path=None) -> dict:
             "due_total": len(review.due_ids(p.data["srs"], day, ids)),
             "due_by_day": review.due_by_day(p.data["srs"], day, 7, ids)}
 
+
+# The exam this platform prepares for (owner's choice, 2026-11-05). Dates from CompTIA, checked 2026-11-05.
+EXAM_TARGET = {
+    "code": "SY0-701", "name": "CompTIA Security+ SY0-701",
+    "retires": "2027-06-11",
+    "note": "English SY0-701 retires June 11, 2027 (Japanese, Portuguese, Spanish and Thai: August 13, 2027). "
+            "Security+ V8 (SY0-801) launches on or around November 17, 2026.",
+    "source": "https://www.comptia.org/en-us/certifications/security/v7/",
+}
 
 METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
            "case_study", "review_session", "review_answer"}

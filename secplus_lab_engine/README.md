@@ -1,4 +1,6 @@
-# Security+ SY0-701 Lab Engine & AI Agent Governor
+# IdentityOps Lab
+
+**Security operations and identity (IAM) labs, with exam-style practice aligned to the CompTIA Security+ SY0-701 exam objectives.** Includes an AI-agent governor lab. Live app: see *Use it online* below.
 
 An **offline, CLI-driven Python lab** for practising the manual security operations behind CompTIA Security+ SY0-701, across **all five exam domains**: identity, Zero Trust, log forensics, change control, vulnerability triage, email security, firewall auditing, hardening, threat actors, resilience, vendor risk, control types, and **governing autonomous AI agents**.
 
@@ -20,21 +22,25 @@ It's meant for building first-principles skill: work through each operation by h
 
 ---
 
+## Use it online
+
+**https://delzarsolutionsllc.github.io/delzar-sovereign-wealth-machine/** (installable on phone and laptop, works offline after the first visit). The workflow `.github/workflows/identityops-pages.yml` runs the tests, then builds and publishes the site on every update to `main`. One-time setup: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**. Progress is stored in each visitor's own browser; nothing is sent to a server.
+
 ## Open it as an app
 
 **On your computer (offline, live engine):**
 
 1. Install Python 3.10+ ([python.org](https://www.python.org/downloads/)) and download this repository (GitHub → *Code* → *Download ZIP*, then unzip).
 2. Double-click the launcher for your system in `launch/`:
-   * Windows: `Start Security+ Lab (Windows).bat`
-   * macOS: `Start Security+ Lab (macOS).command` (first time: right-click → *Open*)
+   * Windows: `Start IdentityOps Lab (Windows).bat`
+   * macOS: `Start IdentityOps Lab (macOS).command` (first time: right-click → *Open*)
    * Linux: `launch/start-secplus-lab.sh`
 3. Your browser opens the course. Keep the small terminal window open while you study; close it to stop.
 
 To put a launcher **on your desktop**, run once from this folder:
 
 ```bash
-python main.py install-shortcut     # creates "Security+ Lab Engine" on your desktop
+python main.py install-shortcut     # creates "IdentityOps Lab" on your desktop
 python main.py web                  # or start it directly
 ```
 
