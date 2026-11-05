@@ -1,0 +1,1167 @@
+{
+  "domain": "2",
+  "title": "SC-300 Domain 2 questions (2.1, 2.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+  "questions": [
+    {
+      "id": "D2-001",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "After the retirement of the legacy MFA and SSPR method settings, where does a Microsoft Entra administrator control which authentication methods users can register and use for both MFA and password reset?",
+      "choices": [
+        "The per-user MFA service settings",
+        "The self-service password reset policy",
+        "The Conditional Access grant controls",
+        "The Authentication methods policy"
+      ],
+      "answer": "The Authentication methods policy",
+      "explanation": "Microsoft converged method management into the Authentication methods policy, which now governs methods for both MFA and SSPR. Conditional Access decides when strong authentication is required, not which methods exist."
+    },
+    {
+      "id": "D2-002",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "Fabrikam wants to make Microsoft Authenticator available only to a pilot group of IT staff before rolling it out to everyone. What should you do?",
+      "choices": [
+        "Enable per-user MFA for each member of the pilot group",
+        "Create a Conditional Access policy that requires MFA for the group",
+        "Enable Authenticator for the pilot group in the methods policy",
+        "Turn on security defaults and exclude users outside the pilot"
+      ],
+      "answer": "Enable Authenticator for the pilot group in the methods policy",
+      "explanation": "Each method in the Authentication methods policy can be targeted at specific groups, which is how you pilot a method. A Conditional Access policy requiring MFA does not control which methods a user is allowed to register."
+    },
+    {
+      "id": "D2-003",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "Many Tailspin Toys users still rely on text messages for MFA. Admins want users to be prompted during sign-in to set up Microsoft Authenticator, with a limited number of chances to postpone. What should you configure?",
+      "choices": [
+        "A Conditional Access policy requiring a compliant device",
+        "A registration campaign for Microsoft Authenticator",
+        "Security defaults with text message sign-in disabled",
+        "An SSPR reconfirmation interval for registered methods"
+      ],
+      "answer": "A registration campaign for Microsoft Authenticator",
+      "explanation": "A registration campaign nudges users who have not set up Authenticator during sign-in and can limit how many times they snooze the prompt. An SSPR reconfirmation interval only asks users to confirm methods they already registered."
+    },
+    {
+      "id": "D2-004",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "Users at Adatum have both text message codes and passkeys registered, but most keep choosing the text message option at sign-in. Admins want Microsoft Entra ID to prompt each user with the most secure method they have registered. What should be enabled?",
+      "choices": [
+        "System-preferred multifactor authentication",
+        "Number matching for push notifications",
+        "Registration enforcement for SSPR",
+        "A default sign-in method chosen by each user"
+      ],
+      "answer": "System-preferred multifactor authentication",
+      "explanation": "System-preferred MFA makes Microsoft Entra ID prompt for the strongest method a user has registered instead of the user's own default. Number matching hardens push approvals but does not change which method is offered."
+    },
+    {
+      "id": "D2-005",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "Relecloud is planning its authentication strategy and wants to start by removing phishable methods for its administrators. Which methods should the plan require for administrator sign-ins?",
+      "choices": [
+        "Text message or voice call verification",
+        "OATH time-based software tokens",
+        "Authenticator push with number matching",
+        "Passkeys (FIDO2) or Windows Hello for Business"
+      ],
+      "answer": "Passkeys (FIDO2) or Windows Hello for Business",
+      "explanation": "Passkeys and Windows Hello for Business are phishing-resistant because the credential is bound to the legitimate sign-in origin. Authenticator push with number matching is stronger than codes, but a user can still be tricked into approving a real-time phishing proxy."
+    },
+    {
+      "id": "D2-006",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "Which statement BEST describes a Temporary Access Pass in Microsoft Entra ID?",
+      "choices": [
+        "A one-time code sent by text message that lets a user reset a forgotten password",
+        "A time-limited passcode that satisfies strong authentication requirements",
+        "A guest invitation link that expires after it is redeemed",
+        "A short-lived refresh token issued after MFA succeeds"
+      ],
+      "answer": "A time-limited passcode that satisfies strong authentication requirements",
+      "explanation": "A Temporary Access Pass is an admin-issued, time-limited passcode that counts as strong authentication, so users can onboard or recover passwordless methods. It is not a password reset code and not a token."
+    },
+    {
+      "id": "D2-007",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "Woodgrove Bank ships FIDO2 security keys to new hires, who have no other registered method on their first day. The company wants new hires to register the keys without ever using a password. What should you do?",
+      "choices": [
+        "Enable text message sign-in for new hires",
+        "Exclude new hires from MFA for their first week",
+        "Issue each new hire a Temporary Access Pass",
+        "Give new hires a temporary password and per-user MFA"
+      ],
+      "answer": "Issue each new hire a Temporary Access Pass",
+      "explanation": "A Temporary Access Pass lets a user sign in strongly and register a passkey without a password. Excluding new hires from MFA leaves the accounts exposed and still relies on a password."
+    },
+    {
+      "id": "D2-008",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "A help desk technician must create Temporary Access Passes for standard users who are not administrators. Which role should you assign by following the principle of least privilege?",
+      "choices": [
+        "Authentication Administrator",
+        "Privileged Authentication Administrator",
+        "Global Administrator",
+        "Authentication Policy Administrator"
+      ],
+      "answer": "Authentication Administrator",
+      "explanation": "Authentication Administrator can manage authentication methods, including issuing a Temporary Access Pass, for non-administrator users. Privileged Authentication Administrator can also do it, but it covers administrators too and is broader; Authentication Policy Administrator manages the policy, not individual users' methods."
+    },
+    {
+      "id": "D2-009",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "An admin issues a Temporary Access Pass to a user who only needs to sign in once to register Windows Hello for Business. The pass must stop working immediately after that sign-in. What should the admin configure?",
+      "choices": [
+        "Set the pass to one-time use",
+        "Set the pass to the longest allowed lifetime",
+        "Require the pass to be sent by text message",
+        "Add the user to a Conditional Access exclusion group"
+      ],
+      "answer": "Set the pass to one-time use",
+      "explanation": "A one-time use Temporary Access Pass is consumed by the first sign-in, so it cannot be reused. A longer lifetime does the opposite and keeps the pass valid for longer."
+    },
+    {
+      "id": "D2-010",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "Litware wants employees to sign in to Microsoft Entra ID directly with smart card certificates issued by its own PKI, without federating to AD FS. What should be configured FIRST?",
+      "choices": [
+        "Federate the domain to AD FS and enable certificate sign-in there",
+        "Enable password hash synchronization for all users",
+        "Require a compliant device in Conditional Access",
+        "Add the issuing certificate authorities to Microsoft Entra ID"
+      ],
+      "answer": "Add the issuing certificate authorities to Microsoft Entra ID",
+      "explanation": "Native certificate-based authentication validates user certificates against certificate authorities you trust in Microsoft Entra ID, so the CA chain must be added first. AD FS is exactly what native CBA lets the company avoid."
+    },
+    {
+      "id": "D2-011",
+      "objective": "2.1",
+      "topic": "Temporary Access Pass and certificate-based authentication",
+      "stem": "Litware's PKI issues user certificates under two policies: one for smart cards and one for software certificates on laptops. Only smart card certificates should satisfy multifactor authentication. What should you configure?",
+      "choices": [
+        "A username binding rule mapping RFC822Name to UPN",
+        "A certificate revocation list for each issuing CA",
+        "An authentication binding rule based on the policy OID",
+        "A Conditional Access policy requiring a hybrid joined device"
+      ],
+      "answer": "An authentication binding rule based on the policy OID",
+      "explanation": "Authentication binding rules decide whether a certificate counts as single-factor or multifactor, and they can match the issuer or the certificate policy OID. Username binding only maps a certificate field to a user account."
+    },
+    {
+      "id": "D2-012",
+      "objective": "2.1",
+      "topic": "Passkeys and Windows Hello for Business",
+      "stem": "Contoso's security team has approved one model of FIDO2 security key. Users must not be able to register any other model as a passkey. What should you configure in the passkey (FIDO2) method settings?",
+      "choices": [
+        "A Conditional Access filter for devices",
+        "Key restrictions that allow only the approved AAGUIDs",
+        "A custom banned password list for key names",
+        "Self-service setup turned off for all users"
+      ],
+      "answer": "Key restrictions that allow only the approved AAGUIDs",
+      "explanation": "Key restrictions use the authenticator's AAGUID to allow or block specific models, and attestation can be enforced so the model claim is verified. A device filter applies to the computer signing in, not the security key."
+    },
+    {
+      "id": "D2-013",
+      "objective": "2.1",
+      "topic": "Passkeys and Windows Hello for Business",
+      "stem": "Which statement about Windows Hello for Business is correct?",
+      "choices": [
+        "The PIN is synchronized to Microsoft Entra ID and checked like a password",
+        "It requires a FIDO2 security key plugged into the device",
+        "It works only on devices joined to an on-premises domain",
+        "The credential is bound to the device and unlocked by a PIN or biometric"
+      ],
+      "answer": "The credential is bound to the device and unlocked by a PIN or biometric",
+      "explanation": "Windows Hello for Business creates a key pair protected by the device (normally its TPM), and the PIN or biometric only unlocks it locally. The PIN never leaves the device, which is why it is safer than a password."
+    },
+    {
+      "id": "D2-014",
+      "objective": "2.1",
+      "topic": "Passkeys and Windows Hello for Business",
+      "stem": "Northwind Traders has hybrid joined Windows devices and wants to deploy Windows Hello for Business with single sign-on to on-premises file servers. The company does not want to deploy or manage a PKI for this. Which deployment model should you recommend?",
+      "choices": [
+        "Cloud Kerberos trust",
+        "Key trust",
+        "Certificate trust",
+        "Password hash trust"
+      ],
+      "answer": "Cloud Kerberos trust",
+      "explanation": "Cloud Kerberos trust uses Microsoft Entra Kerberos to issue Kerberos tickets, so it needs no PKI and is Microsoft's recommended hybrid model. Key trust still needs certificates on domain controllers, and certificate trust needs a full PKI."
+    },
+    {
+      "id": "D2-015",
+      "objective": "2.1",
+      "topic": "Passkeys and Windows Hello for Business",
+      "stem": "Proseware wants frontline staff to use a phishing-resistant method on their company phones without buying hardware security keys. What should you enable?",
+      "choices": [
+        "Passwordless phone sign-in with Authenticator push",
+        "OATH software tokens in Microsoft Authenticator",
+        "Device-bound passkeys in Microsoft Authenticator",
+        "Text message sign-in using the mobile number"
+      ],
+      "answer": "Device-bound passkeys in Microsoft Authenticator",
+      "explanation": "A passkey stored in Microsoft Authenticator is a FIDO2 credential and is phishing-resistant. Passwordless phone sign-in removes the password but is still an approval prompt, so it is not classed as phishing-resistant."
+    },
+    {
+      "id": "D2-016",
+      "objective": "2.1",
+      "topic": "Passkeys and Windows Hello for Business",
+      "stem": "Why are passkeys (FIDO2) considered resistant to phishing?",
+      "choices": [
+        "The one-time code displayed to the user changes every thirty seconds",
+        "The credential is scoped to the relying party it was created for",
+        "The user must approve a push notification on a phone",
+        "The private key is stored safely in Microsoft Entra ID"
+      ],
+      "answer": "The credential is scoped to the relying party it was created for",
+      "explanation": "A passkey signs a challenge only for the origin it was registered with, so a look-alike site cannot use it. The private key stays on the authenticator; Microsoft Entra ID only holds the public key."
+    },
+    {
+      "id": "D2-017",
+      "objective": "2.1",
+      "topic": "Tenant-wide MFA settings",
+      "stem": "A small company uses Microsoft Entra ID Free and wants baseline MFA protection for all users with the LEAST administrative effort. What should it use?",
+      "choices": [
+        "Conditional Access policies",
+        "Security defaults",
+        "Per-user MFA for every account",
+        "Microsoft Entra ID Protection policies"
+      ],
+      "answer": "Security defaults",
+      "explanation": "Security defaults are free and turn on a preconfigured baseline, including MFA registration and prompts, with one switch. Conditional Access and ID Protection need premium licenses, and per-user MFA is account-by-account work."
+    },
+    {
+      "id": "D2-018",
+      "objective": "2.1",
+      "topic": "Tenant-wide MFA settings",
+      "stem": "A tenant that now has Microsoft Entra ID P1 licenses still has security defaults enabled. Admins want to replace them with their own Conditional Access policies. What should they do?",
+      "choices": [
+        "Create the equivalent policies, then disable security defaults",
+        "Keep security defaults on and add the new policies alongside them",
+        "Enable per-user MFA for all users before creating any policy",
+        "Convert security defaults into a Conditional Access template"
+      ],
+      "answer": "Create the equivalent policies, then disable security defaults",
+      "explanation": "Security defaults and enabled Conditional Access policies cannot be used together, so you build the replacement policies and then turn security defaults off. Keeping both on is not supported."
+    },
+    {
+      "id": "D2-019",
+      "objective": "2.1",
+      "topic": "Tenant-wide MFA settings",
+      "stem": "Users at Bellows College have received MFA prompts they did not start. Admins want users to be able to flag these prompts so that the account is treated as risky and can be acted on. What should be enabled?",
+      "choices": [
+        "Number matching for push notifications",
+        "Account lockout after denied MFA prompts",
+        "Report suspicious activity",
+        "Notify users on password resets"
+      ],
+      "answer": "Report suspicious activity",
+      "explanation": "Report suspicious activity lets a user flag an unexpected MFA prompt; the user is then marked as high risk for ID Protection and risk-based policies. Number matching is already enforced for Authenticator push and does not report anything."
+    },
+    {
+      "id": "D2-020",
+      "objective": "2.1",
+      "topic": "Tenant-wide MFA settings",
+      "stem": "Some Contoso users still have legacy per-user MFA set to Enforced, and the company now requires MFA through Conditional Access. What does Microsoft recommend for the per-user MFA setting?",
+      "choices": [
+        "Keep per-user MFA enforced as a fallback for all users",
+        "Replace it with remembering MFA on trusted devices",
+        "Add the office IP ranges to the legacy MFA trusted IPs list",
+        "Disable per-user MFA once Conditional Access requires MFA"
+      ],
+      "answer": "Disable per-user MFA once Conditional Access requires MFA",
+      "explanation": "Per-user MFA prompts on every sign-in regardless of Conditional Access conditions, so it can conflict with the policy design and should be turned off once policies cover MFA. Legacy trusted IPs are better replaced by named locations."
+    },
+    {
+      "id": "D2-021",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "When self-service password reset is configured for users, what applies to administrator accounts regardless of those settings?",
+      "choices": [
+        "The same single-method policy that is configured for standard users",
+        "Self-service reset is always blocked for administrators",
+        "A strong two-method policy that does not allow security questions",
+        "Administrators may reset using security questions only"
+      ],
+      "answer": "A strong two-method policy that does not allow security questions",
+      "explanation": "Microsoft enforces its own strong default policy for administrator roles, requiring two methods and not allowing security questions. The settings you choose for users do not weaken it."
+    },
+    {
+      "id": "D2-022",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "Hybrid users at Fabrikam reset their passwords with SSPR, but the new password does not work when they sign in to domain-joined computers. What should you configure?",
+      "choices": [
+        "Pass-through authentication agents on two servers",
+        "Seamless single sign-on for domain-joined computers",
+        "Password hash synchronization every two minutes",
+        "Password writeback in Entra Connect Sync or Cloud Sync"
+      ],
+      "answer": "Password writeback in Entra Connect Sync or Cloud Sync",
+      "explanation": "Password writeback sends a password reset in the cloud back to on-premises Active Directory, which is where domain sign-ins are checked. Password hash synchronization only flows from on-premises to the cloud."
+    },
+    {
+      "id": "D2-023",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "Contoso wants to try SSPR with the help desk team before enabling it for everyone. What should you do?",
+      "choices": [
+        "Set SSPR to All and block the other users with Conditional Access",
+        "Set SSPR to Selected and choose a group with the help desk team",
+        "Issue a Temporary Access Pass to each help desk member",
+        "Enable per-user MFA for the help desk team members"
+      ],
+      "answer": "Set SSPR to Selected and choose a group with the help desk team",
+      "explanation": "SSPR can be scoped to a selected group, which is the supported way to pilot it. Conditional Access cannot be used to switch SSPR off for some users."
+    },
+    {
+      "id": "D2-024",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "Admins notice that many users registered SSPR phone numbers years ago that are no longer valid. They want users to periodically confirm their registered information. Which setting should they change?",
+      "choices": [
+        "The number of days before users must reconfirm their information",
+        "The number of methods required to reset a password",
+        "Notifying users when their password is reset",
+        "Whether users can reset their password from the Windows sign-in screen"
+      ],
+      "answer": "The number of days before users must reconfirm their information",
+      "explanation": "When registration is required, the reconfirmation interval makes users review their registered methods after a set number of days. The number of methods required controls the reset itself, not how current the data is."
+    },
+    {
+      "id": "D2-025",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "Auditors at Wingtip Toys require that one stolen phone must not be enough to reset a user's password through SSPR. What should you configure?",
+      "choices": [
+        "Require two methods to reset a password",
+        "Disable the mobile app notification method",
+        "Shorten the reconfirmation interval to 30 days",
+        "Allow only security questions for reset"
+      ],
+      "answer": "Require two methods to reset a password",
+      "explanation": "Requiring two methods means an attacker needs more than one factor, such as the phone and an email account, to reset a password. Shortening reconfirmation does not stop someone who holds the phone today."
+    },
+    {
+      "id": "D2-026",
+      "objective": "2.1",
+      "topic": "Self-service password reset",
+      "stem": "The security team wants every administrator to be alerted when another administrator resets their own password with SSPR. Which notification setting should you enable?",
+      "choices": [
+        "Notify users on password resets",
+        "Require users to register when signing in",
+        "Notify all admins when other admins reset their password",
+        "Report suspicious activity for MFA prompts"
+      ],
+      "answer": "Notify all admins when other admins reset their password",
+      "explanation": "This SSPR notification emails all administrators when an admin resets their password, which highlights possible misuse of privileged accounts. Notifying users only tells the person whose password changed."
+    },
+    {
+      "id": "D2-027",
+      "objective": "2.1",
+      "topic": "Disabling accounts and revoking sessions",
+      "stem": "An admin blocked sign-in for a departing cloud-only user, but the user still has access to SharePoint through an existing session. What should the admin do NEXT?",
+      "choices": [
+        "Reset the user's password and wait for it to sync",
+        "Revoke the user's sessions to invalidate refresh tokens",
+        "Remove the user's Microsoft Entra ID P1 license",
+        "Delete all of the user's registered authentication methods"
+      ],
+      "answer": "Revoke the user's sessions to invalidate refresh tokens",
+      "explanation": "Blocking sign-in stops new sign-ins, but issued refresh tokens and existing sessions can continue until they are revoked. Removing a license does not end sessions and can take time to affect the service."
+    },
+    {
+      "id": "D2-028",
+      "objective": "2.1",
+      "topic": "Disabling accounts and revoking sessions",
+      "stem": "A user synchronized from on-premises Active Directory by Microsoft Entra Connect Sync is leaving the company. Where should the account be disabled so the change is not overwritten?",
+      "choices": [
+        "Only in Microsoft Entra ID",
+        "Only in the Microsoft 365 admin center",
+        "In the Microsoft Entra Connect sync rules",
+        "In on-premises Active Directory"
+      ],
+      "answer": "In on-premises Active Directory",
+      "explanation": "For a synchronized user, on-premises Active Directory is the source of authority, so disabling it there is what persists through each sync cycle. A change made only in Microsoft Entra ID to a synced attribute can be overwritten."
+    },
+    {
+      "id": "D2-029",
+      "objective": "2.1",
+      "topic": "Disabling accounts and revoking sessions",
+      "stem": "After an admin revokes a user's sessions, which capability lets Exchange Online and SharePoint Online reject the user's access tokens in near real time instead of waiting for the tokens to expire?",
+      "choices": [
+        "Sign-in frequency set to every time",
+        "Continuous access evaluation",
+        "Persistent browser session set to never",
+        "A configurable token lifetime policy"
+      ],
+      "answer": "Continuous access evaluation",
+      "explanation": "Continuous access evaluation lets supported services receive critical events such as session revocation and reject tokens right away. Sign-in frequency only affects when the next reauthentication is asked for."
+    },
+    {
+      "id": "D2-030",
+      "objective": "2.1",
+      "topic": "Disabling accounts and revoking sessions",
+      "stem": "An employee's company laptop was stolen, but the employee is staying with the company. The admin wants to force sign-in again on every app and stop the laptop from being used to get tokens. What should the admin do?",
+      "choices": [
+        "Revoke the user's sessions and disable the stolen device",
+        "Delete the user account and create a new one",
+        "Block sign-in for the user until the laptop is found",
+        "Remove all licenses and reset all MFA methods"
+      ],
+      "answer": "Revoke the user's sessions and disable the stolen device",
+      "explanation": "Revoking sessions invalidates the user's refresh tokens, and disabling the device object stops it from getting device-based tokens, while the user keeps working on a new device. Blocking or deleting the account is far more disruptive."
+    },
+    {
+      "id": "D2-031",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "Contoso wants to stop users from choosing passwords that contain the company name or its product names. What should you configure?",
+      "choices": [
+        "Lower the smart lockout threshold",
+        "Set passwords to expire every 30 days",
+        "Add the terms to the global banned list",
+        "Add the terms to the custom banned password list"
+      ],
+      "answer": "Add the terms to the custom banned password list",
+      "explanation": "The custom banned password list lets you add organization-specific terms, which are evaluated together with Microsoft's global list. The global banned password list is maintained by Microsoft and cannot be edited."
+    },
+    {
+      "id": "D2-032",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "Microsoft Entra password protection DC agents are deployed on-premises with the policy in Audit mode. What happens when a user sets a password that violates the policy?",
+      "choices": [
+        "The password is rejected and the user is notified",
+        "The account is locked until an admin unlocks it",
+        "The password is accepted and the violation is logged",
+        "The password is accepted only for cloud sign-ins"
+      ],
+      "answer": "The password is accepted and the violation is logged",
+      "explanation": "Audit mode logs what would have been rejected without blocking anything, so you can measure impact before switching to Enforced mode. Rejection only happens in Enforced mode."
+    },
+    {
+      "id": "D2-033",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "Attackers are spraying passwords against Litware accounts from unfamiliar IP addresses, while employees signing in from usual locations should not be locked out. Which Microsoft Entra feature is designed for this?",
+      "choices": [
+        "Custom banned password list",
+        "Smart lockout",
+        "Password writeback",
+        "Seamless single sign-on"
+      ],
+      "answer": "Smart lockout",
+      "explanation": "Smart lockout locks out attackers after repeated failures while tracking familiar and unfamiliar sign-in locations, so legitimate users can continue. A banned password list helps with weak passwords but does not lock anything."
+    },
+    {
+      "id": "D2-034",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "Users sign in to Microsoft Entra joined Windows devices with FIDO2 security keys and need single sign-on to on-premises file shares. What must admins create in each Active Directory domain?",
+      "choices": [
+        "An Active Directory Certificate Services CA",
+        "A pass-through authentication agent",
+        "A Microsoft Entra Kerberos server object",
+        "A cross-tenant access policy for the domain"
+      ],
+      "answer": "A Microsoft Entra Kerberos server object",
+      "explanation": "The Microsoft Entra Kerberos server object lets Microsoft Entra ID issue Kerberos tickets for the domain, so passwordless users can reach on-premises resources. A certificate authority is not required for this scenario."
+    },
+    {
+      "id": "D2-035",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "With Microsoft Entra Kerberos for hybrid identities, what does Microsoft Entra ID issue to a user who signs in with a passkey or Windows Hello for Business?",
+      "choices": [
+        "A full ticket-granting ticket signed with the on-premises domain KRBTGT key",
+        "An NTLM hash that domain controllers accept for the user",
+        "A SAML token that on-premises domain controllers trust",
+        "A partial ticket-granting ticket that a domain controller exchanges"
+      ],
+      "answer": "A partial ticket-granting ticket that a domain controller exchanges",
+      "explanation": "Microsoft Entra ID issues a partial TGT for the on-premises domain, and an on-premises domain controller exchanges it for a full TGT. Microsoft Entra ID never holds the domain's real KRBTGT key."
+    },
+    {
+      "id": "D2-036",
+      "type": "match",
+      "objective": "2.1",
+      "topic": "Authentication methods policy",
+      "stem": "Match each authentication method to the description that BEST fits it.",
+      "pairs": [
+        {
+          "item": "Temporary Access Pass",
+          "match": "Time-limited passcode for onboarding or recovery"
+        },
+        {
+          "item": "Certificate-based authentication",
+          "match": "X.509 certificate validated against a trusted CA"
+        },
+        {
+          "item": "Microsoft Authenticator push notification",
+          "match": "Approval prompt with number matching on a phone"
+        },
+        {
+          "item": "Passkey on a FIDO2 security key",
+          "match": "Hardware credential allowed by AAGUID"
+        },
+        {
+          "item": "Text message verification",
+          "match": "One-time code sent to a mobile number"
+        }
+      ],
+      "targets_extra": [
+        "Password hash checked by an on-premises domain controller"
+      ],
+      "explanation": "Each method is managed in the Authentication methods policy: a Temporary Access Pass is a time-limited passcode, CBA checks a certificate chain, Authenticator push uses number matching, and FIDO2 keys can be restricted by AAGUID. A password hash check is not a Microsoft Entra authentication method."
+    },
+    {
+      "id": "D2-037",
+      "type": "multi",
+      "objective": "2.1",
+      "topic": "Tenant-wide MFA settings",
+      "stem": "Contoso is replacing security defaults with Conditional Access policies that require MFA. Which TWO actions should be part of the plan?",
+      "choices": [
+        "Assign Microsoft Entra ID P1 licenses to the users in scope",
+        "Exclude emergency access accounts from the new policies",
+        "Enforce per-user MFA for every administrator",
+        "Allow only text message codes for MFA",
+        "Add the office IP ranges to the legacy trusted IPs list"
+      ],
+      "answers": [
+        "Assign Microsoft Entra ID P1 licenses to the users in scope",
+        "Exclude emergency access accounts from the new policies"
+      ],
+      "explanation": "Conditional Access needs Entra ID P1 for the users it covers, and emergency access accounts must be excluded to avoid a lockout. Per-user MFA and legacy trusted IPs are older settings that conflict with a policy-based design.",
+      "select": 2
+    },
+    {
+      "id": "D2-038",
+      "type": "order",
+      "objective": "2.1",
+      "topic": "Disabling accounts and revoking sessions",
+      "stem": "A hybrid user synchronized from on-premises Active Directory must lose access immediately. Put the steps in the order Microsoft recommends.",
+      "items": [
+        "Disable the account in on-premises Active Directory",
+        "Reset the user's on-premises password twice",
+        "Block sign-in for the user in Microsoft Entra ID",
+        "Revoke the user's Microsoft Entra sessions",
+        "Disable the user's registered devices"
+      ],
+      "explanation": "Microsoft's emergency guidance starts at the source of authority (disable the AD account and reset its password twice), then blocks the cloud account so it does not wait for sync, then revokes refresh tokens and finally disables the user's devices so they cannot obtain new tokens."
+    },
+    {
+      "id": "D2-039",
+      "type": "order",
+      "objective": "2.1",
+      "topic": "Password protection and Microsoft Entra Kerberos",
+      "stem": "Put the steps in order to deploy Microsoft Entra password protection for on-premises Active Directory.",
+      "items": [
+        "Install the proxy service on a member server with outbound internet access",
+        "Register the proxy and the Active Directory forest with Microsoft Entra ID",
+        "Install the DC agent on the domain controllers",
+        "Run the policy in Audit mode and review the event logs",
+        "Switch the policy to Enforced mode"
+      ],
+      "explanation": "The proxy relays the banned password policy from Microsoft Entra ID, so it must be installed and registered with the forest before DC agents can download policy. Audit mode shows the impact before Enforced mode starts rejecting weak passwords."
+    },
+    {
+      "id": "D2-040",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "What is the minimum Microsoft Entra license needed for users who are covered by Conditional Access policies?",
+      "choices": [
+        "Microsoft Entra ID Free",
+        "Microsoft Entra ID P2",
+        "Microsoft Entra ID Governance",
+        "Microsoft Entra ID P1"
+      ],
+      "answer": "Microsoft Entra ID P1",
+      "explanation": "Conditional Access is a Microsoft Entra ID P1 feature. P2 adds risk-based conditions from ID Protection, but it is not needed for standard policies."
+    },
+    {
+      "id": "D2-041",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "Fabrikam is designing Conditional Access policies that apply to all users. Which accounts should be excluded from every policy to avoid locking the organization out?",
+      "choices": [
+        "All members of the Global Reader role",
+        "All users signing in from trusted locations",
+        "Emergency access accounts",
+        "All users who hold Entra ID P2 licenses"
+      ],
+      "answer": "Emergency access accounts",
+      "explanation": "Excluding emergency access accounts from policies keeps a way back in if a policy is misconfigured or an MFA service fails. Excluding trusted locations would weaken policies for everyone in the office."
+    },
+    {
+      "id": "D2-042",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "Contoso wants users to complete MFA when they register MFA or SSPR methods, unless they are on the trusted office network. What should the policy target?",
+      "choices": [
+        "The Register security information user action",
+        "The Register or join devices user action",
+        "The Microsoft Admin Portals resource",
+        "The Office 365 resource group"
+      ],
+      "answer": "The Register security information user action",
+      "explanation": "The Register security information user action covers combined MFA and SSPR registration, and a location condition can exclude the trusted network. Register or join devices applies to device registration, not security info."
+    },
+    {
+      "id": "D2-043",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "Adatum wants to block sign-ins from countries where it has no operations. What should you use in the policy?",
+      "choices": [
+        "The device platforms condition for those countries",
+        "A named location of countries in the Locations condition",
+        "A sign-in risk condition set to high",
+        "A filter for devices on a country attribute"
+      ],
+      "answer": "A named location of countries in the Locations condition",
+      "explanation": "Named locations can be defined by country or region and used in the Locations condition with a block grant. Sign-in risk measures suspicious behavior, not geography, and needs P2 licenses."
+    },
+    {
+      "id": "D2-044",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "A service principal used by a nightly job should only be able to get tokens from the company's data center IP range. Which Conditional Access configuration meets this?",
+      "choices": [
+        "Target the app as a resource and require multifactor authentication for it",
+        "Assign the policy to the workload identity with a location condition",
+        "Add the principal to a group and require a compliant device",
+        "Apply a sign-in frequency session control to the principal"
+      ],
+      "answer": "Assign the policy to the workload identity with a location condition",
+      "explanation": "Conditional Access for workload identities can include single-tenant service principals and block them outside named locations; this needs Microsoft Entra Workload ID Premium. A service principal cannot perform MFA or present a compliant device."
+    },
+    {
+      "id": "D2-045",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "Northwind wants to stop device code flow sign-ins for everyone except a few conference room devices that need it. Which condition should the policy use?",
+      "choices": [
+        "Authentication flows",
+        "Client apps",
+        "Device platforms",
+        "User risk"
+      ],
+      "answer": "Authentication flows",
+      "explanation": "The authentication flows condition controls device code flow and authentication transfer, so you can block it and exclude the few devices that need it, for example with a filter for devices. The client apps condition is used for legacy authentication protocols."
+    },
+    {
+      "id": "D2-046",
+      "objective": "2.2",
+      "topic": "Policy planning and assignments",
+      "stem": "A user is included in a Conditional Access policy that blocks access and is also a member of a group excluded from that policy. What happens when the user signs in?",
+      "choices": [
+        "The user is blocked because a block access control always wins",
+        "The user must complete MFA instead of being blocked",
+        "The result depends on which group was added first",
+        "The policy does not apply because exclusions take precedence"
+      ],
+      "answer": "The policy does not apply because exclusions take precedence",
+      "explanation": "In Conditional Access an exclusion always overrides an inclusion, so the policy is not applied to that user. Block does win over grant controls, but only among policies that actually apply."
+    },
+    {
+      "id": "D2-047",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Admins at Woodgrove must ensure administrators accessing admin portals sign in only with passkeys, Windows Hello for Business or certificate-based authentication. Which grant control should the policy use?",
+      "choices": [
+        "Require multifactor authentication",
+        "Require device to be marked as compliant",
+        "Require authentication strength",
+        "Require password change"
+      ],
+      "answer": "Require authentication strength",
+      "explanation": "An authentication strength such as the built-in phishing-resistant MFA strength limits which methods satisfy the policy. Require multifactor authentication accepts any MFA method, including text messages."
+    },
+    {
+      "id": "D2-048",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "A policy grants access with Require multifactor authentication and Require device to be marked as compliant, set to require one of the selected controls. A user on a personal unmanaged laptop completes MFA. What is the result?",
+      "choices": [
+        "Access is blocked because the device is not compliant",
+        "Access is granted because one control was satisfied",
+        "The user must enroll the laptop in Intune first",
+        "Access is granted only in a browser session"
+      ],
+      "answer": "Access is granted because one control was satisfied",
+      "explanation": "With require one of the selected controls, satisfying any listed control is enough. If the policy were set to require all the selected controls, the unmanaged laptop would be blocked."
+    },
+    {
+      "id": "D2-049",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Two Conditional Access policies apply to the same sign-in. One requires multifactor authentication and the other requires a compliant device. What must the user do to get access?",
+      "choices": [
+        "Satisfy both MFA and the compliant device requirement",
+        "Satisfy whichever policy was created first",
+        "Satisfy the policy with the higher priority",
+        "Satisfy either one because policies are combined with OR"
+      ],
+      "answer": "Satisfy both MFA and the compliant device requirement",
+      "explanation": "Every applicable Conditional Access policy is enforced, so the user must meet the requirements of all of them. Policies have no priority order."
+    },
+    {
+      "id": "D2-050",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Employees at Proseware use personal iOS and Android phones that will not be enrolled in Intune. The company wants Outlook mobile access only when the app is protected by Intune app protection policies. Which grant control should you use?",
+      "choices": [
+        "Require device to be marked as compliant",
+        "Require Microsoft Entra hybrid joined device",
+        "Require terms of use",
+        "Require app protection policy"
+      ],
+      "answer": "Require app protection policy",
+      "explanation": "Require app protection policy checks that the client app has an Intune app protection policy, which works without device enrollment. A compliant device requires the phone to be enrolled and managed."
+    },
+    {
+      "id": "D2-051",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Users at Bellows College must accept the current acceptable use agreement before they can open the HR portal. What should the Conditional Access policy for the HR portal require?",
+      "choices": [
+        "App enforced restrictions",
+        "A persistent browser session",
+        "A terms of use grant control",
+        "An app protection policy"
+      ],
+      "answer": "A terms of use grant control",
+      "explanation": "Terms of use appear as a grant control, so users must accept the agreement before access is granted. App enforced restrictions only limit what SharePoint and Exchange allow in the session."
+    },
+    {
+      "id": "D2-052",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Security analysts want to monitor sessions to a SaaS app in real time and block file downloads from unmanaged devices. Which Conditional Access session control should be used?",
+      "choices": [
+        "Conditional Access App Control",
+        "App enforced restrictions",
+        "Sign-in frequency",
+        "Persistent browser session"
+      ],
+      "answer": "Conditional Access App Control",
+      "explanation": "Conditional Access App Control routes the session through Microsoft Defender for Cloud Apps, which can monitor activity and block downloads for supported apps. App enforced restrictions only work with apps such as SharePoint and Exchange that enforce the limits themselves."
+    },
+    {
+      "id": "D2-053",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "What happens when a Conditional Access policy is set to report-only?",
+      "choices": [
+        "It is enforced only for administrator accounts",
+        "It is enforced but user prompts are suppressed",
+        "It is evaluated against past sign-ins only",
+        "It is evaluated and logged at sign-in but not enforced"
+      ],
+      "answer": "It is evaluated and logged at sign-in but not enforced",
+      "explanation": "Report-only policies are evaluated during sign-in and their would-be result is recorded in the sign-in logs, without blocking or prompting users. This lets admins measure impact before turning a policy on."
+    },
+    {
+      "id": "D2-054",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "A user says access to a finance app was blocked this morning. The admin needs to find which Conditional Access policy caused it. What should the admin review?",
+      "choices": [
+        "The directory audit logs for any recent Conditional Access policy changes",
+        "The Identity Secure Score recommended actions",
+        "The Conditional Access details of the failed sign-in in the sign-in logs",
+        "The provisioning logs for the user's account"
+      ],
+      "answer": "The Conditional Access details of the failed sign-in in the sign-in logs",
+      "explanation": "Each sign-in log entry shows every Conditional Access policy evaluated and its result, so the failing policy can be identified. Audit logs show who changed a policy, not how a specific sign-in was evaluated."
+    },
+    {
+      "id": "D2-055",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "Before changing any policy, an admin wants to know which existing Conditional Access policies would apply to a specific user signing in from an iOS device at a given IP address, without that user signing in. What should the admin use?",
+      "choices": [
+        "Report-only mode",
+        "The What If tool",
+        "The sign-in logs",
+        "An access review"
+      ],
+      "answer": "The What If tool",
+      "explanation": "The What If tool simulates a sign-in with the user, app, platform, location and other conditions you supply and lists the policies that would apply. Report-only mode and sign-in logs both depend on real sign-ins."
+    },
+    {
+      "id": "D2-056",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "Admins have several policies in report-only mode and want charts of their impact across all users and apps over the past month. What should they use?",
+      "choices": [
+        "The What If tool run for each user",
+        "The Conditional Access insights and reporting workbook",
+        "The audit logs filtered by policy category",
+        "The Identity Secure Score improvement actions"
+      ],
+      "answer": "The Conditional Access insights and reporting workbook",
+      "explanation": "The insights and reporting workbook summarizes policy results, including report-only results, from sign-in data sent to a Log Analytics workspace. The What If tool simulates one sign-in at a time."
+    },
+    {
+      "id": "D2-057",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "A user is not being prompted for MFA, and the sign-in log shows the MFA policy with a result of Not applied. What is the MOST likely cause?",
+      "choices": [
+        "The user had already satisfied the policy's grant controls in an earlier session",
+        "The policy requires a P2 license that the user lacks",
+        "The sign-in did not match the policy's assignments or conditions",
+        "Security defaults overrode the policy for the sign-in"
+      ],
+      "answer": "The sign-in did not match the policy's assignments or conditions",
+      "explanation": "Not applied means the sign-in fell outside the policy's users, target resources or conditions, for example because of an exclusion. A satisfied grant control would show the policy as Success instead."
+    },
+    {
+      "id": "D2-058",
+      "objective": "2.2",
+      "topic": "Session management and device restrictions",
+      "stem": "For all resources, users on unmanaged devices must reauthenticate every 8 hours and must not stay signed in after closing the browser. Which session settings should the policy use?",
+      "choices": [
+        "Sign-in frequency of 8 hours and a never persistent browser session",
+        "Sign-in frequency of 8 hours and app enforced restrictions",
+        "An always persistent browser session and a compliant device",
+        "Strict location enforcement with continuous access evaluation turned on"
+      ],
+      "answer": "Sign-in frequency of 8 hours and a never persistent browser session",
+      "explanation": "Sign-in frequency sets how often users must sign in again, and setting persistent browser session to never persistent ends the session when the browser closes. App enforced restrictions limit what users can do, not how long they stay signed in."
+    },
+    {
+      "id": "D2-059",
+      "objective": "2.2",
+      "topic": "Session management and device restrictions",
+      "stem": "An admin tries to add a persistent browser session control to a policy that targets only SharePoint Online, and the configuration is not accepted. What is the reason?",
+      "choices": [
+        "Persistent browser session works only with policies in report-only mode",
+        "Persistent browser session needs a hybrid joined device grant",
+        "Persistent browser session works only for guest users",
+        "Persistent browser session requires the policy to target all resources"
+      ],
+      "answer": "Persistent browser session requires the policy to target all resources",
+      "explanation": "The persistent browser session control is only supported when the policy targets all resources. Targeting a single app such as SharePoint Online is not supported for this control."
+    },
+    {
+      "id": "D2-060",
+      "objective": "2.2",
+      "topic": "Session management and device restrictions",
+      "stem": "Only privileged access workstations, tagged with the value PAW in extensionAttribute1, may be used to reach the Microsoft admin portals. Which condition lets the policy identify these devices?",
+      "choices": [
+        "The device platforms condition set to Windows only",
+        "A named location containing the PAW subnet",
+        "A filter for devices rule on extensionAttribute1",
+        "The client apps condition set to browser"
+      ],
+      "answer": "A filter for devices rule on extensionAttribute1",
+      "explanation": "Filter for devices targets or excludes devices based on device attributes, including extension attributes, so the policy can block everything except tagged workstations. A named location identifies network ranges, not the device itself."
+    },
+    {
+      "id": "D2-061",
+      "objective": "2.2",
+      "topic": "Session management and device restrictions",
+      "stem": "Contoso wants users to reauthenticate each time they enroll a device in Microsoft Intune, even if they recently signed in. Which session control should the policy use?",
+      "choices": [
+        "Sign-in frequency set to every time",
+        "Persistent browser session set to never",
+        "Require device to be marked as compliant",
+        "Disable continuous access evaluation"
+      ],
+      "answer": "Sign-in frequency set to every time",
+      "explanation": "Sign-in frequency every time forces a fresh authentication whenever the targeted resource or action is reached, which Microsoft supports for Intune enrollment. A never persistent browser session only affects whether the browser keeps the session after closing."
+    },
+    {
+      "id": "D2-062",
+      "objective": "2.2",
+      "topic": "Session management and device restrictions",
+      "stem": "Which services support the app enforced restrictions session control for limiting access from unmanaged devices?",
+      "choices": [
+        "Salesforce and ServiceNow",
+        "The Azure portal and Azure CLI",
+        "Any SAML gallery application",
+        "SharePoint Online and Exchange Online"
+      ],
+      "answer": "SharePoint Online and Exchange Online",
+      "explanation": "App enforced restrictions pass device information to SharePoint Online (and OneDrive) and Exchange Online, which then allow limited, browser-only access. Other SaaS apps need Conditional Access App Control instead."
+    },
+    {
+      "id": "D2-063",
+      "objective": "2.2",
+      "topic": "Continuous access evaluation",
+      "stem": "What does continuous access evaluation provide in Microsoft Entra ID?",
+      "choices": [
+        "Access tokens that all expire after five minutes so changes apply quickly",
+        "Near real-time enforcement of critical events by supporting services",
+        "An MFA prompt for every user once an hour",
+        "A monthly review of group memberships"
+      ],
+      "answer": "Near real-time enforcement of critical events by supporting services",
+      "explanation": "With continuous access evaluation, services such as Exchange Online and SharePoint Online are told about critical events and policy changes and can reject tokens right away. It works without shortening token lifetimes."
+    },
+    {
+      "id": "D2-064",
+      "objective": "2.2",
+      "topic": "Continuous access evaluation",
+      "stem": "Admins want Exchange Online to reject a token immediately when a user's IP address is outside the allowed named locations, even when the IP address seen by the service differs from the one seen by Microsoft Entra ID. What should they configure?",
+      "choices": [
+        "Disable resilience defaults in the session controls of the policy",
+        "Sign-in frequency set to every time",
+        "A never persistent browser session",
+        "Strict location enforcement for continuous access evaluation"
+      ],
+      "answer": "Strict location enforcement for continuous access evaluation",
+      "explanation": "Strict location enforcement makes CAE-capable services enforce location policies using the IP address the resource sees. Disabling resilience defaults only changes behavior during an outage."
+    },
+    {
+      "id": "D2-065",
+      "objective": "2.2",
+      "topic": "Continuous access evaluation",
+      "stem": "Why can Microsoft Entra ID issue longer-lived access tokens to clients and services that support continuous access evaluation?",
+      "choices": [
+        "The token is encrypted with the user's passkey",
+        "The service can revoke the token when a critical event occurs",
+        "The client is asked for MFA again each time it presents the token",
+        "The token is bound to a named location"
+      ],
+      "answer": "The service can revoke the token when a critical event occurs",
+      "explanation": "Because a CAE-capable service can reject a token as soon as it is told about events such as account disablement, the token can safely live longer. Security comes from revocation, not from a short lifetime."
+    },
+    {
+      "id": "D2-066",
+      "objective": "2.2",
+      "topic": "Continuous access evaluation",
+      "stem": "A user's account was disabled, but the user kept working in a third-party SaaS app for almost an hour afterwards. What is the MOST likely reason?",
+      "choices": [
+        "The app does not support CAE, so its token stays valid until expiry",
+        "CAE applies only to guest users from other tenants",
+        "Disabling an account is not one of the critical events that CAE handles",
+        "CAE requires every user to have a P2 license"
+      ],
+      "answer": "The app does not support CAE, so its token stays valid until expiry",
+      "explanation": "Only services that support continuous access evaluation can act on critical events; other apps rely on the token's normal lifetime. Account disablement is one of the critical events CAE handles."
+    },
+    {
+      "id": "D2-067",
+      "objective": "2.2",
+      "topic": "Authentication context and protected actions",
+      "stem": "Users must complete phishing-resistant MFA only when they open SharePoint sites labeled Highly Confidential, not for the rest of SharePoint. What should you use?",
+      "choices": [
+        "A Conditional Access policy that targets the SharePoint Online resource",
+        "App enforced restrictions for SharePoint Online",
+        "An authentication context applied through the sensitivity label",
+        "Sign-in frequency set to every time for SharePoint"
+      ],
+      "answer": "An authentication context applied through the sensitivity label",
+      "explanation": "An authentication context lets the label call a specific Conditional Access policy only for those sites. Targeting SharePoint Online as a resource would apply the requirement to every site."
+    },
+    {
+      "id": "D2-068",
+      "objective": "2.2",
+      "topic": "Authentication context and protected actions",
+      "stem": "When users activate the Global Administrator role in Privileged Identity Management, they must use a phishing-resistant method from a compliant device. What should you configure in the role settings?",
+      "choices": [
+        "Require multifactor authentication on activation",
+        "Require a Conditional Access authentication context",
+        "Require ticket information and justification on activation",
+        "Allow permanent active assignment"
+      ],
+      "answer": "Require a Conditional Access authentication context",
+      "explanation": "PIM role settings can require an authentication context, which links activation to a Conditional Access policy that demands phishing-resistant MFA and a compliant device. The basic MFA option on activation cannot check device compliance or method strength."
+    },
+    {
+      "id": "D2-069",
+      "objective": "2.2",
+      "topic": "Authentication context and protected actions",
+      "stem": "Contoso wants anyone who updates or deletes Conditional Access policies to first complete phishing-resistant MFA, even if they already signed in with MFA. What should you configure?",
+      "choices": [
+        "A policy targeting the Microsoft Admin Portals resource",
+        "PIM approval for the Conditional Access Administrator role",
+        "Protected actions linked to an authentication context",
+        "An access review of Conditional Access Administrators"
+      ],
+      "answer": "Protected actions linked to an authentication context",
+      "explanation": "Protected actions attach an authentication context to specific permissions, so the linked policy is checked at the moment the action is performed. A policy on the admin portals is only checked at sign-in and does not step up for the specific change."
+    },
+    {
+      "id": "D2-070",
+      "objective": "2.2",
+      "topic": "Authentication context and protected actions",
+      "stem": "What is a protected action in Microsoft Entra ID?",
+      "choices": [
+        "A role that can only be activated through Privileged Identity Management approval",
+        "An app permission that always needs admin consent",
+        "A policy that cannot be disabled by any administrator",
+        "A permission that requires an authentication context policy to be met"
+      ],
+      "answer": "A permission that requires an authentication context policy to be met",
+      "explanation": "A protected action is a directory permission, such as updating Conditional Access policies, that is assigned an authentication context so the linked policy must be satisfied before the action runs. It is not tied to PIM or consent."
+    },
+    {
+      "id": "D2-071",
+      "objective": "2.2",
+      "topic": "Policy templates and Microsoft-managed policies",
+      "stem": "Admins at a new tenant have little Conditional Access experience and want to quickly create Microsoft-recommended policies, such as requiring MFA for administrators. What should they use?",
+      "choices": [
+        "Conditional Access policy templates",
+        "Security defaults together with policies",
+        "Cross-tenant synchronization from a partner",
+        "The What If tool to generate policies"
+      ],
+      "answer": "Conditional Access policy templates",
+      "explanation": "Policy templates create preconfigured policies that follow Microsoft recommendations, grouped by scenario. Security defaults cannot be combined with enabled policies, and the What If tool only simulates."
+    },
+    {
+      "id": "D2-072",
+      "objective": "2.2",
+      "topic": "Policy templates and Microsoft-managed policies",
+      "stem": "An admin creates a policy from the Block legacy authentication template for all users. What is the BEST practice before enforcing it?",
+      "choices": [
+        "Enable it immediately for all users at once",
+        "Run it in report-only mode and review the impact",
+        "Exclude all users who use mobile devices",
+        "Turn on security defaults as a backup"
+      ],
+      "answer": "Run it in report-only mode and review the impact",
+      "explanation": "Running the policy in report-only mode shows which sign-ins still use legacy authentication so they can be fixed before blocking. Enabling it immediately risks breaking older clients and service accounts."
+    },
+    {
+      "id": "D2-073",
+      "objective": "2.2",
+      "topic": "Policy templates and Microsoft-managed policies",
+      "stem": "A Fabrikam admin creates a policy from the Require multifactor authentication for all users template. What should the admin make sure of before turning the policy on?",
+      "choices": [
+        "All users have Entra ID P2 licenses",
+        "The Authentication methods policy is off",
+        "Emergency access accounts are excluded",
+        "Per-user MFA is enforced for every account"
+      ],
+      "answer": "Emergency access accounts are excluded",
+      "explanation": "A policy that targets all users must exclude emergency access accounts so the tenant can be recovered if something goes wrong. Requiring MFA through Conditional Access needs P1, not P2."
+    },
+    {
+      "id": "D2-074",
+      "objective": "2.2",
+      "topic": "Policy templates and Microsoft-managed policies",
+      "stem": "Admins notice Conditional Access policies labeled as Microsoft-managed that they did not create, some in report-only mode. What can the admins do with these policies?",
+      "choices": [
+        "Change their state and exclude users, but not delete them",
+        "Delete them because they conflict with the custom policies you created",
+        "Nothing, because they are read-only and always on",
+        "Rename them and change their grant controls freely"
+      ],
+      "answer": "Change their state and exclude users, but not delete them",
+      "explanation": "Microsoft-managed policies can be reviewed, turned on or off and given exclusions, but they cannot be deleted. Admins are not locked out of them entirely."
+    },
+    {
+      "id": "D2-075",
+      "objective": "2.2",
+      "topic": "Policy templates and Microsoft-managed policies",
+      "stem": "A company wants a template-based policy that controls when and from where users can register their MFA and SSPR methods. Which template should the admin use?",
+      "choices": [
+        "Block legacy authentication",
+        "Require multifactor authentication for admins",
+        "Block access for unknown or unsupported device platform",
+        "Securing security info registration"
+      ],
+      "answer": "Securing security info registration",
+      "explanation": "The Securing security info registration template targets the Register security information user action, for example requiring a trusted location. The other templates protect sign-ins rather than registration."
+    },
+    {
+      "id": "D2-076",
+      "type": "match",
+      "objective": "2.2",
+      "topic": "Grant and session controls",
+      "stem": "Match each requirement to the Conditional Access control that meets it.",
+      "pairs": [
+        {
+          "item": "Stop all sign-ins from a country where the company has no staff",
+          "match": "Block access"
+        },
+        {
+          "item": "Allow only Intune-managed devices that meet policy",
+          "match": "Require device to be marked as compliant"
+        },
+        {
+          "item": "Accept only passkeys or Windows Hello for Business for admins",
+          "match": "Require authentication strength"
+        },
+        {
+          "item": "Give unmanaged devices browser-only SharePoint access without downloads",
+          "match": "Use app enforced restrictions"
+        },
+        {
+          "item": "Make users sign in again every four hours",
+          "match": "Sign-in frequency"
+        }
+      ],
+      "targets_extra": [
+        "Persistent browser session"
+      ],
+      "explanation": "Block access, compliant device and authentication strength are grant controls; app enforced restrictions and sign-in frequency are session controls. Persistent browser session only decides whether the browser keeps the session after it closes."
+    },
+    {
+      "id": "D2-077",
+      "type": "order",
+      "objective": "2.2",
+      "topic": "Testing and troubleshooting policies",
+      "stem": "Put the steps in order to roll out a new Conditional Access policy safely.",
+      "items": [
+        "Identify the target users and exclude emergency access accounts",
+        "Create the policy with its state set to report-only",
+        "Review report-only results in the sign-in logs and workbook",
+        "Adjust exclusions for unexpected impact and notify users",
+        "Set the policy state to On"
+      ],
+      "explanation": "Scope comes first, including emergency access exclusions; report-only then collects real results to review, problems are fixed and users told, and only then is the policy enforced. Turning it on before reviewing risks blocking users."
+    },
+    {
+      "id": "D2-078",
+      "type": "multi",
+      "objective": "2.2",
+      "topic": "Continuous access evaluation",
+      "stem": "Which TWO of the following are critical events that continuous access evaluation acts on?",
+      "choices": [
+        "A user account is disabled or deleted",
+        "An admin revokes the user's refresh tokens",
+        "A user changes their profile photo",
+        "A user is added to a new Microsoft 365 group",
+        "A new app registration is created",
+        "The user's manager attribute changes"
+      ],
+      "answers": [
+        "A user account is disabled or deleted",
+        "An admin revokes the user's refresh tokens"
+      ],
+      "explanation": "CAE critical events include account disablement or deletion, password change or reset, refresh token revocation, MFA being enabled for the user and high user risk. Profile and group changes are not critical events.",
+      "select": 2
+    },
+    {
+      "id": "D2-079",
+      "type": "order",
+      "objective": "2.2",
+      "topic": "Authentication context and protected actions",
+      "stem": "Put the steps in the order Microsoft documents to require phishing-resistant MFA before admins change Conditional Access policies.",
+      "items": [
+        "Create an authentication context",
+        "Create a policy that targets the context and requires phishing-resistant MFA",
+        "Add the policy update and delete permissions as protected actions with the context",
+        "Test by changing a policy while signed in as an administrator"
+      ],
+      "explanation": "The authentication context must exist before a policy can target it, and Microsoft has you build that policy before adding protected actions so the step-up applies as soon as the permissions are protected. Testing confirms the prompt appears."
+    }
+  ]
+}

@@ -1,0 +1,1064 @@
+{
+  "part": "Acronyms",
+  "entries": [
+    {
+      "term": "ABAC",
+      "kind": "acronym",
+      "expansion": "attribute-based access control",
+      "definition": "Authorization approach that adds conditions on properties, such as a custom security attribute on a user or an index tag on a storage blob, to Azure role assignments so access depends on those values rather than the role alone.",
+      "domain": "1",
+      "objectives": [
+        "1.2",
+        "3.1"
+      ]
+    },
+    {
+      "term": "ACS",
+      "kind": "acronym",
+      "expansion": "Assertion Consumer Service",
+      "definition": "The SAML endpoint, shown as Reply URL in Entra's single sign-on settings, where the identity provider posts the signed response; a mismatch between the configured and requested value is a common sign-in error.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "AD DS",
+      "kind": "acronym",
+      "expansion": "Active Directory Domain Services",
+      "definition": "The on-premises Windows Server directory role that stores users, groups and computers and authenticates them with Kerberos and NTLM; it is the source that Entra Connect Sync or Cloud Sync copies identities from into a cloud tenant.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "AD FS",
+      "kind": "acronym",
+      "expansion": "Active Directory Federation Services",
+      "definition": "A Windows Server role that issues security tokens for on-premises federation, letting a cloud tenant hand sign-in to local servers; Microsoft now recommends migrating its relying party trusts to cloud authentication such as PHS or PTA.",
+      "domain": "1",
+      "objectives": [
+        "1.4",
+        "3.2"
+      ]
+    },
+    {
+      "term": "ADAL",
+      "kind": "acronym",
+      "expansion": "Active Directory Authentication Library",
+      "definition": "The retired predecessor token library built for the older v1.0 endpoint; support ended in 2023, so apps still using it should migrate to MSAL to keep receiving security fixes.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "ADX",
+      "kind": "acronym",
+      "expansion": "Azure Data Explorer",
+      "definition": "Microsoft's big-data analytics service where the query language used for Entra log analysis originated; logs can also be exported there for long-term, high-volume retention and analysis.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "API",
+      "kind": "acronym",
+      "expansion": "application programming interface",
+      "definition": "A defined interface through which software requests data or actions from another system, such as Microsoft Graph; app registrations can expose their own scopes and request permissions to call others.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "ARM",
+      "kind": "acronym",
+      "expansion": "Azure Resource Manager",
+      "definition": "The deployment and management layer for Azure; it enforces Azure role assignments, and managed identities obtain tokens for it or other services so workloads can manage resources without stored secrets.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "AU",
+      "kind": "acronym",
+      "expansion": "administrative unit",
+      "definition": "A container inside a tenant that groups users, groups or devices so roles can be assigned with a scope limited to just those members, for example letting a regional helpdesk reset passwords only for its own staff.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "B2B",
+      "kind": "acronym",
+      "expansion": "business-to-business",
+      "definition": "External ID collaboration model that brings partner users into your workforce tenant as guests who keep signing in with their own home credentials, while you govern their access with groups, Conditional Access and access reviews.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "B2C",
+      "kind": "acronym",
+      "expansion": "business-to-consumer",
+      "definition": "The older, separate Azure customer-identity service for consumer-facing apps, with its own directory and custom sign-up user flows; new customer scenarios now use External ID in an external tenant instead.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "CA",
+      "kind": "acronym",
+      "expansion": "certificate authority",
+      "definition": "The trusted issuer that signs digital certificates; for certificate-based sign-in, admins upload its root and intermediate certificates plus revocation list locations so Entra can validate user certificates. Not the access-policy engine sharing the abbreviation.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CA",
+      "kind": "acronym",
+      "expansion": "Conditional Access",
+      "definition": "Entra's policy engine that evaluates signals such as user, app, device state, location and risk at sign-in and then blocks, allows or requires controls like MFA or a compliant device; distinct from a certificate issuer with the same abbreviation.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "CAE",
+      "kind": "acronym",
+      "expansion": "continuous access evaluation",
+      "definition": "Mechanism that lets supporting resources such as Exchange Online and SharePoint reject a token almost immediately after critical events like account disablement, password change or a network location change, instead of waiting for the token to expire.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "CASB",
+      "kind": "acronym",
+      "expansion": "cloud access security broker",
+      "definition": "A policy enforcement point between users and cloud services that discovers shadow IT, assesses app risk, and controls data and sessions; Microsoft Defender for Cloud Apps fills this role.",
+      "domain": "3",
+      "objectives": [
+        "3.4"
+      ]
+    },
+    {
+      "term": "CBA",
+      "kind": "acronym",
+      "expansion": "certificate-based authentication",
+      "definition": "Entra sign-in method in which the user presents an X.509 certificate, often on a smart card, which Entra validates against uploaded trusted issuers without needing AD FS; it can count as single-factor or phishing-resistant multifactor.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CIAM",
+      "kind": "acronym",
+      "expansion": "customer identity and access management",
+      "definition": "The discipline of handling sign-up, sign-in and profile management for a business's customers rather than its employees; in Entra it is delivered by External ID running in an external tenant configuration.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "CIDR",
+      "kind": "acronym",
+      "expansion": "Classless Inter-Domain Routing",
+      "definition": "Notation that writes an address range as a base address plus prefix length, such as 203.0.113.0/24; Conditional Access IP-range named locations and MFA trusted IPs are entered in this format.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "CSA",
+      "kind": "acronym",
+      "expansion": "custom security attribute",
+      "definition": "A business-defined key-value property, organized into attribute sets, that can be attached to users and enterprise applications; only dedicated attribute roles can read or set it, and it can drive Azure ABAC conditions and Conditional Access app filters.",
+      "domain": "1",
+      "objectives": [
+        "1.2",
+        "3.2"
+      ]
+    },
+    {
+      "term": "CSV",
+      "kind": "acronym",
+      "expansion": "comma-separated values",
+      "definition": "A plain-text table format used to bulk-create, invite or delete users, upload hardware OATH tokens, download access review results, and export sign-in or audit log extracts from the admin center.",
+      "domain": "4",
+      "objectives": [
+        "4.4",
+        "1.2"
+      ]
+    },
+    {
+      "term": "DC",
+      "kind": "acronym",
+      "expansion": "domain controller",
+      "definition": "A server running the on-premises directory service that holds a writable copy of the directory and answers Kerberos sign-in requests; hybrid agents such as pass-through authentication agents validate passwords against it.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "DLP",
+      "kind": "acronym",
+      "expansion": "data loss prevention",
+      "definition": "Controls that detect and stop sensitive content leaving approved boundaries; Defender for Cloud Apps session and file policies can block downloads or apply sensitivity labels to protect such information.",
+      "domain": "3",
+      "objectives": [
+        "3.4"
+      ]
+    },
+    {
+      "term": "DNS",
+      "kind": "acronym",
+      "expansion": "Domain Name System",
+      "definition": "The internet naming system that maps names to records; to verify a custom domain in a tenant you publish a TXT or MX record supplied by Microsoft at your registrar, proving you own the name.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "ECMA",
+      "kind": "acronym",
+      "expansion": "Extensible Connectivity Management Agent",
+      "definition": "The connector framework behind Entra's on-premises provisioning agent host, letting the cloud provisioning service create and update accounts in SQL databases and LDAP directories that lack a SCIM endpoint.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "FIDO2",
+      "kind": "acronym",
+      "expansion": "Fast Identity Online 2",
+      "definition": "An open standard for passwordless, phishing-resistant sign-in using public-key credentials (passkeys) stored on a hardware security key or device; each credential is bound to the site's origin, so it cannot be replayed on a fake page.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "FQDN",
+      "kind": "acronym",
+      "expansion": "fully qualified domain name",
+      "definition": "A complete host name including every label up to the top level, such as app.contoso.com; Global Secure Access uses it to define private app segments and web filtering destinations, and custom domains are entered in this form.",
+      "domain": "2",
+      "objectives": [
+        "2.4",
+        "1.1"
+      ]
+    },
+    {
+      "term": "gMSA",
+      "kind": "acronym",
+      "expansion": "group managed service account",
+      "definition": "An on-premises identity for running Windows services whose password the domain controllers rotate automatically and share with a defined set of servers; Entra Connect Sync can run under one instead of an account with a manually maintained password.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "GSA",
+      "kind": "acronym",
+      "expansion": "Global Secure Access",
+      "definition": "Microsoft's identity-centric security service edge that routes user traffic through Microsoft's network via a client, combining Internet Access and Private Access so Conditional Access and web filtering apply to network traffic.",
+      "domain": "2",
+      "objectives": [
+        "2.4"
+      ]
+    },
+    {
+      "term": "GUID",
+      "kind": "acronym",
+      "expansion": "globally unique identifier",
+      "definition": "A 128-bit value that is practically never repeated, used in Entra as the object ID, application (client) ID and tenant ID that scripts, Graph calls and PowerShell use to reference an object unambiguously.",
+      "domain": "1",
+      "objectives": [
+        "1.2",
+        "3.3"
+      ]
+    },
+    {
+      "term": "HR",
+      "kind": "acronym",
+      "expansion": "human resources",
+      "definition": "The people-management function whose system of record, such as Workday or SuccessFactors, drives inbound provisioning and lifecycle workflows so joiner, mover and leaver events create, update or disable accounts automatically.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "1.2"
+      ]
+    },
+    {
+      "term": "HRD",
+      "kind": "acronym",
+      "expansion": "home realm discovery",
+      "definition": "Logic that decides which identity provider should authenticate a user, typically from the domain in their sign-in name, so federated users are redirected to their own IdP; policies can tune or accelerate it.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "1.3"
+      ]
+    },
+    {
+      "term": "IAM",
+      "kind": "acronym",
+      "expansion": "identity and access management",
+      "definition": "The overall discipline of managing digital identities and controlling what they can reach; in the Azure portal, the access control blade of each resource is where Azure role assignments, including those for managed identities, are made.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "IdP",
+      "kind": "acronym",
+      "expansion": "identity provider",
+      "definition": "The service that authenticates a user and vouches for them with a token, for example Entra ID, Google, Facebook or a SAML or WS-Fed partner that external users are federated with.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "3.2"
+      ]
+    },
+    {
+      "term": "IGA",
+      "kind": "acronym",
+      "expansion": "identity governance and administration",
+      "definition": "The discipline of ensuring the right people get the right access for the right time, through lifecycle workflows, entitlement management, access reviews and privileged access controls, delivered by Microsoft Entra ID Governance.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.2"
+      ]
+    },
+    {
+      "term": "IP",
+      "kind": "acronym",
+      "expansion": "Internet Protocol",
+      "definition": "The addressing protocol whose public address ranges define trusted named locations in Conditional Access and appear in sign-in logs, letting policies treat corporate egress addresses differently from unknown networks.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "4.4"
+      ]
+    },
+    {
+      "term": "JIT",
+      "kind": "acronym",
+      "expansion": "just-in-time",
+      "definition": "Principle of granting elevated permissions only when needed and only for a limited window, then removing them automatically, which shrinks standing privilege; PIM role activation is Entra's main example.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "JSON",
+      "kind": "acronym",
+      "expansion": "JavaScript Object Notation",
+      "definition": "A lightweight text format of key-value pairs and arrays used by REST APIs, the app registration manifest, token payloads and exported audit logs.",
+      "domain": "3",
+      "objectives": [
+        "3.3",
+        "4.4"
+      ]
+    },
+    {
+      "term": "JWT",
+      "kind": "acronym",
+      "expansion": "JSON Web Token",
+      "definition": "A compact, Base64url-encoded token with a header, a claims payload and a signature; Entra issues ID tokens and access tokens in this format, and apps validate the signature before trusting claims.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "KQL",
+      "kind": "acronym",
+      "expansion": "Kusto Query Language",
+      "definition": "The read-only language for querying Log Analytics, Microsoft Sentinel and Defender advanced hunting data, used to filter and summarize Entra sign-in and audit logs with operators such as where, summarize and project.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "LDAP",
+      "kind": "acronym",
+      "expansion": "Lightweight Directory Access Protocol",
+      "definition": "An open protocol for querying and modifying directory data over TCP 389, or 636 with TLS; Entra can provision users into such directories through the ECMA connector host, and many on-premises apps bind to it.",
+      "domain": "1",
+      "objectives": [
+        "1.4",
+        "3.2"
+      ]
+    },
+    {
+      "term": "MAM",
+      "kind": "acronym",
+      "expansion": "mobile application management",
+      "definition": "App-level protection, delivered by Intune app protection policies, that secures corporate data inside specific apps without enrolling the device, suiting personal phones; Conditional Access can require an app protection policy.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "MAU",
+      "kind": "acronym",
+      "expansion": "monthly active users",
+      "definition": "The billing unit for External ID: each distinct external user who signs in or authenticates during a calendar month counts once, with the first 50,000 of them free.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "MCAS",
+      "kind": "acronym",
+      "expansion": "Microsoft Cloud App Security",
+      "definition": "The former name of Microsoft's CASB before it was rebranded into the Defender family in 2021; older documentation and some exam material still use it for shadow IT discovery and session policies.",
+      "domain": "3",
+      "objectives": [
+        "3.4"
+      ]
+    },
+    {
+      "term": "MDA",
+      "kind": "acronym",
+      "expansion": "Microsoft Defender for Cloud Apps",
+      "definition": "Microsoft's current CASB product inside the Defender portal, which discovers shadow IT, governs OAuth apps and uses Conditional Access app control to monitor or block risky actions in browser sessions in real time.",
+      "domain": "3",
+      "objectives": [
+        "3.4"
+      ]
+    },
+    {
+      "term": "MDM",
+      "kind": "acronym",
+      "expansion": "mobile device management",
+      "definition": "Device-level management, in Microsoft's case Intune, that enrolls whole devices, pushes configuration and reports compliance; Conditional Access can then require a device marked compliant before granting access.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "MFA",
+      "kind": "acronym",
+      "expansion": "multifactor authentication",
+      "definition": "Sign-in that requires two or more proofs from different categories, such as a password plus an Authenticator approval or a FIDO2 key, sharply reducing the value of stolen passwords; Entra enforces it through Conditional Access or security defaults.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "MIM",
+      "kind": "acronym",
+      "expansion": "Microsoft Identity Manager",
+      "definition": "Microsoft's legacy on-premises synchronization and provisioning server; its connector framework underpins the ECMA connector host, and organizations are moving its workloads to Entra Connect, Cloud Sync and ID Governance.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "MSA",
+      "kind": "acronym",
+      "expansion": "managed service account",
+      "definition": "A standalone on-premises identity for running a service on one specific server, with its password rotated automatically by the domain; unlike the group variant it cannot be shared across several servers.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "MSA",
+      "kind": "acronym",
+      "expansion": "Microsoft account",
+      "definition": "A personal consumer identity, such as an Outlook.com or Xbox sign-in, distinct from work or school accounts; app registrations choose whether to accept these personal identities, and B2B guests can use them to sign in.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "3.3"
+      ]
+    },
+    {
+      "term": "MSAL",
+      "kind": "acronym",
+      "expansion": "Microsoft Authentication Library",
+      "definition": "Microsoft's current family of token libraries for .NET, JavaScript, Python, Java, iOS and Android that handles sign-in, token caching and refresh against the identity platform; it replaced the retired ADAL.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "MTO",
+      "kind": "acronym",
+      "expansion": "multitenant organization",
+      "definition": "A grouping of several Entra tenants owned by one company that uses cross-tenant synchronization and access settings so people in each tenant appear as members in the others, improving collaboration in Teams and other Microsoft 365 apps.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "NPS",
+      "kind": "acronym",
+      "expansion": "Network Policy Server",
+      "definition": "Windows Server role that handles RADIUS requests; installing Microsoft's MFA extension on it lets VPN gateways and other RADIUS clients require Entra multifactor authentication for on-premises network access.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "OATH",
+      "kind": "acronym",
+      "expansion": "Open Authentication",
+      "definition": "An industry initiative defining open standards for one-time code tokens; Entra supports its time-based tokens as software apps or as hardware fobs, which admins import with a CSV of serial numbers and secret keys.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "OAuth",
+      "kind": "acronym",
+      "expansion": "Open Authorization",
+      "definition": "The authorization framework apps use to obtain access tokens for APIs such as Microsoft Graph via delegated or application permissions; user or admin consent grants those scopes, making illicit consent grants a key attack.",
+      "domain": "3",
+      "objectives": [
+        "3.3",
+        "3.4"
+      ]
+    },
+    {
+      "term": "OBO",
+      "kind": "acronym",
+      "expansion": "On-Behalf-Of",
+      "definition": "OAuth flow in which a middle-tier API exchanges the token it received from a user's app for a new token to call a downstream API, preserving the user's delegated identity and permissions.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "OIDC",
+      "kind": "acronym",
+      "expansion": "OpenID Connect",
+      "definition": "An identity layer on top of the OAuth 2.0 protocol that adds an ID token describing the signed-in user, giving modern web and mobile apps standard sign-in alongside API authorization.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "OTP",
+      "kind": "acronym",
+      "expansion": "one-time passcode",
+      "definition": "A short code valid for a single use and a brief period; Entra emails one to B2B guests who have no other identity provider, and phone or app methods deliver similar codes for MFA and password reset.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "2.1"
+      ]
+    },
+    {
+      "term": "OU",
+      "kind": "acronym",
+      "expansion": "organizational unit",
+      "definition": "A container inside the on-premises directory used to organize objects and delegate control; sync tools can filter by it so only selected containers of users and groups are synchronized to the cloud.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "PAM",
+      "kind": "acronym",
+      "expansion": "privileged access management",
+      "definition": "The broader practice of securing, controlling and monitoring elevated accounts and their use; in Entra it is delivered by just-in-time role activation, hardened admin workstations, and separate cloud-only admin accounts.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "PAW",
+      "kind": "acronym",
+      "expansion": "privileged access workstation",
+      "definition": "A hardened, dedicated device used only for sensitive administrative tasks, isolating admin credentials from email and web browsing; Conditional Access can require it for admin roles through device filters.",
+      "domain": "4",
+      "objectives": [
+        "4.3",
+        "2.2"
+      ]
+    },
+    {
+      "term": "PHS",
+      "kind": "acronym",
+      "expansion": "password hash synchronization",
+      "definition": "A hybrid sign-in method in which the sync engine copies a salted, re-hashed version of each on-premises credential hash to the cloud so users authenticate directly against Entra ID; it also enables leaked credentials detection in ID Protection.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "PIM",
+      "kind": "acronym",
+      "expansion": "Privileged Identity Management",
+      "definition": "Entra ID Governance feature that makes admin roles and group memberships eligible rather than permanent, requiring activation with justification, MFA or approval for a limited time, plus alerts, audit history and role access reviews.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "PKCE",
+      "kind": "acronym",
+      "expansion": "Proof Key for Code Exchange",
+      "definition": "An OAuth extension in which the client sends a hashed one-time secret with the authorization request and the original value when redeeming the code, so intercepted codes are useless; required for single-page apps.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "PKI",
+      "kind": "acronym",
+      "expansion": "public key infrastructure",
+      "definition": "The set of certificate authorities, policies and revocation lists that issue and vouch for digital certificates; Entra's certificate-based sign-in depends on the organization's issuing hierarchy being uploaded as trusted issuers.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "PRT",
+      "kind": "acronym",
+      "expansion": "Primary Refresh Token",
+      "definition": "A long-lived artifact issued to a Windows, macOS, iOS or Android device after an Entra sign-in that enables single sign-on to cloud apps and carries device and MFA claims; on Windows it is protected by the TPM where available.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "PTA",
+      "kind": "acronym",
+      "expansion": "pass-through authentication",
+      "definition": "A hybrid sign-in method in which lightweight agents on local servers validate the user's password against on-premises domain controllers in real time, so no password data is stored in the cloud and on-premises account states are honored.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "QR",
+      "kind": "acronym",
+      "expansion": "Quick Response",
+      "definition": "A scannable two-dimensional image code; Entra offers it as an authentication method for frontline workers on shared devices, who scan a personal printed code and enter a PIN instead of typing a username and password.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "RADIUS",
+      "kind": "acronym",
+      "expansion": "Remote Authentication Dial-In User Service",
+      "definition": "Older client-server protocol that network devices like VPN concentrators and Wi-Fi controllers use to send sign-in requests to a central server, where an NPS extension can add Entra MFA.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "RBAC",
+      "kind": "acronym",
+      "expansion": "role-based access control",
+      "definition": "Authorization model that grants permissions by assigning built-in or custom roles to users, groups or service principals at a scope; Entra roles govern directory objects, while Azure roles govern subscriptions and resources.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "ROPC",
+      "kind": "acronym",
+      "expansion": "Resource Owner Password Credentials",
+      "definition": "Legacy OAuth grant in which an app collects the user's username and password directly and sends them to the token endpoint; it breaks MFA and federation, and Microsoft discourages its use.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "RP",
+      "kind": "acronym",
+      "expansion": "relying party",
+      "definition": "The application or service that trusts tokens from a federation server; in AD FS each app is configured as a trust of this type, and those trusts are what organizations migrate to Entra enterprise apps.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "1.4"
+      ]
+    },
+    {
+      "term": "SaaS",
+      "kind": "acronym",
+      "expansion": "software as a service",
+      "definition": "Cloud-hosted applications consumed over the internet, such as Salesforce or ServiceNow; they are added from the Entra app gallery for single sign-on and provisioning, and discovered by Defender for Cloud Apps.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "3.4"
+      ]
+    },
+    {
+      "term": "SAML",
+      "kind": "acronym",
+      "expansion": "Security Assertion Markup Language",
+      "definition": "An XML-based standard where the identity provider sends a signed assertion to an app's reply URL; it is the common way to set up single sign-on for older enterprise SaaS apps in the gallery.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "SCIM",
+      "kind": "acronym",
+      "expansion": "System for Cross-domain Identity Management",
+      "definition": "An open REST and JSON standard for automating the creation, update and deprovisioning of user and group accounts in applications; Entra's provisioning service uses it to push identities to SaaS apps.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "SDK",
+      "kind": "acronym",
+      "expansion": "software development kit",
+      "definition": "A packaged set of libraries, tools and samples for building against a platform; Microsoft's identity libraries and the Microsoft Graph libraries let developers add sign-in and API calls without hand-coding protocols.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "SID",
+      "kind": "acronym",
+      "expansion": "security identifier",
+      "definition": "The unique on-premises value that Windows assigns to every user, group and computer account; synchronized users keep it in a cloud attribute so services can map them back to their local identity.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "SIEM",
+      "kind": "acronym",
+      "expansion": "security information and event management",
+      "definition": "A platform that collects and correlates logs from many sources for detection and investigation; Microsoft Sentinel fills this role, and Entra sign-in and audit logs are streamed to it through diagnostic settings.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "SKU",
+      "kind": "acronym",
+      "expansion": "stock keeping unit",
+      "definition": "The product identifier for a specific license plan, such as Entra ID P1 or Microsoft 365 E5, that administrators assign to users directly or through group-based licensing.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "SMS",
+      "kind": "acronym",
+      "expansion": "Short Message Service",
+      "definition": "Text-message channel that delivers verification codes to a registered mobile number for MFA, SSPR or phone-number sign-in; convenient but exposed to SIM swapping and interception, so Microsoft recommends stronger methods.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SOA",
+      "kind": "acronym",
+      "expansion": "source of authority",
+      "definition": "Which system owns an object and is allowed to change it; hybrid objects are normally mastered on-premises, but Entra now lets admins convert synchronized groups or users so the cloud becomes the place they are managed.",
+      "domain": "1",
+      "objectives": [
+        "1.4"
+      ]
+    },
+    {
+      "term": "SOAR",
+      "kind": "acronym",
+      "expansion": "security orchestration, automation, and response",
+      "definition": "Capability that automates incident handling with playbooks; in Microsoft Sentinel, Logic Apps playbooks can, for example, disable a risky Entra user or revoke sessions when an alert fires.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "SOC",
+      "kind": "acronym",
+      "expansion": "security operations center",
+      "definition": "The team that monitors alerts, triages incidents and responds to threats around the clock; identity admins supply it with Entra logs, risk detections and workbooks to investigate compromised accounts.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "SoD",
+      "kind": "acronym",
+      "expansion": "separation of duties",
+      "definition": "Control that prevents one person from holding conflicting access; in entitlement management an access package can be marked incompatible with another package or group so users cannot hold both.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "SP",
+      "kind": "acronym",
+      "expansion": "service principal",
+      "definition": "The local representation of an application or managed identity inside a specific tenant, holding role assignments, consent grants and sign-in settings; it appears as an enterprise application and is created from an app registration.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "3.2"
+      ]
+    },
+    {
+      "term": "SP",
+      "kind": "acronym",
+      "expansion": "service provider",
+      "definition": "In SAML terminology, the application that relies on the identity provider's assertion to sign the user in; sign-in can be initiated from the app itself or from the identity provider, such as through My Apps.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "SPA",
+      "kind": "acronym",
+      "expansion": "single-page application",
+      "definition": "A browser-based JavaScript app that dynamically rewrites one page; in app registrations this platform type uses the authorization code flow with PKCE and redirect URIs enabled for cross-origin token redemption.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "SSE",
+      "kind": "acronym",
+      "expansion": "Security Service Edge",
+      "definition": "The cloud-delivered security stack of secure web gateway, CASB and zero-trust private access functions; Microsoft's version is Global Secure Access, comprising Entra Internet Access and Entra Private Access.",
+      "domain": "2",
+      "objectives": [
+        "2.4"
+      ]
+    },
+    {
+      "term": "SSO",
+      "kind": "acronym",
+      "expansion": "single sign-on",
+      "definition": "Lets a user authenticate once and then reach many applications without re-entering credentials; in Entra it can be federation-based (SAML, OIDC), password-based, linked, or seamless for domain-joined PCs.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "1.4"
+      ]
+    },
+    {
+      "term": "SSPR",
+      "kind": "acronym",
+      "expansion": "self-service password reset",
+      "definition": "Feature that lets users unlock their account or replace a forgotten password themselves after proving identity with registered methods, reducing helpdesk calls; with writeback enabled, the new secret is also written to on-premises directories.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SWG",
+      "kind": "acronym",
+      "expansion": "secure web gateway",
+      "definition": "A cloud proxy that inspects outbound internet traffic and enforces rules like category and FQDN filtering; Entra Internet Access fills this role in Global Secure Access, applying content filtering policies tied to user identity.",
+      "domain": "2",
+      "objectives": [
+        "2.4"
+      ]
+    },
+    {
+      "term": "TAP",
+      "kind": "acronym",
+      "expansion": "Temporary Access Pass",
+      "definition": "A time-limited code issued by an admin that satisfies strong authentication, used to onboard new users, register passwordless methods or recover access after a lost device; it can be configured for one-time use.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "TLS",
+      "kind": "acronym",
+      "expansion": "Transport Layer Security",
+      "definition": "The encryption protocol that secures HTTPS sessions; Global Secure Access can inspect it by terminating and re-encrypting sessions with a customer-supplied certificate so URL-level filtering and threat checks can see inside encrypted traffic.",
+      "domain": "2",
+      "objectives": [
+        "2.4"
+      ]
+    },
+    {
+      "term": "TOTP",
+      "kind": "acronym",
+      "expansion": "time-based one-time password",
+      "definition": "Algorithm that generates a fresh six-digit code from a shared secret and the current clock, typically every 30 seconds; Entra accepts these from Microsoft Authenticator and from third-party software or hardware OATH tokens.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "ToU",
+      "kind": "acronym",
+      "expansion": "terms of use",
+      "definition": "A document, usually a PDF, that users must accept before accessing resources; Conditional Access can present it as a grant control, record acceptances, and require re-acceptance on a schedule or per device.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "1.3"
+      ]
+    },
+    {
+      "term": "TPM",
+      "kind": "acronym",
+      "expansion": "Trusted Platform Module",
+      "definition": "A hardware security chip in a device that stores keys so they cannot be exported; Windows Hello for Business keys and the device's primary refresh token are protected by it.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "UEBA",
+      "kind": "acronym",
+      "expansion": "user and entity behavior analytics",
+      "definition": "Microsoft Sentinel capability that builds baselines of normal activity for users, hosts and apps from Entra and other logs, then scores anomalies such as unusual sign-in locations to aid investigation.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "UPN",
+      "kind": "acronym",
+      "expansion": "user principal name",
+      "definition": "The internet-style sign-in name of a user, formatted like alias@contoso.com; for synchronized users its suffix must match a verified custom domain, otherwise the account falls back to the tenant's onmicrosoft.com name.",
+      "domain": "1",
+      "objectives": [
+        "1.2",
+        "1.4"
+      ]
+    },
+    {
+      "term": "URI",
+      "kind": "acronym",
+      "expansion": "Uniform Resource Identifier",
+      "definition": "A string that names a resource; in app registrations it appears as the redirect address where tokens are returned and as the Application ID used to name an exposed API, for example api://contoso-app.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "VPN",
+      "kind": "acronym",
+      "expansion": "virtual private network",
+      "definition": "An encrypted tunnel that connects a remote device to an internal corporate network; Entra Private Access aims to replace broad tunnel access with per-application access, and legacy tunnel servers can enforce Entra MFA through the NPS extension.",
+      "domain": "2",
+      "objectives": [
+        "2.4",
+        "2.1"
+      ]
+    },
+    {
+      "term": "WHfB",
+      "kind": "acronym",
+      "expansion": "Windows Hello for Business",
+      "definition": "Passwordless sign-in for Windows devices that replaces the password with a PIN or biometric unlocking an asymmetric key held in the TPM; it is phishing resistant and supports hybrid deployment models such as cloud Kerberos trust.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "WS-Fed",
+      "kind": "acronym",
+      "expansion": "Web Services Federation",
+      "definition": "An older federation protocol from the SOAP-era specification family, used by AD FS and by many Microsoft and on-premises apps, that passes security tokens between an identity provider and a relying party.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "1.4"
+      ]
+    },
+    {
+      "term": "XDR",
+      "kind": "acronym",
+      "expansion": "extended detection and response",
+      "definition": "Microsoft's unified defense portal that correlates alerts across identities, endpoints, email and cloud apps into incidents; ID Protection risk and Entra sign-in data feed it, and its advanced hunting uses KQL.",
+      "domain": "4",
+      "objectives": [
+        "4.4",
+        "2.3"
+      ]
+    },
+    {
+      "term": "ZTNA",
+      "kind": "acronym",
+      "expansion": "Zero Trust network access",
+      "definition": "Approach that grants users access to specific private applications only after verifying identity and device per request, instead of placing them on the whole corporate network; Entra Private Access provides it as a VPN replacement.",
+      "domain": "2",
+      "objectives": [
+        "2.4"
+      ]
+    }
+  ]
+}

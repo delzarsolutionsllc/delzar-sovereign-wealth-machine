@@ -1,0 +1,1225 @@
+{
+  "domain": "4",
+  "title": "SC-300 Domain 4 questions (4.1, 4.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+  "questions": [
+    {
+      "id": "D4-001",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "The marketing lead at Fabrikam must be able to create new catalogs for her department's resources and manage them herself. She must not hold any Microsoft Entra administrator role. What should you do?",
+      "choices": [
+        "Assign her the Identity Governance Administrator role",
+        "Make her a catalog owner of the General catalog",
+        "Add her to the Catalog creator role in entitlement management",
+        "Assign her the Groups Administrator role so she can manage all groups"
+      ],
+      "answer": "Add her to the Catalog creator role in entitlement management",
+      "explanation": "Catalog creator is an entitlement management role, not a directory role, and lets a user create catalogs and become owner of the ones they create. Being an owner of the General catalog only lets her manage that one catalog; it does not let her create new ones."
+    },
+    {
+      "id": "D4-002",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "A help desk analyst at Tailspin Toys must add and remove users from the access packages in the Sales catalog. The analyst must not change any policy or resource in those access packages. Which role should you assign, following the principle of least privilege?",
+      "choices": [
+        "Access package assignment manager",
+        "Access package manager",
+        "Catalog owner",
+        "Catalog reader"
+      ],
+      "answer": "Access package assignment manager",
+      "explanation": "An access package assignment manager can manage assignments and requests for the catalog's access packages but cannot edit their policies or resources. An access package manager can also create and edit access packages and policies, which is more than the analyst needs."
+    },
+    {
+      "id": "D4-003",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "A project manager at Contoso must create access packages and edit their request policies in the Projects catalog, using only resources that are already in that catalog. Which role should you assign, following the principle of least privilege?",
+      "choices": [
+        "Catalog owner",
+        "Access package assignment manager",
+        "Catalog creator",
+        "Access package manager"
+      ],
+      "answer": "Access package manager",
+      "explanation": "An access package manager can create and manage access packages and their policies from the resources already in a catalog. A catalog owner can also add resources and manage catalog roles, which goes beyond what is required."
+    },
+    {
+      "id": "D4-004",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "In Microsoft Entra entitlement management, what is a catalog?",
+      "choices": [
+        "A list of the enterprise applications that are published through Application Proxy",
+        "A container of resources and access packages with its own delegated owners",
+        "A report of each user's current group memberships and roles",
+        "A Conditional Access template that grants access to app bundles"
+      ],
+      "answer": "A container of resources and access packages with its own delegated owners",
+      "explanation": "A catalog groups resources (groups, applications, SharePoint Online sites) and the access packages built from them, and can be delegated to catalog owners and other catalog roles. It is not a report or a Conditional Access construct."
+    },
+    {
+      "id": "D4-005",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "A catalog owner at Northwind Traders tries to add the HR-Readers security group to the HR catalog, but the group cannot be selected. The catalog owner holds no Microsoft Entra administrator role. What should you do so the catalog owner can add the group?",
+      "choices": [
+        "Assign the catalog owner the Catalog reader role on the HR catalog",
+        "Make the catalog owner an owner of the security group",
+        "Convert the security group to a Microsoft 365 group",
+        "Enable the catalog for external users"
+      ],
+      "answer": "Make the catalog owner an owner of the security group",
+      "explanation": "To add a resource to a catalog, a user without a suitable administrator role must be a catalog owner and also own the resource. The Catalog reader role only grants view access and would not help."
+    },
+    {
+      "id": "D4-006",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "Contoso wants every member user in the tenant, but no guest users, to be able to request the Finance Tools access package. Which option should the policy use for who can request access?",
+      "choices": [
+        "For users in your directory: All users (including guests)",
+        "For users not in your directory: All configured connected organizations",
+        "None (administrator direct assignments only)",
+        "For users in your directory: All members (excluding guests)"
+      ],
+      "answer": "For users in your directory: All members (excluding guests)",
+      "explanation": "The All members (excluding guests) option lets every member user request while excluding guests. All users (including guests) would also let existing guest users request the package."
+    },
+    {
+      "id": "D4-007",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "Adatum uses an access package to give contractors access to a build system. Only administrators may assign the package, and users must not be able to submit requests for it in any way. Which policy option should you choose?",
+      "choices": [
+        "None (administrator direct assignments only)",
+        "Mark the access package as hidden in My Access",
+        "For users in your directory: Specific users and groups",
+        "Require two stages of approval for every request"
+      ],
+      "answer": "None (administrator direct assignments only)",
+      "explanation": "A policy that allows only administrator direct assignments means no user can request the package. Marking a package as hidden only removes it from the My Access search; users with the direct link could still request it."
+    },
+    {
+      "id": "D4-008",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "Which statement BEST describes an access package in entitlement management?",
+      "choices": [
+        "A set of Conditional Access policies that apply to one group",
+        "A single group membership that can never be set to expire",
+        "A bundle of resource roles with policies that define who can get them",
+        "A list of Microsoft Entra roles that eligible users activate through PIM"
+      ],
+      "answer": "A bundle of resource roles with policies that define who can get them",
+      "explanation": "An access package bundles resource roles (group membership, application roles, SharePoint Online site roles) with one or more policies that control who can request, approval, and lifecycle. It is not a Conditional Access or PIM object."
+    },
+    {
+      "id": "D4-009",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "An access package manager at Litware is building a new access package, but the Project Docs SharePoint Online site does not appear in the list of available resources. What is the MOST likely cause?",
+      "choices": [
+        "SharePoint Online sites cannot be included in access packages",
+        "The site must first be connected to a Microsoft 365 group",
+        "Access package managers can include only applications in packages",
+        "The site has not been added to the catalog that holds the package"
+      ],
+      "answer": "The site has not been added to the catalog that holds the package",
+      "explanation": "Access package managers can only use resources that are already in the catalog; a catalog owner must add the site first. SharePoint Online sites are a supported resource type, so that distractor is false."
+    },
+    {
+      "id": "D4-010",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "Approvers of the Research Data access package at Fabrikam need each requester to state a project code and an end date in the request. What should you configure in the access package policy?",
+      "choices": [
+        "A terms of use document that the requester must open and accept",
+        "A second approval stage assigned to the project leads",
+        "Requestor information questions that the requester must answer",
+        "A custom security attribute on each requester account"
+      ],
+      "answer": "Requestor information questions that the requester must answer",
+      "explanation": "Requestor information lets you add questions to the request form, and the answers are shown to approvers. A terms of use document records acceptance of a document; it does not collect project-specific answers."
+    },
+    {
+      "id": "D4-011",
+      "objective": "4.1",
+      "topic": "Approvals in access packages",
+      "stem": "At Wingtip Toys, requests for the Payroll Viewer access package must be approved first by the requester's manager and then by a member of the Security Reviewers group. What should you configure?",
+      "choices": [
+        "One approval stage that lists both the manager and Security Reviewers",
+        "Two approval stages: the manager first, then Security Reviewers",
+        "Security Reviewers as an incompatible group on the package",
+        "A monthly access review of the package with both as reviewers"
+      ],
+      "answer": "Two approval stages: the manager first, then Security Reviewers",
+      "explanation": "Sequential approval needs separate stages; the request moves to the second stage only after the first stage approves. In a single stage with several approvers, a decision by any one of them is enough, so the manager alone could approve."
+    },
+    {
+      "id": "D4-012",
+      "objective": "4.1",
+      "topic": "Approvals in access packages",
+      "stem": "An access package policy uses the requester's manager as the approver. Some requests at Contoso cannot be routed because the requester has no manager set in Microsoft Entra ID. What should you configure?",
+      "choices": [
+        "Fallback approvers for the stage that uses the manager",
+        "Alternate approvers who receive requests after a timeout",
+        "Requestor justification for every request in the policy",
+        "An expiration date on the access package assignments"
+      ],
+      "answer": "Fallback approvers for the stage that uses the manager",
+      "explanation": "Fallback approvers are used when the manager or sponsor approver cannot be found. Alternate approvers handle requests that the first approvers do not act on in time, not missing managers."
+    },
+    {
+      "id": "D4-013",
+      "objective": "4.1",
+      "topic": "Approvals in access packages",
+      "stem": "Approvers for the Vendor Portal access package at Tailspin Toys are often away. If they do not act on a request within three days, the request must go to the operations team. What should you configure?",
+      "choices": [
+        "Alternate approvers, forwarding requests after three days without a decision",
+        "Fallback approvers for the approval stage",
+        "A request timeout of three days so the request expires",
+        "A second approval stage that is assigned to the operations team members"
+      ],
+      "answer": "Alternate approvers, forwarding requests after three days without a decision",
+      "explanation": "Alternate approvers receive the request when the original approvers have not decided after the configured number of days. A second stage would require both groups to approve, and fallback approvers are only used when the approver cannot be determined."
+    },
+    {
+      "id": "D4-014",
+      "objective": "4.1",
+      "topic": "Approvals in access packages",
+      "stem": "A single approval stage in an access package policy lists three approvers. How many of them must approve a request for it to move forward?",
+      "choices": [
+        "All three of the listed approvers",
+        "Any one of the listed approvers",
+        "A majority of the listed approvers",
+        "Only the first approver in the list"
+      ],
+      "answer": "Any one of the listed approvers",
+      "explanation": "Within a stage, the first decision by any listed approver applies to the request. Requiring several independent approvals is done with multiple approval stages instead."
+    },
+    {
+      "id": "D4-015",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "Contractors at Northwind Traders request the Summer Project access package at different times, but all of their access must end on September 30. How should you configure the policy's expiration?",
+      "choices": [
+        "Assignments expire a set number of days after approval",
+        "Assignments never expire and are reviewed every quarter",
+        "Assignments expire on a specific date of September 30",
+        "Assignments never expire, and users may request extensions"
+      ],
+      "answer": "Assignments expire on a specific date of September 30",
+      "explanation": "Choosing a specific date ends every assignment from that policy on the same day, whenever the request was approved. A number of days would end access at different times for each contractor."
+    },
+    {
+      "id": "D4-016",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "Interns at Adatum receive the Intern Tools access package for 90 days. Interns who still need access must be able to ask for more time before their assignment ends, without submitting a brand new request. What should you configure?",
+      "choices": [
+        "Set the policy's assignments to never expire",
+        "Add a second approval stage to the policy",
+        "Add Intern Tools as its own incompatible access package",
+        "Allow users to extend access in the policy's expiration settings"
+      ],
+      "answer": "Allow users to extend access in the policy's expiration settings",
+      "explanation": "Allowing extension lets users with an expiring assignment request more time from My Access, and the request goes through the policy's approval settings. Removing expiration would leave access open-ended."
+    },
+    {
+      "id": "D4-017",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "To enforce separation of duties at Contoso, users who already have the Payments Approver access package must not be able to request the Payments Creator access package. What should you configure?",
+      "choices": [
+        "Require two approval stages on Payments Creator",
+        "Move the two access packages into separate catalogs",
+        "Add Payments Approver as an incompatible package on Payments Creator",
+        "Schedule a recurring access review of the Payments Approver assignments"
+      ],
+      "answer": "Add Payments Approver as an incompatible package on Payments Creator",
+      "explanation": "Incompatible access packages on Payments Creator block requests from users who already hold Payments Approver. Approval stages or separate catalogs do not stop an approver from granting both packages to the same person."
+    },
+    {
+      "id": "D4-018",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "Members of the Internal Auditors security group at Fabrikam, which is managed outside entitlement management, must not be able to request the Finance Admin access package. What should you configure?",
+      "choices": [
+        "Add Internal Auditors as an incompatible group on Finance Admin",
+        "Exclude Internal Auditors from a Conditional Access policy",
+        "Change the policy to All members (excluding guests)",
+        "Remove the Internal Auditors group from the catalog"
+      ],
+      "answer": "Add Internal Auditors as an incompatible group on Finance Admin",
+      "explanation": "Incompatible groups block requests from users who are members of the specified group, even when that membership is managed elsewhere. A Conditional Access exclusion controls sign-in, not who can request an access package."
+    },
+    {
+      "id": "D4-019",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "Before turning on separation of duties checks between two access packages, a Litware administrator wants to know which users already hold assignments to both. What should you use?",
+      "choices": [
+        "The Microsoft Entra sign-in logs filtered by application",
+        "The Identity Secure Score improvement actions",
+        "The catalog's list of resources and resource roles",
+        "A list of users who already have incompatible access"
+      ],
+      "answer": "A list of users who already have incompatible access",
+      "explanation": "Entitlement management can list users who already have access that conflicts with a package's incompatible settings, so you can clean it up first. New checks only block future requests; they do not remove existing conflicting assignments."
+    },
+    {
+      "id": "D4-020",
+      "objective": "4.1",
+      "topic": "Expiration and separation of duties",
+      "stem": "Assignments to the Partner Collaboration access package at Wingtip Toys never expire. Each quarter, the sponsor of each assigned user must confirm that the access is still needed, and denied users must lose the package. What should you configure with the LEAST administrative effort?",
+      "choices": [
+        "A Teams + Groups review of each group in the package",
+        "Access reviews in the access package's assignment policy",
+        "An expiration date that is changed by hand every quarter",
+        "Lifecycle workflows that run when a user's manager changes"
+      ],
+      "answer": "Access reviews in the access package's assignment policy",
+      "explanation": "A policy can include recurring access reviews of its assignments, and denied users lose the whole access package. Reviewing the underlying groups separately would remove group membership but leave the access package assignment in place."
+    },
+    {
+      "id": "D4-021",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "Where do users at Contoso go to request access packages and to approve the requests that are routed to them?",
+      "choices": [
+        "The My Apps portal",
+        "The My Access portal",
+        "The My Account portal",
+        "The Microsoft Entra admin center"
+      ],
+      "answer": "The My Access portal",
+      "explanation": "Requesters browse, request and extend access packages in My Access, and approvers act on requests there too. My Apps launches applications, and My Account manages a user's own profile and security info."
+    },
+    {
+      "id": "D4-022",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "A request for the Engineering access package at Adatum shows a status of Delivery failed because one SharePoint Online site was briefly unavailable. The site is now available. What should you do with the LEAST administrative effort?",
+      "choices": [
+        "Ask the user to cancel and submit a new request",
+        "Delete the access package and create it again",
+        "Add the user to each resource by hand",
+        "Reprocess the request"
+      ],
+      "answer": "Reprocess the request",
+      "explanation": "Reprocessing retries delivery of a failed or partially delivered request without another approval cycle. Asking for a new request repeats the approval process for no reason."
+    },
+    {
+      "id": "D4-023",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "A user at Tailspin Toys submitted a request for the wrong access package, and the request is still pending approval. As an administrator, what should you do?",
+      "choices": [
+        "Cancel the pending request",
+        "Remove the user's access package assignment",
+        "Delete the access package's request policy",
+        "Start an access review of the access package"
+      ],
+      "answer": "Cancel the pending request",
+      "explanation": "A pending request can be canceled by an administrator or the requester, so no approver acts on it. There is no assignment yet, so removing an assignment does nothing."
+    },
+    {
+      "id": "D4-024",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "A new hire at Fabrikam needs the Onboarding access package today, and an administrator wants to grant it immediately while keeping the package's expiration settings. What should the administrator do?",
+      "choices": [
+        "Add the user to each of the package's groups by hand",
+        "Remove the approval stage from the package's policy",
+        "Directly assign the user to the access package",
+        "Add the user as a reviewer of the access package"
+      ],
+      "answer": "Directly assign the user to the access package",
+      "explanation": "A direct assignment by an administrator grants the package right away and applies the selected policy's lifecycle settings, such as expiration. Adding the user to each group by hand bypasses entitlement management, so nothing would remove that access later."
+    },
+    {
+      "id": "D4-025",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "An auditor asks Northwind Traders for a list of users who currently hold the Treasury access package and the date each assignment ends. What should you use?",
+      "choices": [
+        "The Conditional Access What If tool for each user",
+        "The provisioning logs for the Treasury application",
+        "The catalog's resource roles and their owners",
+        "The access package's assignments list, downloaded as a file"
+      ],
+      "answer": "The access package's assignments list, downloaded as a file",
+      "explanation": "The assignments view of an access package shows who holds it, with start and end dates, and can be downloaded. The What If tool evaluates Conditional Access policies and says nothing about assignments."
+    },
+    {
+      "id": "D4-026",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "When a user at Litware is granted the Field Sales access package, an Azure Logic Apps workflow must create the user's account in an external commission system. What should you configure?",
+      "choices": [
+        "A Conditional Access policy that targets the Logic App",
+        "An app registration with a separate client secret created for each user",
+        "A custom extension on the access package that calls the Logic App",
+        "A connected organization for the commission system"
+      ],
+      "answer": "A custom extension on the access package that calls the Logic App",
+      "explanation": "Custom extensions let entitlement management call an Azure Logic App at points such as when an assignment is granted. A connected organization represents an external directory of users, not a downstream system to provision."
+    },
+    {
+      "id": "D4-027",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "Guest users at Contoso must accept a non-disclosure agreement before they can open the Projects SharePoint Online site. What should you implement?",
+      "choices": [
+        "Company branding sign-in text that describes the agreement",
+        "Terms of use, required by a Conditional Access policy that targets guests",
+        "Requestor justification in the access package policy",
+        "Inbound cross-tenant access settings that trust MFA from the partner tenants"
+      ],
+      "answer": "Terms of use, required by a Conditional Access policy that targets guests",
+      "explanation": "A terms of use document enforced through the Conditional Access grant control blocks access until the user accepts it, and records the acceptance. Company branding text is only displayed; it does not capture consent."
+    },
+    {
+      "id": "D4-028",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "In which file format must you upload a terms of use document to Microsoft Entra ID?",
+      "choices": [
+        "PDF",
+        "Microsoft Word (DOCX)",
+        "HTML",
+        "Plain text (TXT)"
+      ],
+      "answer": "PDF",
+      "explanation": "Terms of use documents are uploaded as PDF files, with an optional separate PDF for each language. Word, HTML and plain text files are not accepted."
+    },
+    {
+      "id": "D4-029",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "Adatum's legal team requires that each user accepts the terms of use again 90 days after that user's last acceptance. Which setting should you configure?",
+      "choices": [
+        "Duration before re-acceptance required (days), set to 90",
+        "Expire consents, set to a quarterly frequency",
+        "Require users to consent on every device",
+        "Require users to expand the terms of use"
+      ],
+      "answer": "Duration before re-acceptance required (days), set to 90",
+      "explanation": "Duration before re-acceptance counts from each user's own acceptance date. Expire consents resets acceptance for everyone on a fixed schedule from a start date, so users who accepted recently would be asked again early."
+    },
+    {
+      "id": "D4-030",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "The legal team at Wingtip Toys requires that users open and view the terms of use document before they can accept it. Which setting should you enable?",
+      "choices": [
+        "Require users to consent on every device",
+        "Require users to expand the terms of use",
+        "Expire consents on a yearly schedule",
+        "Add a language version of the document"
+      ],
+      "answer": "Require users to expand the terms of use",
+      "explanation": "Requiring users to expand the terms of use makes them open the document before the Accept button works. Consent on every device controls where acceptance is needed, not whether the document is viewed."
+    },
+    {
+      "id": "D4-031",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "An auditor asks Fabrikam for evidence of which users accepted or declined the Partner Agreement terms of use. What should you review?",
+      "choices": [
+        "The risky users report in Microsoft Entra ID Protection",
+        "The provisioning logs for the partner application",
+        "The terms of use acceptance details and audit logs",
+        "The access review history for guest users"
+      ],
+      "answer": "The terms of use acceptance details and audit logs",
+      "explanation": "Terms of use keeps per-user accept and decline records, and the related audit log entries show when each action happened. ID Protection reports track risk, not consent to a document."
+    },
+    {
+      "id": "D4-032",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "Tailspin Toys has employees in France and Japan who must read the terms of use in their own language. What should you do with the LEAST administrative effort?",
+      "choices": [
+        "Create a separate terms of use and policy per country",
+        "Translate the document and host it on a public website",
+        "Ask users to change their browser language before sign-in",
+        "Add a PDF for each language to the same terms of use"
+      ],
+      "answer": "Add a PDF for each language to the same terms of use",
+      "explanation": "One terms of use can hold language versions, and users see the version that matches their language. Separate terms of use and Conditional Access policies per country would work but take more effort to manage."
+    },
+    {
+      "id": "D4-033",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "Litware's project partners use their own Microsoft Entra tenant. Partner users must be able to request the Joint Project access package, and access package policies must be able to target the partner as a known organization. What should you configure FIRST?",
+      "choices": [
+        "Guest invitations for every partner user in advance",
+        "A cross-tenant synchronization configuration",
+        "A connected organization for the partner tenant",
+        "Catalog reader assignments for the partner users"
+      ],
+      "answer": "A connected organization for the partner tenant",
+      "explanation": "A connected organization represents the partner's directory, so policies for users not in your directory can allow its users to request access and be added as guests on approval. Inviting everyone up front defeats the self-service, lifecycle-managed approach."
+    },
+    {
+      "id": "D4-034",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "External users at Contoso are added as guests through entitlement management. When a guest loses the last access package assignment, the guest must be blocked from signing in and removed from the tenant 30 days later. What should you configure?",
+      "choices": [
+        "Entitlement management settings for external users",
+        "An access review of all guest users in the tenant",
+        "A Conditional Access policy that blocks all guest users",
+        "A 30-day expiration on each access package assignment"
+      ],
+      "answer": "Entitlement management settings for external users",
+      "explanation": "Entitlement management settings can block sign-in and remove external users, after a set number of days, when they no longer have any assignments. A 30-day expiration would end access early instead of cleaning up after the last assignment ends."
+    },
+    {
+      "id": "D4-035",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "A connected organization was created automatically at Adatum after a partner user requested an access package through a policy that allows all external users. The organization's users must now be able to request packages that are scoped to All configured connected organizations. What should you do?",
+      "choices": [
+        "Add the partner domain to the B2B collaboration allow list",
+        "Move the access package to a new catalog",
+        "Assign the partner's sponsors the Catalog owner role",
+        "Change the connected organization's state from Proposed to Configured"
+      ],
+      "answer": "Change the connected organization's state from Proposed to Configured",
+      "explanation": "Automatically created connected organizations are in the Proposed state and are not part of the All configured connected organizations scope until an administrator sets them to Configured. Allow lists control invitations, not this policy scope."
+    },
+    {
+      "id": "D4-036",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "No access package in Northwind Traders' Internal HR catalog may ever be requested by external users, even if someone misconfigures a policy later. What should you configure?",
+      "choices": [
+        "Delete all of the tenant's connected organizations",
+        "Set the catalog's Enabled for external users setting to No",
+        "Remove the Guest Inviter role from all users",
+        "Require two approval stages on every policy"
+      ],
+      "answer": "Set the catalog's Enabled for external users setting to No",
+      "explanation": "When a catalog is not enabled for external users, its access packages cannot have policies that let users outside the directory request access. Deleting connected organizations would not stop a policy that allows any external user."
+    },
+    {
+      "id": "D4-037",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "Requests from Fabrikam's partner users must be approved by the partner's own project lead, who is a user in the partner's tenant. What should you configure?",
+      "choices": [
+        "Make the project lead a catalog owner of the catalog",
+        "Add the project lead as an external sponsor and use sponsors as approvers",
+        "Add the project lead as a fallback reviewer in a recurring guest access review",
+        "Assign the project lead the Guest Inviter role"
+      ],
+      "answer": "Add the project lead as an external sponsor and use sponsors as approvers",
+      "explanation": "A connected organization can list internal and external sponsors, and an access package policy can route approval to those sponsors. Making the partner lead a catalog owner would give management rights far beyond approving requests."
+    },
+    {
+      "id": "D4-038",
+      "type": "match",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "Match each entitlement management role to the task it allows.",
+      "pairs": [
+        {
+          "item": "Catalog creator",
+          "match": "Create new catalogs"
+        },
+        {
+          "item": "Catalog owner",
+          "match": "Add resources to a catalog and manage its roles"
+        },
+        {
+          "item": "Access package manager",
+          "match": "Create and edit access packages in a catalog"
+        },
+        {
+          "item": "Access package assignment manager",
+          "match": "Add and remove assignments for existing access packages"
+        },
+        {
+          "item": "Catalog reader",
+          "match": "View a catalog's access packages without changing them"
+        }
+      ],
+      "targets_extra": [
+        "Approve role activations in Privileged Identity Management"
+      ],
+      "explanation": "Entitlement management roles are scoped to catalogs and range from creating catalogs down to read-only access. Approving PIM activations belongs to PIM approvers, not to any entitlement management role."
+    },
+    {
+      "id": "D4-039",
+      "type": "order",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "Put the steps in order to give a project team self-service access to a group, an application and a SharePoint Online site through entitlement management.",
+      "items": [
+        "Create a catalog for the project",
+        "Add the group, application and SharePoint Online site to the catalog",
+        "Create an access package and select resource roles from the catalog",
+        "Configure a request policy with approvers and expiration",
+        "Share the access package's My Access link with eligible users"
+      ],
+      "explanation": "Resources must be in a catalog before an access package in that catalog can use them, and the policy decides who can request and for how long. Users can only request once the package and its policy exist."
+    },
+    {
+      "id": "D4-040",
+      "type": "match",
+      "objective": "4.1",
+      "topic": "Approvals in access packages",
+      "stem": "Match each access package approval setting to its effect.",
+      "pairs": [
+        {
+          "item": "Fallback approvers",
+          "match": "Used when the manager or sponsor approver cannot be found"
+        },
+        {
+          "item": "Alternate approvers",
+          "match": "Receive the request when the first approvers do not decide in time"
+        },
+        {
+          "item": "Require approver justification",
+          "match": "Approvers must give a reason for their decision"
+        },
+        {
+          "item": "Require requestor justification",
+          "match": "Requesters must explain why they need access"
+        }
+      ],
+      "targets_extra": [
+        "Users must accept a terms of use document"
+      ],
+      "explanation": "Fallback approvers cover a missing approver, while alternate approvers cover a slow one. Justification settings capture reasons from approvers or requesters; terms of use acceptance is a Conditional Access control."
+    },
+    {
+      "id": "D4-041",
+      "type": "multi",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "External users at Wingtip Toys are added through access packages. When an external user's last assignment ends, the account must be cleaned up automatically. Which TWO entitlement management settings should you configure?",
+      "choices": [
+        "Block external user from signing in to this directory",
+        "Remove external user",
+        "A self-service sign-up user flow for guests",
+        "Inbound cross-tenant access settings that require MFA",
+        "Mark the catalog's access packages as hidden"
+      ],
+      "answers": [
+        "Block external user from signing in to this directory",
+        "Remove external user"
+      ],
+      "select": 2,
+      "explanation": "The external user lifecycle settings block sign-in and then remove the guest after a set number of days once the last assignment is gone. Sign-up user flows and cross-tenant MFA settings govern how users arrive, not how they are cleaned up."
+    },
+    {
+      "id": "D4-042",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "What is the main purpose of access reviews in Microsoft Entra ID Governance?",
+      "choices": [
+        "To detect sign-ins that come from anonymous IP addresses",
+        "To approve user requests for new access packages",
+        "To block legacy authentication protocols for all users",
+        "To regularly confirm that users still need their access"
+      ],
+      "answer": "To regularly confirm that users still need their access",
+      "explanation": "Access reviews let reviewers attest to group memberships, application assignments, access package assignments and role assignments so unneeded access can be removed. Detecting risky sign-ins is a Microsoft Entra ID Protection function."
+    },
+    {
+      "id": "D4-043",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "Contoso plans to review the members of several security groups every quarter. Which license is required for the users involved in the reviews?",
+      "choices": [
+        "Microsoft Entra ID P2",
+        "Microsoft Entra ID Free",
+        "Microsoft Entra ID P1",
+        "Microsoft 365 Business Basic"
+      ],
+      "answer": "Microsoft Entra ID P2",
+      "explanation": "Access reviews require Microsoft Entra ID P2 or Microsoft Entra ID Governance licenses. Microsoft Entra ID P1 covers features such as Conditional Access but not access reviews."
+    },
+    {
+      "id": "D4-044",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "An administrator at Adatum must create access reviews of security groups and enterprise applications. Which role should you assign, following the principle of least privilege?",
+      "choices": [
+        "Global Administrator",
+        "Privileged Role Administrator",
+        "Identity Governance Administrator",
+        "Security Administrator"
+      ],
+      "answer": "Identity Governance Administrator",
+      "explanation": "Identity Governance Administrator can create and manage access reviews of groups and applications, as well as entitlement management. Global Administrator could also do it but grants far more than needed."
+    },
+    {
+      "id": "D4-045",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "Fabrikam must review who holds the Global Administrator and Exchange Administrator roles every quarter. Role assignments are managed in Privileged Identity Management (PIM). Which role should you assign to the person who creates these reviews, following the principle of least privilege?",
+      "choices": [
+        "Global Administrator",
+        "User Administrator",
+        "Security Reader",
+        "Privileged Role Administrator"
+      ],
+      "answer": "Privileged Role Administrator",
+      "explanation": "Reviews of Microsoft Entra roles are created through PIM, which Privileged Role Administrator can manage. User Administrator cannot manage privileged role assignments or their reviews."
+    },
+    {
+      "id": "D4-046",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "Group owners at Tailspin Toys want to create and manage access reviews for the groups they own, without being given any administrator role. What should you do?",
+      "choices": [
+        "Assign each owner the Identity Governance Administrator role",
+        "Make each group owner a catalog owner in entitlement management for their groups",
+        "Turn on the access review setting that lets group owners create reviews",
+        "Assign each owner the Groups Administrator role"
+      ],
+      "answer": "Turn on the access review setting that lets group owners create reviews",
+      "explanation": "An access reviews setting lets group owners create and manage reviews for the groups they own. Assigning an administrator role to each owner breaks the requirement and grants tenant-wide rights."
+    },
+    {
+      "id": "D4-047",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "Northwind Traders wants to review which users are eligible for or assigned to the Billing Reader role on an Azure subscription. Where should this review be created?",
+      "choices": [
+        "As a Teams + Groups review of the group that holds the subscription owners",
+        "In Privileged Identity Management for Azure resource roles",
+        "As an access package review in entitlement management",
+        "As an Applications review of the Azure portal app"
+      ],
+      "answer": "In Privileged Identity Management for Azure resource roles",
+      "explanation": "Reviews of Azure resource role assignments are created through PIM for Azure resources. A Teams + Groups review covers group membership, not Azure role assignments made directly to users."
+    },
+    {
+      "id": "D4-048",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "Litware wants owners of every Microsoft 365 group that contains guests to review only the guests in their group. Which review scope should you configure?",
+      "choices": [
+        "Teams + Groups, all Microsoft 365 groups with guests, guest users only",
+        "Teams + Groups, selected teams and groups, all users",
+        "Applications, all enterprise applications that have guests, guest users only",
+        "Access packages, all access packages, all users"
+      ],
+      "answer": "Teams + Groups, all Microsoft 365 groups with guests, guest users only",
+      "explanation": "The all Microsoft 365 groups with guest users option creates a review for each such group, and limiting the users to guests leaves members out. Selecting all users would make owners review employees as well."
+    },
+    {
+      "id": "D4-049",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "Contoso must review which users are assigned to its Salesforce enterprise application, which uses user assignment. What should you select as what to review?",
+      "choices": [
+        "Applications, then the Salesforce enterprise application",
+        "Teams + Groups, then a group named Salesforce Users",
+        "Access packages, then the default catalog",
+        "Microsoft Entra roles, then the Application Administrator role holders"
+      ],
+      "answer": "Applications, then the Salesforce enterprise application",
+      "explanation": "An Applications review covers the users and groups assigned to the enterprise application. Reviewing one group would miss users assigned to the application directly."
+    },
+    {
+      "id": "D4-050",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "Adatum wants a review of a large group to include only members who have not signed in for 90 days, so reviewers can focus on stale accounts. What should you configure?",
+      "choices": [
+        "Scope the review to guest users only",
+        "Scope the review to inactive users (90 days)",
+        "Set the review's duration to 90 days",
+        "Set the review's recurrence to quarterly with auto apply turned on"
+      ],
+      "answer": "Scope the review to inactive users (90 days)",
+      "explanation": "The inactive users option limits the reviewees to users with no sign-in during the chosen number of days. Duration and recurrence control timing, not which users are reviewed."
+    },
+    {
+      "id": "D4-051",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "Assignments to Fabrikam's Partner Portal access package must be reviewed, and users who are denied must lose the entire access package. What should you select as what to review?",
+      "choices": [
+        "Teams + Groups, then each group in the package",
+        "Applications, then the My Access portal",
+        "Access packages, then the Partner Portal access package",
+        "Azure resource roles, then the subscription used by the partner portal"
+      ],
+      "answer": "Access packages, then the Partner Portal access package",
+      "explanation": "Reviewing the access package removes the denied users' package assignments, which also removes the resources it granted. Reviewing the groups would only remove group membership while the package assignment stays."
+    },
+    {
+      "id": "D4-052",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "An access review of a group uses the Guest users only scope. Which users are included in the review?",
+      "choices": [
+        "Only users from configured connected organizations",
+        "Guests plus members who have never signed in",
+        "Only guests who were invited in the last 30 days",
+        "Users in the group whose user type is Guest"
+      ],
+      "answer": "Users in the group whose user type is Guest",
+      "explanation": "The guest scope includes the resource's users with the Guest user type, however they were invited. It is not limited to connected organizations or to recent invitations."
+    },
+    {
+      "id": "D4-053",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "Wingtip Toys wants each guest user to confirm whether they still need access to the Projects team. Which reviewer option should you choose?",
+      "choices": [
+        "Managers of users",
+        "Group owners",
+        "Users review their own access",
+        "Selected users or groups"
+      ],
+      "answer": "Users review their own access",
+      "explanation": "A self-review asks each user to attest to their own continued need, which suits guests who have no manager in the tenant. Managers of users would fail for most guests because they have no manager set."
+    },
+    {
+      "id": "D4-054",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "Managers at Contoso must review their direct reports' access to the Expenses application, but some users have no manager set in Microsoft Entra ID. What should you configure?",
+      "choices": [
+        "Managers of users as reviewers, with fallback reviewers",
+        "Users review their own access, with fallback reviewers",
+        "Group owners as reviewers, without fallback reviewers",
+        "The Global Administrator as the only selected reviewer for all users"
+      ],
+      "answer": "Managers of users as reviewers, with fallback reviewers",
+      "explanation": "Fallback reviewers take over the review of users whose manager cannot be found. Without them, users with no manager would not be reviewed by anyone."
+    },
+    {
+      "id": "D4-055",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "At Adatum, managers must review access to the Finance app first, and then the app owner must review only the users that managers approved. What should you configure?",
+      "choices": [
+        "One stage that lists both the managers and the app owner as the reviewers",
+        "Two separate reviews that start on the same date",
+        "A self-review followed by a manual export to the app owner",
+        "A multi-stage review that passes only approved users to the second stage"
+      ],
+      "answer": "A multi-stage review that passes only approved users to the second stage",
+      "explanation": "Multi-stage reviews run stages in sequence, and you can choose which reviewees, such as those approved, go to the next stage. In a single stage with several reviewers, any one reviewer's decision would stand."
+    },
+    {
+      "id": "D4-056",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "Several reviewers are assigned to the same stage of an access review, and two of them give different decisions for one user. Which decision is recorded?",
+      "choices": [
+        "The first decision submitted by any reviewer",
+        "The last decision submitted by any reviewer",
+        "The decision of the reviewer listed first",
+        "Deny, because the reviewers disagreed"
+      ],
+      "answer": "The last decision submitted by any reviewer",
+      "explanation": "When multiple reviewers can review the same user, the most recent decision is recorded. There is no majority or automatic deny when reviewers disagree."
+    },
+    {
+      "id": "D4-057",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "Litware is creating one access review that covers every Microsoft 365 group with guests. Each group must be reviewed by the people who own that group. Which reviewer option requires the LEAST administrative effort?",
+      "choices": [
+        "Selected users or groups",
+        "Group owners",
+        "Managers of users",
+        "Users review their own access"
+      ],
+      "answer": "Group owners",
+      "explanation": "Group owners routes each group's review to that group's owners automatically. Selected users or groups would need one fixed set of reviewers for all groups."
+    },
+    {
+      "id": "D4-058",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "At the end of an access review at Fabrikam, users who were denied must lose access to the group without an administrator taking any further action. What should you enable?",
+      "choices": [
+        "If reviewers don't respond: Remove access",
+        "Reminders to reviewers by email",
+        "Justification required for every decision",
+        "Auto apply results to resource"
+      ],
+      "answer": "Auto apply results to resource",
+      "explanation": "Auto apply removes denied users from the resource when the review completes. The If reviewers don't respond setting only decides what happens to users with no decision; it does not apply the denied ones by itself."
+    },
+    {
+      "id": "D4-059",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Reviewers at Tailspin Toys often ignore access reviews of guest users. Company policy says a guest with no decision at the end of a review must lose access. Which option should you set for If reviewers don't respond?",
+      "choices": [
+        "Remove access",
+        "No change",
+        "Approve access",
+        "Take recommendations"
+      ],
+      "answer": "Remove access",
+      "explanation": "Remove access denies every unreviewed user, and with auto apply turned on the access is removed. Take recommendations could keep guests who signed in recently, which breaks the policy."
+    },
+    {
+      "id": "D4-060",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "A review of guest users at Northwind Traders must ensure that denied guests can no longer sign in and are later deleted from the tenant. Which action should you configure for denied guest users?",
+      "choices": [
+        "Remove user's membership from the resource",
+        "Disable the user's account in the user's home tenant",
+        "Block user from signing-in for 30 days, then remove user from the tenant",
+        "Delete the group that the denied guests are members of after the review ends"
+      ],
+      "answer": "Block user from signing-in for 30 days, then remove user from the tenant",
+      "explanation": "For reviews scoped to guests, you can block denied guests from signing in and then remove them from the tenant after 30 days. Removing membership only takes them out of the resource; the guest account stays."
+    },
+    {
+      "id": "D4-061",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Contoso must review a group every three months, and reviewers must have two weeks to finish each review. How should you configure the review?",
+      "choices": [
+        "Monthly recurrence with a duration of 14 days",
+        "Quarterly recurrence with a duration of 90 days",
+        "Annual recurrence with a duration of 14 days",
+        "Quarterly recurrence with a duration of 14 days"
+      ],
+      "answer": "Quarterly recurrence with a duration of 14 days",
+      "explanation": "Recurrence sets how often a new instance starts, and duration sets how long reviewers have to finish it. A 90-day duration would run each review for the whole quarter instead of two weeks."
+    },
+    {
+      "id": "D4-062",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Reviewers at Adatum want the review to suggest denying users who have not signed in recently. What should you enable in the review settings?",
+      "choices": [
+        "Auto apply results to resource",
+        "Justification required",
+        "The no sign-in decision helper for reviewers",
+        "Additional content for the reviewer notification email"
+      ],
+      "answer": "The no sign-in decision helper for reviewers",
+      "explanation": "Reviewer decision helpers show recommendations, such as deny for users with no recent sign-in. Auto apply only acts on decisions after the review ends; it does not help reviewers decide."
+    },
+    {
+      "id": "D4-063",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Litware wants users who are not reviewed by the end of an access review to receive the system's suggested decision, based on their recent activity. Which option should you set for If reviewers don't respond?",
+      "choices": [
+        "Remove access",
+        "Take recommendations",
+        "Approve access",
+        "No change"
+      ],
+      "answer": "Take recommendations",
+      "explanation": "Take recommendations applies the recommended decision, such as approve for recently active users and deny for inactive ones, to each unreviewed user. No change leaves everyone's access as it was."
+    },
+    {
+      "id": "D4-064",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Wingtip Toys' auditors require reviewers to explain every Approve decision in an access review. What should you enable?",
+      "choices": [
+        "Justification required",
+        "Mail notifications",
+        "Reminders",
+        "Auto apply results to resource"
+      ],
+      "answer": "Justification required",
+      "explanation": "With justification required, reviewers must enter a reason when they approve access. Mail notifications and reminders only tell reviewers that a review needs attention."
+    },
+    {
+      "id": "D4-065",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "The compliance team at Fabrikam must be told by email whenever a quarterly access review of the Finance group ends. What should you configure in the review's completion settings?",
+      "choices": [
+        "Send a notification at the end of the review to the compliance team",
+        "Add the compliance team as fallback reviewers",
+        "Add the compliance team as group owners of the Finance group so they get emails",
+        "Turn on reminders for the compliance team"
+      ],
+      "answer": "Send a notification at the end of the review to the compliance team",
+      "explanation": "A review can send a notification to other users or groups when it ends, with a link to the results. Fallback reviewers would ask the compliance team to make decisions, which is not what was requested."
+    },
+    {
+      "id": "D4-066",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "Halfway through an access review, an administrator at Contoso wants to see how many users have been approved, denied or not yet reviewed. What should the administrator use?",
+      "choices": [
+        "The Microsoft Entra sign-in logs",
+        "The access review's overview and results pages",
+        "The risky users report in Microsoft Entra ID Protection",
+        "The Identity Secure Score dashboard"
+      ],
+      "answer": "The access review's overview and results pages",
+      "explanation": "The overview of an active review shows progress, including counts of approved, denied and unreviewed users, and the results page lists each decision. Sign-in logs and risk reports do not track review decisions."
+    },
+    {
+      "id": "D4-067",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "Several reviewers at Adatum have not started an access review that ends in three days. What should the administrator do FIRST?",
+      "choices": [
+        "Stop the review and create a new one with a longer duration",
+        "Reset all decisions in the review",
+        "Send a reminder to the reviewers from the review",
+        "Change the review to a self-review"
+      ],
+      "answer": "Send a reminder to the reviewers from the review",
+      "explanation": "A reminder emails the reviewers who have not finished, without disturbing decisions already made. Stopping or resetting the review would discard progress or end it early."
+    },
+    {
+      "id": "D4-068",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "After a quarterly review of the Payroll group completes, an auditor at Tailspin Toys asks for a file that lists every reviewer decision. What should you do?",
+      "choices": [
+        "Export the sign-in logs for the Payroll group members",
+        "Export the group's current membership as a file",
+        "Open the audit logs for the Group Management category",
+        "Download the results of the completed review instance"
+      ],
+      "answer": "Download the results of the completed review instance",
+      "explanation": "The results of a review instance can be downloaded and show each user, the decision, the reviewer and any justification. Current membership shows who has access now, not what reviewers decided."
+    },
+    {
+      "id": "D4-069",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "Northwind Traders needs one report of all access review decisions made across many reviews over the past year for an annual audit. What should you use?",
+      "choices": [
+        "The Identity Secure Score history",
+        "A Conditional Access insights workbook",
+        "An access review history report",
+        "The provisioning logs for each application"
+      ],
+      "answer": "An access review history report",
+      "explanation": "Review history reports collect the decisions from multiple access reviews over a chosen date range into a downloadable report. Secure Score history measures security posture, not review outcomes."
+    },
+    {
+      "id": "D4-070",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "Litware must keep access review audit events for two years and query them with KQL together with other identity logs. What should you configure?",
+      "choices": [
+        "Diagnostic settings that send audit logs to a Log Analytics workspace",
+        "A longer recurrence on each access review",
+        "Monthly downloads of each review's results, stored on a secure file share",
+        "Email notifications to the security team"
+      ],
+      "answer": "Diagnostic settings that send audit logs to a Log Analytics workspace",
+      "explanation": "Diagnostic settings stream Microsoft Entra audit logs, including access review events, to Log Analytics, where retention is configurable and KQL queries can run. Monthly downloads would not support KQL or central retention."
+    },
+    {
+      "id": "D4-071",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "An administrator at Wingtip Toys wants to find out who stopped an access review of the Sales group early. What should you check?",
+      "choices": [
+        "The sign-in logs filtered by the Sales group",
+        "The access review's list of reviewee decisions and reviewer names",
+        "The Sales group's membership change history",
+        "The Microsoft Entra audit logs for access review activity"
+      ],
+      "answer": "The Microsoft Entra audit logs for access review activity",
+      "explanation": "Changes to access reviews, such as stopping one, are recorded in the audit logs with the actor. The list of decisions shows what reviewers decided, not who changed the review itself."
+    },
+    {
+      "id": "D4-072",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "A manager at Contoso receives an email asking her to complete an access review of her team. Where does she review and record her decisions?",
+      "choices": [
+        "The My Apps portal",
+        "The My Access portal",
+        "The My Account portal",
+        "The Microsoft 365 admin center"
+      ],
+      "answer": "The My Access portal",
+      "explanation": "Reviewers complete their assigned access reviews in My Access, which the review email links to. My Account manages a user's own sign-in and security information."
+    },
+    {
+      "id": "D4-073",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "A reviewer at Fabrikam agrees with every recommendation shown for the 200 users in her review. What should she do with the LEAST effort?",
+      "choices": [
+        "Approve or deny each user one at a time",
+        "Accept the recommendations for the reviewed users",
+        "Download the users and send them to the administrator",
+        "Ask the administrator to stop the review"
+      ],
+      "answer": "Accept the recommendations for the reviewed users",
+      "explanation": "Accepting recommendations applies the suggested decision to all users in one action. Deciding one user at a time gives the same result with much more effort."
+    },
+    {
+      "id": "D4-074",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "An access review of the Contractors group at Adatum has completed. Auto apply was not enabled, and the denied users are still members. What should you do with the LEAST administrative effort?",
+      "choices": [
+        "Remove the denied users from the group one at a time",
+        "Reset the review and run it again",
+        "Create a new review with auto apply turned on",
+        "Apply the results from the completed review"
+      ],
+      "answer": "Apply the results from the completed review",
+      "explanation": "When auto apply is off, an administrator can apply the results of a completed review to remove denied users. Removing them by hand works but takes more effort and leaves no link to the review."
+    },
+    {
+      "id": "D4-075",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "A reviewer at Tailspin Toys denied a user by mistake. The access review is still active. What should the reviewer do?",
+      "choices": [
+        "Change the decision for that user before the review ends",
+        "Ask an administrator to stop the review and then create it again",
+        "Wait until the review ends and then re-add the user",
+        "Ask an administrator to reset every decision"
+      ],
+      "answer": "Change the decision for that user before the review ends",
+      "explanation": "Reviewers can change their decisions while the review is still in progress, and only the final decision is applied. Resetting every decision would throw away the rest of the reviewer's work."
+    },
+    {
+      "id": "D4-076",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "Leadership at Northwind Traders wants an active access review ended today so its results can be applied immediately, instead of waiting for the scheduled end date. What should the administrator do FIRST?",
+      "choices": [
+        "Reset the review",
+        "Delete the review",
+        "Stop the review",
+        "Send a reminder"
+      ],
+      "answer": "Stop the review",
+      "explanation": "Stopping a review ends it early so the decisions made so far can be applied. Deleting it would discard the decisions, and resetting clears them while the review keeps running."
+    },
+    {
+      "id": "D4-077",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "A reviewer at Litware does not know whether a contractor still needs access to the Design group and wants to record that uncertainty instead of guessing. Which decision should the reviewer choose?",
+      "choices": [
+        "Approve",
+        "Deny",
+        "Skip",
+        "Don't know"
+      ],
+      "answer": "Don't know",
+      "explanation": "Don't know records that the reviewer cannot decide, and an optional justification can explain why. Approving or denying would record a decision the reviewer cannot support."
+    },
+    {
+      "id": "D4-078",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "Reviewers at Wingtip Toys made decisions in an active access review based on an outdated list of contractors. The administrator wants to clear all decisions so reviewers can start again, while the review stays active. What should the administrator do?",
+      "choices": [
+        "Stop the review",
+        "Apply the results",
+        "Reset the decisions in the review",
+        "Delete the review"
+      ],
+      "answer": "Reset the decisions in the review",
+      "explanation": "Resetting an active review clears the decisions made so far, and reviewers can review again. Stopping the review would end it with the outdated decisions in place."
+    },
+    {
+      "id": "D4-079",
+      "type": "order",
+      "objective": "4.2",
+      "topic": "Planning access reviews",
+      "stem": "Put the steps in order to create a recurring access review of guest users in a Microsoft 365 group.",
+      "items": [
+        "Select Teams + Groups and choose the group to review",
+        "Limit the review scope to guest users only",
+        "Choose the reviewers and any fallback reviewers",
+        "Set the start date, recurrence and duration",
+        "Configure completion settings such as auto apply",
+        "Review the settings and create the access review"
+      ],
+      "explanation": "The review wizard starts with what to review and the scope of users, then the reviewers and schedule, then the completion and advanced settings. Creating the review is the last step, after every setting is chosen."
+    },
+    {
+      "id": "D4-080",
+      "type": "multi",
+      "objective": "4.2",
+      "topic": "Review scope",
+      "stem": "An administrator at Contoso is creating an access review in Microsoft Entra ID Governance. Which TWO can the administrator choose as what to review?",
+      "choices": [
+        "Teams + Groups",
+        "Applications",
+        "Conditional Access policies",
+        "Named locations",
+        "Authentication methods policies"
+      ],
+      "answers": [
+        "Teams + Groups",
+        "Applications"
+      ],
+      "select": 2,
+      "explanation": "Access reviews cover access to resources, such as group membership and application assignment, as well as access packages and roles. Conditional Access policies, named locations and authentication methods are configuration objects, not access that users hold."
+    },
+    {
+      "id": "D4-081",
+      "type": "multi",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "Which TWO reviewer options in an access review can use fallback reviewers when the expected reviewer cannot be found?",
+      "choices": [
+        "Managers of users",
+        "Group owners",
+        "Users review their own access",
+        "Selected users or groups",
+        "Catalog readers"
+      ],
+      "answers": [
+        "Managers of users",
+        "Group owners"
+      ],
+      "select": 2,
+      "explanation": "Fallback reviewers step in when a user has no manager or a group has no owner. Self-review and selected reviewers always resolve to a known reviewer, so fallback reviewers do not apply to them."
+    },
+    {
+      "id": "D4-082",
+      "type": "match",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "Match each If reviewers don't respond option to what happens to unreviewed users when the review ends.",
+      "pairs": [
+        {
+          "item": "No change",
+          "match": "Access stays as it is"
+        },
+        {
+          "item": "Remove access",
+          "match": "Unreviewed users are denied and lose access"
+        },
+        {
+          "item": "Approve access",
+          "match": "Unreviewed users are marked as approved"
+        },
+        {
+          "item": "Take recommendations",
+          "match": "Each unreviewed user gets the suggested decision"
+        }
+      ],
+      "targets_extra": [
+        "Unreviewed users are converted to member users"
+      ],
+      "explanation": "The option decides the outcome for users no reviewer acted on, and it takes effect on the resource when results are applied. No option changes a user's type."
+    }
+  ]
+}

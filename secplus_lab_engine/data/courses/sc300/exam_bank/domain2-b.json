@@ -1,0 +1,1160 @@
+{
+ "domain": "2",
+ "title": "SC-300 Domain 2 questions (2.3, 2.4)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+ "questions": [
+  {
+   "id": "D2-101",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "A user at Northwind Traders signs in through a Tor exit node. Which Microsoft Entra ID Protection risk detection is MOST likely raised in real time for that sign-in?",
+   "choices": [
+    "Leaked credentials",
+    "Anonymous IP address",
+    "Atypical travel",
+    "Admin confirmed user compromised"
+   ],
+   "answer": "Anonymous IP address",
+   "explanation": "Anonymous IP address is a real-time sign-in detection for sign-ins from anonymizing proxies such as Tor. Atypical travel is calculated offline by comparing two sign-ins from distant locations, so it is not raised by one sign-in."
+  },
+  {
+   "id": "D2-102",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "Fabrikam synchronizes users from Active Directory Domain Services and uses pass-through authentication. The security team wants ID Protection to flag users whose current passwords appear in leaked credential dumps. What should you enable?",
+   "choices": [
+    "Password writeback",
+    "Seamless single sign-on",
+    "Device writeback",
+    "Password hash synchronization"
+   ],
+   "answer": "Password hash synchronization",
+   "explanation": "The leaked credentials detection compares password hashes found in leaks with the hashes Microsoft Entra ID holds, so synced users need password hash synchronization (it can run alongside pass-through authentication). Password writeback sends cloud password changes back on-premises and does not provide hashes for comparison."
+  },
+  {
+   "id": "D2-103",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "A Leaked credentials detection is raised for a user at Tailwind Toys. Which type of risk does this detection increase?",
+   "choices": [
+    "User risk",
+    "Device compliance risk",
+    "Service principal risk",
+    "Sign-in risk"
+   ],
+   "answer": "User risk",
+   "explanation": "Leaked credentials is an offline detection tied to the account itself, so it raises user risk. Sign-in risk describes the likelihood that one specific authentication request was not made by the account owner."
+  },
+  {
+   "id": "D2-104",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "An analyst at Adatum sees an Atypical travel detection for a user who signed in from Chicago and then from Singapore within two hours. The detection appeared in the report some time after the second sign-in. What is the MOST likely reason for the delay?",
+   "choices": [
+    "The sign-in risk policy held the event until the user completed multifactor authentication",
+    "The detection is written to the report only when the weekly digest email is enabled",
+    "Atypical travel is an offline detection that is calculated after the sign-in completes",
+    "Detections are published only after the user changes the password on the next sign-in"
+   ],
+   "answer": "Atypical travel is an offline detection that is calculated after the sign-in completes",
+   "explanation": "Atypical travel compares sign-ins over time against the user's learned behavior, so it is processed offline and can appear after the sign-in. Policies and notification settings do not delay when a detection is recorded."
+  },
+  {
+   "id": "D2-105",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "Which set of risk levels does Microsoft Entra ID Protection assign when it calculates user risk and sign-in risk?",
+   "choices": [
+    "Low, medium, and high",
+    "Trusted, suspicious, and blocked",
+    "Informational, warning, and critical",
+    "Minimal, elevated, and severe"
+   ],
+   "answer": "Low, medium, and high",
+   "explanation": "ID Protection rates both user risk and sign-in risk as low, medium or high (with none meaning no risk). Informational, warning and critical are alert severities used by other products, not ID Protection risk levels."
+  },
+  {
+   "id": "D2-106",
+   "objective": "2.3",
+   "topic": "Risk detections and risk levels",
+   "stem": "Litware has Microsoft Entra ID P1 licenses. Its security team can open the risky users report but cannot see the risk history or the full details of each detection. What is the MOST likely reason?",
+   "choices": [
+    "Risk history is shown only for users who are registered for self-service password reset",
+    "Risk detection details are visible only to members of the Global Administrator role",
+    "Detection details appear only after password writeback is enabled in the tenant",
+    "Full ID Protection reports and detection details require Microsoft Entra ID P2"
+   ],
+   "answer": "Full ID Protection reports and detection details require Microsoft Entra ID P2",
+   "explanation": "With P1 the ID Protection reports show limited information, while the risk history, details and the full set of premium detections need Microsoft Entra ID P2. Reader roles such as Security Reader can view the details, so the Global Administrator role is not the limit."
+  },
+  {
+   "id": "D2-107",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Contoso has Microsoft Entra ID P2. The security team wants users whose sign-in risk is medium or high to complete multifactor authentication before they get access. What should you create?",
+   "choices": [
+    "A named location that marks the IP ranges of risky sign-ins as untrusted for all users",
+    "A Conditional Access policy with the sign-in risk condition that requires MFA",
+    "A per-user multifactor authentication setting that is enforced for every user in the tenant",
+    "A Conditional Access policy that uses the user risk condition and requires a password change"
+   ],
+   "answer": "A Conditional Access policy with the sign-in risk condition that requires MFA",
+   "explanation": "Microsoft recommends configuring risk-based policies in Conditional Access: the sign-in risk condition set to medium and high with an MFA grant control. A user risk policy with a password change addresses compromised accounts, not risky individual sign-ins."
+  },
+  {
+   "id": "D2-108",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Proseware is creating a Conditional Access policy for users whose user risk is high. Which grant configuration does Microsoft recommend for users who sign in with a password?",
+   "choices": [
+    "Require a device marked as compliant",
+    "Require an approved client app",
+    "Require MFA and require password change",
+    "Require acceptance of the terms of use"
+   ],
+   "answer": "Require MFA and require password change",
+   "explanation": "For high user risk, the recommended response is a secure password change, which in Conditional Access is combined with multifactor authentication so the user proves their identity first. A compliant device requirement does not remove the risk or change the possibly leaked password."
+  },
+  {
+   "id": "D2-109",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "An administrator at Wingtip Toys must create and manage risk-based Conditional Access policies. The administrator needs no other permissions. Which role should you assign by using the principle of least privilege?",
+   "choices": [
+    "Reports Reader",
+    "Conditional Access Administrator",
+    "Authentication Policy Administrator",
+    "Security Operator"
+   ],
+   "answer": "Conditional Access Administrator",
+   "explanation": "Conditional Access Administrator can create and manage Conditional Access policies, including those that use risk conditions. Security Operator can act on risky users and sign-ins but cannot manage Conditional Access policies."
+  },
+  {
+   "id": "D2-110",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Which license is required for users who are in scope of Conditional Access policies that use the user risk or sign-in risk condition?",
+   "choices": [
+    "Microsoft Entra ID P1",
+    "Microsoft Entra ID Free",
+    "Microsoft Entra Workload ID Premium",
+    "Microsoft Entra ID P2"
+   ],
+   "answer": "Microsoft Entra ID P2",
+   "explanation": "Risk-based Conditional Access relies on ID Protection signals and requires Microsoft Entra ID P2. P1 covers Conditional Access in general but not the risk conditions; Workload ID Premium is for workload identities."
+  },
+  {
+   "id": "D2-111",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Relecloud is creating a Conditional Access policy that requires a password change for all users with high user risk. Which accounts should you exclude from the policy?",
+   "choices": [
+    "Emergency access accounts",
+    "All guest users in the tenant",
+    "All members of the Global Administrator role",
+    "Users who are registered for multifactor authentication"
+   ],
+   "answer": "Emergency access accounts",
+   "explanation": "Emergency access accounts are excluded from Conditional Access policies so a misconfiguration cannot lock everyone out. Excluding all Global Administrators would leave the most privileged accounts unprotected, which is the opposite of the goal."
+  },
+  {
+   "id": "D2-112",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Northwind Traders still uses the legacy sign-in risk policy configured in ID Protection. The team now wants risk-based enforcement only for specific cloud apps and combined with a device platform condition. What should you do?",
+   "choices": [
+    "Turn on security defaults and disable the legacy sign-in risk policy",
+    "Enable the ID Protection multifactor authentication registration policy",
+    "Re-create it as a Conditional Access sign-in risk policy",
+    "Add the cloud apps to a named location and mark the location as trusted"
+   ],
+   "answer": "Re-create it as a Conditional Access sign-in risk policy",
+   "explanation": "Conditional Access risk policies can scope target resources and combine risk with other conditions such as device platform, and Microsoft recommends them over the legacy ID Protection policies. Security defaults cannot be combined with Conditional Access and offer no risk-based scoping."
+  },
+  {
+   "id": "D2-113",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Adatum plans a new sign-in risk policy that requires multifactor authentication. Administrators want to see which sign-ins the policy would affect before it is enforced. What should you do FIRST?",
+   "choices": [
+    "Enable the weekly digest email for all security administrators in the tenant",
+    "Turn the policy on for all users and review complaints from the help desk",
+    "Dismiss the risk for every user who is currently in the risky users report",
+    "Set the Conditional Access policy to report-only mode"
+   ],
+   "answer": "Set the Conditional Access policy to report-only mode",
+   "explanation": "Report-only mode evaluates the policy and records the result in the sign-in logs without enforcing it, so the impact can be reviewed first. Turning the policy on for everyone tests it in production with real user impact."
+  },
+  {
+   "id": "D2-114",
+   "type": "order",
+   "objective": "2.3",
+   "topic": "Risk-based Conditional Access policies",
+   "stem": "Put the steps in order to roll out a Conditional Access policy that requires multifactor authentication for medium and high sign-in risk.",
+   "items": [
+    "Verify that users have registered a multifactor authentication method",
+    "Create a Conditional Access policy with the sign-in risk condition and an MFA grant control",
+    "Set the policy to report-only mode",
+    "Review the policy's impact in the sign-in logs and the insights and reporting workbook",
+    "Switch the policy to On"
+   ],
+   "explanation": "Users must be able to satisfy MFA before the policy matters, so registration comes first. The policy is then created, run in report-only mode, reviewed in the logs and workbook, and only then enforced."
+  },
+  {
+   "id": "D2-115",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "Contoso already uses Conditional Access. It wants users who have not set up Microsoft Authenticator to be prompted to set it up during sign-in, with the LEAST administrative effort. What should you configure?",
+   "choices": [
+    "A registration campaign in the Authentication methods policy",
+    "A Temporary Access Pass for every user",
+    "Security defaults for the tenant",
+    "Per-user multifactor authentication for each user who lacks the app"
+   ],
+   "answer": "A registration campaign in the Authentication methods policy",
+   "explanation": "A registration campaign nudges users who lack Microsoft Authenticator to set it up at sign-in, and it targets users and groups centrally. Security defaults cannot be enabled while Conditional Access policies are in use."
+  },
+  {
+   "id": "D2-116",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "By default, which authentication method does a Microsoft Entra registration campaign nudge users to set up during sign-in?",
+   "choices": [
+    "Email one-time passcode",
+    "Microsoft Authenticator",
+    "SMS text message",
+    "FIDO2 security key"
+   ],
+   "answer": "Microsoft Authenticator",
+   "explanation": "Registration campaigns are designed to move users onto Microsoft Authenticator during sign-in. SMS is weaker and is the kind of method the campaign tries to move users away from."
+  },
+  {
+   "id": "D2-117",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "Fabrikam is worried that an attacker who learns a user's password could register their own MFA method. Users must register security information only from the corporate network or a compliant device. What should you configure?",
+   "choices": [
+    "A sign-in risk policy that requires multifactor authentication for all users",
+    "A Temporary Access Pass that is issued to every user in the organization",
+    "Conditional Access on the Register security information user action",
+    "A registration campaign with the number of allowed snoozes set to zero"
+   ],
+   "answer": "Conditional Access on the Register security information user action",
+   "explanation": "Conditional Access can target the Register security information user action, so registration is allowed only from trusted conditions. A registration campaign only encourages registration and does not restrict where it happens."
+  },
+  {
+   "id": "D2-118",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "New employees at Tailwind Toys have no authentication methods on their first day. They must register a passkey securely without receiving a password. What should you issue to each new employee?",
+   "choices": [
+    "A Temporary Access Pass",
+    "An SMS sign-in phone number",
+    "A temporary password with MFA disabled",
+    "An exclusion from all Conditional Access policies"
+   ],
+   "answer": "A Temporary Access Pass",
+   "explanation": "A Temporary Access Pass is a time-limited passcode that satisfies strong authentication, so users can register passwordless methods such as passkeys. Disabling MFA or excluding users from Conditional Access weakens security during the most exposed onboarding period."
+  },
+  {
+   "id": "D2-119",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "Before enforcing risk-based policies, Litware must identify which users have not registered any multifactor authentication method. Which report should you review?",
+   "choices": [
+    "The audit log filtered on policy changes",
+    "The provisioning logs for Microsoft Entra Connect",
+    "The risky users report in ID Protection",
+    "The authentication methods activity report"
+   ],
+   "answer": "The authentication methods activity report",
+   "explanation": "The authentication methods activity report shows each user's registered methods and MFA capability, so unregistered users can be found. The risky users report lists users at risk, not their registration status."
+  },
+  {
+   "id": "D2-120",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "An administrator at Proseware must manage the Authentication methods policy and configure registration campaigns. Which role should you assign by using the principle of least privilege?",
+   "choices": [
+    "Authentication Administrator",
+    "Conditional Access Administrator",
+    "Authentication Policy Administrator",
+    "Security Reader"
+   ],
+   "answer": "Authentication Policy Administrator",
+   "explanation": "Authentication Policy Administrator manages the tenant-wide Authentication methods policy, including registration campaigns. Authentication Administrator manages the methods of individual users rather than the policy itself."
+  },
+  {
+   "id": "D2-121",
+   "type": "multi",
+   "objective": "2.3",
+   "topic": "MFA registration and registration campaigns",
+   "stem": "Contoso wants every user to register for multifactor authentication before it enforces risk-based Conditional Access policies. Which TWO configurations will prompt unregistered users to register?",
+   "choices": [
+    "Enable a registration campaign for Microsoft Authenticator",
+    "Create a Conditional Access policy that requires multifactor authentication for all users",
+    "Enable the weekly digest email in ID Protection",
+    "Create a named location for the corporate network",
+    "Enable password writeback in Microsoft Entra Connect Sync",
+    "Dismiss the user risk for all unregistered users"
+   ],
+   "select": 2,
+   "answers": [
+    "Enable a registration campaign for Microsoft Authenticator",
+    "Create a Conditional Access policy that requires multifactor authentication for all users"
+   ],
+   "explanation": "A registration campaign nudges users to set up Microsoft Authenticator, and a policy that requires MFA interrupts users without a method so they must register. A named location, digest email or writeback does nothing to get users registered."
+  },
+  {
+   "id": "D2-122",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "Wingtip Toys synchronizes users from Active Directory Domain Services. Users with high user risk must be able to remediate themselves by changing their password at sign-in. What must be enabled in addition to self-service password reset?",
+   "choices": [
+    "Device writeback",
+    "Password writeback",
+    "Seamless single sign-on",
+    "Group writeback"
+   ],
+   "answer": "Password writeback",
+   "explanation": "A synced user's secure password change in the cloud must be written back to Active Directory, which requires password writeback. Seamless single sign-on only signs users in silently from domain-joined devices."
+  },
+  {
+   "id": "D2-123",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "Relecloud users usually change their passwords on-premises from domain-joined devices. The security team wants those on-premises password changes to clear the users' risk in ID Protection. Password hash synchronization is enabled. What should you configure?",
+   "choices": [
+    "Seamless single sign-on for all domain-joined Windows devices in the forest",
+    "The setting that allows on-premises password changes to reset user risk",
+    "Password writeback for all synchronized users in the tenant",
+    "A scheduled task that dismisses user risk once every week"
+   ],
+   "answer": "The setting that allows on-premises password changes to reset user risk",
+   "explanation": "ID Protection can treat an on-premises password change, synced by password hash synchronization, as remediation once this setting is turned on. Password writeback handles the opposite direction, cloud changes written to Active Directory."
+  },
+  {
+   "id": "D2-124",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "An analyst at Adatum selects Confirm user compromised for a user in the risky users report. What is the immediate effect on the user?",
+   "choices": [
+    "The user's password is reset automatically",
+    "The user's sign-in risk is set to none",
+    "The user's risk level is set to high",
+    "The user account is deleted from the tenant"
+   ],
+   "answer": "The user's risk level is set to high",
+   "explanation": "Confirming compromise raises the user risk to high, so risk-based policies act on the account and ID Protection learns from the feedback. It does not reset the password; that is a separate administrator action."
+  },
+  {
+   "id": "D2-125",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "An investigation at Northwind Traders shows that the detections for a user were caused by the user's new corporate VPN provider and were not malicious. Which action should the analyst take in the risky users report?",
+   "choices": [
+    "Reset password",
+    "Block user",
+    "Confirm user compromised",
+    "Dismiss user risk"
+   ],
+   "answer": "Dismiss user risk",
+   "explanation": "Dismissing user risk clears the risk when the investigation finds no compromise. Confirming compromise would raise the user to high risk and trigger policies for a false positive."
+  },
+  {
+   "id": "D2-126",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "A security operations analyst at Fabrikam must view ID Protection reports, dismiss user risk and confirm compromise. The analyst must not be able to change Conditional Access policies. Which role should you assign by using the principle of least privilege?",
+   "choices": [
+    "Security Operator",
+    "Global Reader",
+    "Security Administrator",
+    "Security Reader"
+   ],
+   "answer": "Security Operator",
+   "explanation": "Security Operator can view the reports and act on risky users and sign-ins without managing policies. Security Reader and Global Reader are read-only, and Security Administrator can also manage security policies, which is more than needed."
+  },
+  {
+   "id": "D2-127",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "The security team at Litware wants an email as soon as ID Protection flags a user at or above a chosen risk level. What should you configure?",
+   "choices": [
+    "An access review of risky users",
+    "The weekly digest email",
+    "The users at risk detected alerts email",
+    "A diagnostic setting for the audit logs"
+   ],
+   "answer": "The users at risk detected alerts email",
+   "explanation": "The users at risk detected alert emails recipients when a user reaches the configured risk level. The weekly digest is a summary sent once a week, so it does not notify the team as soon as risk is detected."
+  },
+  {
+   "id": "D2-128",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "An analyst at Contoso confirms that an attacker knows a cloud-only user's password. Which administrator action removes the user's risk and also makes the stolen password useless?",
+   "choices": [
+    "Reset the user's password",
+    "Dismiss the user's risk",
+    "Add the user to a policy exclusion group",
+    "Confirm the latest sign-in as safe"
+   ],
+   "answer": "Reset the user's password",
+   "explanation": "Resetting the password remediates the user risk and invalidates the credential the attacker holds. Dismissing the risk clears the flag but leaves the compromised password in place."
+  },
+  {
+   "id": "D2-129",
+   "type": "match",
+   "objective": "2.3",
+   "topic": "Remediating risky users",
+   "stem": "Match each ID Protection administrator action to its effect.",
+   "pairs": [
+    {
+     "item": "Confirm user compromised",
+     "match": "Raises the user risk to high"
+    },
+    {
+     "item": "Dismiss user risk",
+     "match": "Clears the risk without changing any credentials"
+    },
+    {
+     "item": "Reset password",
+     "match": "Remediates the risk and invalidates the current password"
+    },
+    {
+     "item": "Confirm sign-in safe",
+     "match": "Closes the sign-in's risk as a false positive"
+    },
+    {
+     "item": "Block user",
+     "match": "Stops the account from signing in"
+    }
+   ],
+   "targets_extra": [
+    "Enrolls the user in a registration campaign"
+   ],
+   "explanation": "Confirming compromise sets user risk to high, dismissing clears it without a credential change, and a reset remediates it and invalidates the password. Confirming a sign-in safe closes that sign-in's risk, and blocking stops further sign-ins; no risk action enrolls users in a registration campaign."
+  },
+  {
+   "id": "D2-130",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "A risky sign-in at Tailwind Toys shows Unfamiliar sign-in properties. The user confirms they were traveling and made the sign-in themselves. Which action should the analyst take?",
+   "choices": [
+    "Block user",
+    "Confirm sign-in safe",
+    "Reset password",
+    "Confirm sign-in compromised"
+   ],
+   "answer": "Confirm sign-in safe",
+   "explanation": "Confirming the sign-in safe closes its risk and gives ID Protection feedback that it was a false positive. Confirming it compromised would raise the user's risk to high for a legitimate sign-in."
+  },
+  {
+   "id": "D2-131",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "The security team at Proseware wants to keep ID Protection risk data longer than the portal retains it and query it with KQL alongside other logs. What should you configure?",
+   "choices": [
+    "The weekly digest email for every member of the security team",
+    "A longer retention period in the risky users report settings",
+    "A weekly CSV export of the risky sign-ins report to a shared folder",
+    "Diagnostic settings that stream risk logs to Log Analytics"
+   ],
+   "answer": "Diagnostic settings that stream risk logs to Log Analytics",
+   "explanation": "Diagnostic settings can stream the RiskyUsers, UserRiskEvents and related logs to Log Analytics, where they are kept as long as the workspace retains them and can be queried with KQL. Manual CSV exports are not continuous and cannot be queried with KQL."
+  },
+  {
+   "id": "D2-132",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "An analyst at Wingtip Toys must find out whether a risky sign-in was blocked or allowed after the user completed multifactor authentication. Where should the analyst look?",
+   "choices": [
+    "The provisioning logs for the user's account",
+    "The audit log entries recorded for the user's account object",
+    "The sign-in log entry's Conditional Access details",
+    "The weekly digest email for the tenant"
+   ],
+   "answer": "The sign-in log entry's Conditional Access details",
+   "explanation": "The sign-in log entry shows which Conditional Access policies applied, their result, and the authentication steps the user completed. Audit logs record changes to directory objects, not the outcome of a sign-in."
+  },
+  {
+   "id": "D2-133",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "Relecloud's security orchestration platform must retrieve new ID Protection risk detections automatically every few minutes. What should the platform use?",
+   "choices": [
+    "The Microsoft Graph API for risk detections",
+    "The Microsoft Entra admin center sign-in page",
+    "Microsoft Entra Connect Health",
+    "An access review of all users"
+   ],
+   "answer": "The Microsoft Graph API for risk detections",
+   "explanation": "Microsoft Graph exposes ID Protection data, such as risk detections, risky users and risky service principals, for automation. Entra Connect Health monitors synchronization and federation infrastructure, not risk detections."
+  },
+  {
+   "id": "D2-134",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "In the risky sign-ins report at Adatum, a sign-in that had medium risk now shows the risk state Remediated. What does this state mean?",
+   "choices": [
+    "The risk detection expired because no administrator reviewed it",
+    "The user satisfied a policy control, such as MFA, that cleared the risk",
+    "An administrator dismissed the user's risk after an investigation",
+    "A named location blocked the sign-in before it reached the requested application"
+   ],
+   "answer": "The user satisfied a policy control, such as MFA, that cleared the risk",
+   "explanation": "Remediated means the risk was cleared by the user satisfying a policy control, such as MFA for sign-in risk or a secure password change for user risk. An administrator dismissal shows as Dismissed, a separate state."
+  },
+  {
+   "id": "D2-135",
+   "objective": "2.3",
+   "topic": "Investigating risky sign-ins",
+   "stem": "Northwind Traders uses Microsoft Defender XDR. Analysts want ID Protection alerts correlated with endpoint and email alerts in a single incident. Where should they investigate?",
+   "choices": [
+    "The Microsoft Purview compliance portal",
+    "The Microsoft Intune admin center",
+    "The Microsoft Entra Connect Health portal",
+    "The incidents queue in the Microsoft Defender portal"
+   ],
+   "answer": "The incidents queue in the Microsoft Defender portal",
+   "explanation": "ID Protection sends its alerts to Microsoft Defender XDR, where they are correlated into incidents with signals from other Defender products. Intune manages devices and is not where identity alerts are correlated."
+  },
+  {
+   "id": "D2-136",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "Fabrikam wants to view the full details of risky workload identities and create Conditional Access policies for service principals. Which license is required?",
+   "choices": [
+    "Microsoft Entra ID P1",
+    "Microsoft Entra ID Governance",
+    "Microsoft Entra Workload ID Premium",
+    "Microsoft Entra ID P2"
+   ],
+   "answer": "Microsoft Entra Workload ID Premium",
+   "explanation": "Risky workload identity details and Conditional Access for workload identities require Microsoft Entra Workload ID Premium. Microsoft Entra ID P2 covers risk for user accounts, not service principals."
+  },
+  {
+   "id": "D2-137",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "ID Protection raises a Leaked credentials detection for Contoso's billing app service principal after its client secret was found in a public code repository. What should you do FIRST?",
+   "choices": [
+    "Confirm the service principal safe and continue to monitor it",
+    "Reset the password of the user who registered the application",
+    "Dismiss the service principal's risk because the app is still working",
+    "Remove the exposed client secret and add a new credential to the app"
+   ],
+   "answer": "Remove the exposed client secret and add a new credential to the app",
+   "explanation": "The leaked secret lets anyone authenticate as the app, so it must be removed and replaced right away. Resetting the owner's password does not affect the app's own credential."
+  },
+  {
+   "id": "D2-138",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "Litware must block a single-tenant line-of-business service principal from getting tokens whenever ID Protection rates its risk as high. What should you create?",
+   "choices": [
+    "A workload identity Conditional Access policy that blocks high service principal risk",
+    "An administrative unit that contains the service principal and a scoped administrator",
+    "An access review that asks the application owner to confirm the service principal",
+    "A Conditional Access policy for users that uses the user risk condition with a password change"
+   ],
+   "answer": "A workload identity Conditional Access policy that blocks high service principal risk",
+   "explanation": "Conditional Access for workload identities can evaluate service principal risk and block token issuance. User risk policies apply to user accounts, not service principals."
+  },
+  {
+   "id": "D2-139",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "Which type of workload identity can be targeted by a Conditional Access policy for workload identities?",
+   "choices": [
+    "A system-assigned managed identity",
+    "A service principal for a single-tenant app registered in your tenant",
+    "A user-assigned managed identity",
+    "A service principal for a multitenant third-party SaaS app from the gallery"
+   ],
+   "answer": "A service principal for a single-tenant app registered in your tenant",
+   "explanation": "Conditional Access for workload identities supports service principals of single-tenant apps registered in the tenant. Managed identities and third-party multitenant apps are not covered."
+  },
+  {
+   "id": "D2-140",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "ID Protection shows the detection Unusual addition of credentials to an OAuth app for one of Proseware's service principals. What does this detection MOST likely indicate?",
+   "choices": [
+    "The app's users signed in from an anonymous IP address during the last few days",
+    "The app's admin consent grant expired and was renewed automatically",
+    "The app registration was renamed by its owner outside of business hours",
+    "An attacker may have added a secret or certificate to keep access as the app"
+   ],
+   "answer": "An attacker may have added a secret or certificate to keep access as the app",
+   "explanation": "An attacker who controls an app can add their own secret or certificate to authenticate as it later, and this detection flags unusual credential additions. Users signing in anonymously raise user sign-in risk, not service principal risk."
+  },
+  {
+   "id": "D2-141",
+   "type": "multi",
+   "objective": "2.3",
+   "topic": "Risky workload identities",
+   "stem": "An analyst at Tailwind Toys confirms that a service principal was compromised and is still being used by an attacker. Which TWO actions contain the threat?",
+   "choices": [
+    "Disable the service principal",
+    "Remove the compromised credentials and add new ones",
+    "Dismiss the service principal's risk",
+    "Apply a user risk policy to the service principal",
+    "Convert the app registration to a multitenant app",
+    "Assign the app owner the Security Reader role"
+   ],
+   "select": 2,
+   "answers": [
+    "Disable the service principal",
+    "Remove the compromised credentials and add new ones"
+   ],
+   "explanation": "Disabling the service principal stops it from getting tokens, and replacing its credentials removes the attacker's means of authenticating. Dismissing the risk clears the flag but leaves the attacker's access in place."
+  },
+  {
+   "id": "D2-142",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Which device state is required to run the Global Secure Access client on a Windows device?",
+   "choices": [
+    "Microsoft Entra joined or Microsoft Entra hybrid joined",
+    "Joined to an on-premises domain that is not synchronized",
+    "Microsoft Entra registered only",
+    "Joined to a workgroup with a local account"
+   ],
+   "answer": "Microsoft Entra joined or Microsoft Entra hybrid joined",
+   "explanation": "The Windows client needs a device that is Microsoft Entra joined or Microsoft Entra hybrid joined so it can get tokens for the device and user. Microsoft Entra registered devices are not supported by the Windows client."
+  },
+  {
+   "id": "D2-143",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Contoso manages 5,000 Microsoft Entra joined Windows devices with Microsoft Intune. It must deploy the Global Secure Access client to all of them with the LEAST administrative effort. What should you do?",
+   "choices": [
+    "Configure a remote network for each office",
+    "Email the installer link and ask users to install it",
+    "Deploy the client as a Win32 app from Intune",
+    "Install the private network connector on each device"
+   ],
+   "answer": "Deploy the client as a Win32 app from Intune",
+   "explanation": "Intune can push the client as a Win32 app to every managed device without user action. The private network connector is a server component that sits near private apps, not an endpoint client."
+  },
+  {
+   "id": "D2-144",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Fabrikam wants its Android users to use Microsoft Entra Private Access. How is the Global Secure Access client delivered on Android?",
+   "choices": [
+    "Through the Intune Company Portal app",
+    "Through the Microsoft Defender app",
+    "Through a remote network IPsec tunnel",
+    "Through the Microsoft Authenticator app"
+   ],
+   "answer": "Through the Microsoft Defender app",
+   "explanation": "On Android, the Global Secure Access client is delivered through the Microsoft Defender app. Microsoft Authenticator handles authentication and does not tunnel network traffic."
+  },
+  {
+   "id": "D2-145",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "A user at Litware reports that private apps are unreachable. The Global Secure Access client icon shows an error. Which tool should you use FIRST to find which part of the client is failing?",
+   "choices": [
+    "The health check in the client's advanced diagnostics",
+    "The risky sign-ins report",
+    "The access reviews overview page",
+    "The Conditional Access insights and reporting workbook"
+   ],
+   "answer": "The health check in the client's advanced diagnostics",
+   "explanation": "The advanced diagnostics health check tests the client's components, such as tunnel connectivity, authentication and traffic forwarding profile retrieval. The risky sign-ins report is about identity risk, not client connectivity."
+  },
+  {
+   "id": "D2-146",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Adatum's web content filtering rules based on FQDNs are not enforced in Microsoft Edge on devices that run the Global Secure Access client, but they work in other apps. What is the MOST likely cause?",
+   "choices": [
+    "The Microsoft traffic profile is enabled at the same time as Internet Access",
+    "The browser's secure DNS (DNS over HTTPS) setting bypasses the client",
+    "The private network connector is installed on the wrong server in the network",
+    "The device is Microsoft Entra hybrid joined instead of Microsoft Entra joined"
+   ],
+   "answer": "The browser's secure DNS (DNS over HTTPS) setting bypasses the client",
+   "explanation": "The client acquires FQDN-based traffic from DNS queries, so a browser that resolves names over its own DNS over HTTPS channel can bypass it; Microsoft advises turning secure DNS off in browsers. Hybrid joined devices are supported, so the join type is not the cause."
+  },
+  {
+   "id": "D2-147",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Developers at Relecloud use macOS laptops and need access to private apps through Microsoft Entra Private Access. What should you deploy to the laptops?",
+   "choices": [
+    "The Microsoft Entra application proxy connector",
+    "A private network connector on each laptop",
+    "A remote network IPsec tunnel on each laptop",
+    "The Global Secure Access client for macOS"
+   ],
+   "answer": "The Global Secure Access client for macOS",
+   "explanation": "macOS devices use the Global Secure Access client for macOS to tunnel traffic to the service. The private network connector runs on a Windows Server next to the private apps, not on user devices."
+  },
+  {
+   "id": "D2-148",
+   "type": "order",
+   "objective": "2.4",
+   "topic": "Global Secure Access clients",
+   "stem": "Put the steps in order to start sending users' traffic through Global Secure Access from Windows devices.",
+   "items": [
+    "Activate Global Secure Access in the tenant",
+    "Enable the traffic forwarding profile and assign it to users",
+    "Deploy the client from Intune to Microsoft Entra joined devices",
+    "Verify that the client shows a connected status",
+    "Confirm in the traffic logs that traffic is tunneled"
+   ],
+   "explanation": "The service is activated and a forwarding profile is enabled and assigned before clients have anything to tunnel. The client is then deployed, its status checked, and the traffic logs confirm traffic is flowing."
+  },
+  {
+   "id": "D2-149",
+   "objective": "2.4",
+   "topic": "Private network connectors",
+   "stem": "Before installing a private network connector, Contoso's firewall team asks which inbound ports must be opened from the internet. What should you tell them?",
+   "choices": [
+    "Inbound TCP 3389 to the connector server",
+    "Inbound TCP 443 from the internet to the connector server's public IP",
+    "No inbound ports; the connector makes only outbound connections",
+    "Inbound UDP 500 and UDP 4500 for IPsec"
+   ],
+   "answer": "No inbound ports; the connector makes only outbound connections",
+   "explanation": "The private network connector makes outbound connections to the service, so no inbound firewall ports are needed. Inbound TCP 443 is a common misconception carried over from traditional reverse proxies."
+  },
+  {
+   "id": "D2-150",
+   "objective": "2.4",
+   "topic": "Private network connectors",
+   "stem": "Fabrikam publishes private apps through Microsoft Entra Private Access. It must keep access available if a connector server fails. What should you do?",
+   "choices": [
+    "Install two or more connectors in one connector group",
+    "Create one connector group for each user group that needs access",
+    "Install a connector on every client device",
+    "Install one connector on a domain controller"
+   ],
+   "answer": "Install two or more connectors in one connector group",
+   "explanation": "Connectors in the same group share the load and take over for each other, so at least two connectors per group give high availability. A single connector, wherever it sits, is still a single point of failure."
+  },
+  {
+   "id": "D2-151",
+   "objective": "2.4",
+   "topic": "Private network connectors",
+   "stem": "Litware has private apps in two datacenters that have no network connectivity between them. How should you configure Private Access connectors?",
+   "choices": [
+    "Create one connector group that contains connectors from both of the datacenters",
+    "Create a connector group per datacenter and assign each app to its local group",
+    "Use a remote network IPsec tunnel instead of connectors for both datacenters",
+    "Install a single connector in the datacenter that holds the most apps"
+   ],
+   "answer": "Create a connector group per datacenter and assign each app to its local group",
+   "explanation": "Connector groups let you tie apps to the connectors that have line of sight to them. A single group with connectors in both sites would send some requests to connectors that cannot reach the app."
+  },
+  {
+   "id": "D2-152",
+   "objective": "2.4",
+   "topic": "Private network connectors",
+   "stem": "Tailwind Toys already publishes web apps with Microsoft Entra application proxy. It now plans to deploy Microsoft Entra Private Access. Which statement about the existing connectors is correct?",
+   "choices": [
+    "Private Access connectors must accept inbound TCP 443 from the internet",
+    "Private Access needs a separate VPN gateway instead of any connectors",
+    "The application proxy connectors must be uninstalled before Private Access can be used",
+    "The same private network connectors can serve application proxy and Private Access"
+   ],
+   "answer": "The same private network connectors can serve application proxy and Private Access",
+   "explanation": "Application proxy and Private Access use the same private network connector, so existing connectors can be reused once they are up to date. Neither product needs inbound ports or a VPN gateway."
+  },
+  {
+   "id": "D2-153",
+   "objective": "2.4",
+   "topic": "Private network connectors",
+   "stem": "A newly installed private network connector at Proseware shows as inactive. The server can reach the private apps. What is the MOST likely cause?",
+   "choices": [
+    "Web content filtering blocks the connector's access to the published private apps",
+    "The connector server is not a member of a connector group for guests",
+    "A firewall or proxy blocks the connector's outbound connections to the service",
+    "Users have not been assigned the Microsoft traffic forwarding profile"
+   ],
+   "answer": "A firewall or proxy blocks the connector's outbound connections to the service",
+   "explanation": "A connector stays inactive when it cannot keep its outbound connections to the service, often because a firewall or a TLS-inspecting proxy interferes. Traffic forwarding profiles and web filtering apply to client traffic, not to the connector's own connection."
+  },
+  {
+   "id": "D2-154",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "Wingtip Toys wants to replace its VPN quickly. Users need access to all servers in several internal IP ranges, and fine-grained per-app policies can come later. What should you configure FIRST?",
+   "choices": [
+    "A web content filtering policy for the IP ranges",
+    "A remote network for each branch office",
+    "Quick Access with app segments for the internal IP ranges",
+    "A per-app enterprise application for each internal server"
+   ],
+   "answer": "Quick Access with app segments for the internal IP ranges",
+   "explanation": "Quick Access publishes broad sets of private destinations in one app, which suits a fast VPN replacement. Creating a per-app enterprise application for every server is the later, more granular step and takes much more effort."
+  },
+  {
+   "id": "D2-155",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "Contoso's internal resources are published through Quick Access. It now must require a compliant device only for the finance server, without affecting other private resources. What should you do?",
+   "choices": [
+    "Create a named location for the finance server's IP address and mark it as trusted",
+    "Add the finance server to the baseline security profile used by Internet Access",
+    "Target the Quick Access app with a Conditional Access policy that requires a compliant device",
+    "Publish the finance server as a per-app access app and target it with Conditional Access"
+   ],
+   "answer": "Publish the finance server as a per-app access app and target it with Conditional Access",
+   "explanation": "Per-app access gives each private app its own enterprise application, so Conditional Access can apply to that app alone. A policy on the Quick Access app would apply to every segment it publishes."
+  },
+  {
+   "id": "D2-156",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "In Microsoft Entra Private Access, what is an application segment?",
+   "choices": [
+    "A web category that is allowed or blocked for a group of users",
+    "A private destination defined by an FQDN or IP range, ports and protocol",
+    "A set of connectors that share the load for one datacenter",
+    "A group of users and devices that are assigned to the same Quick Access application"
+   ],
+   "answer": "A private destination defined by an FQDN or IP range, ports and protocol",
+   "explanation": "An application segment defines the destination (FQDN, IP address or range), port and protocol that the client tunnels to private apps. A set of connectors is a connector group, not a segment."
+  },
+  {
+   "id": "D2-157",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "Users at Adatum reach internal resources through Quick Access by IP address, but names such as payroll.corp.adatum.com do not resolve. What should you configure?",
+   "choices": [
+    "Private DNS suffixes in Quick Access",
+    "A named location for the internal DNS servers",
+    "Custom bypass rules in the Internet Access profile",
+    "Source IP restoration in the adaptive access settings"
+   ],
+   "answer": "Private DNS suffixes in Quick Access",
+   "explanation": "Private DNS in Quick Access sends queries for the configured internal suffixes through the tunnel to internal DNS servers. Custom bypass sends traffic directly to the internet and would not resolve internal names."
+  },
+  {
+   "id": "D2-158",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "After Quick Access is configured at Relecloud, one pilot user cannot reach any internal resource while other pilot users can. The client on the device is connected. What is the MOST likely cause?",
+   "choices": [
+    "The user is not assigned to the Quick Access application",
+    "The baseline security profile blocks the user",
+    "The Microsoft traffic profile is turned off",
+    "The connector group has only two connectors and no spare connector"
+   ],
+   "answer": "The user is not assigned to the Quick Access application",
+   "explanation": "Private Access apps, including Quick Access, need users or groups assigned to them. The Microsoft traffic profile only handles Microsoft 365 traffic and does not affect private apps."
+  },
+  {
+   "id": "D2-159",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "Users at Northwind Traders must get Kerberos single sign-on to on-premises file shares through Microsoft Entra Private Access. What must you also publish so this works?",
+   "choices": [
+    "The file servers as allowed sites in a web content filtering policy",
+    "The domain controllers' Kerberos and LDAP ports as application segments",
+    "The domain controllers as members of a private network connector group for the site",
+    "A remote network that connects each user's home router to the service"
+   ],
+   "answer": "The domain controllers' Kerberos and LDAP ports as application segments",
+   "explanation": "To get Kerberos tickets through the tunnel, the client must reach the domain controllers, so their Kerberos and LDAP ports are published as segments. Domain controllers are not added to connector groups; connectors are."
+  },
+  {
+   "id": "D2-160",
+   "type": "match",
+   "objective": "2.4",
+   "topic": "Quick Access and per-app access",
+   "stem": "Match each Private Access requirement to the feature that meets it.",
+   "pairs": [
+    {
+     "item": "Replace the VPN for all internal subnets as quickly as possible",
+     "match": "Quick Access"
+    },
+    {
+     "item": "Apply a separate Conditional Access policy to one HR server",
+     "match": "Per-app access application"
+    },
+    {
+     "item": "Resolve internal host names through the tunnel",
+     "match": "Private DNS"
+    },
+    {
+     "item": "Reach private apps with only outbound connections from the datacenter",
+     "match": "Private network connector"
+    },
+    {
+     "item": "Send each app's traffic to connectors in the datacenter that hosts it",
+     "match": "Connector group"
+    }
+   ],
+   "targets_extra": [
+    "Web content filtering policy"
+   ],
+   "explanation": "Quick Access is the broad VPN replacement, per-app applications allow app-specific Conditional Access, and private DNS resolves internal names. Connectors provide outbound-only reach and connector groups tie apps to the right site; web content filtering belongs to Internet Access."
+  },
+  {
+   "id": "D2-161",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Fabrikam uses Microsoft Entra Internet Access. All users who send internet traffic through the service must be blocked from gambling sites, with the LEAST administrative effort. Where should you link the web content filtering policy?",
+   "choices": [
+    "A named location for each office",
+    "A new security profile linked to a policy for each department",
+    "The baseline security profile",
+    "The Microsoft traffic forwarding profile"
+   ],
+   "answer": "The baseline security profile",
+   "explanation": "The baseline security profile applies to all Internet Access traffic without a Conditional Access policy, so one link covers everyone. Department-specific profiles need a separate Conditional Access policy each, which is more effort."
+  },
+  {
+   "id": "D2-162",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Litware wants stricter web content filtering for its marketing group than for other users. You create a security profile that contains the stricter policies. How should you apply it to the marketing group?",
+   "choices": [
+    "Assign the security profile directly to the marketing group as an app role",
+    "Add the marketing group to the private network connector group",
+    "Configure the security profile as a custom bypass in the forwarding profile",
+    "Link it to a Conditional Access policy that targets the marketing group"
+   ],
+   "answer": "Link it to a Conditional Access policy that targets the marketing group",
+   "explanation": "Security profiles other than the baseline are applied through a Conditional Access session control that targets users or groups. Connector groups and custom bypass rules have nothing to do with web filtering."
+  },
+  {
+   "id": "D2-163",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "A security profile at Contoso contains several web content filtering policies. Which policy is processed first?",
+   "choices": [
+    "The policy whose name comes first alphabetically",
+    "The policy with the highest priority number",
+    "The policy that was created most recently",
+    "The policy with the lowest priority number"
+   ],
+   "answer": "The policy with the lowest priority number",
+   "explanation": "Within a security profile, policies are processed in priority order and a lower number means a higher priority. Creation date and name have no effect on processing order."
+  },
+  {
+   "id": "D2-164",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Adatum blocks the Social networking category for all users, but the marketing team's partner site in that category must be allowed for everyone. What should you do?",
+   "choices": [
+    "Add the partner site to the custom bypass list of the Microsoft traffic profile",
+    "Create a named location for the partner site and mark the location as trusted",
+    "Add a higher-priority allow policy for the site's FQDN",
+    "Delete the block policy and create block rules for every other social site"
+   ],
+   "answer": "Add a higher-priority allow policy for the site's FQDN",
+   "explanation": "A higher-priority allow rule for the specific FQDN is evaluated before the category block, so only that site is allowed. Listing every other social site individually is error-prone and far more work."
+  },
+  {
+   "id": "D2-165",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Tailwind Toys wants web content filtering rules that match full URL paths, not just domain names, for HTTPS traffic. What must be enabled?",
+   "choices": [
+    "Transport Layer Security inspection",
+    "Source IP restoration",
+    "Private DNS for Quick Access",
+    "Universal tenant restrictions"
+   ],
+   "answer": "Transport Layer Security inspection",
+   "explanation": "Without TLS inspection the service sees only the destination name of HTTPS traffic, so URL path rules need TLS inspection to decrypt it. Source IP restoration shares the user's original IP with Conditional Access and does not decrypt traffic."
+  },
+  {
+   "id": "D2-166",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Proseware routes internet traffic through Microsoft Entra Internet Access. Traffic to its online banking partner must go directly to the internet instead of through the service. What should you configure?",
+   "choices": [
+    "A trusted named location for the banking partner",
+    "A custom bypass rule in the Internet Access profile",
+    "An app segment for the bank in the Quick Access application",
+    "A block rule in the baseline security profile"
+   ],
+   "answer": "A custom bypass rule in the Internet Access profile",
+   "explanation": "Custom bypass rules in a forwarding profile tell the client not to tunnel matching destinations. A block rule would stop access to the site altogether instead of sending it direct."
+  },
+  {
+   "id": "D2-167",
+   "type": "order",
+   "objective": "2.4",
+   "topic": "Web content filtering and security profiles",
+   "stem": "Put the steps in order to apply web content filtering to one group of users with Microsoft Entra Internet Access.",
+   "items": [
+    "Create a web content filtering policy with the required rules",
+    "Add the policy to a security profile with a priority",
+    "Create a Conditional Access policy that targets the group and uses the security profile session control",
+    "Test browsing from a client device and review the traffic logs"
+   ],
+   "explanation": "Rules live in a filtering policy, the policy is linked to a security profile, and the profile is applied to the group through Conditional Access. Testing and reviewing the traffic logs confirms enforcement last."
+  },
+  {
+   "id": "D2-168",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "Which traffic does the Microsoft traffic forwarding profile acquire?",
+   "choices": [
+    "All internet traffic from the device to any public website or service",
+    "Microsoft 365 traffic such as Exchange Online and SharePoint Online",
+    "Traffic to on-premises apps published through connectors",
+    "Remote Desktop traffic to virtual machines in Azure"
+   ],
+   "answer": "Microsoft 365 traffic such as Exchange Online and SharePoint Online",
+   "explanation": "The Microsoft traffic profile tunnels Microsoft services such as Exchange Online and SharePoint Online. General internet traffic belongs to the Internet Access profile, and private apps to the Private Access profile."
+  },
+  {
+   "id": "D2-169",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "Contoso must stop users on corporate devices from signing in to Microsoft 365 with accounts from other organizations' tenants. Traffic already goes through the Microsoft traffic profile. What should you configure?",
+   "choices": [
+    "Universal tenant restrictions with a tenant restrictions v2 policy",
+    "A web content filtering policy that blocks the Microsoft 365 category",
+    "Per-app access for Exchange Online",
+    "A Conditional Access policy that blocks guest users"
+   ],
+   "answer": "Universal tenant restrictions with a tenant restrictions v2 policy",
+   "explanation": "Universal tenant restrictions use Global Secure Access to add tenant restrictions v2 signals to Microsoft traffic, so access with unauthorized tenants' accounts is blocked. A policy blocking guests in your tenant does not stop users from signing in to other tenants."
+  },
+  {
+   "id": "D2-170",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "A Fabrikam branch office has kiosk devices that cannot run the Global Secure Access client. The Microsoft 365 traffic from the branch must still be sent through Global Secure Access. What should you configure?",
+   "choices": [
+    "A private network connector installed on one of the branch's kiosk devices",
+    "A registration campaign for the kiosk devices",
+    "A Quick Access application for the branch's subnet",
+    "A remote network with an IPsec tunnel from the branch router"
+   ],
+   "answer": "A remote network with an IPsec tunnel from the branch router",
+   "explanation": "Remote networks connect a site's router or firewall to the service with IPsec, so devices without the client are covered. A private network connector publishes private apps and does not forward a branch's Microsoft 365 traffic."
+  },
+  {
+   "id": "D2-171",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "Litware sends Microsoft 365 traffic through Global Secure Access and wants detailed logs of SharePoint Online activity from that traffic in its Log Analytics workspace. What should you enable?",
+   "choices": [
+    "The weekly digest email in ID Protection",
+    "Audit log retention in Microsoft Entra ID",
+    "Enriched Microsoft 365 logs through diagnostic settings",
+    "Provisioning logs for Microsoft Entra Connect"
+   ],
+   "answer": "Enriched Microsoft 365 logs through diagnostic settings",
+   "explanation": "Enriched Microsoft 365 logs add Global Secure Access details to Microsoft 365 activity and can be streamed to Log Analytics with diagnostic settings. Provisioning logs track identity provisioning, not network traffic."
+  },
+  {
+   "id": "D2-172",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "Adatum deployed the Global Secure Access client and it shows as healthy, but Exchange Online traffic does not appear in the traffic logs. What is the MOST likely cause?",
+   "choices": [
+    "The users are not included in the baseline security profile of the tenant",
+    "The Microsoft traffic profile is not enabled or not assigned to the users",
+    "The private network connector is inactive",
+    "TLS inspection is turned off for the tenant"
+   ],
+   "answer": "The Microsoft traffic profile is not enabled or not assigned to the users",
+   "explanation": "Each forwarding profile must be enabled and assigned before the client tunnels that traffic. Private network connectors only carry traffic to private apps, so an inactive connector would not affect Exchange Online."
+  },
+  {
+   "id": "D2-173",
+   "type": "multi",
+   "objective": "2.4",
+   "topic": "Microsoft traffic profile",
+   "stem": "Relecloud is planning to send its Microsoft 365 traffic through the Microsoft traffic profile. Which TWO outcomes does this enable?",
+   "choices": [
+    "Universal tenant restrictions that block sign-ins to unauthorized tenants",
+    "A compliant network check that Conditional Access can require for Microsoft 365",
+    "Publishing of on-premises apps without inbound firewall ports",
+    "Removal of the need for multifactor authentication",
+    "Blocking of gambling websites for all users",
+    "Automatic registration of users for Microsoft Authenticator"
+   ],
+   "select": 2,
+   "answers": [
+    "Universal tenant restrictions that block sign-ins to unauthorized tenants",
+    "A compliant network check that Conditional Access can require for Microsoft 365"
+   ],
+   "explanation": "Routing Microsoft traffic through the service enables universal tenant restrictions and lets Conditional Access require the compliant network. Publishing on-premises apps is Private Access and blocking gambling sites is Internet Access."
+  },
+  {
+   "id": "D2-174",
+   "objective": "2.4",
+   "topic": "Conditional Access signaling and monitoring",
+   "stem": "Contoso wants users to reach SharePoint Online only when their traffic comes through its Global Secure Access tenant. Signaling is enabled. What should you configure?",
+   "choices": [
+    "A Quick Access app segment that publishes the SharePoint Online FQDNs",
+    "A named location that contains the public IP addresses of every user's home network",
+    "A block policy for SharePoint Online that excludes the compliant network",
+    "A web content filtering policy that blocks the SharePoint Online category"
+   ],
+   "answer": "A block policy for SharePoint Online that excludes the compliant network",
+   "explanation": "Excluding the compliant network location from a block policy allows access only through the tenant's Global Secure Access. Collecting home IP addresses in a named location is impractical and breaks whenever an address changes."
+  },
+  {
+   "id": "D2-175",
+   "objective": "2.4",
+   "topic": "Conditional Access signaling and monitoring",
+   "stem": "In Conditional Access, what does the compliant network location represent?",
+   "choices": [
+    "Traffic from devices that Microsoft Intune marks as compliant",
+    "Traffic from any network that uses IPsec encryption",
+    "Traffic from IP ranges that you add to a trusted named location",
+    "Traffic that arrives through your tenant's Global Secure Access"
+   ],
+   "answer": "Traffic that arrives through your tenant's Global Secure Access",
+   "explanation": "The compliant network is a location condition that is satisfied when the user connects through the organization's own Global Secure Access, wherever they are. Device compliance is a separate grant control that comes from Intune."
+  },
+  {
+   "id": "D2-176",
+   "objective": "2.4",
+   "topic": "Conditional Access signaling and monitoring",
+   "stem": "After rolling out Global Secure Access, Fabrikam's location-based Conditional Access policies and ID Protection see the service's egress IP addresses instead of the users' original addresses. What should you enable?",
+   "choices": [
+    "Global Secure Access signaling, which restores the source IP",
+    "A trusted named location that contains all of the service's egress IP addresses",
+    "Custom bypass rules for Microsoft Entra ID in the Microsoft traffic profile",
+    "TLS inspection for all traffic acquired by the Internet Access profile"
+   ],
+   "answer": "Global Secure Access signaling, which restores the source IP",
+   "explanation": "Turning on Global Secure Access signaling enables source IP restoration, so Conditional Access and ID Protection see each user's original public IP. Trusting the egress IPs would make every tunneled sign-in look trusted, which weakens location policies."
+  },
+  {
+   "id": "D2-177",
+   "objective": "2.4",
+   "topic": "Conditional Access signaling and monitoring",
+   "stem": "An administrator at Northwind Traders must configure traffic forwarding profiles and web content filtering policies. Which role should you assign by using the principle of least privilege?",
+   "choices": [
+    "Security Reader",
+    "Helpdesk Administrator",
+    "Global Secure Access Administrator",
+    "Application Developer"
+   ],
+   "answer": "Global Secure Access Administrator",
+   "explanation": "Global Secure Access Administrator can manage Global Secure Access settings such as forwarding profiles and filtering policies. Security Reader can only view, and Helpdesk Administrator manages passwords for non-administrators."
+  },
+  {
+   "id": "D2-178",
+   "objective": "2.4",
+   "topic": "Conditional Access signaling and monitoring",
+   "stem": "Tailwind Toys must review which users connected to which private app destinations, and send this data to its Log Analytics workspace for KQL queries. Which logs should you stream?",
+   "choices": [
+    "The ID Protection risky users logs",
+    "The Global Secure Access traffic logs",
+    "The Microsoft Entra provisioning logs",
+    "The Microsoft Entra audit logs"
+   ],
+   "answer": "The Global Secure Access traffic logs",
+   "explanation": "Traffic logs record each network connection through Global Secure Access, including user, destination and action, and can be streamed to Log Analytics. Audit logs record directory changes, not network connections."
+  }
+ ]
+}

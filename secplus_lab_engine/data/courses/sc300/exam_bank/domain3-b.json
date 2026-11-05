@@ -1,0 +1,1299 @@
+{
+  "domain": "3",
+  "title": "SC-300 Domain 3 questions (3.3, 3.4)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+  "questions": [
+    {
+      "id": "D3-101",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "When a multitenant application is used in a customer's Microsoft Entra tenant, which object is created in that tenant to hold the app's local settings, user assignments and granted permissions?",
+      "choices": [
+        "A second application object copied from the home tenant",
+        "A service principal, shown as an enterprise application",
+        "A user-assigned managed identity linked to the app",
+        "An administrative unit scoped to the app's users"
+      ],
+      "answer": "A service principal, shown as an enterprise application",
+      "explanation": "Each tenant that uses an app gets its own service principal (the enterprise application), which holds that tenant's consents, assignments and SSO settings. The application object exists only once, in the home tenant."
+    },
+    {
+      "id": "D3-102",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "Fabrikam sets the user setting that lets users register applications to No. Developers on the payments team must still be able to create app registrations. Which role should you assign them, following the principle of least privilege?",
+      "choices": [
+        "Application Developer",
+        "Cloud Application Administrator",
+        "Application Administrator",
+        "Hybrid Identity Administrator"
+      ],
+      "answer": "Application Developer",
+      "explanation": "Application Developer lets users create app registrations even when user registration is turned off, and makes them owners of only what they create. Cloud Application Administrator can manage every app registration and enterprise application in the tenant, which is far more than needed."
+    },
+    {
+      "id": "D3-103",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "Which Microsoft Entra object is the global definition of an application, created once in its home tenant when the application is registered?",
+      "choices": [
+        "The service principal object",
+        "The delegated permission grant",
+        "The application object",
+        "The app role assignment"
+      ],
+      "answer": "The application object",
+      "explanation": "Registering an app creates the application object, the template from which service principals are created in each tenant that uses it. A service principal is the local instance, not the global definition."
+    },
+    {
+      "id": "D3-104",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "At Northwind Traders, a user with no administrative role registers a new application. Which statement describes the result?",
+      "choices": [
+        "The app stays disabled until an administrator approves it",
+        "The app is automatically granted tenant-wide admin consent",
+        "The user becomes an owner who can manage the registration",
+        "The user is added to the Application Developer role"
+      ],
+      "answer": "The user becomes an owner who can manage the registration",
+      "explanation": "When users are allowed to register apps, the creator becomes an owner of the app registration and its service principal and can manage their settings. No role is assigned and no admin consent is granted automatically."
+    },
+    {
+      "id": "D3-105",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "A helpdesk lead at Tailspin Toys must manage all app registrations and enterprise applications, including SSO and credentials, but must not manage application proxy settings. Which role should you assign, following the principle of least privilege?",
+      "choices": [
+        "Application Administrator",
+        "Cloud Application Administrator",
+        "Global Administrator",
+        "Application Developer"
+      ],
+      "answer": "Cloud Application Administrator",
+      "explanation": "Cloud Application Administrator has the same app management rights as Application Administrator except for application proxy. Application Developer can only create registrations and manage the ones it owns."
+    },
+    {
+      "id": "D3-106",
+      "objective": "3.3",
+      "topic": "App registration planning",
+      "stem": "Contoso subscribes to a SaaS product that the vendor publishes as a multitenant app. Contoso admins must control which users can sign in and configure its single sign-on. Where should they make these changes?",
+      "choices": [
+        "On the vendor's app registration in the vendor's tenant",
+        "On a new app registration that Contoso creates",
+        "On an authentication context in Conditional Access",
+        "On the enterprise application in Contoso's tenant"
+      ],
+      "answer": "On the enterprise application in Contoso's tenant",
+      "explanation": "A customer manages a multitenant app through its own service principal, the enterprise application, which holds user assignment and SSO settings. The vendor's app registration lives in the vendor's tenant and is outside Contoso's control."
+    },
+    {
+      "id": "D3-107",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "A development team at Litware is building a React single-page app that signs users in by using the authorization code flow with PKCE. Which platform should they add to the app registration?",
+      "choices": [
+        "Web",
+        "Mobile and desktop applications",
+        "Single-page application",
+        "iOS / macOS"
+      ],
+      "answer": "Single-page application",
+      "explanation": "The single-page application platform enables the authorization code flow with PKCE and cross-origin token redemption for browser apps. The Web platform is for server-side apps that can keep a credential secret."
+    },
+    {
+      "id": "D3-108",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "After a user signs in, to which location will Microsoft Entra ID send the authorization code or tokens for an app?",
+      "choices": [
+        "To the home page URL set in the app's branding",
+        "Only to a redirect URI registered on the app",
+        "To any URL in the same DNS domain as the app",
+        "To the verified publisher domain of the app"
+      ],
+      "answer": "Only to a redirect URI registered on the app",
+      "explanation": "Microsoft Entra ID returns codes and tokens only to redirect URIs registered on the app registration, which stops tokens being sent to an attacker's site. Same-domain URLs that are not registered are rejected."
+    },
+    {
+      "id": "D3-109",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "Users of a new Woodgrove Bank web app see a sign-in error stating that the reply URL in the request does not match the URLs configured for the app. What should you do?",
+      "choices": [
+        "Turn on ID tokens for the implicit grant flow",
+        "Register the exact URI the app sends as a redirect URI",
+        "Grant tenant-wide admin consent to the app",
+        "Change the supported account types to any organizational directory"
+      ],
+      "answer": "Register the exact URI the app sends as a redirect URI",
+      "explanation": "The error means the redirect URI in the sign-in request is not registered, so adding that exact URI under the right platform fixes it. Consent and account-type changes do not affect redirect URI matching."
+    },
+    {
+      "id": "D3-110",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "A developer tries to add http://portal.contoso.com/signin as a redirect URI for a production web app. What happens?",
+      "choices": [
+        "It is rejected because only localhost may use plain HTTP",
+        "It is accepted for the Web platform but not for the SPA platform",
+        "It is accepted once implicit grant is turned on",
+        "It is accepted only for multitenant registrations"
+      ],
+      "answer": "It is rejected because only localhost may use plain HTTP",
+      "explanation": "Redirect URIs must use the HTTPS scheme; plain HTTP is allowed only for localhost during development. No platform or flow setting relaxes this for a public host name."
+    },
+    {
+      "id": "D3-111",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "A command-line tool at Proseware runs on headless Linux servers and signs users in with the device code flow. Which app registration setting must be enabled?",
+      "choices": [
+        "A client secret for the tool",
+        "Allow public client flows",
+        "Access tokens for the implicit grant",
+        "A Web platform redirect URI"
+      ],
+      "answer": "Allow public client flows",
+      "explanation": "The device code flow is a public client flow, so the registration must allow public client flows. A client secret would be pointless because a public client cannot keep it confidential."
+    },
+    {
+      "id": "D3-112",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "Which app registration setting lets Microsoft Entra ID clear a user's session in an app when the user signs out of another app that shares the same sign-in session?",
+      "choices": [
+        "Redirect URI",
+        "Home page URL",
+        "Application ID URI",
+        "Front-channel logout URL"
+      ],
+      "answer": "Front-channel logout URL",
+      "explanation": "The front-channel logout URL is where Microsoft Entra ID sends a request to clear the app's session during single sign-out. A redirect URI receives tokens after sign-in, not sign-out notices."
+    },
+    {
+      "id": "D3-113",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "A security review of an older single-page app finds that access tokens are issued through the implicit grant flow. What should the developers do?",
+      "choices": [
+        "Add a client secret to the single-page app",
+        "Move to the code flow with PKCE and turn off implicit grant",
+        "Change the platform to Web and keep the implicit grant settings on",
+        "Change the supported account types to single tenant"
+      ],
+      "answer": "Move to the code flow with PKCE and turn off implicit grant",
+      "explanation": "Microsoft recommends the authorization code flow with PKCE for single-page apps; implicit grant settings should then be cleared. A browser app cannot protect a client secret, so adding one does not help."
+    },
+    {
+      "id": "D3-114",
+      "objective": "3.3",
+      "topic": "Supported account types",
+      "stem": "Adatum is registering an internal HR app that only its own employees will use. Which supported account type should you choose?",
+      "choices": [
+        "Accounts in this organizational directory only",
+        "Accounts in any organizational directory",
+        "Any organizational directory and personal Microsoft accounts",
+        "Personal Microsoft accounts only"
+      ],
+      "answer": "Accounts in this organizational directory only",
+      "explanation": "Single tenant is right for a line-of-business app used only within one organization and limits sign-in to that tenant. Multitenant would let users from any Microsoft Entra tenant sign in."
+    },
+    {
+      "id": "D3-115",
+      "objective": "3.3",
+      "topic": "Supported account types",
+      "stem": "A software company sells a SaaS app to business customers who each have their own Microsoft Entra tenant. Consumers with personal accounts must not sign in. Which supported account type should the app use?",
+      "choices": [
+        "Accounts in any organizational directory",
+        "Accounts in this organizational directory only",
+        "Any organizational directory and personal Microsoft accounts",
+        "Personal Microsoft accounts only"
+      ],
+      "answer": "Accounts in any organizational directory",
+      "explanation": "Multitenant registration lets work or school accounts from any Microsoft Entra tenant sign in, with a service principal created in each customer tenant. Adding personal Microsoft accounts would admit consumers, which the requirement forbids."
+    },
+    {
+      "id": "D3-116",
+      "objective": "3.3",
+      "topic": "Supported account types",
+      "stem": "A fitness app from Fourth Coffee must let both employees of partner businesses and members of the public with Outlook.com or Xbox accounts sign in. Which supported account type should you select?",
+      "choices": [
+        "Accounts in any organizational directory",
+        "Accounts in this organizational directory only (single tenant)",
+        "Personal Microsoft accounts only",
+        "Any organizational directory and personal Microsoft accounts"
+      ],
+      "answer": "Any organizational directory and personal Microsoft accounts",
+      "explanation": "This option accepts work or school accounts from any tenant and personal Microsoft accounts such as Outlook.com and Xbox. Personal-accounts-only would block the business users."
+    },
+    {
+      "id": "D3-117",
+      "objective": "3.3",
+      "topic": "Supported account types",
+      "stem": "A single-tenant app registered in Contoso's tenant must send its sign-in requests to the correct Microsoft identity platform authority. Which authority should it use?",
+      "choices": [
+        "https://login.microsoftonline.com/common",
+        "https://login.microsoftonline.com/organizations",
+        "https://login.microsoftonline.com/{Contoso tenant ID}",
+        "https://login.microsoftonline.com/consumers"
+      ],
+      "answer": "https://login.microsoftonline.com/{Contoso tenant ID}",
+      "explanation": "A single-tenant app signs users in against its own tenant's authority, given by tenant ID or verified domain. The common and organizations endpoints are for multitenant apps, and consumers is for personal accounts only."
+    },
+    {
+      "id": "D3-118",
+      "objective": "3.3",
+      "topic": "Supported account types",
+      "stem": "Contoso's single-tenant expense app must also be used by consultants from the partner company Fabrikam, who have their own Microsoft Entra accounts. What should you do with the LEAST change to the app?",
+      "choices": [
+        "Invite the consultants as B2B guest users in Contoso's tenant",
+        "Change the app registration to multitenant",
+        "Add Fabrikam's tenant ID as a redirect URI",
+        "Add personal Microsoft accounts to the app's supported account types"
+      ],
+      "answer": "Invite the consultants as B2B guest users in Contoso's tenant",
+      "explanation": "B2B guests are users of Contoso's directory, so a single-tenant app accepts them without any registration change. Making the app multitenant would let any organization's users try to sign in, which is broader than needed."
+    },
+    {
+      "id": "D3-119",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "Contoso hosts an internal web app in Azure App Service. The app must call Microsoft Graph, and the security team forbids storing any credentials in code or configuration. What should you use?",
+      "choices": [
+        "A client secret stored in the app settings",
+        "A certificate uploaded to an app registration",
+        "A managed identity for the App Service",
+        "A service account whose password never expires"
+      ],
+      "answer": "A managed identity for the App Service",
+      "explanation": "A managed identity gives an Azure-hosted workload an identity whose credentials Azure manages and rotates, so nothing is stored. A certificate is stronger than a secret but still has to be stored and rotated by the team."
+    },
+    {
+      "id": "D3-120",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "A GitHub Actions workflow at Litware deploys to Azure. The team wants to stop storing a client secret in GitHub. What should you add to the workflow's app registration?",
+      "choices": [
+        "A client secret with the longest available expiry",
+        "A federated identity credential for the repository's GitHub issuer",
+        "A certificate whose private key is stored as a GitHub repository secret",
+        "The setting that allows public client flows"
+      ],
+      "answer": "A federated identity credential for the repository's GitHub issuer",
+      "explanation": "Workload identity federation lets the app trust tokens that GitHub issues for a specific repository, branch or environment, so no secret is stored. A certificate kept in GitHub is still a long-lived credential that can leak."
+    },
+    {
+      "id": "D3-121",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "A daemon runs on an on-premises Windows server, outside Azure, and its platform cannot issue tokens for workload identity federation. Which credential should its app registration use instead of a client secret?",
+      "choices": [
+        "A longer-lived client secret",
+        "A user name and password",
+        "An API key in the app manifest",
+        "A certificate credential"
+      ],
+      "answer": "A certificate credential",
+      "explanation": "Microsoft recommends certificate credentials over client secrets for confidential apps when federation or managed identities are not an option. Longer-lived secrets increase the risk rather than reducing it."
+    },
+    {
+      "id": "D3-122",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "An administrator at Tailspin Toys created a client secret for an app registration but left the page without copying its value. What should the administrator do?",
+      "choices": [
+        "Create a new client secret and delete the unused one",
+        "Read the secret value from the app manifest",
+        "Ask a Global Administrator to reveal the value",
+        "Recover the value from the directory audit log entry for the secret"
+      ],
+      "answer": "Create a new client secret and delete the unused one",
+      "explanation": "A client secret's value is shown only once, when it is created, and cannot be retrieved later by anyone. The manifest and audit logs show only metadata such as the key ID and expiry."
+    },
+    {
+      "id": "D3-123",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "A data service runs in a Kubernetes cluster in another cloud. The cluster issues OpenID Connect tokens for its service accounts. The service must call Microsoft Graph without storing long-lived secrets. What should you configure?",
+      "choices": [
+        "A federated credential that trusts the cluster's issuer",
+        "A client secret rotated through the cluster's secrets",
+        "The setting that allows public client flows",
+        "A system-assigned managed identity added to the app registration"
+      ],
+      "answer": "A federated credential that trusts the cluster's issuer",
+      "explanation": "A federated identity credential trusts tokens from the cluster's OIDC issuer for a named service account, so no secret is stored. Managed identities belong to Azure resources, not to app registrations."
+    },
+    {
+      "id": "D3-124",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "When you add certificate authentication to an app registration, what do you upload?",
+      "choices": [
+        "The .pfx file holding the private key",
+        "A client secret generated from the certificate",
+        "Only the issuing root CA certificate",
+        "The certificate's public key, such as a .cer file"
+      ],
+      "answer": "The certificate's public key, such as a .cer file",
+      "explanation": "You upload only the public portion of the certificate; the app keeps the private key and signs its assertions with it. Uploading the private key would expose the credential."
+    },
+    {
+      "id": "D3-125",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "A nightly background service at Alpine Ski House runs with no signed-in user and must read the calendars of every user. Which permission type should its app registration request?",
+      "choices": [
+        "Delegated permissions, granted with user consent",
+        "Delegated permissions, granted with admin consent",
+        "Application permissions, granted with admin consent",
+        "An app role assigned to users and groups"
+      ],
+      "answer": "Application permissions, granted with admin consent",
+      "explanation": "With no signed-in user, the app needs app-only access, which uses application permissions and always requires admin consent. Delegated permissions act on behalf of a signed-in user, so they cannot be used here."
+    },
+    {
+      "id": "D3-126",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "An app has the delegated permission Directory.ReadWrite.All with admin consent. A user with no admin role signs in and the app tries to update another user's properties. What happens?",
+      "choices": [
+        "It succeeds, because admin consent grants the app full directory access",
+        "It succeeds after the user consents again",
+        "It fails until application permissions are added",
+        "It fails, because the app is limited by the user's own rights"
+      ],
+      "answer": "It fails, because the app is limited by the user's own rights",
+      "explanation": "With delegated permissions, the app can do only what both the permission and the signed-in user are allowed to do. Admin consent approves the permission but does not give the user extra rights."
+    },
+    {
+      "id": "D3-127",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "An app requests Microsoft Graph application permissions. You must grant tenant-wide admin consent, following the principle of least privilege. Which role should you use?",
+      "choices": [
+        "Global Administrator",
+        "Cloud Application Administrator",
+        "Privileged Role Administrator",
+        "Application Developer"
+      ],
+      "answer": "Privileged Role Administrator",
+      "explanation": "Privileged Role Administrator can grant consent for any permission to any API, including Microsoft Graph application permissions. Cloud Application Administrator can grant most consent but not Microsoft Graph app roles, and Global Administrator is more privileged than needed."
+    },
+    {
+      "id": "D3-128",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "Proseware has turned off user consent. Users must be able to ask for access to new apps, and a set of reviewers must approve or deny each request. What should you configure?",
+      "choices": [
+        "User consent for apps from any publisher",
+        "The Application Developer role for all users",
+        "The admin consent workflow with designated reviewers",
+        "App roles on each requested app registration"
+      ],
+      "answer": "The admin consent workflow with designated reviewers",
+      "explanation": "The admin consent workflow lets users send requests that chosen reviewers approve or deny. Allowing user consent for all apps would remove the control the company wants."
+    },
+    {
+      "id": "D3-129",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "Contoso wants users to consent only to low-risk permissions, and only for apps from verified publishers. Which user consent setting should you select?",
+      "choices": [
+        "Do not allow user consent",
+        "Allow consent for verified publishers, for selected permissions",
+        "Allow user consent for apps",
+        "Turn on the admin consent workflow and keep user consent unchanged"
+      ],
+      "answer": "Allow consent for verified publishers, for selected permissions",
+      "explanation": "This setting limits user consent to the permissions you classify as low impact and to apps from verified publishers. 'Allow user consent for apps' lets users consent to any app, which is too broad."
+    },
+    {
+      "id": "D3-130",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "In a delegated access token issued to an app, which claim lists the permissions the app was granted?",
+      "choices": [
+        "roles",
+        "groups",
+        "amr",
+        "scp"
+      ],
+      "answer": "scp",
+      "explanation": "Delegated permissions appear as scopes in the scp claim. The roles claim carries application permissions or app roles assigned to the user."
+    },
+    {
+      "id": "D3-131",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "A Fabrikam app needs only to read the profile of the user who is signed in. Which Microsoft Graph permission should it request, following the principle of least privilege?",
+      "choices": [
+        "User.Read.All (application)",
+        "Directory.Read.All (delegated)",
+        "User.ReadWrite.All (application)",
+        "User.Read (delegated)"
+      ],
+      "answer": "User.Read (delegated)",
+      "explanation": "User.Read lets an app read the signed-in user's profile and needs no admin consent. The other permissions reach every user or the whole directory."
+    },
+    {
+      "id": "D3-132",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "Contoso builds a web API and a separate client app. The client must call the API on behalf of signed-in users. What should you configure on the API's app registration?",
+      "choices": [
+        "Add a Web redirect URI for the client",
+        "Add a client secret to the API registration",
+        "Expose an API and define a delegated scope",
+        "Grant the API Microsoft Graph application permissions"
+      ],
+      "answer": "Expose an API and define a delegated scope",
+      "explanation": "An API publishes delegated permissions by exposing scopes, which the client then requests. Redirect URIs and secrets belong to the client side of the flow, not to defining what the API offers."
+    },
+    {
+      "id": "D3-133",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "Contoso's inventory app needs custom roles named Approver and Viewer that appear in users' tokens. Where should you define these roles?",
+      "choices": [
+        "In Microsoft Entra roles and administrators",
+        "In the app registration's app roles",
+        "In a Privileged Identity Management group",
+        "In an administrative unit for the app"
+      ],
+      "answer": "In the app registration's app roles",
+      "explanation": "App roles are defined on the application object and assigned to users, groups or apps through its enterprise application. Microsoft Entra roles control directory administration, not permissions inside an app."
+    },
+    {
+      "id": "D3-134",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "Woodgrove Bank wants to assign an app role to a security group instead of to individual users. Which license does this require?",
+      "choices": [
+        "Microsoft Entra ID Free",
+        "Microsoft Entra Workload ID",
+        "Microsoft Defender for Cloud Apps",
+        "Microsoft Entra ID P1 or P2"
+      ],
+      "answer": "Microsoft Entra ID P1 or P2",
+      "explanation": "Group-based assignment to applications needs Microsoft Entra ID P1 or higher; the Free edition supports direct user assignment only. Workload ID licensing covers workload identities, not group assignment for users."
+    },
+    {
+      "id": "D3-135",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "A daemon must call Contoso's custom API with no signed-in user, and the API authorizes callers by the roles claim. How should you define the permission on the API?",
+      "choices": [
+        "Define a delegated scope under Expose an API",
+        "Create an app role allowed for users and groups",
+        "Create an app role allowed for applications",
+        "Give the daemon the Application Administrator role"
+      ],
+      "answer": "Create an app role allowed for applications",
+      "explanation": "An app role whose allowed member type includes applications becomes an application permission that you grant to the daemon with admin consent. A delegated scope needs a signed-in user, which this daemon lacks."
+    },
+    {
+      "id": "D3-136",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "Only users who hold an app role in Litware's claims app should be able to sign in to it. Other users in the tenant must be blocked. What should you configure?",
+      "choices": [
+        "Set Assignment required to Yes on the enterprise app",
+        "Set the app to visible to users in My Apps",
+        "Add a front-channel logout URL to the app",
+        "Change the supported account types to accounts in this directory only"
+      ],
+      "answer": "Set Assignment required to Yes on the enterprise app",
+      "explanation": "When assignment is required, only users and groups assigned to the app, directly or with an app role, can get tokens for it. Single tenant still lets every user in the tenant sign in."
+    },
+    {
+      "id": "D3-137",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "When an assigned user signs in to an app, which access token or ID token claim tells the app which app roles the user holds?",
+      "choices": [
+        "roles",
+        "scp",
+        "wids",
+        "aud"
+      ],
+      "answer": "roles",
+      "explanation": "App roles assigned to a user or group are emitted in the roles claim. The wids claim lists the user's Microsoft Entra directory roles, not the app's own roles."
+    },
+    {
+      "id": "D3-138",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "Tailspin Toys assigned an app role to the Sales group. Users in a group nested inside Sales do not get the role in their tokens. What is the MOST likely cause?",
+      "choices": [
+        "The nested group has more than one owner",
+        "App role assignment does not follow nested group membership",
+        "The app has no client secret configured",
+        "The app registration's display name is not unique in the tenant directory"
+      ],
+      "answer": "App role assignment does not follow nested group membership",
+      "explanation": "Group-based assignment to applications applies only to direct members of the assigned group, so the nested group must be assigned on its own. Owners and credentials do not affect role claims."
+    },
+    {
+      "id": "D3-139",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "Which property of an app role is emitted in the roles claim of a token?",
+      "choices": [
+        "Value",
+        "Display name",
+        "Description",
+        "Allowed member types"
+      ],
+      "answer": "Value",
+      "explanation": "The app role's value is the string the app receives in the roles claim and checks in code. The display name is only what admins see when assigning the role."
+    },
+    {
+      "id": "D3-140",
+      "type": "order",
+      "objective": "3.3",
+      "topic": "App roles",
+      "stem": "A daemon app is already registered with a certificate credential. It must call Contoso's custom web API with no signed-in user. Put the steps in order to give the daemon access.",
+      "items": [
+        "Register the web API and set its application ID URI",
+        "Define an app role on the API with allowed member type Applications",
+        "Add that app role to the daemon's API permissions as an application permission",
+        "Grant admin consent for the daemon's application permission",
+        "Have the daemon request a token for the API's .default scope and call the API"
+      ],
+      "explanation": "The API must exist before it can define an app role, and the role must exist before the daemon can request it as an application permission. Admin consent then creates the assignment, so only after it is granted does the daemon's token carry the role in its roles claim."
+    },
+    {
+      "id": "D3-141",
+      "type": "match",
+      "objective": "3.3",
+      "topic": "Secrets, certificates and federated credentials",
+      "stem": "Match each workload to the credential it should BEST use to authenticate to Microsoft Entra ID.",
+      "pairs": [
+        {
+          "item": "A function app hosted in Azure that calls Microsoft Graph",
+          "match": "Managed identity"
+        },
+        {
+          "item": "A GitHub Actions workflow that deploys to Azure",
+          "match": "Federated identity credential"
+        },
+        {
+          "item": "A Windows service on an on-premises server",
+          "match": "Certificate credential"
+        },
+        {
+          "item": "A short proof of concept in a developer test tenant",
+          "match": "Client secret"
+        }
+      ],
+      "targets_extra": [
+        "User password"
+      ],
+      "explanation": "Azure-hosted workloads should use managed identities, and workloads with their own token issuer, such as GitHub Actions, should use federation. Outside Azure without federation, a certificate is preferred; a short-lived secret is acceptable only for testing, and user passwords should never be used for apps."
+    },
+    {
+      "id": "D3-142",
+      "type": "multi",
+      "objective": "3.3",
+      "topic": "API permissions and admin consent",
+      "stem": "An app registration requests the following Microsoft Graph permissions. Which TWO always require an administrator to consent?",
+      "choices": [
+        "Mail.Read (application)",
+        "User.Read (delegated)",
+        "Directory.ReadWrite.All (delegated)",
+        "openid (delegated)",
+        "offline_access (delegated)"
+      ],
+      "answers": [
+        "Mail.Read (application)",
+        "Directory.ReadWrite.All (delegated)"
+      ],
+      "select": 2,
+      "explanation": "Application permissions always need admin consent, and high-impact delegated permissions such as Directory.ReadWrite.All are marked as requiring admin consent. User.Read, openid and offline_access are low-impact delegated permissions that users can usually consent to."
+    },
+    {
+      "id": "D3-143",
+      "type": "match",
+      "objective": "3.3",
+      "topic": "Redirect URIs and platforms",
+      "stem": "Match each application to the platform you should add to its app registration.",
+      "pairs": [
+        {
+          "item": "A React app that runs entirely in the browser",
+          "match": "Single-page application"
+        },
+        {
+          "item": "An ASP.NET Core app that redeems codes on the server",
+          "match": "Web"
+        },
+        {
+          "item": "A Windows desktop app built with WPF",
+          "match": "Mobile and desktop applications"
+        },
+        {
+          "item": "A native phone app published on Google Play",
+          "match": "Android"
+        }
+      ],
+      "explanation": "Browser-only apps use the single-page application platform with PKCE, and server-side apps that hold a credential use Web. Desktop clients use the mobile and desktop platform, while native Android apps use the Android platform with their package name and signature hash."
+    },
+    {
+      "id": "D3-144",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "What data does Microsoft Defender for Cloud Apps Cloud Discovery mainly analyze to find the cloud apps in use?",
+      "choices": [
+        "API activity from every SaaS app connected through app connectors",
+        "Microsoft Entra sign-in logs only",
+        "Traffic logs from firewalls, proxies and endpoints",
+        "Intune device hardware inventory"
+      ],
+      "answer": "Traffic logs from firewalls, proxies and endpoints",
+      "explanation": "Cloud Discovery parses traffic logs from network appliances and endpoint integrations to find which apps are used, including apps never connected to Microsoft Entra ID. App connectors give API visibility into specific sanctioned apps, not discovery."
+    },
+    {
+      "id": "D3-145",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Adatum wants a one-time assessment of shadow IT, using a week of logs already exported from its perimeter firewall. Which approach requires the LEAST setup?",
+      "choices": [
+        "Deploy a log collector for a continuous report",
+        "Create a snapshot report by uploading the logs",
+        "Connect the firewall with an app connector",
+        "Route traffic through Conditional Access app control"
+      ],
+      "answer": "Create a snapshot report by uploading the logs",
+      "explanation": "A snapshot report processes uploaded log files once, which suits a single assessment. A continuous report through a log collector needs a container host and is meant for ongoing monitoring."
+    },
+    {
+      "id": "D3-146",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Fabrikam needs ongoing Cloud Discovery data from an on-premises proxy that can send logs by syslog. What should you deploy?",
+      "choices": [
+        "A log collector that receives the proxy's syslog feed",
+        "A weekly snapshot report uploaded by hand",
+        "An app connector that reads the proxy appliance's management API",
+        "A session policy for all discovered apps"
+      ],
+      "answer": "A log collector that receives the proxy's syslog feed",
+      "explanation": "A log collector, run as a Docker container, receives logs over syslog or FTP and uploads them for continuous reports. Manual snapshots do not give ongoing data."
+    },
+    {
+      "id": "D3-147",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Most of Contoso's staff work remotely on Windows devices onboarded to Microsoft Defender for Endpoint and rarely use the corporate network. How should you collect Cloud Discovery data for them?",
+      "choices": [
+        "Integrate Defender for Endpoint with Defender for Cloud Apps",
+        "Deploy a log collector on the corporate network",
+        "Upload weekly snapshot reports exported from the head office firewall",
+        "Connect each SaaS app with an app connector"
+      ],
+      "answer": "Integrate Defender for Endpoint with Defender for Cloud Apps",
+      "explanation": "The Defender for Endpoint integration reports cloud app use from the devices themselves, wherever they connect. A log collector only sees traffic that passes through corporate appliances."
+    },
+    {
+      "id": "D3-148",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Litware's devices are onboarded to Defender for Endpoint, integrated with Defender for Cloud Apps, with network protection in block mode. Users must be blocked from a discovered file-sharing app. What should you do?",
+      "choices": [
+        "Tag the app as Monitored",
+        "Create an OAuth app policy for the app",
+        "Tag the app as Unsanctioned",
+        "Remove the app from the cloud app catalog"
+      ],
+      "answer": "Tag the app as Unsanctioned",
+      "explanation": "With the integration and network protection on, tagging an app Unsanctioned makes Defender for Endpoint block it on devices. The Monitored tag warns users but still lets them continue."
+    },
+    {
+      "id": "D3-149",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Works council rules at Northwind Traders require that analysts reviewing shadow IT reports must not see who used each app unless an investigation is approved. What should you configure?",
+      "choices": [
+        "Anonymization of user names in Cloud Discovery data",
+        "A session policy that monitors all users",
+        "Read-only Global Reader access for the analysts reviewing the reports",
+        "An app connector with limited permissions"
+      ],
+      "answer": "Anonymization of user names in Cloud Discovery data",
+      "explanation": "Cloud Discovery can replace user names with anonymized identifiers, and authorized admins can resolve them when an investigation justifies it. Global Reader would still show the real names."
+    },
+    {
+      "id": "D3-150",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Tailspin Toys wants an alert whenever Cloud Discovery finds a new app with a low risk score that is used by many users. Which policy type should you create?",
+      "choices": [
+        "An activity policy",
+        "A file policy",
+        "An app discovery policy",
+        "A session policy"
+      ],
+      "answer": "An app discovery policy",
+      "explanation": "App discovery policies alert on newly discovered apps that meet conditions such as risk score, category or usage. Activity and file policies rely on app connectors, and session policies control live browser sessions."
+    },
+    {
+      "id": "D3-151",
+      "objective": "3.4",
+      "topic": "App connectors",
+      "stem": "How do Defender for Cloud Apps app connectors get visibility into a connected cloud app?",
+      "choices": [
+        "Through a reverse proxy in the user's browser",
+        "Through firewall logs from a log collector",
+        "Through an agent installed on each endpoint",
+        "Through the app provider's APIs"
+      ],
+      "answer": "Through the app provider's APIs",
+      "explanation": "App connectors call the cloud provider's APIs to read activities, files and accounts and to take governance actions. The reverse proxy belongs to Conditional Access app control."
+    },
+    {
+      "id": "D3-152",
+      "objective": "3.4",
+      "topic": "App connectors",
+      "stem": "Alpine Ski House must find files containing passport numbers that are already stored in its Box tenant, including files uploaded months ago. What should you do?",
+      "choices": [
+        "Create a session policy that inspects downloads",
+        "Connect Box with an app connector and create a file policy",
+        "Create a Cloud Discovery snapshot report from logs covering Box traffic",
+        "Create an access policy for unmanaged devices"
+      ],
+      "answer": "Connect Box with an app connector and create a file policy",
+      "explanation": "File policies scan data at rest through an app connector, so they find existing files. Session policies inspect only content that passes through a live session."
+    },
+    {
+      "id": "D3-153",
+      "objective": "3.4",
+      "topic": "App connectors",
+      "stem": "Before connecting Salesforce to Defender for Cloud Apps with an app connector, what does the admin need?",
+      "choices": [
+        "A Salesforce account with admin rights to authorize API access",
+        "A log collector that receives Salesforce traffic",
+        "A Conditional Access policy using app control",
+        "A Defender for Endpoint integration with network protection in block mode"
+      ],
+      "answer": "A Salesforce account with admin rights to authorize API access",
+      "explanation": "The connector is authorized by an account in the app that has the permissions the API connection requires, typically an administrator. Log collectors and app control are separate, unrelated deployment paths."
+    },
+    {
+      "id": "D3-154",
+      "objective": "3.4",
+      "topic": "App connectors",
+      "stem": "A Google Workspace account at Fourth Coffee is compromised. The security team wants to suspend the user in Google Workspace directly from Defender for Cloud Apps. What is required?",
+      "choices": [
+        "A Google Workspace session policy",
+        "A Google Workspace app connector",
+        "A Cloud Discovery continuous report",
+        "A cloud app catalog score update"
+      ],
+      "answer": "A Google Workspace app connector",
+      "explanation": "Governance actions such as suspending a user are carried out in the app through its API, which needs an app connector. Session policies act only on live browser sessions."
+    },
+    {
+      "id": "D3-155",
+      "objective": "3.4",
+      "topic": "App connectors",
+      "stem": "Admins at Woodgrove Bank change settings directly in a SaaS app's admin console and through its own management tools, never through a proxied browser session. Which capability can still record these activities in Defender for Cloud Apps?",
+      "choices": [
+        "Conditional Access app control",
+        "An access policy for the app",
+        "A Cloud Discovery snapshot report",
+        "An app connector for the app"
+      ],
+      "answer": "An app connector for the app",
+      "explanation": "An app connector reads the app's activity log through its API, so it sees actions however they were performed. App control sees only browser sessions routed through it."
+    },
+    {
+      "id": "D3-156",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "Which Conditional Access session control passes device information to SharePoint Online and Exchange Online so that the app itself can limit what a user can do?",
+      "choices": [
+        "Use Conditional Access App Control",
+        "Sign-in frequency",
+        "Use app enforced restrictions",
+        "Persistent browser session"
+      ],
+      "answer": "Use app enforced restrictions",
+      "explanation": "App enforced restrictions send device state to the supported Microsoft 365 services, which then provide a limited experience. Conditional Access App Control routes the session through Defender for Cloud Apps instead."
+    },
+    {
+      "id": "D3-157",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "Contoso must let users on unmanaged devices open SharePoint Online files in a browser but not download, print or sync them. The solution must not route sessions through a reverse proxy. What should you configure?",
+      "choices": [
+        "Conditional Access App Control with a session policy that blocks downloads",
+        "A grant control that requires a compliant device",
+        "A Defender for Endpoint indicator for SharePoint",
+        "SharePoint limited, web-only access for unmanaged devices"
+      ],
+      "answer": "SharePoint limited, web-only access for unmanaged devices",
+      "explanation": "SharePoint's unmanaged device setting for limited, web-only access relies on app enforced restrictions, with no proxy involved. Requiring a compliant device would block those users instead of giving them a limited experience."
+    },
+    {
+      "id": "D3-158",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "Which cloud apps support the Use app enforced restrictions session control in Conditional Access?",
+      "choices": [
+        "Any SAML or OpenID Connect app",
+        "SharePoint Online and Exchange Online",
+        "Salesforce, Box and ServiceNow",
+        "Only apps published by application proxy"
+      ],
+      "answer": "SharePoint Online and Exchange Online",
+      "explanation": "App enforced restrictions work with SharePoint Online (including OneDrive) and Exchange Online. To control sessions in other SaaS apps, you use Conditional Access App Control."
+    },
+    {
+      "id": "D3-159",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "SharePoint at Adatum is set to allow limited, web-only access from unmanaged devices. A user signs in from a Microsoft Entra hybrid joined corporate laptop. What experience does the user get?",
+      "choices": [
+        "Full access, because the device counts as managed",
+        "Limited, web-only access with downloads blocked",
+        "No access until the device is enrolled again",
+        "Read-only access with a watermark applied"
+      ],
+      "answer": "Full access, because the device counts as managed",
+      "explanation": "Devices that are compliant or Microsoft Entra hybrid joined are treated as managed, so the restriction does not apply. The limited experience is only for devices that meet neither condition."
+    },
+    {
+      "id": "D3-160",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "Northwind Traders wants Outlook on the web to block attachment downloads on unmanaged devices with the LEAST administrative effort. Which solution should you use?",
+      "choices": [
+        "A Defender for Cloud Apps file policy that scans Exchange Online mail",
+        "Cloud Discovery with Outlook tagged Monitored",
+        "An OAuth app policy covering Outlook on the web",
+        "An Outlook on the web policy with app enforced restrictions"
+      ],
+      "answer": "An Outlook on the web policy with app enforced restrictions",
+      "explanation": "Exchange Online honors app enforced restrictions when the Outlook on the web mailbox policy is set for limited access on unmanaged devices. File policies scan stored files and do not control live sessions."
+    },
+    {
+      "id": "D3-161",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "What is the minimum Microsoft Entra license needed for a Conditional Access policy that uses the Use app enforced restrictions session control?",
+      "choices": [
+        "Microsoft Entra ID Free",
+        "Microsoft Entra ID P2 only",
+        "Microsoft Entra ID Governance",
+        "Microsoft Entra ID P1"
+      ],
+      "answer": "Microsoft Entra ID P1",
+      "explanation": "Every Conditional Access policy, including those with session controls, needs Microsoft Entra ID P1. P2 adds risk-based conditions, which this control does not need."
+    },
+    {
+      "id": "D3-162",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "How does Conditional Access App Control in Defender for Cloud Apps monitor and control user sessions?",
+      "choices": [
+        "By reading each app's activity log through the provider's API",
+        "By parsing firewall logs from a log collector",
+        "By changing DNS records for each cloud app",
+        "By routing browser sessions through a reverse proxy"
+      ],
+      "answer": "By routing browser sessions through a reverse proxy",
+      "explanation": "Conditional Access App Control uses a reverse proxy, or in-browser protection in Microsoft Edge for Business, to control sessions in real time. Reading activity logs through APIs is what app connectors do."
+    },
+    {
+      "id": "D3-163",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "Contoso has created session policies in Defender for Cloud Apps for a SaaS app that uses Microsoft Entra ID for SSO. How should user sessions be sent to Defender for Cloud Apps?",
+      "choices": [
+        "A Conditional Access policy using Conditional Access App Control",
+        "An app connector for the app with all governance actions turned on",
+        "A Cloud Discovery continuous report for the app",
+        "An OAuth app policy that targets the app"
+      ],
+      "answer": "A Conditional Access policy using Conditional Access App Control",
+      "explanation": "The Conditional Access policy's session control hands the session to Defender for Cloud Apps, where session policies apply. App connectors work through APIs and cannot control a live session."
+    },
+    {
+      "id": "D3-164",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "Fabrikam must block file downloads from Salesforce for users on unmanaged devices, while still allowing them to work in the browser. What should you use?",
+      "choices": [
+        "The Use app enforced restrictions session control in Conditional Access",
+        "A grant control that requires a compliant device",
+        "A session policy through Conditional Access App Control",
+        "A Salesforce app connector with a file policy"
+      ],
+      "answer": "A session policy through Conditional Access App Control",
+      "explanation": "Session policies through Conditional Access App Control can block downloads in any onboarded web app. App enforced restrictions only work with SharePoint Online and Exchange Online."
+    },
+    {
+      "id": "D3-165",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "You created a Conditional Access policy that uses Conditional Access App Control for a featured app, but the app does not yet appear in the list of apps protected by app control. What should you do?",
+      "choices": [
+        "Create an app connector for the app",
+        "Upload a snapshot report that includes the app",
+        "Assign the app an app role for administrators",
+        "Sign in to the app as a user in scope of the policy"
+      ],
+      "answer": "Sign in to the app as a user in scope of the policy",
+      "explanation": "An app is onboarded to Conditional Access App Control when a user covered by the policy first signs in to it. An app connector is a separate API integration and does not onboard the app to the proxy."
+    },
+    {
+      "id": "D3-166",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "Users at Litware open apps protected by Conditional Access App Control in Microsoft Edge for Business, and the app's URL has no proxy suffix. Why are session policies still enforced?",
+      "choices": [
+        "The session policies are disabled for Edge users",
+        "Edge sends the app's API activity logs to the Microsoft 365 app connector",
+        "Edge for Business enforces them through in-browser protection",
+        "Defender for Endpoint blocks the app's traffic"
+      ],
+      "answer": "Edge for Business enforces them through in-browser protection",
+      "explanation": "In-browser protection lets Microsoft Edge for Business apply session policies directly in the browser instead of through the reverse proxy URL. Session policies remain in force; they are not disabled."
+    },
+    {
+      "id": "D3-167",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "Which licenses does Tailspin Toys need to route sessions to Conditional Access App Control from Microsoft Entra ID?",
+      "choices": [
+        "Microsoft Entra ID P2 only",
+        "Microsoft Entra ID P1 and Defender for Cloud Apps",
+        "Microsoft Entra ID Governance and Intune",
+        "Microsoft Defender for Endpoint only"
+      ],
+      "answer": "Microsoft Entra ID P1 and Defender for Cloud Apps",
+      "explanation": "The Conditional Access policy needs Microsoft Entra ID P1, and the session controls are provided by Defender for Cloud Apps. Defender for Endpoint alone does not include session control."
+    },
+    {
+      "id": "D3-168",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Woodgrove Bank must stop unmanaged devices from opening a SaaS app protected by Conditional Access App Control in desktop or mobile client apps, which cannot be proxied. What should you create?",
+      "choices": [
+        "A session policy that blocks file downloads in the desktop client apps",
+        "An access policy that blocks mobile and desktop client apps",
+        "A file policy that quarantines shared files",
+        "An app discovery policy for the client app"
+      ],
+      "answer": "An access policy that blocks mobile and desktop client apps",
+      "explanation": "Session control works only in browsers, so an access policy should block the non-browser client apps. A session policy cannot control a client app that never goes through the proxy."
+    },
+    {
+      "id": "D3-169",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Contoso wants files containing credit card numbers to receive a sensitivity label automatically when users download them from a protected SaaS app on unmanaged devices. What should you create?",
+      "choices": [
+        "A file policy that scans the app's stored files",
+        "A session policy that protects files on download",
+        "An access policy that blocks unmanaged devices",
+        "An activity policy that alerts when a user downloads many files at once"
+      ],
+      "answer": "A session policy that protects files on download",
+      "explanation": "A session policy can inspect files at download time and apply a sensitivity label to them. A file policy works on files at rest and does not act at the moment of download."
+    },
+    {
+      "id": "D3-170",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Before enforcing restrictions, Alpine Ski House admins want to see which actions users take in a protected app without blocking anything. Which session control type should they choose?",
+      "choices": [
+        "Block activities",
+        "Control file download",
+        "Control file upload",
+        "Monitor only"
+      ],
+      "answer": "Monitor only",
+      "explanation": "Monitor only records session activity so admins can see what a stricter policy would affect. The other types inspect and can block or protect content."
+    },
+    {
+      "id": "D3-171",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Proseware contractors use a finance web app on personal devices. They must not be able to copy data from it or print pages. What should you configure?",
+      "choices": [
+        "An access policy that requires a client certificate",
+        "A file policy that removes external sharing",
+        "An OAuth app policy that revokes the app",
+        "A session policy that blocks copy, paste and print"
+      ],
+      "answer": "A session policy that blocks copy, paste and print",
+      "explanation": "A session policy of the Block activities type can stop cut, copy, paste and print in the browser. An access policy only decides whether the session starts at all."
+    },
+    {
+      "id": "D3-172",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "In a Defender for Cloud Apps session policy, how can Adatum treat Intune compliant devices as managed so that restrictions apply only to other devices?",
+      "choices": [
+        "Use the device tag filter for Intune compliant",
+        "Use the IP address range tag filter",
+        "Use the Sanctioned app tag filter",
+        "Use the user agent string filter"
+      ],
+      "answer": "Use the device tag filter for Intune compliant",
+      "explanation": "Device tags such as Intune compliant, Microsoft Entra hybrid joined or a valid client certificate identify managed devices in access and session policies. IP ranges describe network location, not device management."
+    },
+    {
+      "id": "D3-173",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Which Defender for Cloud Apps policy type is evaluated when a user signs in and can stop the user from reaching the app at all?",
+      "choices": [
+        "Session policy",
+        "File policy",
+        "Access policy",
+        "App discovery policy"
+      ],
+      "answer": "Access policy",
+      "explanation": "Access policies allow or block access in real time when the user signs in. Session policies control what the user does after access is allowed."
+    },
+    {
+      "id": "D3-174",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "Northwind Traders wants an alert when users authorize an OAuth app that has a high permission level and is rarely used by other organizations. What should you create?",
+      "choices": [
+        "An app discovery policy filtered on risk score and number of users",
+        "An OAuth app policy on permission level and community use",
+        "A session policy filtered on device tag",
+        "A file policy filtered on sharing level"
+      ],
+      "answer": "An OAuth app policy on permission level and community use",
+      "explanation": "OAuth app policies can filter on permission level, community use and how many users authorized the app. App discovery policies look at apps found in traffic logs, not consented OAuth apps."
+    },
+    {
+      "id": "D3-175",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "Defender for Cloud Apps does not show any OAuth apps that users have authorized in Contoso's Microsoft Entra tenant. What is the MOST likely cause?",
+      "choices": [
+        "No log collector has been deployed",
+        "The Microsoft 365 app connector is not connected",
+        "Users have not yet signed in to the app through Conditional Access App Control",
+        "No snapshot report has been uploaded"
+      ],
+      "answer": "The Microsoft 365 app connector is not connected",
+      "explanation": "Visibility into OAuth apps authorized in Microsoft Entra ID comes from the Microsoft 365 app connector. Log collectors and app control show traffic and sessions, not consent grants."
+    },
+    {
+      "id": "D3-176",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "Users at Fabrikam consented to a malicious OAuth app that reads their mail. In Defender for Cloud Apps, what should the security team do to stop the app from using those consents?",
+      "choices": [
+        "Tag the app as Unsanctioned in Cloud Discovery",
+        "Ban or disable the app from the OAuth apps view",
+        "Create a snapshot report for the app's domain",
+        "Add the app to a session policy as Monitor only"
+      ],
+      "answer": "Ban or disable the app from the OAuth apps view",
+      "explanation": "Banning or disabling an OAuth app stops it from accessing data through the permissions users granted. Unsanctioned tags apply to apps discovered in traffic and do not affect OAuth consents."
+    },
+    {
+      "id": "D3-177",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "Which Defender for Cloud Apps feature provides policies for OAuth apps registered in Microsoft Entra ID, such as detecting overprivileged apps with unused permissions?",
+      "choices": [
+        "App governance",
+        "Cloud Discovery",
+        "Conditional Access App Control",
+        "Cloud app catalog"
+      ],
+      "answer": "App governance",
+      "explanation": "App governance monitors OAuth apps' permissions and data use and can flag overprivileged apps. Cloud Discovery finds apps in network traffic and does not see unused API permissions."
+    },
+    {
+      "id": "D3-178",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "Litware has connected Google Workspace to Defender for Cloud Apps. The security team reviewed a widely used OAuth app that users authorized in Google Workspace and judged it safe. They want to show it was reviewed and reduce follow-up noise. What should they do?",
+      "choices": [
+        "Mark the app as Banned",
+        "Tag the app as Monitored",
+        "Remove the Google Workspace app connector",
+        "Mark the app as Approved"
+      ],
+      "answer": "Mark the app as Approved",
+      "explanation": "Approving an OAuth app records that it was reviewed and is allowed. Banning would stop the app from working for users."
+    },
+    {
+      "id": "D3-179",
+      "objective": "3.4",
+      "topic": "OAuth app policies",
+      "stem": "On the OAuth apps page of Defender for Cloud Apps, what does an app's community use value indicate?",
+      "choices": [
+        "How common the app is among other organizations",
+        "How many of your users authorized the app",
+        "How many permissions the app requests",
+        "How long ago the app was first authorized"
+      ],
+      "answer": "How common the app is among other organizations",
+      "explanation": "Community use shows whether an app is common, uncommon or rare across other organizations, which helps spot unusual apps. The number of your own users who authorized it is shown separately."
+    },
+    {
+      "id": "D3-180",
+      "objective": "3.4",
+      "topic": "Cloud app catalog",
+      "stem": "Which groups of risk factors make up an app's score in the Defender for Cloud Apps cloud app catalog?",
+      "choices": [
+        "Identity, device, network and data",
+        "Privacy, cost, usage and support",
+        "General, security, compliance and legal",
+        "Availability, latency, region and tier"
+      ],
+      "answer": "General, security, compliance and legal",
+      "explanation": "The catalog scores each app on general, security, compliance and legal risk factors. Usage and cost are not part of the score."
+    },
+    {
+      "id": "D3-181",
+      "objective": "3.4",
+      "topic": "Cloud app catalog",
+      "stem": "Adatum's regulators care more about certifications than any other factor. Admins want catalog risk scores to reflect that. What should they do?",
+      "choices": [
+        "Raise the weight of compliance factors in the score metrics",
+        "Tag every uncertified app as Monitored",
+        "Create an app discovery policy for each app",
+        "Submit a score update request for each app that lacks certifications"
+      ],
+      "answer": "Raise the weight of compliance factors in the score metrics",
+      "explanation": "Score metrics settings let you change how much each risk factor and category counts toward the score. A score update request asks Microsoft to correct data for one app; it does not change weighting."
+    },
+    {
+      "id": "D3-182",
+      "objective": "3.4",
+      "topic": "Cloud app catalog",
+      "stem": "Contoso's healthcare team must choose a file-sharing service that meets HIPAA requirements. How can you find suitable candidates in Defender for Cloud Apps?",
+      "choices": [
+        "Filter the catalog by category and compliance attribute",
+        "Run a snapshot report of current traffic filtered on the HIPAA attribute",
+        "Create a session policy for file-sharing apps",
+        "Create an OAuth app policy for HIPAA"
+      ],
+      "answer": "Filter the catalog by category and compliance attribute",
+      "explanation": "The cloud app catalog lets you filter by category and attributes such as HIPAA or SOC 2 compliance. A snapshot report shows only apps already seen in your logs."
+    },
+    {
+      "id": "D3-183",
+      "objective": "3.4",
+      "topic": "Cloud app catalog",
+      "stem": "A Fabrikam admin believes the catalog's data on encryption at rest for a SaaS app is out of date. What should the admin do?",
+      "choices": [
+        "Edit the attribute in the app's catalog entry",
+        "Mark the app Unsanctioned until it is updated",
+        "Submit a score update request for the app",
+        "Remove the app from Cloud Discovery results"
+      ],
+      "answer": "Submit a score update request for the app",
+      "explanation": "A score update request asks Microsoft to review and correct an app's catalog attributes. Admins cannot edit catalog data directly; they can only adjust weighting or request changes."
+    },
+    {
+      "id": "D3-184",
+      "objective": "3.4",
+      "topic": "Cloud app catalog",
+      "stem": "A department at Tailspin Toys uses a niche SaaS app that is not listed in the cloud app catalog. What should you do so it can be scored and managed?",
+      "choices": [
+        "Create a session policy for the app's domain",
+        "Register the app as single tenant in Microsoft Entra ID",
+        "Request that the app be added to the catalog",
+        "Upload the app's terms of use to the catalog"
+      ],
+      "answer": "Request that the app be added to the catalog",
+      "explanation": "Defender for Cloud Apps lets admins request that a new app be added to the catalog for scoring. Registering an app in Microsoft Entra ID does not put it in the catalog."
+    },
+    {
+      "id": "D3-185",
+      "type": "order",
+      "objective": "3.4",
+      "topic": "Conditional Access app control",
+      "stem": "Put the steps in order to start controlling browser sessions for a Microsoft Entra integrated SaaS app with Conditional Access App Control.",
+      "items": [
+        "Create a Conditional Access policy for the users and app with the custom app control option",
+        "Sign in to the app as a user in scope so the app is onboarded",
+        "Create a session policy in Defender for Cloud Apps for the app",
+        "Test the policy from an unmanaged device and review the activity log"
+      ],
+      "explanation": "The Conditional Access policy routes sessions first, and a scoped sign-in onboards the app to app control. Session policies are then created for the onboarded app and tested before rollout."
+    },
+    {
+      "id": "D3-186",
+      "type": "order",
+      "objective": "3.4",
+      "topic": "Cloud Discovery",
+      "stem": "Put the steps in order to set up continuous Cloud Discovery reports from an on-premises firewall.",
+      "items": [
+        "Add a data source in Defender for Cloud Apps for the firewall's log format",
+        "Add a log collector in Defender for Cloud Apps and link the data source",
+        "Deploy the log collector container on a host in the network",
+        "Configure the firewall to forward its logs to the log collector",
+        "Review discovered apps and tag them Sanctioned or Unsanctioned"
+      ],
+      "explanation": "The data source defines the log format, and the log collector configured in the portal provides the settings used to deploy the container. Only once the firewall forwards logs to it do discovered apps appear for review and tagging."
+    },
+    {
+      "id": "D3-187",
+      "type": "match",
+      "objective": "3.4",
+      "topic": "Access and session policies",
+      "stem": "Match each requirement to the Defender for Cloud Apps policy type that meets it.",
+      "pairs": [
+        {
+          "item": "Block downloads during browser sessions on unmanaged devices",
+          "match": "Session policy"
+        },
+        {
+          "item": "Stop unmanaged devices from opening the app at all",
+          "match": "Access policy"
+        },
+        {
+          "item": "Alert when a new high-risk app appears in traffic logs",
+          "match": "App discovery policy"
+        },
+        {
+          "item": "Alert when users grant an app high-level permissions",
+          "match": "OAuth app policy"
+        },
+        {
+          "item": "Find sensitive files already stored in a connected app",
+          "match": "File policy"
+        }
+      ],
+      "targets_extra": [
+        "Cloud Discovery anomaly detection policy"
+      ],
+      "explanation": "Session policies control actions inside a live session, and access policies decide whether the session starts. App discovery policies watch traffic-log discoveries, OAuth app policies watch consented apps, and file policies scan data at rest through app connectors."
+    },
+    {
+      "id": "D3-188",
+      "type": "multi",
+      "objective": "3.4",
+      "topic": "App-enforced restrictions",
+      "stem": "Which TWO statements about the Use app enforced restrictions session control are true?",
+      "choices": [
+        "It is supported by SharePoint Online and Exchange Online",
+        "It is set as a session control in a Conditional Access policy",
+        "It routes sessions through the Defender for Cloud Apps reverse proxy",
+        "It works with any SAML-based enterprise application",
+        "It requires a Microsoft Entra ID P2 license"
+      ],
+      "answers": [
+        "It is supported by SharePoint Online and Exchange Online",
+        "It is set as a session control in a Conditional Access policy"
+      ],
+      "select": 2,
+      "explanation": "App enforced restrictions are a Conditional Access session control that SharePoint Online and Exchange Online honor to give a limited experience. They do not use the reverse proxy, do not apply to other SaaS apps and need only P1, like any Conditional Access policy."
+    }
+  ]
+}
