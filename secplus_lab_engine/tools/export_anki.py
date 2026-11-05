@@ -33,17 +33,9 @@ from utils.exam import DOMAIN_NAMES  # noqa: E402
 MODEL_ID = 1_707_000_701          # fixed IDs keep re-imports stable
 DECK_BASE_ID = 2_070_000_000
 
-OBJECTIVE_NAMES = {
-    "1.1": "Security controls", "1.2": "Security concepts & Zero Trust", "1.3": "Change management",
-    "1.4": "Cryptography & PKI", "2.1": "Threat actors & motivations", "2.2": "Threat vectors & attack surfaces",
-    "2.3": "Types of vulnerabilities", "2.4": "Indicators of malicious activity", "2.5": "Mitigation techniques",
-    "3.1": "Architecture models", "3.2": "Secure enterprise infrastructure", "3.3": "Data protection",
-    "3.4": "Resilience & recovery", "4.1": "Secure baselines & hardening", "4.2": "Asset management",
-    "4.3": "Vulnerability management", "4.4": "Alerting & monitoring", "4.5": "Enterprise security capabilities",
-    "4.6": "Identity & access management", "4.7": "Automation & orchestration", "4.8": "Incident response",
-    "4.9": "Investigation data sources", "5.1": "Security governance", "5.2": "Risk management",
-    "5.3": "Third-party risk", "5.4": "Compliance", "5.5": "Audits & assessments", "5.6": "Security awareness",
-}
+from utils import course as _course
+
+OBJECTIVE_NAMES = _course.objectives()      # e.g. {"1.1": "Security controls", ...} for the active course
 
 CSS = """
 .card { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; font-size: 17px; text-align: left; color: #17202b; background: #f6f7f9; }

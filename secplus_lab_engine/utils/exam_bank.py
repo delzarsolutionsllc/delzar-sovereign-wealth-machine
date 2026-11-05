@@ -43,12 +43,13 @@ from collections import Counter
 from functools import lru_cache
 from pathlib import Path
 
+from utils import course
 from utils.loader import ROOT
 
-BANK_DIR = ROOT / "data" / "exam_bank"
+BANK_DIR = course.data_dir("exam_bank")                          # the active course's bank (Security+: data/exam_bank)
 PBQ_FILE = BANK_DIR / "pbq.json"                                 # multi / order / match questions
 TYPES = ("single", "multi", "order", "match")
-OBJECTIVES = {"1": 4, "2": 5, "3": 4, "4": 9, "5": 6}          # objectives per domain
+OBJECTIVES = course.objectives_per_domain()                      # objectives per domain, e.g. {"1": 4, "2": 5, ...}
 VALID_OBJECTIVES = {f"{d}.{n}" for d, k in OBJECTIVES.items() for n in range(1, k + 1)}
 # Wording that belongs to the labs, not to the exam: ids like DF-5, IAC-T1, SIEM-004, P-03, rule names in CAPS_WITH_UNDERSCORES.
 _REAL_TERMS = r"(?!(?:SHA|AES|RSA|DES|3DES|MD|RC|ECC|ECDSA|ECDHE|DH|CVE|CWE|ISO|IEC|NIST|SP|PCI|TLS|SSL|WPA|IEEE|RFC|EAP|PEAP|SOC|FIPS|OWASP|HMAC|CIS|SMB|SMBV|HTTP|DOCSIS|X)-)"

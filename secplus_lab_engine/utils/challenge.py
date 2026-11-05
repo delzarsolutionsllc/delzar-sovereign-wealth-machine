@@ -21,7 +21,14 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
-DEFAULT_PROGRESS_PATH = Path(__file__).resolve().parent.parent / "progress.json"
+def _progress_file() -> Path:
+    """progress.json for Security+ (unchanged); progress-<course>.json for every other course."""
+    from utils import course
+    name = "progress.json" if course.code() == course.DEFAULT else f"progress-{course.code()}.json"
+    return Path(__file__).resolve().parent.parent / name
+
+
+DEFAULT_PROGRESS_PATH = _progress_file()
 
 
 KINDS = ("single", "multi", "order", "match")

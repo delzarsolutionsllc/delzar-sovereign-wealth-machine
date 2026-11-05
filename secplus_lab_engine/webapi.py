@@ -137,18 +137,34 @@ def _json_safe(obj):
 # --------------------------------------------------------------------------- #
 # API
 # --------------------------------------------------------------------------- #
+def _lab_codes(n: int, module) -> list[str]:
+    """The active course's objective codes for a lab (Security+: the lab's own SY0-701 codes)."""
+    return _course.lab_objectives(n, videos.lab_objectives(module))
+
+
+def course_labs() -> list[int]:
+    return _course.lab_numbers(LABS)
+
+
 def catalog(policies: dict) -> dict:
     labs = []
-    for n, (m, data_file) in LABS.items():
-        doms = lab_domains(m)
-        labs.append({"n": n, "title": m.TITLE, "objectives": m.OBJECTIVES, "domains": doms,
+    secplus = _course.code() == _course.DEFAULT
+    names = _course.objectives()
+    for n in course_labs():
+        m, data_file = LABS[n]
+        codes = _lab_codes(n, m)
+        doms = lab_domains(m) if secplus else list(dict.fromkeys(c.split(".")[0] for c in codes))
+        objectives = m.OBJECTIVES if secplus else f"{_course.active()['exam_code']} " + " · ".join(f"{c} {names.get(c, '')}" for c in codes)
+        labs.append({"n": n, "title": m.TITLE, "objectives": objectives, "domains": doms,
                      "primary_domain": doms[0] if doms else "1", "has_generator": n in GENERATORS,
                      "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT,
-                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)],
+                     "objective_codes": codes, "videos": [v["id"] for v in videos.for_lab(m)] if _course.active().get("videos") else [],
                      "briefing": portfolio.briefing(n), "career": portfolio.career_tags(n)})
+    vc = {"source": videos.course()["source"], "videos": videos.videos()} if _course.active().get("videos") \
+        else {"source": None, "videos": []}
     return {"labs": labs, "pass_scaled": PASS_SCALED, "domain_test_target": DOMAIN_TEST_TARGET,
-            "exam_target": EXAM_TARGET,
-            "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
+            "exam_target": EXAM_TARGET, "course": _course.summary(), "objectives": names,
+            "video_course": vc,
             "career_tracks": portfolio.career(),
             "objective_quizzes": quizzes.catalog(), "quiz_set_size": quizzes.SET_SIZE,
             "glossary": glossary.catalog(),
@@ -179,6 +195,10 @@ def challenge(policies: dict, lab: int, randomize: bool = False, seed=None, data
     module = LABS[lab][0]
     data = data if data is not None else _data(policies, lab, randomize, seed)
     qs = [_q(q) for q in module.build_challenges(policies, data)]
+    if _course.code() != _course.DEFAULT:            # score lab practice under this course's objective for the lab
+        codes = _lab_codes(lab, module)
+        if codes:
+            qs = [{**q, "objective": codes[0]} for q in qs]
     random.Random(seed).shuffle(qs)
     return {"lab": lab, "random": randomize, "seed": seed, "questions": qs}
 
@@ -339,13 +359,9 @@ def review_answer(qid: str, correct: bool, today=None, path=None) -> dict:
 
 
 # The exam this platform prepares for (owner's choice, 2026-11-05). Dates from CompTIA, checked 2026-11-05.
-EXAM_TARGET = {
-    "code": "SY0-701", "name": "CompTIA Security+ SY0-701",
-    "retires": "2027-06-11",
-    "note": "English SY0-701 retires June 11, 2027 (Japanese, Portuguese, Spanish and Thai: August 13, 2027). "
-            "Security+ V8 (SY0-801) launches on or around November 17, 2026.",
-    "source": "https://www.comptia.org/en-us/certifications/security/v7/",
-}
+from utils import course as _course
+
+EXAM_TARGET = _course.active()["exam_target"]     # exam dates and their source (data/courses/<code>/course.json)
 
 METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
            "case_study", "review_session", "review_answer", "progress_export", "progress_import", "quiz", "quiz_record", "glossary"}
@@ -367,7 +383,7 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         return challenge(policies, int(a["lab"]), bool(a.get("random")), seed)
     if method == "exam":
         return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"), a.get("domain"),
-                    a.get("source") or "bank")
+                    (a.get("source") or "bank") if _course.code() == _course.DEFAULT else "bank")
     if method == "progress_get":
         return progress_get(progress_path)
     if method == "progress_record":

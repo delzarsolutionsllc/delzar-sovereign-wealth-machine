@@ -24,6 +24,16 @@ ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+def _early_course(argv) -> None:
+    """--course CODE builds that course's bundle (the engine reads the course at import)."""
+    import os
+    for i, a in enumerate(argv):
+        if a == "--course" and i + 1 < len(argv):
+            os.environ["DELZAR_COURSE"] = argv[i + 1]
+
+
+_early_course(sys.argv[1:])
+
 import webapi  # noqa: E402
 from labs import LABS  # noqa: E402
 from utils.loader import load_policies  # noqa: E402
@@ -33,7 +43,7 @@ from utils.scenario_generator import GENERATORS  # noqa: E402
 def build(variants: int = 12, seed_base: int = 1000) -> dict:
     policies = load_policies()
     bundle = {"version": 1, "catalog": webapi.catalog(policies), "labs": {}}
-    for n in LABS:
+    for n in webapi.course_labs():
         entry = {"sample": {"run": webapi.run(policies, n)["text"],
                             "questions": webapi.challenge(policies, n, seed=0)["questions"]},
                  "variants": []}
@@ -58,6 +68,7 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[1])
     ap.add_argument("--variants", type=int, default=12)
     ap.add_argument("--out", default=str(ROOT / "web" / "course_data.json"))
+    ap.add_argument("--course", help="course code (default: secplus, or DELZAR_COURSE)")
     args = ap.parse_args(argv)
     bundle = build(args.variants)
     Path(args.out).write_text(json.dumps(bundle, separators=(",", ":")), encoding="utf-8")

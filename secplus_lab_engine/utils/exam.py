@@ -50,10 +50,11 @@ import time
 from dataclasses import dataclass, field
 from typing import Callable
 
-DOMAIN_WEIGHTS = {"1": 0.12, "2": 0.22, "3": 0.18, "4": 0.28, "5": 0.20}
-DOMAIN_NAMES = {"1": "General Security Concepts", "2": "Threats, Vulnerabilities & Mitigations",
-                "3": "Security Architecture", "4": "Security Operations", "5": "Security Program Management"}
-PASS_SCALED = 750
+from utils import course as _course
+
+DOMAIN_WEIGHTS = _course.domain_weights()          # Security+: {"1": 0.12, "2": 0.22, "3": 0.18, "4": 0.28, "5": 0.20}
+DOMAIN_NAMES = _course.domain_names()
+PASS_SCALED = _course.active()["pass_scaled"]       # Security+ 750 on 100-900; SC-300 700 on 1-1000
 DOMAIN_TEST_TARGET = 80          # percent; a study target for domain tests, not an official number
 PBQ_SHARE = 0.10                 # share of exam slots for select-TWO / ordering / matching questions
 
@@ -76,7 +77,8 @@ class ExamResult:
 
     @property
     def scaled(self) -> int:
-        return round(100 + 8 * self.percent)
+        lo, hi = _course.active().get("scale", [100, 900])           # Security+ 100-900; SC-300 1-1000
+        return round(lo + (hi - lo) * self.percent / 100)
 
     @property
     def passed(self) -> bool:
