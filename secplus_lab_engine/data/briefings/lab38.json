@@ -1,0 +1,35 @@
+{
+  "lab": 38,
+  "ticket": "IAM-30838",
+  "type": "Service request and incident",
+  "priority": "P2",
+  "requested_by": "Priya Halden, IT Service Manager",
+  "title": "Set up new app sign-ins, fix the failing SAML apps and check provisioning before the Monday cut-over",
+  "situation": "Larkspur Example Ltd is moving all its business apps behind Okta. App owners have sent 8 requests for new app integrations and need to know which sign-on method each one should use. Users have reported 13 sign-in attempts across 7 SAML (Security Assertion Markup Language) apps, and some of them fail with errors nobody can explain. HR and group changes have also triggered 12 provisioning events, and audit wants proof that people who left no longer have live app accounts.",
+  "your_task": [
+    "For each app request, choose SAML, OIDC (OpenID Connect), SWA (Secure Web Authentication, Okta's password vaulting) or a Bookmark app, and send back any request that is missing information.",
+    "For each failed sign-in, compare Okta's settings with what the service provider (SP, the app) expects: the ACS (Assertion Consumer Service) URL, the Audience URI (SP entity ID), the NameID format and value, the assertion signature and signing certificate, and whether the user is assigned to the app.",
+    "Note whether each attempt started from the Okta End-User Dashboard (IdP-initiated, IdP meaning identity provider) or from the app (SP-initiated).",
+    "For each provisioning event, work out what Okta should do in the app (create, update, deactivate or nothing) and whether the result needs manual work or review.",
+    "List the app accounts that stay active after a user was removed, so they can be disabled by hand."
+  ],
+  "why_it_matters": "An app that signs people in with the wrong settings either locks out staff on cut-over day or, worse, trusts assertions it should not. A leaver whose app account stays active is an open door after offboarding, and an unassigned user must never get in just because the SAML settings are right.",
+  "done_when": [
+    "All 8 app requests have a sign-on method or a written reason for review.",
+    "All 13 sign-in attempts have an outcome and the setting to fix is named.",
+    "All 12 provisioning events have an action and a verification status.",
+    "Every app account left active after offboarding is on the clean-up list."
+  ],
+  "glossary": {
+    "OIN (Okta Integration Network)": "Okta's catalog of pre-built app integrations that already know each app's sign-on and provisioning settings.",
+    "SAML (Security Assertion Markup Language)": "A federation standard where Okta sends the app a signed statement (an assertion) that says who the user is.",
+    "OIDC (OpenID Connect)": "A modern sign-in standard built on OAuth 2.0, suited to web, single-page and mobile apps.",
+    "SWA (Secure Web Authentication)": "Okta stores the user's app username and password and fills the app's login form for them.",
+    "ACS (Assertion Consumer Service) URL": "The address in the app where Okta delivers the SAML response; Okta calls it the Single sign-on URL.",
+    "Audience URI (SP entity ID)": "The app's unique SAML name; the assertion is only accepted by the app it was issued for.",
+    "NameID": "The user identifier inside the SAML assertion, such as the Okta username or the email address.",
+    "Provisioning": "Okta creating, updating and deactivating the user's account inside the app through the app's API (application programming interface)."
+  },
+  "job_roles": ["Okta Administrator", "IAM Engineer", "Identity and Access Analyst", "SSO Integration Specialist"],
+  "talking_point": "Chose a sign-on method for 8 app requests (2 SAML, 2 OIDC, 1 SWA, 1 Bookmark and 2 sent back for review), traced 13 sign-in attempts across 7 SAML integrations (3 succeeded; 3 users were not assigned, 2 ACS URL mismatches, 2 certificate or signature problems, 1 audience mismatch, 1 NameID mismatch and 1 inactive app), and checked 12 provisioning events: 2 accounts created, 1 updated, 1 deactivated, 1 account left active because Deactivate Users was off and 3 events held for review."
+}

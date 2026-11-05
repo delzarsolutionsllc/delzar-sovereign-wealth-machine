@@ -1,0 +1,1236 @@
+{
+  "domain": "4",
+  "title": "Okta Domain 4 questions (4.1 Authenticators and enrollment policies, 4.2 Global session policy)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
+  "questions": [
+    {
+      "id": "D4-001",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "An admin wants to offer Google Authenticator as a new sign-in option. Where in the Admin Console is the authenticator added before it can be referenced by any enrollment policy?",
+      "choices": [
+        "Security > Global Session Policy, on the Default Policy",
+        "Directory > Profile Editor, on the Okta user profile",
+        "Security > Authenticators, on the Setup tab",
+        "Applications > Applications, on the Sign On tab of an app"
+      ],
+      "answer": "Security > Authenticators, on the Setup tab",
+      "explanation": "Authenticators are added and configured on the Setup tab of Security > Authenticators; only then can an enrollment policy on the Enrollment tab offer them. The global session policy decides session rules, not which authenticators exist."
+    },
+    {
+      "id": "D4-002",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "A company wants employees to be able to reset a forgotten password with an SMS code, but SMS must never satisfy a sign-in challenge. What should the admin configure on the Phone authenticator?",
+      "choices": [
+        "Set it to be used for recovery in password policy rules only",
+        "Set it to be used for authentication and recovery",
+        "Allow only voice call as the verification method",
+        "Mark it as Optional in the default authenticator enrollment policy"
+      ],
+      "answer": "Set it to be used for recovery in password policy rules only",
+      "explanation": "The Phone authenticator can be limited to recovery, so users can recover their account with it but cannot authenticate with it. Making it Optional in an enrollment policy still lets enrolled users sign in with it."
+    },
+    {
+      "id": "D4-003",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "An organization already uses Duo Security for second-factor checks on its VPN and wants Okta sign-ins to hand the second factor to the same Duo service. Which authenticator should the admin add?",
+      "choices": [
+        "Custom OTP",
+        "Duo Security",
+        "Okta Verify",
+        "Temporary access code"
+      ],
+      "answer": "Duo Security",
+      "explanation": "The Duo Security authenticator connects Okta to an existing Duo account using the integration key, secret key and API hostname from Duo. Custom OTP is for generic one-time-password tokens and does not call Duo."
+    },
+    {
+      "id": "D4-004",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "After the Email authenticator is enabled, what does a user receive when Okta challenges them with it during sign-in?",
+      "choices": [
+        "A push notification on the Okta Verify app",
+        "A temporary password that replaces the user's current password",
+        "A QR code used to register a security key",
+        "A message with a verification link and a one-time code"
+      ],
+      "answer": "A message with a verification link and a one-time code",
+      "explanation": "The Email authenticator sends a message that the user can complete either by clicking the link or by typing the code. Push notifications come from Okta Verify, not from the Email authenticator."
+    },
+    {
+      "id": "D4-005",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "A manufacturer issues hardware tokens from a vendor that is not listed as its own authenticator in Okta. The tokens generate standard time-based one-time codes. Which authenticator should the admin add?",
+      "choices": [
+        "Custom OTP",
+        "YubiKey OTP",
+        "Symantec VIP",
+        "Passkey (FIDO2 WebAuthn)"
+      ],
+      "answer": "Custom OTP",
+      "explanation": "Custom OTP supports generic HOTP or TOTP tokens from vendors that do not have a dedicated authenticator. YubiKey OTP and Symantec VIP only cover those specific vendors' tokens."
+    },
+    {
+      "id": "D4-006",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "Government contractors must sign in with their PIV cards. Before the admin can add the Smart Card authenticator, what must already be configured in Okta?",
+      "choices": [
+        "A Duo Security integration that registers each of the card readers",
+        "A smart card identity provider that trusts the certificate chain",
+        "An Okta Verify enrollment with biometrics",
+        "A dynamic network zone for the card reader IPs"
+      ],
+      "answer": "A smart card identity provider that trusts the certificate chain",
+      "explanation": "The Smart Card authenticator relies on a smart card identity provider that holds the trusted certificate chain used to validate PIV certificates. Network zones and Okta Verify do not validate card certificates."
+    },
+    {
+      "id": "D4-007",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "An admin adds the Okta Verify authenticator and selects only Okta FastPass as a verification option. Users with iPhones ask why they cannot receive push notifications. What is the MOST likely reason?",
+      "choices": [
+        "Push notifications only work on Windows and macOS",
+        "The global session idle time is too short for push",
+        "Push notification was not selected as an Okta Verify verification option",
+        "The Phone authenticator must be enabled before any Okta Verify push can work"
+      ],
+      "answer": "Push notification was not selected as an Okta Verify verification option",
+      "explanation": "Okta Verify offers TOTP, push notification and Okta FastPass as separate verification options, and only the selected ones are available to users. Push and TOTP run on mobile devices, so the desktop claim is wrong."
+    },
+    {
+      "id": "D4-008",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "The security team saw users approve unexpected Okta Verify push prompts during a suspected push-fatigue attack. Which Okta Verify setting BEST reduces this risk?",
+      "choices": [
+        "Allow TOTP codes as a fallback to push",
+        "Increase the maximum global session idle time",
+        "Change Okta Verify to Optional in enrollment",
+        "Turn on number challenge for all push challenges"
+      ],
+      "answer": "Turn on number challenge for all push challenges",
+      "explanation": "Number challenge makes the user match a number shown in the Sign-In Widget, so a blind approval of an unrequested prompt fails. Adding TOTP as a fallback does nothing to stop users approving rogue pushes."
+    },
+    {
+      "id": "D4-009",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "An admin wants employees on managed laptops to sign in to Okta without typing a password, using the Okta Verify app installed on the same laptop. Which capability provides this?",
+      "choices": [
+        "Okta Verify push notification",
+        "Okta FastPass",
+        "Okta Verify time-based code",
+        "Email magic link"
+      ],
+      "answer": "Okta FastPass",
+      "explanation": "Okta FastPass runs in Okta Verify on the device being used and can sign the user in without a password. Push and TOTP are mobile verification options and are usually a second factor after another factor."
+    },
+    {
+      "id": "D4-010",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "In the Okta Verify authenticator settings, user verification is changed from Preferred to Required. What is the effect for users?",
+      "choices": [
+        "They must confirm with a biometric or device PIN on the device",
+        "They must type the six-digit code instead of approving a push prompt",
+        "They must answer a security question after every push",
+        "An admin must approve each new Okta Verify enrollment"
+      ],
+      "answer": "They must confirm with a biometric or device PIN on the device",
+      "explanation": "User verification requires the person to prove presence on the device with a biometric or local PIN, which lets Okta Verify count as a stronger factor. It does not switch users to codes or add security questions."
+    },
+    {
+      "id": "D4-011",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "Which statement about Okta FastPass is accurate in Okta Identity Engine?",
+      "choices": [
+        "It sends an SMS one-time code that the user types into the Sign-In Widget",
+        "It requires a hardware security key plugged into the computer",
+        "It is a phishing-resistant sign-in method provided through Okta Verify",
+        "It is available only in orgs that run Classic Engine"
+      ],
+      "answer": "It is a phishing-resistant sign-in method provided through Okta Verify",
+      "explanation": "Okta FastPass is delivered by Okta Verify on the user's device and can resist phishing because it is bound to the device and the real Okta origin. It does not use SMS or hardware keys and is an Identity Engine feature."
+    },
+    {
+      "id": "D4-012",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "A user is prompted to set up Okta Verify while signing in on a desktop browser, and the app is already installed on the user's phone. What is the usual way to complete enrollment?",
+      "choices": [
+        "Reply to an SMS that Okta sends to the user's phone",
+        "Email the help desk the code shown on the phone",
+        "Wait for an admin to approve and activate the device in the Admin Console",
+        "Scan the QR code shown in the Sign-In Widget with the Okta Verify app"
+      ],
+      "answer": "Scan the QR code shown in the Sign-In Widget with the Okta Verify app",
+      "explanation": "During Okta Verify setup the Sign-In Widget shows a QR code that the mobile app scans to bind the account; email or SMS links are alternatives the user can request. No admin activation step is needed."
+    },
+    {
+      "id": "D4-013",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "A user enrolls Okta Verify on a laptop so they can use Okta FastPass. Where can an admin later see the laptop associated with that user?",
+      "choices": [
+        "In the user's custom attributes in Profile Editor",
+        "In the global session policy rule details",
+        "In the Devices list in the Admin Console",
+        "In the app assignments of the Okta Dashboard"
+      ],
+      "answer": "In the Devices list in the Admin Console",
+      "explanation": "Enrolling Okta Verify registers the device with Okta, and registered devices appear under Directory > Devices and on the user's record. Profile Editor attributes and policy rules do not list devices."
+    },
+    {
+      "id": "D4-014",
+      "objective": "4.1",
+      "topic": "Okta Verify and Okta FastPass",
+      "stem": "Okta Verify is configured with push notification and TOTP. A traveling employee's phone has no data connection when an Okta Verify challenge appears. How can the employee still verify?",
+      "choices": [
+        "Approve the push once the phone reconnects later",
+        "Answer the security question in place of Okta Verify",
+        "Ask Okta Verify to send an email link instead",
+        "Enter the code currently shown in the Okta Verify app"
+      ],
+      "answer": "Enter the code currently shown in the Okta Verify app",
+      "explanation": "TOTP codes are generated on the phone from a shared secret and do not need a network connection, so the user can type the current code. Push needs connectivity, and a security question is a separate authenticator that may not be allowed."
+    },
+    {
+      "id": "D4-015",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "Where does an admin create a policy that decides which authenticators users must or may enroll?",
+      "choices": [
+        "Security > Authentication Policies, on the app's rules",
+        "Security > Authenticators, on the Enrollment tab",
+        "Security > Global Session Policy, on a new rule",
+        "Directory > Groups, on the group's settings"
+      ],
+      "answer": "Security > Authenticators, on the Enrollment tab",
+      "explanation": "Authenticator enrollment policies live on the Enrollment tab of Security > Authenticators. Authentication policies decide which authenticators are needed to reach an app, not which ones users enroll."
+    },
+    {
+      "id": "D4-016",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "Only members of the Finance group must enroll Okta Verify; everyone else may enroll it if they wish. What should the admin do?",
+      "choices": [
+        "Add a Finance enrollment policy with Okta Verify Required, ranked above the default",
+        "Edit the default enrollment policy to require Okta Verify for everyone",
+        "Add a global session policy rule that requires Okta Verify for all Finance group members",
+        "Require Okta Verify in the Okta Dashboard authentication policy"
+      ],
+      "answer": "Add a Finance enrollment policy with Okta Verify Required, ranked above the default",
+      "explanation": "A group-specific enrollment policy placed above the default policy targets only Finance, while the default policy can keep Okta Verify Optional. Editing the default policy would force everyone to enroll."
+    },
+    {
+      "id": "D4-017",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "Contractors need two weeks to install Okta Verify before it becomes mandatory, but the requirement must already be in place. Which enrollment policy setting meets this need?",
+      "choices": [
+        "Mark Okta Verify as Optional and edit it later",
+        "A maximum global session lifetime of 14 days",
+        "Mark Okta Verify as Disabled until the two-week deadline passes",
+        "A grace period with an end date for the required authenticator"
+      ],
+      "answer": "A grace period with an end date for the required authenticator",
+      "explanation": "A grace period lets users postpone enrollment of a required authenticator until the end date, with a daily reminder. Setting it Optional would depend on someone remembering to change it and gives no reminder."
+    },
+    {
+      "id": "D4-018",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "Several users already enrolled the Security question authenticator. Their enrollment policy is changed so that Security question is Disabled. What do these users experience at their next sign-in?",
+      "choices": [
+        "They keep using it, but new users cannot enroll it",
+        "They no longer see or use the security question authenticator",
+        "They must answer it once more before it is removed",
+        "Their accounts move to the Locked out status"
+      ],
+      "answer": "They no longer see or use the security question authenticator",
+      "explanation": "When an authenticator is Disabled in the policy that applies to a user, Okta does not offer it at sign-in even if the user had enrolled it. Disabling affects existing enrollments as well, not only new ones."
+    },
+    {
+      "id": "D4-019",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "A user belongs to two groups, and each group is assigned a different active authenticator enrollment policy. Which policy does Okta apply to the user?",
+      "choices": [
+        "The highest-priority policy assigned to one of the user's groups",
+        "The policy that requires the most authenticators",
+        "A merge of the required authenticators from both of those policies",
+        "The default policy, because the user matches two"
+      ],
+      "answer": "The highest-priority policy assigned to one of the user's groups",
+      "explanation": "Okta evaluates enrollment policies in priority order and applies the first one whose group assignment includes the user. Policies are not merged, and the default policy only applies when no higher policy matches."
+    },
+    {
+      "id": "D4-020",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "Which statement about the default authenticator enrollment policy is accurate?",
+      "choices": [
+        "It is deleted automatically when the first custom policy is created",
+        "It always takes priority over custom policies",
+        "It cannot be deleted and covers users that no higher policy matches",
+        "It can be assigned only to the Okta administrators group"
+      ],
+      "answer": "It cannot be deleted and covers users that no higher policy matches",
+      "explanation": "The default policy is a permanent catch-all at the bottom of the list. Custom policies above it apply first to their assigned groups."
+    },
+    {
+      "id": "D4-021",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "While building a new enrollment policy, an admin finds that the Disabled option is not available for the Phone authenticator. What is the MOST likely reason?",
+      "choices": [
+        "Phone is the only authenticator in the org",
+        "Another enrollment policy marks Phone as Required",
+        "The admin role lacks access to Profile Editor",
+        "No users have enrolled Phone so far"
+      ],
+      "answer": "Another enrollment policy marks Phone as Required",
+      "explanation": "Okta does not allow Disabled for an authenticator that another enrollment policy requires. Enrollment counts and Profile Editor access do not control this option."
+    },
+    {
+      "id": "D4-022",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "An admin sets every authenticator in a new enrollment policy to Optional and tries to save. What rule must the policy satisfy?",
+      "choices": [
+        "Every authenticator must be Required",
+        "Each authenticator needs its own grace period",
+        "The policy must be assigned to Everyone",
+        "At least one authenticator must be Required"
+      ],
+      "answer": "At least one authenticator must be Required",
+      "explanation": "An enrollment policy must require at least one authenticator, which is commonly the password. The other authenticators can be Optional or Disabled, and the policy can target specific groups."
+    },
+    {
+      "id": "D4-023",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "Security wants to stop users from enrolling new authenticators when they connect from outside the corporate network zone. What should the admin add?",
+      "choices": [
+        "A global session policy rule that denies sessions outside the zone",
+        "A password policy rule that blocks recovery outside the zone",
+        "An enrollment policy rule for IPs not in the corporate zone that denies enrollment",
+        "An app sign-in policy rule that requires Okta Verify for every user outside the zone"
+      ],
+      "answer": "An enrollment policy rule for IPs not in the corporate zone that denies enrollment",
+      "explanation": "Enrollment policy rules can use an IP condition such as Not in zone and set enrollment to Denied. A global session policy rule would block all sign-ins from outside, which is broader than the requirement."
+    },
+    {
+      "id": "D4-024",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "A user's enrollment policy requires Okta Verify with no grace period, and the user has not enrolled it. What happens when the user next signs in?",
+      "choices": [
+        "The Sign-In Widget makes the user set up Okta Verify before continuing",
+        "The user signs in normally and then gets an email reminder to enroll later",
+        "The user is redirected to the help desk portal",
+        "The user's status changes to Pending user action"
+      ],
+      "answer": "The Sign-In Widget makes the user set up Okta Verify before continuing",
+      "explanation": "A required authenticator with no grace period must be enrolled during the first sign-in where it is missing. User status does not change because of a missing authenticator."
+    },
+    {
+      "id": "D4-025",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "A user has completed all required authenticators and the policy also lists Google Authenticator as Optional. How does the Sign-In Widget handle the optional authenticator?",
+      "choices": [
+        "It forces setup because optional authenticators are reminders",
+        "It offers setup with an option to continue without enrolling",
+        "It hides it until the user opens the Admin Console",
+        "It blocks sign-in until an admin approves it"
+      ],
+      "answer": "It offers setup with an option to continue without enrolling",
+      "explanation": "After required enrollments, users are prompted to set up optional authenticators but can skip them. Optional means the user chooses, so the widget never forces it."
+    },
+    {
+      "id": "D4-026",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "A user skipped the optional passkey prompt at sign-in and now wants to add a passkey on their own. Where should the user go?",
+      "choices": [
+        "The Security Methods section of Settings in the End-User Dashboard",
+        "The Profile Editor page for the Okta user profile",
+        "The Okta Verify authenticator page under Security > Authenticators",
+        "The Sign On tab of the Okta Dashboard app"
+      ],
+      "answer": "The Security Methods section of Settings in the End-User Dashboard",
+      "explanation": "End users manage their own authenticators from Settings on the End-User Dashboard, where Security Methods lists what they can set up or remove. Profile Editor and the Authenticators page are admin tools."
+    },
+    {
+      "id": "D4-027",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "An admin wants an enrollment rule to apply only when users access the HR portal app, not when they sign in to the Okta Dashboard. Which rule condition should be set?",
+      "choices": [
+        "IF user's IP is, set to the zone used by the HR portal",
+        "Exclude users, set to every user who is not in HR",
+        "THEN enrollment is, set to allowed for authenticators used for legacy recovery",
+        "AND user is accessing, set to specific applications with the HR portal"
+      ],
+      "answer": "AND user is accessing, set to specific applications with the HR portal",
+      "explanation": "The user is accessing condition lets a rule target Okta itself, any app that supports enrollment, or specific apps. An IP condition describes the network, not the app being accessed."
+    },
+    {
+      "id": "D4-028",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "Okta Verify is required with a grace period that ends next month. A user who has not enrolled opens an app whose app sign-in policy needs Okta Verify. What happens?",
+      "choices": [
+        "The user reaches the app because the grace period applies",
+        "The user is denied with no option to enroll",
+        "The user must enroll Okta Verify now to reach the app",
+        "The user can use the security question until the grace period ends"
+      ],
+      "answer": "The user must enroll Okta Verify now to reach the app",
+      "explanation": "A grace period only lets users continue if they can still satisfy the target app's sign-in policy. Because the app needs Okta Verify, enrollment is required immediately."
+    },
+    {
+      "id": "D4-029",
+      "objective": "4.1",
+      "topic": "Enrollment Rules and End-User Experience",
+      "stem": "A rule in an enrollment policy should apply to every user except one automated test account. What is the BEST way to configure this?",
+      "choices": [
+        "Add the test account in the rule's Exclude users field",
+        "Remove the test account from the Everyone group",
+        "Create a second org for the test account",
+        "Deactivate the test account during each change"
+      ],
+      "answer": "Add the test account in the rule's Exclude users field",
+      "explanation": "Policy rules provide an Exclude users field for exceptions. Users cannot be removed from Everyone, and deactivating the account would break the test."
+    },
+    {
+      "id": "D4-030",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "Which Okta authenticator is classified as a knowledge factor?",
+      "choices": [
+        "Okta Verify",
+        "Security question",
+        "Phone",
+        "YubiKey OTP"
+      ],
+      "answer": "Security question",
+      "explanation": "A security question relies on something the user knows, as does the password. Okta Verify, Phone and YubiKey OTP all prove possession of something the user has."
+    },
+    {
+      "id": "D4-031",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "An authentication policy must allow only phishing-resistant authenticators for the finance app. Which authenticator can satisfy that requirement?",
+      "choices": [
+        "Phone using SMS",
+        "Email",
+        "Google Authenticator",
+        "Passkey (FIDO2 WebAuthn)"
+      ],
+      "answer": "Passkey (FIDO2 WebAuthn)",
+      "explanation": "Passkeys bind the credential to the site origin, so nothing can be relayed to a fake page. SMS, email codes and TOTP codes can all be typed into a phishing site."
+    },
+    {
+      "id": "D4-032",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "A user signs in with a password and then answers a security question. Why do many security teams NOT treat this as strong multifactor authentication?",
+      "choices": [
+        "Both checks are possession factors",
+        "Security questions are phishing-resistant",
+        "Both checks are knowledge factors",
+        "Passwords cannot be combined with other factors"
+      ],
+      "answer": "Both checks are knowledge factors",
+      "explanation": "Strong MFA combines different factor types. A password and a security question are both something you know, so stealing one kind of information can defeat both."
+    },
+    {
+      "id": "D4-033",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "Okta Verify is configured with Okta FastPass and user verification Required. Which factor types does a successful FastPass sign-in with a fingerprint represent?",
+      "choices": [
+        "Knowledge and possession",
+        "Possession and biometric",
+        "Knowledge and biometric",
+        "Possession only"
+      ],
+      "answer": "Possession and biometric",
+      "explanation": "The device holding the Okta Verify credential is a possession factor, and the fingerprint used for user verification adds a biometric factor. No password or other knowledge is used."
+    },
+    {
+      "id": "D4-034",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "A policy requires a hardware-protected possession authenticator. Which of these authenticators meets that characteristic?",
+      "choices": [
+        "Google Authenticator",
+        "Email",
+        "YubiKey OTP",
+        "Phone"
+      ],
+      "answer": "YubiKey OTP",
+      "explanation": "YubiKey OTP codes come from a physical key, so Okta classifies it as hardware-protected. Google Authenticator is device-bound software, and email or phone only show user presence."
+    },
+    {
+      "id": "D4-035",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "A security review flags the Phone authenticator using SMS as a weakness. What is the MAIN concern?",
+      "choices": [
+        "SMS codes cannot be used for account recovery",
+        "SMS is classed as a knowledge factor rather than a possession factor",
+        "SMS requires Okta Verify on the same phone",
+        "The code can be intercepted or entered into a phishing page"
+      ],
+      "answer": "The code can be intercepted or entered into a phishing page",
+      "explanation": "SMS codes can be stolen through SIM swapping or relayed through a fake sign-in page, so SMS is not phishing-resistant. It is still a possession factor and can be used for recovery."
+    },
+    {
+      "id": "D4-036",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "What does it mean when Okta describes an authenticator as device-bound?",
+      "choices": [
+        "Its credential is tied to a specific device the user holds",
+        "It can only be used from inside a trusted network zone set by the admin",
+        "It is only offered to users on managed devices",
+        "It must be reset each time the device restarts"
+      ],
+      "answer": "Its credential is tied to a specific device the user holds",
+      "explanation": "Device-bound authenticators keep their secret or key on one device, such as an app seed or a passkey. The term has nothing to do with network zones or device management."
+    },
+    {
+      "id": "D4-037",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "A user lost the phone that had Okta Verify and cannot sign in. What should the admin do so the user can set up Okta Verify on a new phone?",
+      "choices": [
+        "Deactivate and then reactivate the user account",
+        "Delete Okta Verify from Security > Authenticators",
+        "Reset the user's Okta Verify authenticator in Directory > People",
+        "Clear the user's sessions and then send the user a password reset email"
+      ],
+      "answer": "Reset the user's Okta Verify authenticator in Directory > People",
+      "explanation": "Resetting the authenticator removes the old enrollment, so the user can enroll the new phone at next sign-in. Deleting the authenticator would affect every user, and deactivating the account is unnecessary."
+    },
+    {
+      "id": "D4-038",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "An admin resets all authenticators for a user. What happens the next time the user signs in?",
+      "choices": [
+        "The user is signed in with only a username",
+        "The user's account is suspended until an admin reviews the reset request",
+        "The user must wait for an activation email from an admin",
+        "The user is prompted to enroll the authenticators the policy requires"
+      ],
+      "answer": "The user is prompted to enroll the authenticators the policy requires",
+      "explanation": "After a reset the user has no enrollments for those authenticators, so Okta applies the enrollment policy at sign-in and asks for them again. The account status does not change."
+    },
+    {
+      "id": "D4-039",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "A company wants service desk staff to reset users' authenticators without giving them broad org-wide admin rights. Which standard admin role fits BEST?",
+      "choices": [
+        "Help Desk Administrator",
+        "Read-only Administrator",
+        "Report Administrator",
+        "Application Administrator"
+      ],
+      "answer": "Help Desk Administrator",
+      "explanation": "Help Desk Administrators can reset passwords and authenticators, unlock users and clear sessions for end users. Read-only and Report Administrators cannot change users, and Application Administrators manage apps."
+    },
+    {
+      "id": "D4-040",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "A caller asks the help desk to reset their Okta Verify because they got a new phone. What should the help desk do FIRST?",
+      "choices": [
+        "Reset every authenticator for the account",
+        "Verify the caller's identity using an approved process",
+        "Send the caller a temporary password",
+        "Deactivate the account until the caller visits"
+      ],
+      "answer": "Verify the caller's identity using an approved process",
+      "explanation": "Authenticator resets are a common social engineering target, so identity must be confirmed before any reset. Resetting everything or sending a temporary password before verification gives an attacker access."
+    },
+    {
+      "id": "D4-041",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "A user still has the old phone and wants to move Okta Verify to a new phone without contacting IT. What can the user do?",
+      "choices": [
+        "Edit the Okta Verify authenticator under Security > Authenticators to move it",
+        "Change the mobile phone attribute in Profile Editor",
+        "Create a new Okta account for the new phone",
+        "Remove and set up Okta Verify again from Settings in the End-User Dashboard"
+      ],
+      "answer": "Remove and set up Okta Verify again from Settings in the End-User Dashboard",
+      "explanation": "End users can manage their own security methods from Settings, including setting up Okta Verify on a new device while they can still sign in. Admin pages such as Security > Authenticators are not available to end users."
+    },
+    {
+      "id": "D4-042",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "An admin wants to find out when a user enrolled a new authenticator. Which System Log filter is MOST useful?",
+      "choices": [
+        "eventType eq \"user.mfa.factor.activate\"",
+        "eventType eq \"user.session.start\"",
+        "eventType eq \"user.lifecycle.deactivate\"",
+        "eventType eq \"application.user_membership.add\""
+      ],
+      "answer": "eventType eq \"user.mfa.factor.activate\"",
+      "explanation": "The user.mfa.factor.activate event records an authenticator enrollment. The session start event shows sign-ins, and the other two record deactivation and app assignment."
+    },
+    {
+      "id": "D4-043",
+      "objective": "4.1",
+      "topic": "MFA Reset and Re-enrollment",
+      "stem": "A user changed mobile numbers, so SMS codes no longer arrive, but the user's Okta Verify enrollment still works. What is the BEST admin action?",
+      "choices": [
+        "Reset every authenticator for that user",
+        "Disable the Phone authenticator for the org",
+        "Reset only the Phone authenticator for that user",
+        "Suspend the user until the number is updated"
+      ],
+      "answer": "Reset only the Phone authenticator for that user",
+      "explanation": "The reset dialog lets the admin pick which authenticators to reset, so only Phone needs to go and Okta Verify keeps working. Disabling Phone org-wide affects everyone."
+    },
+    {
+      "id": "D4-101",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "Where in the Admin Console does an admin set how users establish an Okta session and how long it lasts?",
+      "choices": [
+        "Security > Authenticators",
+        "Security > Network",
+        "Security > Global Session Policy",
+        "Customizations > Brands"
+      ],
+      "answer": "Security > Global Session Policy",
+      "explanation": "The global session policy decides how an Okta session is created and controls its lifetime and idle time. Authenticators and network zones are building blocks the policy can reference."
+    },
+    {
+      "id": "D4-102",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "Which statement about the Default Policy in the global session policy list is accurate?",
+      "choices": [
+        "It applies only to administrators and can be deleted",
+        "It applies to everyone and cannot be deleted",
+        "It always outranks custom policies",
+        "It is created only after a custom policy is saved"
+      ],
+      "answer": "It applies to everyone and cannot be deleted",
+      "explanation": "The Default Policy is the catch-all that covers every user and stays at the bottom of the list. Custom policies above it apply first to their assigned groups."
+    },
+    {
+      "id": "D4-103",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "Executives need stricter session settings than other employees, and the change must not affect anyone else. What should the admin do?",
+      "choices": [
+        "Add a policy assigned to the Executives group, ranked above the Default Policy",
+        "Edit the Default Rule of the Default Policy for everyone",
+        "Add the Executives group to the default authenticator enrollment policy instead",
+        "Add a rule to the Okta Dashboard authentication policy"
+      ],
+      "answer": "Add a policy assigned to the Executives group, ranked above the Default Policy",
+      "explanation": "A group-assigned global session policy above the Default Policy targets only executives. Editing the Default Rule would change everyone's sessions, and enrollment policies do not control sessions."
+    },
+    {
+      "id": "D4-104",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "How does Okta evaluate the rules inside a global session policy that applies to a user?",
+      "choices": [
+        "All matching rules are combined and the strictest setting of each wins",
+        "The most recently edited rule is evaluated first",
+        "Rules are evaluated only after app sign-in policies",
+        "In priority order, and the first rule whose conditions match is used"
+      ],
+      "answer": "In priority order, and the first rule whose conditions match is used",
+      "explanation": "Rules are checked from top to bottom and evaluation stops at the first match, so specific or high-risk rules should sit above broad ones. Rules are not merged."
+    },
+    {
+      "id": "D4-105",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "An admin adds a rule that requires MFA for users outside the corporate zone, but users outside the zone are never prompted. A rule above it applies to anywhere with MFA not required. What should the admin do?",
+      "choices": [
+        "Delete the corporate network zone and recreate it",
+        "Increase the maximum global session idle time",
+        "Set Okta Verify to Required in the enrollment policy",
+        "Move the off-network rule above the anywhere rule"
+      ],
+      "answer": "Move the off-network rule above the anywhere rule",
+      "explanation": "The anywhere rule matches first, so evaluation stops before the off-network rule is reached. Putting the narrower rule higher fixes the order."
+    },
+    {
+      "id": "D4-106",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "An admin needs a network zone condition for all users but finds that the Default Rule of the Default Policy cannot take that condition. What is the BEST approach?",
+      "choices": [
+        "Delete the Default Rule and rebuild it",
+        "Disable the Default Policy and create a replacement default with the zone",
+        "Create a new rule with the zone condition above the Default Rule",
+        "Put the zone condition in the enrollment policy"
+      ],
+      "answer": "Create a new rule with the zone condition above the Default Rule",
+      "explanation": "Only some settings of the Default Rule can be edited, so new conditions go in an added rule placed above it. The Default Policy and its Default Rule cannot be removed."
+    },
+    {
+      "id": "D4-107",
+      "objective": "4.2",
+      "topic": "Global Session Policy Structure",
+      "stem": "A user with no existing Okta session opens an app from a bookmark. Which policy is evaluated to decide how the Okta session itself is established?",
+      "choices": [
+        "The global session policy",
+        "The password policy",
+        "The authenticator enrollment policy",
+        "The app's provisioning settings"
+      ],
+      "answer": "The global session policy",
+      "explanation": "The global session policy governs creation of the Okta session, and the app's authentication policy then decides whether the user meets that app's requirements. The password policy controls password rules and recovery."
+    },
+    {
+      "id": "D4-108",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "The security team has a network zone listing IP ranges known for attacks and wants no Okta session created from them. How should the global session policy rule be set?",
+      "choices": [
+        "IF user's IP is anywhere, THEN access is Denied, ranked last",
+        "IF user's IP is in the blocked zone, THEN access is Denied, ranked first",
+        "IF user's IP is not in the blocked zone, THEN MFA is not required",
+        "IF user's IP is in the blocked zone, THEN MFA is required at every sign in"
+      ],
+      "answer": "IF user's IP is in the blocked zone, THEN access is Denied, ranked first",
+      "explanation": "A deny rule for the blocked zone placed at the top stops those requests before any allow rule is reached. Asking for MFA would still let an attacker try to sign in."
+    },
+    {
+      "id": "D4-109",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "Users inside the corporate network may sign in with a password only, but everyone else must use MFA. Which rule setup meets this?",
+      "choices": [
+        "One rule for anywhere that requires MFA, placed above a rule for the corporate zone without MFA",
+        "One rule for the corporate zone that denies access to everyone else",
+        "A single anywhere rule that requires MFA only on new devices",
+        "A rule for IPs not in the corporate zone requiring MFA, above an anywhere rule without MFA"
+      ],
+      "answer": "A rule for IPs not in the corporate zone requiring MFA, above an anywhere rule without MFA",
+      "explanation": "The off-network rule must come first so it catches outside users before the broad rule. If an anywhere MFA rule sits on top, corporate users are prompted too."
+    },
+    {
+      "id": "D4-110",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "An org lets customers sign in with a social login provider. The admin wants a specific global session rule for sessions that come from that provider. Which condition is used?",
+      "choices": [
+        "AND Authenticates via, set to LDAP interface",
+        "AND Identity provider is, set to the specific IdP",
+        "AND Behavior is, set to a new device",
+        "IF user's IP is, set to the provider's zone"
+      ],
+      "answer": "AND Identity provider is, set to the specific IdP",
+      "explanation": "The Identity provider is condition can match Okta, any IdP or a specific IdP. Authenticates via distinguishes LDAP interface sign-ins, not social providers."
+    },
+    {
+      "id": "D4-111",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "A legacy app authenticates users through the Okta LDAP interface. Which global session rule condition targets those sign-ins?",
+      "choices": [
+        "AND Identity provider is, set to Okta",
+        "IF user's IP is, set to all zones",
+        "AND Authenticates via, set to LDAP interface",
+        "AND Risk is, set to Low"
+      ],
+      "answer": "AND Authenticates via, set to LDAP interface",
+      "explanation": "Authenticates via has options Any and LDAP interface. When LDAP is selected, the Establish the user session with setting has no effect."
+    },
+    {
+      "id": "D4-112",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "A rule uses the condition Risk is High. Which MFA prompt setting should that rule use?",
+      "choices": [
+        "At every sign in",
+        "When signing in with a new device cookie",
+        "After MFA lifetime expires for the device cookie",
+        "No MFA, because the risk engine already blocks it"
+      ],
+      "answer": "At every sign in",
+      "explanation": "A high-risk sign-in should always be challenged. Device-cookie or lifetime prompts could let the risky attempt through without MFA if a cookie already exists."
+    },
+    {
+      "id": "D4-113",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "An admin adds a rule with a Behavior is condition for sign-ins from a new country. Which pairing should the admin avoid?",
+      "choices": [
+        "Prompting for MFA at every sign in",
+        "Placing the rule above the catch-all rule",
+        "Excluding the org's break-glass administrator account from the rule",
+        "Prompting for MFA only when signing in with a new device cookie"
+      ],
+      "answer": "Prompting for MFA only when signing in with a new device cookie",
+      "explanation": "Behavior conditions are meant to catch suspicious sign-ins, and a new-device-cookie prompt may skip MFA when the device looks familiar. Okta recommends At every sign in with behavior conditions."
+    },
+    {
+      "id": "D4-114",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "A strict deny rule must not lock out the org's emergency break-glass administrator. What is the BEST way to handle this in the rule?",
+      "choices": [
+        "Assign the account the Read-only Administrator role",
+        "Add the account's IP to the deny rule's zone",
+        "Add that account to the rule's Exclude users field",
+        "Move the account to a Staged status"
+      ],
+      "answer": "Add that account to the rule's Exclude users field",
+      "explanation": "Exclude users lets a specific account skip the rule while it still applies to everyone else. Changing roles or user status does not change policy matching."
+    },
+    {
+      "id": "D4-115",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "Why does Okta advise against a global session policy that relies only on location to deny access?",
+      "choices": [
+        "IP addresses change and IP geolocation is not guaranteed",
+        "Location conditions work only for administrator accounts",
+        "Network zones can be used only in enrollment policies",
+        "Denying access disables the Default Policy"
+      ],
+      "answer": "IP addresses change and IP geolocation is not guaranteed",
+      "explanation": "IP addresses can move between providers and locations, and VPNs or proxies hide where a user really is. Location should be one signal among others, not the only control."
+    },
+    {
+      "id": "D4-116",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "An org is moving to passwordless sign-in. Which Establish the user session with option should the global session policy rule use?",
+      "choices": [
+        "A password",
+        "Any factor used to meet the Authentication Policy requirements",
+        "A password plus a security question",
+        "Okta Verify push on every sign in"
+      ],
+      "answer": "Any factor used to meet the Authentication Policy requirements",
+      "explanation": "With this option the factor the app sign-in policy accepts, such as Okta FastPass, can create the session without a password. Choosing A password always demands a password first."
+    },
+    {
+      "id": "D4-117",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "A rule requires MFA only when signing in with a new device cookie. What is the main risk of this choice?",
+      "choices": [
+        "Users are prompted for MFA on every page load",
+        "The rule turns off password checks entirely",
+        "The rule blocks every user who clears the browser cookies on a device",
+        "Users can skip MFA if they appear to sign in from a known device"
+      ],
+      "answer": "Users can skip MFA if they appear to sign in from a known device",
+      "explanation": "If the device cookie is present, the user is not asked for MFA, so this suits only low-risk cases. Clearing cookies leads to an MFA prompt, not a block."
+    },
+    {
+      "id": "D4-118",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "A rule is set to prompt for MFA after the MFA lifetime expires for the device cookie, with a lifetime of 12 hours. When is the MFA lifetime enforced?",
+      "choices": [
+        "On every app the user opens at any point during the Okta session",
+        "Only when the user's password expires",
+        "When a new session is created or the user changes devices",
+        "Only on the first sign-in after enrollment"
+      ],
+      "answer": "When a new session is created or the user changes devices",
+      "explanation": "The MFA lifetime is checked when a new Okta session is created or on a different device. App-level re-authentication is handled by authentication policies."
+    },
+    {
+      "id": "D4-119",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "Users in a high-security group must complete MFA every time they create an Okta session, regardless of device. Which prompt option should the rule use?",
+      "choices": [
+        "When signing in with a new device cookie",
+        "At every sign in",
+        "After MFA lifetime expires for the device cookie",
+        "MFA is not required"
+      ],
+      "answer": "At every sign in",
+      "explanation": "At every sign in challenges the user each time a session is created, whatever the device. The two cookie-based options can skip MFA on a recognized device."
+    },
+    {
+      "id": "D4-120",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "A global session policy rule has THEN Access is set to Denied. What does this mean for users who match the rule?",
+      "choices": [
+        "They cannot establish an Okta session",
+        "They can sign in but cannot see the Okta Dashboard",
+        "They are signed in with a reduced session lifetime",
+        "Their account status changes to Suspended"
+      ],
+      "answer": "They cannot establish an Okta session",
+      "explanation": "A deny rule stops the Okta session from being created for matching sign-ins. It does not change user status or create a limited session."
+    },
+    {
+      "id": "D4-121",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "An admin wants a global session rule to use a security question as the second factor. What must the rule's Establish the user session with setting be?",
+      "choices": [
+        "Any factor used to meet the Authentication Policy requirements",
+        "A password",
+        "Okta FastPass",
+        "The Email authenticator"
+      ],
+      "answer": "A password",
+      "explanation": "A security question as the secondary factor requires the password as the primary factor. With Any factor, a knowledge factor such as a security question cannot be the secondary factor after a password."
+    },
+    {
+      "id": "D4-122",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Okta sessions should end after 30 minutes of inactivity, even if the user signed in recently. Which setting should the admin change?",
+      "choices": [
+        "Maximum Okta global session idle time",
+        "Maximum Okta global session lifetime",
+        "MFA lifetime for the device cookie",
+        "Password minimum age in the password policy"
+      ],
+      "answer": "Maximum Okta global session idle time",
+      "explanation": "Idle time ends a session after inactivity whatever the overall lifetime. The maximum lifetime is a hard cap from sign-in, not an inactivity timer."
+    },
+    {
+      "id": "D4-123",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Compliance requires that no Okta session last longer than 8 hours, even for users who stay active all day. Which setting enforces this?",
+      "choices": [
+        "Maximum Okta global session idle time set to 8 hours",
+        "MFA lifetime set to 8 hours",
+        "Password expiration set to 8 hours",
+        "Maximum Okta global session lifetime set to 8 hours"
+      ],
+      "answer": "Maximum Okta global session lifetime set to 8 hours",
+      "explanation": "The maximum lifetime ends the session at a fixed time after it began, regardless of activity. An 8-hour idle time would let an active user stay signed in indefinitely."
+    },
+    {
+      "id": "D4-124",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "A rule sets the maximum Okta global session lifetime to No time limit. When does a user's session end?",
+      "choices": [
+        "Never, until an admin deactivates the user",
+        "After 24 hours by default",
+        "When it reaches the idle time or the user signs out",
+        "When the device cookie is older than the MFA lifetime"
+      ],
+      "answer": "When it reaches the idle time or the user signs out",
+      "explanation": "With no lifetime limit, the idle timeout still applies, and signing out ends the session. Okta recommends this only for low-risk cases."
+    },
+    {
+      "id": "D4-125",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Users ask to stay signed in after closing and reopening their browser. What must be true before the admin can set global session cookies to persist across browser sessions?",
+      "choices": [
+        "The Default Policy must be deleted first",
+        "Okta FastPass must be disabled for all users",
+        "The usePersistentCookie option must be set through the Okta API",
+        "The global session idle time must first be changed to No time limit"
+      ],
+      "answer": "The usePersistentCookie option must be set through the Okta API",
+      "explanation": "The persistent cookie setting appears in the rule only after usePersistentCookie is set through the API, and users must then choose Stay signed in. No other policy changes are prerequisites."
+    },
+    {
+      "id": "D4-126",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Persistent session cookies are enabled for a rule. An Okta Super Administrator closes and reopens the browser. What happens to the admin's session?",
+      "choices": [
+        "It does not persist, because persistent cookies are never set for admins",
+        "It persists for the full session lifetime",
+        "It persists, but only if the admin signed in with Okta FastPass on that device",
+        "It persists until the next password change"
+      ],
+      "answer": "It does not persist, because persistent cookies are never set for admins",
+      "explanation": "Okta never sets persistent session cookies for administrators, so admins sign in again after the browser closes. End users who chose Stay signed in keep their session."
+    },
+    {
+      "id": "D4-127",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Security wants Admin Console sessions to time out sooner than end-user Okta sessions. What is the BEST approach?",
+      "choices": [
+        "Lower the idle time in the Default Rule for all users",
+        "Set the Admin Console session timeout separately from the global session policy",
+        "Add admins to a password policy with a short expiry",
+        "Require Okta Verify in the authenticator enrollment policy assigned to every admin"
+      ],
+      "answer": "Set the Admin Console session timeout separately from the global session policy",
+      "explanation": "The Admin Console has its own session lifetime and idle settings that can be stricter than the global session policy. Lowering the Default Rule would shorten everyone's sessions."
+    },
+    {
+      "id": "D4-128",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "A user selected Stay signed in on the Sign-In Widget. The global session lifetime is reached. What happens?",
+      "choices": [
+        "The session keeps going because the user chose to stay signed in",
+        "The session is extended by the MFA lifetime",
+        "The user is moved to the Password expired status",
+        "The user must authenticate again"
+      ],
+      "answer": "The user must authenticate again",
+      "explanation": "When the session expires under the global session policy, users must re-authenticate whether or not they chose Stay signed in. User status is not affected."
+    },
+    {
+      "id": "D4-129",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "Okta sessions last 12 hours, but the payroll app must ask users to re-authenticate every hour. Where should the admin configure this?",
+      "choices": [
+        "In the maximum Okta global session lifetime of the global session policy",
+        "In the payroll app's authentication policy re-authentication setting",
+        "In the MFA lifetime of the global session policy",
+        "In the payroll app's provisioning settings"
+      ],
+      "answer": "In the payroll app's authentication policy re-authentication setting",
+      "explanation": "The global session policy controls the overall Okta session, while each app's authentication policy controls how often users re-authenticate for that app. Shortening the global lifetime would affect every app."
+    },
+    {
+      "id": "D4-130",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "A user's global session rule requires only a password. The user then opens an app whose authentication policy requires Okta Verify. What happens?",
+      "choices": [
+        "The user reaches the app because an Okta session already exists for them",
+        "The user is denied because the policies conflict",
+        "The global session is ended and the user starts over",
+        "Okta prompts the user for Okta Verify before granting the app"
+      ],
+      "answer": "Okta prompts the user for Okta Verify before granting the app",
+      "explanation": "Each app's authentication policy is checked even with an existing session, and Okta asks for any missing authenticator. The two policies work in layers rather than blocking each other."
+    },
+    {
+      "id": "D4-131",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "An admin wants to confirm which global session policy and rule were applied when a test user signed in. Which System Log event type is MOST useful?",
+      "choices": [
+        "user.mfa.factor.activate",
+        "application.provision.user.push",
+        "policy.evaluate_sign_on",
+        "group.user_membership.add"
+      ],
+      "answer": "policy.evaluate_sign_on",
+      "explanation": "The policy.evaluate_sign_on event shows the policy and rule that matched a sign-in. Authenticator enrollment, provisioning and group membership events do not show policy evaluation."
+    },
+    {
+      "id": "D4-132",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "The global session rule uses Any factor used to meet the Authentication Policy requirements, and the Okta Dashboard authentication policy accepts Okta FastPass alone. How can an enrolled user reach the dashboard?",
+      "choices": [
+        "By signing in with Okta FastPass without entering a password",
+        "By entering the password first, then Okta FastPass",
+        "By answering a security question, then the password",
+        "By requesting an email magic link from an admin"
+      ],
+      "answer": "By signing in with Okta FastPass without entering a password",
+      "explanation": "When the session can be established by whatever factor the authentication policy accepts, Okta FastPass alone can create the session and satisfy the dashboard policy. This is how passwordless sign-in is built in Identity Engine."
+    },
+    {
+      "id": "D4-133",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "An admin sets the global session rule to MFA not required, yet users are still asked for a second factor when they open the Okta Dashboard. What is the MOST likely cause?",
+      "choices": [
+        "The Default Policy overrides every custom global session policy rule",
+        "The password policy requires recovery by SMS",
+        "The Okta Dashboard authentication policy requires two factors",
+        "The enrollment policy has a grace period"
+      ],
+      "answer": "The Okta Dashboard authentication policy requires two factors",
+      "explanation": "The Okta Dashboard is protected by its own authentication policy, and its requirements apply after the session is created. The Default Policy is the lowest priority, not an override."
+    },
+    {
+      "id": "D4-134",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "An admin wants to test a new global session rule for remote workers. Which approach BEST verifies it?",
+      "choices": [
+        "Sign in as a test user in the target group from outside the zone and check the System Log",
+        "Sign in as a Super Administrator from the office network",
+        "Preview the rule in Profile Editor",
+        "Reset the test user's authenticators and wait one day"
+      ],
+      "answer": "Sign in as a test user in the target group from outside the zone and check the System Log",
+      "explanation": "Testing with a user who matches the rule's group and network conditions shows real behaviour, and the System Log confirms which rule matched. An admin on the office network would match a different rule."
+    },
+    {
+      "id": "D4-135",
+      "objective": "4.2",
+      "topic": "Global Session and Authentication Policy Interaction",
+      "stem": "Which statement BEST describes how the global session policy and app authentication policies divide the work?",
+      "choices": [
+        "The global session policy governs app access; authentication policies govern enrollment",
+        "Both policies govern only password complexity and recovery",
+        "Authentication policies replace the global session policy in Identity Engine",
+        "The global session policy governs the Okta session; authentication policies govern access to each app"
+      ],
+      "answer": "The global session policy governs the Okta session; authentication policies govern access to each app",
+      "explanation": "Identity Engine uses the global session policy for sign-in to Okta and session length, and authentication policies for each app's requirements. Enrollment and passwords have their own policies."
+    },
+    {
+      "id": "D4-044",
+      "type": "order",
+      "objective": "4.1",
+      "topic": "Authenticator Enrollment Policies",
+      "stem": "The Sales group must enroll Okta Verify while other users stay unaffected. Put the admin steps in order.",
+      "items": [
+        "Add Okta Verify on the Setup tab of Security > Authenticators",
+        "Choose the Okta Verify verification options and number challenge setting",
+        "On the Enrollment tab, add a policy assigned to the Sales group",
+        "Set Okta Verify to Required in that policy and save it",
+        "Rank the new policy above the default policy",
+        "Sign in as a Sales test user and confirm the enrollment prompt"
+      ],
+      "explanation": "An authenticator must exist and be configured before an enrollment policy can require it. The group policy must sit above the default policy to take effect, and a test sign-in confirms the result."
+    },
+    {
+      "id": "D4-045",
+      "type": "multi",
+      "objective": "4.1",
+      "topic": "Factor Types and Assurance",
+      "stem": "An app's authentication policy will accept only phishing-resistant authenticators. Which TWO authenticators can users enroll to meet it?",
+      "choices": [
+        "Okta FastPass",
+        "Passkey (FIDO2 WebAuthn)",
+        "Phone using SMS",
+        "Email",
+        "Security question"
+      ],
+      "answers": [
+        "Okta FastPass",
+        "Passkey (FIDO2 WebAuthn)"
+      ],
+      "select": 2,
+      "explanation": "Okta FastPass and passkeys are bound to the device and the real sign-in origin, so they cannot be relayed through a fake page. SMS, email codes and security answers can all be phished."
+    },
+    {
+      "id": "D4-046",
+      "type": "match",
+      "objective": "4.1",
+      "topic": "Adding and Configuring Authenticators",
+      "stem": "Match each authenticator to the description that BEST fits it.",
+      "pairs": [
+        {
+          "item": "Security question",
+          "match": "Answer the user chose and recalls from memory"
+        },
+        {
+          "item": "Passkey (FIDO2 WebAuthn)",
+          "match": "Public-key credential tied to the site origin"
+        },
+        {
+          "item": "Phone",
+          "match": "Code delivered by SMS or voice call"
+        },
+        {
+          "item": "Okta Verify",
+          "match": "App offering push, codes or Okta FastPass"
+        },
+        {
+          "item": "Email",
+          "match": "Link and code sent to the user's inbox"
+        }
+      ],
+      "targets_extra": [
+        "Certificate stored inside a network zone"
+      ],
+      "explanation": "Each authenticator proves identity in its own way: memory for security questions, origin-bound keys for passkeys, SMS or voice for Phone, an app for Okta Verify and a message for Email. Network zones hold IP ranges, not certificates."
+    },
+    {
+      "id": "D4-136",
+      "type": "order",
+      "objective": "4.2",
+      "topic": "Session Rule Conditions",
+      "stem": "Put the steps in order to require MFA at every sign-in for remote users in a group's global session policy.",
+      "items": [
+        "Go to Security > Global Session Policy",
+        "Open the policy assigned to the target group",
+        "Add a rule with IF user's IP is not in the corporate zone",
+        "Set access to Allowed with MFA required at every sign in",
+        "Create the rule and drag it above the broader catch-all rule"
+      ],
+      "explanation": "The rule is built inside the policy that applies to the group, with the network condition first and the MFA setting after. It must sit above broader rules because the first matching rule wins."
+    },
+    {
+      "id": "D4-137",
+      "type": "multi",
+      "objective": "4.2",
+      "topic": "Session Lifetime, Idle Time and Cookies",
+      "stem": "Which TWO settings can an admin configure in a global session policy rule?",
+      "choices": [
+        "Maximum Okta global session idle time",
+        "Whether MFA is required to establish the session",
+        "Which authenticators users must enroll",
+        "Minimum password length",
+        "Which attributes are mapped to an app"
+      ],
+      "answers": [
+        "Maximum Okta global session idle time",
+        "Whether MFA is required to establish the session"
+      ],
+      "select": 2,
+      "explanation": "Global session rules set how the session is established, whether MFA is required and how long the session lasts. Enrollment, password complexity and attribute mappings belong to other policies and the Profile Editor."
+    },
+    {
+      "id": "D4-138",
+      "type": "match",
+      "objective": "4.2",
+      "topic": "Session Establishment and MFA Prompts",
+      "stem": "Match each global session policy rule setting to what it controls.",
+      "pairs": [
+        {
+          "item": "Maximum Okta global session lifetime",
+          "match": "Hard cap on how long a session can last"
+        },
+        {
+          "item": "Maximum Okta global session idle time",
+          "match": "Ends a session after a period of inactivity"
+        },
+        {
+          "item": "Users will be prompted for MFA",
+          "match": "How often the MFA challenge appears"
+        },
+        {
+          "item": "IF user's IP is",
+          "match": "Network zone condition for the rule"
+        },
+        {
+          "item": "THEN Access is",
+          "match": "Allows or blocks creating the session"
+        }
+      ],
+      "targets_extra": [
+        "Minimum password age before a change"
+      ],
+      "explanation": "Lifetime caps the session, idle time ends inactive sessions, the MFA prompt setting sets challenge frequency, the IP condition matches zones and the access setting allows or denies. Password age is a password policy setting."
+    }
+  ]
+}

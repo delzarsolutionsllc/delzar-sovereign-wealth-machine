@@ -1,0 +1,482 @@
+{
+  "_description": "Harrowgate Instruments (fictional) runs Okta Identity Engine. HR sent ten profile requests, the identity team keeps seven group rules, and the help desk forwarded twelve group membership tickets. Every outcome appears at least once.",
+  "org": "Harrowgate Instruments",
+  "custom_attributes": {
+    "businessUnit": {
+      "type": "string",
+      "required": true
+    },
+    "badgeNumber": {
+      "type": "integer"
+    },
+    "remoteWorker": {
+      "type": "boolean"
+    },
+    "certifications": {
+      "type": "array",
+      "items": "string"
+    }
+  },
+  "users": {
+    "ana.ruiz@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "ana.ruiz@harrowgate.example",
+        "email": "ana.ruiz@harrowgate.example",
+        "firstName": "Ana",
+        "lastName": "Ruiz",
+        "title": "Account Executive",
+        "countryCode": "US",
+        "businessUnit": "Commercial",
+        "department": "Sales",
+        "employeeType": "Employee",
+        "badgeNumber": 2041,
+        "remoteWorker": false,
+        "certifications": []
+      }
+    },
+    "ben.osei@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "ben.osei@harrowgate.example",
+        "email": "ben.osei@harrowgate.example",
+        "firstName": "Ben",
+        "lastName": "Osei",
+        "title": "Sales Associate",
+        "countryCode": "US",
+        "businessUnit": "Commercial",
+        "department": "sales",
+        "employeeType": "Employee",
+        "badgeNumber": 2077
+      }
+    },
+    "chloe.martin@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "chloe.martin@harrowgate.example",
+        "email": "chloe.martin@harrowgate.example",
+        "firstName": "Chloe",
+        "lastName": "Martin",
+        "title": "Account Executive",
+        "countryCode": "FR",
+        "businessUnit": "EMEA Commercial",
+        "department": "Sales",
+        "employeeType": "Employee"
+      }
+    },
+    "dev.patel@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "dev.patel@harrowgate.example",
+        "email": "dev.patel@harrowgate.example",
+        "firstName": "Dev",
+        "lastName": "Patel",
+        "title": "VP Engineering",
+        "countryCode": "US",
+        "businessUnit": "Product",
+        "department": "Engineering",
+        "employeeType": "Employee",
+        "certifications": [
+          "PMP"
+        ]
+      }
+    },
+    "emma.lind@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "emma.lind@harrowgate.example",
+        "email": "emma.lind@harrowgate.example",
+        "firstName": "Emma",
+        "lastName": "Lind",
+        "title": "Sales Consultant",
+        "countryCode": "US",
+        "businessUnit": "Commercial",
+        "department": "Sales",
+        "employeeType": "Contractor"
+      }
+    },
+    "frank.cole@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "frank.cole@harrowgate.example",
+        "email": "frank.cole@harrowgate.example",
+        "firstName": "Frank",
+        "lastName": "Cole",
+        "title": "Sales Trainer",
+        "countryCode": "US",
+        "businessUnit": "Commercial",
+        "department": "Sales",
+        "employeeType": "Employee"
+      }
+    },
+    "grace.kim@harrowgate.example": {
+      "status": "DEPROVISIONED",
+      "profile": {
+        "login": "grace.kim@harrowgate.example",
+        "email": "grace.kim@harrowgate.example",
+        "firstName": "Grace",
+        "lastName": "Kim",
+        "title": "Controller",
+        "countryCode": "US",
+        "businessUnit": "Corporate",
+        "department": "Finance",
+        "employeeType": "Employee"
+      }
+    },
+    "hugo.berg@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "hugo.berg@harrowgate.example",
+        "email": "hugo.berg@harrowgate.example",
+        "firstName": "Hugo",
+        "lastName": "Berg",
+        "title": "Content Lead",
+        "countryCode": "US",
+        "businessUnit": "Corporate",
+        "department": "Marketing"
+      }
+    },
+    "iris.vale@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "iris.vale@harrowgate.example",
+        "email": "iris.vale@harrowgate.example",
+        "firstName": "Iris",
+        "lastName": "Vale",
+        "title": "Support Lead",
+        "countryCode": "CA",
+        "businessUnit": "Operations",
+        "department": "Support",
+        "employeeType": "Employee",
+        "remoteWorker": false
+      }
+    },
+    "jonas.weber@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "jonas.weber@harrowgate.example",
+        "email": "jonas.weber@harrowgate.example",
+        "firstName": "Jonas",
+        "lastName": "Weber",
+        "title": "Vice President, Platform",
+        "countryCode": "US",
+        "businessUnit": "Product",
+        "department": "Engineering",
+        "employeeType": "Employee",
+        "certifications": [
+          "CISSP"
+        ]
+      }
+    },
+    "kara.singh@harrowgate.example": {
+      "status": "STAGED",
+      "profile": {
+        "login": "kara.singh@harrowgate.example",
+        "email": "kara.singh@harrowgate.example",
+        "firstName": "Kara",
+        "lastName": "Singh",
+        "title": "VP Sales",
+        "countryCode": "US",
+        "businessUnit": "Commercial",
+        "department": "Sales",
+        "employeeType": "Employee"
+      }
+    }
+  },
+  "groups": {
+    "00g-sales-us": {
+      "name": "Sales-US",
+      "type": "OKTA_GROUP",
+      "manual_members": [
+        "chloe.martin@harrowgate.example"
+      ]
+    },
+    "00g-leadership": {
+      "name": "Leadership",
+      "type": "OKTA_GROUP",
+      "manual_members": []
+    },
+    "00g-employees": {
+      "name": "All-Employees",
+      "type": "OKTA_GROUP",
+      "manual_members": []
+    },
+    "00g-remote": {
+      "name": "Remote-Workers",
+      "type": "OKTA_GROUP",
+      "manual_members": []
+    },
+    "00g-pmp": {
+      "name": "Project-Managers",
+      "type": "OKTA_GROUP",
+      "manual_members": []
+    },
+    "00g-support": {
+      "name": "Support-Team",
+      "type": "OKTA_GROUP",
+      "manual_members": []
+    },
+    "00g-beta": {
+      "name": "Beta-Testers",
+      "type": "OKTA_GROUP",
+      "manual_members": [
+        "hugo.berg@harrowgate.example",
+        "grace.kim@harrowgate.example"
+      ]
+    },
+    "00g-ad-finance": {
+      "name": "Finance (AD)",
+      "type": "APP_GROUP",
+      "source": "Active Directory",
+      "manual_members": []
+    }
+  },
+  "group_rules": [
+    {
+      "id": "R01",
+      "name": "Sales US",
+      "status": "ACTIVE",
+      "expression": "user.department == \"Sales\" AND user.countryCode == \"US\"",
+      "assign_to": [
+        "00g-sales-us"
+      ],
+      "exclude": [
+        "frank.cole@harrowgate.example"
+      ]
+    },
+    {
+      "id": "R02",
+      "name": "Leadership",
+      "status": "ACTIVE",
+      "expression": "String.startsWith(user.title, \"VP\") OR user.title == \"Chief Executive Officer\"",
+      "assign_to": [
+        "00g-leadership"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R03",
+      "name": "All employees",
+      "status": "ACTIVE",
+      "expression": "user.employeeType != \"Contractor\"",
+      "assign_to": [
+        "00g-employees"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R04",
+      "name": "Remote staff",
+      "status": "INACTIVE",
+      "expression": "user.remoteWorker == true",
+      "assign_to": [
+        "00g-remote"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R05",
+      "name": "PMP holders",
+      "status": "ACTIVE",
+      "expression": "Arrays.contains(user.certifications, \"PMP\")",
+      "assign_to": [
+        "00g-pmp"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R06",
+      "name": "Finance to AD",
+      "status": "ACTIVE",
+      "expression": "user.department == \"Finance\"",
+      "assign_to": [
+        "00g-ad-finance"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R07",
+      "name": "Support team",
+      "status": "ACTIVE",
+      "expression": "user.department = \"Support\"",
+      "assign_to": [
+        "00g-support"
+      ],
+      "exclude": []
+    }
+  ],
+  "profile_updates": [
+    {
+      "id": "P01",
+      "operation": "update",
+      "user": "ben.osei@harrowgate.example",
+      "profile": {
+        "title": "Account Executive"
+      }
+    },
+    {
+      "id": "P02",
+      "operation": "update",
+      "user": "chloe.martin@harrowgate.example",
+      "profile": {
+        "Department": "Sales"
+      }
+    },
+    {
+      "id": "P03",
+      "operation": "update",
+      "user": "dev.patel@harrowgate.example",
+      "profile": {
+        "badgeNumber": "4471"
+      }
+    },
+    {
+      "id": "P04",
+      "operation": "update",
+      "user": "iris.vale@harrowgate.example",
+      "profile": {
+        "remoteWorker": true
+      }
+    },
+    {
+      "id": "P05",
+      "operation": "create",
+      "user": "liam.nash@harrowgate.example",
+      "activate": true,
+      "profile": {
+        "login": "liam.nash@harrowgate.example",
+        "email": "liam.nash@harrowgate.example",
+        "firstName": "Liam",
+        "lastName": "Nash",
+        "department": "Sales",
+        "countryCode": "US"
+      }
+    },
+    {
+      "id": "P06",
+      "operation": "update",
+      "user": "ana.ruiz@harrowgate.example",
+      "profile": {
+        "certifications": "PMP"
+      }
+    },
+    {
+      "id": "P07",
+      "operation": "update",
+      "user": "frank.cole@harrowgate.example",
+      "profile": {
+        "lastName": null
+      }
+    },
+    {
+      "id": "P08",
+      "operation": "create",
+      "user": "mia.lopez@harrowgate.example",
+      "activate": false,
+      "profile": {
+        "login": "mia.lopez@harrowgate.example",
+        "email": "mia.lopez@harrowgate.example",
+        "firstName": "Mia",
+        "lastName": "Lopez",
+        "department": "Sales",
+        "title": "Sales Associate",
+        "countryCode": "US",
+        "employeeType": "Employee",
+        "businessUnit": "Commercial"
+      }
+    },
+    {
+      "id": "P09",
+      "operation": "update",
+      "user": "noah.reyes@harrowgate.example",
+      "profile": {
+        "title": "Analyst"
+      }
+    },
+    {
+      "id": "P10",
+      "operation": "update",
+      "user": "jonas.weber@harrowgate.example",
+      "profile": {
+        "certifications": [
+          "PMP",
+          "CISSP"
+        ]
+      }
+    }
+  ],
+  "tickets": [
+    {
+      "id": "T01",
+      "user": "ben.osei@harrowgate.example",
+      "group": "00g-sales-us",
+      "summary": "Ben is in Sales in the US but is not in Sales-US and cannot open the CRM app."
+    },
+    {
+      "id": "T02",
+      "user": "frank.cole@harrowgate.example",
+      "group": "00g-sales-us",
+      "summary": "Frank is a US sales trainer and is not in Sales-US."
+    },
+    {
+      "id": "T03",
+      "user": "grace.kim@harrowgate.example",
+      "group": "00g-employees",
+      "summary": "Grace is not in All-Employees."
+    },
+    {
+      "id": "T04",
+      "user": "iris.vale@harrowgate.example",
+      "group": "00g-remote",
+      "summary": "Iris was marked as a remote worker today but is not in Remote-Workers."
+    },
+    {
+      "id": "T05",
+      "user": "chloe.martin@harrowgate.example",
+      "group": "00g-sales-us",
+      "summary": "Chloe works in France, so why is she in Sales-US?"
+    },
+    {
+      "id": "T06",
+      "user": "dev.patel@harrowgate.example",
+      "group": "00g-leadership",
+      "summary": "Dev is in Leadership; please confirm why."
+    },
+    {
+      "id": "T07",
+      "user": "jonas.weber@harrowgate.example",
+      "group": "00g-leadership",
+      "summary": "Jonas is a vice president but is not in Leadership."
+    },
+    {
+      "id": "T08",
+      "user": "iris.vale@harrowgate.example",
+      "group": "00g-support",
+      "summary": "Iris leads Support but is not in Support-Team."
+    },
+    {
+      "id": "T09",
+      "user": "ana.ruiz@harrowgate.example",
+      "group": "00g-ad-finance",
+      "summary": "Ana needs Finance (AD) for a budget tool; can a rule add her?"
+    },
+    {
+      "id": "T10",
+      "user": "hugo.berg@harrowgate.example",
+      "group": "00g-employees",
+      "summary": "Hugo has no employee type set, yet he is in All-Employees."
+    },
+    {
+      "id": "T11",
+      "user": "jonas.weber@harrowgate.example",
+      "group": "00g-pmp",
+      "summary": "Jonas passed his PMP exam; is he in Project-Managers now?"
+    },
+    {
+      "id": "T12",
+      "user": "emma.lind@harrowgate.example",
+      "group": "00g-employees",
+      "summary": "Emma is not in All-Employees."
+    }
+  ]
+}

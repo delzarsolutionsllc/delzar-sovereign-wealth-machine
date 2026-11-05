@@ -1,0 +1,558 @@
+{
+  "_description": "Larkspur Example Ltd (fictional): eight app requests to choose a sign-on method for, seven SAML app integrations with thirteen reported sign-in attempts (IdP-initiated from the End-User Dashboard and SP-initiated from the app), and twelve provisioning events after HR and group changes. All names, domains and certificates are invented.",
+  "requirements": [
+    {
+      "id": "R01",
+      "app": "Ledgerline Expenses (OIN)",
+      "protocols": [
+        "saml2"
+      ],
+      "app_type": "web",
+      "login_form": false
+    },
+    {
+      "id": "R02",
+      "app": "Larkspur Field App",
+      "protocols": [
+        "saml2",
+        "oidc"
+      ],
+      "app_type": "mobile",
+      "login_form": false
+    },
+    {
+      "id": "R03",
+      "app": "Pipewise CRM (OIN)",
+      "protocols": [
+        "saml2",
+        "oidc"
+      ],
+      "app_type": "web",
+      "login_form": true
+    },
+    {
+      "id": "R04",
+      "app": "Customer self-service portal",
+      "protocols": [
+        "oidc"
+      ],
+      "app_type": "spa"
+    },
+    {
+      "id": "R05",
+      "app": "Legacy timesheet system",
+      "protocols": [],
+      "app_type": "web",
+      "login_form": true
+    },
+    {
+      "id": "R06",
+      "app": "Staff news page",
+      "protocols": [],
+      "app_type": "web",
+      "sign_in_required": false
+    },
+    {
+      "id": "R07",
+      "app": "Freight vendor gateway",
+      "protocols": [
+        "ldap_bind"
+      ],
+      "app_type": "web",
+      "login_form": false
+    },
+    {
+      "id": "R08",
+      "app": "Shadow IT survey tool",
+      "protocols": [
+        "oidc"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "login": "ana.ruiz@larkspur.example",
+      "email": "ana.ruiz@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Finance"
+      ]
+    },
+    {
+      "login": "ben.okafor@larkspur.example",
+      "email": "b.okafor@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Sales"
+      ]
+    },
+    {
+      "login": "chen.li@larkspur.example",
+      "email": "chen.li@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Engineering"
+      ]
+    },
+    {
+      "login": "dara.kim@larkspur.example",
+      "email": "dara.kim@larkspur.example",
+      "status": "ACTIVE",
+      "groups": []
+    },
+    {
+      "login": "eli.moss@larkspur.example",
+      "email": "eli.moss@larkspur.example",
+      "status": "DEPROVISIONED",
+      "groups": [
+        "Sales"
+      ]
+    },
+    {
+      "login": "fay.ngata@larkspur.example",
+      "email": "fay.ngata@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Finance"
+      ]
+    },
+    {
+      "login": "gia.romero@larkspur.example",
+      "email": "gia.romero@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Sales"
+      ]
+    },
+    {
+      "login": "hana.sato@larkspur.example",
+      "email": "hana.sato@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Engineering"
+      ]
+    },
+    {
+      "login": "ivo.berg@larkspur.example",
+      "email": "ivo.berg@larkspur.example",
+      "status": "ACTIVE",
+      "groups": []
+    },
+    {
+      "login": "jo.walsh@larkspur.example",
+      "email": "jo.walsh@larkspur.example",
+      "status": "ACTIVE",
+      "groups": [
+        "Finance"
+      ]
+    },
+    {
+      "login": "kai.ober@larkspur.example",
+      "email": "kai.ober@larkspur.example",
+      "status": "DEPROVISIONED",
+      "groups": []
+    }
+  ],
+  "apps": {
+    "expense": {
+      "name": "Ledgerline Expenses",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://larkspur.ledgerline.example/saml/acs",
+        "audience": "https://larkspur.ledgerline.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-4f:9a:21"
+      },
+      "sp": {
+        "acs_url": "https://larkspur.ledgerline.example/saml/acs",
+        "entity_id": "https://larkspur.ledgerline.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-4f:9a:21",
+        "accounts": [
+          "ana.ruiz@larkspur.example",
+          "chen.li@larkspur.example",
+          "fay.ngata@larkspur.example",
+          "ivo.berg@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [
+          "chen.li@larkspur.example"
+        ],
+        "groups": [
+          "Finance"
+        ]
+      },
+      "provisioning": {
+        "api_integration": true,
+        "features": {
+          "create_users": true,
+          "update_attributes": false,
+          "deactivate_users": false,
+          "sync_password": false
+        }
+      }
+    },
+    "crm": {
+      "name": "Pipewise CRM",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://pipewise.example/saml/acs",
+        "audience": "https://pipewise.example/saml/metadata",
+        "name_id_format": "Unspecified",
+        "application_username": "okta_username",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-7c:03:be"
+      },
+      "sp": {
+        "acs_url": "https://pipewise.example/saml/acs",
+        "entity_id": "https://pipewise.example/saml/metadata",
+        "name_id_format": "Unspecified",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-7c:03:be",
+        "accounts": [
+          "b.okafor@larkspur.example",
+          "fay.ngata@larkspur.example",
+          "gia.romero@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [
+          "fay.ngata@larkspur.example"
+        ],
+        "groups": [
+          "Sales"
+        ]
+      },
+      "provisioning": {
+        "api_integration": true,
+        "features": {
+          "create_users": true,
+          "update_attributes": true,
+          "deactivate_users": true,
+          "sync_password": false
+        }
+      }
+    },
+    "wiki": {
+      "name": "Brightdocs Wiki",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://larkspur.brightdocs.example/saml/acs",
+        "audience": "https://brightdocs.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-11:d4:e8"
+      },
+      "sp": {
+        "acs_url": "https://larkspur.brightdocs.example/saml/acs",
+        "entity_id": "https://larkspur.brightdocs.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-11:d4:e8",
+        "accounts": [
+          "hana.sato@larkspur.example",
+          "chen.li@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [],
+        "groups": [
+          "Engineering"
+        ]
+      },
+      "provisioning": {
+        "api_integration": false
+      }
+    },
+    "hr": {
+      "name": "Peoplegrove HR",
+      "status": "INACTIVE",
+      "saml": {
+        "sso_url": "https://peoplegrove.example/saml/acs",
+        "audience": "https://peoplegrove.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-90:6b:3a"
+      },
+      "sp": {
+        "acs_url": "https://peoplegrove.example/saml/acs",
+        "entity_id": "https://peoplegrove.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-90:6b:3a",
+        "accounts": [
+          "ana.ruiz@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [],
+        "groups": [
+          "Finance"
+        ]
+      },
+      "provisioning": {
+        "api_integration": false
+      }
+    },
+    "travel": {
+      "name": "Tripnest Travel",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://tripnest.example/sso/saml",
+        "audience": "https://tripnest.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-2e:77:c1"
+      },
+      "sp": {
+        "acs_url": "https://tripnest.example/saml/acs",
+        "entity_id": "https://tripnest.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-2e:77:c1",
+        "accounts": [
+          "chen.li@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [
+          "chen.li@larkspur.example"
+        ],
+        "groups": []
+      },
+      "provisioning": {
+        "api_integration": false
+      }
+    },
+    "analytics": {
+      "name": "Chartwell Analytics",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://chartwell.example/saml/acs",
+        "audience": "https://chartwell.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": true,
+        "signing_cert": "okta-sha256-c8:41:7d"
+      },
+      "sp": {
+        "acs_url": "https://chartwell.example/saml/acs",
+        "entity_id": "https://chartwell.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-5a:e0:19",
+        "accounts": [
+          "hana.sato@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [
+          "hana.sato@larkspur.example",
+          "kai.ober@larkspur.example"
+        ],
+        "groups": []
+      },
+      "provisioning": {
+        "api_integration": true,
+        "features": {
+          "create_users": true,
+          "update_attributes": true
+        }
+      }
+    },
+    "kudos": {
+      "name": "Kudoboard Recognition",
+      "status": "ACTIVE",
+      "saml": {
+        "sso_url": "https://kudoboard.example/saml/acs",
+        "audience": "https://kudoboard.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "application_username": "email",
+        "assertion_signed": false,
+        "signing_cert": "okta-sha256-3b:f2:a6"
+      },
+      "sp": {
+        "acs_url": "https://kudoboard.example/saml/acs",
+        "entity_id": "https://kudoboard.example/saml/metadata",
+        "name_id_format": "EmailAddress",
+        "requires_signed_assertion": true,
+        "idp_cert": "okta-sha256-3b:f2:a6",
+        "accounts": [
+          "fay.ngata@larkspur.example"
+        ]
+      },
+      "assignments": {
+        "users": [],
+        "groups": [
+          "Finance"
+        ]
+      },
+      "provisioning": {
+        "api_integration": false
+      }
+    }
+  },
+  "sign_ins": [
+    {
+      "id": "S01",
+      "user": "ana.ruiz@larkspur.example",
+      "app": "expense",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S02",
+      "user": "chen.li@larkspur.example",
+      "app": "expense",
+      "flow": "sp_initiated"
+    },
+    {
+      "id": "S03",
+      "user": "dara.kim@larkspur.example",
+      "app": "expense",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S04",
+      "user": "eli.moss@larkspur.example",
+      "app": "crm",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S05",
+      "user": "ben.okafor@larkspur.example",
+      "app": "crm",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S06",
+      "user": "fay.ngata@larkspur.example",
+      "app": "crm",
+      "flow": "sp_initiated",
+      "request_acs": "https://pipewise.example/saml/acs"
+    },
+    {
+      "id": "S07",
+      "user": "fay.ngata@larkspur.example",
+      "app": "crm",
+      "flow": "sp_initiated",
+      "request_acs": "https://eu.pipewise.example/saml/acs"
+    },
+    {
+      "id": "S08",
+      "user": "hana.sato@larkspur.example",
+      "app": "wiki",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S09",
+      "user": "dara.kim@larkspur.example",
+      "app": "wiki",
+      "flow": "sp_initiated"
+    },
+    {
+      "id": "S10",
+      "user": "ana.ruiz@larkspur.example",
+      "app": "hr",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S11",
+      "user": "chen.li@larkspur.example",
+      "app": "travel",
+      "flow": "idp_initiated"
+    },
+    {
+      "id": "S12",
+      "user": "hana.sato@larkspur.example",
+      "app": "analytics",
+      "flow": "sp_initiated"
+    },
+    {
+      "id": "S13",
+      "user": "fay.ngata@larkspur.example",
+      "app": "kudos",
+      "flow": "idp_initiated"
+    }
+  ],
+  "provisioning_events": [
+    {
+      "id": "P01",
+      "user": "gia.romero@larkspur.example",
+      "app": "crm",
+      "event": "assigned"
+    },
+    {
+      "id": "P02",
+      "user": "ben.okafor@larkspur.example",
+      "app": "crm",
+      "event": "profile_updated"
+    },
+    {
+      "id": "P03",
+      "user": "ben.okafor@larkspur.example",
+      "app": "crm",
+      "event": "password_changed"
+    },
+    {
+      "id": "P04",
+      "user": "eli.moss@larkspur.example",
+      "app": "crm",
+      "event": "okta_deactivated"
+    },
+    {
+      "id": "P05",
+      "user": "fay.ngata@larkspur.example",
+      "app": "crm",
+      "event": "unassigned"
+    },
+    {
+      "id": "P06",
+      "user": "dara.kim@larkspur.example",
+      "app": "crm",
+      "event": "assigned"
+    },
+    {
+      "id": "P07",
+      "user": "chen.li@larkspur.example",
+      "app": "expense",
+      "event": "profile_updated"
+    },
+    {
+      "id": "P08",
+      "user": "ivo.berg@larkspur.example",
+      "app": "expense",
+      "event": "unassigned"
+    },
+    {
+      "id": "P09",
+      "user": "jo.walsh@larkspur.example",
+      "app": "expense",
+      "event": "assigned"
+    },
+    {
+      "id": "P10",
+      "user": "chen.li@larkspur.example",
+      "app": "travel",
+      "event": "assigned"
+    },
+    {
+      "id": "P11",
+      "user": "hana.sato@larkspur.example",
+      "app": "analytics",
+      "event": "role_changed"
+    },
+    {
+      "id": "P12",
+      "user": "kai.ober@larkspur.example",
+      "app": "analytics",
+      "event": "okta_deactivated"
+    }
+  ]
+}
