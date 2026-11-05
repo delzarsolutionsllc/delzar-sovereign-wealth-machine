@@ -1,0 +1,57 @@
+{
+  "authentication_methods": {
+    "_comment": "Fixed platform rules for Lab 33. The tenant's own settings (which methods are on for which groups, custom strengths, SSPR and TAP settings) live in the scenario data. Built-in strengths follow Microsoft Learn 'Authentication strengths' (2026); federated combinations and QR code are left out to keep the model small.",
+    "combinations": {
+      "windowsHelloForBusiness": {"label": "Windows Hello for Business / Platform Credential", "methods": ["windowsHelloForBusiness"]},
+      "fido2": {"label": "Passkey (FIDO2)", "methods": ["fido2"]},
+      "x509CertificateMultiFactor": {"label": "Certificate-based authentication (multifactor)", "methods": ["x509Certificate"]},
+      "x509CertificateSingleFactor": {"label": "Certificate-based authentication (single-factor)", "methods": ["x509Certificate"]},
+      "deviceBasedPush": {"label": "Microsoft Authenticator (passwordless phone sign-in)", "methods": ["microsoftAuthenticator"], "authenticator_mode": "deviceBasedPush"},
+      "temporaryAccessPassOneTime": {"label": "Temporary Access Pass (one-time use)", "methods": ["temporaryAccessPass"]},
+      "temporaryAccessPassMultiUse": {"label": "Temporary Access Pass (multi-use)", "methods": ["temporaryAccessPass"]},
+      "password,microsoftAuthenticatorPush": {"label": "Password + Microsoft Authenticator push (number matching)", "methods": ["microsoftAuthenticator"], "authenticator_mode": "push"},
+      "password,softwareOath": {"label": "Password + software OATH token", "methods": ["softwareOath"]},
+      "password,hardwareOath": {"label": "Password + hardware OATH token", "methods": ["hardwareOath"]},
+      "password,sms": {"label": "Password + SMS code", "methods": ["sms"]},
+      "password,voice": {"label": "Password + voice call", "methods": ["voice"]},
+      "sms": {"label": "SMS sign-in (single factor)", "methods": ["sms"]},
+      "email": {"label": "Email one-time passcode", "methods": ["email"]},
+      "password": {"label": "Password only", "methods": []}
+    },
+    "builtin_strengths": {
+      "mfa": {"name": "Multifactor authentication", "combinations": ["windowsHelloForBusiness", "fido2", "x509CertificateMultiFactor", "deviceBasedPush", "temporaryAccessPassOneTime", "temporaryAccessPassMultiUse", "password,microsoftAuthenticatorPush", "password,softwareOath", "password,hardwareOath", "password,sms", "password,voice"]},
+      "passwordless_mfa": {"name": "Passwordless MFA", "combinations": ["windowsHelloForBusiness", "fido2", "x509CertificateMultiFactor", "deviceBasedPush"]},
+      "phishing_resistant_mfa": {"name": "Phishing-resistant MFA", "combinations": ["windowsHelloForBusiness", "fido2", "x509CertificateMultiFactor"]}
+    },
+    "phishing_resistant": ["windowsHelloForBusiness", "fido2", "x509CertificateMultiFactor"],
+    "authenticator_modes": {"any": ["push", "deviceBasedPush"], "push": ["push"], "deviceBasedPush": ["deviceBasedPush"]},
+    "sspr_method_map": {
+      "_comment": "Registered authentication method -> SSPR method it counts as. SMS and voice share one mobile phone number, so they count once. Passkeys, Windows Hello, certificates and TAP are not SSPR methods. Hardware/software OATH are left out (support for SSPR varies; owner to check).",
+      "microsoftAuthenticator": "mobileApp",
+      "sms": "mobilePhone",
+      "voice": "mobilePhone",
+      "email": "email",
+      "officePhone": "officePhone",
+      "securityQuestions": "securityQuestions"
+    },
+    "admin_sspr": {
+      "_comment": "Administrator SSPR policy: always on for admin roles, always two methods, never security questions, whatever the tenant's user SSPR policy says.",
+      "methods_required": 2,
+      "allowed_methods": ["mobileApp", "mobilePhone", "email", "officePhone"],
+      "admin_roles": ["Global Administrator", "Privileged Role Administrator", "Helpdesk Administrator", "Password Administrator", "User Administrator", "Authentication Administrator", "Privileged Authentication Administrator", "Security Administrator", "Exchange Administrator", "SharePoint Administrator", "Billing Administrator"],
+      "unknown_role_is_admin": true
+    },
+    "sign_in_outcomes": ["SATISFIED", "NOT_SATISFIED", "METHOD_DISABLED"],
+    "sspr_outcomes": ["SSPR_READY", "NOT_REGISTERED", "INSUFFICIENT_METHODS", "ADMIN_POLICY"],
+    "tap_outcomes": ["TAP_VALID", "TAP_REJECTED"],
+    "concepts": {
+      "authentication methods policy": "The tenant setting that turns each sign-in method on or off and targets it at chosen groups, with exclusions winning over inclusions.",
+      "authentication strength": "A Conditional Access grant control that lists exactly which method combinations may satisfy a sign-in.",
+      "phishing-resistant MFA": "Methods bound to the real site by public-key cryptography, so a fake page cannot relay them: passkeys (FIDO2), Windows Hello for Business and multifactor certificate-based authentication.",
+      "number matching": "Microsoft Authenticator push asks the user to type the number shown on the sign-in screen, which stops blind approval of MFA fatigue prompts.",
+      "Temporary Access Pass": "A time-limited passcode an administrator issues so a user can sign in and register passwordless methods, optionally usable only once.",
+      "self-service password reset": "Lets users reset their own password after proving who they are with the number of registered methods the policy requires.",
+      "custom authentication strength": "An administrator-defined list of allowed combinations, for example passkeys restricted to approved key models by AAGUID."
+    }
+  }
+}

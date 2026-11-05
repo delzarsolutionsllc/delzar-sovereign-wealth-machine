@@ -1,0 +1,85 @@
+{
+  "identity_monitoring": {
+    "result_codes": {
+      "0": "success",
+      "50126": "invalid username or password",
+      "50053": "account locked by smart lockout",
+      "50074": "strong authentication (MFA) required: the user was prompted",
+      "500121": "authentication failed during the strong authentication (MFA) request: denied or not answered"
+    },
+    "success_codes": ["0"],
+    "password_failure_codes": ["50126", "50053"],
+    "mfa_failure_codes": ["500121"],
+    "travel_result_codes": ["0", "50074", "500121"],
+    "legacy_client_apps": ["IMAP4", "POP3", "Authenticated SMTP", "Exchange ActiveSync", "Exchange Web Services",
+                           "MAPI Over HTTP", "Offline Address Book", "Other clients"],
+    "modern_client_apps": ["Browser", "Mobile Apps and Desktop clients"],
+    "password_spray": {"window_minutes": 60, "min_distinct_users": 4},
+    "brute_force": {"window_minutes": 30, "min_failures": 5},
+    "mfa_fatigue": {"window_minutes": 30, "min_failed_prompts": 4},
+    "impossible_travel": {"max_kmh": 900},
+    "country_coordinates": {
+      "NL": [52.37, 4.90], "BE": [50.85, 4.35], "DE": [52.52, 13.40], "GB": [51.51, -0.13],
+      "US": [38.90, -77.04], "BR": [-23.55, -46.63], "JP": [35.68, 139.69], "SG": [1.35, 103.82],
+      "NG": [6.52, 3.38], "IN": [19.08, 72.88], "AU": [-33.87, 151.21], "CA": [43.65, -79.38]
+    },
+    "role_assignment_activities": ["Add member to role", "Add eligible member to role"],
+    "privileged_roles": ["Global Administrator", "Privileged Role Administrator", "Privileged Authentication Administrator",
+                         "Security Administrator", "Conditional Access Administrator", "Exchange Administrator",
+                         "SharePoint Administrator", "User Administrator", "Authentication Administrator",
+                         "Helpdesk Administrator", "Application Administrator", "Cloud Application Administrator"],
+    "risk_levels": ["none", "low", "medium", "high"],
+    "unknown_risk_level": "high",
+    "response_policy": {
+      "compromise_detections": ["MFA_FATIGUE"],
+      "user_risk_for_password_change": ["high"],
+      "signin_risk_for_mfa": ["medium", "high"],
+      "unverifiable_record_response": "REQUIRE_MFA"
+    },
+    "detection_queries": {
+      "PASSWORD_SPRAY": {"table": "SigninLogs", "column": "IPAddress",
+        "kql": "SigninLogs | where ResultType == \"50126\" | summarize Users = dcount(UserPrincipalName) by IPAddress, bin(TimeGenerated, 1h) | where Users >= 4"},
+      "BRUTE_FORCE": {"table": "SigninLogs", "column": "UserPrincipalName",
+        "kql": "SigninLogs | where ResultType in (\"50126\", \"50053\") | summarize Failures = count() by UserPrincipalName, bin(TimeGenerated, 30m) | where Failures >= 5"},
+      "MFA_FATIGUE": {"table": "SigninLogs", "column": "ResultType",
+        "kql": "SigninLogs | where ResultType == \"500121\" | summarize Prompts = count() by UserPrincipalName, bin(TimeGenerated, 30m) | where Prompts >= 4"},
+      "LEGACY_AUTH_USE": {"table": "SigninLogs", "column": "ClientAppUsed",
+        "kql": "SigninLogs | where ClientAppUsed !in (\"Browser\", \"Mobile Apps and Desktop clients\") | summarize count() by UserPrincipalName, ClientAppUsed"},
+      "IMPOSSIBLE_TRAVEL": {"table": "SigninLogs", "column": "LocationDetails",
+        "kql": "SigninLogs | where ResultType == \"0\" | project TimeGenerated, UserPrincipalName, IPAddress, LocationDetails | sort by UserPrincipalName, TimeGenerated asc"},
+      "PRIVILEGED_ROLE_ADDED": {"table": "AuditLogs", "column": "OperationName",
+        "kql": "AuditLogs | where OperationName has \"member to role\" | project TimeGenerated, InitiatedBy, TargetResources"}
+    },
+    "log_tables": {
+      "SigninLogs": "interactive user sign-ins: who signed in, from which IP and app, with the result code and risk",
+      "AADNonInteractiveUserSignInLogs": "sign-ins a client app makes for the user in the background, for example token refreshes",
+      "AuditLogs": "directory changes such as role assignments, group membership and user updates",
+      "AADRiskyUsers": "users Microsoft Entra ID Protection currently rates as risky, with their risk level and state",
+      "AADUserRiskEvents": "individual risk detections, such as leaked credentials or anomalous token"
+    },
+    "signin_columns": {
+      "ResultType": "the error code of the sign-in, \"0\" for success, for example 50126 or 500121",
+      "ClientAppUsed": "the client protocol, which shows legacy authentication such as IMAP4 or Authenticated SMTP",
+      "IPAddress": "the IP address the sign-in came from",
+      "UserPrincipalName": "the account that signed in",
+      "RiskLevelDuringSignIn": "the sign-in risk level ID Protection assigned to this sign-in",
+      "ConditionalAccessStatus": "whether Conditional Access policies succeeded, failed or did not apply"
+    },
+    "log_routing": {
+      "Log Analytics workspace": "keep logs longer than the built-in retention, query them with KQL and power workbooks and alerts",
+      "Azure Storage account": "cheap long-term archive of raw logs for audit, with no interactive query",
+      "Event hub": "stream logs in near real time to a third-party SIEM"
+    },
+    "builtin_retention_days": {"Microsoft Entra ID Free": 7, "Microsoft Entra ID P1 or P2": 30},
+    "concepts": {
+      "user risk": "The probability that an identity itself is compromised, for example because its credentials leaked.",
+      "sign-in risk": "The probability that a single authentication request was not made by the account's owner.",
+      "password spray": "One source tries a few common passwords against many accounts to stay under lockout limits.",
+      "MFA fatigue": "An attacker who already has the password floods the user with MFA prompts until one is approved.",
+      "legacy authentication": "Older protocols such as IMAP and SMTP basic auth that cannot perform MFA.",
+      "risk remediation": "The user clears their own risk by passing MFA or doing a secure password change.",
+      "diagnostic setting": "The configuration that sends Microsoft Entra logs to a workspace, storage account or event hub.",
+      "confirm user compromised": "An admin action in ID Protection that sets the user's risk to high and feeds the model."
+    }
+  }
+}

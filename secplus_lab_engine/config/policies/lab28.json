@@ -1,0 +1,54 @@
+{
+  "app_consent": {
+    "_comment": "Risk tiers for Microsoft Graph permissions as THIS organisation rates them. 'delegated' / 'application' give the risk of each permission type; a type that is missing does not exist for that permission. 'delegated_admin_only' marks delegated permissions that Microsoft Graph always requires an administrator to consent to. Any permission or type not listed here is treated as critical (deny by default).",
+    "risk_order": ["low", "medium", "high", "critical"],
+    "permissions": {
+      "openid": {"delegated": "low"},
+      "profile": {"delegated": "low"},
+      "email": {"delegated": "low"},
+      "offline_access": {"delegated": "low"},
+      "User.Read": {"delegated": "low"},
+      "User.ReadBasic.All": {"delegated": "medium"},
+      "User.Read.All": {"delegated": "high", "application": "high", "delegated_admin_only": true},
+      "Calendars.Read": {"delegated": "medium", "application": "high"},
+      "Mail.Read": {"delegated": "high", "application": "critical"},
+      "Mail.ReadWrite": {"delegated": "high", "application": "critical"},
+      "Mail.Send": {"delegated": "high", "application": "critical"},
+      "Files.Read.All": {"delegated": "high", "application": "high"},
+      "Sites.Read.All": {"delegated": "high", "application": "high"},
+      "Directory.Read.All": {"delegated": "high", "application": "high", "delegated_admin_only": true},
+      "Directory.ReadWrite.All": {"delegated": "critical", "application": "critical", "delegated_admin_only": true},
+      "RoleManagement.ReadWrite.Directory": {"delegated": "critical", "application": "critical", "delegated_admin_only": true},
+      "Application.ReadWrite.All": {"delegated": "critical", "application": "critical", "delegated_admin_only": true},
+      "AppRoleAssignment.ReadWrite.All": {"delegated": "critical", "application": "critical", "delegated_admin_only": true}
+    },
+    "low_impact_permissions": ["openid", "profile", "email", "offline_access", "User.Read"],
+    "user_consent_settings": {
+      "do_not_allow": "Do not allow user consent: an administrator must consent for every app.",
+      "verified_publishers_low_impact": "Allow user consent for apps from verified publishers (or registered in this organisation), for permissions classified as low impact.",
+      "allow_all": "Allow user consent for all apps (legacy, not recommended by Microsoft)."
+    },
+    "block_unverified_multitenant_critical": true,
+    "approver_roles": {
+      "delegated": ["Global Administrator", "Privileged Role Administrator", "Cloud Application Administrator", "Application Administrator"],
+      "application": ["Global Administrator", "Privileged Role Administrator"]
+    },
+    "review": {
+      "unused_after_days": 90,
+      "revoke_unverified_application_risk": "high",
+      "revoke_user_consented_delegated_risk": "high",
+      "wide_grant_users": 250,
+      "wide_grant_risk": "high"
+    },
+    "concepts": {
+      "delegated permission": "Access an app uses on behalf of a signed-in user, limited to what that user could do themselves.",
+      "application permission": "Access an app uses as itself with no signed-in user, usually across the whole tenant, which only an administrator can grant.",
+      "admin consent workflow": "A setting that lets users ask for an app they cannot consent to, sending the request to named reviewers instead of a dead end.",
+      "publisher verification": "A blue badge showing the app's developer proved their identity with a Microsoft partner account linked to the app's domain.",
+      "permission classification": "An administrator's label marking some delegated permissions as low impact so users may consent to them alone.",
+      "illicit consent grant": "An attack where a user is tricked into approving a malicious app, giving the attacker data access without stealing a password.",
+      "multi-tenant application": "An app registration that accounts from any Microsoft Entra tenant can sign in to, not just its home organisation.",
+      "app governance": "The Microsoft Defender for Cloud Apps feature that watches OAuth apps' permissions and activity and can ban risky ones."
+    }
+  }
+}

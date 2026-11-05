@@ -1,0 +1,75 @@
+{
+  "external_identities": {
+    "resource_tenant": {
+      "name": "Harbor Lane Example Ltd",
+      "tenant_id": "a1b2c3d4-0000-4000-8000-00000000a001"
+    },
+    "external_collaboration": {
+      "_guest_invite_levels": "anyone (most inclusive) > members_and_admin_roles > admin_roles_only > no_one (most restrictive)",
+      "guest_invite_level": "members_and_admin_roles",
+      "inviter_roles": ["Guest Inviter", "User Administrator", "Global Administrator"],
+      "_collaboration_restrictions": "allow_any | deny_list (block the listed domains) | allow_list (only the listed domains)",
+      "collaboration_restrictions": {
+        "mode": "deny_list",
+        "domains": ["quillfeather.example", "freemail.example"]
+      }
+    },
+    "cross_tenant_access": {
+      "default": {
+        "b2b_collaboration": {
+          "inbound": {"access": "allow", "applications": "all"},
+          "outbound": {"access": "allow", "applications": "all"}
+        },
+        "b2b_direct_connect": {
+          "inbound": {"access": "block", "applications": "all"},
+          "outbound": {"access": "block", "applications": "all"}
+        },
+        "trust": {"mfa": false, "compliant_device": false, "hybrid_joined": false}
+      },
+      "organizations": {
+        "c0ba1700-0000-4000-8000-00000000c001": {
+          "name": "Cobalt Ridge Consulting",
+          "b2b_direct_connect": {
+            "inbound": {"access": "allow", "applications": ["teams-shared-channels"]},
+            "outbound": {"access": "allow", "applications": "all"}
+          },
+          "trust": {"mfa": true, "compliant_device": true}
+        },
+        "1a4c5000-0000-4000-8000-00000000d002": {
+          "name": "Larkspur Analytics",
+          "b2b_collaboration": {
+            "inbound": {"access": "allow", "applications": ["project-hub", "partner-portal"]}
+          },
+          "trust": {"hybrid_joined": true}
+        },
+        "9f11e000-0000-4000-8000-00000000e003": {
+          "name": "Quillfeather Media",
+          "b2b_collaboration": {
+            "inbound": {"access": "block", "applications": "all"}
+          }
+        }
+      }
+    },
+    "_resource_conditional_access": "Grant controls the resource tenant's Conditional Access policies require of external users, per app. '*' covers every app not listed. compliant_device is satisfied by a trusted compliant OR a trusted hybrid-joined device claim (require one of the device controls).",
+    "resource_conditional_access": {
+      "*": ["mfa"],
+      "finance-erp": ["mfa", "compliant_device"],
+      "partner-portal": []
+    },
+    "guest_lifecycle": {
+      "review_after_days": 90,
+      "remove_after_days": 180,
+      "pending_invitation_expire_days": 30
+    },
+    "concepts": {
+      "cross-tenant access settings": "The per-tenant controls that decide which external Microsoft Entra organisations your users can reach and which of their users can reach you, for B2B collaboration and B2B direct connect.",
+      "B2B collaboration": "External users are invited and get a guest account in your directory, then sign in with their home credentials to reach your apps.",
+      "B2B direct connect": "A mutual trust between two Microsoft Entra tenants that lets users reach shared resources, such as Teams shared channels, without a guest account being created.",
+      "inbound trust settings": "Settings that let your Conditional Access accept the MFA, compliant-device or hybrid-joined claims an external user earned in their home tenant.",
+      "organizational settings": "An override in cross-tenant access settings for one partner tenant ID; anything not overridden is inherited from the default settings.",
+      "external collaboration settings": "Tenant-wide rules for guest access, who may invite guests and which domains invitations may be sent to.",
+      "sponsor": "An internal member who is accountable for a guest account and is asked whether it is still needed.",
+      "Guest Inviter": "A Microsoft Entra role that lets its holder invite guests even when ordinary members cannot."
+    }
+  }
+}

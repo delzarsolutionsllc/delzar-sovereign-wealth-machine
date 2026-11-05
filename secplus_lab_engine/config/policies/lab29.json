@@ -1,0 +1,59 @@
+{
+  "workload_identities": {
+    "_comment": "Lab 29 policy: identity-type planner and workload identity audit. The engine reads only this section.",
+    "azure_hosting": ["app_service", "function_app", "container_apps", "virtual_machine", "vm_scale_set",
+                      "logic_app", "data_factory", "automation_account"],
+    "external_hosting": ["github_actions", "kubernetes", "other_cloud", "on_premises", "saas_vendor"],
+    "user_assigned_min_resources": 2,
+    "planner_rules": [
+      {"name": "azure_shared_or_preprovisioned", "outcome": "USER_ASSIGNED_MI"},
+      {"name": "azure_single_resource", "outcome": "SYSTEM_ASSIGNED_MI"},
+      {"name": "external_oidc_federation", "outcome": "SERVICE_PRINCIPAL_WITH_FEDERATED_CREDENTIAL"},
+      {"name": "fallback_certificate", "outcome": "SERVICE_PRINCIPAL_WITH_CERTIFICATE"}
+    ],
+    "max_secret_lifetime_days": 180,
+    "expiring_soon_days": 30,
+    "unused_after_days": 90,
+    "privileged_roles": ["Owner", "Contributor", "User Access Administrator",
+                         "Role Based Access Control Administrator"],
+    "least_privilege_roles": ["Reader", "Monitoring Reader", "Key Vault Secrets User", "Key Vault Crypto User",
+                              "Storage Blob Data Reader", "Storage Blob Data Contributor",
+                              "Azure Service Bus Data Sender", "Azure Service Bus Data Receiver",
+                              "AcrPull", "Backup Contributor", "Website Contributor"],
+    "broad_scopes": ["root", "management_group", "subscription"],
+    "narrow_scopes": ["resource_group", "resource"],
+    "action_priority": ["DISABLE_UNUSED", "REDUCE_SCOPE", "REPLACE_SECRET_WITH_FEDERATION", "ROTATE",
+                        "ASSIGN_OWNER", "OK"],
+    "finding_actions": {
+      "UNUSED": "DISABLE_UNUSED",
+      "PRIVILEGED_BROAD_SCOPE": "REDUCE_SCOPE",
+      "SECRET_FEDERATION_POSSIBLE": "REPLACE_SECRET_WITH_FEDERATION",
+      "SECRET_EXPIRED": "ROTATE",
+      "SECRET_EXPIRING": "ROTATE",
+      "SECRET_LONG_LIFETIME": "ROTATE",
+      "SECRET_PRESENT": "ROTATE",
+      "CREDENTIAL_EXPIRY_UNKNOWN": "ROTATE",
+      "CERT_EXPIRED": "ROTATE",
+      "CERT_EXPIRING": "ROTATE",
+      "NO_OWNER": "ASSIGN_OWNER"
+    },
+    "action_definitions": {
+      "DISABLE_UNUSED": "Disable the identity (and later delete it) because nothing has signed in with it recently.",
+      "REDUCE_SCOPE": "Replace the broad privileged role with a least-privilege role at resource-group or resource scope.",
+      "REPLACE_SECRET_WITH_FEDERATION": "Add a federated identity credential for the external platform, then delete the client secret.",
+      "ROTATE": "Issue a new credential (preferably a certificate), update the workload, then remove the old one.",
+      "ASSIGN_OWNER": "Name at least one accountable human owner for the application.",
+      "OK": "No finding: keep the identity and review it at the next audit."
+    },
+    "concepts": {
+      "managed identity": "An identity for an Azure resource whose credentials Azure creates, stores and rotates, so the code never handles a secret.",
+      "system-assigned managed identity": "A managed identity created on one Azure resource that is deleted automatically when that resource is deleted.",
+      "user-assigned managed identity": "A managed identity created as its own Azure resource that can be attached to several resources and outlives any one of them.",
+      "service principal": "The local representation of an application in a Microsoft Entra tenant that receives role assignments and signs in as the app.",
+      "app registration": "The global definition of an application (its application ID and credentials) from which service principals are created.",
+      "workload identity federation": "Trust between an app and an external OpenID Connect issuer so the workload swaps its own platform token for an Entra token with no stored secret.",
+      "client secret": "A password-like string stored for an application; it can leak, it expires and someone must rotate it.",
+      "eligible assignment": "A Privileged Identity Management role assignment that must be activated, for a limited time, before it grants any permission."
+    }
+  }
+}
