@@ -750,7 +750,9 @@ function renderMode() {
     el("div", {}, el("b", { text: LIVE ? "Live engine" : window.SECPLUS_BUNDLE ? "Desktop app" : "Hosted course" })),
     el("div", { text: LIVE ? "Running on this computer. Random scenarios are unlimited."
       : window.SECPLUS_BUNDLE ? "Desktop app: works offline from this one file." : "Pre-built scenarios and question banks. Run it on your computer for the live engine." }),
-    el("div", { text: `Progress is saved to ${Progress.where}.` }));
+    el("div", { text: `Progress is saved to ${Progress.where}.` }),
+    !LIVE && !window.SECPLUS_BUNDLE && /^https?:$/.test(location.protocol)
+      ? el("div", {}, el("a", { href: "download/Delzar-Certification-Academy.html", download: "Delzar Certification Academy.html", text: "Download the desktop app" }), " (one file, works offline)") : null);
 }
 function markNav(view, lab) {
   document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("on", a.dataset.view === view));

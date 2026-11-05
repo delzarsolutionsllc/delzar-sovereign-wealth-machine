@@ -12,6 +12,7 @@ What you get:
 * sw.js                 a service worker that caches everything for offline use
 * icons/*.png           app icons, drawn here with the standard library
 * .nojekyll             lets GitHub Pages serve the files as they are
+* download/Delzar-Certification-Academy.html  the one-file desktop app (double-click, offline)
 
 Progress is saved in the browser on each device. Nothing is uploaded anywhere:
 the site is static files. Putting it on the public internet (GitHub Pages,
@@ -41,6 +42,7 @@ SHORT_NAME = "Delzar Academy"
 THEME = "#1d5c8f"
 BACKGROUND = "#f4f6f9"
 ICON_SIZES = (192, 512)
+DESKTOP_FILE = "Delzar-Certification-Academy.html"
 
 HEAD = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -181,6 +183,14 @@ def build_site(out: Path, variants: int = 12) -> list[Path]:
         (out / "icons" / f"icon-{s}.png").write_bytes(draw_icon(s))
     (out / "icons" / "icon-maskable-512.png").write_bytes(draw_icon(512, maskable=True))
     (out / ".nojekyll").write_text("", encoding="utf-8")
+    # The one-file desktop app, offered as a download on the site (not precached: it is the same course again).
+    (out / "download").mkdir()
+    page_only = page.replace("<!--SECPLUS_MODE-->", "")
+    bundle = data.replace("</", "<\\/")
+    (out / "download" / DESKTOP_FILE).write_text(
+        '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+        '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>'
+        f'<script>window.SECPLUS_BUNDLE = {bundle};</script>{page_only}</body></html>', encoding="utf-8")
     precache = ["./", "index.html", "course_data.json", "manifest.webmanifest",
                 *[f"icons/icon-{s}.png" for s in ICON_SIZES], "icons/icon-maskable-512.png"]
     digest = hashlib.sha256()
