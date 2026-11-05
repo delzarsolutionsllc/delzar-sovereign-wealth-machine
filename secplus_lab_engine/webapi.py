@@ -25,7 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import videos
+from utils import portfolio, videos
 from utils.terminal_ui import UI
 
 
@@ -136,9 +136,11 @@ def catalog(policies: dict) -> dict:
         labs.append({"n": n, "title": m.TITLE, "objectives": m.OBJECTIVES, "domains": doms,
                      "primary_domain": doms[0] if doms else "1", "has_generator": n in GENERATORS,
                      "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT,
-                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)]})
+                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)],
+                     "briefing": portfolio.briefing(n), "career": portfolio.career_tags(n)})
     return {"labs": labs, "pass_scaled": PASS_SCALED, "domain_test_target": DOMAIN_TEST_TARGET,
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
+            "career_tracks": portfolio.career(),
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
 
@@ -223,7 +225,8 @@ def progress_reset(path=None) -> dict:
     return progress_get(path)
 
 
-METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch"}
+METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
+           "case_study"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -250,6 +253,8 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         if not isinstance(res, list):
             raise ValueError("results must be a list")
         return progress_record(res, a.get("label", "web"), progress_path)
+    if method == "case_study":
+        return portfolio.case_study(int(a["lab"]), policies)
     if method == "progress_watch":
         return progress_watch(str(a.get("video", "")), bool(a.get("watched", True)), progress_path)
     return progress_reset(progress_path)

@@ -19,6 +19,7 @@ Usage
     python main.py exam --domain 3      # domain test: 30 questions from one domain, scored per objective
     python main.py videos               # Professor Messer's free video course, mapped to the labs
     python main.py videos --lab 17      # the videos for one lab (or --objective 1.4, --mark ID, --open N)
+    python main.py case-study 1         # portfolio case study (Markdown + HTML) in dist/portfolio/ (or --all)
     python main.py web                  # open the course web app in your browser (live engine, offline)
     python main.py install-shortcut     # put a double-click launcher on your desktop
     python main.py lab 4 --file x.json  # run a lab against your own data
@@ -276,6 +277,10 @@ def build_parser() -> argparse.ArgumentParser:
     vi.add_argument("--mark", metavar="ID", help="mark a video watched (ID from the last column)")
     vi.add_argument("--unmark", metavar="ID", help="mark a video not watched")
     vi.add_argument("--open", type=int, metavar="N", dest="open_n", help="open video #N on YouTube")
+    cs = sub.add_parser("case-study", help="write portfolio case studies (Markdown + HTML) to dist/portfolio/")
+    cs.add_argument("labs", nargs="*", type=int, help="lab numbers (default: all)")
+    cs.add_argument("--all", action="store_true", help="every lab")
+    cs.add_argument("--out", metavar="DIR", help="output folder (default dist/portfolio)")
     w = sub.add_parser("web", help="open the course web app in your browser (runs locally)")
     w.add_argument("--port", type=int, default=8765, help="local port (default 8765; a free one is used if busy)")
     w.add_argument("--no-browser", action="store_true", help="don't open a browser window")
@@ -315,6 +320,15 @@ def main(argv: list[str] | None = None) -> int:
         show_progress(ui)
     elif args.command == "videos":
         return show_videos(ui, args.lab, args.objective, args.mark, args.unmark, args.open_n)
+    elif args.command == "case-study":
+        from utils.portfolio import write_case_studies
+        labs = sorted(LABS) if args.all or not args.labs else args.labs
+        bad = [n for n in labs if n not in LABS]
+        if bad:
+            raise SystemExit(f"unknown lab(s): {bad}")
+        files = write_case_studies(labs, args.out, policies)
+        ui.print(f"Wrote {len(files)} files to {files[0].parent}: one Markdown + one HTML page per lab. "
+                 "Open the HTML in a browser and use Print → Save as PDF, or put the Markdown on GitHub.")
     elif args.command == "web":
         from utils.webserver import serve
         serve(args.port, open_browser=not args.no_browser, policies=policies)

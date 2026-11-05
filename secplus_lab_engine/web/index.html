@@ -132,6 +132,17 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 .vlist input { margin: 0; accent-color: var(--accent); }
 .watchfirst { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px; }
 .vstep + .vstep { border-top: 1px solid var(--line); padding-top: 8px; }
+.ticket { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 8px; padding: 12px 16px; margin-bottom: 16px; background: var(--surface); }
+.ticket-head { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.ticket h2 { margin: 6px 0; } .ticket h3 { margin: 6px 0 2px; font-size: .95rem; }
+.ticket-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.ticket dt { font-weight: 600; } .ticket dd { margin: 0 0 6px; color: var(--muted); }
+.casestudy .note { border-left: 3px solid var(--accent); padding: 4px 10px; color: var(--muted); font-size: .9rem; }
+.casestudy .ticketline { font-family: var(--mono); font-size: .85rem; }
+.skill { display: inline-block; background: var(--sunken); border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; margin: 2px 4px 2px 0; font-size: .85rem; }
+ol.path li { margin-bottom: 8px; }
+a.done { font-weight: 600; }
+@media print { .rail, .tabs, .noprint, .panel:not(#labbody) { display: none !important; } .main, #labbody { padding: 0; border: 0; box-shadow: none; } body { background: #fff; } }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
 
@@ -146,6 +157,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
       <a href="#videos" data-view="videos">Video course</a>
       <a href="#exam" data-view="exam">Practice exam</a>
       <a href="#progress" data-view="progress">My progress</a>
+      <a href="#career" data-view="career">IAM career &amp; portfolio</a>
     </nav>
     <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
     <div class="mode" id="mode"></div>
@@ -219,6 +231,10 @@ const Engine = {
     const L = BUNDLE.labs[lab];
     const src = random && L.variants.length ? L.variants[seed % L.variants.length] : L.sample;
     return { questions: shuffle(src.questions, mulberry32(seed || 1)), seed: src.seed ?? null };
+  },
+  async caseStudy(lab) {
+    if (LIVE) return post("case_study", { lab });
+    return BUNDLE.labs[lab].case_study;
   },
   async exam(count, seed, fixed, domain, source = "bank") {
     if (LIVE) return post("exam", { count, seed, fixed, domain: domain || null, source });
@@ -409,7 +425,7 @@ async function viewLab(n, tab = "lesson") {
   const lab = CATALOG.labs.find(l => l.n === n);
   if (!lab) return viewHome();
   markNav(null, n);
-  const tabs = [["lesson", "Lesson"], ["scenario", "Run the scenario"], ["practice", "Practice"]];
+  const tabs = [["lesson", "Lesson"], ["scenario", "Run the scenario"], ["practice", "Practice"], ["case", "Case study"]];
   const body = el("div", { class: "panel", id: "labbody" });
   const tabbar = el("div", { class: "tabs", role: "tablist" }, tabs.map(([k, t]) =>
     el("button", { class: "tab" + (k === tab ? " on" : ""), role: "tab", "aria-selected": String(k === tab), onclick: () => viewLab(n, k), text: t })));
@@ -421,6 +437,7 @@ async function viewLab(n, tab = "lesson") {
     tabbar, body);
   if (tab === "lesson") renderLesson(lab, body);
   else if (tab === "scenario") renderScenario(lab, body);
+  else if (tab === "case") renderCaseStudy(lab, body);
   else renderPracticeStart(lab, body);
 }
 
@@ -436,7 +453,7 @@ function renderLesson(lab, body) {
       watchedBar(w, vs), videoList(vs, w, drawWatch));
   };
   if (vs.length) drawWatch();
-  put(body, vs.length ? watchBox : null,
+  put(body, ticketCard(lab), vs.length ? watchBox : null,
     el("div", { class: "lesson", html: lab.lesson_html }),
     el("h2", { text: "Exam & architectural insight" }),
     el("p", { class: "muted", text: ins.objective }),
@@ -711,6 +728,68 @@ async function viewVideos() {
       }))));
 }
 
+
+/* ------------------------------------------------------------------ work ticket, case study, career */
+function ticketCard(lab) {
+  const b = lab.briefing; if (!b) return null;
+  return el("section", { class: "ticket" },
+    el("div", { class: "ticket-head" },
+      el("span", { class: "label", text: `${b.type} · ${b.ticket} · ${b.priority}` }),
+      el("span", { class: "muted", text: `From ${b.requested_by}` })),
+    el("h2", { text: b.title }),
+    el("p", { text: b.situation }),
+    el("div", { class: "ticket-cols" },
+      el("div", {}, el("h3", { text: "Your task" }), el("ol", {}, b.your_task.map(t => el("li", { text: t })))),
+      el("div", {}, el("h3", { text: "Done when" }), el("ul", {}, b.done_when.map(t => el("li", { text: t }))))),
+    el("p", {}, el("b", { text: "Why it matters: " }), b.why_it_matters),
+    el("details", {}, el("summary", { text: "Plain-English glossary" }),
+      el("dl", {}, Object.entries(b.glossary).flatMap(([k, v]) => [el("dt", { text: k }), el("dd", { text: v })]))),
+    el("p", { class: "muted", text: `Who does this at work: ${b.job_roles.join(" · ")}` }));
+}
+
+async function renderCaseStudy(lab, body) {
+  put(body, el("p", { class: "loading", text: "Building the case study…" }));
+  let cs; try { cs = await Engine.caseStudy(lab.n); } catch (e) { return put(body, el("p", { class: "notice", text: e.message })); }
+  const b = cs.briefing || {};
+  put(body, el("article", { class: "casestudy" },
+    el("div", { class: "label", text: `Portfolio case study · Lab ${cs.lab}` }),
+    el("h1", { text: b.title || cs.title }),
+    el("div", { class: "muted", text: `${cs.title} · ${cs.objectives}` }),
+    el("p", { class: "note", text: cs.note }),
+    b.ticket ? el("p", { class: "ticketline", text: `${b.ticket} · ${b.type} · ${b.priority} · requested by ${b.requested_by}` }) : null,
+    b.situation ? [el("h2", { text: "The situation" }), el("p", { text: b.situation })] : null,
+    b.your_task ? [el("h2", { text: "What I did" }), el("ol", {}, b.your_task.map(t => el("li", { text: t })))] : null,
+    b.why_it_matters ? [el("h2", { text: "Why it mattered" }), el("p", { text: b.why_it_matters })] : null,
+    el("h2", { text: "Results" }), el("div", { class: "tablewrap" }, el("table", {}, el("tbody", {}, cs.results.map(([k, v]) => el("tr", {}, el("td", { text: k }), el("td", { text: v })))))),
+    Object.keys(cs.career).length ? [el("h2", { text: "Skills demonstrated" }),
+      Object.entries(cs.career).map(([t, areas]) => el("p", {}, el("b", { text: t }), el("br"), areas.map(a => el("span", { class: "skill", text: a }))))] : null,
+    b.talking_point ? [el("h2", { text: "Talking point" }), el("p", { text: b.talking_point })] : null),
+    el("div", { class: "btns noprint" },
+      el("button", { class: "btn primary", text: "Print / Save as PDF", onclick: () => window.print() }),
+      el("span", { class: "muted", text: "Screenshot this page for your portfolio, or save it as a PDF. Terminal: python main.py case-study " + cs.lab })));
+}
+
+async function viewCareer() {
+  markNav("career"); setKeys(null);
+  const c = CATALOG.career_tracks, prog = await Progress.get();
+  const practised = new Set(prog.sessions.map(x => String(x.lab)).filter(l => /^lab \d+/i.test(l)).map(l => parseInt(l.replace(/\D+/g, ""), 10)));
+  const labLink = n => { const lab = CATALOG.labs.find(l => l.n === n); return lab ? el("a", { href: `#lab-${n}`, class: practised.has(n) ? "done" : null, title: lab.title, text: `Lab ${n}` + (practised.has(n) ? " ✓" : "") }) : null; };
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "IAM career & portfolio" }),
+      el("h1", { text: "From Security+ to an identity (IAM) job" }),
+      el("ol", { class: "path" }, c.path.map(p => el("li", {}, el("b", { text: p.name }), el("br"), el("span", { class: "muted", text: p.why })))),
+      el("p", { class: "muted", text: "Each lab opens with a work ticket and ends with a one-page case study (the Case study tab). Labs you have practised are ticked." })),
+    c.tracks.map(t => el("section", { class: "panel" }, el("h2", { text: t.name }),
+      el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, el("tr", {}, ["Skill area", "In plain English", "Practise in"].map(h => el("th", { text: h })))),
+        el("tbody", {}, t.areas.map(a => el("tr", {}, el("td", { text: a.name }), el("td", { text: a.plain }),
+          el("td", {}, a.labs.map(labLink).filter(Boolean).flatMap((x, i) => [i ? ", " : "", x]))))))))),
+    el("section", { class: "panel" }, el("h2", { text: "Build your portfolio" }), el("ul", {}, c.portfolio_guide.map(x => el("li", { text: x })))),
+    el("section", { class: "panel" }, el("h2", { text: "Job search (Oklahoma and remote)" }),
+      el("p", {}, el("b", { text: "Titles to search: " }), c.job_titles.join(" · ")),
+      el("ul", {}, c.job_search.map(x => el("li", { text: x })))));
+}
+
 /* ------------------------------------------------------------------ router & boot */
 function route() {
   clearInterval(examTimer); setKeys(null);
@@ -723,6 +802,7 @@ function route() {
   if (dm) return viewExam(dm[1]);
   if (h === "progress") return viewProgress();
   if (h === "videos") return viewVideos();
+  if (h === "career") return viewCareer();
   return viewHome();
 }
 
