@@ -1,0 +1,34 @@
+{
+  "lab": 27,
+  "ticket": "IAM-40527",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Priya Nair, Finance Operations Manager",
+  "title": "Check the self-service access packages before partners start requesting access",
+  "situation": "Kestrel Ridge Outfitters (a fictional retailer) moved finance, partner and sales access into Microsoft Entra entitlement management, the part of Microsoft Entra ID Governance that lets people request bundles of access themselves. Three catalogs hold seven access packages. Sixteen access requests arrived today from employees and from people at partner companies, and ten existing assignments need a lifecycle check. Finance is worried that one person could end up able to both maintain suppliers and approve payments, and security wants old guest accounts cleaned up.",
+  "your_task": [
+    "Review each access package and its assignment policies for risky settings: external users let in with no access review, auto-approval for external users, no expiry, no fallback approver, or a separation-of-duties rule set only one way.",
+    "Decide every access request: auto-approved, pending approval (and by whom), or denied with the rule that denied it.",
+    "Make sure nobody approves their own request and that requests from unknown people or for unknown packages are denied.",
+    "Check every existing assignment for expiry, and decide what happens to each external (guest) user whose access has ended."
+  ],
+  "why_it_matters": "Access packages make access fast, but a weak policy makes bad access fast too. A partner auto-approved with no expiry keeps access forever, and a separation-of-duties rule set on only one package leaves a path to fraud. Guests that are never removed are accounts nobody watches.",
+  "done_when": [
+    "Every package has its configuration risks listed, or is marked OK.",
+    "All 16 requests are marked AUTO_APPROVED, PENDING_APPROVAL or DENIED, with the approvers or the denial rule.",
+    "All 10 assignments have a lifecycle status, and every guest account has a keep, block or remove decision.",
+    "The one-way separation-of-duties gap is reported to the package owner."
+  ],
+  "glossary": {
+    "Entitlement management": "The Microsoft Entra ID Governance feature that lets users request access packages, with approval, expiry and review built in.",
+    "Catalog": "A container of resources (groups, applications, SharePoint sites) and the access packages made from them.",
+    "Access package": "A bundle of resource access that a person requests and receives as one unit.",
+    "Assignment policy": "The rules on an access package: who can request, who approves, whether a justification is needed, when access expires and how it is reviewed.",
+    "Connected organization": "A partner company registered so its people can request access packages; it is either configured or proposed.",
+    "Separation of duties (SoD)": "A rule that one person must not hold two powers that together allow fraud, such as maintaining suppliers and approving payments.",
+    "Fallback approver": "A backup approver used when the normal approver for a stage cannot be found.",
+    "Guest (external user)": "An account in your directory for someone from outside the company, such as a partner employee."
+  },
+  "job_roles": ["Identity and Access Administrator", "IAM Analyst", "Identity Governance (IGA) Engineer", "Microsoft Entra Administrator"],
+  "talking_point": "Audited 7 access packages and found configuration risks in 5, including a one-way separation-of-duties rule and external users auto-approved with no access review; decided 16 access requests (3 auto-approved, 5 sent for approval, 8 denied, among them a separation-of-duties conflict and a CFO who would have been his own approver); and checked 10 assignments and 4 guest accounts, scheduling 1 guest for removal 40 days after its last access ended."
+}

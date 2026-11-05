@@ -1,0 +1,32 @@
+{
+  "lab": 33,
+  "ticket": "IAM-33114",
+  "type": "Change review",
+  "priority": "P2",
+  "requested_by": "Priya Holt, Identity Platform Lead",
+  "title": "Check sign-in methods, password reset readiness and Temporary Access Passes before admins move to phishing-resistant sign-in",
+  "situation": "Larkspur Example Health (fictional) wants every administrator and clinician to sign in with phishing-resistant methods. Before the Conditional Access policies are switched from report-only to on, the identity team exported the authentication methods policy, a custom authentication strength for the finance app, 15 recent sign-in attempts, the self-service password reset (SSPR) settings for 10 users and 8 Temporary Access Pass (TAP) requests from the help desk.",
+  "your_task": [
+    "For each sign-in, check whether the method is enabled for the user's groups in the authentication methods policy, including group exclusions and the Microsoft Authenticator mode.",
+    "Check whether the method satisfies the authentication strength the Conditional Access policy requires, and list the methods that would satisfy it.",
+    "Decide whether each user can reset their own password: count only methods SSPR accepts, and apply the stricter administrator policy to anyone holding an admin role.",
+    "Accept or reject each Temporary Access Pass against the tenant's lifetime limits and one-time-use rule."
+  ],
+  "why_it_matters": "Attackers now use fake sign-in pages that relay SMS codes and push approvals in real time. Only phishing-resistant methods stop that, and a rollout fails if users have no enabled method that meets the new strength, cannot reset a password, or receive long-lived reusable passes that work like a second password.",
+  "done_when": [
+    "Every sign-in is marked SATISFIED, NOT_SATISFIED or METHOD_DISABLED, with the reason and the methods that would work.",
+    "Every user is marked SSPR_READY, NOT_REGISTERED, INSUFFICIENT_METHODS or ADMIN_POLICY.",
+    "Every Temporary Access Pass request is marked TAP_VALID or TAP_REJECTED with the policy rule it broke."
+  ],
+  "glossary": {
+    "Authentication methods policy": "The Microsoft Entra ID setting that turns each sign-in method on or off and targets it at groups; an excluded group always loses the method.",
+    "Authentication strength": "A Conditional Access grant control that lists which method combinations may satisfy a sign-in, such as Multifactor authentication (MFA), Passwordless MFA or Phishing-resistant MFA.",
+    "Conditional Access (CA)": "Microsoft Entra ID's policy engine that decides, per sign-in, whether to allow, block or demand stronger proof.",
+    "Phishing-resistant MFA": "Methods tied to the real website by public-key cryptography, so a fake page cannot reuse them: passkeys (FIDO2), Windows Hello for Business and multifactor certificate-based authentication (CBA).",
+    "FIDO2 and AAGUID": "FIDO2 is the open standard behind passkeys; the Authenticator Attestation GUID (AAGUID) identifies the make and model of a security key so a policy can allow only approved models.",
+    "Self-service password reset (SSPR)": "Lets users reset their own password after proving who they are with a set number of registered methods.",
+    "Temporary Access Pass (TAP)": "A time-limited passcode an administrator issues so a user can sign in and register passwordless methods."
+  },
+  "job_roles": ["Identity and Access Administrator", "IAM Engineer", "Microsoft 365 Administrator", "Help Desk Lead"],
+  "talking_point": "Checked 15 sign-ins against Conditional Access authentication strengths (4 satisfied, 7 not satisfied, 4 blocked because the method was not enabled for the user), found 6 of 10 users not ready for self-service password reset (3 with nothing usable registered, 2 with too few methods and 1 administrator short of the two-method admin rule), and rejected 6 of 8 Temporary Access Pass requests for breaking the lifetime, expiry, one-time-use or group-targeting rules."
+}

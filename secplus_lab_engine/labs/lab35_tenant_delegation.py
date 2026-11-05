@@ -426,7 +426,7 @@ def check_dynamic_groups(data: dict, cfg: dict) -> list[GroupResult]:
             res.reasons.append(f"wrongly excluded {u} ({p.get('department')}, {p.get('country')}, {p.get('userType')})")
         if not res.reasons:
             res.outcome = "OK"
-            res.reasons.append(f"rule matches the intent exactly: {len(res.members)} members")
+            res.reasons.append(f"rule matches the intent exactly: {len(res.members)} member" + ("" if len(res.members) == 1 else "s"))
         out.append(res)
     return out
 
@@ -567,7 +567,7 @@ def build_challenges(policies: dict, data: dict) -> list:
                            context=f"rule: {g.rule or '(empty)'}\nintent: {next((x.get('intent') for x in data.get('dynamic_groups', []) if x.get('id') == g.id), None)}",
                            choices=["DYNAMIC_GROUP_RULE", "OK"], answer=g.outcome,
                            explanation="; ".join(g.reasons), objective="1.2"))
-        for label, lst in (("wrongly includes", g.wrongly_included), ("wrongly excludes", g.wrongly_excluded)):
+        for label, lst in (("wrongly include", g.wrongly_included), ("wrongly exclude", g.wrongly_excluded)):
             if lst:
                 qs.append(Question(prompt=f"Which user does the {g.name} rule {label}?",
                                    context=f"rule: {g.rule}",

@@ -1,0 +1,34 @@
+{
+  "lab": 35,
+  "ticket": "IAM-43518",
+  "type": "Access request batch and role audit",
+  "priority": "P2",
+  "requested_by": "Helena Brandt, Head of Identity, Kestrel Ridge Outfitters",
+  "title": "Delegate admin rights by least privilege and clean up existing directory roles",
+  "situation": "Kestrel Ridge Outfitters runs one Microsoft Entra ID tenant for staff in North America and EMEA (Europe, the Middle East and Africa). The help desk and two regional admins have sent 13 requests for admin rights, several asking for Global Administrator 'to be safe'. A security review also found 14 existing directory role assignments nobody has checked for a year, including guests from partner companies, and the sales team says its automatic (dynamic) groups contain the wrong people.",
+  "your_task": [
+    "For each request, pick the least-privileged built-in Microsoft Entra role for the task and the smallest scope: the whole tenant, one administrative unit (AU) or one application; build a custom role when only a few app permissions are needed; escalate anything you cannot safely grant.",
+    "Check the tenant has no more than 5 Global Administrators and at least 2 emergency access (break-glass) accounts.",
+    "Audit every existing role assignment for guests with privileged roles, too many Global Administrators, admins who must manage people in a restricted management AU without a role scoped to it, and roles or scopes broader than the job.",
+    "Test each dynamic group membership rule against the user list and name every user it wrongly includes or excludes."
+  ],
+  "why_it_matters": "Every extra Global Administrator, and every privileged guest, is one more account an attacker can phish to take over the whole tenant. Scoping roles to administrative units lets regional teams do their job without being able to touch executives or other regions, and a wrong dynamic rule silently gives or takes away access.",
+  "done_when": [
+    "All 13 requests have an outcome (TENANT, ADMINISTRATIVE_UNIT, OBJECT, CUSTOM_ROLE or ESCALATE) with the role, scope and reason.",
+    "The Global Administrator and emergency account check is reported.",
+    "All 14 assignments have a finding or OK, with the reason.",
+    "Each dynamic group is marked OK or DYNAMIC_GROUP_RULE, with the users wrongly in or out."
+  ],
+  "glossary": {
+    "Microsoft Entra ID": "Microsoft's cloud identity service, formerly called Azure Active Directory (Azure AD).",
+    "Least privilege": "Giving each person only the access their job needs, and nothing more.",
+    "Administrative unit (AU)": "A container of users, groups or devices so that a role can be granted for just those objects instead of the whole tenant.",
+    "Restricted management administrative unit": "An AU whose members can only be changed by admins assigned at that AU's scope; even tenant-wide Global Administrators cannot change them.",
+    "Custom role": "A role built from chosen Microsoft Entra permissions when no built-in role is narrow enough; needs a Microsoft Entra ID P1 or P2 licence.",
+    "Emergency access (break-glass) account": "A cloud-only Global Administrator account kept for emergencies when normal admins cannot sign in.",
+    "Dynamic membership rule": "An expression on user attributes, such as department and country, that adds and removes group members automatically.",
+    "Business-to-business (B2B) guest": "A user from another organisation invited into your tenant."
+  },
+  "job_roles": ["Identity and Access Administrator", "Microsoft 365 Administrator", "IAM Engineer", "Help Desk Team Lead"],
+  "talking_point": "Planned 13 admin-rights requests by least privilege (4 tenant-wide, 2 scoped to an administrative unit, 1 scoped to a single app, 1 custom role and 5 escalated instead of granting Global Administrator), found the tenant at 6 Global Administrators against a limit of 5, flagged 9 of 14 role assignments (3 privileged guests, 3 excess Global Administrators, 2 over-broad roles and 1 admin blocked by a restricted management unit), and fixed 2 of 3 dynamic sales group rules that wrongly included or excluded users."
+}

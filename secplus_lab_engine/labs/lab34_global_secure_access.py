@@ -564,11 +564,11 @@ def build_challenges(policies: dict, data: dict) -> list:
         bad = {h.target for h in weak}
         qs.append(Question(prompt=f"Which connector group is below the {cfg['min_healthy_connectors']}-healthy-"
                                   "connector minimum?",
-                           choices=choices_with(weak[0].target, names, exclude=bad), answer=weak[0].target,
+                           choices=choices_with(weak[0].target, names + ["none: every group meets the minimum"],
+                                                exclude=bad), answer=weak[0].target,
                            explanation="; ".join(weak[0].reasons), objective="2.4"))
     for h in health[:1] + [x for x in health if x.type == "SEGMENT_OVERLAP"][:1]:
         qs.append(Question(prompt=f"The health check flags '{h.target}'. What kind of finding is it?",
-                           context="; ".join(h.reasons) if h.type != "SEGMENT_OVERLAP" else "",
                            choices=HEALTH_TYPES, answer=h.type, explanation="; ".join(h.reasons), objective="2.4"))
     qs.append(Question(prompt="A device has no Global Secure Access client. What happens to its Microsoft 365 traffic?",
                        choices=["it is not forwarded: it goes direct and the profiles do not apply",

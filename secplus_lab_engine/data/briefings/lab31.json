@@ -1,0 +1,35 @@
+{
+  "lab": 31,
+  "ticket": "SEC-31014",
+  "type": "Security incident",
+  "priority": "P1",
+  "requested_by": "Marta Kowalczyk, Security Operations Lead",
+  "title": "Overnight sign-in alerts at Kestrel Ridge Logistics: find what happened and decide who to block",
+  "situation": "Kestrel Ridge Logistics, a fictional company, got several identity alerts overnight. The security team exported one day of Microsoft Entra ID (formerly Azure Active Directory) logs: 38 sign-in log records and 4 audit log entries covering 12 users. One account was already confirmed as compromised after a phishing report last week. Microsoft Entra ID Protection has scored each sign-in with a user risk and a sign-in risk. Some records arrived incomplete.",
+  "your_task": [
+    "Check every sign-in record and report any that has no timestamp or no IP address instead of trusting it.",
+    "Find password spray (one IP address, many users, wrong passwords), brute force (one user, many wrong passwords), multifactor authentication (MFA) fatigue (many denied prompts, then a success), legacy protocol use and impossible travel, using the time windows in the policy.",
+    "Read the audit log for privileged directory role assignments, such as a new Global Administrator.",
+    "Decide the ID Protection response for each user: block and revoke sessions, require a secure password change, require MFA, or no action.",
+    "Write down which log table and column you would query in Kusto Query Language (KQL) to find each pattern again, and where the logs must be sent to keep them."
+  ],
+  "why_it_matters": "Attackers who already have a password often only need one tired 'approve' on an MFA prompt. If the team resets the password but does not revoke sessions, the attacker keeps working with a stolen token. If logs are not sent to a Log Analytics workspace, the evidence is deleted after the built-in 30 days.",
+  "done_when": [
+    "The 2 incomplete records are listed with what is missing.",
+    "Every detection names its subject (IP address, user or audit entry), its records and the threshold it crossed.",
+    "Every one of the 12 users has a response with the rule that decided it.",
+    "A diagnostic setting to a Log Analytics workspace is recommended so the hunts can run as KQL queries and workbooks."
+  ],
+  "glossary": {
+    "Sign-in log": "The Microsoft Entra record of each sign-in attempt: who, when, from which IP address and app, and the result code.",
+    "Audit log": "The Microsoft Entra record of changes in the directory, such as adding a user to a role.",
+    "ResultType": "The column in the sign-in log that holds the result code: 0 is success, 50126 is a wrong password, 500121 is a failed MFA step.",
+    "User risk and sign-in risk": "ID Protection's estimate that the account itself is compromised (user risk) or that one sign-in was not made by its owner (sign-in risk).",
+    "Password spray": "Trying a few common passwords against many accounts from one place so no single account locks out.",
+    "MFA fatigue": "Sending a user prompt after prompt until they approve one just to make it stop.",
+    "Legacy authentication": "Older mail protocols such as IMAP4 and Authenticated SMTP that send a password and cannot do MFA.",
+    "Log Analytics workspace": "An Azure Monitor store where logs are kept for as long as you choose and queried with Kusto Query Language (KQL) and workbooks."
+  },
+  "job_roles": ["Identity and Access Administrator", "IAM Analyst", "Security Operations (SOC) Analyst", "Identity Threat Detection Engineer"],
+  "talking_point": "Reviewed 38 sign-in records and 4 audit entries for 12 users: reported 2 records with a missing timestamp or IP address, raised 8 detections (a password spray from one IP address across 4 accounts, a brute-force run, an MFA fatigue attack that ended in a Global Administrator grant, 2 legacy-protocol users, an impossible-travel pair and 2 privileged role assignments), and applied ID Protection responses: blocked and revoked sessions for 2 users, required a secure password change for 1, required MFA for 3 and closed 6 with no action."
+}

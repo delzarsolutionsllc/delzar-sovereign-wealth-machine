@@ -1,0 +1,35 @@
+{
+  "lab": 28,
+  "ticket": "IAM-40828",
+  "type": "Change request",
+  "priority": "P2",
+  "requested_by": "Dana Whitcombe, Head of IT Security",
+  "title": "Clear the app consent queue and clean up risky app permissions before the security audit",
+  "situation": "Staff at Fernhill Example Ltd keep connecting third-party apps to their Microsoft 365 accounts. Ten apps are waiting for a consent decision, and the security team suspects that some apps approved in past years can still read mail or change the directory. The tenant lets users consent only to apps from verified publishers that ask for low-impact permissions, and the admin consent workflow sends everything else to three reviewers.",
+  "your_task": [
+    "Decide each of the ten consent requests: can the user consent alone, does it need an administrator, or must it be blocked?",
+    "Check which permissions each app asks for on Microsoft Graph, whether they are delegated or application permissions, and how risky each one is.",
+    "Send every request that needs an administrator to the admin consent workflow reviewers who actually hold a role that can grant it.",
+    "Review the ten app grants already in the tenant and mark each one to revoke, to review with its owner, or OK.",
+    "Treat any permission you do not recognise as critical and any missing detail as the risky option."
+  ],
+  "why_it_matters": "An app that a user approves keeps its access long after the user forgets it. Attackers use fake apps to win access to mailboxes and the directory without stealing a password (an illicit consent grant), so consent rules and regular grant reviews are a core identity control.",
+  "done_when": [
+    "All ten requests have an outcome, the rule that decided it and a written reason.",
+    "Every request needing an administrator lists the reviewers who can approve it, riskiest request first.",
+    "All ten existing grants are marked REVOKE_GRANT, REVIEW or OK with reasons.",
+    "The revoke list is ready for the identity team to remove in Microsoft Entra ID."
+  ],
+  "glossary": {
+    "Open Authorization (OAuth)": "The standard that lets an app get limited access to your data without ever seeing your password.",
+    "Consent": "The approval, by a user or an administrator, that gives an app the permissions it asked for.",
+    "Microsoft Graph": "The single programming interface (API, application programming interface) apps use to read and change Microsoft 365 and Microsoft Entra data.",
+    "Delegated permission": "Access the app uses on behalf of a signed-in user, never more than that user could do.",
+    "Application permission": "Access the app uses as itself with no user present, usually across the whole organisation; only an administrator can grant it.",
+    "Admin consent workflow": "A Microsoft Entra setting that lets a user request an app they cannot approve, sending the request to named reviewers.",
+    "Publisher verification": "A badge showing that the app's developer proved who they are to Microsoft.",
+    "Microsoft Defender for Cloud Apps": "Microsoft's cloud access security broker (CASB), whose app governance feature watches app permissions and can ban risky apps."
+  },
+  "job_roles": ["Identity and Access Administrator", "Microsoft 365 Administrator", "Cloud Security Analyst", "IAM Engineer"],
+  "talking_point": "Triaged 10 OAuth app consent requests under a verified-publisher, low-impact consent policy: 2 users could consent themselves, 5 went to the admin consent workflow (the 1 asking for Microsoft Graph application permissions routed only to the Privileged Role Administrator) and 3 were blocked, including an unverified app asking for RoleManagement.ReadWrite.Directory; then reviewed 10 existing grants and revoked 3 (a user-consented Mail.Read and Mail.Send app, an unverified app with tenant-wide file access and an unused tool still holding Directory.ReadWrite.All), sent 5 back to their owners for review and kept 2."
+}

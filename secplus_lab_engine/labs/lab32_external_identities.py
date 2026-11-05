@@ -460,7 +460,7 @@ def build_challenges(policies: dict, data: dict) -> list:
                                    "instead of prompting again", objective="2.2"))
     qs.append(Question(prompt="Which external collaboration model needs both organisations to allow it, "
                               "and creates no guest account?",
-                       choices=["B2B direct connect", "B2B collaboration", "Microsoft Entra External ID for customers",
+                       choices=["B2B direct connect", "B2B collaboration", "customer sign-up in an external tenant",
                                 "self-service sign-up"],
                        answer="B2B direct connect", explanation=cfg["concepts"]["B2B direct connect"], objective="1.3"))
     for term in ("cross-tenant access settings", "inbound trust settings", "organizational settings", "sponsor",

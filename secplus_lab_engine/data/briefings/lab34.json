@@ -1,0 +1,33 @@
+{
+  "lab": 34,
+  "ticket": "NET-43418",
+  "type": "Change validation",
+  "priority": "P2",
+  "requested_by": "Priya Okafor, Head of Infrastructure",
+  "title": "Validate the Global Secure Access rollout before the VPN is switched off",
+  "situation": "Harrowgate Example Freight (fictional) is replacing its virtual private network (VPN) with Microsoft Entra Global Secure Access, Microsoft's Security Service Edge (SSE). Microsoft Entra Private Access publishes four internal apps (three per-app enterprise applications and Quick Access) through three connector groups, and Microsoft Entra Internet Access filters web traffic through security profiles linked by Conditional Access. The pilot logged 16 traffic flows from 7 users on 8 laptops, and the help desk says some people cannot reach internal apps while others are browsing unfiltered.",
+  "your_task": [
+    "Check each traffic forwarding profile (Microsoft traffic, Internet Access, Private Access) is enabled and assigned to the right users and groups.",
+    "For every flow, decide whether the Global Secure Access client tunnels it, a web content filter blocks it, a private destination has no application segment, the connector group is down, or the traffic bypasses the service.",
+    "Confirm which security profile and web content filtering rule decided each internet flow, including the baseline profile.",
+    "Run the health check: connector groups below two healthy connectors, overlapping application segments, and profiles that reach nobody.",
+    "Report the fixes needed before the VPN is retired."
+  ],
+  "why_it_matters": "Turning off the VPN only works if every user's private traffic reaches a segment with healthy connectors, and every device actually runs the client. A device without the client, or a security profile nobody is linked to, looks protected on paper but is not.",
+  "done_when": [
+    "All 16 flows have an outcome, the check that decided it and a written reason.",
+    "Every health finding names its target and severity.",
+    "The fix list covers the client gaps, the missing segment and app assignment, the failed connector group and the unlinked security profile."
+  ],
+  "glossary": {
+    "Security Service Edge (SSE)": "A cloud service that sits between users and the apps they reach, inspecting and controlling that traffic; Global Secure Access is Microsoft's SSE.",
+    "Global Secure Access client": "Software on the device that captures the traffic the forwarding profiles select and sends it to Microsoft's edge.",
+    "Traffic forwarding profile": "A setting that decides which kind of traffic (Microsoft, internet or private) is tunneled, and for which users.",
+    "Application segment": "One destination in a Private Access app: a name or IP range plus ports and protocol.",
+    "Connector group": "A set of small agents inside the private network that carry Private Access traffic to internal servers.",
+    "Quick Access": "One broad Private Access app used to replace a VPN quickly, before moving to per-app access.",
+    "Security profile": "A container of web content filtering policies that Conditional Access links to users."
+  },
+  "job_roles": ["Identity and Access Administrator", "Network Security Engineer", "Cloud Security Engineer", "Zero Trust Architect"],
+  "talking_point": "Validated a Global Secure Access rollout across 16 traffic flows: 6 tunneled (1 Microsoft, 2 allowed internet, 3 Private Access), 7 blocked (4 by web content filtering, 2 with no matching application segment, 1 by a connector group with no healthy connector) and 3 bypassed the service (2 devices without the client, 1 user not assigned to the Internet Access profile), and the health check raised 4 findings: 2 under-redundant connector groups, a Quick Access wildcard overlapping the ERP segment and a security profile no enabled Conditional Access policy links."
+}

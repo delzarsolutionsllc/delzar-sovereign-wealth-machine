@@ -534,7 +534,7 @@ def generate_scenario(rng, policies: dict) -> dict:
         },
         "custom_strengths": {"custom_keys": {"name": "Approved Keys", "combinations": ["fido2", "password,hardwareOath"],
                                              "fido2_allowed_aaguids": ["aaaa-1111"]}},
-        "sspr": {"enabled_for": "selected", "groups": ["Staff", "Contractors"], "methods_required": rng.choice([1, 2]),
+        "sspr": {"enabled_for": "selected", "groups": ["Staff", "Contractors"], "methods_required": 2,
                  "allowed_methods": ["mobileApp", "mobilePhone", "email", "securityQuestions"]},
         "tap": {"min_lifetime_minutes": 60, "max_lifetime_minutes": rng.choice([240, 480]),
                 "default_lifetime_minutes": 60, "one_time_only": rng.choice([True, False])},
