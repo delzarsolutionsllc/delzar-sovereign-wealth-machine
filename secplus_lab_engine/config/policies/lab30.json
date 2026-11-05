@@ -1,0 +1,43 @@
+{
+  "hybrid_identity": {
+    "_comment": "Lab 30 (SC-300 1.4, 2.1). Feature support reflects Microsoft Learn's cloud sync vs Connect Sync comparison as understood in 2026; re-check the comparison table before relying on a single row.",
+    "default_auth_method": "PASSWORD_HASH_SYNC",
+    "default_sync_tool": "MICROSOFT_ENTRA_CLOUD_SYNC",
+    "connect_only_features": [
+      "pass_through_authentication",
+      "federation_with_ad_fs",
+      "device_sync_hybrid_join",
+      "device_writeback",
+      "merge_identities_across_forests",
+      "advanced_custom_sync_rules"
+    ],
+    "cloud_sync_supported_features": [
+      "password_hash_sync",
+      "password_writeback",
+      "exchange_hybrid_writeback",
+      "group_provisioning_to_ad",
+      "multiple_disconnected_forests",
+      "directory_extension_attributes"
+    ],
+    "min_pta_agents": 3,
+    "min_provisioning_agents": 3,
+    "sync_stale_after_minutes": 180,
+    "staged_rollout": {
+      "max_initial_group_members": 200,
+      "max_groups_per_feature": 10,
+      "supported_features": ["password_hash_sync", "pass_through_authentication", "certificate_based_authentication"],
+      "unsupported_group_types": ["dynamic"],
+      "nested_groups_supported": false
+    },
+    "concepts": {
+      "password hash synchronization": "A sign-in method where a hash of each user's on-premises password hash is copied to Microsoft Entra ID, so the cloud can check passwords on its own.",
+      "pass-through authentication": "A sign-in method where Microsoft Entra ID hands each password check to lightweight agents on-premises, which ask Active Directory directly.",
+      "federation": "A sign-in method where Microsoft Entra ID trusts a separate identity provider, such as AD FS, to authenticate users and send back a signed token.",
+      "Microsoft Entra Cloud Sync": "A sync service run from the cloud that uses lightweight provisioning agents on-premises, suited to disconnected forests and simpler needs.",
+      "Microsoft Entra Connect Sync": "The full on-premises sync server with the widest feature set, including pass-through authentication, federation set-up and device sync.",
+      "staged rollout": "A way to move chosen groups of users from federated sign-in to cloud authentication before converting the whole domain.",
+      "duplicate attribute resiliency": "The Microsoft Entra behaviour that quarantines a clashing UPN or proxy address on the newer object instead of failing the whole sync.",
+      "leaked credential detection": "A Microsoft Entra ID Protection check that compares synced password hashes with credentials found in breach dumps, which needs password hash sync."
+    }
+  }
+}

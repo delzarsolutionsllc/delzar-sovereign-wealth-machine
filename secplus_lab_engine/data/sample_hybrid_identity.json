@@ -1,0 +1,75 @@
+{
+  "_description": "Larkspur Freight Group (fictional) is consolidating the identity estates of itself and the companies it has bought into one Microsoft Entra ID tenant. Part 1 lists each business unit's requirements; Part 2 is the first sync health check of the main Larkspur forest. All names are fictional.",
+  "organisations": [
+    {"id": "P01", "name": "Larkspur Head Office", "forests": 1, "disconnected_forests": false, "features": ["password_writeback"],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": true, "resilience_required": true},
+    {"id": "P02", "name": "Wrenfield Haulage (acquired)", "forests": 3, "disconnected_forests": true, "features": [],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": true, "resilience_required": false},
+    {"id": "P03", "name": "Larkspur Defence Logistics", "forests": 1, "disconnected_forests": false, "features": [],
+     "passwords_must_not_leave_onprem": true, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": true, "resilience_required": true},
+    {"id": "P04", "name": "Larkspur Depots (shift workers)", "forests": 1, "disconnected_forests": false, "features": [],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": true, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": false, "resilience_required": true},
+    {"id": "P05", "name": "Pellow Customs Brokers", "forests": 1, "disconnected_forests": false, "features": [],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": true,
+     "existing_adfs": true, "needs_leaked_credential_detection": true, "resilience_required": true},
+    {"id": "P06", "name": "Larkspur Engineering", "forests": 1, "disconnected_forests": false, "features": ["device_sync_hybrid_join"],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": true, "resilience_required": false},
+    {"id": "P07", "name": "Fernhill Cold Chain (acquired)", "forests": 2, "disconnected_forests": true, "features": ["device_writeback"],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": false, "resilience_required": false},
+    {"id": "P08", "name": "Larkspur Retail Parcels", "forests": 2, "disconnected_forests": false, "features": ["exchange_hybrid_writeback", "password_writeback"],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "needs_leaked_credential_detection": true, "resilience_required": true},
+    {"id": "P09", "name": "Larkspur Finance", "forests": 1, "disconnected_forests": false, "features": [],
+     "passwords_must_not_leave_onprem": false, "onprem_signin_policies": false, "adfs_third_party_mfa": false,
+     "existing_adfs": true, "needs_leaked_credential_detection": true, "resilience_required": true},
+    {"id": "P10", "name": "Tollgate Brokerage (acquired)", "forests": 1, "features": ["legacy_attribute_flow_x"],
+     "passwords_must_not_leave_onprem": false, "adfs_third_party_mfa": false, "needs_leaked_credential_detection": true},
+    {"id": "P11", "name": "Larkspur Government Contracts", "forests": 1, "disconnected_forests": false, "features": [],
+     "passwords_must_not_leave_onprem": true, "onprem_signin_policies": false, "adfs_third_party_mfa": true,
+     "existing_adfs": true, "needs_leaked_credential_detection": false, "resilience_required": true}
+  ],
+  "health": {
+    "scope_ous": ["OU=Staff,DC=corp,DC=larkspur,DC=example", "OU=Contractors,DC=corp,DC=larkspur,DC=example"],
+    "verified_domains": ["larkspur.example"],
+    "cloud_objects": [
+      {"id": "C1", "upn": "sam.okoro@larkspur.example", "proxy_addresses": ["SMTP:sam.okoro@larkspur.example"]}
+    ],
+    "objects": [
+      {"id": "O01", "dn": "CN=Ivy Marsh,OU=Staff,DC=corp,DC=larkspur,DC=example", "upn": "ivy.marsh@larkspur.example",
+       "proxy_addresses": ["SMTP:ivy.marsh@larkspur.example", "smtp:accounts@larkspur.example"]},
+      {"id": "O02", "dn": "CN=Tom Reyes,OU=Leavers,DC=corp,DC=larkspur,DC=example", "upn": "tom.reyes@larkspur.example",
+       "proxy_addresses": ["SMTP:tom.reyes@larkspur.example"]},
+      {"id": "O03", "dn": "CN=Sam Okoro,OU=Staff,DC=corp,DC=larkspur,DC=example", "upn": "sam.okoro@larkspur.example",
+       "proxy_addresses": ["SMTP:s.okoro@larkspur.example"]},
+      {"id": "O04", "dn": "CN=Nia Patel,OU=Contractors,DC=corp,DC=larkspur,DC=example", "upn": "nia.patel@larkspur.example",
+       "proxy_addresses": ["SMTP:nia.patel@larkspur.example", "smtp:ACCOUNTS@larkspur.example"]},
+      {"id": "O05", "dn": "CN=Leo Grant,OU=Staff,DC=corp,DC=larkspur,DC=example", "upn": "leo.grant@corp.larkspur.local",
+       "proxy_addresses": ["SMTP:leo.grant@larkspur.example"]},
+      {"id": "O06", "dn": "CN=Ivy Marsh (old),OU=Disabled,DC=corp,DC=larkspur,DC=example", "upn": "ivy.marsh@larkspur.example",
+       "proxy_addresses": []},
+      {"id": "O07", "upn": "kiosk01@larkspur.example", "proxy_addresses": []}
+    ],
+    "agent_sets": [
+      {"id": "A01", "type": "pta", "agents": [{"host": "lk-pta01", "status": "active"}, {"host": "lk-pta02", "status": "active"},
+                                            {"host": "lk-pta03", "status": "inactive"}]},
+      {"id": "A02", "type": "pta", "agents": [{"host": "gc-pta01", "status": "active"}, {"host": "gc-pta02", "status": "active"},
+                                            {"host": "gc-pta03", "status": "active"}]},
+      {"id": "A03", "type": "provisioning", "agents": [{"host": "wf-cs01", "status": "active"}]}
+    ],
+    "staged_rollout_groups": [
+      {"id": "G01", "group": "SR-PHS-Pilot", "feature": "password_hash_sync", "group_type": "assigned", "nested": false, "initial_members": 200},
+      {"id": "G02", "group": "SR-PHS-Wave2", "feature": "password_hash_sync", "group_type": "assigned", "nested": false, "initial_members": 850},
+      {"id": "G03", "group": "SR-All-Finance", "feature": "password_hash_sync", "group_type": "dynamic", "nested": false, "initial_members": 120}
+    ],
+    "sync_servers": [
+      {"id": "S01", "host": "lk-sync01", "minutes_since_last_sync": 24},
+      {"id": "S02", "host": "pl-sync01", "minutes_since_last_sync": 1440}
+    ]
+  }
+}

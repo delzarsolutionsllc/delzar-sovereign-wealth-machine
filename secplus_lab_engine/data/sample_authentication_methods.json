@@ -1,0 +1,67 @@
+{
+  "_description": "Larkspur Example Health (fictional) is moving administrators to phishing-resistant sign-in. This export holds its authentication methods policy, a custom authentication strength for the finance app, the SSPR and Temporary Access Pass settings, 10 users, 15 sign-in attempts checked by Conditional Access, and 8 Temporary Access Pass requests.",
+  "tenant": {
+    "name": "Larkspur Example Health",
+    "methods": {
+      "fido2": {"state": "enabled", "include": ["all_users"], "exclude": []},
+      "windowsHelloForBusiness": {"state": "enabled", "include": ["all_users"], "exclude": [], "_comment": "Configured through Intune / Windows policy in real tenants; listed here so the strength check can see it."},
+      "x509Certificate": {"state": "enabled", "include": ["Clinicians"], "exclude": []},
+      "microsoftAuthenticator": {"state": "enabled", "include": ["Staff", "Contractors"], "exclude": [], "modes": {"Staff": "any", "Contractors": "push"}},
+      "sms": {"state": "enabled", "include": ["Contractors", "Staff"], "exclude": ["Admins"]},
+      "voice": {"state": "disabled", "include": ["all_users"], "exclude": []},
+      "hardwareOath": {"state": "enabled", "include": ["Finance"], "exclude": []},
+      "softwareOath": {"state": "disabled", "include": [], "exclude": []},
+      "temporaryAccessPass": {"state": "enabled", "include": ["Staff", "Admins"], "exclude": []},
+      "email": {"state": "enabled", "include": ["all_users"], "exclude": []}
+    },
+    "custom_strengths": {
+      "finance_keys": {
+        "name": "Larkspur Finance Keys",
+        "combinations": ["fido2", "windowsHelloForBusiness", "password,hardwareOath"],
+        "fido2_allowed_aaguids": ["cb69481e-8ff7-4039-93ec-0a2729a154a8", "ee882879-721c-4913-9775-3dfcce97072a"]
+      }
+    },
+    "sspr": {"enabled_for": "selected", "groups": ["Staff", "Contractors"], "methods_required": 2,
+             "allowed_methods": ["mobileApp", "mobilePhone", "email", "securityQuestions"]},
+    "tap": {"min_lifetime_minutes": 60, "max_lifetime_minutes": 480, "default_lifetime_minutes": 60, "one_time_only": true}
+  },
+  "users": [
+    {"id": "ana.ruiz", "name": "Ana Ruiz", "groups": ["Admins", "Staff"], "roles": ["Global Administrator"], "registered": ["fido2", "microsoftAuthenticator", "email"]},
+    {"id": "ben.okafor", "name": "Ben Okafor", "groups": ["Admins", "Staff"], "roles": ["Helpdesk Administrator"], "registered": ["fido2", "microsoftAuthenticator", "securityQuestions"]},
+    {"id": "cara.lind", "name": "Cara Lind", "groups": ["Staff", "Clinicians"], "roles": [], "registered": ["microsoftAuthenticator", "sms", "voice", "x509Certificate"]},
+    {"id": "dev.patel", "name": "Dev Patel", "groups": ["Contractors"], "roles": [], "registered": ["sms", "voice", "microsoftAuthenticator"]},
+    {"id": "eli.moreau", "name": "Eli Moreau", "groups": ["Staff", "Finance"], "roles": [], "registered": []},
+    {"id": "fay.chen", "name": "Fay Chen", "groups": ["Staff"], "roles": [], "registered": ["fido2", "windowsHelloForBusiness"]},
+    {"id": "gus.berg", "name": "Gus Berg", "groups": ["Staff", "Finance"], "roles": [], "registered": ["hardwareOath", "email", "securityQuestions"]},
+    {"id": "hana.sato", "name": "Hana Sato", "groups": ["Interns"], "roles": [], "registered": ["email", "sms"]},
+    {"id": "ivan.novak", "name": "Ivan Novak", "groups": ["Staff"], "roles": [], "registered": ["officePhone", "email"]},
+    {"id": "jo.reyes", "name": "Jo Reyes", "groups": ["Staff"], "roles": [], "registered": ["sms", "voice"]}
+  ],
+  "sign_ins": [
+    {"id": "S01", "user": "ana.ruiz", "app": "Azure portal", "ca_policy": "CA01 Admins need phishing-resistant MFA", "required_strength": "phishing_resistant_mfa", "method": "fido2", "aaguid": "cb69481e-8ff7-4039-93ec-0a2729a154a8"},
+    {"id": "S02", "user": "ana.ruiz", "app": "Azure portal", "ca_policy": "CA01 Admins need phishing-resistant MFA", "required_strength": "phishing_resistant_mfa", "method": "password,sms"},
+    {"id": "S03", "user": "ben.okafor", "app": "Entra admin center", "ca_policy": "CA01 Admins need phishing-resistant MFA", "required_strength": "phishing_resistant_mfa", "method": "deviceBasedPush"},
+    {"id": "S04", "user": "cara.lind", "app": "Patient records", "ca_policy": "CA02 Clinical apps need phishing-resistant MFA", "required_strength": "phishing_resistant_mfa", "method": "x509CertificateMultiFactor"},
+    {"id": "S05", "user": "cara.lind", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "x509CertificateSingleFactor"},
+    {"id": "S06", "user": "dev.patel", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "deviceBasedPush"},
+    {"id": "S07", "user": "dev.patel", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "password,microsoftAuthenticatorPush"},
+    {"id": "S08", "user": "dev.patel", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "sms"},
+    {"id": "S09", "user": "eli.moreau", "app": "Finance ERP", "ca_policy": "CA04 Finance app needs approved keys", "required_strength": "finance_keys", "method": "fido2", "aaguid": "00000000-1111-2222-3333-444444444444"},
+    {"id": "S10", "user": "gus.berg", "app": "Finance ERP", "ca_policy": "CA04 Finance app needs approved keys", "required_strength": "finance_keys", "method": "password,hardwareOath"},
+    {"id": "S11", "user": "fay.chen", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "password,voice"},
+    {"id": "S12", "user": "fay.chen", "app": "HR portal", "ca_policy": "CA05 HR portal needs passwordless", "required_strength": "passwordless_mfa", "method": "temporaryAccessPassOneTime"},
+    {"id": "S13", "user": "ivan.novak", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "email"},
+    {"id": "S14", "user": "zed.unknown", "app": "Office 365", "ca_policy": "CA03 All users need MFA", "required_strength": "mfa", "method": "fido2"},
+    {"id": "S15", "user": "gus.berg", "app": "Legacy payroll", "ca_policy": "CA06 Legacy payroll (misconfigured)", "required_strength": "legacy_strength", "method": "windowsHelloForBusiness"}
+  ],
+  "tap_requests": [
+    {"id": "T01", "user": "cara.lind", "lifetime_minutes": 60, "one_time": true, "uses": 0, "minutes_since_issue": 10},
+    {"id": "T02", "user": "ben.okafor", "lifetime_minutes": 1440, "one_time": true, "uses": 0, "minutes_since_issue": 0},
+    {"id": "T03", "user": "ivan.novak", "lifetime_minutes": 120, "one_time": true, "uses": 1, "minutes_since_issue": 30},
+    {"id": "T04", "user": "dev.patel", "lifetime_minutes": 60, "one_time": true, "uses": 0, "minutes_since_issue": 5},
+    {"id": "T05", "user": "fay.chen", "lifetime_minutes": 120, "one_time": false, "uses": 0, "minutes_since_issue": 0},
+    {"id": "T06", "user": "gus.berg", "lifetime_minutes": 30, "one_time": true, "uses": 0, "minutes_since_issue": 0},
+    {"id": "T07", "user": "eli.moreau", "lifetime_minutes": 480, "one_time": true, "uses": 0, "minutes_since_issue": 0},
+    {"id": "T08", "user": "ana.ruiz", "lifetime_minutes": 60, "one_time": true, "uses": 0, "minutes_since_issue": 75}
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "lab": 32,
+  "ticket": "REQ-43232",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Dana Whitfield, Head of Partner Operations",
+  "title": "Check partner access settings, this week's guest invitations and stale guest accounts",
+  "situation": "Harbor Lane Example Ltd works with three partner companies, each with its own Microsoft Entra tenant: Cobalt Ridge Consulting, Larkspur Analytics and Quillfeather Media. Partners complain they are asked for multifactor authentication (MFA) twice, some cannot open the finance system, and a Teams shared channel with Cobalt Ridge stopped working for one user. At the same time, staff sent 6 guest invitations this week and 8 guest accounts are due for their lifecycle check.",
+  "your_task": [
+    "Read the cross-tenant access settings: the default settings, and the organisational settings for each partner tenant ID, including which home-tenant claims (MFA, compliant device, hybrid joined) are trusted.",
+    "Decide for each guest invitation whether the inviter is allowed to invite and whether the guest's email domain may be invited.",
+    "Work out what happens at each of the 12 external sign-ins: allowed, allowed with trusted home MFA, MFA required in the home or the resource tenant, or blocked.",
+    "Flag guest accounts that have been inactive too long, have no active sponsor, or never accepted their invitation, as REVIEW or REMOVE."
+  ],
+  "why_it_matters": "External users reach company data from tenants you do not control. Trusting the wrong partner's MFA, or keeping guest accounts nobody owns, gives attackers an easy way in, while settings that are too strict stop real partner work.",
+  "done_when": [
+    "Every invitation is INVITE_ALLOWED or INVITE_BLOCKED with the reason.",
+    "Every sign-in has an outcome and the rule that decided it, and unknown tenants are shown to use the default settings.",
+    "Every guest account is KEEP, REVIEW or REMOVE with the reason.",
+    "You can explain to the partners why each blocked or double-prompted sign-in happened."
+  ],
+  "glossary": {
+    "Business-to-business (B2B) collaboration": "Inviting people from another organisation as guest accounts in your directory so they can use your apps with their own sign-in.",
+    "B2B direct connect": "A two-way trust between two Microsoft Entra tenants for shared resources such as Teams shared channels, with no guest account created; both sides must allow it.",
+    "Cross-tenant access settings": "The Microsoft Entra settings that control inbound and outbound access with other tenants, with a default and an override per partner tenant ID.",
+    "Inbound trust settings": "Choices that let your Conditional Access accept MFA or device claims a partner user already earned in their home tenant.",
+    "Conditional Access": "Microsoft Entra policies that decide, at each sign-in, whether access is allowed, blocked or needs extra checks such as MFA.",
+    "Multifactor authentication (MFA)": "Signing in with two or more different kinds of proof, such as a password and a phone app approval.",
+    "Sponsor": "An employee who is accountable for a guest account and confirms whether it is still needed."
+  },
+  "job_roles": [
+    "Identity and Access Administrator",
+    "IAM Engineer",
+    "Microsoft 365 Administrator",
+    "Cloud Security Administrator"
+  ],
+  "talking_point": "Reviewed cross-tenant access for 3 partner organisations plus the default settings: decided 6 guest invitations (2 allowed, 4 blocked: one guest without an inviter role, one unknown inviter and two denied domains), evaluated 12 external sign-ins (1 allowed, 3 allowed on trusted home MFA, 1 sent home for MFA, 2 prompted for MFA in our tenant and 5 blocked, including an unknown tenant's B2B direct connect and a partner whose outbound setting did not allow it), and flagged 7 of 8 guest accounts (3 to review, 4 to remove)."
+}

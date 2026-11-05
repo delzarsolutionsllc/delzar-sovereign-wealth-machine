@@ -1,0 +1,113 @@
+{
+  "_description": "Kestrel Ridge Outfitters (fictional) runs Microsoft Entra entitlement management for finance, partner and sales access. Three catalogs hold six access packages; sixteen access requests arrived today and ten existing assignments need a lifecycle check. All companies and people are fictional. Day counts are relative to the scenario date (negative = in the past).",
+  "as_of": "2026-11-05",
+  "users": [
+    {"id": "U01", "name": "Maya Chen", "type": "member", "department": "Finance", "manager": "U05"},
+    {"id": "U02", "name": "Ravi Patel", "type": "member", "department": "Finance", "manager": "U05"},
+    {"id": "U03", "name": "Elena Ruiz", "type": "member", "department": "Sales", "manager": "U06"},
+    {"id": "U04", "name": "Tom Becker", "type": "member", "department": "Finance (CFO)", "manager": null},
+    {"id": "U05", "name": "Priya Nair", "type": "member", "department": "Finance", "manager": "U04"},
+    {"id": "U06", "name": "Jonas Weber", "type": "member", "department": "Supply Chain", "manager": "U04"},
+    {"id": "X01", "name": "Lena Okafor", "type": "external", "organization": "CO-BLUEFIN", "in_directory": true, "added_by_entitlement_management": true},
+    {"id": "X02", "name": "Sam Ito", "type": "external", "organization": "CO-HARBOR", "in_directory": true, "added_by_entitlement_management": true},
+    {"id": "X03", "name": "Dana Fox", "type": "external", "organization": "CO-QUILL", "in_directory": false},
+    {"id": "X04", "name": "Ade Mensah", "type": "external", "organization": "CO-BLUEFIN", "in_directory": true, "added_by_entitlement_management": true},
+    {"id": "X05", "name": "Kim Lee", "type": "external", "organization": null, "in_directory": false},
+    {"id": "X06", "name": "Noor Haddad", "type": "external", "organization": "CO-HARBOR", "in_directory": true, "added_by_entitlement_management": false}
+  ],
+  "connected_organizations": [
+    {"id": "CO-BLUEFIN", "name": "Bluefin Logistics", "domain": "bluefin-logistics.example", "state": "configured", "internal_sponsors": ["U06"], "external_sponsors": ["X01"]},
+    {"id": "CO-HARBOR", "name": "Harbor Audit LLP", "domain": "harbor-audit.example", "state": "configured", "internal_sponsors": ["U05"], "external_sponsors": []},
+    {"id": "CO-QUILL", "name": "Quillstone Design", "domain": "quillstone.example", "state": "proposed", "internal_sponsors": ["U03"], "external_sponsors": []}
+  ],
+  "catalogs": [
+    {"id": "CAT-FIN", "name": "Finance", "enabled_for_external_users": false, "resources": [
+      {"id": "APP-ERP-VEN", "type": "application", "name": "PayFlow ERP", "role": "Vendor Maintainer"},
+      {"id": "APP-ERP-PAY", "type": "application", "name": "PayFlow ERP", "role": "Payment Approver"},
+      {"id": "GRP-AP", "type": "group", "name": "Accounts Payable Clerks", "role": "Member"},
+      {"id": "SPO-FIN", "type": "sharepoint_site", "name": "Finance Close", "role": "Visitors"}
+    ]},
+    {"id": "CAT-PARTNER", "name": "Partner Collaboration", "enabled_for_external_users": true, "resources": [
+      {"id": "SPO-LOG", "type": "sharepoint_site", "name": "Logistics Partner Portal", "role": "Members"},
+      {"id": "GRP-SCP", "type": "group", "name": "Supply Chain Partners", "role": "Member"},
+      {"id": "APP-TRACK", "type": "application", "name": "ShipTrack", "role": "Viewer"}
+    ]},
+    {"id": "CAT-SALES", "name": "Sales", "enabled_for_external_users": true, "resources": [
+      {"id": "SPO-DEALS", "type": "sharepoint_site", "name": "Deal Room", "role": "Visitors"}
+    ]}
+  ],
+  "access_packages": [
+    {"id": "AP-VENDOR", "name": "Vendor Master Maintenance", "catalog": "CAT-FIN", "resources": ["APP-ERP-VEN", "SPO-FIN"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-VENDOR", "name": "Finance staff", "scope": {"type": "internal_users"},
+        "approval": {"stages": [{"approvers": ["manager"], "fallback": ["U04"]}]},
+        "require_justification": true, "expiry_days": 180, "access_review": {"every_days": 90, "reviewer": "manager"}}
+     ]},
+    {"id": "AP-PAYAPPROVE", "name": "Payment Approval", "catalog": "CAT-FIN", "resources": ["APP-ERP-PAY", "GRP-AP"], "incompatible_packages": ["AP-VENDOR"],
+     "policies": [
+       {"id": "POL-PAY", "name": "Finance staff, two-stage", "scope": {"type": "internal_users"},
+        "approval": {"stages": [{"approvers": ["manager"], "fallback": ["U04"]}, {"approvers": ["U04"], "fallback": ["U05"]}]},
+        "require_justification": true, "expiry_days": 90, "access_review": {"every_days": 30, "reviewer": "U04"}}
+     ]},
+    {"id": "AP-FINREAD", "name": "Finance Close Reader", "catalog": "CAT-FIN", "resources": ["SPO-FIN"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-FINREAD", "name": "All employees", "scope": {"type": "internal_users"},
+        "approval": {"stages": []}, "require_justification": false, "expiry_days": 365, "access_review": null}
+     ]},
+    {"id": "AP-AUDIT", "name": "External Audit Workspace", "catalog": "CAT-FIN", "resources": ["SPO-FIN"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-AUDIT", "name": "Audit partners", "scope": {"type": "all_connected_organizations"},
+        "approval": {"stages": [{"approvers": ["internal_sponsor"], "fallback": ["U05"]}]},
+        "require_justification": true, "expiry_days": 60, "access_review": null}
+     ]},
+    {"id": "AP-PARTNER", "name": "Logistics Partner Access", "catalog": "CAT-PARTNER", "resources": ["SPO-LOG", "GRP-SCP", "APP-TRACK"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-PARTNER-EXT", "name": "Bluefin staff", "scope": {"type": "connected_organizations", "organizations": ["CO-BLUEFIN"]},
+        "approval": {"stages": [{"approvers": ["external_sponsor"], "fallback": ["U06"]}]},
+        "require_justification": true, "expiry_days": 90, "access_review": {"every_days": 90, "reviewer": "internal_sponsor"}},
+       {"id": "POL-PARTNER-INT", "name": "Supply chain employees", "scope": {"type": "internal_users"},
+        "approval": {"stages": []}, "require_justification": false, "expiry_days": null, "access_review": null}
+     ]},
+    {"id": "AP-SHIPDATA", "name": "Shipment Data Feed", "catalog": "CAT-PARTNER", "resources": ["APP-TRACK"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-SHIP", "name": "Any connected partner", "scope": {"type": "all_connected_organizations"},
+        "approval": {"stages": []}, "require_justification": true, "expiry_days": 30, "access_review": null}
+     ]},
+    {"id": "AP-DEALS", "name": "Deal Room Guest", "catalog": "CAT-SALES", "resources": ["SPO-DEALS"], "incompatible_packages": [],
+     "policies": [
+       {"id": "POL-DEALS", "name": "Any external user", "scope": {"type": "any_external"},
+        "approval": {"stages": [{"approvers": ["internal_sponsor"], "fallback": []}]},
+        "require_justification": true, "expiry_days": 30, "access_review": {"every_days": 30, "reviewer": "U03"}}
+     ]}
+  ],
+  "requests": [
+    {"id": "R01", "requester": "U02", "package": "AP-FINREAD", "justification": ""},
+    {"id": "R02", "requester": "U01", "package": "AP-VENDOR", "justification": "Onboarding new suppliers for Q1"},
+    {"id": "R03", "requester": "U02", "package": "AP-PAYAPPROVE", "justification": "Cover payment runs in December"},
+    {"id": "R04", "requester": "U04", "package": "AP-VENDOR", "justification": "Covering vendor setup during the audit"},
+    {"id": "R05", "requester": "U01", "package": "AP-PAYAPPROVE", "justification": "Back-up approver for payment runs"},
+    {"id": "R06", "requester": "U03", "package": "AP-VENDOR", "justification": "asap"},
+    {"id": "R07", "requester": "X01", "package": "AP-PARTNER", "justification": "Weekly shipment planning with Kestrel"},
+    {"id": "R08", "requester": "U05", "package": "AP-VENDOR", "justification": "Fix supplier bank details backlog"},
+    {"id": "R09", "requester": "X06", "package": "AP-AUDIT", "justification": "FY2026 audit fieldwork"},
+    {"id": "R10", "requester": "X03", "package": "AP-DEALS", "justification": "Design review for the spring pitch"},
+    {"id": "R11", "requester": "U99", "package": "AP-FINREAD", "justification": "Need to read the close pack"},
+    {"id": "R12", "requester": "U03", "package": "AP-MARKETING", "justification": "Campaign assets for the launch"},
+    {"id": "R13", "requester": "U06", "package": "AP-PARTNER", "justification": ""},
+    {"id": "R14", "requester": "X03", "package": "AP-SHIPDATA", "justification": "Mock-ups need live shipment data"},
+    {"id": "R15", "requester": "X06", "package": "AP-SHIPDATA", "justification": "Sample shipments for audit testing"},
+    {"id": "R16", "requester": "X05", "package": "AP-DEALS", "justification": "Freelance copywriting for the pitch"}
+  ],
+  "assignments": [
+    {"id": "A01", "user": "U02", "package": "AP-VENDOR", "expires_in_days": 120},
+    {"id": "A02", "user": "U01", "package": "AP-FINREAD", "expires_in_days": 10},
+    {"id": "A03", "user": "X01", "package": "AP-SHIPDATA", "expires_in_days": 14},
+    {"id": "A04", "user": "X04", "package": "AP-PARTNER", "expires_in_days": -40},
+    {"id": "A05", "user": "X02", "package": "AP-SHIPDATA", "expires_in_days": -5},
+    {"id": "A06", "user": "X06", "package": "AP-DEALS", "expires_in_days": 20, "removed_days_ago": 60},
+    {"id": "A07", "user": "U06", "package": "AP-PARTNER", "expires_in_days": null},
+    {"id": "A08", "user": "U07", "package": "AP-FINREAD", "expires_in_days": 200},
+    {"id": "A09", "user": "U05", "package": "AP-PAYAPPROVE", "expires_in_days": 15},
+    {"id": "A10", "user": "U04", "package": "AP-FINREAD", "expires_in_days": 300}
+  ]
+}

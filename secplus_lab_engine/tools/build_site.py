@@ -48,7 +48,7 @@ DESKTOP_FILE = "Delzar-Certification-Academy.html"
 HEAD = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="{theme}">
-<meta name="description" content="Delzar Certification Academy: offline security and IAM labs with exam-style practice aligned to the CompTIA Security+ SY0-701 objectives. Not affiliated with CompTIA.">
+<meta name="description" content="Delzar Certification Academy: offline security and identity labs with exam-style practice aligned to the CompTIA Security+ SY0-701 and Microsoft SC-300 exam objectives. Not affiliated with CompTIA or Microsoft.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
@@ -161,8 +161,8 @@ def manifest() -> dict:
     return {
         "name": APP_NAME, "short_name": SHORT_NAME, "id": "./", "start_url": "./", "scope": "./",
         "display": "standalone", "background_color": BACKGROUND, "theme_color": THEME,
-        "description": "Offline security and IAM labs, exam-style practice aligned to the CompTIA Security+ SY0-701 objectives, daily review and an IAM career track. "
-                       "Not affiliated with or endorsed by CompTIA.",
+        "description": "Offline security and identity labs, exam-style practice aligned to the CompTIA Security+ SY0-701 and Microsoft SC-300 "
+                       "exam objectives, daily review and an IAM career track. Not affiliated with or endorsed by CompTIA or Microsoft.",
         "categories": ["education"],
         "icons": [{"src": f"icons/icon-{s}.png", "sizes": f"{s}x{s}", "type": "image/png", "purpose": "any"}
                   for s in ICON_SIZES]

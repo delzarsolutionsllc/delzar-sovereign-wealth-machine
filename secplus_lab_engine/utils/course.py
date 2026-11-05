@@ -76,9 +76,16 @@ def data_dir(kind: str, c: dict | None = None) -> Path:
 
 
 def lab_numbers(all_labs, c: dict | None = None) -> list[int]:
-    """The labs this course uses (Security+ uses all of them)."""
-    labs = (c or active()).get("labs", "all")
-    return sorted(all_labs) if labs == "all" else sorted(int(n) for n in labs if int(n) in all_labs)
+    """The labs this course uses. ``"all"`` (Security+) means every lab built for it: a lab module
+    may set ``COURSES = ("sc300",)`` to belong to other courses only."""
+    c = c or active()
+    labs = c.get("labs", "all")
+    if labs == "all":
+        def mine(n):
+            mod = all_labs[n][0] if isinstance(all_labs, dict) and isinstance(all_labs[n], tuple) else None
+            return c["code"] in getattr(mod, "COURSES", (c["code"],))
+        return sorted(n for n in all_labs if mine(n))
+    return sorted(int(n) for n in labs if int(n) in all_labs)
 
 
 def lab_objectives(n: int, default: list[str], c: dict | None = None) -> list[str]:

@@ -1,0 +1,56 @@
+{
+  "entitlement_management": {
+    "_comment": "Lab 27 (SC-300 4.1, 1.3). Entitlement management in Microsoft Entra ID Governance, written as a generic rule engine. Day counts are relative to the scenario date.",
+    "expiring_soon_days": 14,
+    "guest_removal_after_days": 30,
+    "min_justification_chars": 10,
+    "max_approval_stages": 2,
+    "scope_types": {
+      "internal_users": "members of this directory (employees); guests are not included",
+      "connected_organizations": "external users from the connected organizations listed on the policy",
+      "all_connected_organizations": "external users from any connected organization in the 'configured' state",
+      "any_external": "any external user, including people from organizations that are not connected yet",
+      "admin_only": "nobody can request; administrators assign directly"
+    },
+    "approver_tokens": {
+      "manager": "the requester's manager",
+      "internal_sponsor": "the internal sponsors of the requester's connected organization",
+      "external_sponsor": "the external sponsors of the requester's connected organization"
+    },
+    "rule_definitions": {
+      "unknown_requester": "requester is not a known user (deny by default)",
+      "unknown_package": "access package (or its catalog) does not exist (deny by default)",
+      "not_in_scope": "no assignment policy on the package lets this requester ask for it",
+      "catalog_not_external": "the catalog is not enabled for external users",
+      "sod_conflict": "requester already holds an access package listed as incompatible",
+      "missing_justification": "the policy requires a business justification and none (or too short) was given",
+      "approver_is_requester": "the only approver left is the requester, who can never approve their own request",
+      "no_approver": "no approver or fallback approver could be found for a stage",
+      "auto_approval": "the policy needs no approval, so access is delivered at once",
+      "single_stage": "the request waits for one approval stage",
+      "two_stage": "the request waits for two approval stages in order"
+    },
+    "assignment_outcomes": {
+      "ACTIVE": "assignment is delivered and not close to expiry",
+      "EXPIRING_SOON": "assignment ends within the warning window: the user should extend or lose access",
+      "EXPIRED": "assignment reached its end date and the access was removed",
+      "REMOVED": "assignment was ended early (by an administrator or an access review)",
+      "INVALID": "assignment points at an unknown user or package: remove it (deny by default)"
+    },
+    "guest_outcomes": {
+      "GUEST_ACTIVE": "external user still has at least one active assignment",
+      "GUEST_BLOCKED": "last assignment ended: blocked from sign-in, removal is scheduled",
+      "GUEST_REMOVAL_DUE": "last assignment ended at least the removal period ago: delete the guest account",
+      "GUEST_NOT_MANAGED": "guest was invited outside entitlement management, so these lifecycle settings do not apply: review it another way"
+    },
+    "concepts": {
+      "catalog": "A container that holds resources (groups, applications, SharePoint sites) and the access packages built from them, with its own owners.",
+      "access package": "A bundle of resource roles that a user requests and receives together, for example a site plus a group plus an app role.",
+      "assignment policy": "The rules on an access package that say who can request it, who approves, whether a justification is needed and when access expires.",
+      "connected organization": "A partner directory or domain registered so its users can request access packages; it is either configured or proposed.",
+      "incompatible access package": "A package named in another package's incompatible list, so anyone already holding it cannot request that other package; listing it both ways enforces separation of duties.",
+      "fallback approver": "An approver used when the normal approver for a stage cannot be found, such as a requester with no manager.",
+      "external user lifecycle": "Settings that block a guest added by entitlement management when their last assignment ends and delete them after a set number of days."
+    }
+  }
+}

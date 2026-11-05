@@ -62,7 +62,10 @@ Gate: validator OK, tests green, reviewer reports read and any "unsure" items li
 
 ## Phase 5: Hands-on labs (optional but this platform's differentiator)
 
-Each lab is a pure, deny-by-default engine module with `TITLE`, `OBJECTIVES`, `INSIGHT`, `run_demo`, `build_challenges`, sample data in `data/`, policy in `config/default_policies.json`, a seeded generator in `utils/scenario_generator.py`, tests, a plain-English work ticket (`data/briefings/labNN.json`) and a case study. Build labs for the objectives that are about doing (configuring, triaging, deciding), not memorising.
+Each lab is a pure, deny-by-default engine module with `TITLE`, `OBJECTIVES`, `INSIGHT`, `run_demo`, `build_challenges`, sample data in `data/`, a plain-English work ticket (`data/briefings/labNN.json`, ticket prefix REQ/INC/CHG/AUD/PRJ) and tests. Build labs for the objectives that are about doing (configuring, triaging, deciding), not memorising. Labs are built in parallel without file conflicts:
+1. One subagent per lab with `references/lab_builder_brief.md` filled in. Each creates only its module (with `COURSES = ("<code>",)` and `generate_scenario(rng, policies)`), sample data, `config/policies/labNN.json` (merged by `load_policies`), briefing and test file.
+2. You register them centrally: imports and `LABS` in `labs/__init__.py` (generators self-register), the course's `labs` map in `course.json` (lab -> objective codes), `data/career_tracks.json`, and the course test (every objective covered by a lab; course-only labs stay out of other courses).
+3. Read every builder's "unsure" list and pass it to the owner.
 
 ## Phase 6: Glossary, acronyms and vocabulary
 
@@ -99,5 +102,6 @@ Run all of these and fix what fails:
 - `references/glossary_brief.md` - acronym / vocabulary writer (Phase 6)
 - `references/playlist_index_brief.md` - YouTube playlist indexer (Phase 6)
 - `references/lab_pbq_brief.md` - lab-backed PBQ generator (Phase 4)
+- `references/lab_builder_brief.md` - one hands-on lab per subagent (Phase 5)
 - `references/platform_checklist.md` - generalising the engine for a second course (Phase 1)
 - `references/verification_scripts.md` - Playwright and axe-core checks (Phase 8)

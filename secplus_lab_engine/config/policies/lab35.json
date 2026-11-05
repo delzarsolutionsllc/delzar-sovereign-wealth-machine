@@ -1,0 +1,67 @@
+{
+  "tenant_delegation": {
+    "_comment": "Lab 35 (SC-300 1.1/1.2). Role facts follow Microsoft Learn 'Least privileged roles by task', 'Privileged roles and permissions', 'Assign roles with administrative unit scope' and 'Restricted management administrative units' as read in 2026. Re-check the 'privileged' labels against Learn before an exam: Microsoft adds roles and labels regularly.",
+    "max_global_admins": 5,
+    "min_emergency_accounts": 2,
+    "unknown_principal_user_type": "Guest",
+    "roles": {
+      "Global Administrator":               {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "Privileged Role Administrator":      {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "Privileged Authentication Administrator": {"privileged": true, "au_scopable": true, "object_scopable": false},
+      "Security Administrator":             {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "Security Reader":                    {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "Conditional Access Administrator":   {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "User Administrator":                 {"privileged": true,  "au_scopable": true,  "object_scopable": false},
+      "Helpdesk Administrator":             {"privileged": true,  "au_scopable": true,  "object_scopable": false},
+      "Password Administrator":             {"privileged": true,  "au_scopable": true,  "object_scopable": false},
+      "Authentication Administrator":       {"privileged": true,  "au_scopable": true,  "object_scopable": false},
+      "Application Administrator":          {"privileged": true,  "au_scopable": false, "object_scopable": true},
+      "Cloud Application Administrator":    {"privileged": true,  "au_scopable": false, "object_scopable": true},
+      "Application Developer":              {"privileged": true,  "au_scopable": false, "object_scopable": false},
+      "Groups Administrator":               {"privileged": false, "au_scopable": true,  "object_scopable": false},
+      "License Administrator":              {"privileged": false, "au_scopable": true,  "object_scopable": false},
+      "Guest Inviter":                      {"privileged": false, "au_scopable": false, "object_scopable": false}
+    },
+    "tasks": {
+      "reset_password":            {"role": "Password Administrator", "description": "reset passwords for non-administrator users"},
+      "reset_password_and_sign_out": {"role": "Helpdesk Administrator", "description": "reset non-admin passwords and force sign-out (invalidate refresh tokens)"},
+      "reset_mfa_methods":         {"role": "Authentication Administrator", "description": "reset or re-register authentication methods for non-admin users"},
+      "manage_users":              {"role": "User Administrator", "description": "create, update and delete users"},
+      "manage_groups":             {"role": "Groups Administrator", "description": "create and manage groups and group settings"},
+      "assign_licenses":           {"role": "License Administrator", "description": "assign and remove product licences on users and groups"},
+      "register_apps":             {"role": "Application Developer", "description": "create app registrations when 'Users can register applications' is set to No"},
+      "configure_enterprise_app":  {"role": "Cloud Application Administrator", "description": "configure single sign-on for one enterprise application"},
+      "update_app_credentials":    {"role": "custom", "custom_role": "App Credential Operator", "permissions": ["microsoft.directory/applications/credentials/update", "microsoft.directory/applications/basic/read"], "description": "rotate the secrets and certificates of one app registration"},
+      "manage_conditional_access": {"role": "Conditional Access Administrator", "description": "create and change Conditional Access policies"},
+      "invite_guests":             {"role": "Guest Inviter", "description": "invite external (B2B) guest users"},
+      "read_security_reports":     {"role": "Security Reader", "description": "read security reports and alerts"},
+      "manage_security_policies":  {"role": "Security Administrator", "description": "manage security settings and policies"}
+    },
+    "finding_severity": ["PRIVILEGED_ROLE_ON_GUEST", "GLOBAL_ADMIN_EXCESS", "RESTRICTED_AU_MEMBER", "ASSIGNMENT_TOO_BROAD"],
+    "plan_definitions": {
+      "TENANT": "assign the role at tenant (directory-wide) scope",
+      "ADMINISTRATIVE_UNIT": "assign the role scoped to one administrative unit",
+      "OBJECT": "assign the role scoped to one specific object, such as a single application",
+      "CUSTOM_ROLE": "build a custom role with only the listed permissions",
+      "ESCALATE": "make no assignment; send the request to the identity team"
+    },
+    "finding_definitions": {
+      "PRIVILEGED_ROLE_ON_GUEST": "an external guest holds a privileged directory role",
+      "GLOBAL_ADMIN_EXCESS": "the tenant has more Global Administrators than policy allows, or too few emergency access accounts",
+      "RESTRICTED_AU_MEMBER": "the admin must manage members of a restricted management administrative unit without a role scoped to it",
+      "ASSIGNMENT_TOO_BROAD": "the role or its scope is wider than the job needs",
+      "DYNAMIC_GROUP_RULE": "a dynamic membership rule includes or excludes the wrong users",
+      "OK": "no finding"
+    },
+    "concepts": {
+      "administrative unit": "A container of users, groups or devices that lets a role be assigned for just those objects instead of the whole tenant.",
+      "restricted management administrative unit": "An administrative unit whose members can be changed only by admins assigned at that unit's scope, not by tenant-wide admins.",
+      "least privilege": "Give each admin the smallest role at the smallest scope that still lets them do their job.",
+      "role scope": "The boundary a role assignment applies to: the whole tenant, one administrative unit, or one object such as an app.",
+      "custom role": "A role you build from selected Microsoft Entra permissions when no built-in role is narrow enough.",
+      "emergency access account": "A cloud-only break-glass Global Administrator kept for when normal admins are locked out.",
+      "dynamic membership rule": "An expression on user attributes, such as department or country, that adds and removes group members automatically.",
+      "role-assignable group": "A group created with isAssignableToRole set, which can hold role assignments and must use assigned (not dynamic) membership."
+    }
+  }
+}

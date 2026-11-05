@@ -215,6 +215,11 @@ def _rating(pct: float, attempted: int) -> str:
 # --------------------------------------------------------------------------- #
 # Runner
 # --------------------------------------------------------------------------- #
+def _exam_code() -> str:
+    from utils import course
+    return course.active().get("exam_code") or "SY0-701"
+
+
 def run_challenge(
     ui,
     lab_number: int,
@@ -237,7 +242,7 @@ def run_challenge(
     result = ChallengeResult(lab_number, len(qs), 0)
 
     for i, q in enumerate(qs, 1):
-        ui.section(f"Question {i}/{len(qs)}  ·  SY0-701 {q.objective}")
+        ui.section(f"Question {i}/{len(qs)}  ·  {_exam_code()} {q.objective}")
         if q.context:
             ui.print(q.context, style="dim")
         ui.print(f"[bold]{q.prompt}[/bold]")
