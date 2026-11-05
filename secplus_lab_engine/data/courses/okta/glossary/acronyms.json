@@ -1,0 +1,749 @@
+{
+  "part": "Acronyms",
+  "entries": [
+    {
+      "term": "ACS",
+      "kind": "acronym",
+      "expansion": "Assertion Consumer Service",
+      "definition": "The endpoint on the application side that receives the signed SAML response posted by Okta; when the URL entered in the app integration differs from what the app expects, users see a sign-in error instead of the app.",
+      "domain": "5",
+      "objectives": [
+        "5.2",
+        "2.1"
+      ]
+    },
+    {
+      "term": "AD",
+      "kind": "acronym",
+      "expansion": "Active Directory",
+      "definition": "Microsoft's on-premises Windows directory of users, groups and computers; Okta connects to it through a lightweight agent to import accounts, delegate password checks and push changes back to domain objects.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "API",
+      "kind": "acronym",
+      "expansion": "application programming interface",
+      "definition": "A programmatic interface that lets scripts and tools read or change org objects such as users, groups and apps; admins create tokens for it under Security and limit them by the role of the creator.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "2.2"
+      ]
+    },
+    {
+      "term": "ASA",
+      "kind": "acronym",
+      "expansion": "Advanced Server Access",
+      "definition": "Okta's earlier product for brokering short-lived certificate-based SSH and RDP logins to Linux and Windows servers without static keys; its capabilities have since been folded into Okta Privileged Access.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "ASN",
+      "kind": "acronym",
+      "expansion": "autonomous system number",
+      "definition": "Identifier assigned to an internet routing domain, typically one ISP or hosting provider; dynamic network zones can match or block requests by this value to deny traffic from whole carrier or cloud networks.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "CAC",
+      "kind": "acronym",
+      "expansion": "Common Access Card",
+      "definition": "The US Department of Defense smart card carrying the holder's certificates; Okta can accept it through the smart card authenticator so personnel sign in by inserting the card and entering its PIN.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "CIDR",
+      "kind": "acronym",
+      "expansion": "Classless Inter-Domain Routing",
+      "definition": "Notation such as 203.0.113.0/24 that writes an address range as a base address plus prefix length; admins use it to list office or proxy ranges when defining IP network zones.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "CLI",
+      "kind": "acronym",
+      "expansion": "command-line interface",
+      "definition": "A text-based tool run in a terminal; developers and admins use Okta's version, or Terraform, to script tasks such as registering OIDC app integrations instead of clicking through the Admin Console.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CORS",
+      "kind": "acronym",
+      "expansion": "Cross-Origin Resource Sharing",
+      "definition": "Browser mechanism that decides whether JavaScript from one website may call an API on another; admins add trusted origins under Security so single-page apps can call Okta endpoints directly from the browser.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CRUD",
+      "kind": "acronym",
+      "expansion": "create, read, update, delete",
+      "definition": "Shorthand for the four basic data operations; custom admin roles are built by granting a subset of them, for example letting helpdesk staff view and edit users without being able to remove them.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "CSV",
+      "kind": "acronym",
+      "expansion": "comma-separated values",
+      "definition": "Plain-text tabular file format with one record per line; admins use it to bulk-import users with their attributes and to download report and System Log results for offline review.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "6.1"
+      ]
+    },
+    {
+      "term": "DN",
+      "kind": "acronym",
+      "expansion": "distinguished name",
+      "definition": "The full path that uniquely locates an entry in an LDAP or Active Directory tree, such as CN=Ana,OU=Sales,DC=corp,DC=com; directory integrations use it to pick which containers to import from.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "DSSO",
+      "kind": "acronym",
+      "expansion": "Desktop Single Sign-On",
+      "definition": "Feature that signs domain-joined Windows users into Okta silently using their Kerberos ticket from logging onto the PC; the agentless version is configured with a service account and an identity provider routing rule.",
+      "domain": "4",
+      "objectives": [
+        "4.3",
+        "5.1"
+      ]
+    },
+    {
+      "term": "EDR",
+      "kind": "acronym",
+      "expansion": "endpoint detection and response",
+      "definition": "Security software on laptops and desktops that monitors processes for attacks; Okta Verify can read its health signals so authentication policies allow access only from devices the tool reports as healthy.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "FIDO2",
+      "kind": "acronym",
+      "expansion": "Fast Identity Online 2",
+      "definition": "Open passwordless standard pairing WebAuthn with hardware security keys or platform biometrics such as Touch ID and Windows Hello; it resists phishing because keys are bound to the real site's origin.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "HAR",
+      "kind": "acronym",
+      "expansion": "HTTP Archive",
+      "definition": "A JSON file recorded from browser developer tools that captures every request and response in a session; Okta Support often asks for one to trace redirect loops or failed federation exchanges.",
+      "domain": "6",
+      "objectives": [
+        "6.2",
+        "5.1"
+      ]
+    },
+    {
+      "term": "HRIS",
+      "kind": "acronym",
+      "expansion": "human resource information system",
+      "definition": "The system of record for employees, such as Workday or BambooHR; when set as a profile source, it drives creation, attribute updates and deactivation of Okta accounts from hiring and termination events.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "3.1"
+      ]
+    },
+    {
+      "term": "HTTP",
+      "kind": "acronym",
+      "expansion": "Hypertext Transfer Protocol",
+      "definition": "The request-response protocol browsers and APIs use; its status codes, like 401 for missing credentials, 403 for forbidden and 429 for rate limiting, help admins diagnose failed sign-ins and integration errors.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "6.1"
+      ]
+    },
+    {
+      "term": "IAM",
+      "kind": "acronym",
+      "expansion": "identity and access management",
+      "definition": "The discipline of establishing who each person or service is and controlling what they may reach; Okta is a cloud platform for this, combining directory, sign-on, authentication and lifecycle features.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "IdP",
+      "kind": "acronym",
+      "expansion": "identity provider",
+      "definition": "The party that verifies a user and issues assertions or tokens other apps trust; Okta usually plays this role for downstream apps, but can also hand off authentication to an external one through routing rules.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "IGA",
+      "kind": "acronym",
+      "expansion": "identity governance and administration",
+      "definition": "Category of tooling that controls who should hold which access through request workflows, periodic certification campaigns and audit reporting; Okta sells a dedicated add-on for this work.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "1.3"
+      ]
+    },
+    {
+      "term": "IP",
+      "kind": "acronym",
+      "expansion": "Internet Protocol",
+      "definition": "The network-layer protocol that addresses and routes packets; the source address of each request appears in the System Log and is what network zones and policy rules evaluate.",
+      "domain": "4",
+      "objectives": [
+        "4.3",
+        "6.1"
+      ]
+    },
+    {
+      "term": "ISPM",
+      "kind": "acronym",
+      "expansion": "Identity Security Posture Management",
+      "definition": "Okta product that scans connected identity systems and SaaS apps for risky configurations, such as accounts lacking MFA, stale admins or unused privileged credentials, and ranks findings for remediation.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "ITP",
+      "kind": "acronym",
+      "expansion": "Identity Threat Protection",
+      "definition": "Okta capability that keeps evaluating risk after sign-in, using signals such as session hijack indicators and partner security events, and can end sessions or demand reauthentication when risk rises.",
+      "domain": "4",
+      "objectives": [
+        "4.2",
+        "4.3"
+      ]
+    },
+    {
+      "term": "IWA",
+      "kind": "acronym",
+      "expansion": "Integrated Windows Authentication",
+      "definition": "Microsoft's Kerberos or NTLM based silent sign-in for domain-joined machines; in Okta it underpins the older on-premises web agent version of desktop single sign-on running on IIS.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "JIT",
+      "kind": "acronym",
+      "expansion": "just-in-time",
+      "definition": "Provisioning style where an account is created or updated at the moment someone first signs in, using attributes from the directory or inbound assertion, rather than in advance by a scheduled import.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "1.1"
+      ]
+    },
+    {
+      "term": "JML",
+      "kind": "acronym",
+      "expansion": "joiner, mover, leaver",
+      "definition": "Shorthand for the three lifecycle events of a worker: being hired, changing role, and departing; admins automate each with group rules, app assignments and deprovisioning so access tracks the job.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "2.2"
+      ]
+    },
+    {
+      "term": "JSON",
+      "kind": "acronym",
+      "expansion": "JavaScript Object Notation",
+      "definition": "Lightweight text format of key-value pairs and arrays; Okta APIs, System Log events, user profiles and token payloads are all expressed in it, so admins read it when inspecting events in detail.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "JWKS",
+      "kind": "acronym",
+      "expansion": "JSON Web Key Set",
+      "definition": "A published document listing the public keys an authorization server signs tokens with; apps fetch it from the keys endpoint to verify signatures and pick up keys automatically after rotation.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "JWT",
+      "kind": "acronym",
+      "expansion": "JSON Web Token",
+      "definition": "Compact signed token of a header, claims payload and signature separated by dots; Okta issues ID and access tokens in this form, and apps verify the signature before trusting the claims.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "LCM",
+      "kind": "acronym",
+      "expansion": "lifecycle management",
+      "definition": "Okta's automated creation, update, deactivation and reactivation of accounts in downstream apps, driven by assignments and profile changes so access appears on day one and disappears at departure.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "3.2"
+      ]
+    },
+    {
+      "term": "LDAP",
+      "kind": "acronym",
+      "expansion": "Lightweight Directory Access Protocol",
+      "definition": "Open protocol for querying and modifying directory entries; Okta's agent for it imports users from servers like OpenLDAP, and Okta can also expose an interface of this kind for legacy apps.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "MDM",
+      "kind": "acronym",
+      "expansion": "mobile device management",
+      "definition": "Tools that enroll and control phones and tablets, enforcing passcodes, encryption and app deployment; Okta device assurance and policies can require a device to be managed by such a tool before granting access.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "MFA",
+      "kind": "acronym",
+      "expansion": "multifactor authentication",
+      "definition": "Requiring proof from two or more categories, such as something you know, have or are, before access; Okta enforces it through authenticator enrollment rules and authentication policy settings.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "OIDC",
+      "kind": "acronym",
+      "expansion": "OpenID Connect",
+      "definition": "Identity layer on top of OAuth 2.0 that adds an ID token describing the signed-in user; it is the usual protocol for modern web, mobile and single-page app integrations created in Okta.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "OIE",
+      "kind": "acronym",
+      "expansion": "Okta Identity Engine",
+      "definition": "The current Okta platform generation, replacing Classic Engine, that introduced app-level authentication policies, flexible authenticator choices, passwordless options and customizable sign-in flows.",
+      "domain": "4",
+      "objectives": [
+        "4.2",
+        "4.3"
+      ]
+    },
+    {
+      "term": "OIG",
+      "kind": "acronym",
+      "expansion": "Okta Identity Governance",
+      "definition": "Okta's add-on product for access requests, certification campaigns and entitlement management, used to prove periodically that each person's app and group access is still appropriate.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "OIN",
+      "kind": "acronym",
+      "expansion": "Okta Integration Network",
+      "definition": "Okta's catalog of thousands of prebuilt connectors for third-party applications; admins browse it to add an app with preconfigured sign-on and, where supported, provisioning settings.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "OPA",
+      "kind": "acronym",
+      "expansion": "Okta Privileged Access",
+      "definition": "Okta product that vaults shared credentials and brokers just-in-time, audited access to servers and privileged accounts, replacing standing admin passwords with approved, time-limited sessions.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "OTP",
+      "kind": "acronym",
+      "expansion": "one-time passcode",
+      "definition": "A short code valid for a single use, delivered by email, text, voice call or generated by an app; Okta authenticators use it as a possession factor during sign-in or account recovery.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "OU",
+      "kind": "acronym",
+      "expansion": "organizational unit",
+      "definition": "Container inside Active Directory or LDAP that groups users, groups and computers; admins choose which ones Okta imports from and which one receives users created through provisioning.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "PAM",
+      "kind": "acronym",
+      "expansion": "privileged access management",
+      "definition": "Discipline and tooling for securing high-risk accounts such as administrators and service credentials through vaulting, session control and just-in-time elevation; Okta sells a dedicated product for this work.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "PEM",
+      "kind": "acronym",
+      "expansion": "Privacy-Enhanced Mail",
+      "definition": "Base64 text encoding of certificates and keys wrapped in BEGIN and END lines; admins download Okta's SAML signing certificate in this form to upload into service provider settings.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "PIV",
+      "kind": "acronym",
+      "expansion": "Personal Identity Verification",
+      "definition": "US federal civilian smart card standard (FIPS 201) holding certificates for employees and contractors; Okta's smart card authenticator can accept these cards as a phishing-resistant sign-in method.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "PKCE",
+      "kind": "acronym",
+      "expansion": "Proof Key for Code Exchange",
+      "definition": "OAuth extension in which the client sends a hashed random secret with the authorization request and the original at the token step, stopping intercepted codes from being redeemed; required for Okta native and single-page apps.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "PKI",
+      "kind": "acronym",
+      "expansion": "public key infrastructure",
+      "definition": "The system of certificate authorities, certificates and revocation lists that binds public keys to identities; Okta relies on it for smart card sign-in, device certificates and signed federation messages.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "RADIUS",
+      "kind": "acronym",
+      "expansion": "Remote Authentication Dial-In User Service",
+      "definition": "Older network authentication protocol used by VPNs and Wi-Fi gear; the Okta agent for it lets those devices check credentials and prompt for Okta Verify push or codes as a second factor.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "RBAC",
+      "kind": "acronym",
+      "expansion": "role-based access control",
+      "definition": "Granting permissions through named roles rather than to individuals; Okta applies it to administration with standard roles like Super Administrator and custom roles scoped to resource sets.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "REST",
+      "kind": "acronym",
+      "expansion": "Representational State Transfer",
+      "definition": "Architectural style for web APIs using resource URLs and standard verbs like GET, POST and DELETE; Okta's management and System Log APIs follow it and return JSON.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "SAML",
+      "kind": "acronym",
+      "expansion": "Security Assertion Markup Language",
+      "definition": "XML-based federation standard in which Okta sends a signed assertion about the user to an application; admins configure audience URI, endpoint URL, name ID format and attribute statements.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SCIM",
+      "kind": "acronym",
+      "expansion": "System for Cross-domain Identity Management",
+      "definition": "Standard REST schema and protocol for creating, updating and deactivating user and group records in remote apps; Okta uses it to push provisioning changes to supporting applications.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "SDK",
+      "kind": "acronym",
+      "expansion": "software development kit",
+      "definition": "Packaged libraries, samples and documentation for a language or platform; developers use Okta's versions to embed sign-in, validate tokens or call management APIs without writing raw HTTP calls.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SHA",
+      "kind": "acronym",
+      "expansion": "Secure Hash Algorithm",
+      "definition": "Family of cryptographic digest functions; the 256-bit second-generation variant is Okta's default for signing SAML assertions, while some older service providers still expect the weaker 160-bit first version.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SIEM",
+      "kind": "acronym",
+      "expansion": "security information and event management",
+      "definition": "Platform such as Splunk or Microsoft Sentinel that collects and correlates logs from many sources; admins stream Okta System Log events to it for alerting, long-term retention and investigations.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "SLO",
+      "kind": "acronym",
+      "expansion": "Single Logout",
+      "definition": "SAML feature in which ending a session in one place sends logout messages so the identity provider and participating apps all end their sessions; it needs a logout URL and signing certificate.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "2.1"
+      ]
+    },
+    {
+      "term": "SMS",
+      "kind": "acronym",
+      "expansion": "Short Message Service",
+      "definition": "Mobile text messaging; Okta's phone authenticator can send codes this way, but because of SIM swapping and interception it is considered weak and often limited to recovery only.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "SOAR",
+      "kind": "acronym",
+      "expansion": "security orchestration, automation and response",
+      "definition": "Tooling that runs playbooks to triage alerts and act on them automatically; it can consume Okta events and call Okta APIs to suspend users or clear sessions during an incident.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "SoD",
+      "kind": "acronym",
+      "expansion": "separation of duties",
+      "definition": "Control that prevents one person from holding conflicting powers, such as requesting and approving the same access; Okta governance and custom roles can be designed to enforce it.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "SP",
+      "kind": "acronym",
+      "expansion": "service provider",
+      "definition": "The application side of a federation that trusts assertions from an identity provider; admins enter its entity ID and endpoint details in the Okta app integration.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SSO",
+      "kind": "acronym",
+      "expansion": "single sign-on",
+      "definition": "Signing in once and then reaching many applications without retyping credentials; Okta delivers it through SAML, OIDC and password-vaulting integrations launched from the End-User Dashboard.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SSPR",
+      "kind": "acronym",
+      "expansion": "self-service password reset",
+      "definition": "Lets users regain access after forgetting a password by proving identity with an enrolled authenticator such as email or Okta Verify, configured in the password policy's recovery settings to reduce helpdesk calls.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "SWA",
+      "kind": "acronym",
+      "expansion": "Secure Web Authentication",
+      "definition": "Okta's password-vaulting sign-on method for apps without federation support: Okta stores encrypted credentials and the browser plugin fills and submits the app's own login form.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "TLS",
+      "kind": "acronym",
+      "expansion": "Transport Layer Security",
+      "definition": "Protocol that encrypts and authenticates network connections, the basis of HTTPS; Okta requires it for all traffic, for custom domain certificates and for secure directory agent connections.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "TOTP",
+      "kind": "acronym",
+      "expansion": "time-based one-time password",
+      "definition": "Algorithm (RFC 6238) generating six-digit codes from a shared secret and the current time, rotating every 30 seconds; Okta Verify and Google Authenticator produce codes this way.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "U2F",
+      "kind": "acronym",
+      "expansion": "Universal 2nd Factor",
+      "definition": "Earlier FIDO standard for hardware keys used as an additional factor after a password; it was superseded by FIDO2, which Okta supports through its security key or biometric authenticator.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "UD",
+      "kind": "acronym",
+      "expansion": "Universal Directory",
+      "definition": "Okta's cloud user store that holds profiles from many sources, supports custom attributes and maps them between Okta and apps through the Profile Editor.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "UEM",
+      "kind": "acronym",
+      "expansion": "unified endpoint management",
+      "definition": "Tooling that manages laptops, desktops and mobile devices from one console, such as Intune or Jamf; Okta checks whether a device is managed by it as a condition in authentication policies.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "UPN",
+      "kind": "acronym",
+      "expansion": "user principal name",
+      "definition": "Active Directory sign-in name in email-like form such as ana@corp.com; admins often map it to the Okta username and to app usernames during directory integration.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "1.1"
+      ]
+    },
+    {
+      "term": "URI",
+      "kind": "acronym",
+      "expansion": "Uniform Resource Identifier",
+      "definition": "Generic string that identifies a resource, of which web addresses are a subset; Okta uses such identifiers for SAML audience and entity IDs and for OIDC redirect and sign-out targets.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "URL",
+      "kind": "acronym",
+      "expansion": "Uniform Resource Locator",
+      "definition": "A web address giving scheme, host and path; admins enter them for app sign-on endpoints and redirect targets, and a mistyped one is a frequent cause of failed app launches.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "VPN",
+      "kind": "acronym",
+      "expansion": "virtual private network",
+      "definition": "Encrypted tunnel connecting a remote device to an internal corporate network across the internet; Okta can secure it through RADIUS or SAML, and network zones may treat traffic from known gateways as trusted.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "ZTNA",
+      "kind": "acronym",
+      "expansion": "zero trust network access",
+      "definition": "Approach that grants access to specific applications only after verifying user identity and device posture for each request, instead of trusting anyone inside a network perimeter; Okta supplies the identity signals.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    }
+  ]
+}
