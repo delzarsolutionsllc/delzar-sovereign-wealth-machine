@@ -25,6 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_WEIGHTS, PASS_SCALED, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
+from utils import videos
 from utils.terminal_ui import UI
 
 
@@ -134,8 +135,10 @@ def catalog(policies: dict) -> dict:
         doms = lab_domains(m)
         labs.append({"n": n, "title": m.TITLE, "objectives": m.OBJECTIVES, "domains": doms,
                      "primary_domain": doms[0] if doms else "1", "has_generator": n in GENERATORS,
-                     "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT})
+                     "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT,
+                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)]})
     return {"labs": labs, "pass_scaled": PASS_SCALED,
+            "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
 
@@ -175,7 +178,21 @@ def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True) -> 
 
 def progress_get(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
-    return {"objectives": p.data["objectives"], "sessions": p.data["sessions"][-20:], "rows": p.rows()}
+    return {"objectives": p.data["objectives"], "sessions": p.data["sessions"][-20:], "rows": p.rows(),
+            "watched": p.data.get("watched", [])}
+
+
+def progress_watch(video_id: str, watched: bool = True, path=None) -> dict:
+    """Mark a course video as watched (or not). Only IDs from the video index are accepted."""
+    if video_id not in {v["id"] for v in videos.videos()}:
+        raise ValueError("unknown video")
+    p = Progress(path) if path is not None else Progress()
+    seen = [v for v in p.data.get("watched", []) if v != video_id]
+    if watched:
+        seen.append(video_id)
+    p.data["watched"] = seen
+    p.save()
+    return progress_get(path)
 
 
 def progress_record(results: list[dict], label: str, path=None) -> dict:
@@ -195,12 +212,12 @@ def progress_record(results: list[dict], label: str, path=None) -> dict:
 
 def progress_reset(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
-    p.data = {"objectives": {}, "sessions": []}
+    p.data = {"objectives": {}, "sessions": [], "watched": []}
     p.save()
     return progress_get(path)
 
 
-METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset"}
+METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -226,4 +243,6 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         if not isinstance(res, list):
             raise ValueError("results must be a list")
         return progress_record(res, a.get("label", "web"), progress_path)
+    if method == "progress_watch":
+        return progress_watch(str(a.get("video", "")), bool(a.get("watched", True)), progress_path)
     return progress_reset(progress_path)

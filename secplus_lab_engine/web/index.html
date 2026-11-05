@@ -125,6 +125,12 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
   .rail:not(.open) .domains, .rail:not(.open) .mode { display: none; }
   .railtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 }
+.vlist { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
+.vlist li { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.vlist li.seen a { color: var(--muted); }
+.vlist input { margin: 0; accent-color: var(--accent); }
+.watchfirst { border-bottom: 1px solid var(--line); padding-bottom: 12px; margin-bottom: 16px; }
+.vstep + .vstep { border-top: 1px solid var(--line); padding-top: 8px; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
 
@@ -136,6 +142,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
     </div>
     <nav class="nav" aria-label="Main">
       <a href="#home" data-view="home">Overview</a>
+      <a href="#videos" data-view="videos">Video course</a>
       <a href="#exam" data-view="exam">Practice exam</a>
       <a href="#progress" data-view="progress">My progress</a>
     </nav>
@@ -224,7 +231,7 @@ function buildExamLocal(count, seed) {
   CATALOG.domains.forEach(d => pool[d.id] = []);
   for (const L of Object.values(BUNDLE.labs)) {
     for (const src of [L.sample, ...L.variants]) for (const q of src.questions) {
-      const key = q.prompt + "\u0000" + q.context, d = q.objective.split(".")[0];
+      const key = [q.prompt, q.context, ...q.choices].join("\u0000"), d = q.objective.split(".")[0];
       if (seen.has(key) || !pool[d]) continue; seen.add(key); pool[d].push(q);
     }
   }
@@ -245,7 +252,7 @@ function buildExamLocal(count, seed) {
 /* ------------------------------------------------------------------ progress store
    Live: progress.json on this computer. Hosted: your private document in this
    page's store (claude.ai account), else this browser's storage, else memory.   */
-const EMPTY = () => ({ objectives: {}, sessions: [] });
+const EMPTY = () => ({ objectives: {}, sessions: [], watched: [] });
 function rating(p, n) { if (n < 3) return p < 50 ? "LOW" : "MEDIUM"; return p >= 85 ? "PASS" : p >= 65 ? "WARN" : "FAIL"; }
 function rowsOf(data) {
   return Object.entries(data.objectives).map(([o, s]) => [o, s.attempted, s.correct, pct(s.correct, s.attempted) + "%", rating(pct(s.correct, s.attempted), s.attempted)])
@@ -274,6 +281,14 @@ const Progress = {
   async get() {
     if (LIVE) return post("progress_get");
     const d = this.cache || EMPTY();
+    return { ...d, watched: d.watched || [], rows: rowsOf(d) };
+  },
+  async watch(video, watched) {
+    if (LIVE) return post("progress_watch", { video, watched });
+    const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
+    d.watched = (d.watched || []).filter(v => v !== video);
+    if (watched) d.watched.push(video);
+    await this.save(d);
     return { ...d, rows: rowsOf(d) };
   },
   async record(results, label) {
@@ -293,6 +308,29 @@ const Progress = {
     if (this.remote) { try { await this.remote.set(d); } catch { /* keep local copy */ } }
   },
 };
+
+/* ------------------------------------------------------------------ video course
+   Professor Messer's free SY0-701 playlist. Only titles/IDs are stored; every
+   video opens on YouTube (new tab), nothing is copied or embedded.            */
+const VC = () => CATALOG.video_course;
+const vById = id => VC().videos.find(v => v.id === id);
+const dur = s => { const h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60), x = String(s % 60).padStart(2, "0"); return h ? `${h}:${String(m).padStart(2, "0")}:${x}` : `${m}:${x}`; };
+const vUrl = v => `https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}&list=${encodeURIComponent(VC().source.playlist_id)}&index=${v.n}`;
+const labsFor = o => CATALOG.labs.filter(l => (l.objective_codes || []).includes(o));
+function videoList(vs, watched, onChange) {
+  return el("ul", { class: "vlist" }, vs.map(v => {
+    const box = el("input", { type: "checkbox", "aria-label": `Watched: ${v.title}`, checked: watched.has(v.id) || null,
+      onchange: async e => { const r = await Progress.watch(v.id, e.target.checked); if (onChange) onChange(new Set(r.watched)); } });
+    return el("li", { class: watched.has(v.id) ? "seen" : null }, box,
+      el("a", { href: vUrl(v), target: "_blank", rel: "noopener noreferrer", text: v.title }),
+      el("span", { class: "muted", text: ` ${v.objective === "intro" ? "start here" : v.objective} · ${dur(v.seconds)}` }));
+  }));
+}
+function watchedBar(watched, vs) {
+  const n = vs.filter(v => watched.has(v.id)).length;
+  return el("p", { class: "muted" }, el("span", { class: "meter" }, el("i", { style: `width:${pct(n, vs.length)}%; background:var(--pass)` })),
+    ` ${n}/${vs.length} watched · ${dur(vs.reduce((a, v) => a + v.seconds, 0))} in total`);
+}
 
 /* ------------------------------------------------------------------ rail */
 function renderRail() {
@@ -334,6 +372,7 @@ async function viewHome() {
       el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the 100–900 scale).` }),
       el("div", { class: "btns" },
         el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
+        el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
         el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
     el("div", { class: "grid5" }, CATALOG.domains.map(d => {
       const s = byDomain[d.id], labs = CATALOG.labs.filter(l => l.domains.includes(d.id));
@@ -366,7 +405,16 @@ async function viewLab(n, tab = "lesson") {
 function renderLesson(lab, body) {
   const ins = lab.insight;
   const sec = (title, items, cls) => el("section", { class: cls || null }, el("h3", { text: title }), el("ul", {}, items.map(i => el("li", { text: i }))));
-  put(body, 
+  const vs = (lab.videos || []).map(vById).filter(Boolean);
+  const watchBox = el("section", { class: "watchfirst" });
+  const drawWatch = async (w) => {
+    w = w || new Set((await Progress.get()).watched);
+    put(watchBox, el("h3", { text: "Watch first" }),
+      el("p", { class: "muted", text: `Professor Messer's free videos for this lab's objectives (open on YouTube). Tick each one when you have watched it.` }),
+      watchedBar(w, vs), videoList(vs, w, drawWatch));
+  };
+  if (vs.length) drawWatch();
+  put(body, vs.length ? watchBox : null,
     el("div", { class: "lesson", html: lab.lesson_html }),
     el("h2", { text: "Exam & architectural insight" }),
     el("p", { class: "muted", text: ins.objective }),
@@ -550,10 +598,47 @@ async function viewProgress() {
             el("td", {}, el("span", { class: "pill " + s, text: s })), el("td", {}, lab ? el("a", { href: `#lab-${lab.n}`, text: `Lab ${lab.n}` }) : ""));
         }))))
         : el("p", { text: "No scores yet. Open any lab and choose Practice, or take a practice exam." })),
+    (() => {
+      const recs = prog.rows.filter(r => r[4] !== "PASS").map(r => r[0]).filter(o => VC().videos.some(v => v.objective === o)).slice(0, 3);
+      const w = new Set(prog.watched || []);
+      return el("section", { class: "panel" }, el("h2", { text: "Watch next" }),
+        recs.length ? [el("p", { class: "muted", text: "Videos for your weakest objectives." }),
+          ...recs.map(o => [el("h3", { text: `${o} ${OBJ[o] || ""}` }), videoList(VC().videos.filter(v => v.objective === o), w, () => viewProgress())])]
+          : el("p", { class: "muted" }, "Practise a few labs first, then this suggests videos for the objectives you miss. ", el("a", { href: "#videos", text: "Browse the video course" })),
+        watchedBar(w, VC().videos));
+    })(),
     el("section", { class: "panel" }, el("h2", { text: "Recent sessions" }),
       prog.sessions.length ? el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, el("tr", {}, ["When (UTC)", "Activity", "Score"].map(h => el("th", { text: h })))),
         el("tbody", {}, prog.sessions.slice().reverse().slice(0, 15).map(s => el("tr", {}, el("td", { text: s.ts.replace("T", " ") }), el("td", { text: s.lab }), el("td", { text: s.score })))))) : el("p", { class: "muted", text: "Nothing yet." }),
       el("div", { class: "btns" }, el("button", { class: "btn", text: "Reset my progress", onclick: () => { confirmBox.hidden = false; } }), confirmBox)));
+}
+
+/* ------------------------------------------------------------------ video course view */
+async function viewVideos() {
+  markNav("videos"); setKeys(null);
+  const src = VC().source;
+  const w = new Set((await Progress.get()).watched || []);
+  const steps = [];
+  for (const v of VC().videos) { let s = steps.find(x => x.o === v.objective); if (!s) steps.push(s = { o: v.objective, vs: [] }); s.vs.push(v); }
+  const redraw = () => viewVideos();
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "Video course" }),
+      el("h1", { text: src.title }),
+      el("p", { class: "muted" }, `${VC().videos.length} free videos by ${src.author}, in exam-objective order. Watch an objective's videos, then practise it in the lab next to it. Videos open on YouTube; `,
+        el("a", { href: src.url, target: "_blank", rel: "noopener noreferrer", text: "open the playlist" }), " · ",
+        el("a", { href: src.site, target: "_blank", rel: "noopener noreferrer", text: "professormesser.com" }), " (notes and study groups)."),
+      watchedBar(w, VC().videos)),
+    CATALOG.domains.map(d => el("section", { class: "panel" },
+      el("span", { class: "label", text: `Domain ${d.id} · ${Math.round(d.weight * 100)}% of the exam` }), el("h2", { text: d.name }),
+      steps.filter(s => s.o.split(".")[0] === d.id || (d.id === "1" && s.o === "intro")).map(s => {
+        const labs = labsFor(s.o);
+        return el("div", { class: "vstep" },
+          el("h3", { text: s.o === "intro" ? "Start here" : `${s.o} ${OBJ[s.o] || ""}` }),
+          videoList(s.vs, w, redraw),
+          s.o === "intro" ? null : el("p", { class: "muted" }, labs.length ? ["Practise in: ", ...labs.flatMap((l, i) => [i ? ", " : "", el("a", { href: `#lab-${l.n}`, text: `Lab ${l.n}` })])]
+            : "No lab for this objective yet: the videos and the practice exam cover it."));
+      }))));
 }
 
 /* ------------------------------------------------------------------ router & boot */
@@ -565,6 +650,7 @@ function route() {
   if (m) return viewLab(parseInt(m[1], 10));
   if (h === "exam") return viewExam();
   if (h === "progress") return viewProgress();
+  if (h === "videos") return viewVideos();
   return viewHome();
 }
 

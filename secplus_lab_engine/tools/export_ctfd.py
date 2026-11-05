@@ -13,7 +13,8 @@ tagged with its objective and lab. Two outputs, same challenges:
 
 How a challenge plays: the description shows the scenario and lettered
 choices; the player submits the letter (``B``) or the answer text, case does
-not matter. A free hint points back to the lab's lesson; a paid hint (default
+not matter. A free hint points back to the lab's lesson and Professor Messer's video for
+the objective; a paid hint (default
 25 points) reveals the engine's explanation.
 
 CTFd itself is free and open source (Apache-2.0, https://github.com/CTFd/CTFd);
@@ -44,6 +45,7 @@ if str(ROOT) not in sys.path:
 
 from labs import LABS  # noqa: E402
 from tools.export_anki import OBJECTIVE_NAMES, collect, question_key  # noqa: E402
+from utils import videos  # noqa: E402
 from utils.exam import DOMAIN_NAMES  # noqa: E402
 
 CSV_FIELDS = ["name", "description", "category", "value", "type", "state", "max_attempts", "flags", "tags", "hints"]
@@ -104,8 +106,9 @@ def flags(q: dict, mc_plugin: bool) -> list[dict]:
 
 def hints(q: dict, hint_cost: int) -> list[dict]:
     lab = LABS[q["lab"]][0]
+    watch = videos.link_text(q["objective"])
     return [{"content": f"Revisit {lab.TITLE}: read its Lesson, then run the scenario "
-                        f"(python main.py lab {q['lab']}).", "cost": 0},
+                        f"(python main.py lab {q['lab']})." + (f" {watch}" if watch else ""), "cost": 0},
             {"content": f"Explanation: {q['explanation']}", "cost": hint_cost}]
 
 

@@ -27,6 +27,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.build_web_bundle import build  # noqa: E402
+from utils import videos  # noqa: E402
 from utils.exam import DOMAIN_NAMES  # noqa: E402
 
 MODEL_ID = 1_707_000_701          # fixed IDs keep re-imports stable
@@ -52,7 +53,18 @@ CSS = """
 .prompt { font-weight: 600; margin: 10px 0; }
 ol.choices { padding-left: 22px; } .answer { font-weight: 700; color: #1d7348; } .nightMode .answer { color: #63c993; }
 .why { margin-top: 8px; }
+.watch { margin-top: 10px; font-size: 14px; opacity: .85; }
 """
+
+
+def _watch_html(objective: str) -> str:
+    """Links to Professor Messer's free videos for the card's objective (they open on YouTube)."""
+    vs = videos.for_objective(objective)[:2]
+    if not vs:
+        return ""
+    links = " · ".join(f'<a href="{html.escape(videos.url(v, False))}">{html.escape(v["title"])}</a> '
+                       f'({videos.duration(v["seconds"])})' for v in vs)
+    return f'<div class="watch">Watch: {links}</div>'
 
 
 def _model():
@@ -106,7 +118,8 @@ def build_package(variants: int = 12):
         note = genanki.Note(
             model=model,
             fields=[f"{esc(obj)} {esc(OBJECTIVE_NAMES.get(obj, ''))} · Lab {q['lab']}", esc(q["context"]), esc(q["prompt"]),
-                    "".join(f"<li>{esc(c)}</li>" for c in q["choices"]), esc(q["answer"]), esc(q["explanation"]),
+                    "".join(f"<li>{esc(c)}</li>" for c in q["choices"]), esc(q["answer"]),
+                    esc(q["explanation"]) + _watch_html(obj),
                     esc("|".join(question_key(q)))],
             guid=genanki.guid_for(*question_key(q)),
             tags=[f"SY0-701::{obj.replace('.', '_')}", f"lab{q['lab']}"])
