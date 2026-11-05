@@ -95,9 +95,32 @@ def test_not_assigned_beats_config_errors(cfg):
     assert r.outcome == "NOT_ASSIGNED" and "AUDIENCE_MISMATCH" in r.problems
 
 
-def test_deprovisioned_or_unknown_user_never_gets_sso(cfg):
-    assert sso(cfg, "c@x.example").outcome == "NOT_ASSIGNED"
+def test_unknown_user_is_not_assigned(cfg):
     assert sso(cfg, "ghost@x.example").outcome == "NOT_ASSIGNED"
+
+
+def test_user_not_active_names_the_status(cfg):
+    r = sso(cfg, "c@x.example")                                   # DEPROVISIONED (Deactivated)
+    assert r.outcome == "USER_NOT_ACTIVE" and "DEPROVISIONED" in r.reasons[0] and "lose" in r.reasons[0]
+    for status in ("SUSPENDED", "LOCKED_OUT"):
+        d = copy.deepcopy(BASE)
+        d["users"][0]["status"] = status
+        r = check_sign_in({"id": "S", "user": "a@x.example", "app": "app", "flow": "idp_initiated"}, d, cfg)
+        assert r.outcome == "USER_NOT_ACTIVE" and status in r.reasons[0]
+        assert "keep their app assignments" in r.reasons[0]
+    d = copy.deepcopy(BASE)
+    d["users"][0]["status"] = "WEIRD"
+    r = check_sign_in({"id": "S", "user": "a@x.example", "app": "app"}, d, cfg)
+    assert r.outcome == "USER_NOT_ACTIVE" and "fail closed" in r.reasons[0]
+
+
+def test_user_not_active_checked_after_app_and_before_assignment(cfg):
+    inactive = sso(cfg, "c@x.example", mutate=lambda a: a.update(status="INACTIVE"))
+    assert inactive.problems[:2] == ["APP_INACTIVE", "USER_NOT_ACTIVE"]
+    d = copy.deepcopy(BASE)
+    d["users"][0].update(status="SUSPENDED", groups=[])
+    r = check_sign_in({"id": "S", "user": "a@x.example", "app": "app"}, d, cfg)
+    assert r.outcome == "USER_NOT_ACTIVE"
 
 
 def test_app_inactive_and_unknown(cfg):
@@ -191,10 +214,10 @@ def test_sample_outcomes(policies, quiet_ui, sample):
     assert out["protocols"] == {"R01": "SAML", "R02": "OIDC", "R03": "SAML", "R04": "OIDC", "R05": "SWA",
                                 "R06": "BOOKMARK", "R07": "NEEDS_REVIEW", "R08": "NEEDS_REVIEW"}
     assert out["sign_ins"] == {"S01": "SSO_SUCCESS", "S02": "SSO_SUCCESS", "S03": "NOT_ASSIGNED",
-                               "S04": "NOT_ASSIGNED", "S05": "NAMEID_MISMATCH", "S06": "SSO_SUCCESS",
+                               "S04": "USER_NOT_ACTIVE", "S05": "NAMEID_MISMATCH", "S06": "SSO_SUCCESS",
                                "S07": "ACS_MISMATCH", "S08": "AUDIENCE_MISMATCH", "S09": "NOT_ASSIGNED",
                                "S10": "APP_INACTIVE", "S11": "ACS_MISMATCH", "S12": "CERT_MISMATCH",
-                               "S13": "CERT_MISMATCH"}
+                               "S13": "CERT_MISMATCH", "S14": "USER_NOT_ACTIVE"}
     assert out["provisioning"]["P05"] == ["NONE", "VERIFIED"]
     assert out["provisioning"]["P08"] == ["NONE", "ACCESS_REMAINS"]
     assert set(out["protocols"].values()) == set(PROTOCOLS)
@@ -210,7 +233,8 @@ def test_briefing_talking_point_matches_demo(policies, quiet_ui, sample, data):
     assert f"for {m['requirements']} app requests ({pc['SAML']} SAML, {pc['OIDC']} OIDC, {pc['SWA']} SWA, " \
            f"{pc['BOOKMARK']} Bookmark and {pc['NEEDS_REVIEW']} sent back" in tp
     assert f"traced {m['sign_ins']} sign-in attempts across {len(sample['apps'])} SAML" in tp
-    assert f"({sc['SSO_SUCCESS']} succeeded; {sc['NOT_ASSIGNED']} users were not assigned, " \
+    assert f"({sc['SSO_SUCCESS']} succeeded; {sc['USER_NOT_ACTIVE']} users were not active (1 deactivated, " \
+           f"1 suspended), {sc['NOT_ASSIGNED']} users were not assigned, " \
            f"{sc['ACS_MISMATCH']} ACS URL mismatches, {sc['CERT_MISMATCH']} certificate" in tp
     assert f"{sc['AUDIENCE_MISMATCH']} audience mismatch, {sc['NAMEID_MISMATCH']} NameID mismatch and " \
            f"{sc['APP_INACTIVE']} inactive app" in tp
