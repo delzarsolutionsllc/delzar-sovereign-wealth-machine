@@ -15,7 +15,8 @@ It's meant for building first-principles skill: work through each operation by h
 * A **course web app** you can open from your desktop or from claude.ai
 * **Exam-like practice exam**: picking an answer never jumps ahead, **flag for review**, a **question grid** (answered / flagged / current), a review screen before scoring, keyboard keys (1–4, N, P, F) and an *approximate* scaled score
 * **Move your progress between devices**: *My progress → Export / Import* (merge or replace), or `python main.py progress --export FILE` / `--import FILE`
-* **Accessible**: skip link, screen-reader announcements for answers and the exam timer, arrow-key tabs, focus moved to each new page's heading
+* **Accessible**: 0 axe-core WCAG 2.2 AA violations on 22 screens in light and dark mode; keyboard-only use, skip link, screen-reader announcements for answers and the exam timer, arrow-key tabs, focus moved to each new page's heading, reflow at 320 px (`docs/ACCESSIBILITY.md`)
+* **AI tutor (MCP server)**: `python main.py mcp` lets Claude (Desktop or Code) or any MCP client quiz you, explain a lab or plan your day, using the course's own engines. Deny-by-default scopes, answers hidden until you respond, schema-validated input and an audit log: an identity and authorization showcase (`docs/AI_TUTOR.md`)
 * **Daily review**: questions you miss come back on a spaced-repetition schedule (tomorrow, then 1, 3, 7 days and longer), plus new questions from your weakest objectives (`python main.py review` or the *Daily review* page)
 * **Installs as an app** on phone and laptop and works offline (`python tools/build_site.py`, see below)
 * 1,000+ pytest tests, run in CI on Python 3.10–3.13
@@ -112,6 +113,8 @@ python main.py quiz                  # every objective and its quizzes (concepts
 python main.py quiz 2.4              # the quizzes for objective 2.4
 python main.py quiz 2.4 --topic 1    # concept quiz 1 of 2.4 (Malware); --set 2 takes mixed Set 2
 python main.py progress --export my-progress.json   # move progress to another device (then --import there)
+python main.py mcp                   # AI tutor for Claude / any MCP client (see docs/AI_TUTOR.md)
+claude mcp add identityops -- python "$PWD/main.py" mcp   # connect it to Claude Code
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file

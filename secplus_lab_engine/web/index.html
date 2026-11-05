@@ -9,7 +9,7 @@
 :root {
   --bg: #f3f5f8; --surface: #ffffff; --sunken: #e9edf2; --ink: #17202b; --muted: #566273; --line: #d6dde6;
   --accent: #1b5a8c; --accent-soft: #dce8f3; --on-accent: #ffffff;
-  --pass: #1d7348; --pass-soft: #dcefe4; --warn: #94600a; --warn-soft: #f6ead2; --fail: #ad2a22; --fail-soft: #f7e0de;
+  --pass: #1d7348; --pass-soft: #dcefe4; --warn: #865606; --warn-soft: #f6ead2; --fail: #ad2a22; --fail-soft: #f7e0de;
   --display: "IBM Plex Sans Condensed", "Arial Narrow", system-ui, sans-serif;
   --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
@@ -31,6 +31,7 @@ html, body { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
 a { color: var(--accent); }
 button, select, input { font: inherit; color: inherit; }
+select { background: var(--surface); color: var(--ink); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 h1, h2, h3 { font-family: var(--display); font-weight: 600; text-wrap: balance; line-height: 1.2; margin: 0; }
 h1 { font-size: 1.9rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.05rem; }
@@ -1093,7 +1094,8 @@ async function startExam(count, minutes, domain = "", source = "bank") {
             el("button", { class: "btn", onclick: () => viewExam(), text: "Other tests" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
     }
   }
-  put(view(), panel); show(); tick(); examTimer = setInterval(tick, 1000);
+  put(view(), el("h1", { class: "sr-only", tabindex: "-1", text: domain ? `Domain ${domain} test in progress` : "Practice exam in progress" }), panel);
+  show(); tick(); examTimer = setInterval(tick, 1000);
 }
 
 /* ------------------------------------------------------------------ daily review (spaced repetition)
