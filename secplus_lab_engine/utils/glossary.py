@@ -32,15 +32,15 @@ import json
 import re
 from functools import lru_cache
 
+from utils import course
 from utils.loader import ROOT
 
-GLOSSARY_DIR = ROOT / "data" / "glossary"
+GLOSSARY_DIR = course.data_dir("glossary")
 VIDEOS_FILE = GLOSSARY_DIR / "videos.json"
 SET_SIZE = 15
 MODES = {"acr": "Acronyms", "voc": "Vocabulary", "def": "Definitions"}
-QUIZ_ID = re.compile(r"^g([1-5])-(acr|voc|def)-(\d{1,2})$")
-DOMAIN_NAMES = {"1": "General Security Concepts", "2": "Threats, Vulnerabilities & Mitigations",
-                "3": "Security Architecture", "4": "Security Operations", "5": "Security Program Management"}
+QUIZ_ID = re.compile(r"^g([1-9])-(acr|voc|def)-(\d{1,2})$")
+DOMAIN_NAMES = course.domain_names()
 
 
 def _slug(s: str) -> str:
@@ -187,7 +187,7 @@ def catalog() -> dict:
 
 def find(quiz_id: str) -> dict:
     m = QUIZ_ID.match(str(quiz_id or ""))
-    quiz = next((q for q in catalog()["domains"][m.group(1)]["quizzes"] if q["id"] == quiz_id), None) if m else None
+    quiz = next((q for q in catalog()["domains"].get(m.group(1), {}).get("quizzes", []) if q["id"] == quiz_id), None) if m else None
     if not quiz:
         raise ValueError(f"unknown glossary quiz '{quiz_id}'")
     return quiz

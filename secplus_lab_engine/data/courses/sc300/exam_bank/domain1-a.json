@@ -1,0 +1,1028 @@
+{
+  "domain": "1",
+  "title": "SC-300 Domain 1 questions (1.1, 1.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+  "questions": [
+    {
+      "id": "D1-001",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "Fabrikam's service desk must be able to reset passwords for non-administrator users. The staff must not be able to create users, delete users or manage authentication methods. Which role should you assign to follow the principle of least privilege?",
+      "choices": [
+        "Helpdesk Administrator",
+        "Password Administrator",
+        "User Administrator",
+        "Authentication Administrator"
+      ],
+      "answer": "Password Administrator",
+      "explanation": "Password Administrator only resets passwords for non-administrators and other Password Administrators. Helpdesk Administrator also resets passwords but adds extra permissions such as invalidating refresh tokens and managing service requests, so it grants more than needed."
+    },
+    {
+      "id": "D1-002",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "Contoso plans to create custom Microsoft Entra roles for its application support team. What is the minimum Microsoft Entra ID license the tenant needs to create and assign custom roles?",
+      "choices": [
+        "Microsoft Entra ID Free",
+        "Microsoft Entra Workload ID",
+        "Microsoft Entra External ID",
+        "Microsoft Entra ID P1"
+      ],
+      "answer": "Microsoft Entra ID P1",
+      "explanation": "Custom Microsoft Entra roles require Microsoft Entra ID P1 (P2 also includes it). The Free edition supports only built-in roles, and Workload ID and External ID are separate products that do not license custom directory roles."
+    },
+    {
+      "id": "D1-003",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "When you assign a custom Microsoft Entra role, which scopes can the assignment use?",
+      "choices": [
+        "The tenant, an administrative unit or a single application",
+        "A management group, an Azure subscription or a single resource group",
+        "The tenant or a single resource group only",
+        "An administrative unit or an Azure subscription only"
+      ],
+      "answer": "The tenant, an administrative unit or a single application",
+      "explanation": "Microsoft Entra role assignments are scoped to the whole tenant, an administrative unit or an individual application object. Management groups, subscriptions and resource groups are Azure RBAC scopes, which is the most common confusion."
+    },
+    {
+      "id": "D1-004",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "Woodgrove Bank is building a custom Microsoft Entra role that lets support engineers add and rotate client secrets and certificates on app registrations, and nothing else. Which permission should the role include?",
+      "choices": [
+        "microsoft.directory/applications/allProperties/read",
+        "microsoft.directory/servicePrincipals/create",
+        "microsoft.directory/applications/credentials/update",
+        "microsoft.directory/users/password/update"
+      ],
+      "answer": "microsoft.directory/applications/credentials/update",
+      "explanation": "The credentials/update permission on applications allows adding and removing secrets and certificates on app registrations. The allProperties/read permission only reads the objects, and the other two act on service principals and users rather than app credentials."
+    },
+    {
+      "id": "D1-005",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "External auditors at Tailspin Toys must be able to view Microsoft Entra configuration settings and administrative information across the tenant, but they must not be able to change anything. Which role should you assign?",
+      "choices": [
+        "Security Reader",
+        "Reports Reader",
+        "Global Reader",
+        "Directory Readers"
+      ],
+      "answer": "Global Reader",
+      "explanation": "Global Reader is the read-only counterpart to Global Administrator: it can read settings and administrative information across Microsoft services but cannot take management actions. Security Reader and Reports Reader are limited to security features and reports, and Directory Readers only reads basic directory information."
+    },
+    {
+      "id": "D1-006",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "Litware wants to assign the Exchange Administrator role to an existing security group named Messaging Admins, but the group does not appear when you add the assignment. What should you do FIRST?",
+      "choices": [
+        "Create a new role-assignable group for the role",
+        "Turn on role assignment for the existing Messaging Admins group",
+        "Change the existing group's membership type to dynamic",
+        "Convert the existing group into a Microsoft 365 group"
+      ],
+      "answer": "Create a new role-assignable group for the role",
+      "explanation": "The setting that lets a group receive Microsoft Entra roles can only be chosen when the group is created, so you must create a new role-assignable group. It cannot be enabled later on an existing group, and role-assignable groups cannot use dynamic membership."
+    },
+    {
+      "id": "D1-007",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "Contoso's helpdesk team in Paris must manage user accounts only for employees in France. Employees in other countries must be out of their reach. What should you configure?",
+      "choices": [
+        "A custom role with a country condition, assigned at the tenant scope",
+        "A dynamic group of French users, with User Administrator assigned at the group's scope",
+        "A separate Microsoft Entra tenant for the French subsidiary",
+        "An administrative unit for French users, with User Administrator assigned at that scope"
+      ],
+      "answer": "An administrative unit for French users, with User Administrator assigned at that scope",
+      "explanation": "Administrative units restrict a role assignment to a subset of users, groups or devices, which is the intended way to delegate by region. Microsoft Entra custom roles have no attribute-based conditions, and a group is not a scope that gives User Administrator control over its members' accounts."
+    },
+    {
+      "id": "D1-008",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "Northwind Traders must protect the accounts of its executives so that tenant-scoped administrators, including Global Administrators, cannot change their properties or reset their passwords. Only a small team should be able to manage them. What should you do?",
+      "choices": [
+        "Add the executives to a role-assignable security group",
+        "Add the executives to a restricted management administrative unit",
+        "Assign the executives the Global Reader role",
+        "Create a Conditional Access policy that blocks the admin center for all admins"
+      ],
+      "answer": "Add the executives to a restricted management administrative unit",
+      "explanation": "Objects in a restricted management administrative unit can be changed only by administrators assigned at that unit's scope, even when tenant-wide administrators hold higher roles. Membership in a role-assignable group protects users from lower-privileged admins but still lets a Global Administrator change them."
+    },
+    {
+      "id": "D1-009",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "An administrator created an administrative unit for finance users last month and now needs it to be a restricted management administrative unit. What should the administrator do?",
+      "choices": [
+        "Create a new restricted management unit and move the members into it",
+        "Turn on restricted management in the existing unit's properties",
+        "Run a Microsoft Graph request to set restricted management on the unit",
+        "Remove all members first, then turn on restricted management"
+      ],
+      "answer": "Create a new restricted management unit and move the members into it",
+      "explanation": "Restricted management can only be set when an administrative unit is created and cannot be changed afterward, so a new unit is required. Editing the property later, through the portal or Graph, is not supported even when the unit is empty."
+    },
+    {
+      "id": "D1-010",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "Adatum wants an administrative unit to keep its membership up to date automatically by using a dynamic membership rule. Which objects can such a rule add to the unit?",
+      "choices": [
+        "Users, groups and devices",
+        "Groups only",
+        "Users or devices",
+        "Users and service principals"
+      ],
+      "answer": "Users or devices",
+      "explanation": "A dynamic membership rule on an administrative unit can target users or devices. Groups can be members of an administrative unit only when added manually, and service principals are not administrative unit members."
+    },
+    {
+      "id": "D1-011",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "An administrative unit contains only the Sales security group. A User Administrator scoped to that unit says that they cannot reset passwords for the people in the Sales group. What is the MOST likely cause?",
+      "choices": [
+        "User Administrator cannot be assigned at an administrative unit scope",
+        "Adding a group to an administrative unit does not add the group's members",
+        "Password resets work only for members of restricted management administrative units",
+        "Only Global Administrators can manage members of security groups"
+      ],
+      "answer": "Adding a group to an administrative unit does not add the group's members",
+      "explanation": "When a group is added to an administrative unit, the scoped admin can manage the group object, but its members are not in scope unless they are added to the unit themselves. User Administrator is one of the roles that can be scoped to an administrative unit."
+    },
+    {
+      "id": "D1-012",
+      "objective": "1.1",
+      "topic": "Effective permissions for Microsoft Entra roles",
+      "stem": "Jamal is assigned User Administrator directly and is also a member of a role-assignable group that holds Helpdesk Administrator. Both assignments are at the tenant scope. Which permissions does Jamal have?",
+      "choices": [
+        "Only the permissions of the directly assigned role",
+        "Only the permissions that both roles share",
+        "Only the permissions of the most recent assignment",
+        "The combined permissions of both roles"
+      ],
+      "answer": "The combined permissions of both roles",
+      "explanation": "Microsoft Entra role permissions are additive: a user's effective permissions are the union of every role assigned directly or through groups. Direct assignments do not override group assignments, and roles are never intersected."
+    },
+    {
+      "id": "D1-013",
+      "objective": "1.1",
+      "topic": "Effective permissions for Microsoft Entra roles",
+      "stem": "Ana is eligible for the Security Administrator role in Privileged Identity Management. She signs in to the admin center and finds that she cannot change any security settings. What is the MOST likely reason?",
+      "choices": [
+        "Eligible assignments grant only read access to settings",
+        "Security Administrator cannot be managed through PIM",
+        "Her account must first be added to an administrative unit",
+        "She has not yet activated the eligible assignment"
+      ],
+      "answer": "She has not yet activated the eligible assignment",
+      "explanation": "An eligible assignment grants no permissions until the user activates it, after meeting any MFA, justification or approval requirements. Eligible assignments are not read-only versions of the role, and Security Administrator is fully supported in PIM."
+    },
+    {
+      "id": "D1-014",
+      "objective": "1.1",
+      "topic": "Effective permissions for Microsoft Entra roles",
+      "stem": "A Global Administrator at Proseware forgot their password and has no self-service password reset methods registered. You must reset the password by using the least privileged role. Which role should perform the reset?",
+      "choices": [
+        "Authentication Administrator",
+        "Privileged Authentication Administrator",
+        "Helpdesk Administrator",
+        "User Administrator"
+      ],
+      "answer": "Privileged Authentication Administrator",
+      "explanation": "Only Privileged Authentication Administrator (or Global Administrator) can reset passwords and authentication methods for users who hold privileged roles such as Global Administrator. Authentication Administrator, Helpdesk Administrator and User Administrator can only act on non-administrators and a limited set of lower roles."
+    },
+    {
+      "id": "D1-015",
+      "objective": "1.1",
+      "topic": "Effective permissions for Microsoft Entra roles",
+      "stem": "Bob holds the User Administrator role scoped to the Sales administrative unit. He can update Sales users but receives an error when he tries to reset the password of a Marketing user. Why?",
+      "choices": [
+        "User Administrator cannot reset user passwords",
+        "Marketing users are placed in restricted management units by default",
+        "His role assignment applies only to objects in the Sales unit",
+        "Password resets require Privileged Role Administrator"
+      ],
+      "answer": "His role assignment applies only to objects in the Sales unit",
+      "explanation": "A role assigned at an administrative unit scope only applies to the objects in that unit, so a user outside it is out of reach. User Administrator can reset passwords, and administrative units are not restricted management unless created that way."
+    },
+    {
+      "id": "D1-016",
+      "objective": "1.1",
+      "topic": "Effective permissions for Microsoft Entra roles",
+      "stem": "Jun has Global Reader at the tenant scope and User Administrator scoped to the Seattle administrative unit. Which statement describes what Jun can do?",
+      "choices": [
+        "Read all tenant settings and update only users in the Seattle unit",
+        "Update every user, because Global Reader extends write access",
+        "Read and update only objects in the Seattle unit",
+        "Update every user except those who hold admin roles"
+      ],
+      "answer": "Read all tenant settings and update only users in the Seattle unit",
+      "explanation": "Permissions add up across assignments: Global Reader gives read access across the tenant, and the scoped User Administrator role gives write access only inside the Seattle unit. Global Reader never adds write permissions."
+    },
+    {
+      "id": "D1-017",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "Contoso has added the custom domain contoso.com to Microsoft Entra ID. Which DNS record should the administrator create at the domain registrar to prove ownership of the domain?",
+      "choices": [
+        "A CNAME record that points to the onmicrosoft.com domain",
+        "A TXT record that contains the verification value",
+        "An SRV record for the sign-in service",
+        "A PTR record for the registrar's IP address"
+      ],
+      "answer": "A TXT record that contains the verification value",
+      "explanation": "Domain verification uses a TXT record (or an MX record) containing the value Microsoft provides. CNAME records are used for other services such as autodiscover, not for proving ownership of the domain."
+    },
+    {
+      "id": "D1-018",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "Fabrikam sold a business unit and must remove the domain fabrikamtoys.com from its tenant. The deletion fails because the domain is still in use. What should you do FIRST?",
+      "choices": [
+        "Change the UPNs and email addresses that still use the domain",
+        "Delete the TXT verification record from public DNS",
+        "Convert the domain from managed to federated",
+        "Set the initial onmicrosoft.com domain as the tenant's primary domain"
+      ],
+      "answer": "Change the UPNs and email addresses that still use the domain",
+      "explanation": "A custom domain cannot be removed while users, groups or apps still reference it, so those references must be changed to another domain first. Removing the DNS record does not detach objects from the domain in the directory."
+    },
+    {
+      "id": "D1-019",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "Which domain in a Microsoft Entra tenant can never be removed from the tenant?",
+      "choices": [
+        "The current primary custom domain",
+        "Any subdomain of a verified domain",
+        "A domain verified by an MX record",
+        "The initial onmicrosoft.com domain"
+      ],
+      "answer": "The initial onmicrosoft.com domain",
+      "explanation": "The initial onmicrosoft.com domain is created with the tenant and can neither be removed nor renamed. A primary custom domain can be removed after another domain is made primary and its references are cleared."
+    },
+    {
+      "id": "D1-020",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "Tailspin Toys must add and verify several new custom domains. The administrator who does the work must not be able to manage users or other settings. Which role should you assign?",
+      "choices": [
+        "Global Administrator",
+        "Hybrid Identity Administrator",
+        "Domain Name Administrator",
+        "Exchange Administrator"
+      ],
+      "answer": "Domain Name Administrator",
+      "explanation": "Domain Name Administrator can manage domain names in cloud services and on-premises, which is exactly this task. Hybrid Identity Administrator manages sync and federation, and Global Administrator grants far more than needed."
+    },
+    {
+      "id": "D1-021",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "After acquiring Litware, Contoso tries to add litware.com to its own tenant. The admin center reports that the domain is already verified in another Microsoft Entra tenant. What must happen before Contoso can verify the domain?",
+      "choices": [
+        "The domain must be removed from the other tenant",
+        "Contoso must federate the domain with the other tenant",
+        "Contoso must add the domain as a subdomain of contoso.com",
+        "Contoso must set up cross-tenant synchronization first"
+      ],
+      "answer": "The domain must be removed from the other tenant",
+      "explanation": "A domain can be verified in only one Microsoft Entra tenant at a time, so it must be removed from the Litware tenant before Contoso can verify it. Federation and cross-tenant synchronization do not let two tenants share a verified domain."
+    },
+    {
+      "id": "D1-022",
+      "objective": "1.1",
+      "topic": "Company branding",
+      "stem": "Adatum configured default company branding with a custom logo and background image. It then added a French browser-language customization that changes only the sign-in page text. What do users whose browser language is French see for the logo and background?",
+      "choices": [
+        "The standard Microsoft logo and background",
+        "No logo or background until French versions are uploaded",
+        "The logo and background from the default branding",
+        "A logo and background chosen from the tenant's country or region"
+      ],
+      "answer": "The logo and background from the default branding",
+      "explanation": "A browser-language customization overrides only the elements you change for that language; any element you leave unchanged falls back to the default branding. The standard Microsoft design appears only where no custom branding exists, and the tenant's country does not select branding elements."
+    },
+    {
+      "id": "D1-023",
+      "objective": "1.1",
+      "topic": "Company branding",
+      "stem": "Users at Proseware go to a generic Microsoft sign-in page and see the standard Microsoft design until they type their username. Management wants the company branding to appear as soon as the page loads. What should you do?",
+      "choices": [
+        "Upload a background image with a higher resolution",
+        "Have users sign in through a URL that includes the tenant's domain",
+        "Convert the company's domain to a federated domain",
+        "Enable custom CSS for the default branding"
+      ],
+      "answer": "Have users sign in through a URL that includes the tenant's domain",
+      "explanation": "Microsoft cannot know which tenant's branding to show until it learns the user's domain, either from the username or from a tenant-specific URL or domain hint (for example whr=contoso.com). Image quality and CSS change how branding looks, not when it appears."
+    },
+    {
+      "id": "D1-024",
+      "objective": "1.1",
+      "topic": "Company branding",
+      "stem": "Northwind Traders wants a marketing employee to manage the logos, background image and text on the sign-in page. The employee must not get any other administrative permissions. Which role should you assign?",
+      "choices": [
+        "Global Administrator",
+        "User Administrator",
+        "Application Administrator",
+        "Organizational Branding Administrator"
+      ],
+      "answer": "Organizational Branding Administrator",
+      "explanation": "Organizational Branding Administrator manages company branding and nothing more, so it is the least privileged fit. Global Administrator can also change branding but grants control of the whole tenant."
+    },
+    {
+      "id": "D1-025",
+      "objective": "1.1",
+      "topic": "Company branding",
+      "stem": "Legal requires every user to see a short notice on the sign-in page reminding them that the system is for authorized use only. Users do not have to accept the notice. What should you configure?",
+      "choices": [
+        "A terms of use in Conditional Access",
+        "Username hint text in company branding",
+        "A custom banner logo with the notice",
+        "Sign-in page text in company branding"
+      ],
+      "answer": "Sign-in page text in company branding",
+      "explanation": "Sign-in page text displays a short message on the sign-in page without requiring any action. A terms of use requires users to accept it, which goes beyond the requirement, and the username hint only replaces the placeholder in the username box."
+    },
+    {
+      "id": "D1-026",
+      "objective": "1.1",
+      "topic": "Company branding",
+      "stem": "Contoso does not want users to be shown the Stay signed in? prompt after they sign in. What should you configure?",
+      "choices": [
+        "Turn off security defaults for the tenant",
+        "Turn off the option to remain signed in in company branding",
+        "Turn on continuous access evaluation",
+        "Create a token lifetime policy for the tenant"
+      ],
+      "answer": "Turn off the option to remain signed in in company branding",
+      "explanation": "The Show option to remain signed in setting in company branding controls whether users see the Stay signed in? prompt. Security defaults and continuous access evaluation enforce MFA and token revocation and do not hide the prompt."
+    },
+    {
+      "id": "D1-027",
+      "objective": "1.1",
+      "topic": "Tenant properties and user, group and device settings",
+      "stem": "Fabrikam set Restrict access to Microsoft Entra admin center to Yes. A non-administrator can still list users by running Microsoft Graph PowerShell. Why?",
+      "choices": [
+        "The setting blocks only the admin center, not Graph or PowerShell",
+        "The setting takes 30 days to apply to all users",
+        "The user must also be added to an administrative unit before it applies",
+        "The setting only applies to guest users in the tenant"
+      ],
+      "answer": "The setting blocks only the admin center, not Graph or PowerShell",
+      "explanation": "Restrict access to Microsoft Entra admin center is not a security boundary: it hides the portal from non-administrators but does not block Microsoft Graph, PowerShell or other clients. To control data access you need other controls, such as Conditional Access."
+    },
+    {
+      "id": "D1-028",
+      "objective": "1.1",
+      "topic": "Tenant properties and user, group and device settings",
+      "stem": "Security at Tailspin Toys wants to stop employees from creating app registrations on their own. What should you configure?",
+      "choices": [
+        "Disable the Microsoft Graph enterprise application for all users",
+        "Turn on restricted management for the app registrations",
+        "Set Users can register applications to No",
+        "Set Users can create security groups to No"
+      ],
+      "answer": "Set Users can register applications to No",
+      "explanation": "Setting Users can register applications to No removes the default right to register apps; the Application Developer role can then give that right back to chosen developers. Disabling Microsoft Graph would break many apps and does not control app registration."
+    },
+    {
+      "id": "D1-029",
+      "objective": "1.1",
+      "topic": "Tenant properties and user, group and device settings",
+      "stem": "Adatum must update the privacy statement URL and the technical contact that are shown for its organization. Where are these values configured?",
+      "choices": [
+        "In company branding",
+        "In the external collaboration settings",
+        "In the tenant properties",
+        "In the cross-tenant access settings"
+      ],
+      "answer": "In the tenant properties",
+      "explanation": "The technical contact, privacy contact and privacy statement URL are tenant properties. Company branding controls the sign-in page look, and the external collaboration and cross-tenant settings control guests and other tenants."
+    },
+    {
+      "id": "D1-030",
+      "objective": "1.1",
+      "topic": "Tenant properties and user, group and device settings",
+      "stem": "Proseware wants only the IT team to create Microsoft 365 groups. Other users must not create them in Outlook, Teams or the portals. Which approach should you use?",
+      "choices": [
+        "Allow only one security group to create Microsoft 365 groups",
+        "Configure a Microsoft 365 group naming policy",
+        "Configure a Microsoft 365 group expiration policy for all groups",
+        "Set Users can create security groups to No"
+      ],
+      "answer": "Allow only one security group to create Microsoft 365 groups",
+      "explanation": "Microsoft 365 group creation is restricted by limiting creation to members of a chosen security group, which applies across Outlook, Teams and the portals. A naming policy only enforces prefixes and blocked words, and the security group setting does not affect Microsoft 365 groups."
+    },
+    {
+      "id": "D1-031",
+      "type": "match",
+      "objective": "1.1",
+      "topic": "Built-in and custom Microsoft Entra roles",
+      "stem": "Match each administrative task to the least privileged built-in Microsoft Entra role that can perform it.",
+      "pairs": [
+        {
+          "item": "Create and update Conditional Access policies",
+          "match": "Conditional Access Administrator"
+        },
+        {
+          "item": "Manage role assignments and Privileged Identity Management settings",
+          "match": "Privileged Role Administrator"
+        },
+        {
+          "item": "Manage Microsoft Entra Connect Sync, pass-through authentication and seamless SSO settings",
+          "match": "Hybrid Identity Administrator"
+        },
+        {
+          "item": "Manage the tenant's authentication methods policy",
+          "match": "Authentication Policy Administrator"
+        },
+        {
+          "item": "Read usage and sign-in reports",
+          "match": "Reports Reader"
+        }
+      ],
+      "targets_extra": [
+        "Global Administrator",
+        "Application Administrator"
+      ],
+      "explanation": "Each of these roles is scoped to exactly the listed task, so it is the least privileged choice. Global Administrator could do every task but grants control of the entire tenant, and Application Administrator manages apps rather than any of these tasks."
+    },
+    {
+      "id": "D1-032",
+      "type": "multi",
+      "objective": "1.1",
+      "topic": "Administrative units",
+      "stem": "A company wants its Seattle helpdesk team to reset passwords only for users who work in Seattle. Which TWO actions should you take?",
+      "choices": [
+        "Create an administrative unit that contains the Seattle users",
+        "Assign Helpdesk Administrator to the team, scoped to the administrative unit",
+        "Assign Helpdesk Administrator to the team at the tenant scope",
+        "Create a dynamic group of Seattle users and make the team its owners",
+        "Create a custom role that includes a city-based condition"
+      ],
+      "answers": [
+        "Create an administrative unit that contains the Seattle users",
+        "Assign Helpdesk Administrator to the team, scoped to the administrative unit"
+      ],
+      "select": 2,
+      "explanation": "An administrative unit holds the Seattle users, and a role assigned at its scope limits the team to those users. A tenant-scoped assignment would cover everyone, and group owners can manage membership but cannot reset members' passwords."
+    },
+    {
+      "id": "D1-033",
+      "type": "order",
+      "objective": "1.1",
+      "topic": "Domains in Microsoft Entra ID and Microsoft 365",
+      "stem": "Put the steps in order so that new users at Contoso can sign in with the custom domain contoso.com.",
+      "items": [
+        "Add contoso.com as a custom domain in Microsoft Entra ID",
+        "Create the TXT record with the verification value at the DNS host",
+        "Verify the domain after the DNS record has propagated",
+        "Set contoso.com as the primary domain for new users"
+      ],
+      "explanation": "The domain must be added first to get the verification value, which is then published as a TXT record. Verification succeeds only once DNS has propagated, and only a verified domain can become the primary domain used for new users."
+    },
+    {
+      "id": "D1-034",
+      "type": "match",
+      "objective": "1.1",
+      "topic": "Tenant properties and user, group and device settings",
+      "stem": "Match each requirement to the Microsoft Entra setting that meets it.",
+      "pairs": [
+        {
+          "item": "Only members of the IT group can join Windows devices to Microsoft Entra ID",
+          "match": "Users may join devices to Microsoft Entra, set to Selected"
+        },
+        {
+          "item": "Limit how many devices each user can join or register",
+          "match": "Maximum number of devices per user"
+        },
+        {
+          "item": "Stop users from viewing the BitLocker recovery keys of their own devices",
+          "match": "Restrict users from recovering the BitLocker keys for their owned devices"
+        },
+        {
+          "item": "Remove inactive Microsoft 365 groups after a set lifetime",
+          "match": "Group expiration policy"
+        }
+      ],
+      "targets_extra": [
+        "Users can register applications",
+        "Group naming policy"
+      ],
+      "explanation": "Device join can be limited to selected users or groups, the device limit caps devices per user, and the BitLocker restriction stops users from reading their own recovery keys. A group expiration policy removes Microsoft 365 groups that are not renewed, while a naming policy only controls group names."
+    },
+    {
+      "id": "D1-035",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "A user at Contoso was deleted by mistake 10 days ago. The account must be recovered with its group memberships and licenses intact. What should you do?",
+      "choices": [
+        "Re-create the user with the same UPN",
+        "Restore the user from Microsoft Entra Connect",
+        "Restore the user from the deleted users list",
+        "Open a support request with Microsoft"
+      ],
+      "answer": "Restore the user from the deleted users list",
+      "explanation": "Deleted users stay in a soft-deleted state for 30 days and can be restored with their memberships and attributes. Re-creating the account makes a new object with a new object ID, so access tied to the old account is lost."
+    },
+    {
+      "id": "D1-036",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "An employee at Fabrikam is leaving after a dispute. Security wants the account kept for an investigation but needs to stop the user's access immediately. What should you do?",
+      "choices": [
+        "Block sign-in and revoke the user's sessions",
+        "Reset the password and keep the existing sessions open",
+        "Remove all of the user's licenses",
+        "Delete the user and restore it later"
+      ],
+      "answer": "Block sign-in and revoke the user's sessions",
+      "explanation": "Blocking sign-in stops new authentications, and revoking sessions invalidates refresh tokens so existing sessions must reauthenticate. A password reset alone can leave existing sessions working, and deleting the account is unnecessary for an investigation."
+    },
+    {
+      "id": "D1-037",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "An administrator tries to change the job title of a user in the Microsoft Entra admin center, but the field cannot be edited. The user is synchronized from on-premises Active Directory by Microsoft Entra Connect Sync. What should the administrator do?",
+      "choices": [
+        "Assign the administrator the User Administrator role",
+        "Convert the user to a cloud-only account first",
+        "Update the job title in company branding",
+        "Update the job title in on-premises Active Directory"
+      ],
+      "answer": "Update the job title in on-premises Active Directory",
+      "explanation": "For a synchronized user, on-premises Active Directory is the source of authority, so the attribute must be changed there and synced. Cloud roles cannot edit attributes that sync owns, which is why being a User Administrator does not help."
+    },
+    {
+      "id": "D1-038",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "Which user attribute does a person type, in the form of an email-style name, to sign in to Microsoft Entra ID?",
+      "choices": [
+        "displayName",
+        "userPrincipalName",
+        "mailNickname",
+        "employeeId"
+      ],
+      "answer": "userPrincipalName",
+      "explanation": "The user principal name (UPN) is the sign-in name, formatted like an email address, and it must be unique in the tenant. The display name is only shown in lists, and mailNickname is the email alias."
+    },
+    {
+      "id": "D1-039",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "The HR team at Woodgrove Bank needs one person who can create, update and delete regular user accounts and manage groups. Which role should you assign to follow the principle of least privilege?",
+      "choices": [
+        "User Administrator",
+        "Global Administrator",
+        "Helpdesk Administrator",
+        "Groups Administrator"
+      ],
+      "answer": "User Administrator",
+      "explanation": "User Administrator can create and manage users and groups, which covers both needs without tenant-wide control. Helpdesk Administrator cannot create users and Groups Administrator cannot manage user accounts."
+    },
+    {
+      "id": "D1-040",
+      "objective": "1.2",
+      "topic": "Users",
+      "stem": "Policy at Litware says that a deleted user account must not be recoverable after an offboarding is approved. What should you do after deleting the user?",
+      "choices": [
+        "Wait 7 days for the object to be purged",
+        "Disable the account before deleting it",
+        "Remove all of the licenses from the account before you delete it",
+        "Permanently delete the user from the deleted users list"
+      ],
+      "answer": "Permanently delete the user from the deleted users list",
+      "explanation": "A deleted user remains restorable for 30 days unless it is permanently deleted from the deleted users list. Disabling the account or removing licenses beforehand does not change how long the deleted object can be restored."
+    },
+    {
+      "id": "D1-041",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "Contoso needs a dynamic group that contains all users whose department attribute is Sales. Which membership rule should you use?",
+      "choices": [
+        "(device.department -eq \"Sales\")",
+        "(user.department -eq \"Sales\")",
+        "(user.department = \"Sales\")",
+        "(user.jobTitle -eq \"Sales\")"
+      ],
+      "answer": "(user.department -eq \"Sales\")",
+      "explanation": "Dynamic membership rules use the object.property -operator value syntax, so user.department -eq \"Sales\" is correct. A plain = sign is not a valid operator, and the rule must reference the user department, not a device property or job title."
+    },
+    {
+      "id": "D1-042",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "Fabrikam plans to use dynamic membership groups for thousands of employees. Which licensing requirement applies?",
+      "choices": [
+        "Microsoft Entra ID P2 for each administrator who writes rules",
+        "No license, because the Free edition includes dynamic rules",
+        "Microsoft Entra ID P1 for each unique user in a dynamic group",
+        "Microsoft Entra ID Governance for each group owner"
+      ],
+      "answer": "Microsoft Entra ID P1 for each unique user in a dynamic group",
+      "explanation": "Dynamic membership needs Microsoft Entra ID P1 (or a license that includes it) for each unique user who is a member of one or more dynamic groups. The Free edition does not include dynamic membership."
+    },
+    {
+      "id": "D1-043",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "An administrator tries to add a contractor to a group named All Engineers, but there is no option to add members manually. The group uses a dynamic user membership rule. What should the administrator do?",
+      "choices": [
+        "Make the contractor an owner of the group",
+        "Add the contractor with Microsoft Graph PowerShell",
+        "Update the user's attributes or the rule so the user matches",
+        "Change the group into a Microsoft 365 group"
+      ],
+      "answer": "Update the user's attributes or the rule so the user matches",
+      "explanation": "Members of a dynamic group are determined only by the rule, so you change the user's attributes or the rule instead of adding the user directly. Owners are not members, and Graph cannot add members to a dynamic group either."
+    },
+    {
+      "id": "D1-044",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "Adatum wants one dynamic group that contains all Windows devices and also the users who sign in to those devices. What should you do?",
+      "choices": [
+        "Create two dynamic groups, one for users and one for devices",
+        "Write one rule that combines user and device properties",
+        "Create one dynamic device rule that includes registered owners",
+        "Create one Microsoft 365 group with a dynamic device rule"
+      ],
+      "answer": "Create two dynamic groups, one for users and one for devices",
+      "explanation": "A dynamic membership rule can contain users or devices, but not both, so two groups are needed. Microsoft 365 groups support only user membership, so they cannot hold devices at all."
+    },
+    {
+      "id": "D1-045",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "A project team at Proseware needs a shared mailbox, calendar, SharePoint site and Teams workspace that are created together. Which type of group should you create?",
+      "choices": [
+        "Security group",
+        "Mail-enabled security group",
+        "Distribution group",
+        "Microsoft 365 group"
+      ],
+      "answer": "Microsoft 365 group",
+      "explanation": "A Microsoft 365 group provisions a shared mailbox, calendar, SharePoint site and can back a team. Security groups only control access, and distribution or mail-enabled security groups only deliver email."
+    },
+    {
+      "id": "D1-046",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "Tailspin Toys configured a group expiration policy with a 180-day lifetime. Six months later, unused security groups are still in the tenant. What is the reason?",
+      "choices": [
+        "The policy runs only after the next 180 days",
+        "Expiration policies apply only to Microsoft 365 groups",
+        "Security groups are renewed every time they are viewed",
+        "The policy requires P2 licenses for each group owner"
+      ],
+      "answer": "Expiration policies apply only to Microsoft 365 groups",
+      "explanation": "Group expiration policies work only on Microsoft 365 groups, not security groups. Microsoft 365 groups that show activity are renewed automatically, but security groups are never in scope."
+    },
+    {
+      "id": "D1-047",
+      "objective": "1.2",
+      "topic": "Custom security attributes",
+      "stem": "A Global Administrator at Contoso tries to assign a custom security attribute value to a user but receives an access denied error. Which role should be assigned to the administrator so they can assign attribute values?",
+      "choices": [
+        "Attribute Definition Administrator",
+        "Attribute Assignment Administrator",
+        "Privileged Role Administrator",
+        "User Administrator"
+      ],
+      "answer": "Attribute Assignment Administrator",
+      "explanation": "Global Administrators have no access to custom security attributes by default, so they need an attribute role. Attribute Assignment Administrator assigns values, while Attribute Definition Administrator defines attributes but cannot assign them."
+    },
+    {
+      "id": "D1-048",
+      "objective": "1.2",
+      "topic": "Custom security attributes",
+      "stem": "Fabrikam's identity architect must create attribute sets and define new custom security attributes, but must not assign values to users. Which role should you assign?",
+      "choices": [
+        "Attribute Assignment Administrator",
+        "Global Administrator",
+        "Application Administrator",
+        "Attribute Definition Administrator"
+      ],
+      "answer": "Attribute Definition Administrator",
+      "explanation": "Attribute Definition Administrator creates and manages attribute sets and attribute definitions. Attribute Assignment Administrator assigns values, and Global Administrator does not have custom security attribute permissions by default."
+    },
+    {
+      "id": "D1-049",
+      "objective": "1.2",
+      "topic": "Custom security attributes",
+      "stem": "Which Microsoft Entra objects can have custom security attribute values assigned to them?",
+      "choices": [
+        "Users and enterprise applications",
+        "Groups and devices",
+        "Users, groups and devices",
+        "Devices and administrative units"
+      ],
+      "answer": "Users and enterprise applications",
+      "explanation": "Custom security attributes can be assigned to users and to enterprise applications (service principals). Groups and devices are not supported as targets."
+    },
+    {
+      "id": "D1-050",
+      "objective": "1.2",
+      "topic": "Custom security attributes",
+      "stem": "Adatum no longer needs a custom security attribute named CostCenterCode. The attribute must no longer be assigned to new objects. What should you do?",
+      "choices": [
+        "Delete the attribute definition",
+        "Delete the attribute set that holds it",
+        "Deactivate the attribute",
+        "Rename the attribute and reuse it"
+      ],
+      "answer": "Deactivate the attribute",
+      "explanation": "Custom security attribute definitions and attribute sets cannot be deleted or renamed, but an attribute can be deactivated so that it can no longer be assigned. This keeps existing data intact while stopping new use."
+    },
+    {
+      "id": "D1-051",
+      "objective": "1.2",
+      "topic": "Custom security attributes",
+      "stem": "Woodgrove Bank must store a sensitive project code on user accounts. Only a small group of administrators may read or change the value; regular users with directory read access must not see it. What should you use?",
+      "choices": [
+        "Custom security attributes",
+        "Directory extension attributes",
+        "Exchange custom attributes",
+        "Open extensions on the user"
+      ],
+      "answer": "Custom security attributes",
+      "explanation": "Custom security attributes are readable and writable only by users given the attribute roles, which makes them suitable for sensitive data. Directory extensions and Exchange custom attributes can be read by anyone with standard directory read access."
+    },
+    {
+      "id": "D1-052",
+      "objective": "1.2",
+      "topic": "Bulk operations and Microsoft Graph PowerShell",
+      "stem": "Litware's HR team sent a spreadsheet of 300 new employees who need cloud-only accounts today. Which method requires the LEAST administrative effort in the Microsoft Entra admin center?",
+      "choices": [
+        "Invite the employees in bulk as guest users",
+        "Create each user one by one in the admin center",
+        "Use bulk create with the downloaded CSV template",
+        "Import the spreadsheet into Microsoft Entra Connect Sync"
+      ],
+      "answer": "Use bulk create with the downloaded CSV template",
+      "explanation": "Bulk create accepts a CSV built from Microsoft's template and creates all the accounts in one operation. Bulk invite creates guests, not employee accounts, and Microsoft Entra Connect Sync synchronizes from Active Directory rather than importing spreadsheets."
+    },
+    {
+      "id": "D1-053",
+      "objective": "1.2",
+      "topic": "Bulk operations and Microsoft Graph PowerShell",
+      "stem": "An administrator's provisioning scripts use the retired AzureAD PowerShell module. Which module should the scripts be migrated to?",
+      "choices": [
+        "MSOnline PowerShell",
+        "AzureADPreview PowerShell",
+        "Exchange Online PowerShell",
+        "Microsoft Graph PowerShell"
+      ],
+      "answer": "Microsoft Graph PowerShell",
+      "explanation": "The AzureAD and MSOnline modules are retired, and Microsoft Graph PowerShell is their supported replacement for managing Microsoft Entra ID. The preview module is part of the same retired family, and Exchange Online PowerShell does not manage directory users."
+    },
+    {
+      "id": "D1-054",
+      "objective": "1.2",
+      "topic": "Bulk operations and Microsoft Graph PowerShell",
+      "stem": "A script will create new users with New-MgUser. Which permission scope should the script request in Connect-MgGraph to follow least privilege?",
+      "choices": [
+        "Directory.ReadWrite.All",
+        "User.ReadWrite.All",
+        "User.Read.All",
+        "User.Read"
+      ],
+      "answer": "User.ReadWrite.All",
+      "explanation": "User.ReadWrite.All allows creating and updating users without broader directory write rights. Directory.ReadWrite.All also works but grants far more, and the read scopes cannot create anything."
+    },
+    {
+      "id": "D1-055",
+      "objective": "1.2",
+      "topic": "Bulk operations and Microsoft Graph PowerShell",
+      "stem": "An administrator must assign a Microsoft 365 E5 license to a user with Microsoft Graph PowerShell. Which cmdlet should be used?",
+      "choices": [
+        "Update-MgUser",
+        "New-MgGroupMember",
+        "Set-MsolUserLicense",
+        "Set-MgUserLicense"
+      ],
+      "answer": "Set-MgUserLicense",
+      "explanation": "Set-MgUserLicense adds or removes licenses by SKU ID. Update-MgUser changes properties such as usage location but cannot assign licenses, and Set-MsolUserLicense belongs to the retired MSOnline module."
+    },
+    {
+      "id": "D1-056",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "Employees at Proseware want to read work email on their personal phones. The devices are owned by the employees, who sign in to them with personal accounts. Which device identity should the devices use?",
+      "choices": [
+        "Microsoft Entra joined",
+        "Microsoft Entra registered",
+        "Microsoft Entra hybrid joined",
+        "On-premises domain joined"
+      ],
+      "answer": "Microsoft Entra registered",
+      "explanation": "Microsoft Entra registration is designed for personal (BYOD) devices where the user keeps a personal sign-in and adds a work account. Microsoft Entra join is for organization-owned devices that users sign in to with their work accounts."
+    },
+    {
+      "id": "D1-057",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "The support team at Contoso must have local administrator rights on every Microsoft Entra joined Windows device with the LEAST administrative effort. What should you do?",
+      "choices": [
+        "Add the team to the local Administrators group on each device by hand",
+        "Assign the team the Cloud Device Administrator role",
+        "Assign the Microsoft Entra Joined Device Local Administrator role",
+        "Make the team the registered owners of each device"
+      ],
+      "answer": "Assign the Microsoft Entra Joined Device Local Administrator role",
+      "explanation": "Members of the Microsoft Entra Joined Device Local Administrator role are added to the local Administrators group on all Microsoft Entra joined devices. Cloud Device Administrator manages device objects in the directory but does not grant local admin rights."
+    },
+    {
+      "id": "D1-058",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "Fabrikam must require multifactor authentication whenever users join or register a device in Microsoft Entra ID. Which approach does Microsoft recommend?",
+      "choices": [
+        "A Conditional Access policy for the register or join devices user action",
+        "The device setting that requires MFA to register or join devices",
+        "A per-user MFA setting for every user who enrolls devices",
+        "Security defaults combined with a device limit of five"
+      ],
+      "answer": "A Conditional Access policy for the register or join devices user action",
+      "explanation": "Microsoft recommends a Conditional Access policy that targets the register or join devices user action, and the device setting that requires MFA should be left at No when you use it. Per-user MFA is a legacy method and not tied to device registration."
+    },
+    {
+      "id": "D1-059",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "A technician needs to check, from a Windows device, whether the device is Microsoft Entra joined or hybrid joined. Which command should the technician run?",
+      "choices": [
+        "gpresult /r",
+        "dsregcmd /status",
+        "whoami /all",
+        "ipconfig /all"
+      ],
+      "answer": "dsregcmd /status",
+      "explanation": "dsregcmd /status shows the device's join state, such as AzureAdJoined and DomainJoined, and its Primary Refresh Token status. gpresult shows Group Policy results and does not report Microsoft Entra join state."
+    },
+    {
+      "id": "D1-060",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "Adatum has hundreds of device objects that have not signed in for six months. You must clean them up with the LEAST risk of disrupting users. What should you do?",
+      "choices": [
+        "Disable the stale devices, then delete them after a grace period",
+        "Delete all of the stale devices immediately",
+        "Remove the licenses from the devices' owners",
+        "Rotate the BitLocker recovery keys stored for each of the stale devices"
+      ],
+      "answer": "Disable the stale devices, then delete them after a grace period",
+      "explanation": "Disabling first lets you re-enable any device that turns out to be in use before you delete it. Immediate deletion cannot be undone for devices and can remove BitLocker keys stored with the device object."
+    },
+    {
+      "id": "D1-061",
+      "objective": "1.2",
+      "topic": "Licenses and group-based licensing",
+      "stem": "An administrator at Northwind Traders tries to assign a Microsoft 365 license directly to a new cloud user and receives an error. The user's other properties are complete. What should the administrator set?",
+      "choices": [
+        "The user's manager attribute",
+        "The user's preferred language",
+        "The user's usage location",
+        "The user's employee type"
+      ],
+      "answer": "The user's usage location",
+      "explanation": "A usage location is required before a license can be assigned directly to a user, because some services are not available in every country. The other attributes are optional and do not affect licensing."
+    },
+    {
+      "id": "D1-062",
+      "objective": "1.2",
+      "topic": "Licenses and group-based licensing",
+      "stem": "Contoso wants every member of the Sales department to receive Microsoft 365 E3 automatically when HR sets their department, and lose it when they leave the department. Which solution requires the LEAST administrative effort?",
+      "choices": [
+        "Run a weekly script that assigns licenses with PowerShell",
+        "Assign the license directly to each Sales user",
+        "Assign the license to an administrative unit for Sales",
+        "Assign the license to a dynamic group based on department"
+      ],
+      "answer": "Assign the license to a dynamic group based on department",
+      "explanation": "Group-based licensing on a dynamic group adds and removes licenses automatically as users match or stop matching the rule. Licenses cannot be assigned to administrative units, and scripts or direct assignment need ongoing manual work."
+    },
+    {
+      "id": "D1-063",
+      "objective": "1.2",
+      "topic": "Licenses and group-based licensing",
+      "stem": "A user at Fabrikam inherits a Visio license from the Design group. The user no longer needs Visio, but the remove option is unavailable on the user's license page. What should you do?",
+      "choices": [
+        "Remove the license directly from the user",
+        "Disable the Visio service plan for the user",
+        "Delete and re-create the user's account",
+        "Remove the user from the Design group"
+      ],
+      "answer": "Remove the user from the Design group",
+      "explanation": "A license inherited from a group cannot be removed from the user directly; it is removed when the user leaves the group or the group's assignment changes. Only directly assigned licenses can be removed on the user."
+    },
+    {
+      "id": "D1-064",
+      "objective": "1.2",
+      "topic": "Licenses and group-based licensing",
+      "stem": "Litware needs an administrator who can assign licenses to users and to groups, without the right to create or delete users. Which role follows the principle of least privilege?",
+      "choices": [
+        "User Administrator",
+        "License Administrator",
+        "Billing Administrator",
+        "Groups Administrator"
+      ],
+      "answer": "License Administrator",
+      "explanation": "License Administrator manages license assignments for users and group-based licensing, and can set usage location, without managing user accounts. User Administrator can also assign licenses but adds full user management, and Billing Administrator handles purchases."
+    },
+    {
+      "id": "D1-065",
+      "type": "multi",
+      "objective": "1.2",
+      "topic": "Groups and dynamic membership",
+      "stem": "Fabrikam wants new marketing employees added to the Marketing security group automatically as soon as HR sets their department to Marketing. Which TWO actions should you take?",
+      "choices": [
+        "Set the group's membership type to Dynamic User",
+        "Add the rule (user.department -eq \"Marketing\")",
+        "Set the group's membership type to Assigned",
+        "Set the group's membership type to Dynamic Device",
+        "Make the HR manager an owner of the group",
+        "Apply a group expiration policy to the group"
+      ],
+      "answers": [
+        "Set the group's membership type to Dynamic User",
+        "Add the rule (user.department -eq \"Marketing\")"
+      ],
+      "select": 2,
+      "explanation": "A Dynamic User group with a department rule adds and removes users automatically as the attribute changes. Assigned membership needs manual changes, and a Dynamic Device group cannot contain users."
+    },
+    {
+      "id": "D1-066",
+      "type": "order",
+      "objective": "1.2",
+      "topic": "Bulk operations and Microsoft Graph PowerShell",
+      "stem": "Put the steps in order to create and license new users with Microsoft Graph PowerShell.",
+      "items": [
+        "Install the Microsoft Graph PowerShell module",
+        "Sign in with Connect-MgGraph and the required scopes",
+        "Create the accounts with New-MgUser",
+        "Set each account's usage location with Update-MgUser",
+        "Assign licenses with Set-MgUserLicense"
+      ],
+      "explanation": "The module must be installed before you connect, and you must connect before you can create users. A user needs a usage location before a license can be assigned, so Set-MgUserLicense comes last."
+    },
+    {
+      "id": "D1-067",
+      "type": "match",
+      "objective": "1.2",
+      "topic": "Device join and device registration",
+      "stem": "Match each device scenario to the device identity it should use.",
+      "pairs": [
+        {
+          "item": "Employee-owned phone that the user signs in to with a personal account",
+          "match": "Microsoft Entra registered"
+        },
+        {
+          "item": "New company laptop for a cloud-only organization with no Active Directory",
+          "match": "Microsoft Entra joined"
+        },
+        {
+          "item": "Existing domain-joined desktop that must also satisfy device-based Conditional Access",
+          "match": "Microsoft Entra hybrid joined"
+        },
+        {
+          "item": "Desktop managed only by on-premises Group Policy that has no identity in Microsoft Entra ID",
+          "match": "On-premises domain joined only"
+        }
+      ],
+      "explanation": "Personal devices are registered, cloud-only corporate devices are joined, and devices already joined to on-premises Active Directory become hybrid joined. A computer that is only domain joined has no device identity in Microsoft Entra ID, so device-based Conditional Access cannot evaluate it."
+    },
+    {
+      "id": "D1-068",
+      "type": "multi",
+      "objective": "1.2",
+      "topic": "Licenses and group-based licensing",
+      "stem": "Group-based licensing at Contoso shows an error state for several members of the E5 Users group. Which TWO conditions could cause the errors?",
+      "choices": [
+        "The tenant has no remaining licenses for the product",
+        "Two assigned products contain service plans that conflict",
+        "The group is a security group rather than a Microsoft 365 group",
+        "The members are synchronized from on-premises Active Directory",
+        "The group uses dynamic membership",
+        "The members hold the User Administrator role"
+      ],
+      "answers": [
+        "The tenant has no remaining licenses for the product",
+        "Two assigned products contain service plans that conflict"
+      ],
+      "select": 2,
+      "explanation": "Running out of licenses and conflicting service plans are common group-based licensing errors. Security groups, synchronized users and dynamic groups are all supported, and directory roles do not affect license assignment."
+    }
+  ]
+}

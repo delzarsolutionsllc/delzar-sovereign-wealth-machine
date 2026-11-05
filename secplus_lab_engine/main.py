@@ -43,6 +43,18 @@ ROOT = Path(__file__).resolve().parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+def _early_course(argv) -> None:
+    """--course must take effect before the engine modules load (they read the course registry at import)."""
+    import os
+    for i, a in enumerate(argv):
+        if a == "--course" and i + 1 < len(argv):
+            os.environ["DELZAR_COURSE"] = argv[i + 1]
+        elif a.startswith("--course="):
+            os.environ["DELZAR_COURSE"] = a.split("=", 1)[1]
+
+
+_early_course(sys.argv[1:])
+
 from labs import LABS  # noqa: E402
 from utils.challenge import Progress, run_challenge  # noqa: E402
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, build_domain_test, build_exam, run_exam  # noqa: E402
@@ -422,6 +434,8 @@ def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="secplus_lab_engine", description=BANNER)
     p.add_argument("--plain", action="store_true", help="disable colour / rich formatting")
     p.add_argument("--policies", metavar="FILE", help="path to an alternative policy JSON file")
+    p.add_argument("--course", metavar="CODE", help="certification course: secplus (default) or sc300 "
+                   "(data/courses/<code>/course.json); put it before the command")
     p.add_argument("-v", "--verbose", action="store_true", help="debug logging to stderr")
     sub = p.add_subparsers(dest="command")
     sub.add_parser("menu", help="interactive menu (default)")

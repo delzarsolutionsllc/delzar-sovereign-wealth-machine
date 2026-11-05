@@ -40,6 +40,10 @@ Status: AI tutor MCP server (`python main.py mcp`, docs/AI_TUTOR.md) with deny-b
 | **PBQs from the labs:** turn firewall-rule, incident-order and Conditional Access decisions from the engines into exam performance-based questions. | 20+ lab-backed PBQs in the exam |
 | **Content gaps:** DONE: every objective has 30+ exam-style items, tagged by topic, and 4.2 / 4.7 now have PBQs. Next: 2+ PBQs for every objective. | 2+ PBQs per objective |
 
+## Multi-course platform and SC-300 (BUILT, 2026-11-05)
+
+The engine is multi-course (`data/courses/<code>/course.json`, `--course`, course picker, per-course progress, data and desktop builds). Second course: **Microsoft SC-300 Identity and Access Administrator** (skills measured as of October 28, 2026; checked on Microsoft Learn 2026-11-05): 16 objectives, a reviewed exam-style bank with performance-based items, objective quizzes, glossary (acronyms + vocabulary) with per-domain quizzes, the identity labs mapped to SC-300 skills, 50-question / 100-minute practice exam on the 1-1000 scale. Next for SC-300: a free video course index, SC-300-specific labs (entitlement management, app consent, workload identities), and lab-backed PBQs.
+
 ## Phase 4: V8 (SY0-801) update (after CompTIA publishes the objectives)
 
 - Map SY0-801 objectives onto the labs and bank. Keep SY0-701 available until June 11, 2027, and label each question with its exam version.

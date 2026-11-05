@@ -1,0 +1,1155 @@
+{
+  "domain": "3",
+  "title": "SC-300 Domain 3 questions (3.1, 3.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Microsoft.",
+  "questions": [
+    {
+      "id": "D3-001",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "Contoso runs a web app in Azure App Service that must read secrets from Azure Key Vault. The security team wants no credentials stored in code or configuration and no secret rotation to manage. Which identity should the app use?",
+      "choices": [
+        "A managed identity",
+        "A service principal with a client secret",
+        "A dedicated cloud-only user account",
+        "A group managed service account"
+      ],
+      "answer": "A managed identity",
+      "explanation": "A managed identity gives an Azure-hosted workload a Microsoft Entra identity whose credentials Azure creates and rotates, so nothing is stored in code. A service principal with a client secret still leaves a secret to store and rotate."
+    },
+    {
+      "id": "D3-002",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "Fabrikam has a build server in its on-premises datacenter (not connected to Azure Arc) that must deploy resources to an Azure subscription. Which identity type is BEST suited for this workload?",
+      "choices": [
+        "A system-assigned managed identity enabled on the build server's operating system",
+        "A service principal from an app registration that uses a certificate",
+        "A user-assigned managed identity attached to a virtual machine",
+        "A shared user account excluded from MFA"
+      ],
+      "answer": "A service principal from an app registration that uses a certificate",
+      "explanation": "Managed identities are available only to Azure resources (or Arc-enabled servers), so an on-premises server not in Azure needs an app registration's service principal, ideally authenticating with a certificate. A shared user account excluded from MFA is a weak, non-auditable choice for automation."
+    },
+    {
+      "id": "D3-003",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "A Windows service on several on-premises domain-joined servers must authenticate to an on-premises SQL Server by using Active Directory credentials. Administrators do not want to manage the service account password. Which identity should you use?",
+      "choices": [
+        "A system-assigned managed identity",
+        "A Microsoft Entra service principal",
+        "A group managed service account",
+        "A standard Active Directory user account"
+      ],
+      "answer": "A group managed service account",
+      "explanation": "A group managed service account (gMSA) is an Active Directory account whose password the domain manages automatically and that several servers can share. A system-assigned managed identity is a Microsoft Entra identity for Azure resources and cannot authenticate to on-premises Active Directory services."
+    },
+    {
+      "id": "D3-004",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "Which statement BEST describes how a managed identity is represented in Microsoft Entra ID?",
+      "choices": [
+        "As a user account with a password that never expires",
+        "As an app registration that the administrator must give a client secret",
+        "As a guest account linked to the Azure subscription",
+        "As a special type of service principal whose credentials Azure manages"
+      ],
+      "answer": "As a special type of service principal whose credentials Azure manages",
+      "explanation": "Each managed identity is backed by a service principal in the tenant, and Azure handles its credentials automatically. It is not an app registration that needs a secret, and it is not a user or guest account."
+    },
+    {
+      "id": "D3-005",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "Tailspin Toys wants an automation script that runs in an Azure Automation account to update resources in the same subscription. The script must not use stored credentials. What should the administrator configure?",
+      "choices": [
+        "Enable a managed identity on the Automation account and grant it an Azure role",
+        "Create a cloud-only user account and store its password as an Automation credential",
+        "Create an app registration and store its client secret as an Automation variable",
+        "Run the runbook under the administrator's own signed-in account"
+      ],
+      "answer": "Enable a managed identity on the Automation account and grant it an Azure role",
+      "explanation": "Azure Automation supports managed identities, so the runbook can request tokens without any stored secret once the identity has the right Azure role. Storing a user password or client secret in the account still leaves a credential to protect and rotate."
+    },
+    {
+      "id": "D3-006",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "An administrator is comparing identity options for a new containerized app in Azure Kubernetes Service that calls Azure Storage. Which consideration favors a managed identity over a service principal with a secret?",
+      "choices": [
+        "A managed identity can be used from any cloud provider without federation",
+        "Azure issues and rotates the credential, so no secret is stored",
+        "A managed identity bypasses Azure RBAC checks on storage",
+        "A managed identity works without any token from Microsoft Entra ID"
+      ],
+      "answer": "Azure issues and rotates the credential, so no secret is stored",
+      "explanation": "The main benefit of a managed identity is that Azure handles the credential lifecycle, so no secret is stored or expires. It still receives a Microsoft Entra token and is still subject to Azure RBAC, and it is not usable from other clouds on its own."
+    },
+    {
+      "id": "D3-007",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "A company plans to use workload identities for dozens of Azure resources. Which identity type should the company AVOID for unattended workloads because it is designed for people and is subject to interactive sign-in controls such as MFA?",
+      "choices": [
+        "A system-assigned managed identity",
+        "A user-assigned managed identity",
+        "A user account",
+        "A service principal"
+      ],
+      "answer": "A user account",
+      "explanation": "User accounts represent people and are affected by MFA, password changes and interactive Conditional Access, which makes them a poor fit for unattended automation. Managed identities and service principals are the intended identities for workloads."
+    },
+    {
+      "id": "D3-008",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "Which statement about a system-assigned managed identity is correct?",
+      "choices": [
+        "It can be shared by several virtual machines at the same time",
+        "It is created as a standalone Azure resource in a resource group",
+        "It keeps its role assignments after its resource is deleted and re-created",
+        "It is deleted automatically when its Azure resource is deleted"
+      ],
+      "answer": "It is deleted automatically when its Azure resource is deleted",
+      "explanation": "A system-assigned identity shares the lifecycle of its resource: it is created when enabled on the resource and removed when the resource is deleted. Sharing one identity across resources and existing as a standalone resource are traits of a user-assigned identity."
+    },
+    {
+      "id": "D3-009",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "Adatum runs a scale set whose instances are frequently deleted and re-created. Each new instance must immediately access the same storage account without new role assignments. Which identity should you use?",
+      "choices": [
+        "A user-assigned managed identity attached to the scale set",
+        "A system-assigned managed identity on each instance",
+        "A separate service principal for each instance",
+        "A group managed service account"
+      ],
+      "answer": "A user-assigned managed identity attached to the scale set",
+      "explanation": "A user-assigned managed identity has its own lifecycle, so its role assignment survives when instances are replaced and can be attached to many resources. A system-assigned identity is tied to one resource, so replacement means a new identity and new role assignments."
+    },
+    {
+      "id": "D3-010",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "A virtual machine already has a system-assigned managed identity. A developer asks whether the same virtual machine can also use user-assigned managed identities. What should you tell the developer?",
+      "choices": [
+        "No, a resource can have only one managed identity of any type",
+        "Yes, it can also have one or more user-assigned identities",
+        "Yes, but only after the system-assigned identity is disabled",
+        "No, user-assigned identities are supported only on App Service"
+      ],
+      "answer": "Yes, it can also have one or more user-assigned identities",
+      "explanation": "Azure resources that support managed identities can have one system-assigned identity and multiple user-assigned identities at the same time. There is no need to disable the system-assigned identity first."
+    },
+    {
+      "id": "D3-011",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "Contoso wants to pre-create an identity, grant it access to a Key Vault, and only later deploy the virtual machines that will use it. Which option supports this sequence?",
+      "choices": [
+        "Enable a system-assigned managed identity before the virtual machine exists",
+        "Create a guest account and convert it to a managed identity",
+        "Create a user-assigned managed identity first and attach it during deployment",
+        "Register an app and convert its service principal into a system-assigned identity"
+      ],
+      "answer": "Create a user-assigned managed identity first and attach it during deployment",
+      "explanation": "Because a user-assigned identity is an independent Azure resource, it can be created and granted roles before the workload exists. A system-assigned identity cannot exist until its resource exists."
+    },
+    {
+      "id": "D3-012",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "A team wants each of its function apps to have a separate identity so that removing an app automatically removes its access, with the least administrative effort. Which identity should the team use?",
+      "choices": [
+        "A single user-assigned managed identity shared by all function apps",
+        "A service principal per function app with a client secret",
+        "A dedicated user account per function app",
+        "A system-assigned managed identity on each function app"
+      ],
+      "answer": "A system-assigned managed identity on each function app",
+      "explanation": "A system-assigned identity is unique to its resource and is cleaned up with it, so access disappears when the app is deleted without extra work. A shared user-assigned identity would leave the identity and its access in place after an app is removed."
+    },
+    {
+      "id": "D3-013",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "An administrator deletes a virtual machine that had a user-assigned managed identity attached. What happens to the user-assigned managed identity?",
+      "choices": [
+        "It remains, with its role assignments, until someone deletes it",
+        "It is deleted together with the virtual machine",
+        "It is converted into a system-assigned identity on another resource",
+        "It is disabled and its role assignments are removed automatically"
+      ],
+      "answer": "It remains, with its role assignments, until someone deletes it",
+      "explanation": "A user-assigned identity has an independent lifecycle, so deleting a resource only detaches it. The identity and its role assignments stay until an administrator deletes the identity itself."
+    },
+    {
+      "id": "D3-014",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "An administrator must create user-assigned managed identities in a resource group without receiving any other permissions. Which Azure built-in role should be assigned, following least privilege?",
+      "choices": [
+        "Managed Identity Operator",
+        "Managed Identity Contributor",
+        "Contributor",
+        "Owner"
+      ],
+      "answer": "Managed Identity Contributor",
+      "explanation": "Managed Identity Contributor can create, read, update and delete user-assigned identities. Managed Identity Operator can only read and assign existing identities, and Contributor or Owner grant far more than needed."
+    },
+    {
+      "id": "D3-015",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "A deployment engineer can modify virtual machines but receives an error when attaching an existing user-assigned managed identity to a virtual machine. Which additional Azure role should the engineer have on the identity, following least privilege?",
+      "choices": [
+        "Managed Identity Contributor",
+        "User Access Administrator",
+        "Managed Identity Operator",
+        "Owner"
+      ],
+      "answer": "Managed Identity Operator",
+      "explanation": "Assigning a user-assigned identity to a resource needs the assign action on the identity, which Managed Identity Operator provides without the right to create or delete identities. Managed Identity Contributor adds create and delete rights that are not needed here."
+    },
+    {
+      "id": "D3-016",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "You enable a system-assigned managed identity on an existing Azure virtual machine. What is created in Microsoft Entra ID as a result?",
+      "choices": [
+        "A user account with the same name as the virtual machine",
+        "An app registration with a client secret",
+        "A security group that contains the virtual machine",
+        "A service principal tied to the virtual machine's lifecycle"
+      ],
+      "answer": "A service principal tied to the virtual machine's lifecycle",
+      "explanation": "Enabling a system-assigned identity makes Azure create a service principal for that resource in the trusted tenant. No user account, client secret or group is created."
+    },
+    {
+      "id": "D3-017",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "A user-assigned managed identity is attached to an App Service app that also has a system-assigned identity. When the app requests a token, how does it make sure it uses the user-assigned identity?",
+      "choices": [
+        "It specifies the identity's client ID or resource ID in the token request",
+        "It signs in with the identity's password from Key Vault",
+        "It disables the system-assigned identity before every token request it sends",
+        "It uses the tenant's default app registration"
+      ],
+      "answer": "It specifies the identity's client ID or resource ID in the token request",
+      "explanation": "When more than one identity is available, the code chooses the user-assigned identity by passing its client ID, object ID or resource ID in the token request. Managed identities have no password to retrieve."
+    },
+    {
+      "id": "D3-018",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "Which endpoint does code on an Azure virtual machine call to obtain a token for its managed identity?",
+      "choices": [
+        "The tenant's federation metadata endpoint",
+        "The Azure Instance Metadata Service endpoint on the virtual machine",
+        "The Microsoft Graph invitation endpoint",
+        "The SCIM endpoint of the target resource"
+      ],
+      "answer": "The Azure Instance Metadata Service endpoint on the virtual machine",
+      "explanation": "On virtual machines, the managed identity token is requested from the local Azure Instance Metadata Service, which is reachable only from inside the machine. The federation metadata and SCIM endpoints serve other purposes."
+    },
+    {
+      "id": "D3-019",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "Fabrikam transfers an Azure subscription to a different Microsoft Entra tenant. Virtual machines in the subscription used managed identities. What should the administrators expect?",
+      "choices": [
+        "The managed identities move automatically with all their role assignments",
+        "The managed identities become guest users in the new tenant",
+        "They must be re-created or re-enabled, and access granted again",
+        "The managed identities keep working in the old tenant only"
+      ],
+      "answer": "They must be re-created or re-enabled, and access granted again",
+      "explanation": "Managed identities belong to the tenant that trusts the subscription, so after a directory transfer they break and must be re-created (user-assigned) or disabled and re-enabled (system-assigned), and role assignments must be redone. They are not converted to guests."
+    },
+    {
+      "id": "D3-020",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "An administrator wants an on-premises Windows server to use a managed identity to access Azure Key Vault. What should be done FIRST?",
+      "choices": [
+        "Enable a system-assigned identity in Microsoft Entra Connect Sync",
+        "Install the Application Proxy connector on the server",
+        "Create a group managed service account for the server",
+        "Onboard the server to Azure Arc"
+      ],
+      "answer": "Onboard the server to Azure Arc",
+      "explanation": "Servers outside Azure get a system-assigned managed identity after they are connected to Azure Arc. Microsoft Entra Connect Sync and the Application Proxy connector do not create managed identities."
+    },
+    {
+      "id": "D3-021",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "A managed identity on a virtual machine must read blobs in one storage account and nothing else. Which Azure role assignment BEST meets the requirement following least privilege?",
+      "choices": [
+        "Storage Blob Data Reader scoped to the storage account",
+        "Reader scoped to the subscription",
+        "Storage Account Contributor scoped to the storage account",
+        "Contributor scoped to the resource group"
+      ],
+      "answer": "Storage Blob Data Reader scoped to the storage account",
+      "explanation": "Storage Blob Data Reader grants read access to blob data, and scoping it to the storage account limits it to that account. Reader covers only management-plane metadata, not blob data, and the contributor roles grant more than read."
+    },
+    {
+      "id": "D3-022",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "An App Service app's managed identity must read secrets from a Key Vault that uses the Azure RBAC permission model. Which role should you assign to the identity?",
+      "choices": [
+        "Key Vault Contributor",
+        "Key Vault Secrets User",
+        "Key Vault Reader",
+        "Key Vault Crypto User"
+      ],
+      "answer": "Key Vault Secrets User",
+      "explanation": "Key Vault Secrets User lets a principal read secret contents in a vault that uses the Azure RBAC permission model. Key Vault Contributor manages the vault itself but does not grant data access, and Key Vault Reader reads metadata only."
+    },
+    {
+      "id": "D3-023",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "An administrator must assign an Azure role to a managed identity on a storage account. Which role does the administrator need, following least privilege?",
+      "choices": [
+        "Contributor",
+        "Managed Identity Operator",
+        "Role Based Access Control Administrator",
+        "Global Administrator"
+      ],
+      "answer": "Role Based Access Control Administrator",
+      "explanation": "Creating Azure role assignments requires the role assignment write permission, which Role Based Access Control Administrator provides without other management rights (Owner and User Access Administrator also have it). Contributor cannot create role assignments, and Managed Identity Operator only assigns identities to resources."
+    },
+    {
+      "id": "D3-024",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "A function app's managed identity was granted a role on a storage account, but requests still fail. Which issue is MOST likely if the role was granted only a few minutes ago?",
+      "choices": [
+        "Managed identities cannot be assigned data-plane roles",
+        "The managed identity must first be added as a guest user",
+        "The storage account must be moved to the function app's resource group",
+        "Role assignment changes and cached tokens can take time to take effect"
+      ],
+      "answer": "Role assignment changes and cached tokens can take time to take effect",
+      "explanation": "Azure role assignments can take a while to propagate, and a token issued before the change does not reflect it until it is refreshed. Managed identities can hold data-plane roles, and the resources do not need to share a resource group."
+    },
+    {
+      "id": "D3-025",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "Contoso wants a single user-assigned managed identity used by several virtual machines to read secrets from three Key Vaults in one resource group, and no others. Where should the role assignment be scoped to meet the requirement with the LEAST administrative effort?",
+      "choices": [
+        "The resource group that contains the three Key Vaults",
+        "Each virtual machine",
+        "The management group above the subscription",
+        "The Microsoft Entra tenant root"
+      ],
+      "answer": "The resource group that contains the three Key Vaults",
+      "explanation": "Scoping one assignment to the resource group covers all three vaults in it and nothing outside it. Scoping at the management group would grant access far beyond the requirement, and the role must be scoped to the target resources, not the virtual machines."
+    },
+    {
+      "id": "D3-026",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "Which tool can an administrator use to confirm what Azure role assignments a managed identity has across a subscription?",
+      "choices": [
+        "The Microsoft Entra sign-in logs filtered to interactive sign-ins",
+        "The access control (IAM) check access feature for the identity",
+        "The app's provisioning logs",
+        "The My Apps portal"
+      ],
+      "answer": "The access control (IAM) check access feature for the identity",
+      "explanation": "Access control (IAM) lets you check access for a managed identity and list the Azure role assignments it holds at a scope. Interactive sign-in logs do not record managed identity sign-ins, and provisioning logs and My Apps are unrelated to Azure RBAC."
+    },
+    {
+      "id": "D3-027",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "A managed identity must be able to start and stop virtual machines in a resource group but must not delete them. What is the BEST approach?",
+      "choices": [
+        "Assign Virtual Machine Contributor at the resource group so it can manage the machines",
+        "Assign Owner at the resource group and add a resource lock",
+        "Assign it an Azure custom role that has only the start and deallocate actions",
+        "Add the identity to a Microsoft Entra group with the Global Reader role"
+      ],
+      "answer": "Assign it an Azure custom role that has only the start and deallocate actions",
+      "explanation": "An Azure custom role can include only the needed actions, which matches least privilege. Virtual Machine Contributor includes delete, and Microsoft Entra roles such as Global Reader do not grant Azure resource actions."
+    },
+    {
+      "id": "D3-028",
+      "objective": "3.1",
+      "topic": "Service principals for workloads",
+      "stem": "A company uses GitHub Actions to deploy to Azure and wants to stop storing client secrets in GitHub. Which approach should the identity administrator configure?",
+      "choices": [
+        "A longer client secret expiry period combined with storing the secret as an encrypted GitHub secret",
+        "Password hash synchronization for the deployment account",
+        "A system-assigned managed identity on the GitHub runner organization",
+        "Workload identity federation on an app registration or user-assigned managed identity"
+      ],
+      "answer": "Workload identity federation on an app registration or user-assigned managed identity",
+      "explanation": "Workload identity federation lets the external platform's own token be exchanged for a Microsoft Entra token, so no secret is stored in GitHub. A longer secret expiry keeps the secret problem and adds risk."
+    },
+    {
+      "id": "D3-029",
+      "objective": "3.1",
+      "topic": "Service principals for workloads",
+      "stem": "When a multitenant application from another company is consented to in your tenant, what is created in your tenant to represent it?",
+      "choices": [
+        "A service principal (enterprise application)",
+        "An app registration owned by your tenant",
+        "A user-assigned managed identity",
+        "A guest user account"
+      ],
+      "answer": "A service principal (enterprise application)",
+      "explanation": "The app registration (application object) lives in the publisher's home tenant, and consent creates a service principal, shown as an enterprise application, in each tenant that uses it. No guest or managed identity is created."
+    },
+    {
+      "id": "D3-030",
+      "objective": "3.1",
+      "topic": "Service principals for workloads",
+      "stem": "An app registration used by a scheduled job authenticates with a client secret. The security team asks for a stronger credential type that is still supported for apps running outside Azure. What should you recommend?",
+      "choices": [
+        "A system-assigned managed identity",
+        "A certificate credential",
+        "A longer client secret",
+        "A Temporary Access Pass"
+      ],
+      "answer": "A certificate credential",
+      "explanation": "Certificates are the recommended credential over client secrets for service principals because the private key is not sent and can be protected in a key store. A Temporary Access Pass is for users, and a system-assigned identity is unavailable outside Azure without Arc."
+    },
+    {
+      "id": "D3-031",
+      "objective": "3.1",
+      "topic": "Service principals for workloads",
+      "stem": "Woodgrove Bank has Microsoft Entra Workload ID Premium licenses and wants to block a single-tenant service principal from signing in from outside approved IP ranges. Which feature should be used?",
+      "choices": [
+        "Microsoft Entra ID Protection user risk policy",
+        "Application Proxy pre-authentication",
+        "Conditional Access for workload identities",
+        "Self-service password reset"
+      ],
+      "answer": "Conditional Access for workload identities",
+      "explanation": "Conditional Access for workload identities, licensed by Workload ID Premium, can block single-tenant service principals based on location or risk (managed identities are not covered). User risk policies target users, not service principals."
+    },
+    {
+      "id": "D3-032",
+      "objective": "3.1",
+      "topic": "Service principals for workloads",
+      "stem": "A security reviewer finds that a service principal used by a daemon app holds a client secret that expired yesterday. Which effect is MOST likely?",
+      "choices": [
+        "The service principal is automatically converted to a managed identity",
+        "Users can no longer sign in to the app interactively with passwords",
+        "The app continues working for 90 days in a grace period",
+        "The app can no longer obtain tokens until a new credential is added"
+      ],
+      "answer": "The app can no longer obtain tokens until a new credential is added",
+      "explanation": "An expired secret cannot be used in a token request, so the daemon fails until a new valid secret or certificate is added. There is no grace period and no automatic conversion to a managed identity."
+    },
+    {
+      "id": "D3-033",
+      "type": "multi",
+      "objective": "3.1",
+      "topic": "System-assigned vs user-assigned managed identities",
+      "stem": "Contoso is choosing between managed identity types. Which TWO statements describe a user-assigned managed identity?",
+      "choices": [
+        "It can be attached to more than one Azure resource",
+        "It has a lifecycle independent of the resources that use it",
+        "It is removed automatically when its resource is deleted",
+        "Each resource can have only one of them",
+        "It requires a client secret that the administrator rotates"
+      ],
+      "answers": [
+        "It can be attached to more than one Azure resource",
+        "It has a lifecycle independent of the resources that use it"
+      ],
+      "select": 2,
+      "explanation": "A user-assigned identity is a standalone resource that can be shared and lives until deleted. Automatic removal with the resource describes a system-assigned identity, and neither type needs a secret."
+    },
+    {
+      "id": "D3-034",
+      "type": "order",
+      "objective": "3.1",
+      "topic": "Creating and assigning managed identities",
+      "stem": "The security team requires that a shared identity be granted Key Vault access before any virtual machine receives it. Put the steps in order to let several new virtual machines read secrets from Azure Key Vault.",
+      "items": [
+        "Create a user-assigned managed identity",
+        "Assign the Key Vault Secrets User role to the identity on the vault",
+        "Attach the identity to each virtual machine",
+        "From each virtual machine, request a token from the Instance Metadata Service by using the identity's client ID",
+        "Read the secret from Key Vault by using the token"
+      ],
+      "explanation": "A user-assigned identity can be created first, and the requirement puts the role assignment before the identity is attached to the machines. Only an attached identity can get a token from the Instance Metadata Service, and the token is then used against Key Vault."
+    },
+    {
+      "id": "D3-035",
+      "type": "match",
+      "objective": "3.1",
+      "topic": "Selecting workload identities",
+      "stem": "Match each workload to the identity that BEST fits it.",
+      "pairs": [
+        {
+          "item": "Azure virtual machine that calls Azure Storage",
+          "match": "Managed identity"
+        },
+        {
+          "item": "Build server in another cloud that deploys to Azure",
+          "match": "Service principal with workload identity federation"
+        },
+        {
+          "item": "Windows service on several on-premises domain-joined servers",
+          "match": "Group managed service account"
+        },
+        {
+          "item": "Help desk technician who signs in interactively",
+          "match": "User account"
+        }
+      ],
+      "targets_extra": [
+        "Guest account"
+      ],
+      "explanation": "Azure-hosted workloads use managed identities, external workloads use a service principal (ideally federated), on-premises Windows services use a gMSA, and people use user accounts. A guest account is for external people, not workloads."
+    },
+    {
+      "id": "D3-036",
+      "type": "multi",
+      "objective": "3.1",
+      "topic": "Accessing Azure resources with managed identities",
+      "stem": "Contoso's audit service uses a managed identity that may only read blob data from a single container. Which TWO actions should you take to follow least privilege?",
+      "choices": [
+        "Assign the Storage Blob Data Reader role",
+        "Scope the role assignment to the container",
+        "Assign the Owner role on the storage account",
+        "Scope the role assignment to the subscription",
+        "Add the identity to the Global Reader role in Microsoft Entra ID",
+        "Store the storage account key in the app configuration"
+      ],
+      "answers": [
+        "Assign the Storage Blob Data Reader role",
+        "Scope the role assignment to the container"
+      ],
+      "select": 2,
+      "explanation": "The data reader role grants only blob read access, and scoping to the container limits it to that container. Global Reader is a Microsoft Entra role that grants no blob data access, and storing the account key defeats the purpose of a managed identity."
+    },
+    {
+      "id": "D3-037",
+      "objective": "3.2",
+      "topic": "Enterprise app properties and tenant settings",
+      "stem": "Contoso added a SaaS app to Microsoft Entra ID and configured SSO. Only members of the Sales group should be able to get tokens for the app. Which application property must be set to Yes?",
+      "choices": [
+        "Visible to users",
+        "Assignment required",
+        "Enabled for users to sign in",
+        "Owner approval required"
+      ],
+      "answer": "Assignment required",
+      "explanation": "When assignment is required, only assigned users and groups can get tokens for the app, so assigning Sales enforces the restriction. Visible to users only controls whether the tile appears in My Apps."
+    },
+    {
+      "id": "D3-038",
+      "objective": "3.2",
+      "topic": "Enterprise app properties and tenant settings",
+      "stem": "A company wants to keep an enterprise application working for assigned users but hide its tile from My Apps and the Microsoft 365 app launcher. Which property should you change?",
+      "choices": [
+        "Assignment required",
+        "Enabled for users to sign in",
+        "Visible to users",
+        "Single sign-on mode"
+      ],
+      "answer": "Visible to users",
+      "explanation": "Setting Visible to users to No hides the tile while leaving sign-in working. Turning off Enabled for users to sign in would stop everyone from signing in."
+    },
+    {
+      "id": "D3-039",
+      "objective": "3.2",
+      "topic": "Enterprise app properties and tenant settings",
+      "stem": "An enterprise application is suspected of being misused. You must immediately stop all users from signing in to it while keeping its configuration for later investigation. What should you do?",
+      "choices": [
+        "Delete the enterprise application",
+        "Set Visible to users to No",
+        "Remove the app's SAML signing certificate",
+        "Set Enabled for users to sign in to No"
+      ],
+      "answer": "Set Enabled for users to sign in to No",
+      "explanation": "Disabling sign-in blocks token issuance for all users but keeps the app and its configuration. Deleting it loses the configuration, and hiding the tile does not block sign-in."
+    },
+    {
+      "id": "D3-040",
+      "objective": "3.2",
+      "topic": "Enterprise app properties and tenant settings",
+      "stem": "An enterprise application has Assignment required set to No. Which statement is correct?",
+      "choices": [
+        "Any user in the tenant can sign in to the app, but only assigned users see it in My Apps",
+        "No users can sign in to the app until an administrator assigns at least one user or group",
+        "Only guest users can sign in to the app",
+        "Users must request access through an access package before signing in"
+      ],
+      "answer": "Any user in the tenant can sign in to the app, but only assigned users see it in My Apps",
+      "explanation": "With assignment not required, any user who reaches the app can get a token, while the My Apps tile shows only for assigned users. That is why assignment is usually required for apps that should be restricted."
+    },
+    {
+      "id": "D3-041",
+      "objective": "3.2",
+      "topic": "Enterprise app properties and tenant settings",
+      "stem": "Fabrikam's security team wants one control, applied to every application in the tenant, that decides whether users can grant apps permissions to company data. Which setting should the team configure?",
+      "choices": [
+        "Assignment required",
+        "User consent settings for applications",
+        "Visible to users",
+        "The SAML signing certificate"
+      ],
+      "answer": "User consent settings for applications",
+      "explanation": "User consent settings apply to every app in the tenant and decide whether and how users can grant apps access to data. Assignment required, Visible to users and the signing certificate are set per application."
+    },
+    {
+      "id": "D3-042",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "A help desk team must configure SAML SSO and user assignments for all SaaS enterprise applications, but must not manage Application Proxy. Which role should you assign, following least privilege?",
+      "choices": [
+        "Application Administrator",
+        "Global Administrator",
+        "Cloud Application Administrator",
+        "Hybrid Identity Administrator"
+      ],
+      "answer": "Cloud Application Administrator",
+      "explanation": "Cloud Application Administrator manages all aspects of app registrations and enterprise apps except Application Proxy. Application Administrator adds Application Proxy rights, which are not needed."
+    },
+    {
+      "id": "D3-043",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "An administrator must publish on-premises web apps through Microsoft Entra Application Proxy and manage their enterprise application settings. Which role should be assigned, following least privilege?",
+      "choices": [
+        "Cloud Application Administrator",
+        "Global Administrator",
+        "Security Administrator",
+        "Application Administrator"
+      ],
+      "answer": "Application Administrator",
+      "explanation": "Application Administrator can manage enterprise apps including Application Proxy settings. Cloud Application Administrator has the same rights except Application Proxy, so it cannot complete the task."
+    },
+    {
+      "id": "D3-044",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "A marketing manager must manage the configuration and user assignments of one specific enterprise application and no others. What should you do, following least privilege?",
+      "choices": [
+        "Add the manager as an owner of that enterprise application",
+        "Assign the Cloud Application Administrator role at tenant scope",
+        "Assign the Application Administrator role at tenant scope",
+        "Assign the Global Reader role"
+      ],
+      "answer": "Add the manager as an owner of that enterprise application",
+      "explanation": "An owner can manage the specific enterprise application they own without rights over other apps. The tenant-wide application roles would let the manager change every app, and Global Reader cannot make changes."
+    },
+    {
+      "id": "D3-045",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "Users are not allowed to register applications in the tenant. A developer must be able to create app registrations without managing other users' apps. Which role should be assigned?",
+      "choices": [
+        "Cloud Application Administrator",
+        "Application Developer",
+        "Application Administrator",
+        "Privileged Role Administrator"
+      ],
+      "answer": "Application Developer",
+      "explanation": "Application Developer lets a user create app registrations even when the tenant setting blocks users from registering apps, and makes them owner of what they create. The administrator roles grant control over all apps."
+    },
+    {
+      "id": "D3-046",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "Contoso wants a group of operators to be able to manage only the user and group assignments of a set of enterprise apps, nothing else. Which solution meets this requirement?",
+      "choices": [
+        "The Cloud Application Administrator role at tenant scope",
+        "The User Administrator role, which manages users and their group memberships tenant-wide",
+        "A Microsoft Entra custom role with assignment permissions, scoped to those apps",
+        "An Azure custom role on the subscription"
+      ],
+      "answer": "A Microsoft Entra custom role with assignment permissions, scoped to those apps",
+      "explanation": "Microsoft Entra custom roles can grant specific enterprise application permissions and be scoped to individual applications. User Administrator manages users, not app assignments, and Azure custom roles control Azure resources, not Entra apps."
+    },
+    {
+      "id": "D3-047",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "Adatum wants remote users to reach an on-premises intranet web app without a VPN and without opening inbound firewall ports. Which solution should you use?",
+      "choices": [
+        "Microsoft Entra Connect Sync",
+        "Password-based SSO in My Apps",
+        "Cross-tenant synchronization",
+        "Microsoft Entra Application Proxy"
+      ],
+      "answer": "Microsoft Entra Application Proxy",
+      "explanation": "Application Proxy publishes on-premises web apps through connectors that make only outbound connections, so no inbound ports or VPN are needed. Connect Sync synchronizes identities and does not publish apps."
+    },
+    {
+      "id": "D3-048",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "Where should you install the Microsoft Entra private network connector used by Application Proxy?",
+      "choices": [
+        "On a Windows server on-premises that can reach the internal app",
+        "On a domain controller in a perimeter network with inbound HTTPS open",
+        "On each user's device",
+        "On the SaaS provider's web server"
+      ],
+      "answer": "On a Windows server on-premises that can reach the internal app",
+      "explanation": "The connector runs on a Windows server inside the network that can reach the back-end app and connects outbound to the service. It does not need inbound ports, and it is not installed on user devices."
+    },
+    {
+      "id": "D3-049",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "An on-premises app published through Application Proxy uses Integrated Windows Authentication. Users must get SSO after signing in to Microsoft Entra ID. What must you configure?",
+      "choices": [
+        "Password hash synchronization so the connector can replay each user's password",
+        "Kerberos constrained delegation from the connector servers to the app",
+        "SAML token encryption on the app",
+        "A SCIM provisioning connector"
+      ],
+      "answer": "Kerberos constrained delegation from the connector servers to the app",
+      "explanation": "For Integrated Windows Authentication apps, the connector uses Kerberos constrained delegation to get a Kerberos ticket for the user, which requires domain-joined connectors with delegation configured. Password hash sync and SCIM do not provide Kerberos SSO."
+    },
+    {
+      "id": "D3-050",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "Contoso publishes an internal app with Application Proxy. Conditional Access policies must apply before any traffic reaches the internal app. Which pre-authentication method should be selected?",
+      "choices": [
+        "Passthrough",
+        "Anonymous",
+        "Microsoft Entra ID",
+        "Basic"
+      ],
+      "answer": "Microsoft Entra ID",
+      "explanation": "With Microsoft Entra ID pre-authentication, users must sign in and satisfy Conditional Access before the connector forwards traffic. Passthrough sends requests to the app without Microsoft Entra authentication."
+    },
+    {
+      "id": "D3-051",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "A company has a single Application Proxy connector serving a critical app and wants to avoid an outage if that server fails. What should you do?",
+      "choices": [
+        "Open an inbound firewall port to the internal app as a fallback path for remote users",
+        "Create a second enterprise application for the same URL",
+        "Increase the token lifetime for the app",
+        "Install a second connector and place both in the same connector group"
+      ],
+      "answer": "Install a second connector and place both in the same connector group",
+      "explanation": "Connectors in the same connector group share load and provide high availability, so a second connector removes the single point of failure. Opening inbound ports defeats the design of Application Proxy."
+    },
+    {
+      "id": "D3-052",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "An on-premises app was built to trust identity values that a front-end access gateway inserts into each incoming request, and it has no support for SAML, OpenID Connect or Windows authentication. Which Application Proxy SSO method should you configure?",
+      "choices": [
+        "Header-based single sign-on",
+        "Kerberos constrained delegation",
+        "Password-based single sign-on",
+        "Linked single sign-on"
+      ],
+      "answer": "Header-based single sign-on",
+      "explanation": "Application Proxy can inject identity headers for apps that rely on header-based authentication. Kerberos constrained delegation is for Integrated Windows Authentication apps."
+    },
+    {
+      "id": "D3-053",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "You are configuring SAML SSO for a gallery app. The vendor gives you the URL where Microsoft Entra ID must post the SAML response. In which setting do you enter it?",
+      "choices": [
+        "Identifier (Entity ID)",
+        "Reply URL (Assertion Consumer Service URL)",
+        "Sign-on URL",
+        "Relay state (where users land after sign-in)"
+      ],
+      "answer": "Reply URL (Assertion Consumer Service URL)",
+      "explanation": "The reply URL, also called the Assertion Consumer Service URL, is where Microsoft Entra ID sends the SAML response. The identifier uniquely names the app, and the sign-on URL starts service-provider-initiated sign-in."
+    },
+    {
+      "id": "D3-054",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "A legacy web app has no support for SAML or OpenID Connect and uses its own sign-in form. Users want to sign in from My Apps without retyping credentials. Which SSO method should you use?",
+      "choices": [
+        "SAML-based single sign-on",
+        "Header-based single sign-on through Application Proxy",
+        "Password-based single sign-on",
+        "Linked single sign-on"
+      ],
+      "answer": "Password-based single sign-on",
+      "explanation": "Password-based SSO stores credentials and fills the app's sign-in form through the My Apps browser extension. Linked SSO only adds a link to the app and does not sign the user in."
+    },
+    {
+      "id": "D3-055",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "Contoso wants accounts in a SaaS app to be created when users are assigned and disabled when users leave. The app supports SCIM 2.0. What should you configure?",
+      "choices": [
+        "Password-based SSO",
+        "Microsoft Entra Connect Sync",
+        "A My Apps collection",
+        "Automatic provisioning for the enterprise application"
+      ],
+      "answer": "Automatic provisioning for the enterprise application",
+      "explanation": "Automatic user provisioning uses SCIM to create, update and deactivate accounts in the SaaS app based on assignments and attribute changes. SSO alone does not create or remove accounts, and Connect Sync syncs from on-premises Active Directory."
+    },
+    {
+      "id": "D3-056",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "Provisioning to a SaaS app must include only users whose department attribute is Finance, even though a large group is assigned. What should you configure?",
+      "choices": [
+        "A scoping filter on the provisioning attribute mappings",
+        "A Conditional Access policy for the app",
+        "An app collection in My Apps",
+        "A token lifetime policy that applies only to the Finance department's users"
+      ],
+      "answer": "A scoping filter on the provisioning attribute mappings",
+      "explanation": "Scoping filters limit which users are provisioned based on attribute values. Conditional Access controls sign-in, not which accounts are created."
+    },
+    {
+      "id": "D3-057",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "An administrator changed a user's attributes and needs to confirm right away that the change provisions correctly to the SaaS app without waiting for the next cycle. What should the administrator use?",
+      "choices": [
+        "Restart the Microsoft Entra Connect Sync service",
+        "Provision on demand",
+        "Rotate the SAML signing certificate",
+        "Clear the provisioning logs"
+      ],
+      "answer": "Provision on demand",
+      "explanation": "Provision on demand runs provisioning for a single user immediately and shows each step. Microsoft Entra Connect Sync does not handle app provisioning to SaaS apps."
+    },
+    {
+      "id": "D3-058",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "Provisioning to a SaaS app has stopped, and the job shows it is in quarantine. What is the MOST likely cause?",
+      "choices": [
+        "More users are assigned to the application than the provisioning service allows per cycle",
+        "The application's Visible to users property is set to No",
+        "Most requests fail, for example because the admin credentials are invalid",
+        "The SAML signing certificate was renewed"
+      ],
+      "answer": "Most requests fail, for example because the admin credentials are invalid",
+      "explanation": "The provisioning service quarantines a job when most calls fail, often because the target credentials are wrong or expired. The number of assigned users and the visibility setting do not cause quarantine."
+    },
+    {
+      "id": "D3-059",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "The SAML signing certificate of a critical SaaS app expires in a few weeks. Which action keeps SSO working with the LEAST disruption?",
+      "choices": [
+        "Delete the old certificate first and then create a new one",
+        "Switch the app to linked SSO until the vendor confirms it has imported a replacement certificate",
+        "Turn off assignment required during the change",
+        "Add a new certificate, share it with the vendor, then activate it before expiry"
+      ],
+      "answer": "Add a new certificate, share it with the vendor, then activate it before expiry",
+      "explanation": "Adding a new certificate and coordinating with the vendor before activating it avoids a gap in SSO. Deleting the old certificate first would break sign-in immediately."
+    },
+    {
+      "id": "D3-060",
+      "objective": "3.2",
+      "topic": "Users, groups and app roles",
+      "stem": "A SaaS app defines app roles named Viewer and Approver in its application manifest. Managers must receive the Approver role in the token. What should you do?",
+      "choices": [
+        "Assign the managers' group to the enterprise application with the Approver role",
+        "Add the managers to the Application Administrator role",
+        "Create a Conditional Access policy that targets the app",
+        "Add the managers as owners of the app registration so they can edit the app's roles"
+      ],
+      "answer": "Assign the managers' group to the enterprise application with the Approver role",
+      "explanation": "Assigning a user or group to the enterprise application with a specific app role makes that role appear in the user's token roles claim. Directory roles and ownership do not set app roles in tokens."
+    },
+    {
+      "id": "D3-061",
+      "objective": "3.2",
+      "topic": "Users, groups and app roles",
+      "stem": "Contoso wants to assign an enterprise application to a security group rather than to individual users. Which license requirement applies?",
+      "choices": [
+        "Microsoft Entra ID Free is enough for group-based assignment",
+        "Microsoft Entra ID P1 or higher",
+        "Microsoft Entra Workload ID Premium",
+        "Microsoft Entra ID Governance only"
+      ],
+      "answer": "Microsoft Entra ID P1 or higher",
+      "explanation": "Group-based assignment to enterprise applications needs Microsoft Entra ID P1 or higher; the Free edition supports only direct user assignment. Workload ID Premium is for workload identities."
+    },
+    {
+      "id": "D3-062",
+      "objective": "3.2",
+      "topic": "Users, groups and app roles",
+      "stem": "An administrator assigns a parent group that contains several nested groups to an enterprise app. Members of the nested groups report they cannot access the app. What is the MOST likely reason?",
+      "choices": [
+        "Nested groups must be mail-enabled to be assigned",
+        "Assignment required must be set to No for groups",
+        "Group-based app assignment does not include members of nested groups",
+        "The app must use password-based SSO for group assignment"
+      ],
+      "answer": "Group-based app assignment does not include members of nested groups",
+      "explanation": "When a group is assigned to an application, only its direct members get access; members of nested groups do not. The fix is to assign the nested groups directly or flatten membership."
+    },
+    {
+      "id": "D3-063",
+      "objective": "3.2",
+      "topic": "Users, groups and app roles",
+      "stem": "Where are the app roles that you assign to users and groups for an enterprise application originally defined?",
+      "choices": [
+        "In the tenant's user consent settings",
+        "In a Conditional Access policy",
+        "In an Azure custom role definition",
+        "In the application's app registration"
+      ],
+      "answer": "In the application's app registration",
+      "explanation": "App roles are defined on the application object (app registration) and then assigned to users, groups or service principals through the enterprise application. Azure custom roles control Azure resources, not app roles."
+    },
+    {
+      "id": "D3-064",
+      "objective": "3.2",
+      "topic": "Users, groups and app roles",
+      "stem": "An application must call another API by using application permissions with no signed-in user. How is an app role of the API granted to the calling application?",
+      "choices": [
+        "By assigning the app role to the calling app's service principal through admin consent",
+        "By adding the calling app's service principal to a security group that is assigned to the API",
+        "By setting Visible to users to Yes",
+        "By adding the calling app to a My Apps collection"
+      ],
+      "answer": "By assigning the app role to the calling app's service principal through admin consent",
+      "explanation": "Application permissions are app roles of the API assigned to the client's service principal, which requires admin consent. Groups, visibility and collections do not grant API permissions."
+    },
+    {
+      "id": "D3-065",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "Fabrikam wants users to consent only to apps from verified publishers that request low-impact permissions, while all other requests need an administrator. Which user consent setting should be selected?",
+      "choices": [
+        "Do not allow user consent",
+        "Allow user consent for apps from verified publishers, for selected permissions",
+        "Allow user consent for all apps",
+        "Let users consent to any app that requests only delegated permissions from any publisher"
+      ],
+      "answer": "Allow user consent for apps from verified publishers, for selected permissions",
+      "explanation": "This setting limits user consent to verified publishers and to permissions classified as low impact, and other requests need admin consent. Blocking all user consent is stricter than the requirement."
+    },
+    {
+      "id": "D3-066",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "User consent is disabled in the tenant. Users must still be able to ask for access to new apps, and designated reviewers should approve or deny those requests. What should you enable?",
+      "choices": [
+        "Self-service password reset",
+        "Risk-based step-up consent",
+        "The admin consent workflow",
+        "App collections in My Apps"
+      ],
+      "answer": "The admin consent workflow",
+      "explanation": "The admin consent workflow lets users request consent, which designated reviewers can approve or deny. Risk-based step-up consent only escalates risky requests to admins and does not route ordinary requests."
+    },
+    {
+      "id": "D3-067",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "An app requests Microsoft Graph application permissions. Which role can grant tenant-wide admin consent for these permissions, following least privilege?",
+      "choices": [
+        "Cloud Application Administrator",
+        "Application Administrator",
+        "User Administrator",
+        "Privileged Role Administrator"
+      ],
+      "answer": "Privileged Role Administrator",
+      "explanation": "Granting Microsoft Graph application permissions (app roles) requires Privileged Role Administrator or Global Administrator. Cloud Application Administrator and Application Administrator can grant other consents but not Microsoft Graph app roles."
+    },
+    {
+      "id": "D3-068",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "Which permission classification is used to decide which permissions users can consent to when user consent is limited to selected permissions?",
+      "choices": [
+        "Low impact",
+        "Tenant critical",
+        "Admin restricted",
+        "Privileged"
+      ],
+      "answer": "Low impact",
+      "explanation": "Administrators classify delegated permissions as low impact, and the user consent setting for selected permissions allows users to consent only to those. The other labels are not permission classifications in Microsoft Entra ID."
+    },
+    {
+      "id": "D3-069",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "A security analyst finds an unknown app that users consented to and that has access to mailboxes. What should be done FIRST to stop the app from accessing data while investigating?",
+      "choices": [
+        "Delete the users who consented",
+        "Disable sign-in for the app's enterprise application",
+        "Change the tenant's user consent setting only",
+        "Remove the app from all My Apps collections"
+      ],
+      "answer": "Disable sign-in for the app's enterprise application",
+      "explanation": "Disabling sign-in for the enterprise application stops it from getting new tokens immediately while keeping its record for investigation; permissions can be reviewed and revoked next. Changing tenant consent settings only affects future consents."
+    },
+    {
+      "id": "D3-070",
+      "objective": "3.2",
+      "topic": "My Apps and app collections",
+      "stem": "Contoso wants users in the Finance department to see their finance apps grouped together on a separate tab in My Apps. What should you create?",
+      "choices": [
+        "A connector group",
+        "An administrative unit",
+        "An app collection assigned to the Finance group",
+        "An access package catalog"
+      ],
+      "answer": "An app collection assigned to the Finance group",
+      "explanation": "Collections group apps into tabs in My Apps and can be assigned to users or groups. Users still see only apps they are assigned to inside a collection."
+    },
+    {
+      "id": "D3-071",
+      "objective": "3.2",
+      "topic": "My Apps and app collections",
+      "stem": "An administrator adds an app to a My Apps collection assigned to all users, but some users still do not see the app. What is the MOST likely reason?",
+      "choices": [
+        "Collections can contain only Microsoft 365 apps",
+        "Collections require Application Proxy",
+        "Collections show only apps that use SAML-based SSO",
+        "Those users are not assigned to the app itself"
+      ],
+      "answer": "Those users are not assigned to the app itself",
+      "explanation": "A collection only organizes apps a user already has access to; users must also be assigned to the application to see it. Collections can contain any app the users are assigned to."
+    },
+    {
+      "id": "D3-072",
+      "objective": "3.2",
+      "topic": "My Apps and app collections",
+      "stem": "Users ask for a single place where they can launch all the enterprise apps assigned to them and request access to others. Which portal should you point them to?",
+      "choices": [
+        "My Apps",
+        "Microsoft Entra admin center",
+        "Azure portal",
+        "Microsoft Defender portal"
+      ],
+      "answer": "My Apps",
+      "explanation": "My Apps is the end-user portal for launching assigned apps, viewing collections and requesting access. The admin center and Azure portal are administrative tools."
+    },
+    {
+      "id": "D3-073",
+      "objective": "3.2",
+      "topic": "My Apps and app collections",
+      "stem": "A user configured password-based SSO for an app in My Apps but the credentials are not filled in automatically. What is the MOST likely missing component?",
+      "choices": [
+        "The private network connector on the user's device",
+        "The My Apps Secure Sign-in Extension in the browser",
+        "A SCIM provisioning connector",
+        "A Kerberos ticket for the app"
+      ],
+      "answer": "The My Apps Secure Sign-in Extension in the browser",
+      "explanation": "Password-based SSO relies on the My Apps browser extension to fill in stored credentials. The private network connector runs on servers for Application Proxy, not on user devices."
+    },
+    {
+      "id": "D3-074",
+      "objective": "3.2",
+      "topic": "My Apps and app collections",
+      "stem": "An administrator wants users to be able to group their own assigned apps into personal collections in My Apps. What should the administrator know?",
+      "choices": [
+        "Only administrators can create collections",
+        "User-created collections replace all administrator collections",
+        "Users can create their own collections in My Apps in addition to admin-created ones",
+        "Each user can create personal collections only after an administrator approves an access review"
+      ],
+      "answer": "Users can create their own collections in My Apps in addition to admin-created ones",
+      "explanation": "Users can build personal collections in My Apps, and these appear alongside any collections the administrator assigned. No access review or admin action is needed."
+    },
+    {
+      "id": "D3-075",
+      "type": "order",
+      "objective": "3.2",
+      "topic": "Microsoft Entra Application Proxy",
+      "stem": "Put the steps in order to publish an on-premises web app through Microsoft Entra Application Proxy.",
+      "items": [
+        "Install the private network connector on an on-premises Windows server",
+        "Confirm the connector is active and in a connector group",
+        "Add an on-premises application with its internal and external URLs",
+        "Select Microsoft Entra ID pre-authentication",
+        "Assign users or groups to the application and test access"
+      ],
+      "explanation": "The connector must be installed and active before an app can be published to its group; then the app is added with its URLs and pre-authentication, and finally users are assigned and access is tested."
+    },
+    {
+      "id": "D3-076",
+      "type": "match",
+      "objective": "3.2",
+      "topic": "Roles for managing enterprise apps",
+      "stem": "Match each administrative task to the least-privileged role or assignment that can perform it.",
+      "pairs": [
+        {
+          "item": "Configure SAML SSO for any SaaS enterprise app, but no Application Proxy",
+          "match": "Cloud Application Administrator"
+        },
+        {
+          "item": "Publish an on-premises app with Application Proxy",
+          "match": "Application Administrator"
+        },
+        {
+          "item": "Grant admin consent to Microsoft Graph application permissions",
+          "match": "Privileged Role Administrator"
+        },
+        {
+          "item": "Manage one specific enterprise app only",
+          "match": "Owner of that enterprise app"
+        },
+        {
+          "item": "Create app registrations when users cannot register apps",
+          "match": "Application Developer"
+        }
+      ],
+      "targets_extra": [
+        "Global Administrator"
+      ],
+      "explanation": "Each task maps to the narrowest role that covers it. Global Administrator could perform them all but is never the least-privileged choice."
+    },
+    {
+      "id": "D3-077",
+      "type": "multi",
+      "objective": "3.2",
+      "topic": "User and admin consent",
+      "stem": "Contoso disables user consent but wants users to request access to new apps without filing a ticket. Which TWO actions should you take?",
+      "choices": [
+        "Enable the admin consent workflow",
+        "Designate reviewers for consent requests",
+        "Set Assignment required to No on every app",
+        "Enable password-based SSO for every app",
+        "Assign all users the Cloud Application Administrator role"
+      ],
+      "answers": [
+        "Enable the admin consent workflow",
+        "Designate reviewers for consent requests"
+      ],
+      "select": 2,
+      "explanation": "The admin consent workflow sends requests to designated reviewers, who approve or deny them. Giving every user an application role would remove the control that disabled consent was meant to provide."
+    },
+    {
+      "id": "D3-078",
+      "type": "order",
+      "objective": "3.2",
+      "topic": "SaaS app SSO and provisioning",
+      "stem": "Put the steps in order to set up automatic SCIM provisioning to a gallery SaaS app.",
+      "items": [
+        "Add the gallery application as an enterprise application",
+        "Set the provisioning mode to Automatic",
+        "Enter the tenant URL and secret token as admin credentials and test the connection",
+        "Review the attribute mappings and scoping filters",
+        "Turn the provisioning status on and review the provisioning logs"
+      ],
+      "explanation": "The app is added first, then automatic provisioning is selected so the admin credentials can be entered and tested; the mappings and scope are reviewed once the connection is saved, and only then is provisioning started and checked in the logs."
+    }
+  ]
+}

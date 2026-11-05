@@ -69,4 +69,7 @@ def test_site_offers_the_one_file_desktop_app(site):
     sw = (app.parent.parent / "sw.js").read_text(encoding="utf-8")
     assert "Delzar-Certification-Academy" not in sw                    # not precached: it is the same course again
     page = (app.parent.parent / "index.html").read_text(encoding="utf-8")
-    assert 'href: "download/Delzar-Certification-Academy.html"' in page
+    assert '"download/Delzar-Certification-Academy.html"' in page and "download/Delzar-Certification-Academy-${" in page
+    sc = site / "download" / "Delzar-Certification-Academy-SC-300.html"          # every other course gets its own file
+    assert sc.exists() and '"code": "sc300"' in sc.read_text(encoding="utf-8").replace('"code":"sc300"', '"code": "sc300"')
+    assert (site / "courses" / "sc300" / "course_data.json").exists() and "courses/sc300/course_data.json" in sw

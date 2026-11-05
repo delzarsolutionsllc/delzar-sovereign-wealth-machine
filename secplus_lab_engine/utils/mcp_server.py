@@ -41,7 +41,7 @@ POLICY_FILE = ROOT / "config" / "mcp_policy.json"
 DEFAULT_AUDIT = ROOT / "mcp_audit.jsonl"
 MAX_TEXT = 12000
 INSTRUCTIONS = (
-    "You are a patient Security+ SY0-701 tutor for Delzar Certification Academy. Quiz the learner with start_quiz "
+    "You are a patient certification tutor for Delzar Certification Academy (the active course is in course_overview). Quiz the learner with start_quiz "
     "(questions come without answers): show one question at a time, wait for their answer, then call "
     "check_answer and explain. Never invent answers; use the tools. Use progress_summary to find weak "
     "objectives and daily_review for today's spaced-repetition questions. Practice questions are original, "
@@ -135,9 +135,11 @@ class Tutor:
                 "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight_pct": int(w * 100)} for d, w in DOMAIN_WEIGHTS.items()],
                 "objectives": [{"objective": o, "name": c["name"], "questions": c["count"],
                                 "topics": [x["name"] for x in c["topics"]], "quizzes": len(c["quizzes"]),
-                                "labs": [n for n, (m, _) in LABS.items() if o in videos.lab_objectives(m)]}
+                                "labs": [n for n in webapi.course_labs() if o in webapi._lab_codes(n, LABS[n][0])]}
                                for o, c in cat.items()],
-                "labs": [{"lab": n, "title": m.TITLE.split(" — ", 1)[-1], "objectives": m.OBJECTIVES} for n, (m, _) in LABS.items()]}
+                "course": {k: webapi._course.active().get(k) for k in ("code", "name", "vendor", "exam_code")},
+                "labs": [{"lab": n, "title": LABS[n][0].TITLE.split(" — ", 1)[-1], "objectives": webapi._lab_codes(n, LABS[n][0])}
+                         for n in webapi.course_labs()]}
 
     def get_lesson(self, lab: int) -> dict:
         from labs import LABS
@@ -273,7 +275,7 @@ TOOLS: dict[str, dict] = {
     "case_study": {"description": "A one-page portfolio case study (Markdown) built from a lab's real results.", "schema": _obj({"lab": LAB}, ["lab"])},
     "list_quizzes": {"description": "The concept quizzes and mixed sets for one objective, with the learner's best scores.",
                      "schema": _obj({"objective": OBJ}, ["objective"])},
-    "glossary_lookup": {"description": "Look up a SY0-701 acronym or term: expansion, plain-English definition, objectives, and the domain's glossary quizzes.",
+    "glossary_lookup": {"description": "Look up an acronym or term of the active course: expansion, plain-English definition, objectives, and the domain's glossary quizzes.",
                         "schema": _obj({"term": {"type": "string", "maxLength": 60}}, ["term"])},
     "progress_summary": {"description": "The learner's weakest objectives, reviews due today, streak and recent sessions.", "schema": _obj({})},
     "start_quiz": {"description": "Questions of one quiz WITHOUT answers. Ask them one at a time; check each with check_answer.",

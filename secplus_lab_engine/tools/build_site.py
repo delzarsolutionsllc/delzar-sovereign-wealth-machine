@@ -25,6 +25,7 @@ import argparse
 import hashlib
 import json
 import math
+import re
 import shutil
 import struct
 import sys
@@ -169,6 +170,30 @@ def manifest() -> dict:
     }
 
 
+def build_other_courses(out: Path, variants: int) -> list[str]:
+    """Every course besides Security+: its data at courses/<code>/course_data.json and its own desktop file.
+    Each is built in a fresh process because the engine reads the course registry at import."""
+    import os
+    import subprocess
+    from utils import course
+    rels = []
+    for code in course.available():
+        if code == course.DEFAULT:
+            continue
+        env = {**os.environ, course.ENV: code}
+        rel = f"courses/{code}/course_data.json"
+        (out / rel).parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run([sys.executable, str(ROOT / "tools" / "build_web_bundle.py"), "--course", code,
+                        "--variants", str(variants), "--out", str(out / rel)], check=True, env=env, cwd=ROOT,
+                       stdout=subprocess.DEVNULL)
+        short = re.sub(r"[^A-Za-z0-9]+", "-", course.load(code)["short"]).strip("-")
+        subprocess.run([sys.executable, str(ROOT / "tools" / "build_desktop_app.py"), "--course", code,
+                        "--variants", str(variants), "--out", str(out / "download" / f"Delzar-Certification-Academy-{short}.html")],
+                       check=True, env=env, cwd=ROOT, stdout=subprocess.DEVNULL)
+        rels.append(rel)
+    return rels
+
+
 def build_site(out: Path, variants: int = 12) -> list[Path]:
     out = Path(out)
     if out.exists():
@@ -191,7 +216,8 @@ def build_site(out: Path, variants: int = 12) -> list[Path]:
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         '<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>'
         f'<script>window.SECPLUS_BUNDLE = {bundle};</script>{page_only}</body></html>', encoding="utf-8")
-    precache = ["./", "index.html", "course_data.json", "manifest.webmanifest",
+    extra = build_other_courses(out, variants)
+    precache = ["./", "index.html", "course_data.json", *extra, "manifest.webmanifest",
                 *[f"icons/icon-{s}.png" for s in ICON_SIZES], "icons/icon-maskable-512.png"]
     digest = hashlib.sha256()
     for rel in precache[1:]:

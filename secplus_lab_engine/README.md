@@ -2,6 +2,8 @@
 
 **Technology certification training by Delzar Solutions: hands-on security and identity (IAM) labs, exam-style practice, a glossary with acronym quizzes, and an AI tutor. The first course is aligned to the CompTIA Security+ SY0-701 exam objectives.** Live app: see *Use it online* below. Formerly "IdentityOps Lab".
 
+**Courses:** **Security+ SY0-701** (the original course) and **SC-300 Microsoft Identity and Access Administrator** (skills measured as of October 28, 2026). Pick a course in the app's rail (hosted site: `?course=sc300`) or run any command with `--course sc300`, e.g. `python main.py --course sc300 quiz 2.2`. Each course has its own question bank, objective quizzes, glossary, exams and progress; SC-300 reuses the identity labs (1, 2, 25, 26) mapped to its skills. Course definitions live in `data/courses/<code>/course.json`; add a new course with the `add-certification-module` skill (`.claude/skills/`).
+
 An **offline, CLI-driven Python lab** for practising the manual security operations behind CompTIA Security+ SY0-701, across **all five exam domains**: identity, Zero Trust, log forensics, change control, vulnerability triage, email security, firewall auditing, hardening, threat actors, resilience, vendor risk, control types, and **governing autonomous AI agents**.
 
 It's meant for building first-principles skill: work through each operation by hand and see exactly where manual processes fail. Only then design the guardrails that automated agents must operate within.

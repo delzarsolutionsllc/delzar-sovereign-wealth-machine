@@ -27,6 +27,8 @@
   color-scheme: dark; }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+summary { cursor: pointer; min-height: 24px; padding: 3px 0; }
 html, body { height: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.55 var(--body); }
 a { color: var(--accent); }
@@ -189,6 +191,8 @@ details.navigator > summary { cursor: pointer; color: var(--muted); font-size: .
 a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-color: var(--accent); }
 .form label.grow { flex: 1 1 260px; } .form input[type=search] { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 .countdown { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--sunken); border-radius: 6px; }
+.coursepick { display: flex; flex-direction: column; gap: 2px; font-size: .75rem; color: var(--muted); margin-top: 8px; }
+.coursepick select { font-size: .9rem; padding: 5px 8px; }
 .tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
@@ -198,7 +202,8 @@ a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-co
 <div class="app">
   <aside class="rail" id="rail">
     <div class="railtop">
-      <div class="brand"><span class="label">Aligned to CompTIA Security+ SY0-701</span><b>Delzar Certification Academy</b></div>
+      <div class="brand"><span class="label" id="aligned">Aligned to CompTIA Security+ SY0-701</span><b>Delzar Certification Academy</b>
+        <label class="coursepick" id="coursepick" hidden>Course <select id="course-select" aria-label="Course"></select></label></div>
       <button class="btn maptoggle" id="maptoggle" aria-expanded="false" aria-controls="domains">Course map</button>
     </div>
     <nav class="nav" aria-label="Main">
@@ -213,7 +218,7 @@ a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-co
     </nav>
     <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
     <div class="mode" id="mode"></div>
-    <p class="tm">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
+    <p class="tm" id="tmnotice">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
   </aside>
   <main class="main" id="main"><div class="wrap" id="view" tabindex="-1"><p class="loading">Loading course…</p></div></main>
 </div>
@@ -242,7 +247,7 @@ let announceT = null;
 function announce(msg) { const a = $("#announcer"); if (!a) return; a.textContent = ""; clearTimeout(announceT); announceT = setTimeout(() => { a.textContent = msg; }, 60); }
 const pct = (c, t) => (t ? Math.round(100 * c / t) : 0);
 
-const OBJ = {
+let OBJ = {
   "1.1": "Security controls", "1.2": "Security concepts / Zero Trust", "1.3": "Change management", "1.4": "Cryptography & PKI",
   "2.1": "Threat actors & motivations", "2.2": "Threat vectors & attack surfaces", "2.3": "Types of vulnerabilities",
   "2.4": "Indicators of malicious activity", "2.5": "Mitigation techniques",
@@ -257,6 +262,16 @@ const OBJ = {
    Live mode (python main.py web): every call goes to the local engine.
    Hosted mode: the same calls are answered from course_data.json.          */
 const LIVE = typeof window.SECPLUS_API === "string";
+/* Which course this page serves. Hosted site: ?course=sc300 or the last one picked (default Security+).
+   Desktop file and local server: the course their data was built for (read from the catalog).        */
+const COURSE = (() => {
+  if (LIVE || window.SECPLUS_BUNDLE) return null;
+  let c = new URLSearchParams(location.search).get("course");
+  if (!c) { try { c = localStorage.getItem("delzar-course"); } catch { c = null; } }
+  return /^[a-z0-9]{2,20}$/.test(c || "") ? c : "secplus";
+})();
+const C = () => (CATALOG && CATALOG.course) || { code: "secplus", exam_code: "SY0-701", vendor: "CompTIA", short: "Security+", scale: [100, 900], courses: [] };
+const isSecplus = () => C().code === "secplus";
 let BUNDLE = null, CATALOG = null;
 
 async function post(method, args = {}) {
@@ -270,7 +285,7 @@ const Engine = {
   async catalog() {
     if (LIVE) return post("catalog");
     if (window.SECPLUS_BUNDLE) { BUNDLE = window.SECPLUS_BUNDLE; return BUNDLE.catalog; }   // single-file desktop app
-    const r = await fetch("course_data.json");
+    const r = await fetch(COURSE && COURSE !== "secplus" ? `courses/${COURSE}/course_data.json` : "course_data.json");
     if (!r.ok) throw new Error("course_data.json could not be loaded");
     BUNDLE = await r.json();
     return BUNDLE.catalog;
@@ -547,6 +562,8 @@ function buildReviewSession(data, bank, today, size = SRS.size, seed = null) {
 /* ------------------------------------------------------------------ progress store
    Live: progress.json on this computer. Hosted: your private document in this
    page's store (claude.ai account), else this browser's storage, else memory.   */
+/* Each course keeps its own progress (Security+ keeps its original key). */
+const progressKey = () => (isSecplus() ? "secplus-progress" : `delzar-progress-${C().code}`);
 const EMPTY = () => ({ objectives: {}, sessions: [], watched: [], srs: {}, streak: { last_day: null, count: 0 }, quizzes: {} });
 
 /* Move progress between devices. Same rules as utils/sync.py (keep the two in step):
@@ -605,7 +622,7 @@ const Progress = {
   where: LIVE ? "progress.json on this computer" : "this browser",
   cache: null, remote: null, loaded: false,
   local() {          // read browser storage once (views can ask before init() has run); fill fields older saves lack
-    if (!this.loaded) { this.loaded = true; try { this.cache = JSON.parse(localStorage.getItem("secplus-progress") || "null"); } catch { this.cache = null; } }
+    if (!this.loaded) { this.loaded = true; try { this.cache = JSON.parse(localStorage.getItem(progressKey()) || "null"); } catch { this.cache = null; } }
     const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
     d.objectives ||= {}; d.sessions ||= []; d.watched ||= [];
     if (!d.srs || typeof d.srs !== "object") d.srs = {};
@@ -621,7 +638,7 @@ const Progress = {
       const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
       const id = db && user ? await user.id() : null;
       if (!id) return;
-      const ref = db.doc("data/users/" + id + "/progress");
+      const ref = db.doc("data/users/" + id + (isSecplus() ? "/progress" : "/progress-" + C().code));
       const snap = await ref.get();
       this.remote = ref; this.where = "your claude.ai account (private to you)";
       if (snap.exists) this.cache = JSON.parse(JSON.stringify(snap.data()));
@@ -706,7 +723,7 @@ const Progress = {
   },
   async save(d) {
     this.cache = d;
-    try { localStorage.setItem("secplus-progress", JSON.stringify(d)); } catch { /* storage blocked */ }
+    try { localStorage.setItem(progressKey(), JSON.stringify(d)); } catch { /* storage blocked */ }
     if (this.remote) { try { await this.remote.set(d); } catch { /* keep local copy */ } }
   },
 };
@@ -752,7 +769,8 @@ function renderMode() {
       : window.SECPLUS_BUNDLE ? "Desktop app: works offline from this one file." : "Pre-built scenarios and question banks. Run it on your computer for the live engine." }),
     el("div", { text: `Progress is saved to ${Progress.where}.` }),
     !LIVE && !window.SECPLUS_BUNDLE && /^https?:$/.test(location.protocol)
-      ? el("div", {}, el("a", { href: "download/Delzar-Certification-Academy.html", download: "Delzar Certification Academy.html", text: "Download the desktop app" }), " (one file, works offline)") : null);
+      ? el("div", {}, el("a", { href: isSecplus() ? "download/Delzar-Certification-Academy.html" : `download/Delzar-Certification-Academy-${C().short.replace(/[^A-Za-z0-9]+/g, "-")}.html`,
+        download: isSecplus() ? "Delzar Certification Academy.html" : `Delzar Certification Academy - ${C().short}.html`, text: "Download the desktop app" }), " (one file, works offline)") : null);
 }
 function markNav(view, lab) {
   document.querySelectorAll(".nav a").forEach(a => a.classList.toggle("on", a.dataset.view === view));
@@ -774,12 +792,14 @@ function todayCard() {
 }
 function examCountdown() {
   const t = CATALOG.exam_target; if (!t) return null;
+  if (!t.retires) return el("p", { class: "countdown" }, el("b", { text: `${t.name}: ` }), `${t.note} `,
+    el("a", { href: t.source, target: "_blank", rel: "noopener noreferrer", text: `${C().vendor}'s exam page` }));
   const days = Math.ceil((new Date(t.retires + "T23:59:59") - new Date()) / 86400000);
   const when = new Date(t.retires + "T12:00:00").toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
   return el("p", { class: "countdown" },
     el("b", { text: days > 0 ? `${days} days left` : "This exam has retired" }),
     ` to take ${t.name}: it retires ${when}. Book your exam date with time to spare. `,
-    el("a", { href: t.source, target: "_blank", rel: "noopener noreferrer", text: "CompTIA's dates" }));
+    el("a", { href: t.source, target: "_blank", rel: "noopener noreferrer", text: `${C().vendor}'s dates` }));
 }
 
 async function viewHome() {
@@ -788,15 +808,19 @@ async function viewHome() {
   const byDomain = {};
   for (const [o, s] of Object.entries(prog.objectives)) { const d = o.split(".")[0]; (byDomain[d] ||= { a: 0, c: 0 }); byDomain[d].a += s.attempted; byDomain[d].c += s.correct; }
   const weakest = prog.rows.find(r => r[1] >= 1);
-  const suggestion = weakest ? CATALOG.labs.find(l => l.objectives.includes(weakest[0])) : CATALOG.labs[0];
+  const weakLab = weakest ? CATALOG.labs.find(l => (l.objective_codes || []).includes(weakest[0]) || l.objectives.includes(weakest[0])) : null;
+  const suggestion = weakLab || CATALOG.labs[0];
+  const firstObjective = Object.keys(OBJ)[0];
   put(view(), 
     el("section", { class: "panel" },
       el("span", { class: "label", text: "Course overview" }),
-      el("h1", { text: "Practise every SY0-701 domain on working security engines" }),
+      el("h1", { text: isSecplus() ? "Practise every SY0-701 domain on working security engines" : `Practise every ${C().exam_code} skill area, one concept at a time` }),
       examCountdown(),
-      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the 100–900 scale).` }),
+      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the ${C().scale[0]}–${C().scale[1]} scale).` + (isSecplus() ? "" : ` The ${CATALOG.labs.length} hands-on labs are the identity labs shared with the Security+ course, mapped to ${C().exam_code} skills.`) }),
       el("div", { class: "btns" },
-        el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
+        weakest ? el("a", { class: "btn primary", href: weakLab ? `#lab-${weakLab.n}` : `#obj-${weakest[0]}`, text: `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}` + (weakLab ? `: Lab ${weakLab.n}` : "") })
+          : isSecplus() ? el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: "Start with Lab 1" })
+          : el("a", { class: "btn primary", href: `#obj-${firstObjective}`, text: `Start with ${firstObjective} ${OBJ[firstObjective] || ""}` }),
         el("a", { class: "btn", href: "#quizzes", text: "Quiz one objective at a time" }),
         el("a", { class: "btn", href: "#glossary", text: "Glossary & acronym quizzes" }),
         el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
@@ -804,10 +828,12 @@ async function viewHome() {
     todayCard(),
     el("div", { class: "grid5" }, CATALOG.domains.map(d => {
       const s = byDomain[d.id], labs = CATALOG.labs.filter(l => l.domains.includes(d.id));
-      return el("a", { class: "dcard", href: `#lab-${(labs.find(l => l.primary_domain === d.id) || labs[0]).n}` },
+      const firstLab = labs.find(l => l.primary_domain === d.id) || labs[0];
+      const firstObj = Object.keys(OBJ).find(o => o.split(".")[0] === d.id) || `${d.id}.1`;
+      return el("a", { class: "dcard", href: firstLab ? `#lab-${firstLab.n}` : `#obj-${firstObj}` },
         el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
         el("span", { class: "w", text: `${Math.round(d.weight * 100)}%` }), el("span", { class: "muted", text: "of the exam" }),
-        el("span", { class: "muted", text: `${labs.length} labs · ` + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
+        el("span", { class: "muted", text: (labs.length ? `${labs.length} labs · ` : "quizzes · ") + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
     })),
     el("p", { class: "btns" }, el("span", { class: "muted", text: "Test one domain: " }), CATALOG.domains.map(d => el("a", { class: "btn", href: `#exam-d${d.id}`, text: `Domain ${d.id} test` }))));
 }
@@ -831,7 +857,7 @@ async function viewLab(n, tab = "lesson", focusTab = false) {
     el("section", { class: "panel" },
       el("span", { class: "label", text: `Lab ${lab.n} · Domain ${lab.domains.join(", ")}` }),
       el("h1", { text: lab.title.replace(/^Lab \d+ — /, "") }),
-      el("div", { class: "chips" }, lab.objectives.replace(/^SY0-701\s*/, "").split(" · ").map(o => el("span", { class: "chip", text: o })))),
+      el("div", { class: "chips" }, lab.objectives.replace(new RegExp("^" + C().exam_code + "\\s*"), "").split(" · ").map(o => el("span", { class: "chip", text: o })))),
     tabbar, body);
   if (focusTab) { const t = $(`#tab-${tab}`); if (t) t.focus(); }
   if (tab === "lesson") renderLesson(lab, body);
@@ -959,20 +985,22 @@ function viewExam(domain = "") {
     el("option", { value: "bank", text: "Exam-style questions" }), el("option", { value: "labs", text: "Lab scenario questions" }));
   const blurb = el("p", { class: "muted" }), title = el("h1");
   const sync = () => {
-    const d = kind.value, opts = d ? [15, 30, 45] : [30, 60, 90], def = d ? 30 : 90;
+    const full = C().exam_questions || 90, d = kind.value, opts = d ? [15, 30, 45] : [Math.round(full / 3), Math.round(2 * full / 3), full], def = d ? 30 : full;
     put(count, opts.map(n => el("option", { value: n, selected: n === def || null, text: `${n} questions` })));
-    mins.value = def;
+    mins.value = d ? def : (C().exam_minutes || def);
     const dom = CATALOG.domains.find(x => x.id === d);
     title.textContent = d ? `Domain ${d} test: ${dom.name}` : "A timed, mixed-domain exam";
     blurb.textContent = d
       ? `Questions from Domain ${d} only (${Math.round(dom.weight * 100)}% of the real exam), spread evenly across its objectives. You get a score per objective; the target is ${CATALOG.domain_test_target}%, a study goal (CompTIA publishes no per-domain pass mark).`
-      : "Weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong.";
+      : (isSecplus() ? "Weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management."
+        : `Weighted like ${C().exam_code}: ` + CATALOG.domains.map(x => `${Math.round(x.weight * 100)}% ${x.name.toLowerCase()}`).join(", ") + ".")
+        + " No feedback until the end; unanswered questions count as wrong.";
     blurb.textContent += " Exam-style questions are original practice questions written like the real exam (short scenarios, four options); lab scenario questions come from the hands-on labs.";
   };
-  kind.addEventListener("change", sync); count.addEventListener("change", () => { mins.value = count.value; }); sync();
+  kind.addEventListener("change", sync); count.addEventListener("change", () => { mins.value = kind.value ? count.value : Math.round(count.value * (C().exam_minutes || 90) / (C().exam_questions || 90)); }); sync();
   put(view(), el("section", { class: "panel" },
     el("span", { class: "label", text: "Practice exam & domain tests" }), title, blurb,
-    el("div", { class: "form" }, el("label", {}, "Test", kind), el("label", {}, "Questions", source), el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
+    el("div", { class: "form" }, el("label", {}, "Test", kind), isSecplus() ? el("label", {}, "Questions", source) : null, el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
       el("button", { class: "btn primary", text: "Start", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 30), kind.value, source.value) }))),
     el("section", { class: "panel" }, el("h2", { text: "Domain tests" }),
       el("div", { class: "grid5" }, CATALOG.domains.map(d => el("a", { class: "dcard", href: `#exam-d${d.id}` },
@@ -1068,7 +1096,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
   async function done(timedOut) {
     if (finished) return; finished = true; clearInterval(examTimer); setKeys(null);
     const results = qs.map((q, k) => ({ objective: q.objective, correct: isCorrect(q, answers[k]), qid: q.id || "" }));
-    const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(100 + 8 * p);
+    const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(C().scale[0] + (C().scale[1] - C().scale[0]) * p / 100);
     const target = CATALOG.domain_test_target;
     const passed = domain ? p >= target : scaled >= CATALOG.pass_scaled;
     try { await Progress.record(results, domain ? `domain ${domain} test` : "exam"); } catch { /* shown below */ }
@@ -1079,11 +1107,11 @@ async function startExam(count, minutes, domain = "", source = "bank") {
     put(view(), 
       el("section", { class: "panel" },
         el("span", { class: "label", text: timedOut ? "Time is up" : "Exam complete" }),
-        el("h1", { tabindex: "-1", id: "result-h", text: `${correct} of ${qs.length} correct · approximate scaled score ${scaled} / 900 · ${passed ? "PASS" : "below the pass mark"}` }),
+        el("h1", { tabindex: "-1", id: "result-h", text: `${correct} of ${qs.length} correct · approximate scaled score ${scaled} / ${C().scale[1]} · ${passed ? "PASS" : "below the pass mark"}` }),
         el("div", { class: "scale", role: "img", "aria-label": `Scaled score ${scaled}, pass mark ${CATALOG.pass_scaled}` },
-          el("div", { class: "track" }), el("div", { class: "pass", style: `left:${(CATALOG.pass_scaled - 100) / 8}%` }),
-          el("div", { class: "you", style: `left:${(scaled - 100) / 8}%; background: var(${passed ? "--pass" : "--fail"})` })),
-        el("p", { class: "muted", text: `The black mark is the pass score (${CATALOG.pass_scaled}). This scale is an approximation: CompTIA's real scaled scoring is not public.` }),
+          el("div", { class: "track" }), el("div", { class: "pass", style: `left:${pct(CATALOG.pass_scaled - C().scale[0], C().scale[1] - C().scale[0])}%` }),
+          el("div", { class: "you", style: `left:${pct(scaled - C().scale[0], C().scale[1] - C().scale[0])}%; background: var(${passed ? "--pass" : "--fail"})` })),
+        el("p", { class: "muted", text: `The black mark is the pass score (${CATALOG.pass_scaled}). This scale is an approximation: ${C().vendor}'s real scaled scoring is not public.` }),
         el("div", { class: "tablewrap" }, el("table", {},
           el("thead", {}, el("tr", {}, ["Domain", "Weight", "Correct", "Score"].map(h => el("th", { text: h })))),
           el("tbody", {}, CATALOG.domains.map(d => { const [c, t] = dom[d.id] || [0, 0]; return el("tr", {}, el("td", { text: `${d.id} ${d.name}` }), el("td", { text: `${Math.round(d.weight * 100)}%` }), el("td", { text: `${c}/${t}` }), el("td", { text: t ? `${pct(c, t)}%` : "–" })); }))))),
@@ -1103,7 +1131,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
         el("section", { class: "panel" },
           el("span", { class: "label", text: timedOut ? "Time is up" : `Domain ${domain} test complete` }),
           el("h1", { tabindex: "-1", id: "result-h", text: `${correct} of ${qs.length} correct · ${Math.round(p)}% · ${passed ? "target met" : "below the " + target + "% target"}` }),
-          el("p", { class: "muted", text: `Domain ${domain} ${d.name} is ${Math.round(d.weight * 100)}% of the real exam. The ${target}% target is a study goal, not a CompTIA pass mark.` }),
+          el("p", { class: "muted", text: `Domain ${domain} ${d.name} is ${Math.round(d.weight * 100)}% of the real exam. The ${target}% target is a study goal, not a ${C().vendor} pass mark.` }),
           el("div", { class: "tablewrap" }, el("table", {},
             el("thead", {}, el("tr", {}, ["Objective", "Correct", "Score", "Study"].map(h => el("th", { text: h })))),
             el("tbody", {}, objs.map(o => { const [c, t] = obj[o], labs = labsFor(o);
@@ -1249,7 +1277,7 @@ async function viewGlossary(domain = "") {
     el("section", { class: "panel" },
       el("span", { class: "label", text: "Glossary & acronyms" }),
       el("h1", { text: domain ? `Domain ${domain} glossary: ${G.domains[domain].name}` : "Speak the language of the exam" }),
-      el("p", { class: "muted", text: `${GLOSS.length} SY0-701 acronyms and terms, each with a plain-English definition and the objectives where it appears. Definitions are original to this course.` }),
+      el("p", { class: "muted", text: `${GLOSS.length} ${C().exam_code} acronyms and terms, each with a plain-English definition and the objectives where it appears. Definitions are original to this course.` }),
       src ? el("p", { class: "muted" }, "Acronym videos: ", el("a", { href: src.url, target: "_blank", rel: "noopener noreferrer", text: `${src.title}` }), ` by ${src.author}, about 35 seconds each on YouTube.`) : null,
       el("div", { class: "btns", role: "group", "aria-label": "Domain" },
         el("a", { class: "btn" + (domain ? "" : " primary"), href: "#glossary", text: "All domains" }),
@@ -1283,7 +1311,7 @@ async function viewQuizzes() {
     el("section", { class: "panel" },
       el("span", { class: "label", text: "Objective quizzes" }),
       el("h1", { text: "Learn one objective at a time" }),
-      el("p", { class: "muted", text: `Every SY0-701 objective has short mixed sets (about ${CATALOG.quiz_set_size || 10} questions; together they cover every question for that objective once) and a concept quiz for each of its topics, so you can learn one idea at a time. No timer: you see the answer and the reason straight away. Missed questions come back in your daily review.` }),
+      el("p", { class: "muted", text: `Every ${C().exam_code} objective has short mixed sets (about ${CATALOG.quiz_set_size || 10} questions; together they cover every question for that objective once) and a concept quiz for each of its topics, so you can learn one idea at a time. No timer: you see the answer and the reason straight away. Missed questions come back in your daily review.` }),
       el("p", { class: "muted" }, el("span", { class: "meter" }, el("i", { style: `width:${pct(taken, total)}%; background:var(--pass)` })), ` ${taken} of ${total} quizzes taken`)),
     CATALOG.domains.map(d => el("section", { class: "panel" },
       el("span", { class: "label", text: `Domain ${d.id} · ${Math.round(d.weight * 100)}% of the exam` }), el("h2", { text: d.name }),
@@ -1561,7 +1589,7 @@ async function viewCareer() {
   put(view(),
     el("section", { class: "panel" },
       el("span", { class: "label", text: "IAM career & portfolio" }),
-      el("h1", { text: "From Security+ to an identity (IAM) job" }),
+      el("h1", { text: `From ${C().short} to an identity (IAM) job` }),
       el("ol", { class: "path" }, c.path.map(p => el("li", {}, el("b", { text: p.name }), el("br"), el("span", { class: "muted", text: p.why })))),
       el("p", { class: "muted", text: "Each lab opens with a work ticket and ends with a one-page case study (the Case study tab). Labs you have practised are ticked." })),
     c.tracks.map(t => el("section", { class: "panel" }, el("h2", { text: t.name }),
@@ -1572,6 +1600,25 @@ async function viewCareer() {
     el("section", { class: "panel" }, el("h2", { text: "Job search (Oklahoma and remote)" }),
       el("p", {}, el("b", { text: "Titles to search: " }), c.job_titles.join(" · ")),
       el("ul", {}, c.job_search.map(x => el("li", { text: x })))));
+}
+
+/* ------------------------------------------------------------------ course (Security+, SC-300, ...) */
+function applyCourse() {
+  const c = C();
+  if (CATALOG.objectives) OBJ = CATALOG.objectives;
+  if (c.aligned) $("#aligned").textContent = c.aligned;
+  if (c.notice) $("#tmnotice").textContent = c.notice;
+  if (!isSecplus()) document.title = `Delzar Certification Academy · ${c.short}`;
+  const hasVideos = (VC().videos || []).length > 0;
+  document.querySelectorAll('.nav a[data-view="videos"]').forEach(a => { a.hidden = !hasVideos; });
+  // The course picker: on the hosted site switch by reloading with ?course=; elsewhere one course per build.
+  const pick = $("#coursepick"), sel = $("#course-select"), list = c.courses || [];
+  if (COURSE && list.length > 1) {
+    put(sel, list.map(x => el("option", { value: x.code, selected: x.code === c.code || null, text: x.name })));
+    sel.onchange = () => { try { localStorage.setItem("delzar-course", sel.value); } catch { /* fine */ }
+      location.href = `${location.pathname}?course=${encodeURIComponent(sel.value)}#home`; };
+    pick.hidden = false;
+  }
 }
 
 /* ------------------------------------------------------------------ router & boot */
@@ -1604,6 +1651,7 @@ $("#maptoggle").addEventListener("click", () => { const r = $("#rail"); r.classL
 (async function boot() {
   try {
     CATALOG = await Engine.catalog();
+    applyCourse();
     renderRail(); renderMode(); route();
     /* After navigating, move keyboard and screen-reader focus to the new page's heading. */
     window.addEventListener("hashchange", async () => {

@@ -27,15 +27,15 @@ Collect, then summarise back in 5 lines:
 
 Gate: dates and domain weights verified from the vendor site.
 
-## Phase 1: Platform readiness (first new module only)
+## Phase 1: Register the course (the platform is already multi-course)
 
-Today the engine is Security+-specific. Before the second course, generalise once, in its own PR, with tests proving Security+ is unchanged:
-- A course registry `data/courses/<code>/course.json` (name, vendor, exam code, domains + names + weights, objectives + names, pass mark, exam target dates, not-affiliated notice) and course-scoped data folders (`exam_bank/`, `exam_bank/topics/`, `glossary/`, `video_course.json`, `career_tracks.json`, `briefings/`).
-- Replace hard-coded maps with the registry: `utils/exam_bank.py` (`OBJECTIVES`), `utils/exam.py` (`DOMAIN_WEIGHTS`, `DOMAIN_NAMES`, `PASS_SCALED`), `utils/glossary.py` (`DOMAIN_NAMES`), `tools/export_anki.py` (`OBJECTIVE_NAMES`), `webapi.EXAM_TARGET`, and the `OBJ` map in `web/index.html`.
-- A course switcher in the web app (rail) and `--course <code>` on the CLI; progress keys namespaced by course.
-See `references/platform_checklist.md` for the file-by-file list.
+The engine became multi-course when SC-300 was added (2026-11-05). For a new course:
+1. Create `secplus_lab_engine/data/courses/<code>/course.json` by copying `data/courses/sc300/course.json`: code, name, short, vendor, exam_code, exam_name, aligned line, not-affiliated notice, domains (id, name, weight; weights must sum to 1 - normalise the vendor's ranges and record them in `weights_note`), objectives (code -> name), pass_scaled and scale, exam_questions / exam_minutes (mark unpublished numbers PROJECTED in a note), exam_target (dates or null, note, source URL), data folders (`data/courses/<code>/exam_bank`, `.../glossary`), labs (`{"25": ["2.2", "4.3"]}` maps shared labs to this course's objectives, or `{}`), videos (true only if a video index exists for the course), facts_checked date.
+2. Everything is course-aware through `utils/course.py`: run any tool with `--course <code>` (or `DELZAR_COURSE=<code>`), e.g. `DELZAR_COURSE=<code> python -m utils.exam_bank <file>`. Progress is kept per course (`progress-<code>.json`; browser key `delzar-progress-<code>`).
+3. `tools/build_site.py` builds every registered course automatically (`courses/<code>/course_data.json` and `download/Delzar-Certification-Academy-<short>.html`); the hosted site's course picker appears when there are 2+ courses.
+4. Copy `tests/test_courses.py`'s SC-300 checks for the new course (they run in a subprocess with the course active).
 
-Gate: full test suite green; Security+ bundle byte-identical except the new course list.
+Gate: `python -m pytest tests -q` green; `python tools/build_site.py --out <scratch>/site` builds the new course.
 
 ## Phase 2: Objective and topic map
 
