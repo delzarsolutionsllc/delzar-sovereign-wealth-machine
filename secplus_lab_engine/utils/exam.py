@@ -77,7 +77,7 @@ def collect_questions(policies: dict, seed: int | None = None, randomize: bool =
             datasets += [generate(n, policies, seed=base * 1000 + n * 10 + r) for r in range(rounds)]
         for data in datasets:
             for q in module.build_challenges(policies, data):
-                key = (q.prompt, q.context)
+                key = (q.prompt, q.context, *q.choices)       # same prompt can come with different choices
                 dom = q.objective.split(".")[0]
                 if key in seen or dom not in pool:
                     continue

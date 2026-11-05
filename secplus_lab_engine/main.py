@@ -16,6 +16,8 @@ Usage
     python main.py challenge 9 --random --seed 42   # fresh generated scenario (labs with a generator)
     python main.py lab 12 --random      # run a lab on a generated scenario
     python main.py exam                 # timed 90-question practice exam weighted by SY0-701 domain
+    python main.py videos               # Professor Messer's free video course, mapped to the labs
+    python main.py videos --lab 17      # the videos for one lab (or --objective 1.4, --mark ID, --open N)
     python main.py web                  # open the course web app in your browser (live engine, offline)
     python main.py install-shortcut     # put a double-click launcher on your desktop
     python main.py lab 4 --file x.json  # run a lab against your own data
@@ -44,6 +46,7 @@ from utils.exam import build_exam, run_exam  # noqa: E402
 from utils.scenario_generator import GENERATORS, generate  # noqa: E402
 from utils.loader import load_data, load_json, load_policies  # noqa: E402
 from utils.terminal_ui import UI  # noqa: E402
+from utils import videos as vids  # noqa: E402
 
 log = logging.getLogger("secplus_lab_engine")
 
@@ -99,6 +102,65 @@ def show_progress(ui: UI, progress_path: str | None = None) -> None:
     recent = p.data.get("sessions", [])[-5:]
     if recent:
         ui.table("Recent sessions", ["When (UTC)", "Lab", "Score"], [[s["ts"], s["lab"], s["score"]] for s in recent])
+    recs = vids.recommend(rows)
+    if recs:
+        ui.table("Watch next: videos for your weakest objectives", ["Objective", "Status", "Video", "Length", "Link"],
+                 [[r["objective"], r["status"], v["title"], vids.duration(v["seconds"]), vids.url(v, False)]
+                  for r in recs for v in r["videos"][:2]])
+
+
+def show_videos(ui: UI, lab: int | None = None, objective: str | None = None, mark: str | None = None,
+                unmark: str | None = None, open_n: int | None = None, progress_path: str | None = None) -> int:
+    """The video course: full study plan, or the videos for one lab / objective."""
+    import webapi
+    if mark or unmark:
+        try:
+            webapi.progress_watch(mark or unmark, bool(mark), progress_path)
+        except ValueError:
+            ui.print(f"No video with ID '{mark or unmark}'. IDs are in the last column of: python main.py videos",
+                     style="yellow")
+            return 1
+    watched = set(webapi.progress_get(progress_path)["watched"])
+    if open_n is not None:
+        match = [v for v in vids.videos() if v["n"] == open_n]
+        if not match:
+            ui.print(f"No video #{open_n} (1-{len(vids.videos())})", style="yellow")
+            return 1
+        import webbrowser
+        webbrowser.open(vids.url(match[0]))
+        ui.print(f"Opening #{open_n} {match[0]['title']}: {vids.url(match[0])}")
+        return 0
+    src = vids.course()["source"]
+
+    def rows(vs):
+        return [[v["n"], "✓" if v["id"] in watched else "", v["title"], v["objective"], vids.duration(v["seconds"]), v["id"]]
+                for v in vs]
+    head = ["#", "Seen", "Video", "Obj.", "Length", "ID"]
+    if lab is not None:
+        mod = LABS[lab][0]
+        vs = vids.for_lab(mod)
+        ui.header(f"VIDEOS FOR {mod.TITLE}", f"{len(vs)} videos · {vids.duration(sum(v['seconds'] for v in vs))} · "
+                                             f"objectives {', '.join(vids.lab_objectives(mod))}")
+        ui.table("Watch, then run the lab and practise", head, rows(vs))
+    elif objective:
+        vs = vids.for_objective(objective)
+        labs_ = vids.labs_for_objective(objective)
+        ui.header(f"VIDEOS FOR OBJECTIVE {objective}", f"{len(vs)} videos · labs: {', '.join(map(str, labs_)) or 'none yet'}")
+        ui.table("Videos", head, rows(vs))
+    else:
+        all_v = vids.videos()
+        ui.header("VIDEO COURSE · " + src["title"],
+                  f"{src['author']} · {len(all_v)} videos · {vids.duration(sum(v['seconds'] for v in all_v))} · "
+                  f"watched {len(watched & {v['id'] for v in all_v})}/{len(all_v)} · {src['url']}")
+        ui.table("Study plan: watch the videos, then practise in the lab",
+                 ["Objective", "Videos", "Length", "Seen", "Practise in"],
+                 [[step["objective"], len(step["videos"]), vids.duration(step["seconds"]),
+                   f"{sum(v['id'] in watched for v in step['videos'])}/{len(step['videos'])}",
+                   ", ".join(f"Lab {n}" for n in step["labs"]) or ("start here" if step["objective"] == "intro" else "videos only")]
+                  for step in vids.study_plan()])
+    ui.print("Open one: python main.py videos --open N · mark it watched: python main.py videos --mark ID · "
+             "videos © Professor Messer, watched on YouTube.", style="dim")
+    return 0
 
 
 def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int | None = None,
@@ -126,7 +188,7 @@ def interactive_menu(ui: UI, policies: dict) -> None:
         list_labs(ui)
         ui.print(f"  [bold]1-{len(LABS)}[/bold] run a lab   [bold]C<n>[/bold] challenge (e.g. C3)   "
                  "[bold]R<n>[/bold] challenge on a random scenario   [bold]E[/bold] practice exam   [bold]P[/bold] progress   "
-                 "[bold]W[/bold] web app   [bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
+                 "[bold]V[/bold] videos   [bold]W[/bold] web app   [bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
         try:
             choice = ui.ask(">").strip().lower()
         except (EOFError, KeyboardInterrupt):
@@ -141,6 +203,8 @@ def interactive_menu(ui: UI, policies: dict) -> None:
             run_tests()
         elif choice in {"p", "progress"}:
             show_progress(ui)
+        elif choice in {"v", "videos"}:
+            show_videos(ui)
         elif choice.startswith("c") and choice[1:].strip().isdigit() and int(choice[1:]) in LABS:
             challenge_lab(ui, int(choice[1:]), policies)
         elif choice.startswith("r") and choice[1:].strip().isdigit() and int(choice[1:]) in GENERATORS:
@@ -186,6 +250,12 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("--seed", type=int, help="make the exam reproducible")
     ex.add_argument("--fixed", action="store_true", help="use bundled sample data only (no generated scenarios)")
     sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
+    vi = sub.add_parser("videos", help="Professor Messer's free SY0-701 video course, mapped to the labs")
+    vi.add_argument("--lab", type=int, choices=sorted(LABS), help="only the videos for this lab's objectives")
+    vi.add_argument("--objective", metavar="X.Y", help="only the videos for one objective, e.g. 1.4")
+    vi.add_argument("--mark", metavar="ID", help="mark a video watched (ID from the last column)")
+    vi.add_argument("--unmark", metavar="ID", help="mark a video not watched")
+    vi.add_argument("--open", type=int, metavar="N", dest="open_n", help="open video #N on YouTube")
     w = sub.add_parser("web", help="open the course web app in your browser (runs locally)")
     w.add_argument("--port", type=int, default=8765, help="local port (default 8765; a free one is used if busy)")
     w.add_argument("--no-browser", action="store_true", help="don't open a browser window")
@@ -223,6 +293,8 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("challenge target must be a lab number or 'all'")
     elif args.command == "progress":
         show_progress(ui)
+    elif args.command == "videos":
+        return show_videos(ui, args.lab, args.objective, args.mark, args.unmark, args.open_n)
     elif args.command == "web":
         from utils.webserver import serve
         serve(args.port, open_browser=not args.no_browser, policies=policies)
