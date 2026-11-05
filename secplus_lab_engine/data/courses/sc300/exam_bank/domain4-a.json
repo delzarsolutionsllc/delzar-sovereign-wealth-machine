@@ -207,10 +207,10 @@
       "choices": [
         "Assignments expire a set number of days after approval",
         "Assignments never expire and are reviewed every quarter",
-        "Assignments expire on a specific date of September 30",
+        "Assignments expire on a specific date (September 30)",
         "Assignments never expire, and users may request extensions"
       ],
-      "answer": "Assignments expire on a specific date of September 30",
+      "answer": "Assignments expire on a specific date (September 30)",
       "explanation": "Choosing a specific date ends every assignment from that policy on the same day, whenever the request was approved. A number of days would end access at different times for each contractor."
     },
     {
@@ -273,7 +273,7 @@
       "id": "D4-020",
       "objective": "4.1",
       "topic": "Expiration and separation of duties",
-      "stem": "Assignments to the Partner Collaboration access package at Wingtip Toys never expire. Each quarter, the sponsor of each assigned user must confirm that the access is still needed, and denied users must lose the package. What should you configure with the LEAST administrative effort?",
+      "stem": "Assignments to the Partner Collaboration access package at Wingtip Toys never expire. Each quarter, the manager of each assigned user must confirm that the access is still needed, and denied users must lose the package. What should you configure with the LEAST administrative effort?",
       "choices": [
         "A Teams + Groups review of each group in the package",
         "Access reviews in the access package's assignment policy",
@@ -523,6 +523,76 @@
     },
     {
       "id": "D4-038",
+      "objective": "4.1",
+      "topic": "Catalogs and delegated roles",
+      "stem": "Which of the following can be added as a resource to a catalog in entitlement management?",
+      "choices": [
+        "A Conditional Access policy",
+        "A named location",
+        "An authentication strength",
+        "A SharePoint Online site"
+      ],
+      "answer": "A SharePoint Online site",
+      "explanation": "Catalogs hold resources that users can be given access to, such as groups, enterprise applications and SharePoint Online sites. Conditional Access policies, named locations and authentication strengths are tenant configuration, not access that can be assigned."
+    },
+    {
+      "id": "D4-039",
+      "objective": "4.1",
+      "topic": "Access packages and request policies",
+      "stem": "What is the effect of marking an access package as hidden?",
+      "choices": [
+        "It is not listed in My Access, so users need its direct link to request it",
+        "It can be assigned only by administrators and never requested",
+        "It is invisible to approvers until a request reaches them",
+        "Its assignments are excluded from every access review"
+      ],
+      "answer": "It is not listed in My Access, so users need its direct link to request it",
+      "explanation": "A hidden access package is left out of the My Access catalog view, but users who are allowed by a policy can still request it through the direct link. Blocking requests entirely is done with a policy that allows only administrator direct assignments."
+    },
+    {
+      "id": "D4-040",
+      "objective": "4.1",
+      "topic": "Managing access requests and assignments",
+      "stem": "Which access package request status means that the request was approved but only some of the package's resources were granted?",
+      "choices": [
+        "Pending approval",
+        "Expired",
+        "Partially delivered",
+        "Denied"
+      ],
+      "answer": "Partially delivered",
+      "explanation": "Partially delivered means delivery completed for some resources but not all, and the request can be reprocessed. Pending approval means no approver has decided yet."
+    },
+    {
+      "id": "D4-041",
+      "objective": "4.1",
+      "topic": "Terms of use",
+      "stem": "What is the minimum Microsoft Entra license required to enforce terms of use through Conditional Access?",
+      "choices": [
+        "Microsoft Entra ID Free",
+        "Microsoft Entra ID P2",
+        "Microsoft Entra ID Governance",
+        "Microsoft Entra ID P1"
+      ],
+      "answer": "Microsoft Entra ID P1",
+      "explanation": "Terms of use is enforced as a Conditional Access grant control, so it needs Microsoft Entra ID P1. P2 and Governance include it but are not the minimum."
+    },
+    {
+      "id": "D4-042",
+      "objective": "4.1",
+      "topic": "Connected organizations and external user lifecycle",
+      "stem": "A policy lets users from a connected organization request an access package. What happens when a partner user who is not yet in the directory has a request approved?",
+      "choices": [
+        "A new member account is created for the user",
+        "The user is synchronized by cross-tenant synchronization",
+        "The user is added to the directory as a B2B guest user",
+        "The request fails until the user is invited by hand"
+      ],
+      "answer": "The user is added to the directory as a B2B guest user",
+      "explanation": "When a request from a user outside the directory is approved, entitlement management invites that user as a B2B guest and then grants the package. Cross-tenant synchronization is a separate feature that is configured between tenants."
+    },
+    {
+      "id": "D4-043",
       "type": "match",
       "objective": "4.1",
       "topic": "Catalogs and delegated roles",
@@ -555,7 +625,7 @@
       "explanation": "Entitlement management roles are scoped to catalogs and range from creating catalogs down to read-only access. Approving PIM activations belongs to PIM approvers, not to any entitlement management role."
     },
     {
-      "id": "D4-039",
+      "id": "D4-044",
       "type": "order",
       "objective": "4.1",
       "topic": "Access packages and request policies",
@@ -570,7 +640,7 @@
       "explanation": "Resources must be in a catalog before an access package in that catalog can use them, and the policy decides who can request and for how long. Users can only request once the package and its policy exist."
     },
     {
-      "id": "D4-040",
+      "id": "D4-045",
       "type": "match",
       "objective": "4.1",
       "topic": "Approvals in access packages",
@@ -599,7 +669,7 @@
       "explanation": "Fallback approvers cover a missing approver, while alternate approvers cover a slow one. Justification settings capture reasons from approvers or requesters; terms of use acceptance is a Conditional Access control."
     },
     {
-      "id": "D4-041",
+      "id": "D4-046",
       "type": "multi",
       "objective": "4.1",
       "topic": "Connected organizations and external user lifecycle",
@@ -619,21 +689,21 @@
       "explanation": "The external user lifecycle settings block sign-in and then remove the guest after a set number of days once the last assignment is gone. Sign-up user flows and cross-tenant MFA settings govern how users arrive, not how they are cleaned up."
     },
     {
-      "id": "D4-042",
+      "id": "D4-047",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "What is the main purpose of access reviews in Microsoft Entra ID Governance?",
       "choices": [
         "To detect sign-ins that come from anonymous IP addresses",
+        "To regularly confirm that users still need their access",
         "To approve user requests for new access packages",
-        "To block legacy authentication protocols for all users",
-        "To regularly confirm that users still need their access"
+        "To block legacy authentication protocols for all users"
       ],
       "answer": "To regularly confirm that users still need their access",
       "explanation": "Access reviews let reviewers attest to group memberships, application assignments, access package assignments and role assignments so unneeded access can be removed. Detecting risky sign-ins is a Microsoft Entra ID Protection function."
     },
     {
-      "id": "D4-043",
+      "id": "D4-048",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "Contoso plans to review the members of several security groups every quarter. Which license is required for the users involved in the reviews?",
@@ -647,35 +717,35 @@
       "explanation": "Access reviews require Microsoft Entra ID P2 or Microsoft Entra ID Governance licenses. Microsoft Entra ID P1 covers features such as Conditional Access but not access reviews."
     },
     {
-      "id": "D4-044",
+      "id": "D4-049",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "An administrator at Adatum must create access reviews of security groups and enterprise applications. Which role should you assign, following the principle of least privilege?",
       "choices": [
+        "Identity Governance Administrator",
         "Global Administrator",
         "Privileged Role Administrator",
-        "Identity Governance Administrator",
         "Security Administrator"
       ],
       "answer": "Identity Governance Administrator",
       "explanation": "Identity Governance Administrator can create and manage access reviews of groups and applications, as well as entitlement management. Global Administrator could also do it but grants far more than needed."
     },
     {
-      "id": "D4-045",
+      "id": "D4-050",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "Fabrikam must review who holds the Global Administrator and Exchange Administrator roles every quarter. Role assignments are managed in Privileged Identity Management (PIM). Which role should you assign to the person who creates these reviews, following the principle of least privilege?",
       "choices": [
         "Global Administrator",
+        "Privileged Role Administrator",
         "User Administrator",
-        "Security Reader",
-        "Privileged Role Administrator"
+        "Security Reader"
       ],
       "answer": "Privileged Role Administrator",
       "explanation": "Reviews of Microsoft Entra roles are created through PIM, which Privileged Role Administrator can manage. User Administrator cannot manage privileged role assignments or their reviews."
     },
     {
-      "id": "D4-046",
+      "id": "D4-051",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "Group owners at Tailspin Toys want to create and manage access reviews for the groups they own, without being given any administrator role. What should you do?",
@@ -689,35 +759,35 @@
       "explanation": "An access reviews setting lets group owners create and manage reviews for the groups they own. Assigning an administrator role to each owner breaks the requirement and grants tenant-wide rights."
     },
     {
-      "id": "D4-047",
+      "id": "D4-052",
       "objective": "4.2",
       "topic": "Planning access reviews",
       "stem": "Northwind Traders wants to review which users are eligible for or assigned to the Billing Reader role on an Azure subscription. Where should this review be created?",
       "choices": [
         "As a Teams + Groups review of the group that holds the subscription owners",
-        "In Privileged Identity Management for Azure resource roles",
         "As an access package review in entitlement management",
-        "As an Applications review of the Azure portal app"
+        "As an Applications review of the Azure portal app",
+        "In Privileged Identity Management for Azure resource roles"
       ],
       "answer": "In Privileged Identity Management for Azure resource roles",
       "explanation": "Reviews of Azure resource role assignments are created through PIM for Azure resources. A Teams + Groups review covers group membership, not Azure role assignments made directly to users."
     },
     {
-      "id": "D4-048",
+      "id": "D4-053",
       "objective": "4.2",
       "topic": "Review scope",
       "stem": "Litware wants owners of every Microsoft 365 group that contains guests to review only the guests in their group. Which review scope should you configure?",
       "choices": [
-        "Teams + Groups, all Microsoft 365 groups with guests, guest users only",
         "Teams + Groups, selected teams and groups, all users",
         "Applications, all enterprise applications that have guests, guest users only",
+        "Teams + Groups, all Microsoft 365 groups with guests, guest users only",
         "Access packages, all access packages, all users"
       ],
       "answer": "Teams + Groups, all Microsoft 365 groups with guests, guest users only",
       "explanation": "The all Microsoft 365 groups with guest users option creates a review for each such group, and limiting the users to guests leaves members out. Selecting all users would make owners review employees as well."
     },
     {
-      "id": "D4-049",
+      "id": "D4-054",
       "objective": "4.2",
       "topic": "Review scope",
       "stem": "Contoso must review which users are assigned to its Salesforce enterprise application, which uses user assignment. What should you select as what to review?",
@@ -731,63 +801,63 @@
       "explanation": "An Applications review covers the users and groups assigned to the enterprise application. Reviewing one group would miss users assigned to the application directly."
     },
     {
-      "id": "D4-050",
+      "id": "D4-055",
       "objective": "4.2",
       "topic": "Review scope",
       "stem": "Adatum wants a review of a large group to include only members who have not signed in for 90 days, so reviewers can focus on stale accounts. What should you configure?",
       "choices": [
         "Scope the review to guest users only",
-        "Scope the review to inactive users (90 days)",
         "Set the review's duration to 90 days",
-        "Set the review's recurrence to quarterly with auto apply turned on"
+        "Set the review's recurrence to quarterly with auto apply turned on",
+        "Scope the review to inactive users (90 days)"
       ],
       "answer": "Scope the review to inactive users (90 days)",
       "explanation": "The inactive users option limits the reviewees to users with no sign-in during the chosen number of days. Duration and recurrence control timing, not which users are reviewed."
     },
     {
-      "id": "D4-051",
+      "id": "D4-056",
       "objective": "4.2",
       "topic": "Review scope",
       "stem": "Assignments to Fabrikam's Partner Portal access package must be reviewed, and users who are denied must lose the entire access package. What should you select as what to review?",
       "choices": [
         "Teams + Groups, then each group in the package",
-        "Applications, then the My Access portal",
         "Access packages, then the Partner Portal access package",
+        "Applications, then the My Access portal",
         "Azure resource roles, then the subscription used by the partner portal"
       ],
       "answer": "Access packages, then the Partner Portal access package",
       "explanation": "Reviewing the access package removes the denied users' package assignments, which also removes the resources it granted. Reviewing the groups would only remove group membership while the package assignment stays."
     },
     {
-      "id": "D4-052",
+      "id": "D4-057",
       "objective": "4.2",
       "topic": "Review scope",
       "stem": "An access review of a group uses the Guest users only scope. Which users are included in the review?",
       "choices": [
         "Only users from configured connected organizations",
+        "Users in the group whose user type is Guest",
         "Guests plus members who have never signed in",
-        "Only guests who were invited in the last 30 days",
-        "Users in the group whose user type is Guest"
+        "Only guests who were invited in the last 30 days"
       ],
       "answer": "Users in the group whose user type is Guest",
       "explanation": "The guest scope includes the resource's users with the Guest user type, however they were invited. It is not limited to connected organizations or to recent invitations."
     },
     {
-      "id": "D4-053",
+      "id": "D4-058",
       "objective": "4.2",
       "topic": "Choosing reviewers",
       "stem": "Wingtip Toys wants each guest user to confirm whether they still need access to the Projects team. Which reviewer option should you choose?",
       "choices": [
         "Managers of users",
         "Group owners",
-        "Users review their own access",
-        "Selected users or groups"
+        "Selected users or groups",
+        "Users review their own access"
       ],
       "answer": "Users review their own access",
       "explanation": "A self-review asks each user to attest to their own continued need, which suits guests who have no manager in the tenant. Managers of users would fail for most guests because they have no manager set."
     },
     {
-      "id": "D4-054",
+      "id": "D4-059",
       "objective": "4.2",
       "topic": "Choosing reviewers",
       "stem": "Managers at Contoso must review their direct reports' access to the Expenses application, but some users have no manager set in Microsoft Entra ID. What should you configure?",
@@ -801,63 +871,63 @@
       "explanation": "Fallback reviewers take over the review of users whose manager cannot be found. Without them, users with no manager would not be reviewed by anyone."
     },
     {
-      "id": "D4-055",
+      "id": "D4-060",
       "objective": "4.2",
       "topic": "Choosing reviewers",
       "stem": "At Adatum, managers must review access to the Finance app first, and then the app owner must review only the users that managers approved. What should you configure?",
       "choices": [
         "One stage that lists both the managers and the app owner as the reviewers",
         "Two separate reviews that start on the same date",
-        "A self-review followed by a manual export to the app owner",
-        "A multi-stage review that passes only approved users to the second stage"
+        "A multi-stage review that passes only approved users to the second stage",
+        "A self-review followed by a manual export to the app owner"
       ],
       "answer": "A multi-stage review that passes only approved users to the second stage",
       "explanation": "Multi-stage reviews run stages in sequence, and you can choose which reviewees, such as those approved, go to the next stage. In a single stage with several reviewers, any one reviewer's decision would stand."
     },
     {
-      "id": "D4-056",
+      "id": "D4-061",
       "objective": "4.2",
       "topic": "Choosing reviewers",
       "stem": "Several reviewers are assigned to the same stage of an access review, and two of them give different decisions for one user. Which decision is recorded?",
       "choices": [
         "The first decision submitted by any reviewer",
-        "The last decision submitted by any reviewer",
         "The decision of the reviewer listed first",
-        "Deny, because the reviewers disagreed"
+        "Deny, because the reviewers disagreed",
+        "The last decision submitted by any reviewer"
       ],
       "answer": "The last decision submitted by any reviewer",
       "explanation": "When multiple reviewers can review the same user, the most recent decision is recorded. There is no majority or automatic deny when reviewers disagree."
     },
     {
-      "id": "D4-057",
+      "id": "D4-062",
       "objective": "4.2",
       "topic": "Choosing reviewers",
       "stem": "Litware is creating one access review that covers every Microsoft 365 group with guests. Each group must be reviewed by the people who own that group. Which reviewer option requires the LEAST administrative effort?",
       "choices": [
         "Selected users or groups",
-        "Group owners",
         "Managers of users",
+        "Group owners",
         "Users review their own access"
       ],
       "answer": "Group owners",
       "explanation": "Group owners routes each group's review to that group's owners automatically. Selected users or groups would need one fixed set of reviewers for all groups."
     },
     {
-      "id": "D4-058",
+      "id": "D4-063",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "At the end of an access review at Fabrikam, users who were denied must lose access to the group without an administrator taking any further action. What should you enable?",
       "choices": [
         "If reviewers don't respond: Remove access",
+        "Auto apply results to resource",
         "Reminders to reviewers by email",
-        "Justification required for every decision",
-        "Auto apply results to resource"
+        "Justification required for every decision"
       ],
       "answer": "Auto apply results to resource",
       "explanation": "Auto apply removes denied users from the resource when the review completes. The If reviewers don't respond setting only decides what happens to users with no decision; it does not apply the denied ones by itself."
     },
     {
-      "id": "D4-059",
+      "id": "D4-064",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "Reviewers at Tailspin Toys often ignore access reviews of guest users. Company policy says a guest with no decision at the end of a review must lose access. Which option should you set for If reviewers don't respond?",
@@ -871,35 +941,35 @@
       "explanation": "Remove access denies every unreviewed user, and with auto apply turned on the access is removed. Take recommendations could keep guests who signed in recently, which breaks the policy."
     },
     {
-      "id": "D4-060",
+      "id": "D4-065",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "A review of guest users at Northwind Traders must ensure that denied guests can no longer sign in and are later deleted from the tenant. Which action should you configure for denied guest users?",
       "choices": [
+        "Block user from signing-in for 30 days, then remove user from the tenant",
         "Remove user's membership from the resource",
         "Disable the user's account in the user's home tenant",
-        "Block user from signing-in for 30 days, then remove user from the tenant",
         "Delete the group that the denied guests are members of after the review ends"
       ],
       "answer": "Block user from signing-in for 30 days, then remove user from the tenant",
       "explanation": "For reviews scoped to guests, you can block denied guests from signing in and then remove them from the tenant after 30 days. Removing membership only takes them out of the resource; the guest account stays."
     },
     {
-      "id": "D4-061",
+      "id": "D4-066",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "Contoso must review a group every three months, and reviewers must have two weeks to finish each review. How should you configure the review?",
       "choices": [
         "Monthly recurrence with a duration of 14 days",
+        "Quarterly recurrence with a duration of 14 days",
         "Quarterly recurrence with a duration of 90 days",
-        "Annual recurrence with a duration of 14 days",
-        "Quarterly recurrence with a duration of 14 days"
+        "Annual recurrence with a duration of 14 days"
       ],
       "answer": "Quarterly recurrence with a duration of 14 days",
       "explanation": "Recurrence sets how often a new instance starts, and duration sets how long reviewers have to finish it. A 90-day duration would run each review for the whole quarter instead of two weeks."
     },
     {
-      "id": "D4-062",
+      "id": "D4-067",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "Reviewers at Adatum want the review to suggest denying users who have not signed in recently. What should you enable in the review settings?",
@@ -913,35 +983,35 @@
       "explanation": "Reviewer decision helpers show recommendations, such as deny for users with no recent sign-in. Auto apply only acts on decisions after the review ends; it does not help reviewers decide."
     },
     {
-      "id": "D4-063",
+      "id": "D4-068",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "Litware wants users who are not reviewed by the end of an access review to receive the system's suggested decision, based on their recent activity. Which option should you set for If reviewers don't respond?",
       "choices": [
         "Remove access",
-        "Take recommendations",
         "Approve access",
-        "No change"
+        "No change",
+        "Take recommendations"
       ],
       "answer": "Take recommendations",
       "explanation": "Take recommendations applies the recommended decision, such as approve for recently active users and deny for inactive ones, to each unreviewed user. No change leaves everyone's access as it was."
     },
     {
-      "id": "D4-064",
+      "id": "D4-069",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "Wingtip Toys' auditors require reviewers to explain every Approve decision in an access review. What should you enable?",
       "choices": [
-        "Justification required",
         "Mail notifications",
         "Reminders",
+        "Justification required",
         "Auto apply results to resource"
       ],
       "answer": "Justification required",
       "explanation": "With justification required, reviewers must enter a reason when they approve access. Mail notifications and reminders only tell reviewers that a review needs attention."
     },
     {
-      "id": "D4-065",
+      "id": "D4-070",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
       "stem": "The compliance team at Fabrikam must be told by email whenever a quarterly access review of the Finance group ends. What should you configure in the review's completion settings?",
@@ -955,63 +1025,63 @@
       "explanation": "A review can send a notification to other users or groups when it ends, with a link to the results. Fallback reviewers would ask the compliance team to make decisions, which is not what was requested."
     },
     {
-      "id": "D4-066",
+      "id": "D4-071",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "Halfway through an access review, an administrator at Contoso wants to see how many users have been approved, denied or not yet reviewed. What should the administrator use?",
       "choices": [
         "The Microsoft Entra sign-in logs",
-        "The access review's overview and results pages",
         "The risky users report in Microsoft Entra ID Protection",
-        "The Identity Secure Score dashboard"
+        "The Identity Secure Score dashboard",
+        "The access review's overview and results pages"
       ],
       "answer": "The access review's overview and results pages",
       "explanation": "The overview of an active review shows progress, including counts of approved, denied and unreviewed users, and the results page lists each decision. Sign-in logs and risk reports do not track review decisions."
     },
     {
-      "id": "D4-067",
+      "id": "D4-072",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "Several reviewers at Adatum have not started an access review that ends in three days. What should the administrator do FIRST?",
       "choices": [
         "Stop the review and create a new one with a longer duration",
-        "Reset all decisions in the review",
         "Send a reminder to the reviewers from the review",
+        "Reset all decisions in the review",
         "Change the review to a self-review"
       ],
       "answer": "Send a reminder to the reviewers from the review",
       "explanation": "A reminder emails the reviewers who have not finished, without disturbing decisions already made. Stopping or resetting the review would discard progress or end it early."
     },
     {
-      "id": "D4-068",
+      "id": "D4-073",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "After a quarterly review of the Payroll group completes, an auditor at Tailspin Toys asks for a file that lists every reviewer decision. What should you do?",
       "choices": [
         "Export the sign-in logs for the Payroll group members",
+        "Download the results of the completed review instance",
         "Export the group's current membership as a file",
-        "Open the audit logs for the Group Management category",
-        "Download the results of the completed review instance"
+        "Open the audit logs for the Group Management category"
       ],
       "answer": "Download the results of the completed review instance",
       "explanation": "The results of a review instance can be downloaded and show each user, the decision, the reviewer and any justification. Current membership shows who has access now, not what reviewers decided."
     },
     {
-      "id": "D4-069",
+      "id": "D4-074",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "Northwind Traders needs one report of all access review decisions made across many reviews over the past year for an annual audit. What should you use?",
       "choices": [
         "The Identity Secure Score history",
         "A Conditional Access insights workbook",
-        "An access review history report",
-        "The provisioning logs for each application"
+        "The provisioning logs for each application",
+        "An access review history report"
       ],
       "answer": "An access review history report",
       "explanation": "Review history reports collect the decisions from multiple access reviews over a chosen date range into a downloadable report. Secure Score history measures security posture, not review outcomes."
     },
     {
-      "id": "D4-070",
+      "id": "D4-075",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "Litware must keep access review audit events for two years and query them with KQL together with other identity logs. What should you configure?",
@@ -1025,63 +1095,63 @@
       "explanation": "Diagnostic settings stream Microsoft Entra audit logs, including access review events, to Log Analytics, where retention is configurable and KQL queries can run. Monthly downloads would not support KQL or central retention."
     },
     {
-      "id": "D4-071",
+      "id": "D4-076",
       "objective": "4.2",
       "topic": "Monitoring access reviews",
       "stem": "An administrator at Wingtip Toys wants to find out who stopped an access review of the Sales group early. What should you check?",
       "choices": [
         "The sign-in logs filtered by the Sales group",
         "The access review's list of reviewee decisions and reviewer names",
-        "The Sales group's membership change history",
-        "The Microsoft Entra audit logs for access review activity"
+        "The Microsoft Entra audit logs for access review activity",
+        "The Sales group's membership change history"
       ],
       "answer": "The Microsoft Entra audit logs for access review activity",
       "explanation": "Changes to access reviews, such as stopping one, are recorded in the audit logs with the actor. The list of decisions shows what reviewers decided, not who changed the review itself."
     },
     {
-      "id": "D4-072",
+      "id": "D4-077",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "A manager at Contoso receives an email asking her to complete an access review of her team. Where does she review and record her decisions?",
       "choices": [
         "The My Apps portal",
-        "The My Access portal",
         "The My Account portal",
-        "The Microsoft 365 admin center"
+        "The Microsoft 365 admin center",
+        "The My Access portal"
       ],
       "answer": "The My Access portal",
       "explanation": "Reviewers complete their assigned access reviews in My Access, which the review email links to. My Account manages a user's own sign-in and security information."
     },
     {
-      "id": "D4-073",
+      "id": "D4-078",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "A reviewer at Fabrikam agrees with every recommendation shown for the 200 users in her review. What should she do with the LEAST effort?",
       "choices": [
         "Approve or deny each user one at a time",
-        "Accept the recommendations for the reviewed users",
         "Download the users and send them to the administrator",
+        "Accept the recommendations for the reviewed users",
         "Ask the administrator to stop the review"
       ],
       "answer": "Accept the recommendations for the reviewed users",
       "explanation": "Accepting recommendations applies the suggested decision to all users in one action. Deciding one user at a time gives the same result with much more effort."
     },
     {
-      "id": "D4-074",
+      "id": "D4-079",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "An access review of the Contractors group at Adatum has completed. Auto apply was not enabled, and the denied users are still members. What should you do with the LEAST administrative effort?",
       "choices": [
         "Remove the denied users from the group one at a time",
+        "Apply the results from the completed review",
         "Reset the review and run it again",
-        "Create a new review with auto apply turned on",
-        "Apply the results from the completed review"
+        "Create a new review with auto apply turned on"
       ],
       "answer": "Apply the results from the completed review",
       "explanation": "When auto apply is off, an administrator can apply the results of a completed review to remove denied users. Removing them by hand works but takes more effort and leaves no link to the review."
     },
     {
-      "id": "D4-075",
+      "id": "D4-080",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "A reviewer at Tailspin Toys denied a user by mistake. The access review is still active. What should the reviewer do?",
@@ -1095,35 +1165,35 @@
       "explanation": "Reviewers can change their decisions while the review is still in progress, and only the final decision is applied. Resetting every decision would throw away the rest of the reviewer's work."
     },
     {
-      "id": "D4-076",
+      "id": "D4-081",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "Leadership at Northwind Traders wants an active access review ended today so its results can be applied immediately, instead of waiting for the scheduled end date. What should the administrator do FIRST?",
       "choices": [
+        "Stop the review",
         "Reset the review",
         "Delete the review",
-        "Stop the review",
         "Send a reminder"
       ],
       "answer": "Stop the review",
       "explanation": "Stopping a review ends it early so the decisions made so far can be applied. Deleting it would discard the decisions, and resetting clears them while the review keeps running."
     },
     {
-      "id": "D4-077",
+      "id": "D4-082",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "A reviewer at Litware does not know whether a contractor still needs access to the Design group and wants to record that uncertainty instead of guessing. Which decision should the reviewer choose?",
       "choices": [
         "Approve",
+        "Don't know",
         "Deny",
-        "Skip",
-        "Don't know"
+        "Skip"
       ],
       "answer": "Don't know",
       "explanation": "Don't know records that the reviewer cannot decide, and an optional justification can explain why. Approving or denying would record a decision the reviewer cannot support."
     },
     {
-      "id": "D4-078",
+      "id": "D4-083",
       "objective": "4.2",
       "topic": "Responding to and applying reviews",
       "stem": "Reviewers at Wingtip Toys made decisions in an active access review based on an outdated list of contractors. The administrator wants to clear all decisions so reviewers can start again, while the review stays active. What should the administrator do?",
@@ -1137,7 +1207,63 @@
       "explanation": "Resetting an active review clears the decisions made so far, and reviewers can review again. Stopping the review would end it with the outdated decisions in place."
     },
     {
-      "id": "D4-079",
+      "id": "D4-084",
+      "objective": "4.2",
+      "topic": "Responding to and applying reviews",
+      "stem": "Which set of decisions can a reviewer record for a user in an access review?",
+      "choices": [
+        "Approve, Deny, or Escalate",
+        "Accept, Reject, or Defer",
+        "Allow, Block, or Report-only",
+        "Approve, Deny, or Don't know"
+      ],
+      "answer": "Approve, Deny, or Don't know",
+      "explanation": "Reviewers choose Approve, Deny or Don't know for each user, optionally with a justification. Report-only is a Conditional Access policy state, not a review decision."
+    },
+    {
+      "id": "D4-085",
+      "objective": "4.2",
+      "topic": "Recurrence and completion settings",
+      "stem": "What does the Auto apply results to resource setting do in an access review?",
+      "choices": [
+        "It approves users who signed in during the last 30 days",
+        "It sends reminder emails to reviewers who have not finished",
+        "It removes denied users from the resource when the review ends",
+        "It extends the review until every user has been reviewed"
+      ],
+      "answer": "It removes denied users from the resource when the review ends",
+      "explanation": "Auto apply carries out the review's decisions on the resource, such as removing denied users, as soon as the review finishes. Approving recently active users is what recommendations suggest; it is not what auto apply does."
+    },
+    {
+      "id": "D4-086",
+      "objective": "4.2",
+      "topic": "Choosing reviewers",
+      "stem": "In Microsoft Entra ID Governance, what is a multi-stage access review?",
+      "choices": [
+        "A review whose stages run in sequence, each with its own reviewers",
+        "A review that runs at the same time in several tenants",
+        "A review that repeats on a weekly schedule",
+        "A review that covers groups and applications together"
+      ],
+      "answer": "A review whose stages run in sequence, each with its own reviewers",
+      "explanation": "In a multi-stage review, each stage has its own reviewers and the next stage starts when the previous one ends, often with only selected reviewees passed on. Recurrence controls how often a review repeats, which is a different setting."
+    },
+    {
+      "id": "D4-087",
+      "objective": "4.2",
+      "topic": "Monitoring access reviews",
+      "stem": "Which access review status shows that the decisions have been carried out on the reviewed resource?",
+      "choices": [
+        "Initializing",
+        "In progress",
+        "Not started",
+        "Applied"
+      ],
+      "answer": "Applied",
+      "explanation": "Applied means the review has ended and its decisions, such as removals, have been made on the resource. In progress means reviewers can still make decisions."
+    },
+    {
+      "id": "D4-088",
       "type": "order",
       "objective": "4.2",
       "topic": "Planning access reviews",
@@ -1153,7 +1279,7 @@
       "explanation": "The review wizard starts with what to review and the scope of users, then the reviewers and schedule, then the completion and advanced settings. Creating the review is the last step, after every setting is chosen."
     },
     {
-      "id": "D4-080",
+      "id": "D4-089",
       "type": "multi",
       "objective": "4.2",
       "topic": "Review scope",
@@ -1173,7 +1299,7 @@
       "explanation": "Access reviews cover access to resources, such as group membership and application assignment, as well as access packages and roles. Conditional Access policies, named locations and authentication methods are configuration objects, not access that users hold."
     },
     {
-      "id": "D4-081",
+      "id": "D4-090",
       "type": "multi",
       "objective": "4.2",
       "topic": "Choosing reviewers",
@@ -1193,7 +1319,7 @@
       "explanation": "Fallback reviewers step in when a user has no manager or a group has no owner. Self-review and selected reviewers always resolve to a known reviewer, so fallback reviewers do not apply to them."
     },
     {
-      "id": "D4-082",
+      "id": "D4-091",
       "type": "match",
       "objective": "4.2",
       "topic": "Recurrence and completion settings",
