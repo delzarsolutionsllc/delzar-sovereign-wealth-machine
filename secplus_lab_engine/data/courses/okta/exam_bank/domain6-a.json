@@ -12,10 +12,10 @@
     "user eq \"ana@example.com\" and result = \"FAILURE\"",
     "actor.alternateId == \"ana@example.com\" && outcome == \"FAILURE\"",
     "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
-    "actor sw \"ana@example.com\" or outcome.result co \"FAIL\""
+    "actor.alternateId co \"ana@example.com\" or outcome.result eq \"FAILURE\""
    ],
    "answer": "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
-   "explanation": "System Log filters use field paths such as actor.alternateId and outcome.result with operators like eq and and. The other choices use made-up fields or programming operators the filter does not support."
+   "explanation": "System Log filters use field paths such as actor.alternateId and outcome.result with operators like eq joined by and. The other choices use made-up fields, programming operators, or or, which would also return every other user's failures."
   },
   {
    "id": "D6-002",
@@ -278,7 +278,7 @@
     "In the target list of the event",
     "In the debug data under debugContext",
     "In the actor's alternate ID",
-    "In the event's legacy type field"
+    "In the legacy event type field of the event"
    ],
    "answer": "In the debug data under debugContext",
    "explanation": "Okta puts extra details such as detected behaviors and risk information in debugContext.debugData. The target lists affected objects, not risk signals."
@@ -445,7 +445,7 @@
    "choices": [
     "The Help Desk Administrator role does not include System Log access",
     "The System Log is turned off for help desk orgs",
-    "The help desk admin must enroll Okta Verify first",
+    "The help desk admin must enroll Okta Verify before the System Log opens",
     "The System Log only opens from a Preview org"
    ],
    "answer": "The Help Desk Administrator role does not include System Log access",
@@ -568,7 +568,7 @@
    "stem": "Within minutes, users across the whole company report that Okta sign-in is failing or very slow. What should the admin check FIRST?",
    "choices": [
     "The System Log for each user, one at a time",
-    "The password policy for a recent lockout change",
+    "The password policy for a recent change to the lockout threshold",
     "The Okta Community forum for similar posts",
     "status.okta.com for an incident affecting the org's cell"
    ],
@@ -583,7 +583,7 @@
    "choices": [
     "Create a group rule for the admin team",
     "Subscribe to notifications on the Okta status page",
-    "Turn on an Early Access feature for alerts",
+    "Turn on an Early Access feature that sends incident alerts",
     "Add the admins to the Everyone group"
    ],
    "answer": "Subscribe to notifications on the Okta status page",
@@ -596,11 +596,11 @@
    "stem": "status.okta.com shows a degraded-performance incident for the cell that hosts the org, matching what users report. What is the BEST next step?",
    "choices": [
     "Reset the passwords of every user in the org",
-    "Rotate the signing certificates of every SAML app",
-    "Follow the incident updates and tell users it is a known Okta issue",
+    "Rotate the signing certificates of every SAML app in the org now",
+    "Follow the incident updates and tell users it is a known issue",
     "Turn off the global session policy until it ends"
    ],
-   "answer": "Follow the incident updates and tell users it is a known Okta issue",
+   "answer": "Follow the incident updates and tell users it is a known issue",
    "explanation": "During a published incident the right step is to communicate and follow Okta's updates. Changing credentials or policies would add risk without fixing the service."
   },
   {
@@ -623,7 +623,7 @@
    "topic": "Okta Status Page",
    "stem": "An admin needs to know whether Okta plans maintenance that could affect sign-in this weekend. Where should the admin look?",
    "choices": [
-    "The System Log events for the weekend",
+    "The System Log events filtered for maintenance activity",
     "The scheduled maintenance listed on status.okta.com",
     "The Okta Usage report for last week",
     "The release notes for the Preview org"
@@ -640,7 +640,7 @@
     "Open an Okta case at the highest severity",
     "Clear the sessions of every user in the org",
     "Check the app vendor's own status page and contact the vendor",
-    "Deactivate and reactivate every user of the app"
+    "Deactivate and reactivate every user assigned to the app in Okta"
    ],
    "answer": "Check the app vendor's own status page and contact the vendor",
    "explanation": "Okta is healthy and the error comes from the app, so the vendor's status and support are the right place. Clearing sessions does not repair an app outage."
@@ -665,7 +665,7 @@
    "topic": "Okta Product Documentation",
    "stem": "Okta documentation pages can be viewed for Identity Engine or Classic Engine. How can an admin tell which engine the org uses?",
    "choices": [
-    "Look at the org's entry on status.okta.com",
+    "Look up the org's entry on status.okta.com for the engine type",
     "Run the Okta Usage report for the org",
     "Search the System Log for an engine event",
     "Check the version shown in the Admin Console footer"
@@ -693,7 +693,7 @@
    "topic": "Okta Product Documentation",
    "stem": "An admin follows a documentation page, but the menu names and steps do not match the Admin Console of an Identity Engine org. What is the MOST likely reason?",
    "choices": [
-    "The org has been moved to a different Okta cell",
+    "The org has been moved to a different Okta cell since the page was written",
     "The admin is reading the Classic Engine version of the page",
     "The admin lacks the Report Administrator role",
     "The page only applies to Preview orgs"
@@ -723,10 +723,10 @@
    "choices": [
     "The Okta status page incident history",
     "The Application Usage report for the org",
-    "The release notes for the next Preview release",
-    "The standard admin roles and permissions page in the Okta documentation"
+    "The release notes for the next Preview release of the Admin Console",
+    "The standard roles and permissions page in the Okta documentation"
    ],
-   "answer": "The standard admin roles and permissions page in the Okta documentation",
+   "answer": "The standard roles and permissions page in the Okta documentation",
    "explanation": "Okta's documentation has a comparison of standard roles and their permissions. The Admin Role Assignments report shows who holds roles, but the documentation explains what each role can do."
   },
   {
@@ -749,7 +749,7 @@
    "topic": "Release Notes and Early Access Features",
    "stem": "What is the main purpose of an Okta Preview org compared with a Production org?",
    "choices": [
-    "It keeps System Log events longer than a Production org",
+    "It keeps System Log events for much longer than a Production org does",
     "It allows unlimited users without a contract",
     "It is the only org type that supports SAML apps",
     "It receives each release earlier so admins can test changes first"
@@ -777,12 +777,12 @@
    "topic": "Release Notes and Early Access Features",
    "stem": "Which statement BEST describes an Early Access feature?",
    "choices": [
-    "A feature that is turned on for every org automatically",
-    "An optional feature that admins can choose to turn on before it is generally available",
+    "A feature that Okta turns on for every org automatically at release",
+    "An optional feature admins can turn on before general availability",
     "A feature that only Okta Support staff can see",
     "A feature that has been retired from the product"
    ],
-   "answer": "An optional feature that admins can choose to turn on before it is generally available",
+   "answer": "An optional feature admins can turn on before general availability",
    "explanation": "Early Access features are opt-in and come before general availability. Features that are on for everyone are generally available."
   },
   {
@@ -793,7 +793,7 @@
    "choices": [
     "Check status.okta.com for an active incident",
     "Search the System Log for admin changes",
-    "Post the question on the Okta Community forum",
+    "Post the question on the Okta Community forum and wait for replies",
     "Read the release notes for the most recent release"
    ],
    "answer": "Read the release notes for the most recent release",
@@ -805,7 +805,7 @@
    "topic": "Release Notes and Early Access Features",
    "stem": "A release note says a new feature is available, but it appears in the company's Preview org and not yet in its Production org. What is the MOST likely reason?",
    "choices": [
-    "The Production org needs a support case for every feature",
+    "The Production org needs a separate support case for every new feature",
     "Production orgs never receive Early Access features",
     "Releases reach Preview orgs before they reach Production orgs",
     "The Production org is hosted on a slower Okta cell"
@@ -847,7 +847,7 @@
    "topic": "Okta Community, Knowledge Base and Learning",
    "stem": "Users see a specific error message during SSO, and the admin suspects it is a known issue. What is the quickest resource to check before opening a case?",
    "choices": [
-    "The Okta status page incident history",
+    "The incident history on the Okta status page for the org's cell",
     "The knowledge base articles in the Okta Help Center",
     "The Okta Usage report for the org",
     "The certification study guide"
@@ -917,13 +917,13 @@
    "topic": "Support Cases and Support Access",
    "stem": "Which details make a support case about failing sign-ins MOST useful to Okta Support?",
    "choices": [
-    "Affected users, exact times with time zone, steps to reproduce and related System Log events",
-    "The affected users' passwords so Support can test them",
+    "Affected users, exact times with time zone, and related System Log events",
+    "The affected users' passwords so that Support can test the sign-ins themselves",
     "A list of every app in the org with its settings",
     "The full employee directory exported from HR"
    ],
-   "answer": "Affected users, exact times with time zone, steps to reproduce and related System Log events",
-   "explanation": "Specific users, times, reproduction steps and events let Support find the matching activity quickly. Passwords must never be shared."
+   "answer": "Affected users, exact times with time zone, and related System Log events",
+   "explanation": "Specific users, times and matching events let Support find the activity quickly. Passwords must never be shared with anyone, including Okta Support."
   },
   {
    "id": "D6-065",
@@ -946,7 +946,7 @@
    "stem": "Okta Support asks for permission to sign in to the org to look at a configuration problem. Where does an admin grant this?",
    "choices": [
     "Security > Administrators, by adding Support as a user",
-    "Directory > People, by creating an account for Support",
+    "Directory > People, by creating a new user account for Okta Support",
     "Reports > System Log, by sharing the current filter",
     "Settings > Account, in the Give Access to Okta Support section"
    ],
@@ -990,13 +990,27 @@
     "Approving support access for self-assigned cases in the account settings",
     "Adding the engineer to the Everyone group in the org",
     "Turning on an Early Access feature for Okta Support",
-    "Sharing a System Log filter with the engineer by email"
+    "Sharing a saved System Log search with the assigned support engineer by email"
    ],
    "answer": "Approving support access for self-assigned cases in the account settings",
    "explanation": "The Give Access to Okta Support section has a separate approval for cases that Support opens and assigns to itself. Adding Support staff to groups is not how access is given."
   },
   {
    "id": "D6-070",
+   "objective": "6.2",
+   "topic": "Okta Status Page",
+   "stem": "The Okta status page lists the health of many separate cells. Which cell's status matters when the admin's users report problems?",
+   "choices": [
+    "The cell nearest to each user's location",
+    "The cell that hosts the company's org",
+    "Every cell, because all orgs share them",
+    "The cell listed first on the status page"
+   ],
+   "answer": "The cell that hosts the company's org",
+   "explanation": "Each Okta org runs on one cell, so only that cell's status explains the org's problems. Users' locations do not change which cell serves the org."
+  },
+  {
+   "id": "D6-071",
    "type": "order",
    "objective": "6.2",
    "topic": "Support Cases and Support Access",
@@ -1011,7 +1025,7 @@
    "explanation": "Ruling out an Okta incident and known issues first saves time; a case with good evidence is solved faster, and access is granted only when Support requests it."
   },
   {
-   "id": "D6-071",
+   "id": "D6-072",
    "type": "multi",
    "objective": "6.2",
    "topic": "Support Cases and Support Access",
@@ -1031,7 +1045,7 @@
    "explanation": "Who, when and the matching events let Support trace the failure. Passwords must never be shared, and unrelated screenshots or app lists add noise."
   },
   {
-   "id": "D6-072",
+   "id": "D6-073",
    "type": "match",
    "objective": "6.2",
    "topic": "Okta Community, Knowledge Base and Learning",
