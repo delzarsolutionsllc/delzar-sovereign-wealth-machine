@@ -318,7 +318,93 @@ def gen_lab17(rng: random.Random, policies: dict) -> dict:
     return {"as_of": AS_OF, "scenarios": scenarios}
 
 
-GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17}
+# --------------------------------------------------------------------------- #
+# Lab 23
+# --------------------------------------------------------------------------- #
+def gen_lab23(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["audit"]
+    techs = sorted(cfg["techniques"])
+    recon = sorted(t for t in techs if cfg["techniques"][t]["category"] in ("passive_recon", "active_recon"))
+    allowed = sorted(set(rng.sample(recon, rng.randint(3, len(recon)))) - set(cfg["always_prohibited"]))
+    others = [t for t in techs if t not in allowed]
+    prohibited = sorted(set(rng.sample(others, rng.randint(1, min(3, len(others))))) | set(cfg["always_prohibited"]))
+    start = rng.choice([7, 8, 9, 20])
+    end = (start + rng.choice([8, 9, 10])) % 24
+    lo, hi = rng.randint(1, 3), rng.randint(6, 12)
+    domain = rng.choice(["northwind.example", "contoso-lab.example", "fabrikam.example"])
+    eng = {
+        "client": rng.choice(["Northwind Fabrication", "Contoso Lab", "Fabrikam Ltd"]) + " (fictional)",
+        "authorization": {"signed_by": "A. Tester", "role": rng.choice(cfg["authorized_signer_roles"] * 4 + ["intern"]),
+                          "signed": rng.random() < 0.9, "valid_from_day": lo, "valid_to_day": hi},
+        "scope": {"in_scope_cidrs": ["198.51.100.0/24", "10.20.0.0/16"], "in_scope_domains": [domain],
+                  "out_of_scope": ["10.20.5.0/24", "198.51.100.200", "mail." + domain]},
+        "allowed_techniques": allowed, "prohibited": prohibited,
+        "window": {"start_hour": start, "end_hour": end},
+        "environment": rng.choice(sorted(cfg["environment_types"])),
+        "emergency_contact": "SOC duty manager, +1-555-0100" if rng.random() < 0.9 else "",
+    }
+    targets = ["198.51.100.%d" % rng.randint(1, 254), "10.20.%d.%d" % (rng.randint(0, 9), rng.randint(1, 254)),
+               "10.20.5.%d" % rng.randint(1, 254), "198.51.100.200", "203.0.113.%d" % rng.randint(1, 254),
+               domain, "portal." + domain, "mail." + domain, "shop.other.example"]
+    actions = []
+    for i in range(1, rng.randint(6, 10) + 1):
+        tech = rng.choice(techs + allowed * 2 + ["unlisted_tool"])
+        cat = cfg["techniques"].get(tech, {}).get("category")
+        declared = "passive" if cat == "passive_recon" or rng.random() < 0.15 else "active"
+        actions.append({"id": f"PT-{i:02d}", "tester": rng.choice(["ai-agent-1", "j.diaz"]),
+                        "day": rng.randint(max(0, lo - 1), hi + 2), "hour": rng.choice([rng.randint(0, 23), (start + rng.randint(0, 7)) % 24]),
+                        "target": rng.choice(targets + targets[:2] * 2 + targets[5:7]), "technique": tech, "recon": declared})
+    drivers = sorted(cfg["assessment_rules"])
+    needs = [{"id": f"AN-{i}", "description": "generated assessment need",
+              "driver": rng.choice(drivers + ["unknown_driver"]) if i > 1 else rng.choice(drivers),
+              "independence_required": rng.random() < 0.5} for i in range(1, rng.randint(3, 5) + 1)]
+    return {"engagement": eng, "actions": actions, "assessment_needs": needs}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 20
+# --------------------------------------------------------------------------- #
+def gen_lab20(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["iac"]
+    bad = lambda p=0.12: rng.random() < p                     # noqa: E731
+    owners = ["web-team", "platform", "data-team", "it-ops", "payments"]
+    resources = []
+    for i in range(1, rng.randint(6, 10) + 1):
+        rtype = rng.choice(cfg["known_types"] + ["dns_zone"]) if bad(0.08) else rng.choice(cfg["known_types"])
+        tags = {"owner": rng.choice(owners), "data_classification": rng.choice(["public", "internal", "confidential"])}
+        if bad(0.15):
+            del tags[rng.choice(sorted(tags))]
+        if rng.random() < 0.3:
+            tags["criticality"] = "critical"
+        r = {"id": f"{rtype.split('_')[0]}-{i}", "type": rtype, "tags": tags}
+        if rtype in ("vm", "database", "load_balancer", "container"):
+            r["availability_zones"] = ["zone-a"] if bad(0.3) else ["zone-a", "zone-b"]
+        if rtype == "storage_bucket":
+            r.update(acl="public-read" if bad(0.15) else "private", encryption_at_rest=not bad(), logging=not bad())
+        elif rtype == "security_group":
+            r["ingress"] = [{"port": 443, "cidr": "0.0.0.0/0"},
+                            {"port": rng.choice([22, 3389, 5432]), "cidr": "0.0.0.0/0" if bad(0.2) else "10.0.0.0/8"}]
+        elif rtype == "vm":
+            r.update(encrypted_disk=not bad(), public_ip=bad())
+        elif rtype == "database":
+            r.update(publicly_accessible=bad(0.15), encryption_at_rest=not bad(), backup_retention_days=rng.choice([1, 7, 14, 35]))
+        elif rtype == "iam_policy":
+            r["statements"] = [{"effect": "Allow", "action": "*" if bad(0.15) else "storage:GetObject",
+                                "resource": "*" if bad(0.5) else "arn:example:storage:::bucket-1/*"}]
+        elif rtype == "container":
+            r.update(privileged=bad(0.15), run_as_root=bad(0.3), secrets_in_env=bad(0.1))
+        elif rtype == "function":
+            r.update(secrets_in_env=bad(0.15), logging=not bad())
+        elif rtype == "load_balancer":
+            r.update(https_only=not bad(0.15), logging=not bad())
+        for k in [k for k in r if k not in ("id", "type", "tags")]:
+            if bad(0.04):                                       # an undeclared property -> deny by default
+                del r[k]
+        resources.append(r)
+    return {"plan": {"name": f"generated-plan-{rng.randint(100, 999)}", "resources": resources}}
+
+
+GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 20: gen_lab20, 23: gen_lab23}
 
 
 def generate(lab: int, policies: dict, seed: int | None = None) -> dict:

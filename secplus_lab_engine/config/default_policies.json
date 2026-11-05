@@ -443,5 +443,452 @@
       "Certificate pinning": "An application only accepts a specific certificate or public key for a site, even if another CA-signed one is presented",
       "Self-signed certificate": "A certificate signed by its own key, not by a CA the client already trusts"
     }
+  },
+
+  "audit": {
+    "authorized_signer_roles": [
+      "CISO",
+      "CIO",
+      "CEO",
+      "system owner",
+      "general counsel"
+    ],
+    "environment_types": {
+      "known": "Known environment (formerly white box): testers get full details such as network diagrams, source code and credentials.",
+      "partially_known": "Partially known environment (formerly gray box): testers get some information, e.g. a user account or an IP range, but not full documentation.",
+      "unknown": "Unknown environment (formerly black box): testers get no prior information and must discover everything, like an outside attacker."
+    },
+    "passive_recon_ignores_window": true,
+    "passive_recon_note": "Passive reconnaissance only reads public third-party sources (search engines, WHOIS, certificate transparency logs) and sends nothing to client systems, so it may run outside the testing window hours. It still needs signed, in-date authorization and an in-scope target: the RoE covers the whole engagement, not only the packets.",
+    "always_prohibited": [
+      "dos_flood"
+    ],
+    "techniques": {
+      "osint_search": {
+        "category": "passive_recon",
+        "description": "Search engines, social media and public filings about the client (OSINT)"
+      },
+      "whois_dns_lookup": {
+        "category": "passive_recon",
+        "description": "WHOIS records and public DNS data from third-party resolvers"
+      },
+      "cert_transparency": {
+        "category": "passive_recon",
+        "description": "Read certificate transparency logs to find subdomains"
+      },
+      "port_scan": {
+        "category": "active_recon",
+        "description": "Send probes to target ports to find listening services"
+      },
+      "banner_grab": {
+        "category": "active_recon",
+        "description": "Connect to services and read their version banners"
+      },
+      "vuln_scan": {
+        "category": "active_recon",
+        "description": "Run a vulnerability scanner against target hosts"
+      },
+      "web_app_test": {
+        "category": "exploitation",
+        "description": "Attempt injection and authentication attacks on a web app"
+      },
+      "password_spray": {
+        "category": "exploitation",
+        "description": "Try a few common passwords against many accounts"
+      },
+      "exec_spear_phishing": {
+        "category": "social_engineering",
+        "description": "Targeted phishing of executives"
+      },
+      "physical_tailgating": {
+        "category": "physical",
+        "description": "Follow staff through a secured door"
+      },
+      "dos_flood": {
+        "category": "availability",
+        "description": "Flood a service to make it unavailable (denial of service)"
+      },
+      "prod_data_modify": {
+        "category": "data_integrity",
+        "description": "Change records in a production database"
+      }
+    },
+    "pentest_types": {
+      "offensive": "Offensive testing (red team): attack the organisation the way an adversary would to find exploitable weaknesses.",
+      "defensive": "Defensive testing (blue team): test how well detection and response controls identify and stop attacks.",
+      "integrated": "Integrated testing (purple team): attackers and defenders work together, sharing results to improve controls in real time.",
+      "physical": "Physical penetration testing: test locks, badges, guards and doors, e.g. tailgating into a data centre."
+    },
+    "assessment_types": {
+      "INTERNAL_AUDIT": {
+        "category": "internal",
+        "definition": "Internal audit: the organisation's own audit function checks compliance with policies and laws and reports to the audit committee."
+      },
+      "SELF_ASSESSMENT": {
+        "category": "internal",
+        "definition": "Self-assessment: a team reviews its own controls against a standard or checklist; quick and cheap but not independent."
+      },
+      "REGULATORY_EXAMINATION": {
+        "category": "external",
+        "definition": "Regulatory examination: a government regulator inspects the organisation to verify it meets legal requirements."
+      },
+      "INDEPENDENT_THIRD_PARTY_AUDIT": {
+        "category": "external",
+        "definition": "Independent third-party audit: an outside firm with no stake in the result audits the controls and gives an unbiased opinion."
+      },
+      "ATTESTATION": {
+        "category": "external",
+        "definition": "Attestation: an independent auditor formally states (attests) that controls are in place and working, e.g. a SOC 2 Type II report."
+      }
+    },
+    "assessment_rules": {
+      "regulator_requires": {
+        "default": "REGULATORY_EXAMINATION",
+        "if_independent": "REGULATORY_EXAMINATION",
+        "why": "a regulator mandates it, so the regulator (or its examiners) performs an external examination"
+      },
+      "audit_committee": {
+        "default": "INTERNAL_AUDIT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "the board's audit committee oversees internal audit; when independence is required an outside firm is engaged"
+      },
+      "compliance_review": {
+        "default": "INTERNAL_AUDIT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "checking adherence to internal policy and law is the internal audit compliance function"
+      },
+      "customer_soc2": {
+        "default": "ATTESTATION",
+        "if_independent": "ATTESTATION",
+        "why": "a customer wants a SOC 2 report, which is an independent auditor's attestation"
+      },
+      "self_check": {
+        "default": "SELF_ASSESSMENT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "a team checking its own controls is a self-assessment; it cannot satisfy an independence requirement"
+      }
+    }
+  },
+
+  "iac": {
+    "_comment": "Lab 20 IaC gate. A check PASSES only when the declared property satisfies 'op'; a missing property FAILS (deny by default).",
+    "known_types": [
+      "storage_bucket",
+      "security_group",
+      "vm",
+      "database",
+      "iam_policy",
+      "container",
+      "function",
+      "load_balancer"
+    ],
+    "unknown_type_severity": "critical",
+    "severity_order": [
+      "critical",
+      "high",
+      "medium",
+      "low"
+    ],
+    "decision": {
+      "block_if_any": [
+        "critical"
+      ],
+      "max_high_before_block": 1,
+      "warn_if_any": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "internet_cidrs": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "admin_ports": {
+      "22": "SSH",
+      "3389": "RDP",
+      "3306": "MySQL",
+      "5432": "PostgreSQL",
+      "1433": "SQL Server",
+      "1521": "Oracle",
+      "27017": "MongoDB",
+      "6379": "Redis"
+    },
+    "required_tags": [
+      "owner",
+      "data_classification"
+    ],
+    "ha_min_zones": 2,
+    "ha_tag": {
+      "key": "criticality",
+      "value": "critical"
+    },
+    "checks": [
+      {
+        "id": "IAC-S1",
+        "title": "Public storage bucket ACL",
+        "types": [
+          "storage_bucket"
+        ],
+        "property": "acl",
+        "op": "not_in",
+        "value": [
+          "public-read",
+          "public-read-write"
+        ],
+        "severity": "critical",
+        "rationale": "A public bucket exposes every object to the internet (data exposure is the #1 cloud breach cause).",
+        "fix": "Set acl = \"private\" and enable block-public-access; serve public content through a CDN."
+      },
+      {
+        "id": "IAC-S2",
+        "title": "Storage not encrypted at rest",
+        "types": [
+          "storage_bucket"
+        ],
+        "property": "encryption_at_rest",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Data at rest must be encrypted so lost media or a mis-scoped snapshot does not leak it.",
+        "fix": "Set encryption_at_rest = true with a KMS-managed key."
+      },
+      {
+        "id": "IAC-S3",
+        "title": "Access logging disabled",
+        "types": [
+          "storage_bucket",
+          "load_balancer",
+          "function"
+        ],
+        "property": "logging",
+        "op": "is_true",
+        "severity": "medium",
+        "rationale": "Without access logs there is no audit trail for incident response.",
+        "fix": "Set logging = true and ship logs to the central SIEM bucket."
+      },
+      {
+        "id": "IAC-N1",
+        "title": "Admin/database port open to the internet",
+        "types": [
+          "security_group"
+        ],
+        "property": "ingress",
+        "op": "no_open_ingress",
+        "severity": "critical",
+        "rationale": "SSH/RDP/database ports reachable from 0.0.0.0/0 invite brute force and exploitation.",
+        "fix": "Restrict the source CIDR to a bastion/VPN range (RFC 1918) or use a managed session service."
+      },
+      {
+        "id": "IAC-V1",
+        "title": "VM disk not encrypted",
+        "types": [
+          "vm"
+        ],
+        "property": "encrypted_disk",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Unencrypted volumes and their snapshots expose data at rest.",
+        "fix": "Set encrypted_disk = true (full-disk/volume encryption)."
+      },
+      {
+        "id": "IAC-V2",
+        "title": "VM has a public IP",
+        "types": [
+          "vm"
+        ],
+        "property": "public_ip",
+        "op": "is_false",
+        "severity": "medium",
+        "rationale": "Directly exposed hosts enlarge the attack surface; put them behind a load balancer or bastion.",
+        "fix": "Set public_ip = false and reach the VM through the load balancer or a bastion."
+      },
+      {
+        "id": "IAC-D1",
+        "title": "Database publicly accessible",
+        "types": [
+          "database"
+        ],
+        "property": "publicly_accessible",
+        "op": "is_false",
+        "severity": "critical",
+        "rationale": "A database endpoint on the internet bypasses network segmentation.",
+        "fix": "Set publicly_accessible = false and place it in a private subnet."
+      },
+      {
+        "id": "IAC-D2",
+        "title": "Database not encrypted at rest",
+        "types": [
+          "database"
+        ],
+        "property": "encryption_at_rest",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Database files, replicas and backups must be encrypted at rest.",
+        "fix": "Set encryption_at_rest = true (re-create from an encrypted snapshot)."
+      },
+      {
+        "id": "IAC-D3",
+        "title": "Backup retention too short",
+        "types": [
+          "database"
+        ],
+        "property": "backup_retention_days",
+        "op": "min",
+        "value": 7,
+        "severity": "medium",
+        "rationale": "Short retention hurts ease of recovery (e.g. ransomware found after a week).",
+        "fix": "Set backup_retention_days >= 7."
+      },
+      {
+        "id": "IAC-I1",
+        "title": "IAM policy grants * on *",
+        "types": [
+          "iam_policy"
+        ],
+        "property": "statements",
+        "op": "no_wildcard_admin",
+        "severity": "critical",
+        "rationale": "Action '*' on resource '*' is full admin: it breaks least privilege and maximises blast radius.",
+        "fix": "Grant only the specific actions on the specific resource ARNs the role needs."
+      },
+      {
+        "id": "IAC-C1",
+        "title": "Privileged container",
+        "types": [
+          "container"
+        ],
+        "property": "privileged",
+        "op": "is_false",
+        "severity": "high",
+        "rationale": "A privileged container can reach the host kernel and devices: container escape.",
+        "fix": "Set privileged = false and add only the specific capabilities needed."
+      },
+      {
+        "id": "IAC-C2",
+        "title": "Container runs as root",
+        "types": [
+          "container"
+        ],
+        "property": "run_as_root",
+        "op": "is_false",
+        "severity": "medium",
+        "rationale": "Root inside the container makes escape and tampering easier.",
+        "fix": "Set run_as_root = false (USER non-root in the image, runAsNonRoot)."
+      },
+      {
+        "id": "IAC-F1",
+        "title": "Secrets in plaintext environment variables",
+        "types": [
+          "function",
+          "container"
+        ],
+        "property": "secrets_in_env",
+        "op": "is_false",
+        "severity": "high",
+        "rationale": "Plaintext secrets in config leak through logs, consoles and the IaC repo itself.",
+        "fix": "Reference the secret from a secrets manager/vault instead of the environment."
+      },
+      {
+        "id": "IAC-L1",
+        "title": "Listener allows plain HTTP",
+        "types": [
+          "load_balancer"
+        ],
+        "property": "https_only",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Data in transit must be encrypted with TLS.",
+        "fix": "Set https_only = true and redirect port 80 to 443."
+      },
+      {
+        "id": "IAC-H1",
+        "title": "Critical resource in a single availability zone",
+        "types": [
+          "vm",
+          "database",
+          "load_balancer",
+          "container"
+        ],
+        "property": "availability_zones",
+        "op": "multi_az_if_critical",
+        "severity": "high",
+        "rationale": "A resource tagged critical needs high availability: one zone is a single point of failure.",
+        "fix": "Deploy across at least 2 availability zones (multi-AZ replica / auto-scaling group)."
+      },
+      {
+        "id": "IAC-T1",
+        "title": "Missing required tags",
+        "types": [
+          "*"
+        ],
+        "property": "tags",
+        "op": "has_tags",
+        "severity": "medium",
+        "rationale": "Owner and data_classification tags drive accountability, data handling and cost allocation.",
+        "fix": "Add tags owner and data_classification."
+      }
+    ],
+    "responsibility_layers": {
+      "physical_datacenter": "Physical data centre and hardware",
+      "hypervisor": "Virtualisation layer / hypervisor",
+      "network_controls": "Network controls (security groups)",
+      "guest_os_patching": "Guest operating system patching",
+      "runtime_middleware": "Runtime and middleware",
+      "application_code": "Application code",
+      "data": "Data classification and protection",
+      "identities_access": "User identities and access"
+    },
+    "responsibility_matrix": {
+      "IaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "customer",
+        "guest_os_patching": "customer",
+        "runtime_middleware": "customer",
+        "application_code": "customer",
+        "data": "customer",
+        "identities_access": "customer"
+      },
+      "PaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "shared",
+        "guest_os_patching": "provider",
+        "runtime_middleware": "provider",
+        "application_code": "customer",
+        "data": "customer",
+        "identities_access": "customer"
+      },
+      "SaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "provider",
+        "guest_os_patching": "provider",
+        "runtime_middleware": "provider",
+        "application_code": "provider",
+        "data": "customer",
+        "identities_access": "customer"
+      }
+    },
+    "quiz_layers": [
+      "guest_os_patching",
+      "application_code",
+      "data"
+    ],
+    "architecture_models": {
+      "serverless": "Code runs as functions on provider-managed compute: you never patch an OS, but you still secure code, permissions and secrets.",
+      "microservices": "An application split into small independently deployed services talking over APIs: more API surface, smaller blast radius.",
+      "containerization": "Applications packaged with their dependencies sharing the host kernel: fast and portable, but a kernel escape hits every container.",
+      "virtualization": "Multiple guest OSes on one hypervisor: VM escape and VM sprawl are the key risks.",
+      "air-gapped network": "Physical isolation with no network connection to other networks: strongest isolation, but updates and data move by removable media.",
+      "logical segmentation": "VLANs/subnets and ACLs separate traffic on shared hardware: limits lateral movement without separate equipment.",
+      "software-defined networking (SDN)": "Network control plane separated from the data plane and managed centrally in software: agile, but the controller is a high-value target.",
+      "ICS/SCADA": "Industrial control of physical processes on legacy protocols: availability first, often unable to patch, so segmentation is the main control.",
+      "IoT": "Many low-cost connected sensors and devices: weak default credentials and limited patch availability.",
+      "RTOS": "An operating system that must respond within strict timing deadlines: security controls must not add latency.",
+      "embedded system": "Firmware-based hardware built for one dedicated function with limited compute and power: hard to update.",
+      "hybrid cloud": "On-premises infrastructure combined with public cloud: consistent policy and identity across both is the challenge.",
+      "infrastructure as code (IaC)": "Infrastructure defined in version-controlled templates: repeatable, scannable deployments, but one bad template misconfigures every copy."
+    }
   }
 }

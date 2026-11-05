@@ -27,6 +27,8 @@ from . import (
     lab15_vendor_risk,
     lab16_control_classifier,
     lab17_pki_validator,
+    lab20_iac_scanner,
+    lab23_audit_roe,
 )
 
 # lab number -> (module, default data file)
@@ -48,4 +50,6 @@ LABS = {
     15: (lab15_vendor_risk, "sample_vendors.json"),
     16: (lab16_control_classifier, "sample_controls.json"),
     17: (lab17_pki_validator, "sample_certificates.json"),
+    20: (lab20_iac_scanner, "sample_iac.json"),
+    23: (lab23_audit_roe, "sample_engagement.json"),
 }
