@@ -35,7 +35,9 @@ BANK_DIR = ROOT / "data" / "exam_bank"
 OBJECTIVES = {"1": 4, "2": 5, "3": 4, "4": 9, "5": 6}          # objectives per domain
 VALID_OBJECTIVES = {f"{d}.{n}" for d, k in OBJECTIVES.items() for n in range(1, k + 1)}
 # Wording that belongs to the labs, not to the exam: ids like DF-5, IAC-T1, SIEM-004, P-03, rule names in CAPS_WITH_UNDERSCORES.
-_JARGON = re.compile(r"\b(?:[A-Z]{1,5}-\d{1,3}|[A-Z]{2,}-[A-Z]\d|[A-Z]+_[A-Z_]{3,})\b|\blab\s?\d+\b|\bgate decide\b", re.I)
+_REAL_TERMS = r"(?!(?:SHA|AES|RSA|DES|3DES|MD|RC|ECC|ECDSA|ECDHE|DH|CVE|CWE|ISO|IEC|NIST|SP|PCI|TLS|SSL|WPA|IEEE|RFC|EAP|PEAP|SOC|FIPS|OWASP|HMAC|CIS|SMB|SMBV|HTTP|DOCSIS|X)-)"
+_JARGON = re.compile(r"\b(?:" + _REAL_TERMS + r"[A-Z]{1,5}-\d{1,3}|[A-Z]{2,}-[A-Z]\d|[A-Z]+_[A-Z_]{3,})\b"
+                     r"|(?i:\blab\s?\d+\b|\bgate decide\b)")
 _BANNED_CHOICES = {"all of the above", "none of the above", "both a and b"}
 
 

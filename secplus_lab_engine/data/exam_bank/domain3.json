@@ -1,0 +1,839 @@
+{
+  "domain": "3",
+  "title": "Security Architecture",
+  "note": "Original practice questions written in the style of the CompTIA Security+ SY0-701 exam. Not real exam questions.",
+  "questions": [
+    {
+      "id": "D3-001",
+      "objective": "3.1",
+      "stem": "A company is moving its line-of-business servers to virtual machines hosted by an IaaS provider. Under the shared responsibility model, which of the following tasks will remain the company's responsibility?",
+      "choices": [
+        "Securing the physical data center",
+        "Patching the guest operating systems",
+        "Maintaining the hypervisor software",
+        "Replacing failed storage hardware"
+      ],
+      "answer": "Patching the guest operating systems",
+      "explanation": "In IaaS the customer owns everything from the guest OS upward, so OS patching stays with the customer. The hypervisor is tempting, but it sits below the guest and is maintained by the provider."
+    },
+    {
+      "id": "D3-002",
+      "objective": "3.1",
+      "stem": "A sales team uses a SaaS customer relationship management platform. The security manager is reviewing the vendor's responsibility matrix. Which of the following will the company MOST likely still be responsible for?",
+      "choices": [
+        "Patching the application's source code",
+        "Hardening the underlying web servers",
+        "Managing user accounts and access rights",
+        "Maintaining the database software"
+      ],
+      "answer": "Managing user accounts and access rights",
+      "explanation": "Even in SaaS, the customer controls who can log in and what they can see, so identity and access management stays with the customer. Patching the application is tempting, but in SaaS the provider owns the application stack."
+    },
+    {
+      "id": "D3-003",
+      "objective": "3.1",
+      "stem": "An organization keeps its customer database in its own data center but runs its public web front end on a public cloud provider. Which of the following BEST describes this deployment model?",
+      "choices": [
+        "Community cloud",
+        "Hybrid cloud",
+        "Multi-cloud",
+        "Private cloud"
+      ],
+      "answer": "Hybrid cloud",
+      "explanation": "Combining on-premises or private infrastructure with public cloud services is a hybrid cloud. Multi-cloud is the tempting distractor, but it means using more than one public cloud provider, which is not described here."
+    },
+    {
+      "id": "D3-004",
+      "objective": "3.1",
+      "stem": "A DevOps team now defines servers, network settings and firewall rules in version-controlled templates that a pipeline applies automatically to every environment. Which of the following security benefits does this practice MOST directly provide?",
+      "choices": [
+        "Removal of the operating system attack surface",
+        "Kernel isolation for every workload",
+        "Automatic encryption of all stored data",
+        "Reduced configuration drift between environments"
+      ],
+      "answer": "Reduced configuration drift between environments",
+      "explanation": "Infrastructure as code builds every environment from the same reviewed templates, which keeps configurations consistent and makes drift easy to detect. Removing the OS attack surface describes serverless, not IaC."
+    },
+    {
+      "id": "D3-005",
+      "objective": "3.1",
+      "stem": "A developer deploys code as functions that run only when an event triggers them, and the team never provisions or manages any servers. Which of the following security tasks shifts MOST to the cloud provider in this model?",
+      "choices": [
+        "Patching the underlying OS and runtime",
+        "Validating all input passed to the functions",
+        "Assigning least-privilege permissions to the functions",
+        "Reviewing the functions' own code for flaws"
+      ],
+      "answer": "Patching the underlying OS and runtime",
+      "explanation": "In serverless computing the provider manages the servers, OS and runtime, so their patching moves to the provider. Input validation is tempting, but the customer still owns the function code and everything it does with input."
+    },
+    {
+      "id": "D3-006",
+      "objective": "3.1",
+      "stem": "A company is breaking a large monolithic application into dozens of small, independently deployed services that talk to each other over APIs. Which of the following is the MOST significant new security consideration?",
+      "choices": [
+        "A single failure taking down the whole application",
+        "Inability to scale individual components",
+        "More service-to-service APIs that must be secured",
+        "One shared code base for every function"
+      ],
+      "answer": "More service-to-service APIs that must be secured",
+      "explanation": "Microservices multiply the number of network-exposed interfaces, so each API needs authentication, authorization and encryption. A single failure taking down everything is a weakness of the monolith that microservices reduce."
+    },
+    {
+      "id": "D3-007",
+      "objective": "3.1",
+      "stem": "A chemical plant must ensure that its safety control network cannot be reached from any other network by any path, including through firewalls or routers. Which of the following BEST meets this requirement?",
+      "choices": [
+        "VLAN segmentation",
+        "A screened subnet",
+        "An air-gapped network",
+        "Software-defined micro-segmentation"
+      ],
+      "answer": "An air-gapped network",
+      "explanation": "Only an air gap provides physical isolation with no network connection at all. VLANs and micro-segmentation are logical controls that still share connected infrastructure, so a misconfiguration could create a path."
+    },
+    {
+      "id": "D3-008",
+      "objective": "3.1",
+      "stem": "A company wants to separate guest wireless traffic from corporate traffic on its existing switches without buying any new hardware. Which of the following should the network team implement?",
+      "choices": [
+        "Physical isolation on separate switches",
+        "Logical segmentation with VLANs",
+        "An air-gapped guest network",
+        "Port mirroring on the access switches"
+      ],
+      "answer": "Logical segmentation with VLANs",
+      "explanation": "VLANs logically separate traffic on shared switches with no new hardware. Physical isolation would also separate the traffic, but it requires additional switches, which the requirement rules out."
+    },
+    {
+      "id": "D3-009",
+      "objective": "3.1",
+      "stem": "Which of the following separates the control plane from the data plane so that a data center network can be configured programmatically from a central controller?",
+      "choices": [
+        "Secure access service edge",
+        "Software-defined networking",
+        "Network access control",
+        "Unified threat management"
+      ],
+      "answer": "Software-defined networking",
+      "explanation": "SDN decouples the control plane, which decides how traffic flows, from the data plane, which forwards it, and manages it through a central controller. SASE is a cloud-delivered security service for users, not a way to program data center switching."
+    },
+    {
+      "id": "D3-010",
+      "objective": "3.1",
+      "stem": "A company is consolidating authentication, logging and policy management for all of its branch offices into a single headquarters data center. Which of the following is the MOST likely security drawback of this centralized design?",
+      "choices": [
+        "Policies become harder to apply consistently",
+        "It can create a single point of failure",
+        "Logs end up scattered across many systems",
+        "Each site needs its own administrators"
+      ],
+      "answer": "It can create a single point of failure",
+      "explanation": "Centralizing services improves consistency and visibility, but if the central site fails, every branch loses the service. Inconsistent policy and scattered logs are weaknesses of decentralized designs, not centralized ones."
+    },
+    {
+      "id": "D3-011",
+      "objective": "3.1",
+      "stem": "A security architect is comparing containers with virtual machines for hosting several customer workloads on one server. Which of the following is the MOST important security difference?",
+      "choices": [
+        "Containers share the host operating system kernel",
+        "Containers each require a full guest operating system",
+        "Containers cannot be scanned for vulnerabilities",
+        "Containers must run on a type 1 hypervisor"
+      ],
+      "answer": "Containers share the host operating system kernel",
+      "explanation": "Containers share the host kernel, so a kernel flaw or container escape can affect every container on the host, while VMs each run their own kernel on a hypervisor. A full guest OS per instance describes VMs, not containers."
+    },
+    {
+      "id": "D3-012",
+      "objective": "3.1",
+      "stem": "An audit of a company's virtualization platform finds dozens of virtual machines that developers created for short tests and never removed. Most are unpatched and no one knows who owns them. Which of the following BEST describes this issue?",
+      "choices": [
+        "Virtual machine escape",
+        "Virtual machine sprawl",
+        "Resource reuse",
+        "Configuration drift"
+      ],
+      "answer": "Virtual machine sprawl",
+      "explanation": "VM sprawl is the uncontrolled growth of unmanaged virtual machines that miss patching and monitoring. VM escape is an attack that breaks out of a guest to reach the hypervisor, which is not what the audit found."
+    },
+    {
+      "id": "D3-013",
+      "objective": "3.1",
+      "stem": "A company is installing smart thermostats and door sensors in its offices. The devices use hard-coded credentials and the vendor provides no way to install security software on them. Which of the following would BEST reduce the risk they pose?",
+      "choices": [
+        "Install endpoint detection agents on the devices",
+        "Enable full-disk encryption on the devices",
+        "Join the devices to the corporate domain",
+        "Place the devices on an isolated network segment"
+      ],
+      "answer": "Place the devices on an isolated network segment",
+      "explanation": "Many IoT devices cannot be hardened or run agents, so isolating them limits what an attacker can reach if one is compromised. Installing EDR agents sounds strong but is not possible on devices that cannot run added software."
+    },
+    {
+      "id": "D3-014",
+      "objective": "3.1",
+      "stem": "A municipal water utility is designing security for the SCADA systems that control its pumps and treatment chemicals. Which of the following should be the PRIMARY design priority?",
+      "choices": [
+        "Availability and safety of the physical process",
+        "Confidentiality of the process telemetry",
+        "Non-repudiation of operator commands",
+        "Data sovereignty of the historian data"
+      ],
+      "answer": "Availability and safety of the physical process",
+      "explanation": "ICS and SCADA environments control physical processes, so keeping them running safely outweighs other goals. Confidentiality is the usual IT priority, but leaking sensor readings is far less harmful than a pump or dosing failure."
+    },
+    {
+      "id": "D3-015",
+      "objective": "3.1",
+      "stem": "A medical infusion pump must react to sensor readings within a few milliseconds every time, or a patient could be harmed. Which of the following is the pump MOST likely running?",
+      "choices": [
+        "A type 2 hypervisor",
+        "A real-time operating system",
+        "A virtual desktop client",
+        "A container runtime"
+      ],
+      "answer": "A real-time operating system",
+      "explanation": "An RTOS guarantees that tasks finish within strict, predictable time limits, which safety-critical devices need. A type 2 hypervisor adds a layer of overhead and unpredictable scheduling, which is the opposite of what the pump needs."
+    },
+    {
+      "id": "D3-016",
+      "objective": "3.1",
+      "stem": "A manufacturer's production line relies on an embedded controller whose vendor no longer releases firmware updates. The controller cannot be replaced until next year. Which of the following is the BEST way to reduce the risk until then?",
+      "choices": [
+        "Apply operating system patches to it manually",
+        "Install host-based antivirus on the controller",
+        "Segment the controller and restrict traffic to it",
+        "Enable automatic updates on the controller"
+      ],
+      "answer": "Segment the controller and restrict traffic to it",
+      "explanation": "When a device cannot be patched, compensating controls such as network segmentation and strict access rules reduce exposure. Manual patching or automatic updates are not options because no patches are available."
+    },
+    {
+      "id": "D3-017",
+      "objective": "3.1",
+      "stem": "A CFO supports moving card processing to a third-party payment provider because the provider will contractually take on liability for breaches of the payment environment. Which of the following architecture considerations is the CFO relying on?",
+      "choices": [
+        "Ease of recovery",
+        "Responsiveness",
+        "Risk transference",
+        "Scalability"
+      ],
+      "answer": "Risk transference",
+      "explanation": "Shifting the financial impact of a risk to another party through a contract is risk transference. Ease of recovery concerns how quickly a system can be restored, not who pays when something goes wrong."
+    },
+    {
+      "id": "D3-018",
+      "objective": "3.1",
+      "stem": "A defense contractor must keep complete physical control of the servers that store classified designs, and its policy forbids any provider staff from having access to the hardware. Which of the following deployment models BEST meets this requirement?",
+      "choices": [
+        "Community cloud",
+        "Hybrid cloud",
+        "Public cloud",
+        "On-premises"
+      ],
+      "answer": "On-premises",
+      "explanation": "Only on-premises infrastructure keeps the hardware entirely under the organization's own physical control. A community cloud is shared by organizations with similar needs, but it is still operated by a provider whose staff can reach the hardware."
+    },
+    {
+      "id": "D3-019",
+      "objective": "3.2",
+      "stem": "A company is deploying a public web server and wants to keep internet users from ever reaching the internal network directly. Where should the web server be placed?",
+      "choices": [
+        "In a screened subnet",
+        "On the internal user LAN",
+        "On the management VLAN",
+        "On the internal database segment"
+      ],
+      "answer": "In a screened subnet",
+      "explanation": "A screened subnet sits between the internet and the internal network, so public services are reachable without exposing internal hosts. Placing the server on any internal segment would let a compromise of the server reach internal systems directly."
+    },
+    {
+      "id": "D3-020",
+      "objective": "3.2",
+      "stem": "A firewall protects the network segment that holds a payment database. Policy states that if the firewall crashes, no traffic may pass to the database until the firewall is restored. Which of the following failure modes does this describe?",
+      "choices": [
+        "Fail-open",
+        "Passive mode",
+        "Tap mode",
+        "Fail-closed"
+      ],
+      "answer": "Fail-closed",
+      "explanation": "Fail-closed means the device blocks all traffic when it fails, which protects confidentiality at the cost of availability. Fail-open would let traffic through unchecked during a failure, which the policy forbids."
+    },
+    {
+      "id": "D3-021",
+      "objective": "3.2",
+      "stem": "A hospital is adding an inline IPS in front of its patient portal. Leadership requires that the portal stay reachable even if the IPS hardware fails, but the IPS must still block attacks when it is working. Which of the following BEST meets these requirements?",
+      "choices": [
+        "Configure the IPS to fail closed",
+        "Connect the IPS to a SPAN port",
+        "Configure the IPS to fail open",
+        "Replace the IPS with a passive IDS"
+      ],
+      "answer": "Configure the IPS to fail open",
+      "explanation": "Fail-open lets traffic bypass a failed inline device, preserving availability while keeping prevention during normal operation. A SPAN port or passive IDS would also keep the portal up, but they cannot block attacks, so they miss the second requirement."
+    },
+    {
+      "id": "D3-022",
+      "objective": "3.2",
+      "stem": "A security analyst wants to inspect production traffic for threats without any chance that the monitoring tool will block or delay that traffic. Which of the following deployments should the analyst choose?",
+      "choices": [
+        "A passive sensor connected to a network tap",
+        "An inline intrusion prevention system",
+        "An inline next-generation firewall",
+        "A reverse proxy in front of the servers"
+      ],
+      "answer": "A passive sensor connected to a network tap",
+      "explanation": "A passive sensor on a tap receives a copy of the traffic, so it can never block or slow production flows. An inline IPS sits in the traffic path, so a failure or false positive could disrupt traffic."
+    },
+    {
+      "id": "D3-023",
+      "objective": "3.2",
+      "stem": "A security device generated this alert: `SQL injection attempt 198.51.100.23 -> 10.0.5.20:443 action=alert`. The malicious request still reached the server. Management wants such requests stopped automatically in the future. Which of the following should replace the current device?",
+      "choices": [
+        "An intrusion detection system",
+        "A network tap",
+        "A SIEM collector",
+        "An intrusion prevention system"
+      ],
+      "answer": "An intrusion prevention system",
+      "explanation": "An IPS sits inline and can drop malicious traffic, while the alert-only behavior shows the current device is acting as an IDS. Another IDS would detect the attack again but still let it reach the server."
+    },
+    {
+      "id": "D3-024",
+      "objective": "3.2",
+      "stem": "Administrators must manage servers in a high-security zone, but policy prohibits direct remote desktop connections from user workstations to those servers. Which of the following should be implemented?",
+      "choices": [
+        "A jump server",
+        "A forward proxy",
+        "A load balancer",
+        "A reverse proxy"
+      ],
+      "answer": "A jump server",
+      "explanation": "A jump server is a hardened, monitored host that administrators connect to first, and only it is allowed to reach the secure zone. A reverse proxy publishes services to clients; it is not a controlled administrative entry point."
+    },
+    {
+      "id": "D3-025",
+      "objective": "3.2",
+      "stem": "A company wants all employee web requests to pass through a device that filters URLs by category, caches common content and hides internal client addresses from websites. Which of the following should be deployed?",
+      "choices": [
+        "A reverse proxy",
+        "A jump server",
+        "A load balancer",
+        "A forward proxy"
+      ],
+      "answer": "A forward proxy",
+      "explanation": "A forward proxy acts for internal clients making outbound requests and can filter, cache and hide their addresses. A reverse proxy does similar work, but for inbound requests to the company's own servers."
+    },
+    {
+      "id": "D3-026",
+      "objective": "3.2",
+      "stem": "An e-commerce site runs on four identical web servers. The company wants incoming requests spread evenly across them and any server that fails a health check removed from service automatically. Which of the following should be deployed?",
+      "choices": [
+        "A forward proxy",
+        "A load balancer",
+        "A web application firewall",
+        "A unified threat management appliance"
+      ],
+      "answer": "A load balancer",
+      "explanation": "A load balancer distributes client requests across a pool of servers and uses health checks to stop sending traffic to failed ones. A WAF inspects HTTP traffic for attacks but does not spread load or track server health."
+    },
+    {
+      "id": "D3-027",
+      "objective": "3.2",
+      "stem": "A company wants any device plugged into an office network jack to be denied access until the user or device authenticates against a RADIUS server. Which of the following should be implemented on the switches?",
+      "choices": [
+        "MAC address filtering on each port",
+        "Port mirroring to a monitoring sensor",
+        "802.1X port-based authentication",
+        "DHCP snooping on the access VLANs"
+      ],
+      "answer": "802.1X port-based authentication",
+      "explanation": "802.1X keeps a switch port in an unauthorized state until the supplicant authenticates through the authenticator to a RADIUS server. MAC filtering also restricts ports, but it checks an easily spoofed address and does not authenticate against RADIUS."
+    },
+    {
+      "id": "D3-028",
+      "objective": "3.2",
+      "stem": "A company is deploying 802.1X on its wireless network and requires that both the client and the authentication server prove their identity with digital certificates. Which of the following EAP methods should be used?",
+      "choices": [
+        "PEAP",
+        "EAP-TLS",
+        "EAP-FAST",
+        "EAP-TTLS"
+      ],
+      "answer": "EAP-TLS",
+      "explanation": "EAP-TLS requires certificates on both the client and the server for mutual authentication. PEAP is the most tempting choice, but it normally uses only a server certificate and authenticates the user with a password inside the tunnel."
+    },
+    {
+      "id": "D3-029",
+      "objective": "3.2",
+      "stem": "Web server logs show many requests containing `' OR 1=1 --` and `<script>` strings aimed at a customer portal. Which of the following would BEST block these attacks?",
+      "choices": [
+        "A layer 4 firewall",
+        "A network-based IDS",
+        "A forward proxy",
+        "A web application firewall"
+      ],
+      "answer": "A web application firewall",
+      "explanation": "A WAF inspects HTTP requests and blocks application attacks such as SQL injection and cross-site scripting. A layer 4 firewall filters on IP addresses and ports, so it cannot see the malicious content inside allowed HTTPS requests."
+    },
+    {
+      "id": "D3-030",
+      "objective": "3.2",
+      "stem": "A small business with one IT employee wants a single appliance that provides firewalling, antivirus scanning, content filtering, spam filtering and VPN termination, all managed from one console. Which of the following BEST meets this need?",
+      "choices": [
+        "Unified threat management",
+        "A web application firewall",
+        "A stand-alone IPS",
+        "A layer 4 firewall"
+      ],
+      "answer": "Unified threat management",
+      "explanation": "A UTM appliance combines many security functions in one box, which suits small organizations with limited staff. A WAF protects web applications only and offers none of the other required functions."
+    },
+    {
+      "id": "D3-031",
+      "objective": "3.2",
+      "stem": "A company must block an unapproved file-sharing application that tunnels its traffic over TCP 443, while still allowing normal HTTPS browsing. Which of the following firewall capabilities is required?",
+      "choices": [
+        "Layer 4 port filtering",
+        "Layer 7 application inspection",
+        "Stateless packet filtering",
+        "Router access control lists"
+      ],
+      "answer": "Layer 7 application inspection",
+      "explanation": "Only a layer 7 firewall can identify the application inside the traffic and block it while allowing other HTTPS. Layer 4 filtering sees only TCP 443, so it would have to allow or block all HTTPS together."
+    },
+    {
+      "id": "D3-032",
+      "objective": "3.2",
+      "stem": "A security engineer is hardening a new Linux server that will only serve a single internal API. Which of the following would BEST reduce the server's attack surface?",
+      "choices": [
+        "Forward all of the server's logs to the SIEM",
+        "Place a network tap beside the server's switch port",
+        "Disable unneeded services and close unused ports",
+        "Increase the server's log retention to one year"
+      ],
+      "answer": "Disable unneeded services and close unused ports",
+      "explanation": "Removing unneeded services and open ports eliminates entry points an attacker could use, which directly shrinks the attack surface. Forwarding logs to a SIEM improves detection, but every exposed service would still be there to attack."
+    },
+    {
+      "id": "D3-033",
+      "objective": "3.2",
+      "stem": "Two company offices need a permanent encrypted connection between their edge routers so that all traffic between the sites is protected automatically, without any software on user computers. Which of the following should be used?",
+      "choices": [
+        "A site-to-site IPSec VPN",
+        "A remote access TLS VPN",
+        "A jump server at each site",
+        "Clientless browser-based access"
+      ],
+      "answer": "A site-to-site IPSec VPN",
+      "explanation": "A site-to-site IPSec VPN creates a permanent tunnel between the gateways, so traffic between the sites is protected without client software. A remote access VPN connects individual users, which is not what the offices need."
+    },
+    {
+      "id": "D3-034",
+      "objective": "3.2",
+      "stem": "Employees who travel often stay in hotels whose networks allow only outbound HTTPS. Their IPSec VPN client fails to connect from these locations. Which of the following would BEST allow them to connect securely?",
+      "choices": [
+        "A TLS-based remote access VPN",
+        "A site-to-site IPSec VPN",
+        "An IPSec tunnel in transport mode",
+        "An unencrypted GRE tunnel"
+      ],
+      "answer": "A TLS-based remote access VPN",
+      "explanation": "A TLS VPN runs over TCP 443, which restrictive networks usually allow, so remote users can still build an encrypted tunnel. Switching IPSec to transport mode changes what is encrypted, but it still uses protocols the hotel network blocks."
+    },
+    {
+      "id": "D3-035",
+      "objective": "3.2",
+      "stem": "A retailer with 300 stores wants to replace expensive MPLS circuits with ordinary broadband and LTE links. It wants central management and automatic routing of each application over the best-performing link. Which of the following BEST meets these requirements?",
+      "choices": [
+        "SD-WAN",
+        "SASE",
+        "A site-to-site VPN mesh",
+        "Network access control"
+      ],
+      "answer": "SD-WAN",
+      "explanation": "SD-WAN centrally manages several WAN links and steers traffic over them based on application performance. SASE is the tempting choice because it can include SD-WAN, but its focus is cloud-delivered security for users rather than link selection between sites."
+    },
+    {
+      "id": "D3-036",
+      "objective": "3.2",
+      "stem": "Most of a company's employees now work remotely and connect straight to SaaS applications. The company wants a cloud-delivered service that combines secure web gateway, CASB, zero trust network access and firewall functions close to each user. Which of the following should it adopt?",
+      "choices": [
+        "SD-WAN",
+        "SASE",
+        "Unified threat management",
+        "A remote access VPN concentrator"
+      ],
+      "answer": "SASE",
+      "explanation": "SASE delivers networking and security services such as SWG, CASB, ZTNA and firewall-as-a-service from the cloud, close to users wherever they work. A UTM bundles similar functions, but in an on-premises appliance that remote users would have to route back through."
+    },
+    {
+      "id": "D3-037",
+      "objective": "3.3",
+      "stem": "A clinic stores patient diagnoses and treatment histories that are covered by HIPAA. Which of the following BEST describes this type of data?",
+      "choices": [
+        "Trade secret",
+        "Intellectual property",
+        "Regulated",
+        "Public"
+      ],
+      "answer": "Regulated",
+      "explanation": "Data whose handling is governed by laws such as HIPAA is regulated data. Intellectual property is tempting because the data is valuable, but IP refers to creations such as inventions or designs, not patient records."
+    },
+    {
+      "id": "D3-038",
+      "objective": "3.3",
+      "stem": "A beverage company has never patented its drink formula. Instead, only three employees know it, and each has signed a confidentiality agreement. Which of the following data types BEST describes the formula?",
+      "choices": [
+        "Trade secret",
+        "Regulated data",
+        "Legal data",
+        "Financial data"
+      ],
+      "answer": "Trade secret",
+      "explanation": "A trade secret is valuable business information protected by keeping it confidential rather than by registering it. It is not regulated data, because no law dictates how the formula must be handled."
+    },
+    {
+      "id": "D3-039",
+      "objective": "3.3",
+      "stem": "A company's DLP system detects sensitive data in documents and email text, but it misses the same data when it is encoded in barcodes and serialized binary files. Which of the following types of data is the DLP system failing to inspect?",
+      "choices": [
+        "Human-readable data",
+        "Public data",
+        "Non-human-readable data",
+        "Legal data"
+      ],
+      "answer": "Non-human-readable data",
+      "explanation": "Barcodes and binary formats are non-human-readable, so they need decoding before their content can be inspected. Human-readable data such as document text is exactly what the DLP system is already catching."
+    },
+    {
+      "id": "D3-040",
+      "objective": "3.3",
+      "stem": "A marketing team publishes product brochures and press releases on the company website for anyone to download. Which of the following data classifications should these documents have?",
+      "choices": [
+        "Private",
+        "Public",
+        "Sensitive",
+        "Confidential"
+      ],
+      "answer": "Public",
+      "explanation": "Information intended for release to anyone carries the public classification and needs no confidentiality controls. Private is tempting as the opposite label, but it applies to information about individuals that should not be disclosed."
+    },
+    {
+      "id": "D3-041",
+      "objective": "3.3",
+      "stem": "A company labels its order-processing database so that it receives the strongest backup and availability protections, because business operations stop if the data becomes unavailable. Which of the following classifications BEST fits this data?",
+      "choices": [
+        "Confidential",
+        "Restricted",
+        "Public",
+        "Critical"
+      ],
+      "answer": "Critical",
+      "explanation": "Critical data is data the organization cannot operate without, so it gets the highest availability protections. Confidential and restricted focus on limiting who can see data, which is not the concern described."
+    },
+    {
+      "id": "D3-042",
+      "objective": "3.3",
+      "stem": "An analytics application loads customer records into memory and decrypts them so it can calculate monthly trends. Which of the following states is the data in while it is being calculated?",
+      "choices": [
+        "Data at rest",
+        "Data in use",
+        "Data in transit",
+        "Data in archive"
+      ],
+      "answer": "Data in use",
+      "explanation": "Data that is loaded in memory and actively processed is data in use. Data at rest is tempting because the records came from a database, but once they are decrypted in memory and being processed, they are in use."
+    },
+    {
+      "id": "D3-043",
+      "objective": "3.3",
+      "stem": "A company wants to protect customer records as they move across the internal network between its application servers and its database servers. Which of the following should it implement?",
+      "choices": [
+        "Enable full-disk encryption on the database servers",
+        "Hash the customer records in the database",
+        "Mask the records in the database tables",
+        "Enable TLS on the database connections"
+      ],
+      "answer": "Enable TLS on the database connections",
+      "explanation": "TLS encrypts the connection, which protects data in transit between the servers. Full-disk encryption protects data at rest on the disks and does nothing for data crossing the network."
+    },
+    {
+      "id": "D3-044",
+      "objective": "3.3",
+      "stem": "A German company learns that its cloud provider may copy backup data to data centers in another country. The legal team is concerned that the data could then be subject to that country's laws and government access requests. Which of the following concepts is the legal team concerned about?",
+      "choices": [
+        "Data classification",
+        "Data retention",
+        "Data masking",
+        "Data sovereignty"
+      ],
+      "answer": "Data sovereignty",
+      "explanation": "Data sovereignty means data is subject to the laws of the country where it is physically stored. Data retention concerns how long data is kept, not which country's laws apply."
+    },
+    {
+      "id": "D3-045",
+      "objective": "3.3",
+      "stem": "Logs for a bank's administrative portal show successful logins from IP addresses in countries where the bank has no staff or customers. The bank wants to deny any login attempt that geolocation places outside its country of operation. Which of the following methods should it use?",
+      "choices": [
+        "Geographic restrictions",
+        "Network segmentation",
+        "Tokenization",
+        "Data obfuscation"
+      ],
+      "answer": "Geographic restrictions",
+      "explanation": "Geographic restrictions use the location of a request to allow or deny access, which matches the requirement. Segmentation separates internal networks but does not consider where a remote user is located."
+    },
+    {
+      "id": "D3-046",
+      "objective": "3.3",
+      "stem": "A developer needs to store user passwords so that the original passwords cannot be recovered from the database, even by administrators. Which of the following should the developer use?",
+      "choices": [
+        "Symmetric encryption",
+        "Tokenization",
+        "Salted hashing",
+        "Data masking"
+      ],
+      "answer": "Salted hashing",
+      "explanation": "A salted hash is a one-way function, so the original password cannot be recovered, but a login attempt can still be checked by hashing it again. Encryption is reversible by anyone holding the key, which defeats the requirement."
+    },
+    {
+      "id": "D3-047",
+      "objective": "3.3",
+      "stem": "Call center agents need to confirm a customer's identity, but their screens show card numbers only as `XXXX-XXXX-XXXX-4821`. The full number remains stored in the back-end system. Which of the following methods is being used?",
+      "choices": [
+        "Tokenization",
+        "Hashing",
+        "Data masking",
+        "Encryption"
+      ],
+      "answer": "Data masking",
+      "explanation": "Masking hides part of a value when it is displayed while the original stays intact in storage. Tokenization replaces the stored value itself with a surrogate held in a vault, which is not what this display shows."
+    },
+    {
+      "id": "D3-048",
+      "objective": "3.3",
+      "stem": "A merchant replaces each customer card number with a random value that has no mathematical relationship to the original. The real numbers are kept only in a secured vault at the payment processor. Which of the following methods is the merchant using?",
+      "choices": [
+        "Masking",
+        "Tokenization",
+        "Encryption",
+        "Hashing"
+      ],
+      "answer": "Tokenization",
+      "explanation": "Tokenization swaps sensitive data for random surrogates and keeps the mapping in a secure vault, which reduces the merchant's PCI DSS scope. Encryption is tempting, but ciphertext is mathematically derived from the original and can be reversed with the key."
+    },
+    {
+      "id": "D3-049",
+      "objective": "3.3",
+      "stem": "A software company ships a JavaScript application and wants to make the code difficult for competitors to read and reverse engineer, while the code must still run normally in customers' browsers. Which of the following should the company use?",
+      "choices": [
+        "Encryption",
+        "Tokenization",
+        "Masking",
+        "Obfuscation"
+      ],
+      "answer": "Obfuscation",
+      "explanation": "Obfuscation makes code hard for humans to understand while leaving it executable. Encryption would also hide the code, but browsers could not run it without first decrypting it, which defeats the purpose."
+    },
+    {
+      "id": "D3-050",
+      "objective": "3.3",
+      "stem": "A retailer wants to shrink the number of systems in scope for PCI DSS audits. It plans to move all systems that store or process cardholder data into a separate network zone with tightly controlled access. Which of the following data protection methods is this?",
+      "choices": [
+        "Masking",
+        "Hashing",
+        "Segmentation",
+        "Geographic restrictions"
+      ],
+      "answer": "Segmentation",
+      "explanation": "Segmentation isolates the systems that handle sensitive data, so fewer systems fall into audit scope. Geographic restrictions limit access by user location; they do not separate systems from one another."
+    },
+    {
+      "id": "D3-051",
+      "objective": "3.4",
+      "stem": "Two database servers share the same storage. If the active server fails, the second server automatically takes over the database service with the same identity and data. Which of the following BEST describes this configuration?",
+      "choices": [
+        "Load balancing",
+        "Clustering",
+        "Journaling",
+        "Snapshots"
+      ],
+      "answer": "Clustering",
+      "explanation": "Clustering groups servers so that a standby node takes over a service when the active node fails. Load balancing spreads requests across several independent servers, but it does not move one server's service and identity to another."
+    },
+    {
+      "id": "D3-052",
+      "objective": "3.4",
+      "stem": "A company needs a recovery site that already has hardware and network connectivity installed but must load recent backups before it can operate. The company can accept recovery taking one to two days and has a moderate budget. Which of the following site types BEST fits?",
+      "choices": [
+        "Warm site",
+        "Hot site",
+        "Cold site",
+        "Mobile site"
+      ],
+      "answer": "Warm site",
+      "explanation": "A warm site has equipment and connectivity ready but needs current data restored, so it balances cost against recovery time. A hot site would recover faster, but it keeps live data synchronized and costs more than this requirement justifies."
+    },
+    {
+      "id": "D3-053",
+      "objective": "3.4",
+      "stem": "A company's primary data center and its backup data center are 10 miles apart. A single hurricane caused extended outages at both sites. Which of the following should the company have considered when choosing the backup location?",
+      "choices": [
+        "Platform diversity",
+        "Capacity planning",
+        "Clustering",
+        "Geographic dispersion"
+      ],
+      "answer": "Geographic dispersion",
+      "explanation": "Geographic dispersion places recovery sites far enough apart that one regional disaster cannot affect both. Clustering adds redundant servers, but if those servers share the same region, the hurricane still takes them out."
+    },
+    {
+      "id": "D3-054",
+      "objective": "3.4",
+      "stem": "A flaw in one vendor's firewall firmware caused every firewall in the company to crash at the same moment, because all of them were the same model running the same version. Which of the following would have MOST reduced the impact?",
+      "choices": [
+        "Platform diversity",
+        "Multi-cloud systems",
+        "Geographic dispersion",
+        "Load balancing"
+      ],
+      "answer": "Platform diversity",
+      "explanation": "Using products from different vendors means a single flaw cannot disable every device at once. Geographic dispersion would not help, because identical firewalls in distant locations would still share the same flaw."
+    },
+    {
+      "id": "D3-055",
+      "objective": "3.4",
+      "stem": "A company runs all of its applications with one cloud provider. During a provider-wide control plane outage that affected every region, all of the company's services went down. Which of the following would BEST prevent a repeat of this outage?",
+      "choices": [
+        "Deploying to additional availability zones",
+        "A hybrid cloud with on-premises file shares",
+        "A multi-cloud architecture",
+        "Vertical scaling of the existing servers"
+      ],
+      "answer": "A multi-cloud architecture",
+      "explanation": "A multi-cloud design runs services with more than one provider, so one provider's outage does not stop everything. Additional availability zones are tempting, but they belong to the same provider, and this outage affected all of its regions."
+    },
+    {
+      "id": "D3-056",
+      "objective": "3.4",
+      "stem": "During a regional flu outbreak, half of a company's IT staff were out sick, and the only two people who knew how to restore the backup system were both unavailable. Which of the following areas of capacity planning was overlooked?",
+      "choices": [
+        "People",
+        "Technology",
+        "Infrastructure",
+        "Platform diversity"
+      ],
+      "answer": "People",
+      "explanation": "Capacity planning for people means having enough trained staff, cross-training and documentation to cover absences. The technology and infrastructure were working fine; the gap was that too few people could operate them."
+    },
+    {
+      "id": "D3-057",
+      "objective": "3.4",
+      "stem": "Department managers meet in a conference room and talk through how they would respond to a ransomware attack, step by step, without touching any production systems. Which of the following types of exercises is this?",
+      "choices": [
+        "Tabletop exercise",
+        "Simulation",
+        "Failover test",
+        "Parallel processing"
+      ],
+      "answer": "Tabletop exercise",
+      "explanation": "A tabletop exercise is a discussion-based walk-through of a scenario that uses no systems. A simulation is the tempting choice, but it acts out the scenario with realistic events or systems rather than only talking through it."
+    },
+    {
+      "id": "D3-058",
+      "objective": "3.4",
+      "stem": "To validate its disaster recovery plan, a bank runs the same live transaction workload on its recovery systems at the same time as production and compares the results, without interrupting production. Which of the following types of tests is this?",
+      "choices": [
+        "Failover",
+        "Tabletop exercise",
+        "Parallel processing",
+        "Simulation"
+      ],
+      "answer": "Parallel processing",
+      "explanation": "Parallel processing runs the recovery systems alongside production on real workloads to confirm that they produce the same results. A failover test actually shifts production to the backup, which the bank deliberately avoided."
+    },
+    {
+      "id": "D3-059",
+      "objective": "3.4",
+      "stem": "An operations team deliberately shuts down the primary web cluster during a maintenance window to confirm that traffic automatically moves to the secondary cluster at another site. Which of the following tests is the team performing?",
+      "choices": [
+        "Tabletop exercise",
+        "Parallel processing",
+        "Simulation",
+        "Failover"
+      ],
+      "answer": "Failover",
+      "explanation": "A failover test forces the primary to go offline so the team can confirm that the secondary takes over. Parallel processing runs both environments at once without taking the primary down."
+    },
+    {
+      "id": "D3-060",
+      "objective": "3.4",
+      "stem": "Before applying a risky patch, an administrator wants to capture the exact current state of a virtual machine so that it can be rolled back within minutes if the patch fails. Which of the following should the administrator use?",
+      "choices": [
+        "Journaling",
+        "A snapshot",
+        "Replication",
+        "An offsite tape backup"
+      ],
+      "answer": "A snapshot",
+      "explanation": "A snapshot captures a VM's state at a point in time and allows a fast rollback. Replication is tempting, but it copies changes, including a bad patch, to another location rather than preserving the earlier state."
+    },
+    {
+      "id": "D3-061",
+      "objective": "3.4",
+      "stem": "Ransomware encrypted a file server, and the encrypted files were copied to the disaster recovery site within seconds, corrupting it as well. Which of the following would BEST ensure that the company can recover from a similar attack in the future?",
+      "choices": [
+        "Synchronous replication to another site",
+        "Additional RAID mirroring on the server",
+        "Offline backups stored offsite",
+        "More frequent snapshots on the same storage"
+      ],
+      "answer": "Offline backups stored offsite",
+      "explanation": "Offline, offsite backups cannot be reached by ransomware on the network, so a clean copy survives. Synchronous replication is what spread the encrypted files in the first place, so adding more of it would repeat the problem."
+    },
+    {
+      "id": "D3-062",
+      "objective": "3.4",
+      "stem": "A database records every change to a separate log before writing it to the data files. After a crash, the administrator replays the log to restore the database to the moment just before the failure. Which of the following is being used?",
+      "choices": [
+        "Snapshots",
+        "Replication",
+        "Differential backups",
+        "Journaling"
+      ],
+      "answer": "Journaling",
+      "explanation": "Journaling writes each change to a log that can be replayed to rebuild the database to a precise point in time. Differential backups capture changes since the last full backup, but only as often as they run, not up to the moment of failure."
+    },
+    {
+      "id": "D3-063",
+      "objective": "3.4",
+      "stem": "A company ships its weekly backup tapes to a third-party storage facility. The auditor is concerned that a tape could be lost or stolen in transit and the data read. Which of the following should the company do?",
+      "choices": [
+        "Increase the frequency of the backups",
+        "Replace the tapes with snapshots",
+        "Enable journaling on the source servers",
+        "Encrypt the backups before they leave the site"
+      ],
+      "answer": "Encrypt the backups before they leave the site",
+      "explanation": "Encrypting the backups means a lost or stolen tape cannot be read without the key. Increasing backup frequency improves the recovery point, but it does nothing to protect the data on a tape that goes missing."
+    },
+    {
+      "id": "D3-064",
+      "objective": "3.4",
+      "stem": "A data center has a diesel generator that takes about 30 seconds to start and stabilize after a utility power failure. Which of the following is needed to keep the servers running during that gap?",
+      "choices": [
+        "A second diesel generator",
+        "A managed power distribution unit",
+        "Dual power supplies in each server",
+        "An uninterruptible power supply"
+      ],
+      "answer": "An uninterruptible power supply",
+      "explanation": "A UPS supplies battery power instantly, which bridges the gap until the generator takes over the load. Dual power supplies protect against the failure of one supply or circuit, but both would lose power together when utility power fails."
+    }
+  ]
+}

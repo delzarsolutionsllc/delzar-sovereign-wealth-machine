@@ -1,0 +1,631 @@
+{
+  "domain": "1",
+  "title": "General Security Concepts",
+  "note": "Original practice questions written in the style of the CompTIA Security+ SY0-701 exam. Not real exam questions.",
+  "questions": [
+    {
+      "id": "D1-001",
+      "objective": "1.1",
+      "stem": "A company places signs at every entrance that read: \"This facility is monitored 24/7 by video surveillance. Trespassers will be prosecuted.\" Which of the following control types do the signs BEST represent?",
+      "choices": [
+        "Detective",
+        "Corrective",
+        "Deterrent",
+        "Compensating"
+      ],
+      "answer": "Deterrent",
+      "explanation": "The signs are meant to discourage someone from attempting entry, which makes them a deterrent control. They do not detect anything themselves; the cameras they mention would be the detective control."
+    },
+    {
+      "id": "D1-002",
+      "objective": "1.1",
+      "stem": "A manufacturing plant runs a legacy controller that cannot support multifactor authentication. The security team places the controller on an isolated network segment that can be reached only through a jump server requiring MFA. Which of the following control types BEST describes this arrangement?",
+      "choices": [
+        "Preventive",
+        "Corrective",
+        "Compensating",
+        "Directive"
+      ],
+      "answer": "Compensating",
+      "explanation": "A compensating control is an alternative measure used when the required control cannot be implemented on the system itself. The segmentation does block access, but the BEST description is compensating because it substitutes for the MFA the controller cannot support."
+    },
+    {
+      "id": "D1-003",
+      "objective": "1.1",
+      "stem": "An organization's leadership approves a new information security policy and requires that a formal risk assessment be performed every year. Which of the following control categories do these measures fall under?",
+      "choices": [
+        "Managerial",
+        "Operational",
+        "Technical",
+        "Physical"
+      ],
+      "answer": "Managerial",
+      "explanation": "Policies and risk assessments are administrative oversight measures, which are managerial controls. Operational controls are the day-to-day tasks carried out by people, such as guard rounds or running awareness sessions."
+    },
+    {
+      "id": "D1-004",
+      "objective": "1.1",
+      "stem": "Which of the following control categories includes host-based firewalls, antivirus software, and operating system file permissions?",
+      "choices": [
+        "Managerial",
+        "Technical",
+        "Operational",
+        "Physical"
+      ],
+      "answer": "Technical",
+      "explanation": "Technical controls are implemented and enforced by systems, such as firewalls, anti-malware and permissions. Operational controls are carried out by people rather than by technology."
+    },
+    {
+      "id": "D1-005",
+      "objective": "1.1",
+      "stem": "After ransomware encrypts a file server, an administrator restores the server's data from the previous night's offline backup. Which of the following control types is the restoration from backup?",
+      "choices": [
+        "Corrective",
+        "Detective",
+        "Preventive",
+        "Deterrent"
+      ],
+      "answer": "Corrective",
+      "explanation": "Corrective controls restore systems and limit damage after an incident has occurred. The backup did not stop the encryption from happening, so it is not preventive."
+    },
+    {
+      "id": "D1-006",
+      "objective": "1.1",
+      "stem": "A company publishes a standard stating: \"Employees must store customer data only on the approved, encrypted file share.\" No technical mechanism enforces the rule. Which of the following control types is this?",
+      "choices": [
+        "Preventive",
+        "Deterrent",
+        "Directive",
+        "Compensating"
+      ],
+      "answer": "Directive",
+      "explanation": "A directive control instructs people what they must or must not do, such as a policy or standard. It is not preventive because nothing technically stops an employee from saving data elsewhere."
+    },
+    {
+      "id": "D1-007",
+      "objective": "1.1",
+      "stem": "A network sensor operating in monitoring mode generates the following entry: `ALERT: possible SQL injection from 198.51.100.24 to 10.0.5.20:443 - action: logged`. The traffic was still delivered to the server. Which of the following BEST describes this control?",
+      "choices": [
+        "Detective",
+        "Preventive",
+        "Corrective",
+        "Deterrent"
+      ],
+      "answer": "Detective",
+      "explanation": "The sensor identified and recorded the suspicious traffic but did not stop it, which is a detective control. An inline IPS that dropped the traffic would have been preventive."
+    },
+    {
+      "id": "D1-008",
+      "objective": "1.1",
+      "stem": "A data center installs motion sensors in its server room that sound an alarm at the guard desk whenever movement is detected after hours. Which of the following BEST describes the category and type of this control?",
+      "choices": [
+        "Physical and preventive",
+        "Technical and deterrent",
+        "Physical and detective",
+        "Operational and corrective"
+      ],
+      "answer": "Physical and detective",
+      "explanation": "Motion sensors protect a physical space and alert staff that an event is happening, so they are physical detective controls. They do not stop anyone from entering the room, so they are not preventive."
+    },
+    {
+      "id": "D1-009",
+      "objective": "1.1",
+      "stem": "A security team runs monthly phishing awareness sessions, and front-desk staff check visitor identification and maintain the sign-in log each day. These controls are carried out by people rather than by systems. Which control category do these activities BEST fit?",
+      "choices": [
+        "Managerial",
+        "Operational",
+        "Technical",
+        "Physical"
+      ],
+      "answer": "Operational",
+      "explanation": "Operational controls are security tasks performed by people as part of daily operations, such as awareness training and visitor checks. Managerial controls set direction and oversight, such as policies and risk assessments, rather than carrying out the tasks."
+    },
+    {
+      "id": "D1-010",
+      "objective": "1.1",
+      "stem": "A system administrator configures domain accounts to lock for 30 minutes after five consecutive failed login attempts. Which of the following control types does this setting represent?",
+      "choices": [
+        "Detective",
+        "Deterrent",
+        "Corrective",
+        "Preventive"
+      ],
+      "answer": "Preventive",
+      "explanation": "Account lockout actively stops further password guessing, which makes it a preventive control. Lockout events may be logged, but the setting itself blocks the attack rather than only reporting it."
+    },
+    {
+      "id": "D1-011",
+      "objective": "1.2",
+      "stem": "A software vendor publishes a SHA-256 hash next to each installer so customers can confirm the file was not altered during download. Which of the following security concepts does this support?",
+      "choices": [
+        "Confidentiality",
+        "Availability",
+        "Non-repudiation",
+        "Integrity"
+      ],
+      "answer": "Integrity",
+      "explanation": "A matching hash shows the file has not been modified, which supports integrity. A hash alone does not prove who published the file; non-repudiation requires a digital signature."
+    },
+    {
+      "id": "D1-012",
+      "objective": "1.2",
+      "stem": "A purchasing manager approves a large order by digitally signing it with a private key stored on a smart card. Later, the manager claims never to have approved the order. Which of the following concepts allows the company to refute this claim?",
+      "choices": [
+        "Integrity",
+        "Non-repudiation",
+        "Authorization",
+        "Confidentiality"
+      ],
+      "answer": "Non-repudiation",
+      "explanation": "Non-repudiation ties an action to the holder of a private key so the signer cannot credibly deny it. The signature also provides integrity, but integrity only proves the approval was not changed, not who made it."
+    },
+    {
+      "id": "D1-013",
+      "objective": "1.2",
+      "stem": "A network administrator configures the RADIUS server to record each VPN user's login time, session length, and amount of data transferred. Which part of the AAA framework does this represent?",
+      "choices": [
+        "Authentication",
+        "Authorization",
+        "Identification",
+        "Accounting"
+      ],
+      "answer": "Accounting",
+      "explanation": "Accounting tracks what authenticated users do, such as session times and data usage. Authorization decides what a user is allowed to access; it does not record activity."
+    },
+    {
+      "id": "D1-014",
+      "objective": "1.2",
+      "stem": "A company wants its corporate wireless network to admit only company-issued laptops, regardless of which employee is signed in. Which of the following would BEST authenticate the laptops themselves?",
+      "choices": [
+        "Device certificates on each laptop",
+        "Employee usernames and passwords",
+        "Fingerprint readers on each laptop",
+        "One-time codes sent to employees"
+      ],
+      "answer": "Device certificates on each laptop",
+      "explanation": "Authenticating systems rather than people is typically done with machine certificates, for example through 802.1X with EAP-TLS. Passwords, biometrics and one-time codes all authenticate the user, so a personal device with valid user credentials could still connect."
+    },
+    {
+      "id": "D1-015",
+      "objective": "1.2",
+      "stem": "A newly hired CISO wants to compare the organization's current security controls against the requirements of a recognized security framework to identify which controls are missing. Which of the following should the CISO perform?",
+      "choices": [
+        "Gap analysis",
+        "Penetration test",
+        "Business impact analysis",
+        "Vulnerability scan"
+      ],
+      "answer": "Gap analysis",
+      "explanation": "A gap analysis compares the current state with a desired state, such as a framework, and lists what is missing. A vulnerability scan finds technical weaknesses on systems but does not measure the program against a framework."
+    },
+    {
+      "id": "D1-016",
+      "objective": "1.2",
+      "stem": "In a zero trust architecture, which of the following components evaluates each access request against enterprise policy and threat intelligence to decide whether to grant, deny, or revoke access?",
+      "choices": [
+        "Policy administrator",
+        "Policy engine",
+        "Policy enforcement point",
+        "Implicit trust zone"
+      ],
+      "answer": "Policy engine",
+      "explanation": "The policy engine makes the access decision. The policy administrator acts on that decision by setting up or tearing down the session and instructing the policy enforcement point."
+    },
+    {
+      "id": "D1-017",
+      "objective": "1.2",
+      "stem": "A zero trust platform has just decided to approve a contractor's request to reach an internal application. Which component is responsible for establishing the session, such as generating the session credential and instructing the gateway to open the connection?",
+      "choices": [
+        "Policy engine",
+        "Policy enforcement point",
+        "Policy administrator",
+        "Subject"
+      ],
+      "answer": "Policy administrator",
+      "explanation": "The policy administrator executes the policy engine's decision by creating session credentials and signaling the enforcement point. The policy engine only makes the decision, and the enforcement point only opens or closes the connection when told to."
+    },
+    {
+      "id": "D1-018",
+      "objective": "1.2",
+      "stem": "In a zero trust model, a gateway sits in the data plane between users and an internal application and opens, monitors, or terminates each connection as instructed. Which of the following is this gateway?",
+      "choices": [
+        "Policy engine",
+        "Policy administrator",
+        "Implicit trust zone",
+        "Policy enforcement point"
+      ],
+      "answer": "Policy enforcement point",
+      "explanation": "The policy enforcement point is the data plane component that allows or blocks traffic between the subject and the resource. The policy engine and policy administrator are control plane components that decide and instruct but do not carry the traffic."
+    },
+    {
+      "id": "D1-019",
+      "objective": "1.2",
+      "stem": "A user who normally signs in from Chicago on a managed laptop attempts to log in from an unmanaged device in another country. The system evaluates this context and automatically requires an additional verification step. Which zero trust concept is being applied?",
+      "choices": [
+        "Threat scope reduction",
+        "Adaptive identity",
+        "Implicit trust zone",
+        "Federation"
+      ],
+      "answer": "Adaptive identity",
+      "explanation": "Adaptive identity adjusts authentication requirements based on context such as location, device and behavior. Threat scope reduction limits what a user can reach to shrink the attack surface; it does not change how the user is verified."
+    },
+    {
+      "id": "D1-020",
+      "objective": "1.2",
+      "stem": "In a zero trust architecture, which of the following contains the policy engine and the policy administrator?",
+      "choices": [
+        "Data plane",
+        "Control plane",
+        "Implicit trust zone",
+        "Screened subnet"
+      ],
+      "answer": "Control plane",
+      "explanation": "The control plane holds the components that make and manage access decisions. The data plane is where traffic between subjects and resources actually flows, through the policy enforcement point."
+    },
+    {
+      "id": "D1-021",
+      "objective": "1.2",
+      "stem": "A security guard notices that employees often let others follow them through the badge-controlled entrance of a data center. Which of the following would BEST prevent this tailgating?",
+      "choices": [
+        "Bollards",
+        "Video surveillance",
+        "Additional lighting",
+        "Access control vestibule"
+      ],
+      "answer": "Access control vestibule",
+      "explanation": "An access control vestibule uses two interlocking doors so only one authorized person passes at a time, which directly prevents tailgating. Video surveillance can record tailgating but does not stop it."
+    },
+    {
+      "id": "D1-022",
+      "objective": "1.2",
+      "stem": "A warehouse needs an intrusion sensor that detects the body heat of a person moving through an unlit storage area. Which of the following sensor types should be installed?",
+      "choices": [
+        "Infrared",
+        "Pressure",
+        "Ultrasonic",
+        "Microwave"
+      ],
+      "answer": "Infrared",
+      "explanation": "Infrared sensors detect heat signatures, so they work in the dark and respond to a warm body. Ultrasonic and microwave sensors detect motion through reflected sound or radio waves, not heat."
+    },
+    {
+      "id": "D1-023",
+      "objective": "1.2",
+      "stem": "A retail company is concerned that a vehicle could be driven through the glass entrance of its flagship store. The entrance must stay open to pedestrians during business hours. Which of the following would BEST address this concern?",
+      "choices": [
+        "Bollards",
+        "Fencing",
+        "Access control vestibule",
+        "Security guard"
+      ],
+      "answer": "Bollards",
+      "explanation": "Bollards are short, sturdy posts that stop vehicles while letting people walk between them. Fencing would also stop vehicles but would block the pedestrian entrance the store needs to keep open."
+    },
+    {
+      "id": "D1-024",
+      "objective": "1.2",
+      "stem": "A security engineer adds a fake cloud API key to a configuration file in an internal code repository. The key grants no access, but any attempt to use it triggers an immediate alert. Which of the following has the engineer deployed?",
+      "choices": [
+        "Honeyfile",
+        "Honeypot",
+        "Honeynet",
+        "Honeytoken"
+      ],
+      "answer": "Honeytoken",
+      "explanation": "A honeytoken is a piece of fake data, such as a credential, whose use signals an intruder. A honeyfile is a decoy file that alerts when opened; here the alert depends on the fake key being used, not on the file being read."
+    },
+    {
+      "id": "D1-025",
+      "objective": "1.3",
+      "stem": "During a scheduled upgrade, a database patch causes the order-processing application to crash. Which part of the approved change request should the team follow to return the system to its previous working state?",
+      "choices": [
+        "Backout plan",
+        "Impact analysis",
+        "Test results",
+        "Maintenance window"
+      ],
+      "answer": "Backout plan",
+      "explanation": "The backout plan documents how to roll back a change that fails. The impact analysis predicts what a change could affect, but it does not give the steps to undo it."
+    },
+    {
+      "id": "D1-026",
+      "objective": "1.3",
+      "stem": "A patch for an e-commerce site requires the web service to be restarted, which will disconnect active customers. The change board schedules the work for 2:00 a.m. on Sunday, when traffic is lowest. Which of the following is the change board using?",
+      "choices": [
+        "Backout plan",
+        "Maintenance window",
+        "Standard operating procedure",
+        "Impact analysis"
+      ],
+      "answer": "Maintenance window",
+      "explanation": "A maintenance window is a pre-agreed time when changes and the restarts or downtime they cause have the least business impact. A backout plan describes how to undo the change, not when to perform it."
+    },
+    {
+      "id": "D1-027",
+      "objective": "1.3",
+      "stem": "Before approving a proposed firewall rule change, the change advisory board wants to understand which business applications could be disrupted and how serious the risk would be. Which of the following should be completed?",
+      "choices": [
+        "Backout plan",
+        "Version control",
+        "Impact analysis",
+        "Maintenance window"
+      ],
+      "answer": "Impact analysis",
+      "explanation": "An impact analysis identifies what a change could affect and the risk involved, which informs the approval decision. A backout plan is still needed, but it explains how to reverse the change rather than assessing its effect."
+    },
+    {
+      "id": "D1-028",
+      "objective": "1.3",
+      "stem": "A company plans to replace its payroll software. The HR, finance, and legal departments all rely on payroll data and will be affected by the change. In change management terms, these departments are BEST described as which of the following?",
+      "choices": [
+        "Change owners",
+        "Data custodians",
+        "Stakeholders",
+        "Change advisory board"
+      ],
+      "answer": "Stakeholders",
+      "explanation": "Stakeholders are the people and groups affected by a change who should be consulted and informed. The change owner is the single party accountable for the change, not every department that depends on the system."
+    },
+    {
+      "id": "D1-029",
+      "objective": "1.3",
+      "stem": "An administrator updates a shared runtime library on an application server. Afterward, two internal applications on the same server stop working because they required the older library version. Which of the following technical implications was MOST likely not evaluated?",
+      "choices": [
+        "Legacy applications",
+        "Restricted activities",
+        "Allow lists",
+        "Dependencies"
+      ],
+      "answer": "Dependencies",
+      "explanation": "The applications relied on a specific library version, so the change broke a dependency. The applications might also be old, but the failure was caused by the unexamined relationship between components, not by their age."
+    },
+    {
+      "id": "D1-030",
+      "objective": "1.3",
+      "stem": "After a scheduled upgrade, users report that the new version of the accounting software will not launch. The endpoint logs show: `Execution blocked: C:\\Program Files\\AcctPro\\acctpro.exe - hash not in approved list`. Which of the following should have been updated as part of the change?",
+      "choices": [
+        "Application deny list",
+        "Backout plan",
+        "Application allow list",
+        "Maintenance window"
+      ],
+      "answer": "Application allow list",
+      "explanation": "The new executable has a new hash that is not in the approved list, so the allow list should have been updated with the change. A deny list blocks only listed items and would not block an unlisted program."
+    },
+    {
+      "id": "D1-031",
+      "objective": "1.3",
+      "stem": "A network team wants to keep every revision of its router configuration files, see exactly who changed each line, and quickly revert to any earlier revision. Which of the following BEST meets these requirements?",
+      "choices": [
+        "Standard operating procedure",
+        "Version control",
+        "Backout plan",
+        "Change documentation"
+      ],
+      "answer": "Version control",
+      "explanation": "Version control tracks every revision with its author and allows rollback to any earlier version. Change documentation records what was changed and why, but it does not store each file revision or allow an instant revert."
+    },
+    {
+      "id": "D1-032",
+      "objective": "1.3",
+      "stem": "An administrator changed a production firewall rule without a ticket because it seemed like a minor change. Company policy requires the change advisory board to sign off on every production change before work begins. Which change management requirement did the administrator bypass?",
+      "choices": [
+        "Approval process",
+        "Impact analysis",
+        "Backout plan",
+        "Test results"
+      ],
+      "answer": "Approval process",
+      "explanation": "Requiring the change advisory board's sign-off before implementation is the approval process. An impact analysis may also have been skipped, but the requirement the policy describes is the sign-off itself."
+    },
+    {
+      "id": "D1-033",
+      "objective": "1.4",
+      "stem": "A company encrypts employee laptops and must be able to recover the data if an employee leaves or forgets a passphrase. It stores copies of the encryption keys with a trusted third party. Which of the following is this practice called?",
+      "choices": [
+        "Key stretching",
+        "Key exchange",
+        "Key rotation",
+        "Key escrow"
+      ],
+      "answer": "Key escrow",
+      "explanation": "Key escrow means a trusted party holds copies of keys so data can be recovered when needed. Key exchange is how two parties securely share a key for a session, not how keys are stored for recovery."
+    },
+    {
+      "id": "D1-034",
+      "objective": "1.4",
+      "stem": "A user wants to send a confidential file to a colleague using asymmetric encryption. The user encrypts the file with the colleague's public key. Which of the following keys will decrypt the file?",
+      "choices": [
+        "The colleague's public key",
+        "The sender's private key",
+        "The sender's public key",
+        "The colleague's private key"
+      ],
+      "answer": "The colleague's private key",
+      "explanation": "Data encrypted with a public key can be decrypted only with the matching private key, which only the colleague holds. The public key cannot decrypt what it encrypted; that is what keeps the file confidential."
+    },
+    {
+      "id": "D1-035",
+      "objective": "1.4",
+      "stem": "An employee digitally signs a contract before emailing it to a client. Which of the following keys will the client use to verify the signature?",
+      "choices": [
+        "The employee's private key",
+        "The client's private key",
+        "The employee's public key",
+        "The client's public key"
+      ],
+      "answer": "The employee's public key",
+      "explanation": "The signer creates the signature with their private key, and anyone can verify it with the signer's public key. The client never has the employee's private key, and the client's own keys play no part in checking the employee's signature."
+    },
+    {
+      "id": "D1-036",
+      "objective": "1.4",
+      "stem": "A sales team's laptops are often lost while traveling. The company wants all data on each laptop, including the operating system, temporary files, and swap space, to be unreadable if a device is stolen. Which of the following is the BEST solution?",
+      "choices": [
+        "File-level encryption",
+        "Full-disk encryption",
+        "Transport encryption",
+        "Database encryption"
+      ],
+      "answer": "Full-disk encryption",
+      "explanation": "Full-disk encryption protects the entire drive, including the OS, temp files and swap space. File-level encryption protects only selected files and leaves the rest of the disk readable."
+    },
+    {
+      "id": "D1-037",
+      "objective": "1.4",
+      "stem": "Which of the following allows two parties to establish a shared secret key over an untrusted network without ever sending the key itself?",
+      "choices": [
+        "Diffie-Hellman",
+        "Triple DES",
+        "Blowfish",
+        "SHA-256"
+      ],
+      "answer": "Diffie-Hellman",
+      "explanation": "Diffie-Hellman is a key exchange algorithm that lets both sides derive the same secret from values exchanged in the open. Triple DES and Blowfish are symmetric ciphers that need a key both sides already share, so they cannot set up that key themselves."
+    },
+    {
+      "id": "D1-038",
+      "objective": "1.4",
+      "stem": "A company wants laptops to store disk encryption keys in a hardware chip on the motherboard and to confirm that the boot process has not been tampered with before releasing those keys. Which of the following should the laptops include?",
+      "choices": [
+        "Trusted Platform Module",
+        "Hardware security module",
+        "Key management system",
+        "Secure enclave"
+      ],
+      "answer": "Trusted Platform Module",
+      "explanation": "A TPM is a chip on the motherboard that stores keys and measures the boot process so keys are released only if the system is unchanged. An HSM provides similar protection but is a separate appliance or card for servers, not a built-in laptop chip."
+    },
+    {
+      "id": "D1-039",
+      "objective": "1.4",
+      "stem": "A certificate authority needs a tamper-resistant, network-attached hardware appliance to generate and protect its private signing keys while performing thousands of cryptographic operations per second. Which of the following BEST meets this requirement?",
+      "choices": [
+        "Trusted Platform Module",
+        "Hardware security module",
+        "Secure enclave",
+        "Key management system"
+      ],
+      "answer": "Hardware security module",
+      "explanation": "An HSM is a dedicated, tamper-resistant appliance built for high-volume key generation, storage and signing. A TPM is a low-performance chip tied to a single device and is not designed to serve a CA's signing workload."
+    },
+    {
+      "id": "D1-040",
+      "objective": "1.4",
+      "stem": "A payment processor replaces each credit card number in its order database with a random value. The real card numbers are kept in a separate, secured vault and can be retrieved by mapping the random value back. Which of the following techniques is being used?",
+      "choices": [
+        "Data masking",
+        "Hashing",
+        "Steganography",
+        "Tokenization"
+      ],
+      "answer": "Tokenization",
+      "explanation": "Tokenization swaps sensitive data for a random token that can be mapped back to the original through a protected vault. Data masking hides part of the data, such as showing only the last four digits, and is not reversed through a vault lookup."
+    },
+    {
+      "id": "D1-041",
+      "objective": "1.4",
+      "stem": "During a forensic investigation, an analyst finds that a departing employee emailed vacation photos to a personal account. Further analysis shows the image files contain hidden customer records. Which of the following techniques did the employee MOST likely use?",
+      "choices": [
+        "Tokenization",
+        "Data masking",
+        "Steganography",
+        "Hashing"
+      ],
+      "answer": "Steganography",
+      "explanation": "Steganography hides data inside another file, such as an image, so that the file looks normal. Tokenization and masking replace or hide sensitive values in a dataset; neither conceals data inside a photo."
+    },
+    {
+      "id": "D1-042",
+      "objective": "1.4",
+      "stem": "An analyst reviewing a leaked password database sees these two entries: `jsmith:5f4dcc3b5aa765d61d8327deb882cf99` and `mlopez:5f4dcc3b5aa765d61d8327deb882cf99`. Which of the following would have prevented identical passwords from producing identical stored values?",
+      "choices": [
+        "Key stretching",
+        "Data masking",
+        "Key escrow",
+        "Salting"
+      ],
+      "answer": "Salting",
+      "explanation": "A salt adds a unique random value to each password before hashing, so identical passwords produce different hashes and precomputed rainbow tables stop working. Key stretching slows hashing down, but without a salt two identical passwords would still produce the same output."
+    },
+    {
+      "id": "D1-043",
+      "objective": "1.4",
+      "stem": "A developer wants to make offline brute-force attacks against stored password hashes much slower by running each password through thousands of iterations of a hashing function. Which of the following techniques does this describe?",
+      "choices": [
+        "Salting",
+        "Key escrow",
+        "Key stretching",
+        "Tokenization"
+      ],
+      "answer": "Key stretching",
+      "explanation": "Key stretching, used by algorithms such as PBKDF2 and bcrypt, repeats hashing many times to make each guess expensive. Salting makes each hash unique but on its own does not make an individual guess any slower."
+    },
+    {
+      "id": "D1-044",
+      "objective": "1.4",
+      "stem": "A group of shipping companies wants a shared record of transactions that is distributed among all members. Each block of records is linked to the previous one by a hash, so past entries cannot be altered without detection. Which of the following BEST describes this technology?",
+      "choices": [
+        "Certificate revocation list",
+        "Blockchain",
+        "Key management system",
+        "Tokenization"
+      ],
+      "answer": "Blockchain",
+      "explanation": "A blockchain is a distributed, open ledger in which each block contains the hash of the previous block, so any change to an earlier entry breaks the chain. A key management system stores and manages keys centrally; it is not a shared transaction record."
+    },
+    {
+      "id": "D1-045",
+      "objective": "1.4",
+      "stem": "A web browser must check whether a server's certificate has been revoked. Instead of downloading the CA's full list of revoked certificates, it queries the status of that single certificate and receives a response of good, revoked, or unknown. Which of the following is being used?",
+      "choices": [
+        "Certificate revocation list",
+        "Certificate signing request",
+        "Online Certificate Status Protocol",
+        "Root of trust"
+      ],
+      "answer": "Online Certificate Status Protocol",
+      "explanation": "OCSP returns the real-time status of one certificate on request. A CRL is the full published list of revoked certificates that the client would have to download and search itself."
+    },
+    {
+      "id": "D1-046",
+      "objective": "1.4",
+      "stem": "A company hosts www.example.com, mail.example.com, and shop.example.com. It wants one certificate that will cover these and any future first-level subdomains of example.com without reissuing the certificate. Which of the following should the company request?",
+      "choices": [
+        "Subject alternative name certificate",
+        "Wildcard certificate",
+        "Self-signed certificate",
+        "Code-signing certificate"
+      ],
+      "answer": "Wildcard certificate",
+      "explanation": "A wildcard certificate for *.example.com covers any first-level subdomain, including ones created later. A SAN certificate covers only the names listed when it is issued, so new subdomains would require a new certificate."
+    },
+    {
+      "id": "D1-047",
+      "objective": "1.4",
+      "stem": "An administrator runs the following command on a new web server: `openssl req -new -key web01.key -out web01.csr`. The output file will be sent to a third-party certificate authority. Which of the following is the administrator creating?",
+      "choices": [
+        "A certificate signing request",
+        "A certificate revocation list",
+        "A self-signed certificate",
+        "A new private key"
+      ],
+      "answer": "A certificate signing request",
+      "explanation": "The command uses an existing private key to create a CSR, which carries the public key and identity information for the CA to sign. A self-signed certificate would need the -x509 option, and the private key already exists as web01.key."
+    },
+    {
+      "id": "D1-048",
+      "objective": "1.4",
+      "stem": "Users who connect to a new internal web portal receive browser warnings that its certificate is not trusted. The administrator generated the certificate on the server itself without involving any certificate authority. Which of the following would BEST resolve the warnings on all company devices?",
+      "choices": [
+        "Enable OCSP stapling on the portal",
+        "Publish the certificate in the CA's CRL",
+        "Reissue it as a wildcard certificate",
+        "Replace it with a certificate from a trusted CA"
+      ],
+      "answer": "Replace it with a certificate from a trusted CA",
+      "explanation": "The certificate is self-signed, so browsers cannot chain it to a root of trust; a certificate issued by a CA the devices already trust fixes this. OCSP stapling only speeds up revocation checks and does nothing for a certificate that has no trusted issuer."
+    }
+  ]
+}

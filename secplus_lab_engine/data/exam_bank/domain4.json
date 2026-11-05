@@ -1,0 +1,1307 @@
+{
+  "domain": "4",
+  "title": "Security Operations",
+  "note": "Original practice questions written in the style of the CompTIA Security+ SY0-701 exam. Not real exam questions.",
+  "questions": [
+    {
+      "id": "D4-001",
+      "objective": "4.1",
+      "stem": "A company rolls out 50 new Linux servers. The security team wants every server to start from the same approved, hardened configuration and wants to compare each server against that configuration quarterly to catch drift. Which of the following BEST describes what the team is using?",
+      "choices": [
+        "Secure baseline",
+        "Rollback plan",
+        "Standard operating procedure",
+        "Asset inventory"
+      ],
+      "answer": "Secure baseline",
+      "explanation": "A secure baseline is the approved hardened configuration that is established, deployed, and then maintained by checking systems against it for drift. An SOP describes how to perform a task step by step, not the target configuration of a system."
+    },
+    {
+      "id": "D4-002",
+      "objective": "4.1",
+      "stem": "A water treatment plant uses programmable logic controllers that run vendor firmware that cannot be patched or run security agents. Which of the following would BEST reduce the risk to these controllers?",
+      "choices": [
+        "Enroll the controllers in the MDM platform",
+        "Install host-based antivirus on each controller",
+        "Place the ICS on an isolated, segmented network",
+        "Enable automatic firmware updates from the internet"
+      ],
+      "answer": "Place the ICS on an isolated, segmented network",
+      "explanation": "When ICS/SCADA devices cannot be patched or run agents, segmentation that isolates them from the corporate network and the internet is the primary hardening control. Installing antivirus is not possible on most PLCs and is exactly what the scenario rules out."
+    },
+    {
+      "id": "D4-003",
+      "objective": "4.1",
+      "stem": "Before installing a wireless network in a new office building, a company wants to identify sources of interference, neighboring networks, and the best locations for access points. Which of the following should the company perform?",
+      "choices": [
+        "Vulnerability scan",
+        "Site survey",
+        "Tabletop exercise",
+        "Penetration test"
+      ],
+      "answer": "Site survey",
+      "explanation": "A wireless site survey examines the physical space, RF interference, and nearby networks to plan access point placement before installation. A vulnerability scan checks systems for known weaknesses and says nothing about RF coverage."
+    },
+    {
+      "id": "D4-004",
+      "objective": "4.1",
+      "stem": "After installing access points in a warehouse, a technician walks the floor with a laptop recording signal strength. The software produces a color-coded floor plan showing strong coverage in green and dead spots in red. Which of the following is the technician creating?",
+      "choices": [
+        "Heat map",
+        "Attack surface map",
+        "Data flow diagram",
+        "Network topology diagram"
+      ],
+      "answer": "Heat map",
+      "explanation": "A wireless heat map visually shows signal strength across a physical area so coverage gaps can be fixed. A topology diagram shows how devices are logically connected, not RF strength on a floor plan."
+    },
+    {
+      "id": "D4-005",
+      "objective": "4.1",
+      "stem": "A company issues smartphones to its sales staff. The security manager needs the ability to enforce screen-lock PINs, push approved apps, and remotely wipe a phone if it is lost. Which of the following should the company implement?",
+      "choices": [
+        "EDR",
+        "NAC",
+        "DLP",
+        "MDM"
+      ],
+      "answer": "MDM",
+      "explanation": "Mobile device management centrally enforces policies such as screen locks, app deployment, and remote wipe on mobile devices. NAC controls whether a device may join the network but does not manage or wipe the device."
+    },
+    {
+      "id": "D4-006",
+      "objective": "4.1",
+      "stem": "A company selects a single smartphone model, purchases it, and issues it to every employee. Employees are allowed to install personal apps and use the phone outside of work. Which of the following deployment models is the company using?",
+      "choices": [
+        "COPE",
+        "CYOD",
+        "VDI",
+        "BYOD"
+      ],
+      "answer": "COPE",
+      "explanation": "Corporate-owned, personally enabled (COPE) means the company owns and chooses the device but allows personal use. CYOD would let employees choose their device from an approved list, which did not happen here."
+    },
+    {
+      "id": "D4-007",
+      "objective": "4.1",
+      "stem": "A small office uses WPA2-Personal. An auditor warns that an attacker who captures the four-way handshake could run an offline dictionary attack against the passphrase. Which of the following would BEST address this concern?",
+      "choices": [
+        "WEP with a 128-bit key",
+        "WPA2-Personal with AES-CCMP",
+        "WPA2-Personal with TKIP",
+        "WPA3-Personal with SAE"
+      ],
+      "answer": "WPA3-Personal with SAE",
+      "explanation": "WPA3-Personal uses Simultaneous Authentication of Equals, which resists offline dictionary attacks against a captured handshake. WPA2-Personal with AES-CCMP has strong encryption but still uses the same pre-shared key handshake that can be attacked offline."
+    },
+    {
+      "id": "D4-008",
+      "objective": "4.1",
+      "stem": "A company wants each employee to authenticate to the corporate Wi-Fi with their own directory credentials so that access can be revoked per user and logged centrally. Which of the following should be implemented?",
+      "choices": [
+        "MAC address filtering on each access point",
+        "WPA3-Personal with a shared passphrase",
+        "A captive portal with a shared voucher code",
+        "WPA3-Enterprise with 802.1X and RADIUS"
+      ],
+      "answer": "WPA3-Enterprise with 802.1X and RADIUS",
+      "explanation": "Enterprise mode uses 802.1X with a RADIUS (AAA) server so each user authenticates individually and is logged and revoked centrally. WPA3-Personal still uses one shared passphrase for everyone, so access cannot be removed for a single user."
+    },
+    {
+      "id": "D4-009",
+      "objective": "4.1",
+      "stem": "A developer notices that a customer search form accepts the value `' OR 1=1 --` and returns every record in the database. Which of the following would BEST prevent this?",
+      "choices": [
+        "Input validation",
+        "Secure cookies",
+        "Code signing",
+        "Sandboxing"
+      ],
+      "answer": "Input validation",
+      "explanation": "Validating and sanitizing input (ideally with parameterized queries) stops attacker-supplied SQL from being executed. Code signing proves who published the code and that it was not altered, but does nothing about malicious input at run time."
+    },
+    {
+      "id": "D4-010",
+      "objective": "4.1",
+      "stem": "A penetration tester captures a user's session cookie in cleartext after the user clicks an http:// link to the company's web application, even though the site normally uses HTTPS. Which of the following cookie settings would have prevented this?",
+      "choices": [
+        "Path attribute",
+        "Secure attribute",
+        "Expires attribute",
+        "HttpOnly attribute"
+      ],
+      "answer": "Secure attribute",
+      "explanation": "The Secure attribute tells the browser to send the cookie only over HTTPS, so it would never travel over the cleartext HTTP request. HttpOnly is tempting but only blocks client-side scripts from reading the cookie; it does not stop it being sent over HTTP."
+    },
+    {
+      "id": "D4-011",
+      "objective": "4.1",
+      "stem": "A software vendor wants customers to be able to verify that an update package came from the vendor and was not modified after it was released. Which of the following should the vendor use?",
+      "choices": [
+        "Input validation",
+        "Static code analysis",
+        "Code signing",
+        "Obfuscation"
+      ],
+      "answer": "Code signing",
+      "explanation": "Code signing applies a digital signature with the vendor's private key so customers can verify origin and integrity. Static code analysis finds flaws in source code before release but provides customers no way to verify the package."
+    },
+    {
+      "id": "D4-012",
+      "objective": "4.1",
+      "stem": "A security analyst receives a suspicious executable from an email attachment and wants to run it to observe its behavior without putting production systems at risk. Which of the following should the analyst use?",
+      "choices": [
+        "Secure baseline",
+        "Sandboxing",
+        "Code signing",
+        "Static code analysis"
+      ],
+      "answer": "Sandboxing",
+      "explanation": "A sandbox is an isolated environment where untrusted code can run and be observed without affecting other systems. Static code analysis examines code without running it, so it would not show the file's run-time behavior."
+    },
+    {
+      "id": "D4-013",
+      "objective": "4.2",
+      "stem": "A company plans to buy new firewalls. The security team insists that the vendor commit to providing security updates for at least five years and disclose the components used in the firmware. During which phase of asset management should these requirements be addressed?",
+      "choices": [
+        "Monitoring and asset tracking",
+        "Assignment and accounting",
+        "Disposal and decommissioning",
+        "Acquisition and procurement"
+      ],
+      "answer": "Acquisition and procurement",
+      "explanation": "Vendor support commitments and component disclosure must be negotiated before purchase, during acquisition and procurement. Monitoring and tracking happen after the asset is in service, when it is too late to set contract terms."
+    },
+    {
+      "id": "D4-014",
+      "objective": "4.2",
+      "stem": "An investigation finds that no one approved or reviewed access to a sensitive finance file share. The IT staff who back it up said they only follow instructions. Which of the following should the company assign to fix this gap?",
+      "choices": [
+        "A data processor",
+        "A data custodian",
+        "An asset owner",
+        "A help desk technician"
+      ],
+      "answer": "An asset owner",
+      "explanation": "The owner is accountable for the asset, including deciding and reviewing who should have access. A custodian is the IT role that maintains and backs up the data as instructed, which is exactly the role that already existed here."
+    },
+    {
+      "id": "D4-015",
+      "objective": "4.2",
+      "stem": "A company labels each document and system as Public, Internal, Confidential, or Restricted so that handling requirements match the sensitivity of the information. Which of the following asset management activities is this?",
+      "choices": [
+        "Enumeration",
+        "Procurement",
+        "Classification",
+        "Sanitization"
+      ],
+      "answer": "Classification",
+      "explanation": "Classification assigns sensitivity levels that drive how assets are handled and protected. Enumeration is discovering and listing assets, not deciding how sensitive they are."
+    },
+    {
+      "id": "D4-016",
+      "objective": "4.2",
+      "stem": "The asset inventory lists 400 workstations, but a network discovery scan finds 437 devices responding on workstation subnets. Which of the following activities revealed this discrepancy?",
+      "choices": [
+        "Certification",
+        "Data retention",
+        "Classification",
+        "Enumeration"
+      ],
+      "answer": "Enumeration",
+      "explanation": "Enumeration actively discovers and lists the assets present on the network, which is how the unrecorded devices were found. Certification is proof of a completed process such as destruction and does not discover devices."
+    },
+    {
+      "id": "D4-017",
+      "objective": "4.2",
+      "stem": "A hospital attaches RFID tags to portable medical carts so that staff can see where each cart is in real time and receive an alert if one leaves the building. Which of the following does this BEST represent?",
+      "choices": [
+        "Change management",
+        "Data retention",
+        "Asset classification",
+        "Asset tracking"
+      ],
+      "answer": "Asset tracking",
+      "explanation": "RFID tags that report location are a form of asset tracking used to monitor where assets are. Classification labels the sensitivity of assets and does not locate them."
+    },
+    {
+      "id": "D4-018",
+      "objective": "4.2",
+      "stem": "A company wants to reuse solid-state drives in another department after a project ends. All data on the drives must be unrecoverable, but the drives must remain usable. Which of the following should the technician do?",
+      "choices": [
+        "Degauss the drives",
+        "Run the drive's built-in secure erase command",
+        "Shred the drives",
+        "Delete the files and empty the recycle bin"
+      ],
+      "answer": "Run the drive's built-in secure erase command",
+      "explanation": "Sanitizing with the SSD's secure erase function removes data while leaving the drive usable for reuse. Degaussing does not reliably erase flash memory and, like shredding, is a destruction method that defeats reuse."
+    },
+    {
+      "id": "D4-019",
+      "objective": "4.2",
+      "stem": "A company sends old hard drives to a third-party vendor for shredding. An auditor asks for proof that every drive was actually destroyed. Which of the following should the company provide?",
+      "choices": [
+        "Chain of custody form",
+        "Bill of materials",
+        "Certificate of destruction",
+        "Service level agreement"
+      ],
+      "answer": "Certificate of destruction",
+      "explanation": "A certificate of destruction from the vendor documents that specific media were destroyed, which is the proof the auditor needs. A chain of custody form tracks who held the drives but does not confirm destruction occurred."
+    },
+    {
+      "id": "D4-020",
+      "objective": "4.2",
+      "stem": "A company is decommissioning an accounting server. Regulations require transaction records to be kept for seven years. Which of the following should the administrator consult BEFORE wiping the server?",
+      "choices": [
+        "Incident response plan",
+        "Acceptable use policy",
+        "Data retention policy",
+        "Password policy"
+      ],
+      "answer": "Data retention policy",
+      "explanation": "The data retention policy defines how long records must be kept and how, so the data can be archived before the server is sanitized. An acceptable use policy governs how employees may use systems, not how long records are kept."
+    },
+    {
+      "id": "D4-021",
+      "objective": "4.3",
+      "stem": "A vulnerability scan of the server farm reports only open ports and service banners. The administrator wants the scan to also report missing operating system patches and insecure local settings. Which of the following should the administrator configure?",
+      "choices": [
+        "Ping sweep",
+        "Non-credentialed scan",
+        "Passive network scan",
+        "Credentialed scan"
+      ],
+      "answer": "Credentialed scan",
+      "explanation": "A credentialed scan logs in to each host and can inspect installed patches and local configuration. A non-credentialed scan sees only what is exposed over the network, which is what the current results already show."
+    },
+    {
+      "id": "D4-022",
+      "objective": "4.3",
+      "stem": "A security team tests a running web application by sending large volumes of malformed and unexpected input to every form field and watching for crashes or errors. Which of the following is being performed?",
+      "choices": [
+        "Code signing",
+        "Dynamic analysis",
+        "Static analysis",
+        "Package monitoring"
+      ],
+      "answer": "Dynamic analysis",
+      "explanation": "Testing an application while it runs, such as by fuzzing its inputs, is dynamic analysis. Static analysis reviews source code or binaries without executing them."
+    },
+    {
+      "id": "D4-023",
+      "objective": "4.3",
+      "stem": "A development team uses dozens of open-source libraries. The team wants to be alerted automatically when a newly published vulnerability affects any library version in their applications. Which of the following should the team implement?",
+      "choices": [
+        "Penetration testing",
+        "Dynamic analysis",
+        "Package monitoring",
+        "Static code analysis"
+      ],
+      "answer": "Package monitoring",
+      "explanation": "Package monitoring tracks third-party dependencies and alerts when vulnerabilities are published for the versions in use. Static code analysis looks for flaws in the team's own code and does not track new advisories for libraries."
+    },
+    {
+      "id": "D4-024",
+      "objective": "4.3",
+      "stem": "A regional hospital joins a sector-specific group in which member healthcare organizations share indicators of compromise and threat reports with each other. Which of the following threat intelligence sources is this?",
+      "choices": [
+        "Information-sharing organization",
+        "Proprietary threat feed",
+        "Open-source intelligence",
+        "Dark web monitoring"
+      ],
+      "answer": "Information-sharing organization",
+      "explanation": "Sector groups such as ISACs are information-sharing organizations whose members exchange threat data. OSINT is gathered from publicly available sources, not from a members-only sharing community."
+    },
+    {
+      "id": "D4-025",
+      "objective": "4.3",
+      "stem": "A company learns that a list of its employees' usernames and passwords is being offered for sale on an underground forum reachable only through Tor. Which of the following threat intelligence sources MOST likely revealed this?",
+      "choices": [
+        "Dark web monitoring",
+        "Responsible disclosure program",
+        "System audit",
+        "Vulnerability scan"
+      ],
+      "answer": "Dark web monitoring",
+      "explanation": "Credentials sold on Tor-only forums are found through dark web monitoring. A responsible disclosure program receives vulnerability reports from researchers and would not normally surface stolen credentials being sold."
+    },
+    {
+      "id": "D4-026",
+      "objective": "4.3",
+      "stem": "A software company publishes rules allowing outside researchers to test its public applications and pays a cash reward based on the severity of each valid vulnerability reported. Which of the following BEST describes this?",
+      "choices": [
+        "Bug bounty program",
+        "Responsible disclosure program",
+        "System audit",
+        "Penetration test"
+      ],
+      "answer": "Bug bounty program",
+      "explanation": "A bug bounty program pays rewards to external researchers for valid findings. A responsible disclosure program gives researchers a safe way to report issues but does not necessarily pay them, so the cash reward is the deciding detail."
+    },
+    {
+      "id": "D4-027",
+      "objective": "4.3",
+      "stem": "A vulnerability scanner reports a critical Apache HTTP Server flaw on a host. The administrator confirms the host runs only Microsoft IIS and has never had Apache installed. Which of the following BEST describes the finding?",
+      "choices": [
+        "False negative",
+        "True positive",
+        "False positive",
+        "True negative"
+      ],
+      "answer": "False positive",
+      "explanation": "A false positive is a reported vulnerability that does not actually exist on the system. A false negative is the opposite case, where a real vulnerability goes unreported."
+    },
+    {
+      "id": "D4-028",
+      "objective": "4.3",
+      "stem": "During a penetration test, the tester gains access to a database server by exploiting an unpatched flaw. The vulnerability scan run against the same server the day before did not report the flaw. Which of the following BEST describes the scan result?",
+      "choices": [
+        "False negative",
+        "False positive",
+        "Exception",
+        "True positive"
+      ],
+      "answer": "False negative",
+      "explanation": "A false negative occurs when a scanner fails to report a vulnerability that is really present. A false positive would be a reported issue that does not exist, which is not what happened."
+    },
+    {
+      "id": "D4-029",
+      "objective": "4.3",
+      "stem": "Which of the following provides a numerical score from 0.0 to 10.0 that reflects the severity of a vulnerability?",
+      "choices": [
+        "STIX",
+        "CVSS",
+        "CVE",
+        "SCAP"
+      ],
+      "answer": "CVSS",
+      "explanation": "The Common Vulnerability Scoring System rates severity on a 0.0 to 10.0 scale. CVE supplies a unique identifier for a known vulnerability but does not itself score it."
+    },
+    {
+      "id": "D4-030",
+      "objective": "4.3",
+      "stem": "An analyst must choose which vulnerability to remediate FIRST: a CVSS 9.8 flaw on a test server with no network connection, a CVSS 7.5 flaw with a public exploit on an internet-facing payment server, a CVSS 5.3 flaw on an internal print server, or a CVSS 4.0 flaw on a kiosk. Which should be remediated FIRST?",
+      "choices": [
+        "The 5.3 flaw on the internal print server",
+        "The 9.8 flaw on the disconnected test server",
+        "The 4.0 flaw on the kiosk",
+        "The 7.5 flaw on the internet-facing payment server"
+      ],
+      "answer": "The 7.5 flaw on the internet-facing payment server",
+      "explanation": "Prioritization weighs environmental variables such as exposure, exploit availability, and business impact, not just the base score. The 9.8 flaw has the highest base score, but with no network connection it is far less likely to be exploited than the exposed payment server."
+    },
+    {
+      "id": "D4-031",
+      "objective": "4.3",
+      "stem": "A risk analyst estimates that a ransomware outbreak would destroy about 40% of the value of a file server cluster. Which of the following terms describes the 40% figure?",
+      "choices": [
+        "Exposure factor",
+        "Annualized loss expectancy",
+        "Annualized rate of occurrence",
+        "Single loss expectancy"
+      ],
+      "answer": "Exposure factor",
+      "explanation": "Exposure factor is the percentage of an asset's value lost in a single event. Single loss expectancy is the resulting dollar amount (asset value multiplied by the exposure factor), not the percentage."
+    },
+    {
+      "id": "D4-032",
+      "objective": "4.3",
+      "stem": "A legacy manufacturing system runs an unsupported operating system that cannot be patched. The security team moves it to an isolated VLAN and allows traffic only from one engineering workstation. Which of the following BEST describes this action?",
+      "choices": [
+        "Granting an exemption",
+        "Applying a patch",
+        "Implementing a compensating control",
+        "Transferring the risk"
+      ],
+      "answer": "Implementing a compensating control",
+      "explanation": "Segmentation that reduces the risk when the primary fix (patching) is not possible is a compensating control. An exemption would formally waive the requirement without adding any protection, which is not what the team did."
+    },
+    {
+      "id": "D4-033",
+      "objective": "4.3",
+      "stem": "A business unit cannot install a critical patch until its application vendor certifies it. The CISO signs a documented approval allowing the system to remain unpatched for 60 days, after which it must be reviewed. Which of the following BEST describes this?",
+      "choices": [
+        "Exception",
+        "Compensating control",
+        "Segmentation",
+        "Cyber insurance"
+      ],
+      "answer": "Exception",
+      "explanation": "A documented, time-limited approval to deviate from a security requirement is an exception. A compensating control is an alternative safeguard that reduces risk, while this approval only accepts the risk for a set period."
+    },
+    {
+      "id": "D4-034",
+      "objective": "4.3",
+      "stem": "An administrator has just applied patches for the critical vulnerabilities identified in last week's scan. Which of the following should the administrator do NEXT to validate the remediation?",
+      "choices": [
+        "Grant an exception",
+        "Rescan the affected systems",
+        "Close the tickets as resolved",
+        "Purchase cyber insurance"
+      ],
+      "answer": "Rescan the affected systems",
+      "explanation": "Rescanning confirms whether the patches actually removed the vulnerabilities before the work is reported as done. Closing the tickets without verifying assumes the patches installed and worked, which is the very thing validation is meant to check."
+    },
+    {
+      "id": "D4-035",
+      "objective": "4.4",
+      "stem": "A security operations center wants to collect logs from firewalls, servers, and cloud services into one platform that correlates events and generates alerts when related suspicious activity occurs across systems. Which of the following should be deployed?",
+      "choices": [
+        "NetFlow collector",
+        "SNMP manager",
+        "Vulnerability scanner",
+        "SIEM"
+      ],
+      "answer": "SIEM",
+      "explanation": "A SIEM aggregates logs from many sources, correlates them, and alerts on patterns. A NetFlow collector records traffic flow metadata but does not correlate logs from servers and cloud services."
+    },
+    {
+      "id": "D4-036",
+      "objective": "4.4",
+      "stem": "A government agency needs an automated, standardized way to check thousands of systems against configuration checklists written in XCCDF and OVAL and to report the results in a common format. Which of the following should the agency use?",
+      "choices": [
+        "NetFlow",
+        "STIX",
+        "SCAP",
+        "SNMP"
+      ],
+      "answer": "SCAP",
+      "explanation": "The Security Content Automation Protocol uses standards such as XCCDF and OVAL to automate configuration compliance checks. STIX is a format for sharing threat intelligence, not for checking system configurations."
+    },
+    {
+      "id": "D4-037",
+      "objective": "4.4",
+      "stem": "A company wants consensus-based, vendor-neutral hardening recommendations for its Ubuntu servers that it can use as the basis for configuration checks. Which of the following would BEST meet this need?",
+      "choices": [
+        "CIS Benchmarks",
+        "OWASP Top 10",
+        "ISO/IEC 27001",
+        "PCI DSS"
+      ],
+      "answer": "CIS Benchmarks",
+      "explanation": "CIS Benchmarks are consensus-developed, platform-specific hardening guides that scanners can check against. ISO/IEC 27001 defines requirements for an information security management system but does not give per-OS configuration settings."
+    },
+    {
+      "id": "D4-038",
+      "objective": "4.4",
+      "stem": "A company needs to monitor the health and configuration of hundreds of IP cameras and sensors that cannot have additional software installed. Which of the following approaches should be used?",
+      "choices": [
+        "Agent-based monitoring",
+        "Endpoint antivirus",
+        "Agentless monitoring",
+        "Host-based intrusion prevention"
+      ],
+      "answer": "Agentless monitoring",
+      "explanation": "Agentless monitoring collects data remotely over the network without installing software on the device, which suits IoT devices. Agent-based monitoring requires installing software on each device, which the scenario rules out."
+    },
+    {
+      "id": "D4-039",
+      "objective": "4.4",
+      "stem": "A network switch is configured to send an unsolicited message to the network management station on UDP port 162 whenever an interface goes down. Which of the following is the switch sending?",
+      "choices": [
+        "SNMP GET response",
+        "SNMP trap",
+        "NetFlow record",
+        "SCAP report"
+      ],
+      "answer": "SNMP trap",
+      "explanation": "An SNMP trap is an unsolicited alert pushed by the device to the manager, typically on UDP 162. A GET response is only sent when the manager polls the device, so it is not unsolicited."
+    },
+    {
+      "id": "D4-040",
+      "objective": "4.4",
+      "stem": "An analyst wants to see which internal hosts communicate with which external addresses, on which ports, and how much data is transferred, without storing full packet contents. Which of the following tools would BEST meet this need?",
+      "choices": [
+        "SNMP traps",
+        "File integrity monitoring",
+        "NetFlow",
+        "Full packet capture"
+      ],
+      "answer": "NetFlow",
+      "explanation": "NetFlow records metadata about traffic flows, such as source, destination, ports, and byte counts, without the payload. Full packet capture would provide this too, but it stores entire payloads, which the analyst wants to avoid."
+    },
+    {
+      "id": "D4-041",
+      "objective": "4.4",
+      "stem": "SOC analysts receive more than 5,000 alerts a day from a new detection rule. After review, nearly all of them are triggered by a legitimate backup job. Which of the following should the team do?",
+      "choices": [
+        "Alert tuning",
+        "Log archiving",
+        "Quarantine",
+        "Log aggregation"
+      ],
+      "answer": "Alert tuning",
+      "explanation": "Alert tuning adjusts thresholds and exclusions so detections stop firing on known-good activity, reducing alert fatigue. Log aggregation collects more data in one place but does nothing to reduce false alerts."
+    },
+    {
+      "id": "D4-042",
+      "objective": "4.4",
+      "stem": "An EDR alert shows that a workstation is beaconing to a known command-and-control address. The analyst wants to stop the threat from spreading while keeping the system available for forensic analysis. Which of the following should the analyst do FIRST?",
+      "choices": [
+        "Run a full vulnerability scan",
+        "Quarantine the workstation from the network",
+        "Delete the user's account",
+        "Reimage the workstation"
+      ],
+      "answer": "Quarantine the workstation from the network",
+      "explanation": "Quarantining isolates the host so it cannot communicate or spread while its evidence stays intact. Reimaging would remove the threat but would also destroy the forensic evidence the analyst wants to keep."
+    },
+    {
+      "id": "D4-043",
+      "objective": "4.4",
+      "stem": "A compliance officer wants to be alerted whenever an employee emails a spreadsheet containing customer credit card numbers to an external address. Which of the following tools should be configured?",
+      "choices": [
+        "Antivirus",
+        "NetFlow",
+        "DLP",
+        "SNMP"
+      ],
+      "answer": "DLP",
+      "explanation": "Data loss prevention inspects content leaving the organization and can alert on or block sensitive data such as card numbers. Antivirus looks for malicious code, not sensitive data in outbound messages."
+    },
+    {
+      "id": "D4-044",
+      "objective": "4.4",
+      "stem": "Regulations require a company to keep security logs for one year, but the SIEM can store only 90 days of data online. Which of the following should the company implement?",
+      "choices": [
+        "Reporting",
+        "Log archiving",
+        "Alert tuning",
+        "Log aggregation"
+      ],
+      "answer": "Log archiving",
+      "explanation": "Archiving moves older logs to long-term storage so they are retained for the required period. Aggregation collects logs from many sources into the SIEM but does not by itself extend how long they are kept."
+    },
+    {
+      "id": "D4-045",
+      "objective": "4.5",
+      "stem": "A firewall processes these rules from top to bottom: `1 permit tcp any 10.0.5.10 eq 443`, `2 deny ip any any`, `3 permit tcp 192.168.10.0/24 10.0.5.10 eq 22`. Administrators on 192.168.10.0/24 cannot SSH to 10.0.5.10. Which of the following is the MOST likely cause?",
+      "choices": [
+        "Rule 1 blocks traffic on port 22",
+        "Rule 2 matches the traffic before rule 3",
+        "The firewall has no implicit deny rule",
+        "SSH requires UDP port 22"
+      ],
+      "answer": "Rule 2 matches the traffic before rule 3",
+      "explanation": "Firewall rules are processed in order, and the explicit deny-all in rule 2 matches the SSH traffic before rule 3 is reached. Rule 1 only permits HTTPS and does not block anything."
+    },
+    {
+      "id": "D4-046",
+      "objective": "4.5",
+      "stem": "A company wants to host a public web server so that internet users can reach it, while preventing a compromise of that server from giving direct access to the internal network. Where should the server be placed?",
+      "choices": [
+        "On the guest wireless network",
+        "In a screened subnet",
+        "On the management VLAN",
+        "On the internal LAN"
+      ],
+      "answer": "In a screened subnet",
+      "explanation": "A screened subnet sits between the internet and the internal network, with firewall rules limiting what the public server can reach. Placing it on the internal LAN would let a compromise reach internal systems directly."
+    },
+    {
+      "id": "D4-047",
+      "objective": "4.5",
+      "stem": "Directory queries from an application to the domain controllers are sent in cleartext on port 389. The security team wants the queries encrypted. Which of the following should the team implement?",
+      "choices": [
+        "LDAPS over TCP 636",
+        "LDAP over UDP 389",
+        "SMB over TCP 445",
+        "SNMPv3 over UDP 161"
+      ],
+      "answer": "LDAPS over TCP 636",
+      "explanation": "LDAPS wraps LDAP in TLS, normally on TCP 636, encrypting directory queries. LDAP over UDP 389 is still unencrypted LDAP, only on a different transport."
+    },
+    {
+      "id": "D4-048",
+      "objective": "4.5",
+      "stem": "Partners must send files to a company over an encrypted connection. The firewall team will open only a single port for the service and will not allow separate data channels. Which of the following protocols BEST meets these requirements?",
+      "choices": [
+        "SFTP",
+        "FTP",
+        "FTPS",
+        "TFTP"
+      ],
+      "answer": "SFTP",
+      "explanation": "SFTP runs over SSH on a single port (TCP 22) and encrypts both commands and data. FTPS is also encrypted, but it uses separate control and data connections, which the firewall team will not allow."
+    },
+    {
+      "id": "D4-049",
+      "objective": "4.5",
+      "stem": "A new strain of malware with no known signature moves through the network without triggering the IDS. Which of the following detection methods would MOST likely have identified it?",
+      "choices": [
+        "Port mirroring",
+        "Anomaly-based detection",
+        "Signature-based detection",
+        "Static block lists"
+      ],
+      "answer": "Anomaly-based detection",
+      "explanation": "Anomaly-based detection compares activity against a baseline of normal behavior, so it can catch threats with no known signature. Signature-based detection needs a known pattern, which is why the IDS missed this malware."
+    },
+    {
+      "id": "D4-050",
+      "objective": "4.5",
+      "stem": "A company's employees work from home and often connect directly to the internet without the VPN. The company must still block access to malicious and inappropriate websites on their laptops. Which of the following would BEST meet this requirement?",
+      "choices": [
+        "Perimeter firewall ACL",
+        "Screened subnet",
+        "Agent-based web filter",
+        "Centralized proxy server"
+      ],
+      "answer": "Agent-based web filter",
+      "explanation": "An agent-based web filter runs on the laptop and enforces policy wherever the device connects. A centralized proxy only filters traffic routed through it, so it cannot see laptops browsing directly from home."
+    },
+    {
+      "id": "D4-051",
+      "objective": "4.5",
+      "stem": "A school wants its web filter to block all gambling and adult websites, including new sites, without staff having to list each URL. Which of the following web filtering features should be used?",
+      "choices": [
+        "Manual block rules",
+        "Certificate pinning",
+        "URL scanning",
+        "Content categorization"
+      ],
+      "answer": "Content categorization",
+      "explanation": "Content categorization groups sites by type so whole categories can be blocked, including newly categorized sites. Manual block rules require listing each URL, which is what the school wants to avoid."
+    },
+    {
+      "id": "D4-052",
+      "objective": "4.5",
+      "stem": "An administrator needs to enforce screen-lock timeouts, disable USB storage, and set password requirements on 2,000 domain-joined Windows workstations. Which of the following is the MOST efficient way to do this?",
+      "choices": [
+        "Host-based firewall rules",
+        "SELinux",
+        "Local security policy on each workstation",
+        "Group Policy"
+      ],
+      "answer": "Group Policy",
+      "explanation": "Group Policy pushes settings centrally to every domain-joined Windows computer. Local security policy can apply the same settings but must be configured one machine at a time, which is not efficient for 2,000 workstations."
+    },
+    {
+      "id": "D4-053",
+      "objective": "4.5",
+      "stem": "Which of the following provides mandatory access control on Linux by labeling processes and files and enforcing a security policy even when a process runs as root?",
+      "choices": [
+        "Group Policy",
+        "chmod",
+        "sudo",
+        "SELinux"
+      ],
+      "answer": "SELinux",
+      "explanation": "SELinux is a Linux kernel module that enforces mandatory access control policies that apply even to root processes. chmod sets discretionary file permissions that the owner or root can change at will."
+    },
+    {
+      "id": "D4-054",
+      "objective": "4.5",
+      "stem": "A company wants to stop all devices, including IoT devices that cannot run agents, from reaching known malicious domains by refusing to resolve those names. Which of the following should be implemented?",
+      "choices": [
+        "Host-based IPS",
+        "File integrity monitoring",
+        "DNS filtering",
+        "Agent-based web filtering"
+      ],
+      "answer": "DNS filtering",
+      "explanation": "DNS filtering blocks lookups of known malicious domains for every device that uses the resolver, so no agent is needed. Agent-based web filtering requires software on each device, which IoT devices cannot run."
+    },
+    {
+      "id": "D4-055",
+      "objective": "4.5",
+      "stem": "Attackers are sending email that appears to come from example.com. The company wants receiving mail servers to be able to check whether a message came from an IP address authorized to send mail for example.com. Which of the following should the company publish in DNS?",
+      "choices": [
+        "SPF record",
+        "DKIM record",
+        "MX record",
+        "DMARC record"
+      ],
+      "answer": "SPF record",
+      "explanation": "An SPF record lists the servers and IP addresses allowed to send mail for the domain. DKIM publishes a public key used to verify a message signature, which proves integrity and origin but does not list authorized sending IPs."
+    },
+    {
+      "id": "D4-056",
+      "objective": "4.5",
+      "stem": "A company already publishes SPF and DKIM records. It now wants to tell receiving servers to reject messages that fail those checks and to send aggregate reports back to the company. Which of the following should the company implement?",
+      "choices": [
+        "DNSSEC",
+        "S/MIME",
+        "An email security gateway",
+        "DMARC"
+      ],
+      "answer": "DMARC",
+      "explanation": "DMARC builds on SPF and DKIM by publishing a policy for failed messages (none, quarantine, or reject) and a reporting address. An email security gateway filters the company's own inbound mail but cannot instruct other organizations' servers how to handle spoofed mail."
+    },
+    {
+      "id": "D4-057",
+      "objective": "4.5",
+      "stem": "A security team wants to be alerted immediately if any system binaries or configuration files on its web servers are modified outside of an approved change. Which of the following should the team implement?",
+      "choices": [
+        "File integrity monitoring",
+        "User behavior analytics",
+        "Data loss prevention",
+        "Network access control"
+      ],
+      "answer": "File integrity monitoring",
+      "explanation": "File integrity monitoring hashes critical files and alerts when they change. DLP watches for sensitive data leaving the organization, not for changes to system files."
+    },
+    {
+      "id": "D4-058",
+      "objective": "4.5",
+      "stem": "A company wants to verify that laptops have current antivirus signatures and an enabled host firewall before they can connect to the corporate network, and to place non-compliant laptops on a remediation VLAN. Which of the following should be deployed?",
+      "choices": [
+        "DLP",
+        "EDR",
+        "NAC",
+        "SIEM"
+      ],
+      "answer": "NAC",
+      "explanation": "Network access control checks device posture at connection time and can restrict non-compliant devices to a remediation network. EDR monitors and responds to threats on the endpoint but does not decide whether it may join the network."
+    },
+    {
+      "id": "D4-059",
+      "objective": "4.5",
+      "stem": "A security team wants one platform that collects and correlates telemetry from endpoints, email, network sensors, and cloud workloads, and can take automated response actions across all of them. Which of the following BEST meets this need?",
+      "choices": [
+        "EDR",
+        "XDR",
+        "FIM",
+        "NAC"
+      ],
+      "answer": "XDR",
+      "explanation": "Extended detection and response (XDR) correlates data across endpoints, email, network, and cloud and responds across them. EDR is limited to endpoint telemetry, so it would miss the email, network, and cloud sources."
+    },
+    {
+      "id": "D4-060",
+      "objective": "4.5",
+      "stem": "A finance employee normally works 9:00 to 17:00 and accesses about 20 files a day. One night at 02:00, the account downloads 3,000 files from a file share. Which of the following would MOST likely detect this as suspicious?",
+      "choices": [
+        "Network access control",
+        "File integrity monitoring",
+        "User behavior analytics",
+        "Signature-based antivirus"
+      ],
+      "answer": "User behavior analytics",
+      "explanation": "User behavior analytics builds a baseline of each user's normal activity and flags deviations such as unusual hours and volume. File integrity monitoring detects changes to files, but these files were only read, not modified."
+    },
+    {
+      "id": "D4-061",
+      "objective": "4.6",
+      "stem": "An employee is terminated for misconduct effective immediately. Which of the following should the identity administrator do FIRST?",
+      "choices": [
+        "Disable the user's accounts",
+        "Archive the user's home folder",
+        "Remove the user from distribution lists",
+        "Delete the user's mailbox"
+      ],
+      "answer": "Disable the user's accounts",
+      "explanation": "Disabling the accounts immediately stops access while preserving data and audit history for any investigation. Deleting the mailbox can destroy evidence and does not by itself stop the user from signing in to other systems."
+    },
+    {
+      "id": "D4-062",
+      "objective": "4.6",
+      "stem": "Each quarter, department managers must review a list of their team members' access rights and formally confirm that each permission is still required. Which of the following BEST describes this process?",
+      "choices": [
+        "Provisioning",
+        "Federation",
+        "Attestation",
+        "Identity proofing"
+      ],
+      "answer": "Attestation",
+      "explanation": "Attestation is the periodic review in which managers certify that users' access is still appropriate, which catches permission creep. Provisioning creates accounts and grants access but does not review existing rights."
+    },
+    {
+      "id": "D4-063",
+      "objective": "4.6",
+      "stem": "Before issuing credentials to a fully remote new hire, a company requires the person to show a government-issued photo ID on a live video call and matches it against HR records. Which of the following is this an example of?",
+      "choices": [
+        "Identity proofing",
+        "Just-in-time permissions",
+        "Single sign-on",
+        "Attestation"
+      ],
+      "answer": "Identity proofing",
+      "explanation": "Identity proofing verifies that a person is who they claim to be before an account is issued. Attestation reviews access rights that already exist and does not verify a new person's identity."
+    },
+    {
+      "id": "D4-064",
+      "objective": "4.6",
+      "stem": "A company wants employees to sign in once with corporate credentials and access a third-party SaaS application. The identity provider will send the application a signed XML assertion about the user. Which of the following is being used?",
+      "choices": [
+        "Kerberos",
+        "SAML",
+        "LDAP",
+        "OAuth"
+      ],
+      "answer": "SAML",
+      "explanation": "SAML is an XML-based standard in which the identity provider sends signed assertions to the service provider for web SSO. OAuth is an authorization framework that typically uses tokens such as JSON Web Tokens, not XML assertions."
+    },
+    {
+      "id": "D4-065",
+      "objective": "4.6",
+      "stem": "A scheduling application asks users for permission to read their cloud calendar. Users approve access on the calendar provider's page, and the application receives a token but never sees the users' passwords. Which of the following is being used?",
+      "choices": [
+        "OAuth",
+        "LDAP",
+        "RADIUS",
+        "SAML"
+      ],
+      "answer": "OAuth",
+      "explanation": "OAuth lets a user grant an application limited access to resources through a token without sharing their password. SAML is mainly used to authenticate users to web applications for SSO, not to delegate an app's access to a user's data."
+    },
+    {
+      "id": "D4-066",
+      "objective": "4.6",
+      "stem": "Two companies form a partnership. Each wants its employees to access the other company's portal using their existing home-company credentials, without new accounts being created. Which of the following should be implemented?",
+      "choices": [
+        "Attestation",
+        "Password vaulting",
+        "Federation",
+        "Role-based access control"
+      ],
+      "answer": "Federation",
+      "explanation": "Federation establishes trust between separate identity systems so users authenticate with their home organization and are accepted by the partner. RBAC decides what a user may do once signed in, but does not let the partner trust outside credentials."
+    },
+    {
+      "id": "D4-067",
+      "objective": "4.6",
+      "stem": "In a defense contractor's system, files are labeled Confidential, Secret, or Top Secret, and users receive clearances. The operating system enforces access, and users cannot change the labels. Which of the following access control models is in use?",
+      "choices": [
+        "Discretionary access control",
+        "Role-based access control",
+        "Rule-based access control",
+        "Mandatory access control"
+      ],
+      "answer": "Mandatory access control",
+      "explanation": "Mandatory access control enforces access by comparing system-assigned labels and clearances, and users cannot override them. Discretionary access control lets the owner decide who has access, which this system does not allow."
+    },
+    {
+      "id": "D4-068",
+      "objective": "4.6",
+      "stem": "On a shared file server, the employee who creates a folder can decide which coworkers are allowed to read or modify it. Which of the following access control models does this describe?",
+      "choices": [
+        "Mandatory access control",
+        "Discretionary access control",
+        "Role-based access control",
+        "Attribute-based access control"
+      ],
+      "answer": "Discretionary access control",
+      "explanation": "In discretionary access control, the resource owner decides who gets access. Mandatory access control takes that decision away from users and enforces system-assigned labels."
+    },
+    {
+      "id": "D4-069",
+      "objective": "4.6",
+      "stem": "A hospital's policy grants access to a patient record only if the user is a nurse, is assigned to the same ward as the patient, and is connecting from a hospital-managed device. Which of the following access control models BEST supports this policy?",
+      "choices": [
+        "Discretionary access control",
+        "Rule-based access control",
+        "Role-based access control",
+        "Attribute-based access control"
+      ],
+      "answer": "Attribute-based access control",
+      "explanation": "Attribute-based access control evaluates several attributes of the user, resource, and environment together, such as role, ward, and device. RBAC is tempting because nurse is a role, but RBAC alone cannot also check the ward and device conditions."
+    },
+    {
+      "id": "D4-070",
+      "objective": "4.6",
+      "stem": "A company allows contractors to sign in to its systems only between 08:00 and 18:00 on weekdays. Attempts outside those hours are denied even with valid credentials. Which of the following controls is being used?",
+      "choices": [
+        "Least privilege",
+        "Discretionary access control",
+        "Account lockout",
+        "Time-of-day restrictions"
+      ],
+      "answer": "Time-of-day restrictions",
+      "explanation": "Time-of-day restrictions allow sign-in only during set hours regardless of valid credentials. Least privilege limits what permissions a user has, not when they may use them."
+    },
+    {
+      "id": "D4-071",
+      "objective": "4.6",
+      "stem": "To sign in to a workstation, an employee inserts a smart card and then types a PIN. Which of the following authentication factors are being used?",
+      "choices": [
+        "Somewhere you are and something you know",
+        "Something you have and something you know",
+        "Something you have and something you are",
+        "Something you are and something you know"
+      ],
+      "answer": "Something you have and something you know",
+      "explanation": "The smart card is something you have and the PIN is something you know. Neither step uses a biometric, so something you are does not apply."
+    },
+    {
+      "id": "D4-072",
+      "objective": "4.6",
+      "stem": "Employees install an authenticator app on their smartphones that generates a new six-digit code every 30 seconds for multifactor sign-in. Which of the following BEST describes this authenticator?",
+      "choices": [
+        "Biometric factor",
+        "Soft token",
+        "Security key",
+        "Hard token"
+      ],
+      "answer": "Soft token",
+      "explanation": "A soft token is software, such as a mobile app, that generates one-time codes. A hard token is a dedicated physical device that generates the codes, not an app on a general-purpose phone."
+    },
+    {
+      "id": "D4-073",
+      "objective": "4.6",
+      "stem": "A company remembers each user's last five passwords to prevent reuse. An audit finds that users change their password six times in a row in a few minutes so they can return to their original password. Which of the following settings would BEST prevent this?",
+      "choices": [
+        "Password complexity",
+        "Password length",
+        "Minimum password age",
+        "Maximum password age"
+      ],
+      "answer": "Minimum password age",
+      "explanation": "A minimum password age stops users from changing their password again until a set time has passed, which defeats cycling through the history. Maximum password age forces changes more often and would not stop rapid cycling."
+    },
+    {
+      "id": "D4-074",
+      "objective": "4.6",
+      "stem": "Administrators no longer have standing admin rights. When needed, an administrator requests elevated access through a portal, receives it for two hours after approval, and the access is then removed automatically. Which of the following is being used?",
+      "choices": [
+        "Just-in-time permissions",
+        "Role-based access control",
+        "Federation",
+        "Password vaulting"
+      ],
+      "answer": "Just-in-time permissions",
+      "explanation": "Just-in-time permissions grant elevated rights only when needed and remove them automatically after a short time. Password vaulting stores and checks out privileged passwords but does not by itself grant and then revoke rights on a timer."
+    },
+    {
+      "id": "D4-075",
+      "objective": "4.7",
+      "stem": "When HR enters a new hire into the HR system, a script automatically creates the user's directory account, mailbox, and group memberships based on job title. Which of the following automation use cases is this?",
+      "choices": [
+        "Ticket creation",
+        "Guard rails",
+        "Continuous integration and testing",
+        "User provisioning"
+      ],
+      "answer": "User provisioning",
+      "explanation": "Automatically creating accounts and access from HR data is user provisioning. Guard rails are automated limits that stop unsafe actions, not the creation of accounts."
+    },
+    {
+      "id": "D4-076",
+      "objective": "4.7",
+      "stem": "A cloud team configures automation that blocks any engineer from creating a storage bucket with public access, even if the engineer has rights to create buckets. Which of the following BEST describes this?",
+      "choices": [
+        "Escalation",
+        "Guard rails",
+        "Ticket creation",
+        "Resource provisioning"
+      ],
+      "answer": "Guard rails",
+      "explanation": "Guard rails are automated policies that prevent unsafe configurations while still allowing normal work. Resource provisioning creates resources and does not by itself stop an insecure setting."
+    },
+    {
+      "id": "D4-077",
+      "objective": "4.7",
+      "stem": "A SOAR playbook opens a ticket for every critical alert. If the on-call analyst does not acknowledge the ticket within 15 minutes, the playbook automatically pages the SOC manager. Which of the following use cases does the paging step represent?",
+      "choices": [
+        "Escalation",
+        "User provisioning",
+        "Ticket creation",
+        "Guard rails"
+      ],
+      "answer": "Escalation",
+      "explanation": "Automatically raising an unacknowledged issue to a higher level of responsibility is escalation. Ticket creation is the earlier step that opened the ticket, not the step that pages the manager."
+    },
+    {
+      "id": "D4-078",
+      "objective": "4.7",
+      "stem": "Every time a developer commits code, the pipeline automatically builds the application and runs unit tests, static analysis, and dependency checks before the change can be merged. Which of the following is this?",
+      "choices": [
+        "Escalation",
+        "Resource provisioning",
+        "Continuous integration and testing",
+        "Enabling and disabling services"
+      ],
+      "answer": "Continuous integration and testing",
+      "explanation": "Continuous integration automatically builds and tests each change, including security checks, before it is merged. Resource provisioning creates infrastructure and does not test code changes."
+    },
+    {
+      "id": "D4-079",
+      "objective": "4.7",
+      "stem": "After automating alert enrichment and triage, a three-person SOC now handles the volume of work that previously needed ten analysts. Which of the following benefits of automation does this BEST describe?",
+      "choices": [
+        "Employee retention",
+        "Enforcing baselines",
+        "Standard infrastructure configurations",
+        "Workforce multiplier"
+      ],
+      "answer": "Workforce multiplier",
+      "explanation": "A workforce multiplier lets a small team accomplish the work of a much larger one. Employee retention is about keeping staff by reducing tedious work, which is a different benefit from the output gain described."
+    },
+    {
+      "id": "D4-080",
+      "objective": "4.7",
+      "stem": "A configuration management tool checks servers every hour and automatically reapplies the approved security settings to any server that has drifted from them. Which of the following benefits of automation does this BEST demonstrate?",
+      "choices": [
+        "Employee retention",
+        "Workforce multiplier",
+        "Enforcing baselines",
+        "Reaction time"
+      ],
+      "answer": "Enforcing baselines",
+      "explanation": "Automatically reapplying the approved settings keeps systems consistent with the secure baseline. Reaction time refers to responding faster to events such as incidents, not to keeping configurations consistent."
+    },
+    {
+      "id": "D4-081",
+      "objective": "4.7",
+      "stem": "All of a company's security playbooks, provisioning scripts, and response actions run from one orchestration server. When the server fails, none of the automated processes run. Which of the following considerations does this illustrate?",
+      "choices": [
+        "Cost",
+        "Single point of failure",
+        "Employee retention",
+        "Technical debt"
+      ],
+      "answer": "Single point of failure",
+      "explanation": "When one component's failure stops every dependent process, it is a single point of failure. Technical debt is the future rework caused by shortcuts, not an outage caused by one critical component."
+    },
+    {
+      "id": "D4-082",
+      "objective": "4.7",
+      "stem": "To meet a deadline, engineers wrote automation scripts quickly with hard-coded values and no documentation. Two years later, every change requires extensive rework, and the scripts frequently break. Which of the following considerations does this BEST describe?",
+      "choices": [
+        "Single point of failure",
+        "Workforce multiplier",
+        "Scaling",
+        "Technical debt"
+      ],
+      "answer": "Technical debt",
+      "explanation": "Technical debt is the growing cost of rework created by earlier shortcuts. A single point of failure is one component whose outage stops everything, which is not the problem described here."
+    },
+    {
+      "id": "D4-083",
+      "objective": "4.8",
+      "stem": "During an incident, the response team has isolated the compromised servers from the network. Which of the following phases of the incident response process should the team perform NEXT?",
+      "choices": [
+        "Eradication",
+        "Lessons learned",
+        "Detection",
+        "Recovery"
+      ],
+      "answer": "Eradication",
+      "explanation": "After containment, the team moves to eradication, removing malware and closing the entry point. Recovery comes after eradication; restoring systems before the threat is removed risks reinfection."
+    },
+    {
+      "id": "D4-084",
+      "objective": "4.8",
+      "stem": "A company writes an incident response plan, assembles contact lists, and stocks jump kits with forensic tools and clean media. Which of the following incident response phases is the company performing?",
+      "choices": [
+        "Preparation",
+        "Detection",
+        "Recovery",
+        "Containment"
+      ],
+      "answer": "Preparation",
+      "explanation": "Building plans, contacts, and tools before an incident happens is the preparation phase. Detection begins only when a possible incident is identified."
+    },
+    {
+      "id": "D4-085",
+      "objective": "4.8",
+      "stem": "Ransomware is actively encrypting file shares and spreading to other workstations. Which of the following should the incident response team do FIRST?",
+      "choices": [
+        "Disconnect the infected systems from the network",
+        "Notify law enforcement",
+        "Restore the file shares from backup",
+        "Reimage the infected workstations"
+      ],
+      "answer": "Disconnect the infected systems from the network",
+      "explanation": "Containment comes first, and isolating infected systems stops further encryption and spread. Restoring from backup before containment would let the ransomware encrypt the restored data again."
+    },
+    {
+      "id": "D4-086",
+      "objective": "4.8",
+      "stem": "Two weeks after a phishing incident was resolved, the response team meets to discuss what happened, what worked well, and what should change in the response plan. Which of the following phases is this?",
+      "choices": [
+        "Recovery",
+        "Preparation",
+        "Eradication",
+        "Lessons learned"
+      ],
+      "answer": "Lessons learned",
+      "explanation": "The lessons learned phase is the post-incident review that improves future response. Preparation is where the resulting improvements are later put in place, but the review meeting itself is lessons learned."
+    },
+    {
+      "id": "D4-087",
+      "objective": "4.8",
+      "stem": "Department leaders gather in a conference room as a facilitator describes a hypothetical data breach step by step, and each leader explains how their team would respond. No systems are touched. Which of the following is being conducted?",
+      "choices": [
+        "Penetration test",
+        "Simulation",
+        "Failover test",
+        "Tabletop exercise"
+      ],
+      "answer": "Tabletop exercise",
+      "explanation": "A tabletop exercise is a discussion-based walkthrough of a scenario without affecting systems. A simulation has participants carry out response actions in a realistic environment rather than only talking through them."
+    },
+    {
+      "id": "D4-088",
+      "objective": "4.8",
+      "stem": "After several accounts were compromised, analysts repeatedly ask why each failure happened until they determine that the help desk reset passwords without verifying callers. Which of the following is the team performing?",
+      "choices": [
+        "Legal hold",
+        "Threat hunting",
+        "E-discovery",
+        "Root cause analysis"
+      ],
+      "answer": "Root cause analysis",
+      "explanation": "Root cause analysis digs past the symptoms to find the underlying reason an incident happened, for example by asking why repeatedly. Threat hunting searches proactively for undetected attackers rather than explaining why a known incident occurred."
+    },
+    {
+      "id": "D4-089",
+      "objective": "4.8",
+      "stem": "No alerts have fired, but a security analyst uses recent threat intelligence about a new attacker technique to search endpoint and network logs for signs that the technique has already been used in the environment. Which of the following is the analyst doing?",
+      "choices": [
+        "Tabletop exercise",
+        "Root cause analysis",
+        "Threat hunting",
+        "Vulnerability scanning"
+      ],
+      "answer": "Threat hunting",
+      "explanation": "Threat hunting is a proactive search for threats that existing tools have not detected, often guided by threat intelligence. Vulnerability scanning looks for weaknesses on systems, not for evidence that an attacker is already present."
+    },
+    {
+      "id": "D4-090",
+      "objective": "4.8",
+      "stem": "A company's legal department is notified that a former employee has filed a lawsuit. Counsel instructs IT to suspend automatic email deletion for everyone involved. Which of the following does this describe?",
+      "choices": [
+        "Chain of custody",
+        "Data sanitization",
+        "Legal hold",
+        "Acquisition"
+      ],
+      "answer": "Legal hold",
+      "explanation": "A legal hold requires an organization to preserve potentially relevant data when litigation is expected, overriding normal deletion. Chain of custody documents who handled evidence, but it does not stop data from being deleted."
+    },
+    {
+      "id": "D4-091",
+      "objective": "4.8",
+      "stem": "A forensic analyst removes a hard drive from a suspect's laptop. Each time the drive is handed to another person, the transfer is recorded with the date, time, purpose, and signatures. Which of the following is being maintained?",
+      "choices": [
+        "Legal hold",
+        "Order of volatility",
+        "E-discovery",
+        "Chain of custody"
+      ],
+      "answer": "Chain of custody",
+      "explanation": "Chain of custody records every person who handles evidence so its integrity can be shown in court. A legal hold preserves data from deletion but does not track who has handled a specific item."
+    },
+    {
+      "id": "D4-092",
+      "objective": "4.8",
+      "stem": "A responder arrives at a running server that is suspected of being compromised. Following the order of volatility, which of the following should be collected FIRST?",
+      "choices": [
+        "Archived backup tapes",
+        "Contents of system memory",
+        "Contents of the hard drive",
+        "Remote syslog server logs"
+      ],
+      "answer": "Contents of system memory",
+      "explanation": "System memory is the most volatile source and is lost when the server is powered off, so it should be captured first. Hard drive contents persist after shutdown and can be imaged afterward."
+    },
+    {
+      "id": "D4-093",
+      "objective": "4.9",
+      "stem": "A firewall log shows: `DENY TCP 203.0.113.50:44321 -> 10.0.0.5:21`, `DENY TCP 203.0.113.50:44322 -> 10.0.0.5:22`, `DENY TCP 203.0.113.50:44323 -> 10.0.0.5:23`, `DENY TCP 203.0.113.50:44324 -> 10.0.0.5:25`, all within one second. Which of the following is MOST likely occurring?",
+      "choices": [
+        "Distributed denial-of-service attack",
+        "Port scan",
+        "Password spraying attack",
+        "DNS poisoning"
+      ],
+      "answer": "Port scan",
+      "explanation": "One source probing many sequential ports on a single host within a second is the pattern of a port scan. A DDoS would come from many sources and aim to overwhelm the target, not test one port after another."
+    },
+    {
+      "id": "D4-094",
+      "objective": "4.9",
+      "stem": "An analyst needs to determine which process on a laptop launched PowerShell, what command line it used, and which files it created. Which of the following data sources would BEST provide this information?",
+      "choices": [
+        "Firewall logs",
+        "Endpoint logs",
+        "NetFlow data",
+        "Vulnerability scan results"
+      ],
+      "answer": "Endpoint logs",
+      "explanation": "Endpoint logs, such as EDR telemetry, record process creation, command lines, and file activity on the host. NetFlow shows network connections but has no visibility into which local process ran what command."
+    },
+    {
+      "id": "D4-095",
+      "objective": "4.9",
+      "stem": "Windows security logs on a server show `Event ID 4625` for the account svc-backup 60 times in two minutes from 198.51.100.23, followed by `Event ID 4624` for svc-backup from the same address. Which of the following BEST explains these events?",
+      "choices": [
+        "A scheduled task running normally",
+        "A brute-force attack that succeeded",
+        "A user who forgot a password and called the help desk",
+        "A brute-force attack that failed"
+      ],
+      "answer": "A brute-force attack that succeeded",
+      "explanation": "Event ID 4625 is a failed logon and 4624 is a successful logon, so many failures followed by a success from the same address indicates a brute-force attack that worked. A failed attack would end without the 4624 success event."
+    },
+    {
+      "id": "D4-096",
+      "objective": "4.9",
+      "stem": "An analyst wants to trace the actual sending mail server and the path a phishing message took before reaching a user's inbox. Which of the following should the analyst examine?",
+      "choices": [
+        "Firewall deny logs",
+        "The vulnerability scan report",
+        "The email body text",
+        "Email header metadata"
+      ],
+      "answer": "Email header metadata",
+      "explanation": "Email header metadata includes the Received lines that show each server the message passed through. The body text is written by the attacker and does not reveal the delivery path."
+    },
+    {
+      "id": "D4-097",
+      "objective": "4.9",
+      "stem": "NetFlow data shows a server sent 2 GB to an unknown external address over TCP 443. The investigator now needs to see the actual contents that were transferred. Which of the following data sources would BEST provide this?",
+      "choices": [
+        "Dashboard reports",
+        "Packet capture",
+        "SNMP traps",
+        "NetFlow records"
+      ],
+      "answer": "Packet capture",
+      "explanation": "A packet capture records full packet payloads, so it can show what was sent (decrypted if the TLS keys are available). NetFlow records only flow metadata such as addresses, ports, and byte counts, which is what the investigator already has."
+    },
+    {
+      "id": "D4-098",
+      "objective": "4.9",
+      "stem": "An analyst wants to confirm whether an exploit attempt against a public web server was detected and blocked inline before reaching the server. Which of the following log sources should the analyst review FIRST?",
+      "choices": [
+        "IPS logs",
+        "Endpoint logs on a user laptop",
+        "Web server application logs",
+        "Vulnerability scan results"
+      ],
+      "answer": "IPS logs",
+      "explanation": "An inline IPS logs both the signature it matched and the action taken, such as blocking, so it shows whether the attempt was stopped. The web server's application logs would show only requests that reached the server and cannot confirm an inline block."
+    },
+    {
+      "id": "D4-099",
+      "objective": "4.9",
+      "stem": "A web server was compromised, and the investigator wants to know whether a known unpatched flaw on that server was the likely entry point. Which of the following data sources would BEST support this?",
+      "choices": [
+        "Badge access logs for the data center",
+        "SNMP traps from the server",
+        "Recent vulnerability scan results for the server",
+        "NetFlow data from the core switch"
+      ],
+      "answer": "Recent vulnerability scan results for the server",
+      "explanation": "Vulnerability scan results show which known flaws existed on the server, which can be matched against the attack activity. NetFlow shows traffic patterns but not which vulnerabilities were present on the host."
+    },
+    {
+      "id": "D4-100",
+      "objective": "4.9",
+      "stem": "A web application log contains the entry `GET /download?file=../../../../etc/passwd HTTP/1.1 200`. Which of the following attacks is shown?",
+      "choices": [
+        "Cross-site scripting",
+        "SQL injection",
+        "Cross-site request forgery",
+        "Directory traversal"
+      ],
+      "answer": "Directory traversal",
+      "explanation": "The `../` sequences try to move up the directory tree to read a file outside the web root, which is directory traversal. SQL injection would involve database syntax such as quotes or OR 1=1, not file path sequences."
+    }
+  ]
+}
