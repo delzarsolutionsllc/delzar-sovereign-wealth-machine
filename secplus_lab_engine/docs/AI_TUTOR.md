@@ -46,7 +46,8 @@ python main.py mcp --grant progress:write
 | read | `case_study` | Portfolio case study (Markdown) from a lab's real results |
 | read | `list_quizzes` | An objective's concept quizzes and mixed sets, with your best scores |
 | read | `progress_summary` | Weakest objectives, reviews due today, streak |
-| quiz | `start_quiz` | A quiz's questions **without answers** |
+| read | `glossary_lookup` | An acronym or term: expansion, plain-English definition, objectives and the domain's glossary quizzes |
+| quiz | `start_quiz` | A quiz's questions **without answers** (objective quizzes like `2.4-t1` and glossary quizzes like `g3-acr-1`) |
 | quiz | `daily_review` | Today's spaced-repetition questions, without answers |
 | quiz | `check_answer` | Right or wrong, the correct answer and the explanation |
 | progress:write | `record_answer`, `record_quiz` | Save results (off unless granted) |

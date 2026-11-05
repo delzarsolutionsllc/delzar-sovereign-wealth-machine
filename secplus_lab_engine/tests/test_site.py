@@ -59,3 +59,14 @@ def test_service_worker_precaches_existing_files_only(site):
 def test_icon_is_valid_png():
     assert _png_size(draw_icon(48)) == (48, 48)
     assert _png_size(draw_icon(48, maskable=True)) == (48, 48)
+
+
+def test_site_offers_the_one_file_desktop_app(site):
+    app = site / "download" / "Delzar-Certification-Academy.html"
+    html = app.read_text(encoding="utf-8")
+    assert app.parent.name == "download" and "window.SECPLUS_BUNDLE = {" in html and html.count("</script>") == 2
+    assert "glossary_questions" in html and "Delzar Certification Academy" in html
+    sw = (app.parent.parent / "sw.js").read_text(encoding="utf-8")
+    assert "Delzar-Certification-Academy" not in sw                    # not precached: it is the same course again
+    page = (app.parent.parent / "index.html").read_text(encoding="utf-8")
+    assert 'href: "download/Delzar-Certification-Academy.html"' in page
