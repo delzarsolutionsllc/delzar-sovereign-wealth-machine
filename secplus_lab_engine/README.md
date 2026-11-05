@@ -7,7 +7,7 @@ It's meant for building first-principles skill: work through each operation by h
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 17 labs, a random scenario generator and a timed, domain-weighted practice exam
+* 24 labs (every SY0-701 objective has one), a random scenario generator and a timed, domain-weighted practice exam
 * A **course web app** you can open from your desktop or from claude.ai
 * 565 pytest tests, run in CI on Python 3.10–3.13
 
@@ -65,13 +65,13 @@ python main.py                       # interactive menu
 python main.py list                  # list labs
 python main.py lab 1                 # run a lab's example scenario
 python main.py lab 3 --file my.json  # run a lab against your own scenario data
-python main.py all                   # run all seventeen labs
+python main.py all                   # run all 24 labs
 python main.py challenge 4           # quiz mode: predict each verdict before it is revealed
 python main.py challenge all         # quiz every lab
 python main.py lab 4 --challenge     # same as "challenge 4"
 python main.py progress              # your scores per SY0-701 objective, weakest first
 python main.py videos                # Professor Messer's free video course, mapped to the labs (--lab N, --open N, --mark ID)
-python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17)
+python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17–24)
 python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
 python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
 python main.py exam --count 30 --minutes 30 --seed 3
@@ -120,6 +120,13 @@ You answer, and the engine reveals its own verdict with the reasoning. The quest
 | 15 | **Third-Party / Vendor Risk Assessor** (`labs/lab15_vendor_risk.py`) | 5.3 | Inherent risk = data sensitivity × access level × criticality; weighted questionnaire (unanswered = no) reduces it to residual risk; required clauses depend on exposure (MSA/NDA, SLA, right-to-audit, breach notification, DPA, security schedule, BPA); hard REJECT for unverifiable sensitive vendors and undisclosed conflicts of interest; SLA uptime/notification checks; monitoring cadence; agreement-type (SLA/MSA/SOW/NDA/MOU/MOA/BPA) drills |
 | 16 | **Security Control Classifier** (`labs/lab16_control_classifier.py`) | 1.1 | Classifies control descriptions by category (technical/managerial/operational/physical) and type (preventive/detective/corrective/deterrent/compensating/directive) with whole-word weighted phrases; a unique winner is required, otherwise "Unclassified"; shows evidence and agreement with an answer key (19/19 on the sample) |
 | 17 | **PKI & Certificate Validator** (`labs/lab17_pki_validator.py`) | 1.4 | Browser-style TLS chain validation: path building + CA flags + trusted roots (incomplete chain, self-signed, untrusted root, leaf-as-CA), validity windows and 398-day limit, SAN/wildcard hostname matching (one label only), key length and SHA-2 signatures, serverAuth EKU, CRL/OCSP revocation with soft/hard-fail policy, SPKI pinning (detects TLS interception); generator applies random faults to healthy chains |
+| 18 | **Data Protection & DLP Gate** (`labs/lab18_data_protection.py`) | 3.3, 4.5, 5.4 | Scans outbound data flows for PII, card numbers (Luhn-checked), secrets and trade-secret/IP/legal markings; raises the label to the effective classification; ALLOW / ALLOW_WITH_PROTECTION (mask, tokenize, encrypt, hash) / BLOCK by destination, region, data sovereignty and state of data |
+| 19 | **SIEM Correlation & Alert Tuning** (`labs/lab19_siem_alerting.py`) | 4.4, 4.9 | Correlates auth/firewall/EDR/DNS/app events (brute force, spraying, impossible travel, after-hours privilege, log-source silence, threat intel, port scan, malware); owned, expiring suppressions (critical never suppressed); response per alert; precision/recall before and after tuning |
+| 20 | **Cloud Architecture & IaC Gate** (`labs/lab20_iac_scanner.py`) | 3.1, 3.3, 4.1, 4.6 | Policy-as-code scan of a Terraform-like plan (public buckets, internet-open admin ports, unencrypted data, IAM `*` on `*`, privileged containers, single-AZ critical resources, missing tags, unreviewed types) → BLOCK / WARN / PASS with a fix per finding; shared-responsibility matrix and architecture-model trade-offs |
+| 21 | **Asset Inventory & Secure Disposal** (`labs/lab21_asset_management.py`) | 4.2, 3.3, 4.5 | Reconciles the CMDB against a discovery scan (unmanaged / missing / no owner / unclassified); approves or rejects media disposal with NIST SP 800-88 Clear/Purge/Destroy, media-method fit, certificates of destruction, legal hold and retention |
+| 22 | **Compliance & Privacy Tracker** (`labs/lab22_compliance_privacy.py`) | 5.4, 5.1 | Data subject requests, breach notifications, retention and attestations against configurable (illustrative) deadlines → COMPLIANT / AT_RISK / NON_COMPLIANT / EXEMPT, with consequence and internal/external reporting; controller vs processor |
+| 23 | **Pen-Test RoE Gate & Audit Planner** (`labs/lab23_audit_roe.py`) | 5.5, 4.3, 5.3 | Gates each planned pen-test action against the signed rules of engagement (authorization, scope, prohibited/unknown techniques, window, passive-recon rule) → ALLOW / NEEDS_APPROVAL / BLOCK; maps assessment needs to internal audit, self-assessment, examination, third-party audit or attestation |
+| 24 | **Security Awareness Analyzer** (`labs/lab24_awareness.py`) | 5.6, 2.2 | Phishing-simulation outcomes and training actions per employee and department, program KPIs, anomalous-behaviour classification (risky / unexpected / unintentional) and phishing-indicator checks on messages |
 
 ---
 
@@ -146,7 +153,15 @@ secplus_lab_engine/
 │   ├── sample_resilience.json      # Lab 14 systems: RTO/RPO targets vs current design
 │   ├── sample_vendors.json         # Lab 15 vendor questionnaires + contracts
 │   ├── sample_controls.json        # Lab 16 control descriptions + answer key
-│   └── sample_certificates.json    # Lab 17 TLS chains + CRL/OCSP data
+│   ├── sample_certificates.json    # Lab 17 TLS chains + CRL/OCSP data
+│   ├── sample_data_flows.json      # Lab 18 outbound data flows for the DLP gate
+│   ├── sample_security_events.json # Lab 19 SIEM events, suppressions, ground truth
+│   ├── sample_iac.json             # Lab 20 Terraform-like cloud plan
+│   ├── sample_assets.json          # Lab 21 CMDB, discovery scan, disposal requests
+│   ├── sample_privacy_cases.json   # Lab 22 DSRs, breaches, retention, attestations
+│   ├── sample_engagement.json      # Lab 23 pen-test RoE + planned actions + audit needs
+│   ├── sample_awareness.json       # Lab 24 phishing simulation, behaviours, messages
+│   └── video_course.json           # Professor Messer video index (titles/IDs only)
 ├── labs/                         # one module per lab (+ registry in __init__.py)
 ├── utils/
 │   ├── crypto_helpers.py         # SHA-256, salting, PBKDF2, HMAC, hash chains
@@ -162,7 +177,7 @@ secplus_lab_engine/
 ├── tools/build_web_bundle.py     # rebuilds web/course_data.json
 ├── launch/                       # double-click launchers for Windows / macOS / Linux
 ├── docs/                         # HANDBOOK.pdf (+ HTML source and render script)
-└── tests/                        # pytest suite: one file per lab 9–17, web app, generator/exam, labs 1–8
+└── tests/                        # pytest suite: one file per lab 9–24, web app, generator/exam, labs 1–8
 ```
 
 ## Practise with your own scenarios
@@ -183,6 +198,11 @@ The labs are data-driven, so the best way to learn is to **break the sample data
 * **Lab 11**: Move rule 4 (the Tor block) above rule 1. Which finding disappears?
 * **Lab 13**: Give T-07 the indicator `political_message`. Is the actor still decisive?
 * **Lab 17**: Set `revocation_hard_fail` to `true`. Which connection flips to UNTRUSTED, and why is soft-fail risky?
+* **Lab 18**: Change DF-4's destination region to `us`. Does the SSN-bearing backup pass now, and which protection rule still applies at rest?
+* **Lab 19**: Remove the owner from SUP-1. Why does the scanner alert come back, and what does that do to precision?
+* **Lab 20**: Fix every critical finding. Is the plan now WARN or BLOCK, and how does `max_high_before_block` decide?
+* **Lab 21**: Try `degauss` on an HDD that is leaving the organisation with restricted data. Why is Purge not enough?
+* **Lab 23**: Add `web_app_test` to the allowed techniques. Which action changes from NEEDS_APPROVAL to ALLOW?
 
 Then run your changes with `python main.py lab N --file your_copy.json`.
 

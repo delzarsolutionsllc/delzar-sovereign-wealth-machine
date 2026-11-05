@@ -1723,5 +1723,281 @@
       "permission_restrictions": "Permission restrictions: access controls (least privilege, ACLs) limit who can read or change the data.",
       "geographic_restrictions": "Geographic restrictions: allow storage or access only from approved locations (geolocation / geofencing)."
     }
+  },
+
+  "siem": {
+    "sources": {
+      "auth": "Authentication / OS security logs (logon success and failure, account changes)",
+      "firewall": "Firewall logs (allowed and denied connections, ports)",
+      "edr": "Endpoint logs from the EDR/antivirus agent (detections, quarantine)",
+      "dns": "DNS query logs (domains resolved by each host)",
+      "app": "Application logs (business actions, admin changes)"
+    },
+    "severity_order": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "geo": {
+      "London": [
+        51.51,
+        -0.13
+      ],
+      "New York": [
+        40.71,
+        -74.01
+      ],
+      "Singapore": [
+        1.35,
+        103.82
+      ],
+      "Frankfurt": [
+        50.11,
+        8.68
+      ],
+      "Chicago": [
+        41.88,
+        -87.63
+      ],
+      "Lagos": [
+        6.52,
+        3.38
+      ]
+    },
+    "threat_intel": {
+      "fields": [
+        "src_ip",
+        "dst_ip",
+        "domain"
+      ],
+      "ips": [
+        "192.0.2.66",
+        "203.0.113.200"
+      ],
+      "domains": [
+        "update-checker.example.net",
+        "cdn-sync.example.org"
+      ]
+    },
+    "never_suppress_severities": [
+      "critical"
+    ],
+    "rules": [
+      {
+        "id": "SIEM-000",
+        "name": "Log parse failure",
+        "logic": "normalization",
+        "severity": "medium",
+        "description": "An event is missing id/ts/source, has an unparseable timestamp or comes from an unknown source",
+        "params": {
+          "required": [
+            "id",
+            "ts",
+            "source"
+          ]
+        },
+        "response": "fix the collector/parser and re-ingest; an unparsed event is invisible to every other rule"
+      },
+      {
+        "id": "SIEM-001",
+        "name": "Brute force",
+        "logic": "threshold",
+        "severity": "high",
+        "description": "At least N failed logins for one user from one IP within W seconds",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "failure"
+          },
+          "group_by": [
+            "user",
+            "src_ip"
+          ],
+          "count": 5,
+          "window_seconds": 300,
+          "escalate": {
+            "filter": {
+              "source": "auth",
+              "action": "login",
+              "outcome": "success"
+            },
+            "within_seconds": 600,
+            "severity": "critical",
+            "response": "possible compromise: disable the account, revoke sessions, quarantine the user's host via EDR"
+          }
+        },
+        "response": "lock the account temporarily and block the source IP at the firewall"
+      },
+      {
+        "id": "SIEM-002",
+        "name": "Password spraying",
+        "logic": "threshold",
+        "severity": "high",
+        "description": "One source IP fails against at least M distinct users within W seconds",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "failure"
+          },
+          "group_by": [
+            "src_ip"
+          ],
+          "distinct": "user",
+          "count": 4,
+          "window_seconds": 600
+        },
+        "response": "block the source IP and force password resets / MFA enrolment for the targeted users"
+      },
+      {
+        "id": "SIEM-003",
+        "name": "Impossible travel",
+        "logic": "impossible_travel",
+        "severity": "high",
+        "description": "Two successive successful logins by one user from places too far apart for the time between them",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "success"
+          },
+          "max_speed_kmh": 900
+        },
+        "response": "revoke the user's sessions, require MFA re-authentication and verify with the user"
+      },
+      {
+        "id": "SIEM-004",
+        "name": "After-hours privileged action",
+        "logic": "after_hours",
+        "severity": "high",
+        "description": "A privileged action outside business hours (UTC)",
+        "params": {
+          "actions": [
+            "add_admin",
+            "disable_logging",
+            "export_database",
+            "change_audit_policy"
+          ],
+          "business_hours": [
+            7,
+            19
+          ],
+          "weekdays_only": true
+        },
+        "response": "confirm with the account owner and their manager; revert the change if not approved"
+      },
+      {
+        "id": "SIEM-005",
+        "name": "Log source silence",
+        "logic": "source_silence",
+        "severity": "medium",
+        "description": "An expected log source sent no events for longer than its allowed gap (monitoring blind spot)",
+        "params": {
+          "max_gap_seconds": {
+            "auth": 21600,
+            "firewall": 21600,
+            "edr": 21600,
+            "dns": 14400,
+            "app": 21600
+          }
+        },
+        "response": "check the agent/forwarder and its heartbeat (SNMP trap, agent health), restore collection, then validate events arrive"
+      },
+      {
+        "id": "SIEM-006",
+        "name": "Threat-intel match",
+        "logic": "threat_intel",
+        "severity": "high",
+        "description": "An event involves an IP or domain on the threat-intelligence list",
+        "params": {},
+        "response": "block the IP / sinkhole the domain and quarantine the host via EDR for investigation"
+      },
+      {
+        "id": "SIEM-007",
+        "name": "Port scan",
+        "logic": "threshold",
+        "severity": "medium",
+        "description": "One source IP touches at least N distinct destination ports within W seconds",
+        "params": {
+          "filter": {
+            "source": "firewall"
+          },
+          "group_by": [
+            "src_ip"
+          ],
+          "distinct": "dst_port",
+          "count": 5,
+          "window_seconds": 120
+        },
+        "response": "identify the scanning host; block it at the firewall if it is not an authorised scanner"
+      },
+      {
+        "id": "SIEM-008",
+        "name": "Malware not blocked",
+        "logic": "match",
+        "severity": "high",
+        "description": "The EDR/antivirus agent detected malware but did not block or quarantine it",
+        "params": {
+          "filter": {
+            "source": "edr",
+            "action": "malware_detected",
+            "outcome": "allowed"
+          }
+        },
+        "response": "quarantine the host via EDR, remove the malware, then validate with a rescan before release"
+      }
+    ],
+    "suppressions": [
+      {
+        "id": "SUP-1",
+        "rule": "SIEM-007",
+        "match": {
+          "src_ip": "10.0.5.20"
+        },
+        "owner": "vuln-mgmt team",
+        "expires": "2026-12-31T00:00:00Z",
+        "reason": "authorised vulnerability scanner (weekly credentialed scan)"
+      },
+      {
+        "id": "SUP-2",
+        "rule": "SIEM-007",
+        "match": {
+          "src_ip": "10.0.5.99"
+        },
+        "owner": "red team",
+        "expires": "2026-09-30T00:00:00Z",
+        "reason": "Q3 penetration test engagement"
+      },
+      {
+        "id": "SUP-3",
+        "rule": "SIEM-003",
+        "match": {
+          "user": "bnguyen"
+        },
+        "owner": "",
+        "expires": "2026-12-31T00:00:00Z",
+        "reason": "travels often, uses a cloud VPN"
+      }
+    ],
+    "tools": {
+      "SIEM": "Aggregates and correlates logs from many sources and raises alerts",
+      "SCAP": "Standard formats (e.g. XCCDF, OVAL) so tools can check configurations against a benchmark automatically",
+      "Benchmarks": "Published secure-configuration guides such as CIS Benchmarks",
+      "Agent-based monitoring": "Software installed on the host that collects and forwards data",
+      "Agentless monitoring": "Collects data remotely (e.g. over SSH, WMI or an API) without installing software",
+      "SNMP traps": "Unsolicited alert messages a network device sends to the management station",
+      "NetFlow": "Records metadata about traffic flows (who talked to whom, ports, volume), not the content",
+      "DLP": "Detects and blocks sensitive data leaving the organisation",
+      "Vulnerability scanner": "Probes systems for known weaknesses and missing patches"
+    },
+    "activities": {
+      "Log aggregation": "Collecting logs from many systems into one place in a common format",
+      "Alert tuning": "Adjusting rules, thresholds and suppressions to cut false positives without missing real attacks",
+      "Quarantine": "Isolating a suspect host or file so it cannot spread or communicate",
+      "Archiving": "Keeping logs for the retention period required by policy or law",
+      "Validation": "Confirming that a remediation actually worked, e.g. by rescanning"
+    }
   }
 }

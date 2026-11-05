@@ -589,7 +589,110 @@ def gen_lab18(rng: random.Random, policies: dict) -> dict:
     return {"flows": flows}
 
 
-GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 18: gen_lab18, 20: gen_lab20, 21: gen_lab21, 22: gen_lab22, 23: gen_lab23, 24: gen_lab24}
+# --------------------------------------------------------------------------- #
+# Lab 19
+# --------------------------------------------------------------------------- #
+def gen_lab19(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["siem"]
+    rules = {r["id"]: r for r in cfg["rules"]}
+    base = 1791936000                              # 2026-10-14T00:00:00Z (a Wednesday)
+    evs, scen = [], {"S0": {"label": "benign", "description": "normal background activity"}}
+
+    def ts(sec, as_int=None):
+        if as_int if as_int is not None else rng.random() < 0.3:
+            return base + sec
+        return f"2026-10-14T{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}Z"
+
+    def add(sec, sc, **kw):
+        evs.append({"ts": ts(sec), "scenario": sc, **kw})
+
+    def S(label, text):
+        sid = f"S{len(scen)}"
+        scen[sid] = {"label": label, "description": text}
+        return sid
+
+    def fail(user, ip):
+        return {"source": "auth", "host": "VPN-1", "user": user, "src_ip": ip, "action": "login", "outcome": "failure"}
+
+    def ok(user, ip, geo):
+        return {**fail(user, ip), "outcome": "success", "geo": geo}
+
+    # background: every source except possibly a silent one
+    gaps = rules["SIEM-005"]["params"]["max_gap_seconds"]
+    silent = rng.choice(sorted(gaps)) if rng.random() < 0.6 else None
+    for src in sorted(gaps):
+        if src == silent:
+            sid = S("actionable", f"the {src} log forwarder stops sending events")
+            add(rng.randint(600, 3600), sid, source=src, host="LOG-1", action="heartbeat", outcome="ok")
+            continue
+        for h in (1, 4, 7, 10):
+            add(h * 3600 + rng.randint(0, 1500), "S0", source=src, host="WS-11", action="heartbeat", outcome="ok")
+
+    bf = rules["SIEM-001"]["params"]
+    n = bf["count"] + rng.choice([-2, -1, 0, 1])
+    t = rng.randint(2, 3) * 3600
+    sid = S("actionable" if n >= bf["count"] else "benign",
+            f"{n} failed logins for user dana from one IP" if n >= bf["count"] else "dana mistypes her password")
+    for i in range(n):
+        add(t + i * 15, sid, **fail("dana", "203.0.113.50"))
+    if rng.random() < 0.5:
+        add(t + n * 15 + rng.choice([30, 120, 900]), sid, **ok("dana", "203.0.113.50", "Lagos"))
+
+    sp = rules["SIEM-002"]["params"]
+    m = sp["count"] + rng.choice([-1, 0, 1])
+    sid = S("actionable" if m >= sp["count"] else "benign", f"one IP fails against {m} different users")
+    for i in range(m):
+        add(4 * 3600 + i * 20, sid, **fail(f"user{i + 1}", "198.51.100.23"))
+
+    cities = sorted(cfg["geo"])
+    a, b = rng.sample(cities, 2)
+    gap_min = rng.choice([45, 90, 600])
+    sid = S(rng.choice(["actionable", "benign"]), f"erin logs in from {a} then {b} {gap_min} min later")
+    add(6 * 3600, sid, **ok("erin", "198.51.100.40", a))
+    add(6 * 3600 + gap_min * 60, sid, **ok("erin", "192.0.2.150", b))
+
+    ah = rules["SIEM-004"]["params"]
+    hour = rng.choice([2, 3, 6, 10, 11])
+    lo, hi = ah["business_hours"]
+    sid = S("benign" if lo <= hour < hi else "actionable", f"privileged change at {hour:02d}:30 UTC")
+    add(hour * 3600 + 1800, sid, source="app", host="ERP-1", user="frank", action=rng.choice(ah["actions"]),
+        outcome="success")
+
+    ps = rules["SIEM-007"]["params"]
+    sups = [s for s in cfg.get("suppressions", []) if s.get("rule") == "SIEM-007" and s.get("match", {}).get("src_ip")]
+    for k, s in enumerate(rng.sample(sups, min(len(sups), rng.randint(1, 2)))):
+        valid = bool(s.get("owner")) and str(s.get("expires", "")) > "2026-10-14"
+        sid = S("benign" if valid else "actionable", f"port scan from {s['match']['src_ip']} ({s.get('reason')})")
+        for i in range(ps["count"] + rng.choice([-1, 0, 2])):
+            add(7 * 3600 + k * 600 + i * 5, sid, source="firewall", host="FW-1", src_ip=s["match"]["src_ip"],
+                dst_ip="10.0.2.10", dst_port=20 + i * 3, action="connection", outcome="denied")
+
+    ti = cfg["threat_intel"]
+    if rng.random() < 0.7:
+        sid = S("actionable", "workstation contacts a known-bad indicator")
+        if rng.random() < 0.5:
+            add(8 * 3600, sid, source="dns", host="WS-17", src_ip="10.0.3.17", domain=rng.choice(ti["domains"]),
+                action="query", outcome="ok")
+        else:
+            add(8 * 3600, sid, source="firewall", host="FW-1", src_ip="10.0.3.17", dst_ip=rng.choice(ti["ips"]),
+                dst_port=443, action="connection", outcome="allowed")
+
+    outcome = rng.choice(["allowed", "quarantined"])
+    sid = S("actionable" if outcome == "allowed" else "benign", f"EDR detects malware, outcome {outcome}")
+    add(9 * 3600, sid, source="edr", host="WS-22", action="malware_detected", outcome=outcome, file="dropper.exe")
+
+    if rng.random() < 0.4:
+        sid = S("actionable", "an app writes a non-ISO timestamp after an update")
+        evs.append({"ts": "14/10/2026 10:15", "source": "app", "host": "HR-APP-2", "action": "export_database",
+                    "outcome": "success", "scenario": sid})
+
+    for i, e in enumerate(evs, 1):
+        e["id"] = f"EV-{i:02d}"
+    return {"window": {"start": "2026-10-14T00:00:00Z", "end": "2026-10-14T12:00:00Z"}, "scenarios": scen,
+            "events": evs}
+
+
+GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 18: gen_lab18, 19: gen_lab19, 20: gen_lab20, 21: gen_lab21, 22: gen_lab22, 23: gen_lab23, 24: gen_lab24}
 
 
 def generate(lab: int, policies: dict, seed: int | None = None) -> dict:
