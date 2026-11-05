@@ -88,4 +88,4 @@ def test_domain_tests_use_the_bank(policies, domain):
 def test_web_bundle_carries_the_bank():
     from tools.build_web_bundle import build
     b = build(variants=0)
-    assert len(b["exam_bank"]) == len(BANK) and set(b["exam_bank"][0]) == {"objective", "stem", "choices", "answer", "explanation"}
+    assert len(b["exam_bank"]) == len(BANK) and {"id", "objective", "stem", "choices", "answer", "explanation"} <= set(b["exam_bank"][0])

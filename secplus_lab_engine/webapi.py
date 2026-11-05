@@ -119,7 +119,7 @@ def lab_domains(module) -> list[str]:
 
 def _q(q) -> dict:
     return {"prompt": q.prompt, "context": q.context, "choices": list(q.choices), "answer": q.answer,
-            "explanation": q.explanation, "objective": q.objective}
+            "explanation": q.explanation, "objective": q.objective, "id": q.qid}
 
 
 def _json_safe(obj):

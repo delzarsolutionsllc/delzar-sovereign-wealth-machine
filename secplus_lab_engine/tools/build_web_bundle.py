@@ -47,8 +47,7 @@ def build(variants: int = 12, seed_base: int = 1000) -> dict:
         entry["case_study"] = case_study(n, policies)
         bundle["labs"][str(n)] = entry
     from utils.exam_bank import load_bank
-    bundle["exam_bank"] = [{k: q[k] for k in ("objective", "stem", "choices", "answer", "explanation")}
-                           for q in load_bank()]
+    bundle["exam_bank"] = [dict(q) for q in load_bank()]          # every field (id, type-specific keys)
     return bundle
 
 

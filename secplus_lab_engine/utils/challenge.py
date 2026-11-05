@@ -34,6 +34,7 @@ class Question:
     explanation: str
     objective: str            # e.g. "4.6" — used to aggregate progress
     context: str = ""         # optional scenario detail shown above the prompt
+    qid: str = ""             # stable id for exam-bank questions (e.g. "D3-031"); empty for lab questions
 
     def __post_init__(self) -> None:
         if self.answer not in self.choices:

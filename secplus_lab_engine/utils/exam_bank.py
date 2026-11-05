@@ -105,7 +105,7 @@ def as_questions(records=None) -> list:
     """Bank records as challenge ``Question`` objects (no lab context)."""
     from utils.challenge import Question
     return [Question(prompt=r["stem"], choices=list(r["choices"]), answer=r["answer"],
-                     explanation=r["explanation"], objective=r["objective"], context="")
+                     explanation=r["explanation"], objective=r["objective"], context="", qid=r["id"])
             for r in (load_bank() if records is None else records)]
 
 

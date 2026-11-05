@@ -245,7 +245,9 @@ const Engine = {
 /* Exam questions: the exam-style bank (original questions written like SY0-701) by default,
    or the labs' hands-on scenario questions. Bank options are shuffled per exam.            */
 const useBank = source => source !== "labs" && (BUNDLE.exam_bank || []).length > 0;
-const bankQ = (r, rnd) => ({ prompt: r.stem, context: "", choices: shuffle(r.choices, rnd), answer: r.answer, explanation: r.explanation, objective: r.objective });
+const bankQ = (r, rnd) => ({ ...r, id: r.id, prompt: r.stem, context: "", choices: shuffle(r.choices, rnd), answer: r.answer, explanation: r.explanation, objective: r.objective });
+/* Is answer a correct for question q? Single-answer questions compare text; other question types extend this. */
+function isCorrect(q, a) { return a === q.answer; }
 function* allExamQuestions(source, rnd) {
   if (useBank(source)) { for (const r of BUNDLE.exam_bank) yield bankQ(r, rnd); return; }
   for (const L of Object.values(BUNDLE.labs)) for (const src of [L.sample, ...L.variants]) yield* src.questions;
@@ -608,7 +610,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
   let finished = false;
   async function done(timedOut) {
     if (finished) return; finished = true; clearInterval(examTimer); setKeys(null);
-    const results = qs.map((q, k) => ({ objective: q.objective, correct: answers[k] === q.answer }));
+    const results = qs.map((q, k) => ({ objective: q.objective, correct: isCorrect(q, answers[k]), qid: q.id || "" }));
     const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(100 + 8 * p);
     const target = CATALOG.domain_test_target;
     const passed = domain ? p >= target : scaled >= CATALOG.pass_scaled;
