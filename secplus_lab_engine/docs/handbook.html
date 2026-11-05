@@ -731,6 +731,8 @@ python tools/build_web_bundle.py         # rebuild the hosted bundle after chang
 <h2>24. Random scenarios &amp; the practice exam</h2>
 <h3>23.1 Scenario generator (<code>utils/scenario_generator.py</code>)</h3>
 <p><code>generate(lab, policies, seed) -&gt; data</code> builds a fresh scenario in exactly the lab's sample-file format, drawing only from the policy file (roles, CMDB, catalogs) and fixed text banks. The same seed always gives the same scenario. Supported labs: <b>2, 6, 9, 11, 12, 13, 14, 15, 17</b>. Story-driven labs (logs, SOC pipeline, IR playbooks, emails, CAB stories) keep their hand-crafted samples. The tests generate 25 scenarios per lab and require every quiz to be valid and uniquely answerable; a stress run of 200 seeds × 8 labs had zero failures.</p>
+<h4>Domain tests</h4>
+<p><code>build_domain_test(policies, domain, count, seed)</code> draws questions from one domain only and deals them round-robin across its objectives, so a 30-question Domain 3 test covers 3.1–3.4 evenly. <code>run_exam(..., domain=...)</code> reports a score per objective and marks the test against <code>DOMAIN_TEST_TARGET</code> (80%, a study target; CompTIA publishes no per-domain pass mark). CLI: <code>python main.py exam --domain N</code> (30 questions, one minute each) or <b>D1</b>–<b>D5</b> in the menu. Web app: the Practice exam page has a test picker and domain-test cards; results link each objective to its labs and videos.</p>
 <pre>python main.py challenge 9 --random --seed 42      python main.py lab 12 --random      menu: R9</pre>
 <h3>23.2 Exam simulator (<code>utils/exam.py</code>)</h3>
 <ul>

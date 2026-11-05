@@ -113,7 +113,8 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 .timer { font-family: var(--mono); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
 .timer.low { color: var(--fail); }
 .form { display: flex; gap: 14px; flex-wrap: wrap; align-items: end; }
-.form label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); }
+.form label { display: flex; flex-direction: column; gap: 4px; font-size: .85rem; color: var(--muted); max-width: 100%; min-width: 0; }
+.form select { max-width: 100%; }
 .form select, .form input[type=number] { padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 .notice { padding: 10px 12px; border-radius: 6px; background: var(--warn-soft); color: var(--warn); }
 .loading { color: var(--muted); font-style: italic; }
@@ -219,9 +220,9 @@ const Engine = {
     const src = random && L.variants.length ? L.variants[seed % L.variants.length] : L.sample;
     return { questions: shuffle(src.questions, mulberry32(seed || 1)), seed: src.seed ?? null };
   },
-  async exam(count, seed, fixed) {
-    if (LIVE) return post("exam", { count, seed, fixed });
-    return buildExamLocal(count, seed);
+  async exam(count, seed, fixed, domain) {
+    if (LIVE) return post("exam", { count, seed, fixed, domain: domain || null });
+    return domain ? buildDomainTestLocal(count, seed, domain) : buildExamLocal(count, seed);
   },
 };
 
@@ -247,6 +248,21 @@ function buildExamLocal(count, seed) {
   while (spare > 0) { const room = byWeight.filter(d => alloc[d] < pool[d].length); if (!room.length) break; for (const d of room) { if (!spare) break; alloc[d]++; spare--; } }
   let qs = []; for (const d in alloc) qs = qs.concat(shuffle(pool[d], rnd).slice(0, alloc[d]));
   return { questions: shuffle(qs, rnd), allocation: alloc, shortfall };
+}
+
+function buildDomainTestLocal(count, seed, domain) {
+  // one domain only, spread evenly over its objectives (round-robin), like utils/exam.build_domain_test
+  const rnd = mulberry32(seed), seen = new Set(), byObj = {};
+  for (const L of Object.values(BUNDLE.labs)) for (const src of [L.sample, ...L.variants]) for (const q of src.questions) {
+    const key = [q.prompt, q.context, ...q.choices].join("\u0000");
+    if (q.objective.split(".")[0] !== domain || seen.has(key)) continue; seen.add(key); (byObj[q.objective] ||= []).push(q);
+  }
+  const order = Object.keys(byObj).sort((a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b));
+  for (const o of order) byObj[o] = shuffle(byObj[o], rnd);
+  const picked = [];
+  while (picked.length < count && order.some(o => byObj[o].length)) for (const o of order) if (byObj[o].length && picked.length < count) picked.push(byObj[o].pop());
+  const allocation = {}; picked.forEach(q => allocation[q.objective] = (allocation[q.objective] || 0) + 1);
+  return { questions: shuffle(picked, rnd), domain, allocation, shortfall: {}, target: CATALOG.domain_test_target };
 }
 
 /* ------------------------------------------------------------------ progress store
@@ -380,9 +396,9 @@ async function viewHome() {
         el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
         el("span", { class: "w", text: `${Math.round(d.weight * 100)}%` }), el("span", { class: "muted", text: "of the exam" }),
         el("span", { class: "muted", text: `${labs.length} labs · ` + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
-    })));
+    })),
+    el("p", { class: "btns" }, el("span", { class: "muted", text: "Test one domain: " }), CATALOG.domains.map(d => el("a", { class: "btn", href: `#exam-d${d.id}`, text: `Domain ${d.id} test` }))));
 }
-
 async function viewLab(n, tab = "lesson") {
   const lab = CATALOG.labs.find(l => l.n === n);
   if (!lab) return viewHome();
@@ -508,22 +524,39 @@ async function startQuiz(lab, body, random) {
 
 /* ------------------------------------------------------------------ exam */
 let examTimer = null;
-function viewExam() {
+function viewExam(domain = "") {
   markNav("exam"); clearInterval(examTimer); setKeys(null);
-  const count = el("select", { id: "exam-count" }, [30, 60, 90].map(n => el("option", { value: n, selected: n === 90, text: `${n} questions` })));
-  const mins = el("input", { id: "exam-minutes", type: "number", min: 5, max: 180, value: 90 });
-  count.addEventListener("change", () => { mins.value = count.value; });
+  const kind = el("select", { id: "exam-kind" },
+    el("option", { value: "", selected: !domain || null, text: "Full exam (all domains)" }),
+    CATALOG.domains.map(d => el("option", { value: d.id, selected: d.id === domain || null, text: `Domain ${d.id} test: ${d.name}` })));
+  const count = el("select", { id: "exam-count" });
+  const mins = el("input", { id: "exam-minutes", type: "number", min: 5, max: 180 });
+  const blurb = el("p", { class: "muted" }), title = el("h1");
+  const sync = () => {
+    const d = kind.value, opts = d ? [15, 30, 45] : [30, 60, 90], def = d ? 30 : 90;
+    put(count, opts.map(n => el("option", { value: n, selected: n === def || null, text: `${n} questions` })));
+    mins.value = def;
+    const dom = CATALOG.domains.find(x => x.id === d);
+    title.textContent = d ? `Domain ${d} test: ${dom.name}` : "A timed, mixed-domain exam";
+    blurb.textContent = d
+      ? `Questions from Domain ${d} only (${Math.round(dom.weight * 100)}% of the real exam), spread evenly across its objectives. You get a score per objective; the target is ${CATALOG.domain_test_target}%, a study goal (CompTIA publishes no per-domain pass mark).`
+      : "Questions are drawn from every lab and weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong.";
+  };
+  kind.addEventListener("change", sync); count.addEventListener("change", () => { mins.value = count.value; }); sync();
   put(view(), el("section", { class: "panel" },
-    el("span", { class: "label", text: "Practice exam" }),
-    el("h1", { text: "A timed, mixed-domain exam" }),
-    el("p", { class: "muted", text: "Questions are drawn from every lab and weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong." }),
-    el("div", { class: "form" }, el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
-      el("button", { class: "btn primary", text: "Start the exam", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 90)) }))));
+    el("span", { class: "label", text: "Practice exam & domain tests" }), title, blurb,
+    el("div", { class: "form" }, el("label", {}, "Test", kind), el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
+      el("button", { class: "btn primary", text: "Start", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 30), kind.value) }))),
+    el("section", { class: "panel" }, el("h2", { text: "Domain tests" }),
+      el("div", { class: "grid5" }, CATALOG.domains.map(d => el("a", { class: "dcard", href: `#exam-d${d.id}` },
+        el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
+        el("span", { class: "muted", text: `${Math.round(d.weight * 100)}% of the exam · 30 questions` }))))));
 }
 
-async function startExam(count, minutes) {
-  put(view(), el("p", { class: "loading", text: "Assembling your exam…" }));
-  let ex; try { ex = await Engine.exam(count, newSeed(), false); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+async function startExam(count, minutes, domain = "") {
+  put(view(), el("p", { class: "loading", text: domain ? `Assembling your Domain ${domain} test…` : "Assembling your exam…" }));
+  let ex; try { ex = await Engine.exam(count, newSeed(), false, domain); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+  if (!ex.questions.length) return put(view(), el("p", { class: "notice", text: "No questions available for this test." }));
   const qs = ex.questions, answers = new Array(qs.length).fill(null);
   const deadline = Date.now() + minutes * 60000; let i = 0;
   const timer = el("span", { class: "timer" });
@@ -551,10 +584,12 @@ async function startExam(count, minutes) {
     if (finished) return; finished = true; clearInterval(examTimer); setKeys(null);
     const results = qs.map((q, k) => ({ objective: q.objective, correct: answers[k] === q.answer }));
     const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(100 + 8 * p);
-    const passed = scaled >= CATALOG.pass_scaled;
-    try { await Progress.record(results, "exam"); } catch { /* shown below */ }
+    const target = CATALOG.domain_test_target;
+    const passed = domain ? p >= target : scaled >= CATALOG.pass_scaled;
+    try { await Progress.record(results, domain ? `domain ${domain} test` : "exam"); } catch { /* shown below */ }
     const dom = {}; qs.forEach((q, k) => { const d = q.objective.split(".")[0]; (dom[d] ||= [0, 0]); dom[d][1]++; if (results[k].correct) dom[d][0]++; });
     const missed = qs.map((q, k) => [q, answers[k]]).filter(([q, a]) => a !== q.answer);
+    if (domain) return showDomainResult();
     put(view(), 
       el("section", { class: "panel" },
         el("span", { class: "label", text: timedOut ? "Time is up" : "Exam complete" }),
@@ -570,7 +605,33 @@ async function startExam(count, minutes) {
         missed.length ? el("div", { class: "choices" }, missed.slice(0, 40).map(([q, a]) =>
           el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
             el("div", { text: `Answer: ${q.answer}${a ? " · you chose: " + a : " · not answered"}` }), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
-        el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: viewExam, text: "New exam" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
+        el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: () => viewExam(), text: "New exam" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
+
+    function showDomainResult() {
+      const d = CATALOG.domains.find(x => x.id === domain), obj = {};
+      qs.forEach((q, k) => { (obj[q.objective] ||= [0, 0]); obj[q.objective][1]++; if (results[k].correct) obj[q.objective][0]++; });
+      const objs = Object.keys(obj).sort((a, b) => parseFloat(a) - parseFloat(b));
+      const weak = objs.filter(o => pct(...obj[o]) < target);
+      put(view(),
+        el("section", { class: "panel" },
+          el("span", { class: "label", text: timedOut ? "Time is up" : `Domain ${domain} test complete` }),
+          el("h1", { text: `${correct} of ${qs.length} correct · ${Math.round(p)}% · ${passed ? "target met" : "below the " + target + "% target"}` }),
+          el("p", { class: "muted", text: `Domain ${domain} ${d.name} is ${Math.round(d.weight * 100)}% of the real exam. The ${target}% target is a study goal, not a CompTIA pass mark.` }),
+          el("div", { class: "tablewrap" }, el("table", {},
+            el("thead", {}, el("tr", {}, ["Objective", "Correct", "Score", "Study"].map(h => el("th", { text: h })))),
+            el("tbody", {}, objs.map(o => { const [c, t] = obj[o], labs = labsFor(o);
+              return el("tr", {}, el("td", { text: `${o} ${OBJ[o] || ""}` }), el("td", { text: `${c}/${t}` }),
+                el("td", {}, el("span", { class: "meter" }, el("i", { style: `width:${pct(c, t)}%; background:var(--${pct(c, t) >= target ? "pass" : "fail"})` })), ` ${pct(c, t)}%`),
+                el("td", {}, labs.length ? labs.flatMap((l, i) => [i ? ", " : "", el("a", { href: `#lab-${l.n}`, text: `Lab ${l.n}` })]) : "", " · ", el("a", { href: "#videos", text: "videos" })));
+            })))),
+          weak.length ? el("p", {}, el("b", { text: "Work on next: " }), weak.map(o => `${o} ${OBJ[o] || ""}`).join(" · ")) : el("p", { text: "Every objective is at or above the target." })),
+        el("section", { class: "panel" }, el("h2", { text: `Review (${missed.length} missed)` }),
+          missed.length ? el("div", { class: "choices" }, missed.slice(0, 40).map(([q, a]) =>
+            el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
+              el("div", { text: `Answer: ${q.answer}${a ? " · you chose: " + a : " · not answered"}` }), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
+          el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: () => viewExam(domain), text: `New Domain ${domain} test` }),
+            el("button", { class: "btn", onclick: () => viewExam(), text: "Other tests" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
+    }
   }
   put(view(), panel); show(); tick(); examTimer = setInterval(tick, 1000);
 }
@@ -649,6 +710,8 @@ function route() {
   const m = h.match(/^lab-(\d+)$/);
   if (m) return viewLab(parseInt(m[1], 10));
   if (h === "exam") return viewExam();
+  const dm = h.match(/^exam-d([1-5])$/);
+  if (dm) return viewExam(dm[1]);
   if (h === "progress") return viewProgress();
   if (h === "videos") return viewVideos();
   return viewHome();

@@ -7,7 +7,7 @@ It's meant for building first-principles skill: work through each operation by h
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 24 labs (every SY0-701 objective has one), a random scenario generator and a timed, domain-weighted practice exam
+* 24 labs (every SY0-701 objective has one), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
 * A **course web app** you can open from your desktop or from claude.ai
 * 565 pytest tests, run in CI on Python 3.10–3.13
 
@@ -75,6 +75,7 @@ python main.py challenge 9 --random  # quiz on a freshly generated scenario (lab
 python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
 python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
 python main.py exam --count 30 --minutes 30 --seed 3
+python main.py exam --domain 4         # domain test: 30 questions from Domain 4 only, scored per objective (target 80%)
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file
@@ -167,7 +168,7 @@ secplus_lab_engine/
 │   ├── crypto_helpers.py         # SHA-256, salting, PBKDF2, HMAC, hash chains
 │   ├── challenge.py              # challenge mode + progress.json tracking
 │   ├── scenario_generator.py     # seeded random scenarios (--random)
-│   ├── exam.py                   # timed, domain-weighted practice exam
+│   ├── exam.py                   # timed, domain-weighted practice exam + per-domain tests
 │   ├── webserver.py              # local server for the web app (127.0.0.1 only)
 │   ├── desktop.py                # desktop shortcut installer
 │   ├── terminal_ui.py            # rich / plain-text rendering, Insight panel

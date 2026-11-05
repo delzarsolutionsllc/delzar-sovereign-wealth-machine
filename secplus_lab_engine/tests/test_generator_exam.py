@@ -131,3 +131,55 @@ def test_cli_random_challenge_and_exam(tmp_path, monkeypatch, capsys):
     assert "generated scenario" in out.lower() and "Practice exam result" in out
     with pytest.raises(SystemExit):
         main.main(["--plain", "lab", "3", "--random"])
+
+
+# =========================================================================== #
+# Domain tests
+# =========================================================================== #
+@pytest.mark.parametrize("domain", sorted(DOMAIN_WEIGHTS))
+def test_domain_test_draws_only_that_domain_and_every_objective(policies, domain):
+    from utils.exam import build_domain_test
+    qs, per_obj = build_domain_test(policies, domain, 30, seed=3)
+    assert len(qs) == 30 and all(q.objective.split(".")[0] == domain for q in qs)
+    objectives = {q.objective for qs_ in collect_questions(policies, 3).values() for q in qs_ if q.objective.startswith(domain + ".")}
+    assert set(per_obj) == objectives                                  # every objective in the domain is represented
+    assert max(per_obj.values()) - min(per_obj.values()) <= 1 or sum(per_obj.values()) < 30  # round-robin spread
+    assert len({(q.prompt, q.context, *q.choices) for q in qs}) == 30  # no repeats
+
+
+def test_domain_test_is_seeded_and_validated(policies):
+    from utils.exam import build_domain_test
+    a, _ = build_domain_test(policies, "4", 20, seed=9)
+    b, _ = build_domain_test(policies, "4", 20, seed=9)
+    assert [q.prompt for q in a] == [q.prompt for q in b]
+    with pytest.raises(ValueError):
+        build_domain_test(policies, "6", 10, seed=1)
+
+
+def test_domain_test_scoring_uses_target(quiet_ui, tmp_path):
+    from utils.challenge import Progress
+    from utils.exam import DOMAIN_TEST_TARGET
+    qs = [Question("p%d" % i, ["yes", "no"], "yes", "e", f"3.{1 + i % 4}") for i in range(10)]
+    answers = iter(["yes"] * 8 + ["no"] * 2)
+    prog = Progress(tmp_path / "p.json")
+    res = run_exam(quiet_ui, qs, 10, ask=lambda _: next(answers), progress=prog, domain="3")
+    assert res.percent == 80.0 and res.passed == (80.0 >= DOMAIN_TEST_TARGET)
+    assert sum(t for _, t in res.by_objective.values()) == 10 and set(res.by_objective) == {"3.1", "3.2", "3.3", "3.4"}
+    assert prog.data["sessions"][-1]["lab"] == "domain 3 test" and prog.data["sessions"][-1]["score"] == "8/10 (80%)"
+    answers = iter(["yes"] * 7 + ["no"] * 3)
+    assert not run_exam(quiet_ui, qs, 10, ask=lambda _: next(answers), domain="3").passed
+
+
+def test_domain_test_via_api_and_cli(policies, capsys, tmp_path):
+    import main
+    import webapi
+    from utils.terminal_ui import UI
+    out = webapi.exam(policies, 12, seed=4, domain="5")
+    assert out["domain"] == "5" and len(out["questions"]) == 12 and all(q["objective"][0] == "5" for q in out["questions"])
+    assert webapi.dispatch("exam", {"count": 6, "seed": 1, "domain": "2"}, policies)["domain"] == "2"
+    assert "domain_test_target" in webapi.catalog(policies)
+    answers = iter(["1"] * 6)
+    res = main.domain_test(UI(plain=True), policies, "1", 6, 6, seed=2, ask=lambda _: next(answers),
+                           progress_path=str(tmp_path / "p.json"))
+    assert res.domain == "1" and res.total == 6
+    assert "Domain 1 test result" in capsys.readouterr().out

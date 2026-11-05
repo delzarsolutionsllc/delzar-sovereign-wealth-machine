@@ -22,7 +22,7 @@ import re
 
 from labs import LABS
 from utils.challenge import Progress
-from utils.exam import DOMAIN_NAMES, DOMAIN_WEIGHTS, PASS_SCALED, build_exam
+from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
 from utils import videos
@@ -137,7 +137,7 @@ def catalog(policies: dict) -> dict:
                      "primary_domain": doms[0] if doms else "1", "has_generator": n in GENERATORS,
                      "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT,
                      "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)]})
-    return {"labs": labs, "pass_scaled": PASS_SCALED,
+    return {"labs": labs, "pass_scaled": PASS_SCALED, "domain_test_target": DOMAIN_TEST_TARGET,
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
@@ -170,8 +170,13 @@ def challenge(policies: dict, lab: int, randomize: bool = False, seed=None, data
     return {"lab": lab, "random": randomize, "seed": seed, "questions": qs}
 
 
-def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True) -> dict:
+def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True, domain=None) -> dict:
+    """Full exam (weighted by domain) or, with ``domain``, a single-domain test."""
     count = max(5, min(int(count), 150))
+    if domain not in (None, ""):
+        qs, per_obj = build_domain_test(policies, str(domain), count, seed, randomize)
+        return {"questions": [_q(q) for q in qs], "domain": str(domain), "allocation": per_obj,
+                "shortfall": {}, "target": DOMAIN_TEST_TARGET}
     qs, alloc, short = build_exam(policies, count, seed, randomize)
     return {"questions": [_q(q) for q in qs], "allocation": alloc, "shortfall": short}
 
@@ -235,7 +240,7 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
     if method == "challenge":
         return challenge(policies, int(a["lab"]), bool(a.get("random")), seed)
     if method == "exam":
-        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"))
+        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"), a.get("domain"))
     if method == "progress_get":
         return progress_get(progress_path)
     if method == "progress_record":

@@ -16,6 +16,7 @@ Usage
     python main.py challenge 9 --random --seed 42   # fresh generated scenario (labs with a generator)
     python main.py lab 12 --random      # run a lab on a generated scenario
     python main.py exam                 # timed 90-question practice exam weighted by SY0-701 domain
+    python main.py exam --domain 3      # domain test: 30 questions from one domain, scored per objective
     python main.py videos               # Professor Messer's free video course, mapped to the labs
     python main.py videos --lab 17      # the videos for one lab (or --objective 1.4, --mark ID, --open N)
     python main.py web                  # open the course web app in your browser (live engine, offline)
@@ -42,7 +43,7 @@ if str(ROOT) not in sys.path:
 
 from labs import LABS  # noqa: E402
 from utils.challenge import Progress, run_challenge  # noqa: E402
-from utils.exam import build_exam, run_exam  # noqa: E402
+from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, build_domain_test, build_exam, run_exam  # noqa: E402
 from utils.scenario_generator import GENERATORS, generate  # noqa: E402
 from utils.loader import load_data, load_json, load_policies  # noqa: E402
 from utils.terminal_ui import UI  # noqa: E402
@@ -163,6 +164,17 @@ def show_videos(ui: UI, lab: int | None = None, objective: str | None = None, ma
     return 0
 
 
+def domain_test(ui: UI, policies: dict, domain: str, count: int = 30, minutes: float | None = None,
+                seed: int | None = None, randomize: bool = True, ask=None, progress_path: str | None = None):
+    questions, per_obj = build_domain_test(policies, str(domain), count, seed, randomize)
+    minutes = minutes if minutes is not None else float(len(questions))
+    ui.header(f"DOMAIN {domain} TEST · {DOMAIN_NAMES[str(domain)]}",
+              f"{len(questions)} questions · {minutes:g} minutes · per objective {per_obj} · "
+              f"target {DOMAIN_TEST_TARGET}% · no feedback until the end")
+    progress = Progress(progress_path) if progress_path is not None else Progress()
+    return run_exam(ui, questions, minutes, ask=ask, progress=progress, domain=str(domain))
+
+
 def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int | None = None,
          randomize: bool = True, ask=None, progress_path: str | None = None):
     questions, alloc, shortfall = build_exam(policies, count, seed, randomize)
@@ -187,7 +199,8 @@ def interactive_menu(ui: UI, policies: dict) -> None:
     while True:
         list_labs(ui)
         ui.print(f"  [bold]1-{len(LABS)}[/bold] run a lab   [bold]C<n>[/bold] challenge (e.g. C3)   "
-                 "[bold]R<n>[/bold] challenge on a random scenario   [bold]E[/bold] practice exam   [bold]P[/bold] progress   "
+                 "[bold]R<n>[/bold] challenge on a random scenario   [bold]E[/bold] practice exam   [bold]D<n>[/bold] domain test (D1-D5)   "
+                 "[bold]P[/bold] progress   "
                  "[bold]V[/bold] videos   [bold]W[/bold] web app   [bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
         try:
             choice = ui.ask(">").strip().lower()
@@ -211,6 +224,8 @@ def interactive_menu(ui: UI, policies: dict) -> None:
             challenge_lab(ui, int(choice[1:]), policies, randomize=True)
         elif choice in {"e", "exam"}:
             exam(ui, policies)
+        elif len(choice) == 2 and choice[0] == "d" and choice[1] in "12345":
+            domain_test(ui, policies, choice[1])
         elif choice in {"w", "web"}:
             from utils.webserver import serve
             serve(open_browser=True, policies=policies)
@@ -245,10 +260,12 @@ def build_parser() -> argparse.ArgumentParser:
     ch.add_argument("--seed", type=int, help="fix the question order (and the generated scenario with --random)")
     ch.add_argument("--random", action="store_true", help="generate a fresh scenario so answers can't be memorised")
     ex = sub.add_parser("exam", help="timed practice exam weighted by SY0-701 domain")
-    ex.add_argument("--count", type=int, default=90, help="number of questions (default 90)")
-    ex.add_argument("--minutes", type=float, default=90, help="time limit in minutes (default 90)")
+    ex.add_argument("--count", type=int, help="number of questions (default 90; 30 for a domain test)")
+    ex.add_argument("--minutes", type=float, help="time limit in minutes (default: one per question)")
     ex.add_argument("--seed", type=int, help="make the exam reproducible")
     ex.add_argument("--fixed", action="store_true", help="use bundled sample data only (no generated scenarios)")
+    ex.add_argument("--domain", choices=list("12345"),
+                    help="domain test: questions from one domain only (default 30 questions, 1 minute each)")
     sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
     vi = sub.add_parser("videos", help="Professor Messer's free SY0-701 video course, mapped to the labs")
     vi.add_argument("--lab", type=int, choices=sorted(LABS), help="only the videos for this lab's objectives")
@@ -303,7 +320,12 @@ def main(argv: list[str] | None = None) -> int:
         path = install_shortcut(Path(args.desktop) if args.desktop else None)
         ui.print(f"Created {path}\nDouble-click it to open the Security+ Lab Engine in your browser.", style="green")
     elif args.command == "exam":
-        exam(ui, policies, args.count, args.minutes, args.seed, randomize=not args.fixed)
+        if args.domain:
+            domain_test(ui, policies, args.domain, args.count or 30, args.minutes, args.seed, randomize=not args.fixed)
+        else:
+            count = args.count or 90
+            exam(ui, policies, count, args.minutes if args.minutes is not None else float(count), args.seed,
+                 randomize=not args.fixed)
     elif args.command == "all":
         ui.header(BANNER, SUBTITLE)
         for n in LABS:
