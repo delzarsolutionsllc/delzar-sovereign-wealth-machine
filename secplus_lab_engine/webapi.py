@@ -25,7 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import portfolio, review, videos
+from utils import portfolio, quizzes, review, sync, videos
 from utils.terminal_ui import UI
 
 
@@ -150,6 +150,7 @@ def catalog(policies: dict) -> dict:
             "exam_target": EXAM_TARGET,
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
             "career_tracks": portfolio.career(),
+            "objective_quizzes": quizzes.catalog(), "quiz_set_size": quizzes.SET_SIZE,
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
 
@@ -197,7 +198,7 @@ def progress_get(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
     return {"objectives": p.data["objectives"], "sessions": p.data["sessions"][-20:], "rows": p.rows(),
             "watched": p.data.get("watched", []), "srs": p.data.get("srs", {}),
-            "streak": p.data.get("streak", {"last_day": None, "count": 0})}
+            "streak": p.data.get("streak", {"last_day": None, "count": 0}), "quizzes": p.data.get("quizzes", {})}
 
 
 def progress_watch(video_id: str, watched: bool = True, path=None) -> dict:
@@ -239,9 +240,49 @@ def progress_record(results: list[dict], label: str, path=None, today=None) -> d
 
 def progress_reset(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
-    p.data = {"objectives": {}, "sessions": [], "watched": [], "srs": {}, "streak": {"last_day": None, "count": 0}}
+    p.data = sync.empty()
     p.save()
     return progress_get(path)
+
+
+def progress_export(path=None) -> dict:
+    """Everything needed to move progress to another device (the web app saves it as a file)."""
+    p = Progress(path) if path is not None else Progress()
+    return sync.export(p.data)
+
+
+def progress_import(data, replace: bool = False, path=None) -> dict:
+    """Merge (or, with ``replace``, overwrite) progress from an exported file's JSON. Rules: utils/sync.py."""
+    p = Progress(path) if path is not None else Progress()
+    p.data = sync.import_into(p.data, data, bool(replace))
+    p.save()
+    return progress_get(path)
+
+
+# --------------------------------------------------------------------------- #
+# Objective quizzes (several short quizzes per objective; utils/quizzes.py)
+# --------------------------------------------------------------------------- #
+def quiz(quiz_id: str, seed=None) -> dict:
+    q = quizzes.find(quiz_id)
+    topic = {r["id"]: r.get("topic") for r in _bank()}
+    return {"quiz": {k: v for k, v in q.items() if k != "qids"}, "objective": quiz_id.split("-")[0],
+            "questions": [{**_q(x), "topic": topic.get(x.qid)} for x in quizzes.questions(quiz_id, seed)]}
+
+
+def quiz_record(quiz_id: str, results: list[dict], today=None, path=None) -> dict:
+    """Score one finished quiz: answers count per objective and feed the daily review; the quiz keeps best/last."""
+    q = quizzes.find(quiz_id)
+    if not isinstance(results, list) or not results:
+        raise ValueError("results must be a non-empty list")
+    allowed = set(q["qids"])
+    if any(not isinstance(r, dict) or r.get("qid") not in allowed for r in results):
+        raise ValueError("every result needs the qid of a question in this quiz")
+    progress_record(results, f"quiz {quiz_id}", path, today)
+    p = Progress(path) if path is not None else Progress()
+    day = _today(today).isoformat()
+    slot = quizzes.record(p.data, quiz_id, sum(bool(r.get("correct")) for r in results), len(results), day)
+    p.save()
+    return {**progress_get(path), "quiz_score": slot}
 
 
 # --------------------------------------------------------------------------- #
@@ -298,7 +339,7 @@ EXAM_TARGET = {
 }
 
 METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
-           "case_study", "review_session", "review_answer"}
+           "case_study", "review_session", "review_answer", "progress_export", "progress_import", "quiz", "quiz_record"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -329,6 +370,14 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         return review_session(progress_path, a.get("today"), a.get("size", review.DEFAULT_SIZE), seed)
     if method == "review_answer":
         return review_answer(a.get("qid"), a.get("correct"), a.get("today"), progress_path)
+    if method == "progress_export":
+        return progress_export(progress_path)
+    if method == "progress_import":
+        return progress_import(a.get("data"), bool(a.get("replace")), progress_path)
+    if method == "quiz":
+        return quiz(str(a.get("quiz", "")), seed)
+    if method == "quiz_record":
+        return quiz_record(str(a.get("quiz", "")), a.get("results"), a.get("today"), progress_path)
     if method == "case_study":
         return portfolio.case_study(int(a["lab"]), policies)
     if method == "progress_watch":

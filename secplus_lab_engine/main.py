@@ -243,6 +243,93 @@ def review(ui: UI, count: int = 15, seed: int | None = None, ask=None, progress_
     return {"done": done, "correct": correct, "due_by_day": by_day}
 
 
+def progress_file(ui: UI, export: str | None = None, import_: str | None = None, replace: bool = False,
+                  progress_path: str | None = None) -> int:
+    """Export progress to a file, or import (merge / replace) one, e.g. from the web app on another device."""
+    import json
+    import webapi
+    from utils import sync
+    if export:
+        Path(export).write_text(json.dumps(webapi.progress_export(progress_path), indent=2), encoding="utf-8")
+        ui.print(f"Saved your progress to {export}. Import it on another device: My progress → Import, "
+                 f"or python main.py progress --import {export}", style="green")
+        return 0
+    try:
+        got = webapi.progress_import(sync.read_file(import_), replace, progress_path)
+    except (OSError, ValueError) as e:
+        ui.print(f"Could not import {import_}: {e}", style="red")
+        return 1
+    ui.print(f"{'Replaced your progress with' if replace else 'Merged'} {import_}: {len(got['objectives'])} objectives, "
+             f"{len(got['srs'])} review cards, {len(got['quizzes'])} quiz scores.", style="green")
+    return 0
+
+
+def quiz(ui: UI, objective: str | None = None, set_n: int | None = None, topic_n: int | None = None, ask=None,
+         progress_path: str | None = None, seed: int | None = None, today=None) -> dict | None:
+    """Objective quizzes: list them, or take one with the answer and the reason after each question."""
+    from datetime import date
+    import webapi
+    from utils import quizzes
+    from utils.challenge import check
+    from utils.exam import describe_answer, parse_answer, show_question
+    cat = quizzes.catalog()
+    prog = Progress(progress_path) if progress_path is not None else Progress()
+    scores = prog.data.get("quizzes", {})
+    best = lambda qid: f"best {scores[qid]['best']}%" if qid in scores else "not taken"
+    if objective and objective not in cat:
+        ui.print(f"Unknown objective '{objective}'. Use one like 2.4 (python main.py quiz lists them).", style="red")
+        return None
+    if not objective:
+        ui.table("Objective quizzes (python main.py quiz X.Y to see one objective's quizzes)",
+                 ["Objective", "Name", "Questions", "Sets", "Concept quizzes", "Done"],
+                 [[o, c["name"], c["count"], sum(q["kind"] == "set" for q in c["quizzes"]),
+                   sum(q["kind"] == "topic" for q in c["quizzes"]),
+                   f"{sum(q['id'] in scores for q in c['quizzes'])}/{len(c['quizzes'])}"] for o, c in cat.items()])
+        return None
+    c = cat[objective]
+    if set_n is None and topic_n is None:
+        ui.table(f"{objective} {c['name']}: quizzes", ["Take it with", "Quiz", "Questions", "Score"],
+                 [[f"--set {q['id'].rsplit('set', 1)[1]}" if q["kind"] == "set" else f"--topic {q['id'].rsplit('-t', 1)[1]}",
+                   q["title"] if q["kind"] == "set" else f"Concept: {q['title']}", len(q["qids"]), best(q["id"])]
+                  for q in c["quizzes"]])
+        return None
+    qid = f"{objective}-set{set_n}" if set_n is not None else f"{objective}-t{topic_n}"
+    try:
+        quiz_def = quizzes.find(qid)
+    except ValueError:
+        ui.print(f"No such quiz for {objective}. See: python main.py quiz {objective}", style="red")
+        return None
+    ask = ask or ui.ask
+    qs = quizzes.questions(qid, seed)
+    title = quiz_def["title"] if quiz_def["kind"] == "set" else f"Concept: {quiz_def['title']}"
+    ui.header(f"QUIZ {objective} {c['name']}", f"{title} · {len(qs)} questions · the answer and why after each one")
+    results = []
+    for i, q in enumerate(qs, 1):
+        ui.section(f"Question {i}/{len(qs)}")
+        ui.print(f"[bold]{q.prompt}[/bold]")
+        show_question(ui, q)
+        try:
+            raw = ask("Your answer:").strip()
+        except (EOFError, KeyboardInterrupt):
+            ui.print("\n  Quiz stopped early. Scoring the questions answered so far.", style="yellow")
+            break
+        resp = parse_answer(q, raw)
+        ok = check(q, resp)
+        ui.status("Your answer", "PASS" if ok else "FAIL",
+                  q.answer if ok else f"you said '{describe_answer(q, resp) or raw}', the answer is '{q.answer}'")
+        ui.print(f"  [dim]Why:[/dim] {q.explanation}")
+        results.append({"objective": q.objective, "correct": ok, "qid": q.qid})
+    if not results:
+        return None
+    day = today or date.today().isoformat()
+    got = webapi.quiz_record(qid, results, day, progress_path)
+    n_ok = sum(r["correct"] for r in results)
+    ui.panel("Quiz score", f"{n_ok}/{len(results)} correct ({100 * n_ok // len(results)}%) · best {got['quiz_score']['best']}%"
+             "\nMissed questions come back in your daily review: python main.py review",
+             style="green" if n_ok * 100 >= 85 * len(results) else "yellow")
+    return {"quiz": qid, "correct": n_ok, "total": len(results), "best": got["quiz_score"]["best"]}
+
+
 def list_labs(ui: UI) -> None:
     ui.table("Available labs", ["#", "Lab", "Objectives", "Default data", "Random"],
              [[n, m.TITLE, m.OBJECTIVES, f, "yes" if n in GENERATORS else "-"] for n, (m, f) in LABS.items()])
@@ -329,7 +416,16 @@ def build_parser() -> argparse.ArgumentParser:
                     help="bank = exam-style questions (default); labs = the labs' hands-on scenario questions")
     ex.add_argument("--domain", choices=list("12345"),
                     help="domain test: questions from one domain only (default 30 questions, 1 minute each)")
-    sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
+    pr = sub.add_parser("progress", help="show scores per SY0-701 objective; export / import them between devices")
+    pr.add_argument("--export", metavar="FILE", help="save your progress to a file")
+    pr.add_argument("--import", metavar="FILE", dest="import_", help="merge progress from an exported file")
+    pr.add_argument("--replace", action="store_true", help="with --import: overwrite instead of merging")
+    qz = sub.add_parser("quiz", help="several short quizzes per objective (sets and one per concept)")
+    qz.add_argument("objective", nargs="?", help="objective, e.g. 2.4 (omit to list every objective)")
+    qg = qz.add_mutually_exclusive_group()
+    qg.add_argument("--set", type=int, dest="set_n", metavar="N", help="take mixed Set N")
+    qg.add_argument("--topic", type=int, dest="topic_n", metavar="N", help="take the concept quiz for topic N")
+    qz.add_argument("--seed", type=int, help="fix the question and option order")
     rv = sub.add_parser("review", help="today's spaced-repetition review: due questions, then your weakest objectives")
     rv.add_argument("--count", type=int, default=15, help="questions in the session (default 15, max 50)")
     rv.add_argument("--seed", type=int, help="fix which new questions are picked (default: today's date)")
@@ -379,7 +475,11 @@ def main(argv: list[str] | None = None) -> int:
         else:
             raise SystemExit("challenge target must be a lab number or 'all'")
     elif args.command == "progress":
+        if args.export or args.import_:
+            return progress_file(ui, args.export, args.import_, args.replace)
         show_progress(ui)
+    elif args.command == "quiz":
+        quiz(ui, args.objective, args.set_n, args.topic_n, seed=args.seed)
     elif args.command == "review":
         review(ui, args.count, args.seed)
     elif args.command == "videos":

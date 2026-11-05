@@ -1,0 +1,917 @@
+{
+  "domain": "3",
+  "title": "Domain 3 extra questions (3.1-3.4)",
+  "note": "Original questions written for IdentityOps Lab. Not from exam dumps or commercial banks.",
+  "questions": [
+    {
+      "id": "D3-101",
+      "objective": "3.1",
+      "topic": "Cloud models and shared responsibility",
+      "stem": "A startup wants to rent virtual servers, storage and networking from a provider, but it will install, patch and manage its own operating systems and applications. Which of the following cloud service models BEST fits this plan?",
+      "choices": [
+        "Software as a service",
+        "Platform as a service",
+        "Function as a service",
+        "Infrastructure as a service"
+      ],
+      "answer": "Infrastructure as a service",
+      "explanation": "IaaS gives the customer raw compute, storage and networking while the customer manages everything from the operating system up. PaaS is tempting, but in PaaS the provider manages the operating system and runtime, so the startup would not control them."
+    },
+    {
+      "id": "D3-102",
+      "objective": "3.1",
+      "topic": "Cloud models and shared responsibility",
+      "stem": "A company extends its on-premises directory and file servers into a public cloud. A review finds that password rules, logging settings and firewall policies differ between the two environments. Which of the following is the MOST significant hybrid cloud challenge shown here?",
+      "choices": [
+        "Losing physical control of the on-premises servers",
+        "Keeping security policies consistent across environments",
+        "Being unable to encrypt data stored in the public cloud",
+        "Being unable to use multifactor authentication on premises"
+      ],
+      "answer": "Keeping security policies consistent across environments",
+      "explanation": "A hybrid design splits controls across two environments, and keeping policies, logging and configurations aligned is its main security challenge. Losing physical control is wrong because the on-premises servers stay in the company's own facility."
+    },
+    {
+      "id": "D3-103",
+      "objective": "3.1",
+      "topic": "Cloud-native architectures",
+      "stem": "A DevOps team deploys every environment from the same infrastructure as code templates. A template that made a storage bucket publicly readable was copied into all environments before anyone noticed. Which of the following would BEST prevent this in the future?",
+      "choices": [
+        "Apply the templates manually to each environment",
+        "Increase the frequency of vulnerability scans in production",
+        "Rebuild production servers from golden images every month",
+        "Scan templates for misconfigurations before deployment"
+      ],
+      "answer": "Scan templates for misconfigurations before deployment",
+      "explanation": "Because IaC repeats whatever is in the template, checking templates in the pipeline catches a bad setting before it reaches any environment. Scanning production more often only finds the exposure after it is already live."
+    },
+    {
+      "id": "D3-104",
+      "objective": "3.1",
+      "topic": "Cloud-native architectures",
+      "stem": "Which of the following BEST describes a serverless architecture?",
+      "choices": [
+        "The provider runs code on demand and manages the servers that execute it",
+        "The customer manages virtual machines while the provider manages the hypervisor",
+        "Applications are packaged with their dependencies and share the host kernel",
+        "A complete application is delivered to users over the internet by a vendor"
+      ],
+      "answer": "The provider runs code on demand and manages the servers that execute it",
+      "explanation": "In serverless computing the customer supplies functions and the provider handles the servers, operating system and scaling. Packaging applications with their dependencies on a shared kernel describes containers, not serverless."
+    },
+    {
+      "id": "D3-105",
+      "objective": "3.1",
+      "topic": "Cloud-native architectures",
+      "stem": "A company split its online store into separate services for catalog, reviews and checkout. When the reviews service crashed during a sale, customers could still browse and pay. Which of the following benefits of a microservices architecture does this show?",
+      "choices": [
+        "Fault isolation between services",
+        "A smaller overall attack surface",
+        "Less network traffic between components",
+        "Centralized management of a single codebase"
+      ],
+      "answer": "Fault isolation between services",
+      "explanation": "Independently deployed services can fail without taking the rest of the application down. Microservices usually increase the attack surface, because there are more APIs and network connections to secure."
+    },
+    {
+      "id": "D3-106",
+      "objective": "3.1",
+      "topic": "Network infrastructure",
+      "stem": "A company keeps its backup management servers on their own switches, and there is no cable or wireless link between those switches and the production network. Which of the following types of network separation is being used?",
+      "choices": [
+        "Logical segmentation",
+        "Network address translation",
+        "Physical isolation",
+        "A virtual private network"
+      ],
+      "answer": "Physical isolation",
+      "explanation": "Separate hardware with no connection to other networks is physical isolation. Logical segmentation is wrong because it separates traffic on shared hardware using VLANs or rules."
+    },
+    {
+      "id": "D3-107",
+      "objective": "3.1",
+      "topic": "Network infrastructure",
+      "stem": "A data center uses software-defined networking, and every switch receives its forwarding rules from one central system. Which of the following components is MOST important to protect, because an attacker who controls it could reconfigure the whole network?",
+      "choices": [
+        "A single edge switch",
+        "The console port of one router",
+        "The SDN controller",
+        "A wireless access point"
+      ],
+      "answer": "The SDN controller",
+      "explanation": "The controller is the control plane for every device in an SDN, so compromising it gives control of all forwarding rules. A single edge switch only affects the traffic that passes through that switch."
+    },
+    {
+      "id": "D3-108",
+      "objective": "3.1",
+      "topic": "Network infrastructure",
+      "stem": "A network team is choosing between VLANs on shared switches and separate physical networks for a sensitive system. Which of the following is the MAIN security drawback of logical segmentation compared with physical isolation?",
+      "choices": [
+        "A misconfiguration can let traffic cross between segments",
+        "It requires separate cabling for every segment",
+        "It cannot be combined with firewall rules",
+        "It prevents central management of the switches in each segment"
+      ],
+      "answer": "A misconfiguration can let traffic cross between segments",
+      "explanation": "Because logically separated segments share hardware, a configuration mistake or a VLAN hopping attack can allow traffic between them. Separate cabling is a cost of physical isolation, not of logical segmentation."
+    },
+    {
+      "id": "D3-109",
+      "objective": "3.1",
+      "topic": "Virtualization and containers",
+      "stem": "An attacker with administrator rights on one guest virtual machine exploits a flaw in the hypervisor and gains access to other virtual machines on the same host. Which of the following BEST describes this attack?",
+      "choices": [
+        "Virtual machine escape",
+        "Virtual machine sprawl",
+        "Resource reuse",
+        "Side loading"
+      ],
+      "answer": "Virtual machine escape",
+      "explanation": "Breaking out of a guest into the hypervisor or other guests is VM escape. Resource reuse is tempting, but it describes leftover data in memory or storage being exposed to a new VM, not an attacker breaking out of a guest."
+    },
+    {
+      "id": "D3-110",
+      "objective": "3.1",
+      "topic": "Virtualization and containers",
+      "stem": "A development team builds its containers from images pulled from a public registry, and a recent image included a hidden cryptocurrency miner. Which of the following would BEST reduce this risk?",
+      "choices": [
+        "Store the container images on an encrypted volume in the registry",
+        "Use only scanned, trusted base images from an approved registry",
+        "Increase the memory limits assigned to each container",
+        "Run the containers on a type 2 hypervisor"
+      ],
+      "answer": "Use only scanned, trusted base images from an approved registry",
+      "explanation": "The risk comes from untrusted image content, so the fix is to scan images and pull them only from a vetted source. Encrypting the storage protects images from theft but does nothing about malicious code already inside them."
+    },
+    {
+      "id": "D3-111",
+      "objective": "3.1",
+      "topic": "Virtualization and containers",
+      "stem": "Which of the following runs directly on server hardware, with no host operating system underneath it, to host virtual machines?",
+      "choices": [
+        "A type 2 hypervisor",
+        "A type 1 hypervisor",
+        "A container runtime",
+        "An emulator application"
+      ],
+      "answer": "A type 1 hypervisor",
+      "explanation": "A type 1 (bare-metal) hypervisor is installed directly on the hardware. A type 2 hypervisor is an application that runs on top of a host operating system."
+    },
+    {
+      "id": "D3-112",
+      "objective": "3.1",
+      "topic": "IoT, ICS and embedded systems",
+      "stem": "An electric utility collects readings from substations spread over hundreds of miles and lets operators open and close breakers remotely from a central control room. Which of the following BEST describes this system?",
+      "choices": [
+        "A real-time operating system",
+        "Software-defined networking",
+        "Supervisory control and data acquisition",
+        "An Internet of Things gateway"
+      ],
+      "answer": "Supervisory control and data acquisition",
+      "explanation": "SCADA is the type of industrial control system that monitors and controls equipment across wide geographic areas from a central site. An RTOS is the operating system inside an individual device, not the supervisory system."
+    },
+    {
+      "id": "D3-113",
+      "objective": "3.1",
+      "topic": "Architecture considerations",
+      "stem": "An online retailer's traffic triples during the holiday season. The company wants an architecture that adds capacity automatically during peaks and releases it afterward. Which of the following architecture considerations is the company focused on?",
+      "choices": [
+        "Responsiveness",
+        "Resilience",
+        "Scalability",
+        "Ease of recovery"
+      ],
+      "answer": "Scalability",
+      "explanation": "Scalability is the ability to grow or shrink resources to match demand. Responsiveness is about how quickly the system answers requests, which benefits from scaling but is not the requirement described."
+    },
+    {
+      "id": "D3-114",
+      "objective": "3.1",
+      "topic": "Architecture considerations",
+      "stem": "A company is installing battery-powered sensors at remote pipeline sites. The engineers report that the devices cannot run strong encryption or security agents without draining their batteries in days. Which of the following considerations is limiting the security design?",
+      "choices": [
+        "Data sovereignty requirements",
+        "Risk transference",
+        "Ease of deployment",
+        "Power and compute constraints"
+      ],
+      "answer": "Power and compute constraints",
+      "explanation": "Small embedded devices have limited power and processing capacity, which restricts which security controls they can run. Ease of deployment is about how simply a system can be rolled out, not whether it can run the controls."
+    },
+    {
+      "id": "D3-115",
+      "objective": "3.1",
+      "topic": "Architecture considerations",
+      "stem": "After a breach, an architect wants the company to be able to destroy compromised servers and redeploy clean ones from known-good templates within an hour. Which of the following architecture considerations is the architect prioritizing?",
+      "choices": [
+        "Cost",
+        "Ease of recovery",
+        "Scalability",
+        "Patch availability"
+      ],
+      "answer": "Ease of recovery",
+      "explanation": "Ease of recovery is how quickly and reliably a system can be restored after a failure or compromise. Scalability is wrong because the goal is restoring clean systems, not adding capacity."
+    },
+    {
+      "id": "D3-116",
+      "objective": "3.2",
+      "topic": "Device placement and security zones",
+      "stem": "A company wants an intrusion detection sensor that sees only the attacks that get past its perimeter firewall, without the noise of traffic the firewall already blocks. Where should the sensor be placed?",
+      "choices": [
+        "On the internet-facing link in front of the perimeter firewall",
+        "On the guest wireless network",
+        "On the internal network directly behind the firewall",
+        "On the isolated backup network"
+      ],
+      "answer": "On the internal network directly behind the firewall",
+      "explanation": "A sensor just inside the firewall sees traffic that the firewall allowed, which is where successful attacks show up. A sensor in front of the firewall sees every probe from the internet, including attacks the firewall already stopped."
+    },
+    {
+      "id": "D3-117",
+      "objective": "3.2",
+      "topic": "Device placement and security zones",
+      "stem": "An audit finds that a VPN concentrator the company stopped using two years ago is still connected to the internet and still has firewall rules allowing traffic to it. Which of the following actions BEST reduces the attack surface?",
+      "choices": [
+        "Change the concentrator's administrator password",
+        "Move the concentrator to a different public IP address range",
+        "Turn on detailed logging on the concentrator",
+        "Decommission the concentrator and remove its firewall rules"
+      ],
+      "answer": "Decommission the concentrator and remove its firewall rules",
+      "explanation": "Removing an unused device and its rules eliminates the exposure entirely. Changing the password helps, but the device still offers an internet-facing service that nobody maintains or patches."
+    },
+    {
+      "id": "D3-118",
+      "objective": "3.2",
+      "topic": "Device placement and security zones",
+      "stem": "Which of the following BEST describes a security zone in an enterprise network?",
+      "choices": [
+        "A physical room that requires badge access to enter",
+        "A list of applications that are approved to run on a host",
+        "A group of systems with similar trust levels that share access rules",
+        "A single firewall rule that permits traffic between two specific hosts"
+      ],
+      "answer": "A group of systems with similar trust levels that share access rules",
+      "explanation": "Security zones group systems by trust level, such as internet, screened subnet and internal, with controls enforced between zones. A badge-controlled room is a physical security area, not a network security zone."
+    },
+    {
+      "id": "D3-119",
+      "objective": "3.2",
+      "topic": "Failure modes and device attributes",
+      "stem": "Which of the following BEST describes the difference between an inline intrusion prevention system and an intrusion detection system connected to a switch's mirror port?",
+      "choices": [
+        "The IDS can block traffic, while the IPS can only alert",
+        "The IPS can block traffic, while the IDS can only alert",
+        "The IDS adds more latency than the IPS",
+        "Only the IPS can use signature-based detection"
+      ],
+      "answer": "The IPS can block traffic, while the IDS can only alert",
+      "explanation": "An inline (active) IPS sits in the traffic path and can drop packets, while a passive IDS receives a copy and can only raise alerts. Both can use signatures, and the passive IDS adds no latency because it is not in the path."
+    },
+    {
+      "id": "D3-120",
+      "objective": "3.2",
+      "topic": "Failure modes and device attributes",
+      "stem": "An analyst finds that the switch's mirror port drops packets whenever the network is busy, so the monitoring system misses traffic. Which of the following would BEST capture all traffic reliably without affecting the production link?",
+      "choices": [
+        "An inline IPS",
+        "A network tap",
+        "A jump server",
+        "A forward proxy"
+      ],
+      "answer": "A network tap",
+      "explanation": "A hardware tap copies every packet passively and is not limited by the switch's mirroring capacity. An inline IPS would see all traffic, but it sits in the path and can affect production if it fails or slows down."
+    },
+    {
+      "id": "D3-121",
+      "objective": "3.2",
+      "topic": "Network appliances",
+      "stem": "A company wants internet users to reach its internal web servers only through a device that receives their requests, forwards them to the servers and hides the servers' real addresses. Which of the following should be deployed?",
+      "choices": [
+        "A forward proxy",
+        "A jump server",
+        "A passive sensor",
+        "A reverse proxy"
+      ],
+      "answer": "A reverse proxy",
+      "explanation": "A reverse proxy sits in front of servers and handles inbound requests on their behalf. A forward proxy does the opposite, handling outbound requests from internal clients to the internet."
+    },
+    {
+      "id": "D3-122",
+      "objective": "3.2",
+      "topic": "Port security",
+      "stem": "In an 802.1X deployment, which of the following roles does the network switch perform?",
+      "choices": [
+        "Supplicant",
+        "Authentication server",
+        "Authenticator",
+        "Certificate authority"
+      ],
+      "answer": "Authenticator",
+      "explanation": "The switch or access point is the authenticator, passing credentials between the device and the RADIUS server. The supplicant is the client device that requests access."
+    },
+    {
+      "id": "D3-123",
+      "objective": "3.2",
+      "topic": "Port security",
+      "stem": "A company is setting up 802.1X on its wireless network. Only the authentication server will have a certificate, and users will sign in with their username and password inside an encrypted tunnel. Which of the following EAP methods BEST fits?",
+      "choices": [
+        "EAP-TLS",
+        "LEAP",
+        "EAP-MD5",
+        "PEAP"
+      ],
+      "answer": "PEAP",
+      "explanation": "PEAP builds a TLS tunnel using only a server certificate and then protects the user's password inside it. EAP-TLS is wrong because it requires a certificate on every client as well."
+    },
+    {
+      "id": "D3-124",
+      "objective": "3.2",
+      "topic": "Port security",
+      "stem": "Visitors keep plugging personal devices into network jacks in a conference room. The company does not have a RADIUS server, and it wants each jack to accept only one known device and shut down if any other device is connected. Which of the following should be configured?",
+      "choices": [
+        "MAC-based port security on the switch",
+        "802.1X with EAP-TLS",
+        "VLAN trunking on the port",
+        "Spanning Tree Protocol"
+      ],
+      "answer": "MAC-based port security on the switch",
+      "explanation": "Switch port security can limit a port to specific MAC addresses and disable it on a violation, with no RADIUS server needed. 802.1X is stronger, but it requires an authentication server, which the company does not have."
+    },
+    {
+      "id": "D3-125",
+      "objective": "3.2",
+      "topic": "Firewall types",
+      "stem": "Which of the following firewall types can identify applications regardless of the port they use, includes intrusion prevention, and can apply rules based on user identity?",
+      "choices": [
+        "A layer 4 stateful firewall",
+        "A next-generation firewall",
+        "A web application firewall",
+        "A packet-filtering router"
+      ],
+      "answer": "A next-generation firewall",
+      "explanation": "An NGFW adds application awareness, integrated IPS and user-based policy to traditional firewalling. A WAF inspects application traffic too, but only HTTP traffic to web applications, and it does not filter general network traffic."
+    },
+    {
+      "id": "D3-126",
+      "objective": "3.2",
+      "topic": "Firewall types",
+      "stem": "Which of the following is the MAIN limitation of a layer 4 firewall?",
+      "choices": [
+        "It cannot track the state of TCP connections passing through it",
+        "It cannot filter traffic by destination port",
+        "It cannot be placed inline in the network",
+        "It cannot inspect the application content inside allowed ports"
+      ],
+      "answer": "It cannot inspect the application content inside allowed ports",
+      "explanation": "A layer 4 firewall decides based on addresses, ports and protocols, so anything carried over an allowed port passes without content inspection. Stateful layer 4 firewalls do track connection state, so that option is not a limitation."
+    },
+    {
+      "id": "D3-127",
+      "objective": "3.2",
+      "topic": "Secure communication and access",
+      "stem": "Remote employees use a VPN that sends only corporate traffic through the tunnel, while their web browsing goes directly to the internet. The security team wants all of their traffic inspected by the corporate web gateway. Which of the following should be configured?",
+      "choices": [
+        "A full-tunnel VPN",
+        "A split-tunnel VPN",
+        "A site-to-site VPN",
+        "An SD-WAN overlay"
+      ],
+      "answer": "A full-tunnel VPN",
+      "explanation": "A full tunnel sends all client traffic through the VPN so it passes the company's security controls. A split tunnel is the current setup, which lets internet traffic bypass the gateway."
+    },
+    {
+      "id": "D3-128",
+      "objective": "3.2",
+      "topic": "Secure communication and access",
+      "stem": "Which of the following IPSec components encrypts the payload of each packet to provide confidentiality?",
+      "choices": [
+        "Encapsulating Security Payload",
+        "Authentication Header",
+        "Internet Key Exchange",
+        "Generic Routing Encapsulation"
+      ],
+      "answer": "Encapsulating Security Payload",
+      "explanation": "ESP provides encryption, plus integrity and authentication. AH is tempting, but it provides only integrity and authentication, with no encryption."
+    },
+    {
+      "id": "D3-129",
+      "objective": "3.3",
+      "topic": "Data types",
+      "stem": "A manufacturer holds patents on its production process and copyrights on its product design drawings and training videos. Which of the following data types BEST describes these assets?",
+      "choices": [
+        "Regulated data",
+        "Legal information",
+        "Financial information",
+        "Intellectual property"
+      ],
+      "answer": "Intellectual property",
+      "explanation": "Patented and copyrighted creations of the company are intellectual property. Legal information is tempting because patents involve the law, but that type covers records such as contracts and litigation files, not the creations themselves."
+    },
+    {
+      "id": "D3-130",
+      "objective": "3.3",
+      "topic": "Data types",
+      "stem": "A company's legal department stores contracts, records for a pending lawsuit and confidential communications with outside attorneys. Which of the following data types BEST describes these records?",
+      "choices": [
+        "Intellectual property",
+        "Trade secret",
+        "Legal information",
+        "Financial information"
+      ],
+      "answer": "Legal information",
+      "explanation": "Contracts, litigation records and attorney communications are legal information. A trade secret is valuable business knowledge kept secret, such as a formula, not records about legal matters."
+    },
+    {
+      "id": "D3-131",
+      "objective": "3.3",
+      "topic": "Data types",
+      "stem": "A finance team handles payroll records, corporate bank account numbers and quarterly earnings figures that have not yet been announced. Which of the following data types BEST describes this data?",
+      "choices": [
+        "Legal information",
+        "Trade secret",
+        "Intellectual property",
+        "Financial information"
+      ],
+      "answer": "Financial information",
+      "explanation": "Payroll, banking and earnings data are financial information. Trade secret is the most tempting choice, but earnings figures are protected only until announcement and are not a lasting competitive secret like a formula or process."
+    },
+    {
+      "id": "D3-132",
+      "objective": "3.3",
+      "topic": "Data classifications",
+      "stem": "A company's policy defines four data labels, from lowest to highest: public, sensitive, confidential and restricted. A plan for an upcoming merger could cause severe damage if leaked, and only board members may see it. Which label should the plan receive?",
+      "choices": [
+        "Public",
+        "Restricted",
+        "Sensitive",
+        "Confidential"
+      ],
+      "answer": "Restricted",
+      "explanation": "The most damaging data, available only to a few named people, belongs at the highest level of the company's scheme, which is restricted. Confidential is close, but the policy reserves a higher level, and this data clearly needs it."
+    },
+    {
+      "id": "D3-133",
+      "objective": "3.3",
+      "topic": "Data classifications",
+      "stem": "Employee home addresses, salaries and medical leave records should be seen only by the employee and authorized HR staff. Which of the following classifications BEST describes this data?",
+      "choices": [
+        "Private",
+        "Public",
+        "Critical",
+        "Proprietary"
+      ],
+      "answer": "Private",
+      "explanation": "Private data relates to individuals and must be protected from disclosure. Proprietary data is information the company owns for its business, such as product plans, rather than personal details about employees."
+    },
+    {
+      "id": "D3-134",
+      "objective": "3.3",
+      "topic": "Data classifications",
+      "stem": "Which of the following is the PRIMARY reason to classify data before choosing protection controls?",
+      "choices": [
+        "So every data set receives the same level of encryption",
+        "So controls can match the value and sensitivity of each data set",
+        "So every data set can be deleted after the same retention period",
+        "So all backups can be stored in a single location"
+      ],
+      "answer": "So controls can match the value and sensitivity of each data set",
+      "explanation": "Classification tells the organization how much protection each data set needs, so strong controls go where they matter most. Applying the same encryption to everything ignores the differences that classification is meant to identify."
+    },
+    {
+      "id": "D3-135",
+      "objective": "3.3",
+      "topic": "Data states",
+      "stem": "A financial analytics service must keep customer data protected even while it is loaded and decrypted in memory for processing. Which of the following BEST protects the data in this state?",
+      "choices": [
+        "Processing the data inside a secure enclave",
+        "Enabling full-disk encryption on the servers",
+        "Requiring TLS for all client connections",
+        "Encrypting the nightly database backups"
+      ],
+      "answer": "Processing the data inside a secure enclave",
+      "explanation": "Data in use sits decrypted in memory, and a secure enclave or trusted execution environment isolates that memory from other processes. Full-disk encryption protects data at rest, not data that is loaded into memory."
+    },
+    {
+      "id": "D3-136",
+      "objective": "3.3",
+      "topic": "Data states",
+      "stem": "A company stores scanned customer contracts in a cloud storage bucket. Auditors want the files protected if the provider's disks were ever stolen or improperly disposed of. Which of the following BEST meets this requirement?",
+      "choices": [
+        "Encrypt the files stored in the bucket",
+        "Require TLS for all file uploads",
+        "Mask contract numbers in the web interface",
+        "Require MFA for all file downloads"
+      ],
+      "answer": "Encrypt the files stored in the bucket",
+      "explanation": "Encrypting stored files protects data at rest on the provider's disks. TLS is tempting, but it protects files only while they travel to the bucket, not once they sit on the disk."
+    },
+    {
+      "id": "D3-137",
+      "objective": "3.3",
+      "topic": "Data sovereignty and geolocation",
+      "stem": "A national privacy law requires that citizens' personal data stay within the country. A company is selecting a SaaS vendor to hold that data. Which of the following should the company verify FIRST?",
+      "choices": [
+        "The vendor's uptime service level agreement",
+        "The encryption algorithm the vendor uses for backups",
+        "Where the vendor stores and replicates the data",
+        "The vendor's software release schedule"
+      ],
+      "answer": "Where the vendor stores and replicates the data",
+      "explanation": "To meet a data residency requirement, the company must confirm the physical locations of all copies, including replicas and backups. Encryption is important, but it does not change which country's laws apply to where the data is kept."
+    },
+    {
+      "id": "D3-138",
+      "objective": "3.3",
+      "topic": "Data sovereignty and geolocation",
+      "stem": "Which of the following BEST describes data sovereignty?",
+      "choices": [
+        "The data owner decides who may access the data",
+        "Data must be encrypted whenever it is transferred out of a country",
+        "Data must be deleted when its retention period ends",
+        "Data is subject to the laws of the country where it is located"
+      ],
+      "answer": "Data is subject to the laws of the country where it is located",
+      "explanation": "Data sovereignty means that data falls under the laws of the nation where it is stored or processed. Deciding who may access data is the data owner's role, which is a different concept."
+    },
+    {
+      "id": "D3-139",
+      "objective": "3.3",
+      "topic": "Data sovereignty and geolocation",
+      "stem": "An employee's account signs in from New York and, 10 minutes later, from Singapore. Which of the following lets the security team flag this activity as suspicious?",
+      "choices": [
+        "Data classification labels",
+        "Tokenization of the user IDs",
+        "Geolocation of the source IP addresses",
+        "Data sovereignty rules"
+      ],
+      "answer": "Geolocation of the source IP addresses",
+      "explanation": "Mapping each login's IP address to a location shows travel that is physically impossible in that time. Data sovereignty concerns which laws apply to stored data and does not help detect suspicious logins."
+    },
+    {
+      "id": "D3-140",
+      "objective": "3.3",
+      "topic": "Data sovereignty and geolocation",
+      "stem": "A company chooses a cloud backup service that pins all backup copies to one country and never replicates them across borders. Which of the following risks does this choice PRIMARILY address?",
+      "choices": [
+        "The data becoming subject to foreign laws",
+        "Ransomware encrypting all of the backup copies",
+        "An insider deleting backup copies",
+        "Slow restores during an outage"
+      ],
+      "answer": "The data becoming subject to foreign laws",
+      "explanation": "Keeping copies inside one country keeps them under that country's jurisdiction, which is a data sovereignty concern. Ransomware protection depends on immutability or offline copies, not on which country holds the data."
+    },
+    {
+      "id": "D3-141",
+      "objective": "3.3",
+      "topic": "Encryption, hashing and restrictions",
+      "stem": "A shared folder that holds payroll spreadsheets turns out to be readable by every employee in the company. Which of the following methods would BEST fix this?",
+      "choices": [
+        "Hashing",
+        "Obfuscation",
+        "Geographic restrictions",
+        "Permission restrictions"
+      ],
+      "answer": "Permission restrictions",
+      "explanation": "Limiting the folder's access rights to payroll staff directly removes the unwanted access. Obfuscation only makes data harder to understand, and it would still leave the files available to everyone."
+    },
+    {
+      "id": "D3-142",
+      "objective": "3.3",
+      "topic": "Encryption, hashing and restrictions",
+      "stem": "A software company publishes installation files on its website and wants customers to be able to confirm that a downloaded file has not been altered. Which of the following methods should the company use?",
+      "choices": [
+        "Tokenization",
+        "Masking",
+        "Hashing",
+        "Obfuscation"
+      ],
+      "answer": "Hashing",
+      "explanation": "Publishing a hash lets customers compute the hash of their download and compare the two values to confirm integrity. Obfuscation makes code harder to read but gives customers no way to detect changes."
+    },
+    {
+      "id": "D3-143",
+      "objective": "3.3",
+      "topic": "Encryption, hashing and restrictions",
+      "stem": "An HR application must store employee identification numbers so that the application can retrieve the original values, but a stolen copy of the database must be unreadable. Which of the following methods BEST meets this requirement?",
+      "choices": [
+        "Hashing",
+        "Encryption",
+        "Masking",
+        "Obfuscation"
+      ],
+      "answer": "Encryption",
+      "explanation": "Encryption is reversible with the right key, so the application can recover the original values while thieves without the key cannot. Hashing is tempting, but it is one-way, so the original numbers could never be retrieved."
+    },
+    {
+      "id": "D3-144",
+      "objective": "3.3",
+      "topic": "Masking, tokenization and obfuscation",
+      "stem": "Developers need realistic customer data for testing. The company copies the production database and replaces real names and account numbers with fictitious but consistent values before giving it to them. Which of the following methods is being used?",
+      "choices": [
+        "Encryption",
+        "Data masking",
+        "Hashing",
+        "Segmentation"
+      ],
+      "answer": "Data masking",
+      "explanation": "Masking replaces sensitive values with realistic substitutes so the data stays usable without exposing real information. Encryption would protect the data, but developers would need the key to use it, which would expose the real values."
+    },
+    {
+      "id": "D3-145",
+      "objective": "3.4",
+      "topic": "High availability",
+      "stem": "Which of the following BEST describes an active-passive high availability configuration?",
+      "choices": [
+        "All nodes share the traffic load at the same time",
+        "One node handles all traffic while another waits to take over",
+        "Traffic is spread across all of the servers by DNS round robin",
+        "Backups are copied to a standby server each night"
+      ],
+      "answer": "One node handles all traffic while another waits to take over",
+      "explanation": "In active-passive, the standby node stays idle until the active node fails. Sharing traffic across all nodes at once describes active-active."
+    },
+    {
+      "id": "D3-146",
+      "objective": "3.4",
+      "topic": "High availability",
+      "stem": "Shoppers are being logged out of an online store because the load balancer sends each of their requests to a different web server. Which of the following load balancer settings would BEST fix this?",
+      "choices": [
+        "Round-robin scheduling",
+        "Active-active clustering",
+        "Health checks",
+        "Session persistence"
+      ],
+      "answer": "Session persistence",
+      "explanation": "Session persistence (affinity) keeps a user's requests on the same server for the length of the session. Round-robin scheduling causes the problem, because it rotates requests across servers."
+    },
+    {
+      "id": "D3-147",
+      "objective": "3.4",
+      "topic": "High availability",
+      "stem": "A company spreads web traffic across six servers, but every request passes through a single load balancer. Which of the following would BEST remove this single point of failure?",
+      "choices": [
+        "Add more web servers behind the existing load balancer",
+        "Take nightly snapshots of the load balancer",
+        "Add a second load balancer in a redundant pair",
+        "Move the load balancer to the screened subnet"
+      ],
+      "answer": "Add a second load balancer in a redundant pair",
+      "explanation": "A redundant load balancer can take over if the first one fails, so the service stays up. Adding web servers improves capacity but leaves the single load balancer as the point of failure."
+    },
+    {
+      "id": "D3-148",
+      "objective": "3.4",
+      "topic": "Site considerations",
+      "stem": "A small company wants the least expensive recovery site possible. It can tolerate several weeks of downtime and needs only a facility with power, cooling and space for equipment it would buy after a disaster. Which of the following site types BEST fits?",
+      "choices": [
+        "Hot site",
+        "Warm site",
+        "Cold site",
+        "Active-active data center"
+      ],
+      "answer": "Cold site",
+      "explanation": "A cold site provides basic space and utilities with no installed equipment, which makes it the cheapest and slowest option. A warm site already has hardware installed, so it costs more than the company needs to spend."
+    },
+    {
+      "id": "D3-149",
+      "objective": "3.4",
+      "topic": "Site considerations",
+      "stem": "A payment processor's business impact analysis says its transaction system must resume within minutes of a data center loss. Which of the following recovery site types BEST meets this requirement?",
+      "choices": [
+        "Hot site",
+        "Warm site",
+        "Cold site",
+        "Offsite tape vault"
+      ],
+      "answer": "Hot site",
+      "explanation": "A hot site runs current systems and data so it can take over almost immediately. A warm site needs time to load recent data, which typically takes hours or days."
+    },
+    {
+      "id": "D3-150",
+      "objective": "3.4",
+      "topic": "Platform diversity and continuity",
+      "stem": "A government contractor writes a plan describing how it will keep its essential functions running, including manual workarounds and alternate work locations, during a disruption that could last weeks. Which of the following plans is this?",
+      "choices": [
+        "Continuity of operations plan",
+        "Incident response plan",
+        "Disaster recovery plan",
+        "Capacity plan"
+      ],
+      "answer": "Continuity of operations plan",
+      "explanation": "A continuity of operations plan focuses on sustaining essential business functions during a prolonged disruption. A disaster recovery plan is tempting, but it focuses on restoring IT systems after a disaster rather than keeping the business running in the meantime."
+    },
+    {
+      "id": "D3-151",
+      "objective": "3.4",
+      "topic": "Platform diversity and continuity",
+      "stem": "A company uses one vendor's firewalls at its internet edge and a different vendor's firewalls between its internal zones, so that a single exploit cannot bypass both layers. Which of the following resilience concepts does this BEST describe?",
+      "choices": [
+        "Geographic dispersion",
+        "Multi-cloud",
+        "Clustering",
+        "Platform diversity"
+      ],
+      "answer": "Platform diversity",
+      "explanation": "Using different vendors or technologies means one flaw does not affect every layer. Geographic dispersion is about physical locations, not the variety of products in use."
+    },
+    {
+      "id": "D3-152",
+      "objective": "3.4",
+      "topic": "Platform diversity and continuity",
+      "stem": "A company moves from one cloud provider to a multi-cloud design. Which of the following is the MOST likely drawback of this change?",
+      "choices": [
+        "Greater dependence on a single provider",
+        "Less resilience to a provider-wide outage",
+        "More complexity in managing security across providers",
+        "Inability to spread workloads across geographic regions"
+      ],
+      "answer": "More complexity in managing security across providers",
+      "explanation": "Each provider has its own tools, identity systems and settings, which makes consistent security harder to manage. Dependence on one provider is the problem multi-cloud reduces, so it is not a drawback."
+    },
+    {
+      "id": "D3-153",
+      "objective": "3.4",
+      "topic": "Capacity planning",
+      "stem": "A company's VPN software is licensed for 200 concurrent users. When an emergency sent 1,500 employees home, most of them could not connect. Which of the following areas of capacity planning was overlooked?",
+      "choices": [
+        "People",
+        "Infrastructure",
+        "Technology",
+        "Processes"
+      ],
+      "answer": "Technology",
+      "explanation": "The limit was in a software system and its licenses, which falls under technology capacity. Infrastructure is tempting, but in this context it refers to facilities, power and network circuits rather than application licenses."
+    },
+    {
+      "id": "D3-154",
+      "objective": "3.4",
+      "topic": "Capacity planning",
+      "stem": "A company plans to add more server racks to its data center, but an assessment finds the room's cooling and electrical circuits cannot support any additional load. Which of the following areas of capacity planning does this finding affect?",
+      "choices": [
+        "People",
+        "Infrastructure",
+        "Technology",
+        "Processes"
+      ],
+      "answer": "Infrastructure",
+      "explanation": "Power, cooling and facility space are infrastructure capacity. Technology covers the servers and software themselves, which are not what is lacking here."
+    },
+    {
+      "id": "D3-155",
+      "objective": "3.4",
+      "topic": "Capacity planning",
+      "stem": "Only one network engineer knows how to configure the company's core routers, and that engineer is about to go on extended leave. Which of the following is the BEST way to reduce this resilience risk?",
+      "choices": [
+        "Buy additional core routers",
+        "Cross-train other staff on the critical tasks",
+        "Increase the frequency of configuration backups",
+        "Add a second internet circuit"
+      ],
+      "answer": "Cross-train other staff on the critical tasks",
+      "explanation": "Cross-training addresses people capacity by making sure more than one person can perform critical work. Backing up the configurations is useful, but no one would know how to apply them if something broke."
+    },
+    {
+      "id": "D3-156",
+      "objective": "3.4",
+      "topic": "Capacity planning",
+      "stem": "Which of the following BEST describes capacity planning as part of resilience?",
+      "choices": [
+        "Ensuring enough people, technology and infrastructure to meet demand",
+        "Deciding how long backup copies must be retained",
+        "Testing failover from the primary data center to the secondary site",
+        "Ranking data sets by their sensitivity"
+      ],
+      "answer": "Ensuring enough people, technology and infrastructure to meet demand",
+      "explanation": "Capacity planning makes sure staff, systems and facilities can handle both normal and disrupted demand. Failover testing checks that a design works but does not decide how much capacity is needed."
+    },
+    {
+      "id": "D3-157",
+      "objective": "3.4",
+      "topic": "Resilience testing",
+      "stem": "A security team builds an isolated copy of its network, releases harmless test malware that behaves like ransomware, and has responders carry out their actual containment steps. Which of the following types of exercises is this?",
+      "choices": [
+        "Simulation",
+        "Tabletop exercise",
+        "Parallel processing",
+        "Failover test"
+      ],
+      "answer": "Simulation",
+      "explanation": "A simulation recreates a realistic event so participants perform real actions without affecting production. A tabletop exercise is only a discussion of the steps, with no hands-on actions."
+    },
+    {
+      "id": "D3-158",
+      "objective": "3.4",
+      "topic": "Resilience testing",
+      "stem": "Which of the following is the PRIMARY advantage of a tabletop exercise compared with a full failover test?",
+      "choices": [
+        "It measures the actual recovery time of the systems",
+        "It confirms that backup data can be restored",
+        "It validates the hardware performance at the recovery site",
+        "It tests the plan at low cost with no risk to production"
+      ],
+      "answer": "It tests the plan at low cost with no risk to production",
+      "explanation": "A tabletop exercise is a discussion, so it is cheap and cannot disrupt operations. It does not measure real recovery times, which requires actually failing systems over."
+    },
+    {
+      "id": "D3-159",
+      "objective": "3.4",
+      "topic": "Backups",
+      "stem": "A business impact analysis states that a sales database can lose no more than one hour of data, but the database is backed up only once each night. Which of the following should the company do?",
+      "choices": [
+        "Increase the backup frequency to at least hourly",
+        "Move the backup copies offsite",
+        "Encrypt the backup copies",
+        "Contract a cold recovery site"
+      ],
+      "answer": "Increase the backup frequency to at least hourly",
+      "explanation": "How often backups run determines how much data can be lost, so meeting a one-hour recovery point objective requires at least hourly backups. Moving copies offsite protects them from site disasters but does not reduce the data lost between backups."
+    },
+    {
+      "id": "D3-160",
+      "objective": "3.4",
+      "topic": "Backups",
+      "stem": "A company's backup software reports that every job completes successfully, but no one has ever tried to recover data from them. Which of the following is the BEST way to make sure the backups are usable?",
+      "choices": [
+        "Perform regular test restores",
+        "Increase the backup retention period",
+        "Encrypt the backup copies",
+        "Add more backup storage capacity"
+      ],
+      "answer": "Perform regular test restores",
+      "explanation": "Only a test restore proves the backup data is complete and recoverable. A longer retention period keeps more copies, but they could all be unusable."
+    },
+    {
+      "id": "D3-161",
+      "objective": "3.4",
+      "topic": "Backups",
+      "stem": "A company stores all of its backup copies on a storage device in the same server room as the systems they protect. Which of the following would BEST protect the company if a fire destroyed that room?",
+      "choices": [
+        "Take snapshots of the production servers more often",
+        "Encrypt the backup storage device",
+        "Add RAID to the backup storage device",
+        "Keep a copy of the backups at an offsite location"
+      ],
+      "answer": "Keep a copy of the backups at an offsite location",
+      "explanation": "An offsite copy survives a disaster that destroys the primary site. RAID protects against a single disk failure, not against the loss of the entire room."
+    },
+    {
+      "id": "D3-162",
+      "objective": "3.4",
+      "topic": "Power",
+      "stem": "A hospital must keep its systems running through utility power outages that could last several days after a major storm. Which of the following BEST meets this requirement?",
+      "choices": [
+        "An uninterruptible power supply",
+        "A generator with a fuel supply",
+        "A surge protector",
+        "Redundant server power supplies"
+      ],
+      "answer": "A generator with a fuel supply",
+      "explanation": "A generator can supply power for as long as it has fuel, which covers outages lasting days. A UPS is tempting, but its batteries last only minutes to hours and are meant to bridge the gap until a generator starts."
+    },
+    {
+      "id": "D3-163",
+      "objective": "3.4",
+      "topic": "Power",
+      "stem": "Each server in a rack has two power supplies. Which of the following BEST protects the servers if one electrical circuit in the data center fails?",
+      "choices": [
+        "Connect both power supplies to one larger UPS",
+        "Add a surge protector to the existing circuit",
+        "Replace both supplies with one higher-wattage supply",
+        "Connect each power supply to a separate circuit"
+      ],
+      "answer": "Connect each power supply to a separate circuit",
+      "explanation": "Feeding each power supply from a different circuit means the server keeps running if one circuit goes down. A larger UPS on a single circuit still leaves both supplies depending on the same path."
+    },
+    {
+      "id": "D3-164",
+      "objective": "3.4",
+      "topic": "Power",
+      "stem": "During an extended power outage, a company's backup generator failed to start, and the servers shut down when the UPS batteries ran out. The generator had never been started since it was installed. Which of the following would BEST prevent this from happening again?",
+      "choices": [
+        "Buy a larger UPS for the data center",
+        "Test the generator under load on a regular schedule",
+        "Add a second utility power feed",
+        "Move the servers to a cloud provider"
+      ],
+      "answer": "Test the generator under load on a regular schedule",
+      "explanation": "Regular load testing finds generator problems before a real outage depends on it. A larger UPS only buys more minutes and still depends on the generator for a long outage."
+    },
+    {
+      "id": "D3-165",
+      "objective": "3.4",
+      "topic": "Power",
+      "stem": "A small branch office has no generator. Its utility power fails for up to five minutes several times a year, and its network equipment reboots each time. Which of the following is the MOST cost-effective solution?",
+      "choices": [
+        "A diesel generator for the branch",
+        "A warm recovery site for the branch",
+        "An uninterruptible power supply for the branch equipment",
+        "A second internet connection for the branch"
+      ],
+      "answer": "An uninterruptible power supply for the branch equipment",
+      "explanation": "A UPS can easily cover short outages of a few minutes at low cost. A generator would also work, but it is far more expensive than needed for outages this short."
+    }
+  ]
+}

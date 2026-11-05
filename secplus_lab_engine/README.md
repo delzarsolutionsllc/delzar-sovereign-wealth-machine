@@ -10,8 +10,12 @@ It's meant for building first-principles skill: work through each operation by h
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
 * 26 labs (every SY0-701 objective has one, plus two identity-governance labs for an IAM career), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
-* **396 exam-style practice questions** (`data/exam_bank/`): 364 four-option questions plus 32 in the exam's other formats (**Select TWO**, and performance-based **put-in-order** and **match** questions) for the exams and domain tests. They use short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
+* **946 exam-style practice questions** (`data/exam_bank/`): 914 four-option questions plus 32 in the exam's other formats (**Select TWO**, and performance-based **put-in-order** and **match** questions) for the exams, domain tests and objective quizzes. They use short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
+* **Objective quizzes: 251 short quizzes**, several for every one of the 28 objectives (1.1–5.6). Each objective has 30–45 questions split into **concept quizzes** (one per topic of the objective, e.g. 2.4 *Malware*, *Password attacks*, *Indicators of malicious activity*) and **mixed sets** of about 10 that together cover every question once. Untimed, with the answer and the reason after each question; misses go to the daily review (*Objective quizzes* page, or `python main.py quiz`)
 * A **course web app** you can open from your desktop or from claude.ai
+* **Exam-like practice exam**: picking an answer never jumps ahead, **flag for review**, a **question grid** (answered / flagged / current), a review screen before scoring, keyboard keys (1–4, N, P, F) and an *approximate* scaled score
+* **Move your progress between devices**: *My progress → Export / Import* (merge or replace), or `python main.py progress --export FILE` / `--import FILE`
+* **Accessible**: skip link, screen-reader announcements for answers and the exam timer, arrow-key tabs, focus moved to each new page's heading
 * **Daily review**: questions you miss come back on a spaced-repetition schedule (tomorrow, then 1, 3, 7 days and longer), plus new questions from your weakest objectives (`python main.py review` or the *Daily review* page)
 * **Installs as an app** on phone and laptop and works offline (`python tools/build_site.py`, see below)
 * 1,000+ pytest tests, run in CI on Python 3.10–3.13
@@ -70,7 +74,9 @@ docker run -p 8000:8000 ctfd/ctfd          # then open http://localhost:8000 and
 
 Submit the letter or the answer text. Each challenge has a free hint that points to its lab and a 25-point hint that shows the explanation. Options: `--variants 3` adds generated scenarios, `--attempts`, `--points`, `--hint-cost`, and `--mc-plugin` for hosted CTFd's multiple-choice type. Full steps are in `dist/ctfd/README.txt`.
 
-Inside the app every lab has three tabs: **Lesson**, **Run the scenario** and **Practice** (instant feedback; number keys answer). There's also a timed **Practice exam** and **My progress**, which lists your weakest objectives first.
+Inside the app every lab has four tabs: **Lesson**, **Run the scenario**, **Practice** (instant feedback; number keys answer) and **Case study**. There are also **Objective quizzes** (learn each objective one concept at a time), a timed **Practice exam** with flagging and a question grid, and **My progress**, which lists your weakest objectives first and exports / imports your progress.
+
+**Objective quizzes, step by step:** open *Objective quizzes*, pick an objective (say 2.4), take its concept quizzes one at a time (each is 5–9 questions on one idea), then the mixed sets to check yourself. Each quiz keeps your best and last score; "Next" takes you through the objective in order. Topics follow the official SY0-701 sub-bullets and live in `data/exam_bank/topics/*.json`.
 
 > **Technical handbook:** [`docs/HANDBOOK.pdf`](docs/HANDBOOK.pdf) explains the architecture, every lab's decision logic, the data formats and how to extend the engine. It includes a ready-to-paste prompt for another AI. To regenerate it from `docs/handbook.html`, run `NODE_PATH=$(npm root -g) node docs/render_handbook.js "$PWD/docs/handbook.html" docs/HANDBOOK.pdf` (needs Playwright).
 
@@ -102,6 +108,10 @@ python main.py exam --source labs    # the same, using the labs' hands-on scenar
 python main.py exam --count 30 --minutes 30 --seed 3
 python main.py exam --domain 4         # domain test: 30 questions from Domain 4 only, scored per objective (target 80%)
 python main.py review                # today's daily review: due questions first, then your weakest objectives
+python main.py quiz                  # every objective and its quizzes (concepts + mixed sets)
+python main.py quiz 2.4              # the quizzes for objective 2.4
+python main.py quiz 2.4 --topic 1    # concept quiz 1 of 2.4 (Malware); --set 2 takes mixed Set 2
+python main.py progress --export my-progress.json   # move progress to another device (then --import there)
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file
