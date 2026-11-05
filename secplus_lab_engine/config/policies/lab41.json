@@ -1,0 +1,53 @@
+{
+  "okta_password_recovery": {
+    "_comment": "Lab 41 (Okta Professional 4.4/5.1). Setting names follow the Okta Identity Engine password policy (Admin Console: Security > Authenticators > Password > policies) and its API fields (complexity.minLength, minLowerCase, minUpperCase, minNumber, minSymbol, excludeUsername, dictionary.common.exclude; age.historyCount, minAgeMinutes, maxAgeDays (0 = never expires); lockout.maxAttempts, autoUnlockMinutes (null = admin must unlock)). Recovery methods follow the policy rule's self-service password reset and unlock options as read in 2026. The exact order in which Okta reports several complexity failures is not documented; check_order is this course's teaching order.",
+    "everyone_group": "Everyone",
+    "check_order": ["TOO_SHORT", "MISSING_CLASS", "CONTAINS_USERNAME", "COMMON_PASSWORD", "IN_HISTORY", "TOO_SOON"],
+    "username_part_min_length": 3,
+    "username_delimiters": ".,-_#@+",
+    "common_passwords": [
+      "password", "password1", "password123", "password1234", "passw0rd", "p@ssw0rd", "p@ssword1",
+      "123456789", "qwerty123", "qwertyuiop", "letmein123", "welcome1", "welcome123", "welcome2026",
+      "iloveyou1", "admin123", "changeme1", "summer2026", "winter2026", "spring2026", "autumn2026",
+      "football1", "sunshine1", "monkey123", "dragon123", "trustno1"
+    ],
+    "fallback_policy": {
+      "id": "fallback-strict",
+      "name": "Strict fallback (no matching active policy)",
+      "priority": 9999,
+      "status": "ACTIVE",
+      "groups": [],
+      "complexity": {"minLength": 16, "minLowerCase": 1, "minUpperCase": 1, "minNumber": 1, "minSymbol": 1,
+                     "excludeUsername": true, "dictionary": {"common": {"exclude": true}}},
+      "age": {"historyCount": 24, "minAgeMinutes": 1440, "maxAgeDays": 60},
+      "lockout": {"maxAttempts": 3, "autoUnlockMinutes": null},
+      "recovery": {"methods": [], "selfServiceUnlock": false}
+    },
+    "recovery_methods": {
+      "email": {"authenticator": "email", "label": "Email (magic link or code)"},
+      "sms":   {"authenticator": "phone", "label": "Phone: SMS code"},
+      "voice": {"authenticator": "phone", "label": "Phone: voice call code"},
+      "push":  {"authenticator": "okta_verify", "label": "Okta Verify push"}
+    },
+    "lost_device_authenticators": ["okta_verify", "phone"],
+    "statuses": {
+      "Active":               {"api": "ACTIVE",           "can_sign_in": true,  "can_recover": true},
+      "Password expired":     {"api": "PASSWORD_EXPIRED", "can_sign_in": false, "can_recover": true},
+      "Locked out":           {"api": "LOCKED_OUT",       "can_sign_in": false, "can_recover": true},
+      "Suspended":            {"api": "SUSPENDED",        "can_sign_in": false, "can_recover": false},
+      "Deactivated":          {"api": "DEPROVISIONED",    "can_sign_in": false, "can_recover": false},
+      "Staged":               {"api": "STAGED",           "can_sign_in": false, "can_recover": false},
+      "Pending user action":  {"api": "PROVISIONED",      "can_sign_in": false, "can_recover": false}
+    },
+    "concepts": {
+      "password policy priority": "Okta checks password policies from priority 1 downward and applies the first active policy assigned to one of the user's groups; the Default Policy (Everyone) is always last.",
+      "password history": "The number of a user's most recent passwords that cannot be chosen again; older passwords drop out of the window and become usable.",
+      "minimum password age": "How long a user must keep a new password before changing it again, which stops someone cycling through the history to reuse an old favourite.",
+      "account lockout": "After the set number of failed sign-in attempts the user's status becomes Locked out until an admin unlocks it, the user self-unlocks, or the auto-unlock time passes.",
+      "recovery authenticator": "An authenticator the password policy allows for self-service reset or unlock, such as email, phone (SMS or voice) or Okta Verify push; the user must have enrolled it.",
+      "self-service unlock": "A password policy option that lets a locked-out user unlock their own account after verifying with an allowed recovery authenticator.",
+      "expire password": "An admin action that sets the user to Password expired, so they must choose a new password at their next sign-in.",
+      "clear user sessions": "An admin action that ends the user's current Okta sessions, signing them out so a stolen session cookie stops working."
+    }
+  }
+}

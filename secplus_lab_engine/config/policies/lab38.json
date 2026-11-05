@@ -1,0 +1,51 @@
+{
+  "okta_app_integration": {
+    "_comment": "Lab 38 (Okta Certified Professional 2.1/2.2). Setting names follow Okta's admin console help for SAML app integrations (Single sign-on URL, Audience URI (SP Entity ID), Name ID format, Application username, Response / Assertion Signature, SAML signing certificates) and provisioning (Enable API integration; To App: Create Users, Update User Attributes, Deactivate Users, Sync Password) as read in 2026. The protocol tie-break (a web app that offers both SAML and OIDC gets SAML) is this course's own choice: both are federation and either is correct in Okta.",
+    "known_protocols": ["saml2", "oidc"],
+    "app_types": ["web", "spa", "native", "mobile"],
+    "oidc_first_app_types": ["spa", "native", "mobile"],
+    "protocol_rules": [
+      {"name": "unknown app type", "outcome": "NEEDS_REVIEW"},
+      {"name": "no sign-in needed", "outcome": "BOOKMARK"},
+      {"name": "SPA, native or mobile app with OIDC", "outcome": "OIDC"},
+      {"name": "app supports SAML 2.0", "outcome": "SAML"},
+      {"name": "app supports OIDC", "outcome": "OIDC"},
+      {"name": "login form only", "outcome": "SWA"},
+      {"name": "no supported sign-on method", "outcome": "NEEDS_REVIEW"}
+    ],
+    "sso_user_statuses": ["ACTIVE"],
+    "active_app_status": "ACTIVE",
+    "name_id_formats": ["Unspecified", "EmailAddress", "Persistent", "Transient", "x509SubjectName"],
+    "application_username_formats": {
+      "okta_username": "the Okta username (login)",
+      "okta_username_prefix": "the part of the Okta username before the @",
+      "email": "the primary email attribute",
+      "email_prefix": "the part of the email before the @"
+    },
+    "saml_check_order": ["APP_INACTIVE", "NOT_ASSIGNED", "ACS_MISMATCH", "CERT_MISMATCH", "AUDIENCE_MISMATCH",
+                         "NAMEID_MISMATCH"],
+    "provisioning_events": {
+      "assigned": "create_users",
+      "profile_updated": "update_attributes",
+      "password_changed": "sync_password",
+      "unassigned": "deactivate_users",
+      "okta_deactivated": "deactivate_users"
+    },
+    "feature_labels": {
+      "create_users": "Create Users",
+      "update_attributes": "Update User Attributes",
+      "deactivate_users": "Deactivate Users",
+      "sync_password": "Sync Password"
+    },
+    "concepts": {
+      "ACS URL": "The service provider's Assertion Consumer Service endpoint; Okta calls it the Single sign-on URL and posts the SAML response there.",
+      "Audience URI": "The SP entity ID that Okta writes into the assertion's audience restriction so the service provider knows the assertion is meant for it.",
+      "NameID": "The subject identifier in a SAML assertion, built from the app's Application username setting and sent in the chosen Name ID format.",
+      "IdP-initiated sign-in": "The user starts from the Okta End-User Dashboard tile and Okta sends an unsolicited SAML response to the app.",
+      "SP-initiated sign-in": "The user starts at the app, which redirects to Okta with an authentication request and receives the SAML response back.",
+      "SWA": "Secure Web Authentication: Okta stores the user's app credentials and fills the app's login form, for apps with no federation support.",
+      "Bookmark app": "A dashboard tile that only opens a URL; Okta does no sign-in for it.",
+      "Push provisioning": "Okta uses the app's API to create, update and deactivate the app account when the user's assignment or profile changes."
+    }
+  }
+}
