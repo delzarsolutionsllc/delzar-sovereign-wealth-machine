@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parent.parent
 CONFIG_DIR = ROOT / "config"
 DATA_DIR = ROOT / "data"
 DEFAULT_POLICY_PATH = CONFIG_DIR / "default_policies.json"
+POLICY_FRAGMENTS_DIR = CONFIG_DIR / "policies"
 
 
 def load_json(path: str | Path) -> Any:
@@ -18,8 +19,16 @@ def load_json(path: str | Path) -> Any:
 
 
 def load_policies(path: str | Path | None = None) -> dict:
-    """Load the policy file (defaults to ``config/default_policies.json``)."""
-    return load_json(path or DEFAULT_POLICY_PATH)
+    """Load the policy file (defaults to ``config/default_policies.json``).
+
+    Labs added later keep their policy in ``config/policies/<name>.json`` (one top-level
+    section per file); a section is merged in only when the main file does not define it,
+    so a custom policy file can still override any lab."""
+    pol = load_json(path or DEFAULT_POLICY_PATH)
+    for f in sorted(POLICY_FRAGMENTS_DIR.glob("*.json")):
+        for k, v in load_json(f).items():
+            pol.setdefault(k, v)
+    return pol
 
 
 def load_data(name: str, data_dir: str | Path | None = None) -> Any:

@@ -67,3 +67,14 @@ LABS = {
     25: (lab25_conditional_access, "sample_signins.json"),
     26: (lab26_identity_governance, "sample_governance.json"),
 }
+
+
+def _register_generators() -> None:
+    """Labs that carry their own seeded generator (``generate_scenario(rng, policies)``) register it here."""
+    from utils.scenario_generator import GENERATORS
+    for n, (module, _) in LABS.items():
+        if hasattr(module, "generate_scenario"):
+            GENERATORS.setdefault(n, module.generate_scenario)
+
+
+_register_generators()

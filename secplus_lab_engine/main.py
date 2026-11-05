@@ -372,9 +372,15 @@ def glossary_cmd(ui: UI, term: str | None = None, domain: str | None = None, qui
     return {"count": len(rows)}
 
 
+def _course_labs() -> list[int]:
+    """The labs of the active course (Security+ keeps Labs 1-26; SC-300 has its own list)."""
+    from utils.course import lab_numbers
+    return lab_numbers(LABS)
+
+
 def list_labs(ui: UI) -> None:
     ui.table("Available labs", ["#", "Lab", "Objectives", "Default data", "Random"],
-             [[n, m.TITLE, m.OBJECTIVES, f, "yes" if n in GENERATORS else "-"] for n, (m, f) in LABS.items()])
+             [[n, m.TITLE, m.OBJECTIVES, f, "yes" if n in GENERATORS else "-"] for n, (m, f) in LABS.items() if n in _course_labs()])
 
 
 def run_tests(extra: list[str] | None = None) -> int:
@@ -398,7 +404,7 @@ def interactive_menu(ui: UI, policies: dict) -> None:
         if choice in {"q", "quit", "exit"}:
             return
         if choice in {"a", "all"}:
-            for n in LABS:
+            for n in _course_labs():
                 run_lab(ui, n, policies)
         elif choice in {"t", "test", "tests"}:
             run_tests()
@@ -521,7 +527,7 @@ def main(argv: list[str] | None = None) -> int:
             run_lab(ui, args.number, policies, args.file, randomize=args.random, seed=args.seed)
     elif args.command == "challenge":
         if args.target == "all":
-            for n in LABS:
+            for n in _course_labs():
                 challenge_lab(ui, n, policies, seed=args.seed, randomize=args.random and n in GENERATORS)
         elif args.target.isdigit():
             challenge_lab(ui, int(args.target), policies, args.file, seed=args.seed, randomize=args.random)
@@ -541,7 +547,7 @@ def main(argv: list[str] | None = None) -> int:
         return show_videos(ui, args.lab, args.objective, args.mark, args.unmark, args.open_n)
     elif args.command == "case-study":
         from utils.portfolio import write_case_studies
-        labs = sorted(LABS) if args.all or not args.labs else args.labs
+        labs = _course_labs() if args.all or not args.labs else args.labs
         bad = [n for n in labs if n not in LABS]
         if bad:
             raise SystemExit(f"unknown lab(s): {bad}")
@@ -568,7 +574,7 @@ def main(argv: list[str] | None = None) -> int:
         return mcp_main(args.grant, args.audit)
     elif args.command == "all":
         ui.header(BANNER, SUBTITLE)
-        for n in LABS:
+        for n in _course_labs():
             run_lab(ui, n, policies)
     elif args.command == "test":
         return run_tests(args.pytest_args)

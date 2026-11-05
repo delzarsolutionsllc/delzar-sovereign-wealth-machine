@@ -11,6 +11,9 @@ import pytest
 
 import webapi
 from labs import LABS
+from webapi import course_labs
+
+SECPLUS_LABS = course_labs()   # labs built only for other courses (COURSES attribute) are not in Security+
 from utils.desktop import install_shortcut, launcher
 from utils.webserver import make_server
 
@@ -20,7 +23,7 @@ from utils.webserver import make_server
 # =========================================================================== #
 def test_catalog_lists_every_lab(policies):
     c = webapi.catalog(policies)
-    assert [l["n"] for l in c["labs"]] == sorted(LABS)
+    assert [l["n"] for l in c["labs"]] == SECPLUS_LABS
     assert {d["id"] for d in c["domains"]} == {"1", "2", "3", "4", "5"}
     for lab in c["labs"]:
         assert lab["lesson_html"] and lab["insight"]["ai_governance"] and lab["primary_domain"] in "12345"
@@ -112,7 +115,7 @@ def test_index_served_in_live_mode(server):
 
 def test_api_call(server):
     status, data, _ = request(server, "POST", "/api/catalog", "{}", {"Content-Type": "application/json"})
-    assert status == 200 and len(json.loads(data)["labs"]) == len(LABS)
+    assert status == 200 and len(json.loads(data)["labs"]) == len(SECPLUS_LABS)
 
 
 def test_api_progress_uses_server_path(server, tmp_path):
@@ -171,7 +174,7 @@ def test_windows_launcher_uses_crlf():
 def test_bundle_builder(tmp_path):
     from tools.build_web_bundle import build
     b = build(variants=1)
-    assert set(b["labs"]) == {str(n) for n in LABS}
+    assert set(b["labs"]) == {str(n) for n in SECPLUS_LABS}
     for n, lab in b["labs"].items():
         assert lab["sample"]["run"] and lab["sample"]["questions"]
         assert len(lab["variants"]) == (1 if lab_has_generator(int(n)) else 0)
@@ -186,7 +189,7 @@ def lab_has_generator(n):
 def test_committed_bundle_matches_labs():
     from utils.loader import ROOT
     data = json.loads((ROOT / "web" / "course_data.json").read_text())
-    assert set(data["labs"]) == {str(n) for n in LABS}, "re-run: python tools/build_web_bundle.py"
+    assert set(data["labs"]) == {str(n) for n in SECPLUS_LABS}, "re-run: python tools/build_web_bundle.py"
 
 
 def test_single_file_desktop_app():
