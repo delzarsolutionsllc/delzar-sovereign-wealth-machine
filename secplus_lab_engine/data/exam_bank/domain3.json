@@ -235,7 +235,7 @@
         "On-premises"
       ],
       "answer": "On-premises",
-      "explanation": "Only on-premises infrastructure keeps the hardware entirely under the organization's own physical control. A community cloud is shared by organizations with similar needs, but it is still operated by a provider whose staff can reach the hardware."
+      "explanation": "Only on-premises infrastructure keeps the hardware entirely under the organization's own physical control. A community cloud is shared by several organizations with similar needs, so physical control of the hardware is shared with other members or with a third-party operator rather than held by the contractor alone."
     },
     {
       "id": "D3-019",
@@ -617,7 +617,7 @@
     {
       "id": "D3-048",
       "objective": "3.3",
-      "stem": "A merchant replaces each customer card number with a random value that has no mathematical relationship to the original. The real numbers are kept only in a secured vault at the payment processor. Which of the following methods is the merchant using?",
+      "stem": "A merchant wants to take its order database out of PCI DSS scope while still letting the order system reference each customer's card for refunds. Its payment processor will keep the real card numbers and return a surrogate value for each one that cannot be reversed without access to the processor's vault. Which of the following methods should the merchant use?",
       "choices": [
         "Masking",
         "Tokenization",
@@ -625,7 +625,7 @@
         "Hashing"
       ],
       "answer": "Tokenization",
-      "explanation": "Tokenization swaps sensitive data for random surrogates and keeps the mapping in a secure vault, which reduces the merchant's PCI DSS scope. Encryption is tempting, but ciphertext is mathematically derived from the original and can be reversed with the key."
+      "explanation": "Tokenization replaces card numbers with surrogates that have no mathematical relationship to the originals, and only the processor's vault can map them back, so the merchant's database no longer holds cardholder data and drops out of PCI DSS scope. Encryption is tempting, but encrypted card numbers are still cardholder data, and the merchant would have to manage the key, which keeps the database in scope."
     },
     {
       "id": "D3-049",

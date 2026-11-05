@@ -8,6 +8,7 @@ It's meant for building first-principles skill: work through each operation by h
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
 * 24 labs (every SY0-701 objective has one), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
+* **364 exam-style practice questions** (`data/exam_bank/`) for the exams and domain tests: short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
 * A **course web app** you can open from your desktop or from claude.ai
 * 565 pytest tests, run in CI on Python 3.10–3.13
 
@@ -35,9 +36,9 @@ python main.py web                  # or start it directly
 
 **Video course:** the app's *Video course* page (or `python main.py videos`) lays out [Professor Messer's free SY0-701 course](https://www.youtube.com/playlist?list=PLG49S3nxzAnl4QDVqK-hOnoqcSKEIDDuv) (121 videos, about 15 hours) in exam-objective order. Next to each objective it names the lab that practises it. Each lab's Lesson tab starts with a "Watch first" list, *My progress* suggests videos for your weakest objectives, and you can tick videos off as you watch them. Flashcards and CTFd hints link the matching video. The videos stay on YouTube: the course stores only titles, IDs and lengths (`data/video_course.json`). CLI: `python main.py videos [--lab N | --objective 1.4 | --open N | --mark ID]`.
 
-**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 1,600 cards sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
+**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 3,900 cards (lab questions plus the exam-style bank) sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
 
-**Your own scoreboard (CTFd):** `python tools/export_ctfd.py` turns every challenge question into a scored [CTFd](https://github.com/CTFd/CTFd) challenge (about 320, 100 points each), with the five exam domains as categories so the scoreboard shows your strength per domain. It writes `dist/ctfd/challenges.csv` and `dist/ctfd/challenges/*/challenge.yml` (for ctfcli). To play:
+**Your own scoreboard (CTFd):** `python tools/export_ctfd.py` turns every challenge question into a scored [CTFd](https://github.com/CTFd/CTFd) challenge (about 990: lab questions plus the exam-style bank, 100 points each), with the five exam domains as categories so the scoreboard shows your strength per domain. It writes `dist/ctfd/challenges.csv` and `dist/ctfd/challenges/*/challenge.yml` (for ctfcli). To play:
 
 ```
 docker run -p 8000:8000 ctfd/ctfd          # then open http://localhost:8000 and finish setup
@@ -73,7 +74,8 @@ python main.py progress              # your scores per SY0-701 objective, weakes
 python main.py videos                # Professor Messer's free video course, mapped to the labs (--lab N, --open N, --mark ID)
 python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17–24)
 python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
-python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
+python main.py exam                  # 90 exam-style questions / 90 minutes, weighted 12/22/18/28/20 % by domain
+python main.py exam --source labs    # the same, using the labs' hands-on scenario questions instead
 python main.py exam --count 30 --minutes 30 --seed 3
 python main.py exam --domain 4         # domain test: 30 questions from Domain 4 only, scored per objective (target 80%)
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)

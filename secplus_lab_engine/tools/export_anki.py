@@ -89,8 +89,8 @@ def question_key(q: dict) -> tuple:
     return (q["prompt"], q["context"], *q["choices"])
 
 
-def collect(variants: int = 12) -> list[dict]:
-    """Unique questions from the course bundle (sample + generated variants)."""
+def collect(variants: int = 12, include_bank: bool = True) -> list[dict]:
+    """Unique questions: the labs' (sample + generated variants) and the exam-style bank."""
     bundle = build(variants)
     seen, out = set(), []
     for lab_n, lab in bundle["labs"].items():
@@ -101,7 +101,19 @@ def collect(variants: int = 12) -> list[dict]:
                     continue
                 seen.add(key)
                 out.append({**q, "lab": int(lab_n)})
+    if include_bank:
+        from utils.exam_bank import load_bank
+        for r in load_bank():                                  # exam-style questions, lab 0 = "exam-style"
+            q = {"prompt": r["stem"], "context": "", "choices": list(r["choices"]), "answer": r["answer"],
+                 "explanation": r["explanation"], "objective": r["objective"], "lab": 0}
+            if question_key(q) not in seen:
+                seen.add(question_key(q))
+                out.append(q)
     return out
+
+
+def source_label(q: dict) -> str:
+    return "Exam-style question" if q["lab"] == 0 else f"Lab {q['lab']}"
 
 
 def build_package(variants: int = 12):
@@ -117,12 +129,12 @@ def build_package(variants: int = 12):
         esc = html.escape
         note = genanki.Note(
             model=model,
-            fields=[f"{esc(obj)} {esc(OBJECTIVE_NAMES.get(obj, ''))} · Lab {q['lab']}", esc(q["context"]), esc(q["prompt"]),
+            fields=[f"{esc(obj)} {esc(OBJECTIVE_NAMES.get(obj, ''))} · {source_label(q)}", esc(q["context"]), esc(q["prompt"]),
                     "".join(f"<li>{esc(c)}</li>" for c in q["choices"]), esc(q["answer"]),
                     esc(q["explanation"]) + _watch_html(obj),
                     esc("|".join(question_key(q)))],
             guid=genanki.guid_for(*question_key(q)),
-            tags=[f"SY0-701::{obj.replace('.', '_')}", f"lab{q['lab']}"])
+            tags=[f"SY0-701::{obj.replace('.', '_')}", "exam_style" if q["lab"] == 0 else f"lab{q['lab']}"])
         decks[name].add_note(note)
     return genanki.Package(list(decks.values())), len(questions), len(decks)
 
