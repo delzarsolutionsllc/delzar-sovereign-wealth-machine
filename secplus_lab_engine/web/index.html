@@ -823,7 +823,7 @@ async function viewHome() {
       el("span", { class: "label", text: "Course overview" }),
       el("h1", { text: isSecplus() ? "Practise every SY0-701 domain on working security engines" : `Practise every ${C().exam_code} skill area, one concept at a time` }),
       examCountdown(),
-      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the ${C().scale[0]}–${C().scale[1]} scale).` + (isSecplus() ? "" : ` The ${CATALOG.labs.length} hands-on labs are the identity labs shared with the Security+ course, mapped to ${C().exam_code} skills.`) }),
+      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (${C().pass_label || `pass mark ${CATALOG.pass_scaled} on the ${C().scale[0]}–${C().scale[1]} scale`}).` + (isSecplus() ? "" : ` Every lab is mapped to ${C().exam_code} objectives; some are shared with the Security+ course.`) }),
       el("div", { class: "btns" },
         weakest ? el("a", { class: "btn primary", href: weakLab ? `#lab-${weakLab.n}` : `#obj-${weakest[0]}`, text: `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}` + (weakLab ? `: Lab ${weakLab.n}` : "") })
           : isSecplus() ? el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: "Start with Lab 1" })
