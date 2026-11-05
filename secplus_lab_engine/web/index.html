@@ -137,7 +137,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
   .app { grid-template-columns: minmax(0, 1fr); }
   .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right, 0px)); gap: 12px; }
   .maptoggle { display: inline-flex; }
-  .rail:not(.open) .domains, .rail:not(.open) .mode { display: none; }
+  .rail:not(.open) .domains, .rail:not(.open) .mode, .rail:not(.open) .tm { display: none; }
   .railtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 }
 .vlist { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
@@ -157,6 +157,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 ol.path li { margin-bottom: 8px; }
 a.done { font-weight: 600; }
 @media print { .rail, .tabs, .noprint, .panel:not(#labbody) { display: none !important; } .main, #labbody { padding: 0; border: 0; box-shadow: none; } body { background: #fff; } }
+.tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
 
@@ -176,6 +177,7 @@ a.done { font-weight: 600; }
     </nav>
     <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
     <div class="mode" id="mode"></div>
+    <p class="tm">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
   </aside>
   <main class="main"><div class="wrap" id="view"><p class="loading">Loading course…</p></div></main>
 </div>

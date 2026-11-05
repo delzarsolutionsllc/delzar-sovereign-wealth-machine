@@ -8,9 +8,15 @@ It's meant for building first-principles skill: work through each operation by h
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
 * 26 labs (every SY0-701 objective has one, plus two identity-governance labs for an IAM career), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
-* **364 exam-style practice questions** (`data/exam_bank/`) for the exams and domain tests: short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
+* **396 exam-style practice questions** (`data/exam_bank/`): 364 four-option questions plus 32 in the exam's other formats (**Select TWO**, and performance-based **put-in-order** and **match** questions) for the exams and domain tests. They use short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
 * A **course web app** you can open from your desktop or from claude.ai
-* 565 pytest tests, run in CI on Python 3.10–3.13
+* **Daily review**: questions you miss come back on a spaced-repetition schedule (tomorrow, then 1, 3, 7 days and longer), plus new questions from your weakest objectives (`python main.py review` or the *Daily review* page)
+* **Installs as an app** on phone and laptop and works offline (`python tools/build_site.py`, see below)
+* 1,000+ pytest tests, run in CI on Python 3.10–3.13
+
+> Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; Microsoft, Entra and SailPoint are trademarks of their owners. Practice questions are original and are not real exam questions.
+
+**Heads-up on exam versions:** CompTIA says Security+ V8 (SY0-801) launches on or around November 17, 2026, and the English SY0-701 exam (what this platform teaches) retires on June 11, 2027 ([V8](https://www.comptia.org/en-us/certifications/security/v8/), [SY0-701](https://www.comptia.org/en-us/certifications/security/v7/), checked 2026-11-05). See `docs/ROADMAP.md` for the plan, `docs/PLATFORM_AUDIT.md` for an honest audit and `docs/PRODUCT_PATHS.md` for ways to turn this into a site, app or product.
 
 ---
 
@@ -31,6 +37,15 @@ To put a launcher **on your desktop**, run once from this folder:
 python main.py install-shortcut     # creates "Security+ Lab Engine" on your desktop
 python main.py web                  # or start it directly
 ```
+
+**Install it as an app (phone or laptop, works offline):**
+
+```bash
+python tools/build_site.py                       # writes the app to dist/site/
+python -m http.server -d dist/site 8000          # then open http://localhost:8000
+```
+
+In Chrome or Edge, click the *Install* icon in the address bar (on Android: menu → *Install app*; on iPhone, Safari: Share → *Add to Home Screen*). Installing needs a web address (localhost or HTTPS), not a double-clicked file. To use it on your phone, put `dist/site/` on free static hosting such as GitHub Pages or Cloudflare Pages. **That makes it public**, so do it only when you decide to (see `docs/ROADMAP.md`, Phase 2). Progress is saved in each browser.
 
 **Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
 
@@ -80,6 +95,7 @@ python main.py exam                  # 90 exam-style questions / 90 minutes, wei
 python main.py exam --source labs    # the same, using the labs' hands-on scenario questions instead
 python main.py exam --count 30 --minutes 30 --seed 3
 python main.py exam --domain 4         # domain test: 30 questions from Domain 4 only, scored per objective (target 80%)
+python main.py review                # today's daily review: due questions first, then your weakest objectives
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file

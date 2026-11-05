@@ -270,12 +270,13 @@ def run_challenge(
 def option_index(token: str, choices: list[str]) -> int | None:
     """
     0-based option index for a typed number (``2``) or letter (``B``, case-insensitive).
-    A letter counts only when no choice's own text is that letter, so exact text wins.
+    Letters are off for a question whose options include a one-letter text (such as "A"),
+    so typing that text always means the text itself.
     """
     t = token.strip()
     if t.isdigit():
         return int(t) - 1 if 1 <= int(t) <= len(choices) else None
-    if len(t) == 1 and t.isalpha() and not any(c.strip().lower() == t.lower() for c in choices):
+    if len(t) == 1 and t.isalpha() and not any(len(c.strip()) == 1 and c.strip().isalpha() for c in choices):
         k = ord(t.lower()) - ord("a")
         return k if 0 <= k < len(choices) else None
     return None
