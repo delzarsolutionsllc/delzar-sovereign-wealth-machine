@@ -61,3 +61,8 @@ The engine is multi-course (`data/courses/<code>/course.json`, `--course`, cours
 - **Paid course:** competes with free and low-cost prep, and carries trademark risk.
 - **Approved training provider:** takes 3–12+ months, a $1,284 Oklahoma school licence fee plus a bond, insurance and CPA costs, and outcome reporting. Details and sources are in `docs/PRODUCT_PATHS.md`.
 - A low-cost first step later: offer the labs as free supplementary material to an Oklahoma technology centre or a tribal career-services office.
+
+
+## Okta Certified Professional course (BUILT, 2026-11-05)
+
+Third course, `data/courses/okta/course.json`, aligned to the Okta Certified Professional Performance Exam (Okta Identity Engine; six hands-on use cases weighted 26/10/8/38/12/6; 150 minutes, USD 250, pass/fail only; study guide checked 2026-11-05). 15 objectives, a reviewed question bank with performance-style items (every objective 30+), a 229-entry glossary with per-domain quizzes, and 7 Okta-only labs (36-42) so every objective has hands-on practice. The practice exam (60 questions, 90 minutes, 70 % readiness target) is this course's own format: Okta does not publish a passing score. Next: lab-backed PBQs from the Okta labs and a free video index.

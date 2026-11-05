@@ -234,7 +234,7 @@
    "stem": "After an admin clears a user's sessions, the user can still work in a SaaS app for a while before being asked to sign in again. What is the MOST likely explanation?",
    "choices": [
     "Session clearing only takes effect after the next directory import",
-    "Keep me signed in overrides any admin request to clear sessions",
+    "Stay signed in overrides any admin request to clear sessions",
     "Clearing sessions only affects sessions on mobile devices",
     "The app keeps its own session, which lasts until it expires"
    ],
@@ -281,7 +281,7 @@
     "Add the users to the Everyone group for the session"
    ],
    "answer": "Let global session cookies persist across browser sessions in the rule",
-   "explanation": "A global session policy rule can make the Okta session cookie persist across browser sessions. App re-authentication settings do not keep the Okta session alive after the browser closes."
+   "explanation": "A global session policy rule can make the Okta session cookie persist across browser sessions; users must also select Stay signed in when they sign in. App re-authentication settings do not keep the Okta session alive after the browser closes."
   },
   {
    "id": "D5-021",
@@ -699,7 +699,7 @@
     "Clear the sessions of the affected users"
    ],
    "answer": "Deactivate the rule so it can be edited",
-   "explanation": "Okta requires an active rule to be deactivated before it can be edited, and then activated again. Removing users by hand is neither needed nor possible for rule-managed members."
+   "explanation": "Okta's documentation states that only inactive group rules can be edited, so the admin deactivates the rule, edits it and activates it again. Removing users by hand is neither needed nor possible for rule-managed members."
   },
   {
    "id": "D5-049",
@@ -727,7 +727,7 @@
     "Create a second rule that removes the executive"
    ],
    "answer": "List the executive as an exception in the group rule",
-   "explanation": "Group rules can exclude named users, which keeps them out even when they match the condition. Manual removal is not possible for rule-managed memberships, and rules only add users."
+   "explanation": "Group rules can exclude named users, which keeps them out even when they match the condition. Manual removal is not possible for rule-managed memberships, and suspending the user would block all of the executive's sign-ins."
   },
   {
    "id": "D5-051",
@@ -752,24 +752,24 @@
     "Make a copy of the group in Okta and add the user to the copy",
     "Assign the user to the group with the Group Membership Administrator role",
     "Add the user to the group in AD and let the next import update Okta",
-    "Use a group rule to place the user into the AD-sourced group"
+    "Edit the group's profile in Okta to change its source to Okta"
    ],
    "answer": "Add the user to the group in AD and let the next import update Okta",
-   "explanation": "Membership of AD-sourced groups is mastered in Active Directory and arrives in Okta through imports. Group rules cannot target directory-sourced groups."
+   "explanation": "Membership of AD-sourced groups is mastered in Active Directory and arrives in Okta through imports, so the change belongs in AD. A copy of the group in Okta would not grant what the AD group grants."
   },
   {
    "id": "D5-053",
    "objective": "5.2",
-   "topic": "Group Types and Directory-Sourced Groups",
-   "stem": "When building a group rule, an admin cannot choose an AD-sourced group as the target in the Assign to field. Why?",
+   "topic": "Group Rules and Membership Errors",
+   "stem": "When building a group rule, an admin cannot choose the IT Admins group as the target in the Assign to field. An administrator role is assigned to that group. Why is it unavailable?",
    "choices": [
-    "Group rules can only assign users to Okta-sourced groups",
+    "Group rules can't assign users to groups that hold admin roles",
     "The admin needs the Report Administrator role to choose that group",
-    "AD-sourced groups first need an authentication policy",
+    "A group must first have an authentication policy",
     "Group rules can only target groups assigned to an app"
    ],
-   "answer": "Group rules can only assign users to Okta-sourced groups",
-   "explanation": "Rules write membership only into groups that Okta masters. A directory or app controls membership of the groups it sources."
+   "answer": "Group rules can't assign users to groups that hold admin roles",
+   "explanation": "Okta does not let group rules assign users to admin groups, which stops attribute changes from silently granting admin privileges. Rules do not require the target group to have an app or a policy, and editing rules needs a super admin or org admin, not a Report Administrator."
   },
   {
    "id": "D5-054",
@@ -811,7 +811,7 @@
     "The user must reset her password before she can join any new group"
    ],
    "answer": "No import from Active Directory has run since the change",
-   "explanation": "Changes to AD-sourced groups appear in Okta after the next import. Group rules cannot change AD-sourced groups."
+   "explanation": "Changes made in AD reach AD-sourced groups in Okta after the next import. Okta does not remove members for not signing in, and a password reset has no effect on group membership."
   },
   {
    "id": "D5-057",
