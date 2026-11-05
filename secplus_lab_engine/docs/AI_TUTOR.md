@@ -7,7 +7,7 @@
 **Claude Code:**
 
 ```bash
-claude mcp add identityops -- python /full/path/to/secplus_lab_engine/main.py mcp
+claude mcp add delzar-academy -- python /full/path/to/secplus_lab_engine/main.py mcp
 ```
 
 **Claude Desktop** (Settings → Developer → Edit config, then restart):
@@ -15,7 +15,7 @@ claude mcp add identityops -- python /full/path/to/secplus_lab_engine/main.py mc
 ```json
 {
   "mcpServers": {
-    "identityops": {
+    "delzar-academy": {
       "command": "python",
       "args": ["/full/path/to/secplus_lab_engine/main.py", "mcp"]
     }

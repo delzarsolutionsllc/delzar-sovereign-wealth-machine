@@ -265,7 +265,7 @@ def progress_file(ui: UI, export: str | None = None, import_: str | None = None,
 
 
 def quiz(ui: UI, objective: str | None = None, set_n: int | None = None, topic_n: int | None = None, ask=None,
-         progress_path: str | None = None, seed: int | None = None, today=None) -> dict | None:
+         progress_path: str | None = None, seed: int | None = None, today=None, quiz_id: str | None = None) -> dict | None:
     """Objective quizzes: list them, or take one with the answer and the reason after each question."""
     from datetime import date
     import webapi
@@ -273,27 +273,29 @@ def quiz(ui: UI, objective: str | None = None, set_n: int | None = None, topic_n
     from utils.challenge import check
     from utils.exam import describe_answer, parse_answer, show_question
     cat = quizzes.catalog()
+    if quiz_id:                                    # a glossary quiz, e.g. g3-acr-1
+        objective = None
     prog = Progress(progress_path) if progress_path is not None else Progress()
     scores = prog.data.get("quizzes", {})
     best = lambda qid: f"best {scores[qid]['best']}%" if qid in scores else "not taken"
     if objective and objective not in cat:
         ui.print(f"Unknown objective '{objective}'. Use one like 2.4 (python main.py quiz lists them).", style="red")
         return None
-    if not objective:
+    if not objective and not quiz_id:
         ui.table("Objective quizzes (python main.py quiz X.Y to see one objective's quizzes)",
                  ["Objective", "Name", "Questions", "Sets", "Concept quizzes", "Done"],
                  [[o, c["name"], c["count"], sum(q["kind"] == "set" for q in c["quizzes"]),
                    sum(q["kind"] == "topic" for q in c["quizzes"]),
                    f"{sum(q['id'] in scores for q in c['quizzes'])}/{len(c['quizzes'])}"] for o, c in cat.items()])
         return None
-    c = cat[objective]
-    if set_n is None and topic_n is None:
+    c = cat[objective] if objective else {"name": "Glossary"}
+    if not quiz_id and set_n is None and topic_n is None:
         ui.table(f"{objective} {c['name']}: quizzes", ["Take it with", "Quiz", "Questions", "Score"],
                  [[f"--set {q['id'].rsplit('set', 1)[1]}" if q["kind"] == "set" else f"--topic {q['id'].rsplit('-t', 1)[1]}",
                    q["title"] if q["kind"] == "set" else f"Concept: {q['title']}", len(q["qids"]), best(q["id"])]
                   for q in c["quizzes"]])
         return None
-    qid = f"{objective}-set{set_n}" if set_n is not None else f"{objective}-t{topic_n}"
+    qid = quiz_id or (f"{objective}-set{set_n}" if set_n is not None else f"{objective}-t{topic_n}")
     try:
         quiz_def = quizzes.find(qid)
     except ValueError:
@@ -301,8 +303,8 @@ def quiz(ui: UI, objective: str | None = None, set_n: int | None = None, topic_n
         return None
     ask = ask or ui.ask
     qs = quizzes.questions(qid, seed)
-    title = quiz_def["title"] if quiz_def["kind"] == "set" else f"Concept: {quiz_def['title']}"
-    ui.header(f"QUIZ {objective} {c['name']}", f"{title} · {len(qs)} questions · the answer and why after each one")
+    title = quiz_def["title"] if quiz_def.get("kind", "set") == "set" else f"Concept: {quiz_def['title']}"
+    ui.header(f"QUIZ {objective or qid} {c['name']}", f"{title} · {len(qs)} questions · the answer and why after each one")
     results = []
     for i, q in enumerate(qs, 1):
         ui.section(f"Question {i}/{len(qs)}")
@@ -328,6 +330,34 @@ def quiz(ui: UI, objective: str | None = None, set_n: int | None = None, topic_n
              "\nMissed questions come back in your daily review: python main.py review",
              style="green" if n_ok * 100 >= 85 * len(results) else "yellow")
     return {"quiz": qid, "correct": n_ok, "total": len(results), "best": got["quiz_score"]["best"]}
+
+
+def glossary_cmd(ui: UI, term: str | None = None, domain: str | None = None, quiz_id: str | None = None, ask=None,
+                 progress_path: str | None = None, seed: int | None = None) -> dict | None:
+    """Look up SY0-701 acronyms and vocabulary, list a domain, or take a glossary quiz."""
+    from utils import glossary
+    if quiz_id:
+        try:
+            glossary.find(quiz_id)
+        except ValueError:
+            ui.print(f"No glossary quiz '{quiz_id}'. List them with: python main.py glossary --domain N", style="red")
+            return None
+        return quiz(ui, quiz_id=quiz_id, ask=ask, progress_path=progress_path, seed=seed)
+    rows = glossary.lookup(term) if term else [e for e in glossary.entries() if not domain or e["domain"] == domain]
+    if not rows:
+        ui.print(f"Nothing found for '{term}'.", style="yellow")
+        return None
+    for e in rows[:60]:
+        ui.print(f"[bold]{e['term']}[/bold]" + (f" · {e['expansion']}" if e.get("expansion") else "")
+                 + f"   [dim]{', '.join(e.get('objectives', []))}[/dim]")
+        ui.print(f"    {e['definition']}")
+    if len(rows) > 60:
+        ui.print(f"... and {len(rows) - 60} more. Narrow it with a search term.", style="dim")
+    if domain:
+        c = glossary.catalog()["domains"][domain]
+        ui.table(f"Domain {domain} glossary quizzes (python main.py glossary --quiz ID)", ["ID", "Quiz", "Questions"],
+                 [[q["id"], q["title"], len(q["qids"])] for q in c["quizzes"]])
+    return {"count": len(rows)}
 
 
 def list_labs(ui: UI) -> None:
@@ -426,6 +456,11 @@ def build_parser() -> argparse.ArgumentParser:
     qg.add_argument("--set", type=int, dest="set_n", metavar="N", help="take mixed Set N")
     qg.add_argument("--topic", type=int, dest="topic_n", metavar="N", help="take the concept quiz for topic N")
     qz.add_argument("--seed", type=int, help="fix the question and option order")
+    gl = sub.add_parser("glossary", help="SY0-701 acronyms and vocabulary: look up, list by domain, or quiz")
+    gl.add_argument("term", nargs="?", help="term or acronym to look up, e.g. CASB")
+    gl.add_argument("--domain", choices=list("12345"), help="list a domain's entries and its quizzes")
+    gl.add_argument("--quiz", metavar="ID", help="take a glossary quiz, e.g. g3-acr-1")
+    gl.add_argument("--seed", type=int, help="fix the question and option order")
     rv = sub.add_parser("review", help="today's spaced-repetition review: due questions, then your weakest objectives")
     rv.add_argument("--count", type=int, default=15, help="questions in the session (default 15, max 50)")
     rv.add_argument("--seed", type=int, help="fix which new questions are picked (default: today's date)")
@@ -482,6 +517,8 @@ def main(argv: list[str] | None = None) -> int:
         if args.export or args.import_:
             return progress_file(ui, args.export, args.import_, args.replace)
         show_progress(ui)
+    elif args.command == "glossary":
+        glossary_cmd(ui, args.term, args.domain, args.quiz, seed=args.seed)
     elif args.command == "quiz":
         quiz(ui, args.objective, args.set_n, args.topic_n, seed=args.seed)
     elif args.command == "review":
@@ -503,7 +540,7 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "install-shortcut":
         from utils.desktop import install_shortcut
         path = install_shortcut(Path(args.desktop) if args.desktop else None)
-        ui.print(f"Created {path}\nDouble-click it to open IdentityOps Lab in your browser.", style="green")
+        ui.print(f"Created {path}\nDouble-click it to open Delzar Certification Academy in your browser.", style="green")
     elif args.command == "exam":
         if args.domain:
             domain_test(ui, policies, args.domain, args.count or 30, args.minutes, args.seed, randomize=not args.fixed,

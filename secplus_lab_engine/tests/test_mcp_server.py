@@ -60,7 +60,7 @@ def _write_tmp(obj):
 
 def test_initialize_and_lists(server):
     r = server.handle({"jsonrpc": "2.0", "id": 1, "method": "initialize", "params": {"protocolVersion": "2024-11-05"}})["result"]
-    assert r["protocolVersion"] == "2024-11-05" and r["serverInfo"]["name"] == "identityops-lab-tutor"
+    assert r["protocolVersion"] == "2024-11-05" and r["serverInfo"]["name"] == "delzar-academy-tutor"
     assert "tools" in r["capabilities"] and "prompts" in r["capabilities"]
     r = server.handle({"jsonrpc": "2.0", "id": 2, "method": "initialize", "params": {"protocolVersion": "1999-01-01"}})["result"]
     assert r["protocolVersion"] == M.PROTOCOL_VERSIONS[0]

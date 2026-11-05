@@ -1,4 +1,4 @@
-<title>IdentityOps Lab</title>
+<title>Delzar Certification Academy</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -182,6 +182,12 @@ details.navigator > summary { cursor: pointer; color: var(--muted); font-size: .
 .qcard.done { border-left: 4px solid var(--pass); }
 .objnav { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 .dropzone { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+/* glossary */
+.glist { display: grid; gap: 10px; }
+.gentry { border-bottom: 1px solid var(--line); padding: 4px 0 10px; display: flex; flex-direction: column; gap: 4px; }
+.gentry p { margin: 0; max-width: 75ch; } .gterm b { font-family: var(--mono); }
+a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-color: var(--accent); }
+.form label.grow { flex: 1 1 260px; } .form input[type=search] { width: 100%; padding: 8px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
 .countdown { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--sunken); border-radius: 6px; }
 .tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
@@ -192,7 +198,7 @@ details.navigator > summary { cursor: pointer; color: var(--muted); font-size: .
 <div class="app">
   <aside class="rail" id="rail">
     <div class="railtop">
-      <div class="brand"><span class="label">Aligned to CompTIA Security+ SY0-701</span><b>IdentityOps Lab</b></div>
+      <div class="brand"><span class="label">Aligned to CompTIA Security+ SY0-701</span><b>Delzar Certification Academy</b></div>
       <button class="btn maptoggle" id="maptoggle" aria-expanded="false" aria-controls="domains">Course map</button>
     </div>
     <nav class="nav" aria-label="Main">
@@ -200,6 +206,7 @@ details.navigator > summary { cursor: pointer; color: var(--muted); font-size: .
       <a href="#home" data-view="home">Overview</a>
       <a href="#videos" data-view="videos">Video course</a>
       <a href="#quizzes" data-view="quizzes">Objective quizzes</a>
+      <a href="#glossary" data-view="glossary">Glossary &amp; acronyms</a>
       <a href="#exam" data-view="exam">Practice exam</a>
       <a href="#progress" data-view="progress">My progress</a>
       <a href="#career" data-view="career">IAM career &amp; portfolio</a>
@@ -286,8 +293,19 @@ const Engine = {
     return BUNDLE.labs[lab].case_study;
   },
   /* Objective quiz: the quiz's questions (from the exam-style bank), order and options shuffled. */
+  async glossary() {
+    if (LIVE) return post("glossary");
+    return BUNDLE.glossary || [];
+  },
   async quiz(id, seed) {
     if (LIVE) return post("quiz", { quiz: id, seed });
+    if (isGlossaryQuiz(id)) {
+      const d = id[1], def = (((CATALOG.glossary || {}).domains || {})[d] || { quizzes: [] }).quizzes.find(q => q.id === id);
+      if (!def) throw new Error("This glossary quiz does not exist. Pick one from the Glossary page.");
+      const rnd = mulberry32(seed || 1), by = {};
+      for (const r of BUNDLE.glossary_questions || []) by[r.id] = r;
+      return { quiz: def, objective: `g${d}`, questions: shuffle(def.qids.filter(i => by[i]).map(i => bankQ(by[i], rnd)), rnd) };
+    }
     const obj = String(id).split("-")[0], def = ((CATALOG.objective_quizzes[obj] || {}).quizzes || []).find(q => q.id === id);
     if (!def) throw new Error("This quiz does not exist (the question bank may have changed). Pick one from Objective quizzes.");
     const rnd = mulberry32(seed || 1), by = {};
@@ -540,7 +558,7 @@ const SYNC_MAX_SESSIONS = 50;
 const isObj = x => !!x && typeof x === "object" && !Array.isArray(x);
 function cleanProgress(raw) {
   if (isObj(raw) && isObj(raw.progress)) raw = raw.progress;
-  if (!isObj(raw) || !["objectives", "srs", "sessions", "watched", "quizzes"].some(k => k in raw)) throw new Error("This file does not contain IdentityOps Lab progress.");
+  if (!isObj(raw) || !["objectives", "srs", "sessions", "watched", "quizzes"].some(k => k in raw)) throw new Error("This file does not contain Delzar Certification Academy progress.");
   const int = (v, lo = 0, hi = 1e7) => { let n = typeof v === "number" ? Math.trunc(v) : typeof v === "boolean" ? Number(v) : typeof v === "string" && /^\s*[-+]?\d+\s*$/.test(v) ? parseInt(v, 10) : NaN; if (!Number.isFinite(n)) n = lo; return Math.max(lo, Math.min(hi, n)); };
   const day = v => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null);
   const KEY = /^[\w.\-]{1,40}$/, OBJK = /^[1-5]\.[1-9]$/, out = EMPTY();
@@ -644,7 +662,11 @@ const Progress = {
   async quizRecord(id, results) {
     const today = todayISO();
     if (LIVE) return post("quiz_record", { quiz: id, results, today });
-    await this.record(results, `quiz ${id}`);
+    if (isGlossaryQuiz(id)) {             // vocabulary drill: a session and a quiz score, not objective scores
+      const d0 = this.local();
+      d0.sessions.push({ ts: new Date().toISOString().slice(0, 19), lab: `quiz ${id}`, score: `${results.filter(r => r.correct).length}/${results.length}` });
+      d0.sessions = d0.sessions.slice(-50); await this.save(d0);
+    } else await this.record(results, `quiz ${id}`);
     const d = this.local(), c = results.filter(r => r.correct).length, p = results.length ? Math.floor(100 * c / results.length + 0.5) : 0;
     const s = d.quizzes[id] ||= { best: 0, last: 0, attempts: 0, last_day: null };
     Object.assign(s, { best: Math.max(s.best | 0, p), last: p, attempts: (s.attempts | 0) + 1, last_day: today });
@@ -653,7 +675,7 @@ const Progress = {
   },
   async exportData() {
     if (LIVE) return post("progress_export");
-    return { app: "IdentityOps Lab", format: 1, exported: new Date().toISOString().slice(0, 19) + "+00:00", progress: cleanProgress(this.local()) };
+    return { app: "Delzar Certification Academy", format: 1, exported: new Date().toISOString().slice(0, 19) + "+00:00", progress: cleanProgress(this.local()) };
   },
   async importData(raw, replace = false) {
     if (LIVE) return post("progress_import", { data: raw, replace: !!replace });
@@ -774,6 +796,7 @@ async function viewHome() {
       el("div", { class: "btns" },
         el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
         el("a", { class: "btn", href: "#quizzes", text: "Quiz one objective at a time" }),
+        el("a", { class: "btn", href: "#glossary", text: "Glossary & acronym quizzes" }),
         el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
         el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
     todayCard(),
@@ -1178,11 +1201,74 @@ function startReview(qs, body, s) {
   show();
 }
 
+
+/* ------------------------------------------------------------------ glossary
+   SY0-701 acronyms and key vocabulary with plain-English definitions, by domain, each acronym
+   linked to its short video in Geekus Maximus's free acronym playlist (opens on YouTube),
+   plus acronym / vocabulary / definition quizzes per domain (utils/glossary.py). */
+let GLOSS = null;
+async function viewGlossary(domain = "") {
+  markNav("glossary"); setKeys(null);
+  put(view(), el("p", { class: "loading", text: "Loading the glossary…" }));
+  try { GLOSS = GLOSS || await Engine.glossary(); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+  const G = CATALOG.glossary, prog = await Progress.get(), done = prog.quizzes || {}, src = G.videos;
+  let q = "", kind = "";
+  const list = el("div", { class: "glist", role: "list" }), count = el("p", { class: "muted", role: "status" });
+  const vurl = v => `https://www.youtube.com/watch?v=${encodeURIComponent(v.id)}&list=${encodeURIComponent(src.playlist_id)}&index=${v.n}`;
+  const draw = () => {
+    const t = q.trim().toLowerCase();
+    const rows = GLOSS.filter(e => (!domain || e.domain === domain) && (!kind || e.kind === kind) &&
+      (!t || e.term.toLowerCase().includes(t) || (e.expansion || "").toLowerCase().includes(t) || e.definition.toLowerCase().includes(t)));
+    put(count, `${rows.length} ${rows.length === 1 ? "entry" : "entries"}` + (t ? ` matching "${q.trim()}"` : ""));
+    put(list, rows.slice(0, 400).map(e => el("div", { class: "gentry", role: "listitem" },
+      el("div", { class: "gterm" }, el("b", { text: e.term }), e.expansion ? el("span", { class: "muted", text: ` · ${e.expansion}` }) : null),
+      el("p", { text: e.definition }),
+      el("div", { class: "chips" },
+        (e.objectives || []).map(o => el("a", { class: "chip", href: `#obj-${o}`, text: `${o} ${OBJ[o] || ""}` })),
+        e.video && src ? el("a", { class: "chip", href: vurl(e.video), target: "_blank", rel: "noopener noreferrer",
+          "aria-label": `Watch the ${e.term} video on YouTube${e.video.seconds ? ` (${e.video.seconds} seconds)` : ""}`, text: `▶ video${e.video.seconds ? " " + dur(e.video.seconds) : ""}` }) : null))));
+    if (rows.length > 400) list.append(el("p", { class: "muted", text: "Showing the first 400. Search or pick a domain to narrow the list." }));
+  };
+  const search = el("input", { type: "search", placeholder: "Search a term, acronym or word…", "aria-label": "Search the glossary",
+    oninput: e => { q = e.target.value; draw(); } });
+  const kindSel = el("select", { "aria-label": "Show", onchange: e => { kind = e.target.value; draw(); } },
+    el("option", { value: "", text: "Acronyms and vocabulary" }), el("option", { value: "acronym", text: "Acronyms only" }), el("option", { value: "term", text: "Vocabulary only" }));
+  const quizCards = d => {
+    const info = G.domains[d];
+    return Object.entries({ acr: "Acronyms", voc: "Vocabulary", def: "Definitions" }).map(([m, label]) => {
+      const qs = info.quizzes.filter(x => x.mode === m);
+      return qs.length ? el("div", {}, el("h3", { text: label }),
+        el("p", { class: "muted", text: { acr: "What does the acronym stand for?", voc: "Read a description, pick the term.", def: "Pick the definition of a term or acronym." }[m] }),
+        el("div", { class: "qcards" }, qs.map(x => el("a", { class: "qcard" + (done[x.id] ? " done" : ""), href: `#quiz-${x.id}` },
+          el("b", { text: x.title.split(" · ")[1] }), el("span", { class: "muted", text: `${x.qids.length} questions` }), el("span", { class: "score", text: scoreText(done[x.id]) }))))) : null;
+    });
+  };
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "Glossary & acronyms" }),
+      el("h1", { text: domain ? `Domain ${domain} glossary: ${G.domains[domain].name}` : "Speak the language of the exam" }),
+      el("p", { class: "muted", text: `${GLOSS.length} SY0-701 acronyms and terms, each with a plain-English definition and the objectives where it appears. Definitions are original to this course.` }),
+      src ? el("p", { class: "muted" }, "Acronym videos: ", el("a", { href: src.url, target: "_blank", rel: "noopener noreferrer", text: `${src.title}` }), ` by ${src.author}, about 35 seconds each on YouTube.`) : null,
+      el("div", { class: "btns", role: "group", "aria-label": "Domain" },
+        el("a", { class: "btn" + (domain ? "" : " primary"), href: "#glossary", text: "All domains" }),
+        CATALOG.domains.map(d => el("a", { class: "btn" + (domain === d.id ? " primary" : ""), href: `#glossary-d${d.id}`, text: `Domain ${d.id}` })))),
+    domain ? el("section", { class: "panel" }, el("h2", { text: `Domain ${domain} quizzes` }),
+      el("p", { class: "muted", text: `${G.domains[domain].acronyms} acronyms and ${G.domains[domain].terms} vocabulary terms. Each quiz has about ${G.set_size} questions with the answer and definition after each one.` }),
+      quizCards(domain))
+      : el("section", { class: "panel" }, el("h2", { text: "Quizzes by domain" }),
+        el("div", { class: "grid5" }, CATALOG.domains.map(d => { const info = G.domains[d.id], n = info.quizzes.filter(x => done[x.id]).length;
+          return el("a", { class: "dcard", href: `#glossary-d${d.id}` }, el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
+            el("span", { class: "muted", text: `${info.acronyms} acronyms · ${info.terms} terms` }), el("span", { class: "muted", text: `${n}/${info.quizzes.length} quizzes taken` })); }))),
+    el("section", { class: "panel" },
+      el("div", { class: "form" }, el("label", { class: "grow" }, "Search", search), el("label", {}, "Show", kindSel)), count, list));
+  draw();
+}
 /* ------------------------------------------------------------------ objective quizzes
    Several short quizzes per objective: mixed sets that together cover every question once,
    and one concept quiz per topic of the objective (utils/quizzes.py builds the list).
    Untimed, with the answer and the reason after each question. Misses go to the daily review. */
 const OQ = () => CATALOG.objective_quizzes || {};
+const isGlossaryQuiz = id => /^g[1-5]-/.test(String(id));
 const objOrder = () => Object.keys(OQ()).sort((a, b) => cmpTuple(a.split(".").map(Number), b.split(".").map(Number)));
 const quizTitle = q => (q.kind === "set" ? q.title : `Concept: ${q.title}`);
 const scoreText = s => (s ? `best ${s.best}% · last ${s.last}% · ${s.attempts} attempt${s.attempts === 1 ? "" : "s"}` : "not taken yet");
@@ -1239,12 +1325,14 @@ async function startObjectiveQuiz(id) {
   markNav("quizzes"); setKeys(null);
   put(view(), el("p", { class: "loading", text: "Building your quiz…" }));
   let qz; try { qz = await Engine.quiz(id, newSeed()); } catch (e) { return put(view(), el("section", { class: "panel" }, el("p", { class: "notice", text: e.message }), el("a", { class: "btn", href: "#quizzes", text: "Objective quizzes" }))); }
-  const o = qz.objective, info = OQ()[o], def = qz.quiz, qs = qz.questions, results = [], missed = [];
+  const gq = isGlossaryQuiz(id), gd = gq ? id[1] : null;
+  const o = qz.objective, info = gq ? null : OQ()[o], def = qz.quiz, qs = qz.questions, results = [], missed = [];
+  const glist = gq ? ((CATALOG.glossary.domains[gd] || {}).quizzes || []) : [];
   const body = el("section", { class: "panel", "aria-label": "Quiz question" });
   put(view(),
     el("section", { class: "panel" },
-      el("span", { class: "label", text: `Objective ${o} · ${info ? info.name : ""}` }),
-      el("h1", { text: quizTitle(def) }),
+      el("span", { class: "label", text: gq ? `Glossary · Domain ${gd} ${CATALOG.glossary.domains[gd].name}` : `Objective ${o} · ${info ? info.name : ""}` }),
+      el("h1", { text: gq ? def.title : quizTitle(def) }),
       el("p", { class: "muted", text: `${qs.length} questions · no timer · you see the answer and why after each one.` })),
     body);
   let i = 0;
@@ -1294,6 +1382,7 @@ async function startObjectiveQuiz(id) {
         el("span", { class: "muted", text: `${results.filter(r => r.correct).length} correct so far` })),
       el("div", { class: "bar" }, el("i", { style: `width:${pct(i, qs.length)}%` })),
       q.topic && def.kind === "set" ? el("div", { class: "chips" }, el("span", { class: "chip", text: q.topic })) : null,
+      gq ? el("div", { class: "chips" }, el("span", { class: "chip", text: `${q.objective} ${OBJ[q.objective] || ""}` })) : null,
       el("div", { class: "prompt", id: "qprompt", tabindex: "-1", text: q.prompt }), area, fb, el("div", { class: "btns" }, next));
     if (i > 0) { const pr = $("#qprompt"); if (pr) pr.focus({ preventScroll: true }); body.scrollIntoView({ block: "nearest" }); }
   };
@@ -1302,16 +1391,16 @@ async function startObjectiveQuiz(id) {
     const c = results.filter(r => r.correct).length, p = pct(c, results.length);
     put(body, el("p", { class: "loading", text: "Saving your score…" }));
     let saved = null; try { saved = await Progress.quizRecord(id, results); } catch { /* shown below */ }
-    const list = info ? info.quizzes : [], at = list.findIndex(q => q.id === id), nextQ = list[at + 1];
+    const list = gq ? glist : info ? info.quizzes : [], at = list.findIndex(q => q.id === id), nextQ = list[at + 1];
     put(body,
       el("span", { class: "label", text: "Quiz complete" }),
       el("h2", { tabindex: "-1", id: "quizdone", text: `${c} of ${results.length} correct (${p}%)` + (saved ? ` · best ${saved.quiz_score.best}%` : "") }),
       el("p", { class: "muted", text: p >= 85 ? "You have this concept. Move on to the next quiz." : p >= 65 ? "Nearly there. Read the explanations below, then retake it tomorrow." : "Read the explanations below, watch the objective's videos, and retake this quiz." }),
       saved ? null : el("p", { class: "notice", text: "Your score could not be saved this time." }),
       el("div", { class: "btns" },
-        nextQ ? el("a", { class: "btn primary", href: `#quiz-${nextQ.id}`, text: `Next: ${quizTitle(nextQ)}` }) : null,
+        nextQ ? el("a", { class: "btn primary", href: `#quiz-${nextQ.id}`, text: `Next: ${gq ? nextQ.title : quizTitle(nextQ)}` }) : null,
         el("button", { class: "btn" + (nextQ ? "" : " primary"), onclick: () => startObjectiveQuiz(id), text: "Retake this quiz" }),
-        el("a", { class: "btn", href: `#obj-${o}`, text: `Back to ${o}` }),
+        gq ? el("a", { class: "btn", href: `#glossary-d${gd}`, text: `Back to the Domain ${gd} glossary` }) : el("a", { class: "btn", href: `#obj-${o}`, text: `Back to ${o}` }),
         el("a", { class: "btn", href: "#review", text: "Daily review" })),
       missed.length ? [el("h3", { text: `Review (${missed.length} missed)` }), el("div", { class: "choices" }, missed.map(([q, a]) =>
         el("div", { class: "verdict no" }, q.topic ? el("div", { class: "label", text: q.topic }) : null, el("b", { text: q.prompt }), reviewAnswer(q, a), el("div", { class: "muted", text: q.explanation }))))] : null);
@@ -1381,7 +1470,7 @@ function syncPanel() {
     try {
       const data = await Progress.exportData();
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-      const a = el("a", { href: URL.createObjectURL(blob), download: `identityops-progress-${todayISO()}.json` });
+      const a = el("a", { href: URL.createObjectURL(blob), download: `delzar-academy-progress-${todayISO()}.json` });
       document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
       put(status, "Saved a progress file to your downloads. Open this app on your other device, go to My progress → Import, and pick that file.");
     } catch (err) { put(status, el("span", { class: "notice", text: `Export failed: ${err.message}` })); }
@@ -1494,7 +1583,10 @@ function route() {
   if (h === "quizzes") return viewQuizzes();
   const om = h.match(/^obj-([1-5]\.[1-9])$/);
   if (om) return viewObjective(om[1]);
-  const qm = h.match(/^quiz-([1-5]\.[1-9]-(?:set|t)\d{1,2})$/);
+  if (h === "glossary") return viewGlossary("");
+  const gm = h.match(/^glossary-d([1-5])$/);
+  if (gm) return viewGlossary(gm[1]);
+  const qm = h.match(/^quiz-([1-5]\.[1-9]-(?:set|t)\d{1,2}|g[1-5]-(?:acr|voc|def)-\d{1,2})$/);
   if (qm) return startObjectiveQuiz(qm[1]);
   const dm = h.match(/^exam-d([1-5])$/);
   if (dm) return viewExam(dm[1]);

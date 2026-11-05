@@ -27,7 +27,7 @@ from utils.loader import ROOT
 BRIEFING_DIR = ROOT / "data" / "briefings"
 CAREER_FILE = ROOT / "data" / "career_tracks.json"
 SIMULATION_NOTE = ("Simulated lab with fictional people, systems and data, built with the open-source "
-                   "IdentityOps Lab (practice aligned to the CompTIA Security+ SY0-701 exam objectives). Results come from running the lab's engine on its sample scenario.")
+                   "Delzar Certification Academy (practice aligned to the CompTIA Security+ SY0-701 exam objectives). Results come from running the lab's engine on its sample scenario.")
 
 
 def briefing(n: int) -> dict | None:

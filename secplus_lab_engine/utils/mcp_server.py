@@ -5,7 +5,7 @@ this course's own engines and question bank.
 
     python main.py mcp                          # read + quiz tools (default grants)
     python main.py mcp --grant progress:write   # also let the tutor save your answers
-    claude mcp add identityops -- python /path/to/secplus_lab_engine/main.py mcp
+    claude mcp add delzar-academy -- python /path/to/secplus_lab_engine/main.py mcp
 
 It doubles as a small identity-and-authorization showcase:
 
@@ -36,12 +36,12 @@ from typing import Callable
 from utils.loader import ROOT
 
 PROTOCOL_VERSIONS = ("2025-06-18", "2025-03-26", "2024-11-05")
-SERVER_INFO = {"name": "identityops-lab-tutor", "title": "IdentityOps Lab tutor", "version": "1.0.0"}
+SERVER_INFO = {"name": "delzar-academy-tutor", "title": "Delzar Academy tutor", "version": "1.0.0"}
 POLICY_FILE = ROOT / "config" / "mcp_policy.json"
 DEFAULT_AUDIT = ROOT / "mcp_audit.jsonl"
 MAX_TEXT = 12000
 INSTRUCTIONS = (
-    "You are a patient Security+ SY0-701 tutor for IdentityOps Lab. Quiz the learner with start_quiz "
+    "You are a patient Security+ SY0-701 tutor for Delzar Certification Academy. Quiz the learner with start_quiz "
     "(questions come without answers): show one question at a time, wait for their answer, then call "
     "check_answer and explain. Never invent answers; use the tools. Use progress_summary to find weak "
     "objectives and daily_review for today's spaced-repetition questions. Practice questions are original, "
@@ -55,8 +55,9 @@ def _obj(props: dict, required=()) -> dict:
 
 LAB = {"type": "integer", "minimum": 1, "maximum": 26, "description": "Lab number 1-26"}
 OBJ = {"type": "string", "pattern": r"^[1-5]\.[1-9]$", "description": "Exam objective, e.g. 2.4"}
-QID = {"type": "string", "pattern": r"^[A-Z0-9]{1,4}-\d{3}$", "description": "Question id, e.g. D2-014"}
-QUIZ = {"type": "string", "pattern": r"^[1-5]\.[1-9]-(set|t)\d{1,2}$", "description": "Quiz id from list_quizzes, e.g. 2.4-t1"}
+QID = {"type": "string", "pattern": r"^[A-Z0-9]{1,4}-\d{3}$|^G-[a-z0-9-]{1,80}:(acr|voc|def)$", "description": "Question id, e.g. D2-014"}
+QUIZ = {"type": "string", "pattern": r"^[1-5]\.[1-9]-(set|t)\d{1,2}$|^g[1-5]-(acr|voc|def)-\d{1,2}$",
+        "description": "Quiz id from list_quizzes (e.g. 2.4-t1) or a glossary quiz (e.g. g3-acr-1)"}
 SEED = {"type": "integer", "minimum": 0, "maximum": 2 ** 31 - 1}
 
 
@@ -108,8 +109,17 @@ class Tutor:
         return self.today or date.today().isoformat()
 
     def _bank(self) -> dict:
+        from utils import glossary
         from utils.exam_bank import load_bank
-        return {r["id"]: r for r in load_bank()}
+        return {**{r["id"]: r for r in load_bank()}, **glossary.questions()}
+
+    def glossary_lookup(self, term: str) -> dict:
+        from utils import glossary
+        hits = glossary.lookup(term)[:10]
+        if not hits:
+            raise ValueError(f"nothing in the glossary for '{term}'")
+        return {"matches": [{k: e.get(k) for k in ("term", "expansion", "definition", "domain", "objectives")} for e in hits],
+                "glossary_quizzes": [q["id"] for q in glossary.catalog()["domains"][hits[0]["domain"]]["quizzes"]]}
 
     # read -------------------------------------------------------------------
     def course_overview(self) -> dict:
@@ -263,6 +273,8 @@ TOOLS: dict[str, dict] = {
     "case_study": {"description": "A one-page portfolio case study (Markdown) built from a lab's real results.", "schema": _obj({"lab": LAB}, ["lab"])},
     "list_quizzes": {"description": "The concept quizzes and mixed sets for one objective, with the learner's best scores.",
                      "schema": _obj({"objective": OBJ}, ["objective"])},
+    "glossary_lookup": {"description": "Look up a SY0-701 acronym or term: expansion, plain-English definition, objectives, and the domain's glossary quizzes.",
+                        "schema": _obj({"term": {"type": "string", "maxLength": 60}}, ["term"])},
     "progress_summary": {"description": "The learner's weakest objectives, reviews due today, streak and recent sessions.", "schema": _obj({})},
     "start_quiz": {"description": "Questions of one quiz WITHOUT answers. Ask them one at a time; check each with check_answer.",
                    "schema": _obj({"quiz": QUIZ, "seed": SEED}, ["quiz"])},
