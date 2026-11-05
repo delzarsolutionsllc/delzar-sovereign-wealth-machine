@@ -1,0 +1,97 @@
+{
+  "_description": "Harrowgate Example Freight (fictional) is replacing its VPN with Microsoft Entra Global Secure Access. Three traffic forwarding profiles, three per-app Private Access apps plus Quick Access, three connector groups, web content filtering through security profiles linked by Conditional Access, and 16 observed traffic flows to evaluate.",
+  "tenant": "Harrowgate Example Freight",
+  "private_dns_suffixes": ["hgf.internal"],
+  "users": [
+    {"upn": "ava.lind@harrowgate.example", "name": "Ava Lind"},
+    {"upn": "ben.osei@harrowgate.example", "name": "Ben Osei"},
+    {"upn": "chloe.marsh@harrowgate.example", "name": "Chloe Marsh"},
+    {"upn": "dev.patel@harrowgate.example", "name": "Dev Patel"},
+    {"upn": "eli.novak@harrowgate.example", "name": "Eli Novak"},
+    {"upn": "fatima.reyes@harrowgate.example", "name": "Fatima Reyes"},
+    {"upn": "gus.hale@harrowgate.example", "name": "Gus Hale"}
+  ],
+  "groups": {
+    "Finance": ["ava.lind@harrowgate.example", "chloe.marsh@harrowgate.example"],
+    "Engineering": ["ben.osei@harrowgate.example", "eli.novak@harrowgate.example"],
+    "Ops": ["fatima.reyes@harrowgate.example", "gus.hale@harrowgate.example"],
+    "Contractors": ["dev.patel@harrowgate.example"],
+    "GSA-Pilot": []
+  },
+  "devices": [
+    {"id": "LT-01", "user": "ava.lind@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-02", "user": "ben.osei@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-03", "user": "chloe.marsh@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-04", "user": "dev.patel@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-05", "user": "eli.novak@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-06", "user": "fatima.reyes@harrowgate.example", "gsa_client_installed": true},
+    {"id": "LT-07", "user": "ben.osei@harrowgate.example"},
+    {"id": "LT-08", "user": "gus.hale@harrowgate.example", "gsa_client_installed": false}
+  ],
+  "forwarding_profiles": {
+    "microsoft": {"enabled": true, "assigned_to": ["All users"]},
+    "internet": {"enabled": true, "assigned_to": ["Finance", "Engineering", "Ops"]},
+    "private": {"enabled": true, "assigned_to": ["Finance", "Engineering", "Ops", "Contractors"]}
+  },
+  "connector_groups": [
+    {"name": "CG-Leeds", "connectors": [{"name": "leeds-conn-1", "status": "active"}, {"name": "leeds-conn-2", "status": "active"}]},
+    {"name": "CG-Bristol", "connectors": [{"name": "bristol-conn-1", "status": "active"}, {"name": "bristol-conn-2", "status": "inactive"}]},
+    {"name": "CG-Archive", "connectors": [{"name": "archive-conn-1", "status": "inactive"}]}
+  ],
+  "private_apps": [
+    {"id": "PA-ERP", "name": "Finance ERP", "type": "enterprise", "connector_group": "CG-Leeds", "assigned_to": ["Finance"],
+     "segments": [{"destination": "erp.hgf.internal", "ports": ["443"], "protocol": "tcp"}]},
+    {"id": "PA-BUILD", "name": "Build Servers", "type": "enterprise", "connector_group": "CG-Bristol", "assigned_to": ["Engineering"],
+     "segments": [{"destination": "10.20.0.0/16", "ports": ["22", "8080-8090"], "protocol": "tcp"}]},
+    {"id": "PA-FILES", "name": "Legacy File Share", "type": "enterprise", "connector_group": "CG-Archive", "assigned_to": ["Finance", "Ops"],
+     "segments": [{"destination": "files.hgf.internal", "ports": ["445"], "protocol": "tcp"}]},
+    {"id": "QA", "name": "Quick Access", "type": "quick_access", "connector_group": "CG-Leeds", "assigned_to": ["Engineering", "Ops"],
+     "segments": [{"destination": "*.hgf.internal", "ports": ["80", "443"], "protocol": "tcp"},
+                  {"destination": "10.20.5.0/24", "ports": ["443"], "protocol": "tcp"}]}
+  ],
+  "web_categories": {
+    "*.wager-example.test": "Gambling",
+    "chirp.example": "Social networking",
+    "friendspace.example": "Social networking",
+    "news.example": "News"
+  },
+  "web_filtering_policies": [
+    {"name": "Block-HighRisk", "action": "block", "rules": [{"type": "webCategory", "value": "Gambling"}, {"type": "fqdn", "value": "*.wager-example.test"}]},
+    {"name": "Block-Social", "action": "block", "rules": [{"type": "webCategory", "value": "Social networking"}]},
+    {"name": "Allow-Chirp-Marketing", "action": "allow", "rules": [{"type": "fqdn", "value": "chirp.example"}]}
+  ],
+  "security_profiles": [
+    {"name": "Baseline", "baseline": true, "links": [{"policy": "Block-HighRisk", "priority": 100}]},
+    {"name": "Standard", "priority": 200, "links": [{"policy": "Block-Social", "priority": 100}]},
+    {"name": "Ops-Comms", "priority": 100, "links": [{"policy": "Allow-Chirp-Marketing", "priority": 100}, {"policy": "Block-Social", "priority": 200}]},
+    {"name": "Contractor-Strict", "priority": 300, "links": [{"policy": "Block-Social", "priority": 100}]}
+  ],
+  "conditional_access_policies": [
+    {"name": "GSA - Standard filtering", "state": "enabled", "include": ["Finance", "Engineering"], "exclude": [],
+     "target_resources": "All internet resources with Global Secure Access", "security_profile": "Standard"},
+    {"name": "GSA - Ops comms filtering", "state": "enabled", "include": ["Ops"], "exclude": [],
+     "target_resources": "All internet resources with Global Secure Access", "security_profile": "Ops-Comms"},
+    {"name": "GSA - Contractor filtering", "state": "reportOnly", "include": ["Contractors"], "exclude": [],
+     "target_resources": "All internet resources with Global Secure Access", "security_profile": "Contractor-Strict"},
+    {"name": "Finance Office 365 MFA", "state": "enabled", "include": ["Finance"], "exclude": [],
+     "target_resources": "Office 365", "security_profile": "Contractor-Strict"}
+  ],
+  "flows": [
+    {"id": "F01", "user": "ava.lind@harrowgate.example", "device": "LT-01", "destination": "harrowgate.sharepoint.com", "port": 443, "protocol": "tcp"},
+    {"id": "F02", "user": "ava.lind@harrowgate.example", "device": "LT-01", "destination": "news.example", "port": 443, "protocol": "tcp"},
+    {"id": "F03", "user": "chloe.marsh@harrowgate.example", "device": "LT-03", "destination": "friendspace.example", "port": 443, "protocol": "tcp"},
+    {"id": "F04", "user": "fatima.reyes@harrowgate.example", "device": "LT-06", "destination": "chirp.example", "port": 443, "protocol": "tcp"},
+    {"id": "F05", "user": "fatima.reyes@harrowgate.example", "device": "LT-06", "destination": "friendspace.example", "port": 443, "protocol": "tcp"},
+    {"id": "F06", "user": "eli.novak@harrowgate.example", "device": "LT-05", "destination": "play.wager-example.test", "port": 443, "protocol": "tcp"},
+    {"id": "F07", "user": "ben.osei@harrowgate.example", "device": "LT-02", "destination": "unknown-tools.example", "port": 443, "protocol": "tcp"},
+    {"id": "F08", "user": "ava.lind@harrowgate.example", "device": "LT-01", "destination": "erp.hgf.internal", "port": 443, "protocol": "tcp"},
+    {"id": "F09", "user": "chloe.marsh@harrowgate.example", "device": "LT-03", "destination": "erp.hgf.internal", "port": 8443, "protocol": "tcp"},
+    {"id": "F10", "user": "ben.osei@harrowgate.example", "device": "LT-02", "destination": "10.20.4.15", "port": 22, "protocol": "tcp"},
+    {"id": "F11", "user": "ava.lind@harrowgate.example", "device": "LT-01", "destination": "10.20.4.15", "port": 22, "protocol": "tcp"},
+    {"id": "F12", "user": "fatima.reyes@harrowgate.example", "device": "LT-06", "destination": "files.hgf.internal", "port": 445, "protocol": "tcp"},
+    {"id": "F13", "user": "eli.novak@harrowgate.example", "device": "LT-05", "destination": "wiki.hgf.internal", "port": 443, "protocol": "tcp"},
+    {"id": "F14", "user": "dev.patel@harrowgate.example", "device": "LT-04", "destination": "news.example", "port": 443, "protocol": "tcp"},
+    {"id": "F15", "user": "ben.osei@harrowgate.example", "device": "LT-07", "destination": "10.20.4.15", "port": 8085, "protocol": "tcp"},
+    {"id": "F16", "user": "gus.hale@harrowgate.example", "device": "LT-08", "destination": "harrowgate.sharepoint.com", "port": 443, "protocol": "tcp"}
+  ]
+}

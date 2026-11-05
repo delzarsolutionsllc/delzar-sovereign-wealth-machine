@@ -1,0 +1,47 @@
+{
+  "global_secure_access": {
+    "_comment": "Lab 34 policy. Endpoint lists and precedence are illustrative simplifications of Microsoft Entra Global Secure Access; check Microsoft Learn for current product behaviour.",
+    "all_users_keyword": "All users",
+    "microsoft_destinations": [
+      "*.sharepoint.com",
+      "*.sharepoint-df.com",
+      "outlook.office.com",
+      "outlook.office365.com",
+      "*.outlook.com",
+      "*.teams.microsoft.com",
+      "teams.microsoft.com",
+      "login.microsoftonline.com",
+      "*.login.microsoftonline.com",
+      "graph.microsoft.com"
+    ],
+    "private_ip_ranges": ["10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"],
+    "healthy_connector_statuses": ["active"],
+    "min_healthy_connectors": 2,
+    "app_evaluation_order": ["enterprise", "quick_access"],
+    "ca_internet_target": "All internet resources with Global Secure Access",
+    "enforced_ca_states": ["enabled"],
+    "report_only_ca_states": ["reportOnly"],
+    "default_internet_action": "allow",
+    "unknown_category_action": "block",
+    "missing_security_profile_action": "block",
+    "outcome_definitions": {
+      "TUNNELED_MICROSOFT": "Microsoft 365 and Entra traffic acquired by the Microsoft traffic profile.",
+      "TUNNELED_INTERNET_ALLOWED": "Internet traffic acquired by the Internet Access profile and allowed by web content filtering.",
+      "BLOCKED_BY_WEB_FILTER": "Internet traffic acquired and blocked by a web content filtering rule or a deny-by-default setting.",
+      "TUNNELED_PRIVATE_ACCESS": "Private traffic matched to an assigned app's segment and sent through a healthy connector group.",
+      "BLOCKED_NO_SEGMENT": "Private destination that no application segment available to the user covers.",
+      "BLOCKED_CONNECTOR_UNAVAILABLE": "Matched app whose connector group is missing or has no healthy connector.",
+      "BYPASSED_NOT_FORWARDED": "Traffic the client never acquires: no client, profile disabled or user not assigned."
+    },
+    "concepts": {
+      "traffic forwarding profile": "A switch-and-assignment that tells the Global Secure Access client which class of traffic (Microsoft, internet or private) to send into the tunnel and for whom.",
+      "Global Secure Access client": "Software on the device that captures traffic matching the enabled forwarding profiles and sends it to Microsoft's edge.",
+      "application segment": "One destination definition in a Private Access app: an FQDN, wildcard FQDN, IP address or CIDR range plus ports and protocol.",
+      "connector group": "A set of lightweight agents on the private network that carry Private Access traffic from Microsoft's edge to the internal resource.",
+      "Quick Access": "A single broad Private Access app, often used to replace a VPN quickly, before splitting access into per-app enterprise applications.",
+      "web content filtering policy": "An ordered list of allow or block rules matching web categories or FQDNs for internet traffic.",
+      "security profile": "A prioritised container of filtering policies that Conditional Access links to users through a session control.",
+      "baseline profile": "The lowest-priority security profile that applies to all forwarded internet traffic without any Conditional Access policy."
+    }
+  }
+}

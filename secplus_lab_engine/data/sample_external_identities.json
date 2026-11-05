@@ -1,0 +1,43 @@
+{
+  "_description": "Harbor Lane Example Ltd (fictional) works with three partner organisations. Its Microsoft Entra tenant has organisational cross-tenant settings for Cobalt Ridge Consulting (MFA and compliant-device trust, B2B direct connect for Teams shared channels), Larkspur Analytics (only two apps, hybrid-joined trust) and Quillfeather Media (inbound B2B collaboration blocked). This week's queue: 6 guest invitations, 12 external sign-ins and 8 guest accounts due for lifecycle review. All companies, people and tenant IDs are fictional.",
+  "members": [
+    {"id": "U001", "name": "Maya Okafor", "user_type": "member", "roles": ["User Administrator"], "account_enabled": true},
+    {"id": "U002", "name": "Tom Brennan", "user_type": "member", "roles": [], "account_enabled": true},
+    {"id": "U003", "name": "Priya Raman", "user_type": "member", "roles": [], "account_enabled": true},
+    {"id": "U004", "name": "Owen Lacey", "user_type": "member", "roles": [], "account_enabled": false},
+    {"id": "U900", "name": "Sam Ortiz (Cobalt Ridge)", "user_type": "guest", "roles": [], "account_enabled": true},
+    {"id": "U901", "name": "Rhea Collins (Larkspur)", "user_type": "guest", "roles": ["Guest Inviter"], "account_enabled": true}
+  ],
+  "invitations": [
+    {"id": "I01", "inviter": "U002", "guest_email": "jordan.lee@cobaltridge.example", "note": "project kickoff"},
+    {"id": "I02", "inviter": "U900", "guest_email": "kim.ash@cobaltridge.example", "note": "guest inviting a colleague"},
+    {"id": "I03", "inviter": "U901", "guest_email": "noor.patel@larkspur.example", "note": "guest with Guest Inviter role"},
+    {"id": "I04", "inviter": "U003", "guest_email": "ellis.grant@quillfeather.example", "note": "agency contact"},
+    {"id": "I05", "inviter": "U777", "guest_email": "drew.fox@cobaltridge.example", "note": "inviter not found"},
+    {"id": "I06", "inviter": "U001", "guest_email": "Pat.Morrow@FreeMail.Example", "note": "personal mailbox, mixed case"}
+  ],
+  "sign_ins": [
+    {"id": "S01", "user": "jordan.lee@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_collaboration", "app": "project-hub", "home_mfa": true},
+    {"id": "S02", "user": "sam.ortiz@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_collaboration", "app": "finance-erp", "home_mfa": true, "device_compliant": true},
+    {"id": "S03", "user": "sam.ortiz@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_direct_connect", "app": "teams-shared-channels", "home_mfa": true, "partner_outbound_allows": true},
+    {"id": "S04", "user": "kim.ash@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_collaboration", "app": "finance-erp", "home_mfa": true, "device_compliant": false, "hybrid_joined": true},
+    {"id": "S05", "user": "kim.ash@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_collaboration", "app": "project-hub", "home_mfa": false},
+    {"id": "S06", "user": "noor.patel@larkspur.example", "home_tenant_id": "1a4c5000-0000-4000-8000-00000000d002", "access_type": "b2b_collaboration", "app": "project-hub", "home_mfa": true},
+    {"id": "S07", "user": "noor.patel@larkspur.example", "home_tenant_id": "1a4c5000-0000-4000-8000-00000000d002", "access_type": "b2b_collaboration", "app": "partner-portal", "home_mfa": false},
+    {"id": "S08", "user": "rhea.collins@larkspur.example", "home_tenant_id": "1a4c5000-0000-4000-8000-00000000d002", "access_type": "b2b_collaboration", "app": "finance-erp", "home_mfa": true, "hybrid_joined": true},
+    {"id": "S09", "user": "ellis.grant@quillfeather.example", "home_tenant_id": "9f11e000-0000-4000-8000-00000000e003", "access_type": "b2b_collaboration", "app": "partner-portal", "home_mfa": true},
+    {"id": "S10", "user": "alex.rivera@brightwater.example", "home_tenant_id": "77aa0000-0000-4000-8000-00000000f004", "access_type": "b2b_collaboration", "app": "project-hub", "home_mfa": true},
+    {"id": "S11", "user": "alex.rivera@brightwater.example", "home_tenant_id": "77aa0000-0000-4000-8000-00000000f004", "access_type": "b2b_direct_connect", "app": "teams-shared-channels", "home_mfa": true, "partner_outbound_allows": true},
+    {"id": "S12", "user": "jordan.lee@cobaltridge.example", "home_tenant_id": "c0ba1700-0000-4000-8000-00000000c001", "access_type": "b2b_direct_connect", "app": "teams-shared-channels", "home_mfa": true, "partner_outbound_allows": false}
+  ],
+  "guests": [
+    {"id": "G01", "upn": "jordan.lee_cobaltridge.example#EXT#@harborlane.example", "sponsor": "U002", "invitation_state": "Accepted", "last_sign_in_days_ago": 3},
+    {"id": "G02", "upn": "sam.ortiz_cobaltridge.example#EXT#@harborlane.example", "sponsor": "U003", "invitation_state": "Accepted", "last_sign_in_days_ago": 120},
+    {"id": "G03", "upn": "lee.hollis_larkspur.example#EXT#@harborlane.example", "sponsor": "U002", "invitation_state": "Accepted", "last_sign_in_days_ago": 240},
+    {"id": "G04", "upn": "noor.patel_larkspur.example#EXT#@harborlane.example", "sponsor": null, "invitation_state": "Accepted", "last_sign_in_days_ago": 12},
+    {"id": "G05", "upn": "casey.dunn_cobaltridge.example#EXT#@harborlane.example", "sponsor": null, "invitation_state": "Accepted", "last_sign_in_days_ago": 130},
+    {"id": "G06", "upn": "ari.boyd_brightwater.example#EXT#@harborlane.example", "sponsor": "U001", "invitation_state": "PendingAcceptance", "invited_days_ago": 45},
+    {"id": "G07", "upn": "mo.stern_larkspur.example#EXT#@harborlane.example", "sponsor": "U004", "invitation_state": "Accepted", "last_sign_in_days_ago": 20},
+    {"id": "G08", "upn": "jess.kerr_cobaltridge.example#EXT#@harborlane.example", "sponsor": "U003", "invitation_state": "Accepted"}
+  ]
+}

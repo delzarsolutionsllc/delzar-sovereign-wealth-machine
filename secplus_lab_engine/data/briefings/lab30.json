@@ -1,0 +1,35 @@
+{
+  "lab": 30,
+  "ticket": "IAM-43030",
+  "type": "Design request",
+  "priority": "P2",
+  "requested_by": "Dev Anand, Head of Identity, Larkspur Freight Group",
+  "title": "Choose the sync tool and sign-in method for 11 business units and fix the first sync health check",
+  "situation": "Larkspur Freight Group (fictional) is bringing itself and three companies it bought into one Microsoft Entra ID tenant. Each of its 11 business units has its own on-premises Active Directory (AD) set-up and rules: some have several forests that cannot see each other, one may never let passwords leave its own network, one uses AD FS (Active Directory Federation Services) with a third-party MFA (multifactor authentication) product, and the depots enforce logon hours. The first sync health check of the main forest has also come back with warnings.",
+  "your_task": [
+    "For each business unit, pick the sign-in method: password hash sync (PHS) by default, pass-through authentication (PTA) or federation only when a requirement needs it.",
+    "Decide whether each unit gets password hash sync as a backup, and flag any unit that needs leaked credential detection but cannot have it.",
+    "Pick the sync tool for each unit: Microsoft Entra Cloud Sync where it meets the needs, Microsoft Entra Connect Sync where a feature needs it, and both side by side where a disconnected forest needs it.",
+    "Work through the health check: objects outside the sync scope, duplicate UPNs (user principal names) and proxy addresses, unverified UPN suffixes, too few agents, staged rollout groups that break the limits, and a sync server that has stopped syncing.",
+    "List every requirement a unit did not state, so the account team can confirm it before go-live."
+  ],
+  "why_it_matters": "The wrong sign-in method either breaks a rule (hashes in the cloud when a regulator forbids it) or locks everyone out when one on-premises server fails. Sync errors mean people start on Monday with no account, the wrong sign-in name, or a mailbox address taken by someone else.",
+  "done_when": [
+    "All 11 business units have a sign-in method, a backup decision and a sync tool, each with written reasons.",
+    "The one leaked credential detection gap and the two units with no backup sign-in method are reported to the risk owner.",
+    "All 15 health checks have a finding, and the 11 that need action have a fix.",
+    "The unit with unstated requirements is sent back for confirmation."
+  ],
+  "glossary": {
+    "Password hash synchronization (PHS)": "Copying a hash of each user's AD password hash to Microsoft Entra ID so the cloud can check passwords itself.",
+    "Pass-through authentication (PTA)": "Microsoft Entra ID passes each password check to small agents on-premises, which ask AD directly.",
+    "Federation (AD FS)": "Microsoft Entra ID trusts another sign-in service, such as Active Directory Federation Services, to check the user and return a signed token.",
+    "Microsoft Entra Cloud Sync": "A cloud-managed sync service that uses lightweight agents in each forest.",
+    "Microsoft Entra Connect Sync": "The full sync server installed on-premises, with the widest set of features (formerly Azure AD Connect).",
+    "Staged rollout": "Moving selected groups of users from federation to cloud sign-in before switching the whole domain.",
+    "User principal name (UPN)": "The sign-in name, such as name@company.example; its suffix must be a domain verified in the tenant.",
+    "Leaked credential detection": "A Microsoft Entra ID Protection check that matches synced password hashes against passwords found in breaches."
+  },
+  "job_roles": ["Identity and Access Administrator", "IAM Engineer", "Microsoft 365 Administrator", "Cloud Identity Architect"],
+  "talking_point": "Planned hybrid identity for 11 business units: 7 on password hash sync, 2 on pass-through authentication and 2 on federation, with password hash sync as backup for 2 and 2 left with no backup; 4 on Cloud Sync and 7 on Connect Sync, 1 of them running Cloud Sync side by side for a disconnected forest. Found 1 leaked credential detection gap and flagged 11 of 15 sync health checks for action: 3 objects out of scope, 2 duplicate attributes, 1 unverified UPN suffix, a pass-through set with only 2 active agents, a single Cloud Sync agent, an 850-member staged rollout group, a dynamic group and a sync server 1440 minutes behind."
+}

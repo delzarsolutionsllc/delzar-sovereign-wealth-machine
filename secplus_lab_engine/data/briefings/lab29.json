@@ -1,0 +1,33 @@
+{
+  "lab": 29,
+  "ticket": "SEC-42907",
+  "type": "Security review",
+  "priority": "P2",
+  "requested_by": "Priya Halvorsen, Cloud Platform Lead",
+  "title": "Pick identities for the Azure migration and clean up existing app logins before the platform security review",
+  "situation": "Larkspur Example Logistics is moving seven workloads into or alongside Azure: web apps, function apps, a rebuilt-every-release batch scale set, a GitHub Actions release pipeline, an on-premises payroll export, a partner sync and a vendor agent nobody has documented. At the same time, the security team exported the nine service principals and managed identities that already exist. Several still use client secrets, some have no owner and one migration account from last year still holds Contributor on the whole subscription.",
+  "your_task": [
+    "For each workload, recommend a system-assigned managed identity, a user-assigned managed identity, a service principal with a federated credential, or a service principal with a certificate.",
+    "Never recommend a client secret, and choose the safest option when the hosting is unknown.",
+    "Audit every existing identity for client secrets (present, too long-lived, expired or expiring soon), missing owners, privileged Azure roles at subscription scope and sign-ins that stopped.",
+    "Give each identity one headline fix and hand the platform team a remediation plan."
+  ],
+  "why_it_matters": "Workload identities do not use multifactor authentication (MFA) and are rarely watched, so a leaked client secret or an over-privileged service principal is one of the easiest ways into a cloud subscription. Managed identities and federation remove the secret entirely; least-privilege role-based access control (RBAC) limits the damage if something is still compromised.",
+  "done_when": [
+    "All 7 workloads have a recommended identity type with the rule that decided it.",
+    "All 9 existing identities have findings, a headline fix and written reasons.",
+    "Every client secret has a plan: replace with federation where the platform supports OpenID Connect (OIDC), otherwise rotate to a certificate.",
+    "No workload identity keeps a privileged role at subscription scope."
+  ],
+  "glossary": {
+    "Managed identity": "An identity for an Azure resource whose credential Azure creates and rotates, so no secret appears in code or configuration.",
+    "System-assigned managed identity": "A managed identity switched on for one resource and deleted automatically with it.",
+    "User-assigned managed identity": "A managed identity created as its own Azure resource, which can be attached to several resources.",
+    "Service principal": "An application's identity inside one Microsoft Entra ID tenant, used to sign in and to receive role assignments.",
+    "Workload identity federation": "A trust that lets a workload outside Azure, such as a GitHub Actions job, exchange its own OpenID Connect (OIDC) token for a Microsoft Entra token without any stored secret.",
+    "Azure role-based access control (RBAC)": "Permissions in Azure given as a role (what you can do) at a scope (subscription, resource group or single resource).",
+    "Privileged Identity Management (PIM)": "A Microsoft Entra ID Governance feature that makes powerful roles eligible rather than permanent, so people activate them for a limited time with justification or approval."
+  },
+  "job_roles": ["Identity and Access Administrator", "Cloud Security Engineer", "Azure Platform Engineer", "DevSecOps Engineer"],
+  "talking_point": "Chose identities for 7 workloads (1 system-assigned and 2 user-assigned managed identities, 1 federated service principal for GitHub Actions and 3 certificate-based service principals, never a client secret) and audited 9 existing workload identities, flagging 7 for a fix: 1 secret replaced with federation, 2 secrets rotated (one expired, one expiring in 12 days), 1 owner assigned, 2 broad privileged roles reduced (including an unknown custom role treated as privileged) and 1 unused migration account disabled, with 2 left as OK."
+}
