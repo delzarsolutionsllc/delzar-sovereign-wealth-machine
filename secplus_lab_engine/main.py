@@ -113,7 +113,7 @@ def show_progress(ui: UI, progress_path: str | None = None) -> None:
     if not rows:
         ui.print("No challenge results yet. Try: python main.py challenge 1", style="yellow")
         return
-    ui.table("Progress by SY0-701 objective (weakest first)", ["Objective", "Attempted", "Correct", "Score", "Status"], rows)
+    ui.table(f"Progress by {_exam()} objective (weakest first)", ["Objective", "Attempted", "Correct", "Score", "Status"], rows)
     recent = p.data.get("sessions", [])[-5:]
     if recent:
         ui.table("Recent sessions", ["When (UTC)", "Lab", "Score"], [[s["ts"], s["lab"], s["score"]] for s in recent])
@@ -193,7 +193,7 @@ def domain_test(ui: UI, policies: dict, domain: str, count: int = 30, minutes: f
 def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int | None = None,
          randomize: bool = True, ask=None, progress_path: str | None = None, source: str = "bank"):
     questions, alloc, shortfall = build_exam(policies, count, seed, randomize, source)
-    ui.header("PRACTICE EXAM · SY0-701", f"{len(questions)} questions · {minutes:g} minutes · per domain {alloc} · "
+    ui.header(f"PRACTICE EXAM · {_exam()}", f"{len(questions)} questions · {minutes:g} minutes · per domain {alloc} · "
                                          "no feedback until the end")
     progress = Progress(progress_path) if progress_path is not None else Progress()
     return run_exam(ui, questions, minutes, ask=ask, progress=progress, shortfall=shortfall)
@@ -219,7 +219,7 @@ def review(ui: UI, count: int = 15, seed: int | None = None, ask=None, progress_
         return {"done": 0, "correct": 0, "due_by_day": session["due_by_day"]}
     done = correct = 0
     for i, q in enumerate(qs, 1):
-        ui.section(f"Question {i}/{len(qs)}  ·  SY0-701 {q['objective']}  ·  {q['reason']}")
+        ui.section(f"Question {i}/{len(qs)}  ·  {_exam()} {q['objective']}  ·  {q['reason']}")
         ui.print(f"[bold]{q['prompt']}[/bold]")
         for n, c in enumerate(q["choices"], 1):
             ui.print(f"  {n}) {c}")
@@ -370,6 +370,11 @@ def glossary_cmd(ui: UI, term: str | None = None, domain: str | None = None, qui
         ui.table(f"Domain {domain} glossary quizzes (python main.py glossary --quiz ID)", ["ID", "Quiz", "Questions"],
                  [[q["id"], q["title"], len(q["qids"])] for q in c["quizzes"]])
     return {"count": len(rows)}
+
+
+def _exam() -> str:
+    from utils.course import active
+    return active().get("exam_code") or "SY0-701"
 
 
 def _course_labs() -> list[int]:

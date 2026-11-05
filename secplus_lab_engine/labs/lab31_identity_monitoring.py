@@ -449,7 +449,8 @@ def build_challenges(policies: dict, data: dict) -> list:
                                context=ctx, choices=list(RULES.values()), answer=RULES[r.rule],
                                explanation=r.reasons[0], objective="2.3"))
 
-    # Which detection fires for this evidence?
+    # Which detection fires for this evidence, and which table/column finds it?
+    asked_tables: set = set()
     for t in DETECTIONS:
         d = next((x for x in dets if x.type == t), None)
         if not d:
@@ -461,10 +462,17 @@ def build_challenges(policies: dict, data: dict) -> list:
                            context="\n".join(ev_lines), choices=choices_with(t, DETECTIONS, exclude=also, key=d.subject),
                            answer=t, explanation="; ".join(d.reasons), objective="4.4"))
         q = cfg["detection_queries"][t]
-        qs.append(Question(prompt=f"To hunt for {t.replace('_', ' ').lower()} in Log Analytics, which table do you query?",
-                           choices=sorted(cfg["log_tables"]), answer=q["table"],
-                           explanation=f"{q['table']}: {cfg['log_tables'][q['table']]}. Example: {q['kql']}",
-                           objective="4.4"))
+        if q["table"] not in asked_tables and q["table"] != "AuditLogs":      # AuditLogs gets its own question below
+            asked_tables.add(q["table"])
+            qs.append(Question(prompt=f"To hunt for {t.replace('_', ' ').lower()} in Log Analytics, which table do "
+                               f"you query?", choices=sorted(cfg["log_tables"]), answer=q["table"],
+                               explanation=f"{q['table']}: {cfg['log_tables'][q['table']]}. Example: {q['kql']}",
+                               objective="4.4"))
+        if q["column"] in cfg["signin_columns"] and q["column"] not in ("ResultType", "ClientAppUsed"):
+            qs.append(Question(prompt=f"A KQL hunt for {t.replace('_', ' ').lower()} summarizes failures by which "
+                               f"SigninLogs column?", choices=sorted(cfg["signin_columns"]), answer=q["column"],
+                               explanation=f"{q['column']}: {cfg['signin_columns'][q['column']]}. Query: {q['kql']}",
+                               objective="4.4"))
 
     # Threshold edge: which IP is a password spray?
     spray = [d for d in dets if d.type == "PASSWORD_SPRAY"]
