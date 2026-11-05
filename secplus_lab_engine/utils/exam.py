@@ -28,6 +28,15 @@ Usage
     python main.py exam --fixed                # sample data only, no random scenarios
     python main.py exam --domain 4             # domain test: 30 questions from Domain 4 only
 
+Question kinds: besides single-answer questions the bank has select-TWO
+(multiple response) and performance-based ordering and matching items
+(data/exam_bank/pbq.json). About ``PBQ_SHARE`` of each domain's slots go to
+them, like the handful of such items on the real exam. On the command line:
+
+    select TWO   type both numbers or letters:   1,3   or   A C
+    order        type the numbers first to last:  3 1 4 2
+    match        number then letter for each:     1b 2a 3c
+
 Domain tests draw only from one domain, spread evenly across its objectives,
 and report a score per objective. They are marked against a target of
 ``DOMAIN_TEST_TARGET`` percent; that is a study target, not a CompTIA figure
@@ -46,6 +55,7 @@ DOMAIN_NAMES = {"1": "General Security Concepts", "2": "Threats, Vulnerabilities
                 "3": "Security Architecture", "4": "Security Operations", "5": "Security Program Management"}
 PASS_SCALED = 750
 DOMAIN_TEST_TARGET = 80          # percent; a study target for domain tests, not an official number
+PBQ_SHARE = 0.10                 # share of exam slots for select-TWO / ordering / matching questions
 
 
 @dataclass
@@ -151,11 +161,40 @@ def allocate(count: int, available: dict) -> tuple[dict, dict]:
 
 
 def _shuffled_choices(q, rng: random.Random):
-    """Copy of a question with its options in a random order (the answer letter varies between exams)."""
+    """
+    Copy of a question with its options in a random order (the answer letter varies between exams).
+    Only the DISPLAY changes: ``answer``, ``answers``, ``items`` (the correct order) and the pairs
+    themselves are kept. An ordering question is never shown already in the right order.
+    """
     from dataclasses import replace
     choices = list(q.choices)
     rng.shuffle(choices)
+    kind = getattr(q, "kind", "single")
+    if kind == "order" and choices == list(q.items):
+        choices = choices[1:] + choices[:1]
+    if kind == "match":
+        pairs = list(q.pairs)
+        rng.shuffle(pairs)                      # the order the items are listed in
+        return replace(q, choices=choices, pairs=tuple(pairs))
     return replace(q, choices=choices)
+
+
+def _is_single(q) -> bool:
+    return getattr(q, "kind", "single") == "single"
+
+
+def _pbq_slots(n: int, available: int) -> int:
+    """How many of ``n`` slots go to select-TWO / performance-based questions (about PBQ_SHARE, rounded half up)."""
+    return min(available, int(n * PBQ_SHARE + 0.5))
+
+
+def _sample_mixed(rng: random.Random, qs: list, n: int) -> list:
+    """``n`` questions from ``qs`` with about PBQ_SHARE of them non-single kinds (when there are any)."""
+    singles = [q for q in qs if _is_single(q)]
+    others = [q for q in qs if not _is_single(q)]
+    k = _pbq_slots(n, len(others))
+    k = max(k, n - len(singles))                # too few singles: fill with the other kinds
+    return rng.sample(singles, n - k) + (rng.sample(others, k) if k else [])
 
 
 def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomize: bool = True,
@@ -165,7 +204,7 @@ def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomi
     alloc, shortfall = allocate(count, {d: len(q) for d, q in pool.items()})
     questions = []
     for d, n in alloc.items():
-        questions += rng.sample(pool[d], n)
+        questions += _sample_mixed(rng, pool[d], n)
     rng.shuffle(questions)
     if source == "bank":
         questions = [_shuffled_choices(q, rng) for q in questions]
@@ -184,11 +223,16 @@ def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | 
         raise ValueError(f"unknown domain '{domain}' (use 1-5)")
     rng = random.Random(seed)
     pool = collect_questions(policies, seed, randomize, source=source)[domain]
+    others = [q for q in pool if not _is_single(q)]
+    chosen = rng.sample(others, _pbq_slots(count, len(others))) if others else []
     by_obj: dict[str, list] = {}
     for q in pool:
-        by_obj.setdefault(q.objective, []).append(q)
+        if _is_single(q):
+            by_obj.setdefault(q.objective, []).append(q)
     for qs in by_obj.values():
         rng.shuffle(qs)
+    for q in chosen:                            # end of the list = popped first, so they are always picked
+        by_obj.setdefault(q.objective, []).append(q)
     picked, order = [], sorted(by_obj, key=lambda o: tuple(map(int, o.split("."))))
     while len(picked) < count and any(by_obj[o] for o in order):
         for o in order:
@@ -203,10 +247,92 @@ def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | 
     return picked, dict(sorted(counts.items(), key=lambda kv: tuple(map(int, kv[0].split(".")))))
 
 
+def instructions(q) -> str:
+    """How to type an answer for this kind of question (shown under the options)."""
+    kind = getattr(q, "kind", "single")
+    if kind == "multi":
+        return f"Select {_WORDS.get(q.select, q.select)}: type the numbers or letters, e.g. 1,3 or A C."
+    if kind == "order":
+        return "Put these in order: type the numbers from first to last, e.g. " + " ".join(map(str, _demo(len(q.choices)))) + "."
+    if kind == "match":
+        return "Match each numbered item to a lettered option: e.g. 1b 2a 3c (an option can be unused)."
+    return ""
+
+
+_WORDS = {2: "TWO", 3: "THREE"}
+
+
+def _demo(n: int) -> list[int]:
+    return [3, 1, 4, 2, 5, 6][:n] if n >= 4 else list(range(n, 0, -1))
+
+
+def show_question(ui, q) -> None:
+    """Print a question's options for its kind (numbers for options, letters for match targets)."""
+    kind = getattr(q, "kind", "single")
+    if kind == "match":
+        for n, (item, _) in enumerate(q.pairs, 1):
+            ui.print(f"  {n}) {item}")
+        ui.print("  Options:")
+        for k, c in enumerate(q.choices):
+            ui.print(f"    {chr(97 + k)}) {c}")
+    else:
+        for n, c in enumerate(q.choices, 1):
+            ui.print(f"  {n}) {c}")
+    if kind != "single":
+        ui.print(f"  {instructions(q)}", style="dim")
+
+
+def parse_answer(q, raw: str):
+    """
+    Turn typed input into a response for :func:`utils.challenge.check`, or None if it
+    cannot be read. single: number, letter or text · multi: "1,3" / "1 3" / "A C" ·
+    order: "3 1 4 2" (or letters) · match: "1b 2a 3c" (also "1-b", "1:b", "1=b").
+    """
+    import re
+    from utils.challenge import _resolve, option_index
+
+    kind = getattr(q, "kind", "single")
+    raw = (raw or "").strip()
+    if kind == "single":
+        return _resolve(raw, q.choices)
+    if kind in ("multi", "order"):
+        tokens = [t for t in re.split(r"[\s,;]+", raw) if t]
+        idx = [option_index(t, q.choices) for t in tokens]
+        if not tokens or None in idx or len(set(idx)) != len(idx):
+            return None
+        if kind == "order" and len(idx) != len(q.choices):
+            return None
+        return [q.choices[k] for k in idx]
+    if kind == "match":
+        found = re.findall(r"(\d+)\s*[-:=.)]?\s*([a-z])\b", raw.lower())
+        rest = re.sub(r"(\d+)\s*[-:=.)]?\s*([a-z])\b", "", raw.lower())
+        if not found or re.sub(r"[\s,;]+", "", rest):
+            return None
+        out = {}
+        for num, letter in found:
+            n, k = int(num) - 1, ord(letter) - 97
+            if not (0 <= n < len(q.pairs) and 0 <= k < len(q.choices)) or q.pairs[n][0] in out:
+                return None
+            out[q.pairs[n][0]] = q.choices[k]
+        return out
+    return None
+
+
+def describe_answer(q, response) -> str:
+    """Readable form of a response, for the review of misses."""
+    from utils.challenge import answer_text
+    kind = getattr(q, "kind", "single")
+    if response is None or kind == "single":
+        return response
+    if kind == "match":
+        return answer_text(kind, pairs=[(i, response[i]) for i, _ in q.pairs if i in response])
+    return answer_text(kind, answers=response, items=response)
+
+
 def run_exam(ui, questions: list, minutes: float = 90, ask: Callable[[str], str] | None = None,
              clock: Callable[[], float] = time.monotonic, progress=None, shortfall: dict | None = None,
              domain: str | None = None) -> ExamResult:
-    from utils.challenge import _resolve
+    from utils.challenge import check
 
     ask = ask or ui.ask
     deadline = clock() + minutes * 60
@@ -225,16 +351,16 @@ def run_exam(ui, questions: list, minutes: float = 90, ask: Callable[[str], str]
         if q.context:
             ui.print(q.context, style="dim")
         ui.print(f"[bold]{q.prompt}[/bold]")
-        for n, c in enumerate(q.choices, 1):
-            ui.print(f"  {n}) {c}")
+        show_question(ui, q)
         try:
             raw = ask("Answer:").strip()
         except (EOFError, KeyboardInterrupt):
             res.missed += [(x, None) for x in questions[i - 1:]]
             break
         res.answered += 1
-        chosen = _resolve(raw, q.choices)
-        ok = chosen == q.answer
+        response = parse_answer(q, raw)
+        ok = check(q, response)
+        chosen = describe_answer(q, response)
         if ok:
             res.correct += 1
             res.by_domain[q.objective.split(".")[0]][0] += 1

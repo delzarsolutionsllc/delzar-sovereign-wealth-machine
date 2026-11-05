@@ -104,6 +104,7 @@ def collect(variants: int = 12, include_bank: bool = True) -> list[dict]:
     if include_bank:
         from utils.exam_bank import load_bank
         for r in load_bank():                                  # exam-style questions, lab 0 = "exam-style"
+            if r.get("type", "single") != "single": continue   # select-TWO / ordering / matching do not fit a flashcard
             q = {"prompt": r["stem"], "context": "", "choices": list(r["choices"]), "answer": r["answer"],
                  "explanation": r["explanation"], "objective": r["objective"], "lab": 0}
             if question_key(q) not in seen:

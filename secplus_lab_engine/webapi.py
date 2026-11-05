@@ -25,7 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import portfolio, videos
+from utils import portfolio, review, videos
 from utils.terminal_ui import UI
 
 
@@ -118,8 +118,16 @@ def lab_domains(module) -> list[str]:
 
 
 def _q(q) -> dict:
-    return {"prompt": q.prompt, "context": q.context, "choices": list(q.choices), "answer": q.answer,
-            "explanation": q.explanation, "objective": q.objective}
+    """A question as JSON. ``kind`` says how to render and score it; ``choices`` is the display order."""
+    out = {"prompt": q.prompt, "context": q.context, "choices": list(q.choices), "answer": q.answer,
+           "explanation": q.explanation, "objective": q.objective, "id": q.qid, "kind": q.kind}
+    if q.kind == "multi":
+        out.update(answers=list(q.answers), select=q.select)
+    elif q.kind == "order":
+        out["items"] = list(q.items)                                  # the correct order
+    elif q.kind == "match":
+        out["pairs"] = [[i, m] for i, m in q.pairs]                    # listed in display order
+    return out
 
 
 def _json_safe(obj):
@@ -187,7 +195,8 @@ def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True, dom
 def progress_get(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
     return {"objectives": p.data["objectives"], "sessions": p.data["sessions"][-20:], "rows": p.rows(),
-            "watched": p.data.get("watched", [])}
+            "watched": p.data.get("watched", []), "srs": p.data.get("srs", {}),
+            "streak": p.data.get("streak", {"last_day": None, "count": 0})}
 
 
 def progress_watch(video_id: str, watched: bool = True, path=None) -> dict:
@@ -203,14 +212,23 @@ def progress_watch(video_id: str, watched: bool = True, path=None) -> dict:
     return progress_get(path)
 
 
-def progress_record(results: list[dict], label: str, path=None) -> dict:
-    """results = [{"objective": "4.3", "correct": true}, ...]"""
+def progress_record(results: list[dict], label: str, path=None, today=None) -> dict:
+    """results = [{"objective": "4.3", "correct": true, "qid": "D4-012"}, ...]
+
+    A result whose ``qid`` is an exam-bank id also schedules spaced repetition, so
+    exam misses enter the daily review automatically (see utils/review.py).
+    """
     p = Progress(path) if path is not None else Progress()
+    ids = _bank_ids()
+    day = review.as_date(today) if today not in (None, "") else None
     correct = 0
     for r in results:
+        if not isinstance(r, dict):
+            raise ValueError("each result must be an object")
         ok = bool(r.get("correct"))
         correct += ok
-        p.record(str(r.get("objective", "?")), ok)
+        qid = str(r.get("qid") or "")
+        p.record(str(r.get("objective", "?")), ok, qid if qid in ids else "", day)
     from datetime import datetime, timezone
     p.data["sessions"].append({"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
                                "lab": str(label)[:40], "score": f"{correct}/{len(results)}"})
@@ -220,13 +238,57 @@ def progress_record(results: list[dict], label: str, path=None) -> dict:
 
 def progress_reset(path=None) -> dict:
     p = Progress(path) if path is not None else Progress()
-    p.data = {"objectives": {}, "sessions": [], "watched": []}
+    p.data = {"objectives": {}, "sessions": [], "watched": [], "srs": {}, "streak": {"last_day": None, "count": 0}}
     p.save()
     return progress_get(path)
 
 
+# --------------------------------------------------------------------------- #
+# Daily review (spaced repetition over the exam bank; rules in utils/review.py)
+# --------------------------------------------------------------------------- #
+def _bank():
+    from utils.exam_bank import load_bank
+    return load_bank()
+
+
+def _bank_ids() -> set:
+    return {r["id"] for r in _bank()}
+
+
+def _today(today):
+    from datetime import date
+    return review.as_date(today) if today not in (None, "") else date.today()
+
+
+def review_session(path=None, today=None, size: int = review.DEFAULT_SIZE, seed=None) -> dict:
+    """Today's session: due reviews first, then new questions from the weakest objectives."""
+    size = int(size)
+    if not 1 <= size <= 50:
+        raise ValueError("size must be between 1 and 50")
+    p = Progress(path) if path is not None else Progress()
+    return review.build_session(p.data, _bank(), _today(today), size, seed)
+
+
+def review_answer(qid: str, correct: bool, today=None, path=None) -> dict:
+    """Record one review answer: schedules the card, counts the objective and the daily streak."""
+    by_id = {r["id"]: r for r in _bank()}
+    if not isinstance(qid, str) or qid not in by_id:
+        raise ValueError("unknown question id")
+    if not isinstance(correct, bool):
+        raise ValueError("correct must be true or false")
+    day = _today(today)
+    p = Progress(path) if path is not None else Progress()
+    p.record(by_id[qid]["objective"], correct, qid, day, review=True)
+    p.save()
+    ids = {q for q, r in by_id.items() if review.is_single(r)}      # what a session can show today
+    return {"qid": qid, "correct": correct, "card": p.data["srs"][qid],
+            "streak": {**p.data["streak"], "current": review.current_streak(p.data["streak"], day)},
+            "due_total": len(review.due_ids(p.data["srs"], day, ids)),
+            "due_by_day": review.due_by_day(p.data["srs"], day, 7, ids)}
+
+
 METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
-           "case_study"}
+           "case_study", "review_session", "review_answer"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -252,7 +314,11 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         res = a.get("results")
         if not isinstance(res, list):
             raise ValueError("results must be a list")
-        return progress_record(res, a.get("label", "web"), progress_path)
+        return progress_record(res, a.get("label", "web"), progress_path, a.get("today"))
+    if method == "review_session":
+        return review_session(progress_path, a.get("today"), a.get("size", review.DEFAULT_SIZE), seed)
+    if method == "review_answer":
+        return review_answer(a.get("qid"), a.get("correct"), a.get("today"), progress_path)
     if method == "case_study":
         return portfolio.case_study(int(a["lab"]), policies)
     if method == "progress_watch":

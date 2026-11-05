@@ -90,6 +90,20 @@ code, pre, .mono { font-family: var(--mono); }
 .choice.picked { border-color: var(--accent); background: var(--accent-soft); }
 .choice.right { border-color: var(--pass); background: var(--pass-soft); }
 .choice.wrong { border-color: var(--fail); background: var(--fail-soft); }
+/* select-TWO / ordering / matching exam questions */
+.pbq-how { font-size: .85rem; color: var(--muted); }
+.choice input { margin: 0; accent-color: var(--accent); flex: none; }
+.choice.locked { opacity: .55; cursor: default; }
+.olist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.orow { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 8px 10px; cursor: grab; }
+.orow.dragging { opacity: .5; } .orow.over { border-color: var(--accent); background: var(--accent-soft); }
+.orow .k { font-family: var(--mono); color: var(--muted); font-size: .8rem; min-width: 1.2em; }
+.orow .mv { display: flex; gap: 4px; } .orow .mv .btn { padding: 4px 10px; }
+.mrow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: center; border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; background: var(--surface); }
+.mrow select { width: 100%; max-width: 100%; padding: 7px 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+@media (max-width: 560px) { .mrow { grid-template-columns: minmax(0, 1fr); } }
+.review-list { margin: 4px 0; padding-left: 20px; }
+.verdict, .prompt { overflow-wrap: anywhere; }   /* long code-like strings in a stem must not widen the page */
 .verdict { border-left: 3px solid var(--line); padding: 8px 12px; background: var(--sunken); border-radius: 0 6px 6px 0; }
 .verdict.ok { border-left-color: var(--pass); } .verdict.no { border-left-color: var(--fail); }
 .pill { display: inline-block; padding: 1px 8px; border-radius: 99px; font-size: .75rem; font-weight: 600; letter-spacing: .03em; }
@@ -123,7 +137,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
   .app { grid-template-columns: minmax(0, 1fr); }
   .rail { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding-right: max(16px, env(safe-area-inset-right, 0px)); gap: 12px; }
   .maptoggle { display: inline-flex; }
-  .rail:not(.open) .domains, .rail:not(.open) .mode { display: none; }
+  .rail:not(.open) .domains, .rail:not(.open) .mode, .rail:not(.open) .tm { display: none; }
   .railtop { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
 }
 .vlist { list-style: none; padding: 0; margin: 8px 0; display: grid; gap: 6px; }
@@ -143,6 +157,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 ol.path li { margin-bottom: 8px; }
 a.done { font-weight: 600; }
 @media print { .rail, .tabs, .noprint, .panel:not(#labbody) { display: none !important; } .main, #labbody { padding: 0; border: 0; box-shadow: none; } body { background: #fff; } }
+.tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
 
@@ -153,6 +168,7 @@ a.done { font-weight: 600; }
       <button class="btn maptoggle" id="maptoggle" aria-expanded="false" aria-controls="domains">Course map</button>
     </div>
     <nav class="nav" aria-label="Main">
+      <a href="#review" data-view="review">Daily review</a>
       <a href="#home" data-view="home">Overview</a>
       <a href="#videos" data-view="videos">Video course</a>
       <a href="#exam" data-view="exam">Practice exam</a>
@@ -161,6 +177,7 @@ a.done { font-weight: 600; }
     </nav>
     <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
     <div class="mode" id="mode"></div>
+    <p class="tm">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
   </aside>
   <main class="main"><div class="wrap" id="view"><p class="loading">Loading course…</p></div></main>
 </div>
@@ -245,7 +262,95 @@ const Engine = {
 /* Exam questions: the exam-style bank (original questions written like SY0-701) by default,
    or the labs' hands-on scenario questions. Bank options are shuffled per exam.            */
 const useBank = source => source !== "labs" && (BUNDLE.exam_bank || []).length > 0;
-const bankQ = (r, rnd) => ({ prompt: r.stem, context: "", choices: shuffle(r.choices, rnd), answer: r.answer, explanation: r.explanation, objective: r.objective });
+/* Bank records of every kind become exam questions. Only the DISPLAY is shuffled: answers (multi),
+   items (order: the correct sequence) and pairs (match) keep the right answer.            */
+const bankQ = (r, rnd) => {
+  const kind = r.type || "single", base = { ...r, id: r.id, prompt: r.stem, context: "", kind, explanation: r.explanation, objective: r.objective };
+  if (kind === "multi") return { ...base, choices: shuffle(r.choices, rnd), answers: r.answers.slice(), select: r.select || r.answers.length, answer: r.answers.join("; ") };
+  if (kind === "order") {
+    let c = shuffle(r.items, rnd); if (c.every((x, k) => x === r.items[k])) c = c.slice(1).concat(c[0]);   // never shown already solved
+    return { ...base, choices: c, items: r.items.slice(), answer: r.items.join(" → ") };
+  }
+  if (kind === "match") {
+    const targets = [...new Set([...r.pairs.map(p => p.match), ...(r.targets_extra || [])])];
+    return { ...base, pairs: shuffle(r.pairs.map(p => [p.item, p.match]), rnd), choices: shuffle(targets, rnd), answer: r.pairs.map(p => `${p.item} = ${p.match}`).join("; ") };
+  }
+  return { ...base, choices: shuffle(r.choices, rnd), answer: r.answer };
+};
+/* Is answer a correct for question q? All or nothing, like the real exam:
+   single = the choice text · multi = array, exactly the right set · order = array, exactly the right sequence ·
+   match = {item: target}, every item right.                                                                  */
+function isCorrect(q, a) {
+  if (a == null) return false;
+  const kind = q.kind || "single";
+  if (kind === "multi") return Array.isArray(a) && a.length === q.answers.length && new Set(a).size === a.length && a.every(x => q.answers.includes(x));
+  if (kind === "order") return Array.isArray(a) && a.length === q.items.length && a.every((x, k) => x === q.items[k]);
+  if (kind === "match") return typeof a === "object" && !Array.isArray(a) && q.pairs.every(([it, m]) => a[it] === m);
+  return a === q.answer;
+}
+const numWord = n => ({ 2: "TWO", 3: "THREE" })[n] || String(n);
+/* Review of a missed question: the right answer and what was given, as lists for ordering/matching. */
+function reviewAnswer(q, a) {
+  const kind = q.kind || "single";
+  if (kind === "order") return [el("div", { text: "Correct order:" }), el("ol", { class: "review-list" }, q.items.map(x => el("li", { text: x }))),
+    a ? [el("div", { text: "Your order:" }), el("ol", { class: "review-list" }, a.map(x => el("li", { text: x })))] : el("div", { text: "Not answered" })];
+  if (kind === "match") return [el("div", { text: "Correct matches:" }), el("ul", { class: "review-list" }, q.pairs.map(([it, m]) =>
+    el("li", {}, `${it} → ${m}`, a && a[it] !== m ? el("span", { class: "muted", text: ` (you: ${a[it] || "nothing"})` }) : null))), a ? null : el("div", { text: "Not answered" })];
+  const given = kind === "multi" && a ? a.join("; ") : a;
+  return el("div", { text: `Answer: ${q.answer}${given ? " · you chose: " + given : " · not answered"}` });
+}
+/* Answer controls for the non-single kinds. save(value) stores the answer (null = unanswered); redraw() re-renders. */
+function pbqControls(q, cur, save, redraw) {
+  const kind = q.kind;
+  if (kind === "multi") {
+    const sel = cur || [], n = q.select || q.answers.length;
+    const boxes = q.choices.map((c, k) => {
+      const on = sel.includes(c), locked = !on && sel.length >= n;
+      const box = el("input", { type: "checkbox", checked: on || null, disabled: locked || null,
+        onchange: () => { const next = q.choices.filter(x => x === c ? !on : sel.includes(x)); save(next.length ? next : null); redraw(`m${k}`); } });
+      box.dataset.focus = `m${k}`;
+      return el("label", { class: "choice" + (on ? " picked" : "") + (locked ? " locked" : "") }, box, el("span", { class: "k", text: k + 1 }), el("span", { text: c }));
+    });
+    return [el("div", { class: "label", text: `Select ${numWord(n)}` }),
+      el("p", { class: "pbq-how", text: `${sel.length} of ${n} selected. Untick one to change your choice.` }), el("div", { class: "choices", role: "group", "aria-label": `Select ${numWord(n)}` }, boxes)];
+  }
+  if (kind === "order") {
+    const order = (cur || q.choices).slice();
+    const move = (from, to, focus) => { if (to < 0 || to >= order.length) return; const [x] = order.splice(from, 1); order.splice(to, 0, x); save(order.slice()); redraw(focus); };
+    let dragFrom = null;
+    const rows = order.map((item, k) => {
+      const up = el("button", { class: "btn", type: "button", disabled: k === 0 || null, "aria-label": `Move up: ${item}`, text: "↑", onclick: () => move(k, k - 1, `u${item}`) });
+      const down = el("button", { class: "btn", type: "button", disabled: k === order.length - 1 || null, "aria-label": `Move down: ${item}`, text: "↓", onclick: () => move(k, k + 1, `d${item}`) });
+      up.dataset.focus = `u${item}`; down.dataset.focus = `d${item}`;
+      const row = el("li", { class: "orow", draggable: "true",
+        ondragstart: ev => { dragFrom = k; row.classList.add("dragging"); ev.dataTransfer.effectAllowed = "move"; ev.dataTransfer.setData("text/plain", String(k)); },
+        ondragend: () => row.classList.remove("dragging"),
+        ondragover: ev => { ev.preventDefault(); row.classList.add("over"); },
+        ondragleave: () => row.classList.remove("over"),
+        ondrop: ev => { ev.preventDefault(); const from = dragFrom ?? parseInt(ev.dataTransfer.getData("text/plain"), 10); if (from !== k && from >= 0) move(from, k, null); } },
+        el("span", { class: "k", text: k + 1 }), el("span", { text: item }), el("span", { class: "mv" }, up, down));
+      return row;
+    });
+    return [el("div", { class: "label", text: "Put in order" }),
+      el("p", { class: "pbq-how", text: "Drag the steps, or use the ↑ and ↓ buttons, so the first step is at the top." }),
+      el("ol", { class: "olist", "aria-label": "Steps, first to last" }, rows),
+      el("div", { class: "btns" }, el("button", { class: "btn", type: "button", text: cur ? "Order saved" : "Save this order", disabled: cur ? true : null, onclick: () => { save(order.slice()); redraw(null); } }))];
+  }
+  if (kind === "match") {
+    const m = { ...(cur || {}) };
+    const rows = q.pairs.map(([item], k) => {
+      const s = el("select", { "aria-label": `Match for: ${item}`, onchange: () => { if (s.value) m[item] = s.value; else delete m[item]; save(Object.keys(m).length ? { ...m } : null); redraw(`s${k}`); } },
+        el("option", { value: "", text: "Choose…" }), q.choices.map(c => el("option", { value: c, text: c, selected: m[item] === c || null })));
+      s.dataset.focus = `s${k}`;
+      return el("div", { class: "mrow" }, el("span", { text: item }), s);
+    });
+    const done = q.pairs.filter(([it]) => m[it]).length;
+    return [el("div", { class: "label", text: "Match each item" }),
+      el("p", { class: "pbq-how", text: `Choose the best match for each item (${done} of ${q.pairs.length} done). Some options may not be used.` }),
+      el("div", { class: "choices" }, rows)];
+  }
+  return [];
+}
 function* allExamQuestions(source, rnd) {
   if (useBank(source)) { for (const r of BUNDLE.exam_bank) yield bankQ(r, rnd); return; }
   for (const L of Object.values(BUNDLE.labs)) for (const src of [L.sample, ...L.variants]) yield* src.questions;
@@ -287,10 +392,102 @@ function buildDomainTestLocal(count, seed, domain, source = "bank") {
   return { questions: shuffle(picked, rnd), domain, allocation, shortfall: {}, target: CATALOG.domain_test_target };
 }
 
+/* ------------------------------------------------------------------ spaced repetition
+   Same rules as utils/review.py (keep the two in step):
+   wrong → due tomorrow, lapses +1, right-answer run reset, ease −0.20 (min 1.30);
+   right → waits 1, 3, 7 days, then previous wait × ease (max 180), ease +0.05 (max 2.80).
+   Exam misses enter review; an exam right answer only updates an existing card.
+   Session: due cards oldest first, then new questions round-robin from the 4 weakest
+   objectives (mastery (correct+1)/(attempted+2), so unpractised objectives count as weak),
+   shuffled with mulberry32(seed); the default seed is the date (YYYYMMDD).          */
+const SRS = { start: 2.5, min: 1.3, max: 2.8, up: 0.05, down: 0.2, first: [1, 3, 7], cap: 180, weak: 4, size: 15 };
+const todayISO = (t = new Date()) => `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, "0")}-${String(t.getDate()).padStart(2, "0")}`;
+const isoUTC = iso => { const [y, m, d] = iso.split("-").map(Number); return Date.UTC(y, m - 1, d); };
+const addDays = (iso, n) => new Date(isoUTC(iso) + n * 86400000).toISOString().slice(0, 10);
+const daysBetween = (a, b) => Math.round((isoUTC(b) - isoUTC(a)) / 86400000);
+const has = (o, k) => Object.prototype.hasOwnProperty.call(o || {}, k);
+const cmpStr = (a, b) => (a < b ? -1 : a > b ? 1 : 0);
+const isSingleRec = r => r.type == null || r.type === "" || r.type === "single";
+function srsSchedule(card, correct, today) {
+  const c = { due: today, interval_days: 0, ease: SRS.start, reps: 0, lapses: 0, last_result: null, ...(card || {}) };
+  const ease = Number(c.ease) || SRS.start;
+  let interval;
+  if (correct) {
+    const reps = (c.reps | 0) + 1;
+    interval = reps <= SRS.first.length ? SRS.first[reps - 1] : Math.floor(Math.max(c.interval_days | 0, 1) * ease + 0.5);
+    interval = Math.min(interval, SRS.cap);
+    Object.assign(c, { reps, interval_days: interval, ease: Math.floor(Math.min(SRS.max, ease + SRS.up) * 100 + 0.5) / 100, last_result: "right" });
+  } else {
+    interval = 1;
+    Object.assign(c, { reps: 0, interval_days: 1, lapses: (c.lapses | 0) + 1, ease: Math.floor(Math.max(SRS.min, ease - SRS.down) * 100 + 0.5) / 100, last_result: "wrong" });
+  }
+  c.due = addDays(today, interval);
+  return c;
+}
+function srsRecord(srs, qid, correct, today, enrollCorrect = true) {
+  if (!qid || (!has(srs, qid) && correct && !enrollCorrect)) return null;
+  return (srs[qid] = srsSchedule(srs[qid], !!correct, today));
+}
+function srsTouchStreak(streak, today) {
+  const s = { last_day: null, count: 0, ...(streak || {}) };
+  if (s.last_day === today) return s;
+  const gap = s.last_day ? daysBetween(s.last_day, today) : null;
+  if (gap != null && gap < 0) return s;
+  return { last_day: today, count: gap === 1 ? (s.count | 0) + 1 : 1 };
+}
+const srsCurrentStreak = (streak, today) => (streak && streak.last_day && [0, 1].includes(daysBetween(streak.last_day, today)) ? streak.count | 0 : 0);
+function srsDueIds(srs, today, ids) {
+  return Object.entries(srs || {}).map(([q, c]) => [c.due || today, q]).filter(([d, q]) => d <= today && (!ids || has(ids, q)))
+    .sort((a, b) => cmpStr(a[0], b[0]) || cmpStr(a[1], b[1])).map(x => x[1]);
+}
+function srsDueByDay(srs, today, days = 7, ids) {
+  const out = {}; for (let i = 0; i < days; i++) out[addDays(today, i)] = 0;
+  const last = addDays(today, days - 1);
+  for (const [q, c] of Object.entries(srs || {})) {
+    if (ids && !has(ids, q)) continue;
+    const due = c.due || today;
+    if (due <= today) out[today]++; else if (due <= last) out[due]++;
+  }
+  return out;
+}
+function buildReviewSession(data, bank, today, size = SRS.size, seed = null) {
+  size = Math.max(1, Math.floor(size));
+  seed = seed == null || seed === "" ? parseInt(today.replace(/-/g, ""), 10) : parseInt(seed, 10);
+  const srs = (data && data.srs) || {}, objectives = (data && data.objectives) || {};
+  const byId = {}; for (const r of bank || []) if (isSingleRec(r)) byId[r.id] = r;
+  const Q = (r, reason, kind) => ({ id: r.id, prompt: r.stem, context: "", choices: r.choices.slice(), answer: r.answer, explanation: r.explanation, objective: r.objective, reason, kind });
+  const due = srsDueIds(srs, today, byId), out = [];
+  for (const q of due.slice(0, size)) out.push(Q(byId[q], srs[q].last_result === "wrong" ? "Due for review (missed last time)" : "Due for review", "review"));
+  const groups = {};
+  for (const r of Object.values(byId).sort((a, b) => cmpStr(a.id, b.id))) if (!has(srs, r.id)) (groups[r.objective] ||= []).push(r);
+  const mastery = o => { const s = objectives[o] || {}; return ((s.correct | 0) + 1) / ((s.attempted | 0) + 2); };
+  const ranked = Object.keys(groups).sort((a, b) => mastery(a) - mastery(b) || cmpStr(a, b));
+  const rnd = mulberry32(seed);
+  for (const o of ranked) groups[o] = shuffle(groups[o], rnd);
+  const reason = o => {
+    const s = objectives[o] || {}, a = s.attempted | 0;
+    if (!a) return `New: ${o} not practised yet`;
+    const p = Math.floor(100 * (s.correct | 0) / a + 0.5);
+    return o === ranked[0] ? `New: ${o} is your weakest objective (${p}%)` : `New: ${o} is one of your weakest objectives (${p}%)`;
+  };
+  const queue = ranked.slice(), active = queue.splice(0, Math.min(SRS.weak, queue.length));
+  while (out.length < size && active.length) {
+    for (const o of active.slice()) {
+      if (out.length >= size) break;
+      out.push(Q(groups[o].shift(), reason(o), "new"));
+      if (!groups[o].length) { const i = active.indexOf(o); if (queue.length) active[i] = queue.shift(); else active.splice(i, 1); }
+    }
+  }
+  const newCount = out.filter(q => q.kind === "new").length;
+  return { today, seed, size, questions: out, due_total: due.length, review_count: out.length - newCount, new_count: newCount,
+    due_by_day: srsDueByDay(srs, today, 7, byId), tracked: Object.keys(srs).filter(q => has(byId, q)).length,
+    streak: { last_day: null, count: 0, ...((data && data.streak) || {}), current: srsCurrentStreak(data && data.streak, today) } };
+}
+
 /* ------------------------------------------------------------------ progress store
    Live: progress.json on this computer. Hosted: your private document in this
    page's store (claude.ai account), else this browser's storage, else memory.   */
-const EMPTY = () => ({ objectives: {}, sessions: [], watched: [] });
+const EMPTY = () => ({ objectives: {}, sessions: [], watched: [], srs: {}, streak: { last_day: null, count: 0 } });
 function rating(p, n) { if (n < 3) return p < 50 ? "LOW" : "MEDIUM"; return p >= 85 ? "PASS" : p >= 65 ? "WARN" : "FAIL"; }
 function rowsOf(data) {
   return Object.entries(data.objectives).map(([o, s]) => [o, s.attempted, s.correct, pct(s.correct, s.attempted) + "%", rating(pct(s.correct, s.attempted), s.attempted)])
@@ -298,10 +495,18 @@ function rowsOf(data) {
 }
 const Progress = {
   where: LIVE ? "progress.json on this computer" : "this browser",
-  cache: null, remote: null,
+  cache: null, remote: null, loaded: false,
+  local() {          // read browser storage once (views can ask before init() has run); fill fields older saves lack
+    if (!this.loaded) { this.loaded = true; try { this.cache = JSON.parse(localStorage.getItem("secplus-progress") || "null"); } catch { this.cache = null; } }
+    const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
+    d.objectives ||= {}; d.sessions ||= []; d.watched ||= [];
+    if (!d.srs || typeof d.srs !== "object") d.srs = {};
+    if (!d.streak || typeof d.streak !== "object") d.streak = { last_day: null, count: 0 };
+    return d;
+  },
   async init() {
     if (LIVE) return;
-    try { this.cache = JSON.parse(localStorage.getItem("secplus-progress") || "null"); } catch { this.cache = null; }
+    this.local();
     if (!window.claude || typeof window.claude.use !== "function") return;
     try {
       const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")]);
@@ -318,28 +523,53 @@ const Progress = {
   },
   async get() {
     if (LIVE) return post("progress_get");
-    const d = this.cache || EMPTY();
-    return { ...d, watched: d.watched || [], rows: rowsOf(d) };
+    const d = this.local();
+    return { ...d, rows: rowsOf(d) };
   },
   async watch(video, watched) {
     if (LIVE) return post("progress_watch", { video, watched });
-    const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
+    const d = this.local();
     d.watched = (d.watched || []).filter(v => v !== video);
     if (watched) d.watched.push(video);
     await this.save(d);
     return { ...d, rows: rowsOf(d) };
   },
   async record(results, label) {
-    if (LIVE) return post("progress_record", { results, label });
-    const d = this.cache ? JSON.parse(JSON.stringify(this.cache)) : EMPTY();
+    const today = todayISO();
+    if (LIVE) return post("progress_record", { results, label, today });
+    const d = this.local(), ids = this.bankIds();
     let correct = 0;
-    for (const r of results) { const s = d.objectives[r.objective] ||= { attempted: 0, correct: 0 }; s.attempted++; if (r.correct) { s.correct++; correct++; } }
+    for (const r of results) {
+      const s = d.objectives[r.objective] ||= { attempted: 0, correct: 0 }; s.attempted++; if (r.correct) { s.correct++; correct++; }
+      if (r.qid && has(ids, r.qid)) srsRecord(d.srs, r.qid, r.correct, today, false);   // exam misses enter the daily review
+    }
     d.sessions.push({ ts: new Date().toISOString().slice(0, 19), lab: String(label), score: `${correct}/${results.length}` });
     d.sessions = d.sessions.slice(-50);
     await this.save(d);
     return { ...d, rows: rowsOf(d) };
   },
   async reset() { if (LIVE) return post("progress_reset"); await this.save(EMPTY()); return { ...EMPTY(), rows: [] }; },
+  bankIds() { const ids = {}; for (const r of (BUNDLE && BUNDLE.exam_bank) || []) ids[r.id] = r; return ids; },
+  /* Daily review: today's session, and one answer at a time (saved at once, so a reload loses nothing). */
+  async reviewSession(size = SRS.size, seed = null) {
+    const today = todayISO();
+    if (LIVE) return post("review_session", { today, size, seed });
+    return buildReviewSession(this.local(), (BUNDLE && BUNDLE.exam_bank) || [], today, size, seed);
+  },
+  async reviewAnswer(qid, correct) {
+    const today = todayISO();
+    if (LIVE) return post("review_answer", { qid, correct: !!correct, today });
+    const ids = this.bankIds();
+    if (!has(ids, qid)) throw new Error("unknown question id");
+    const d = this.local(), s = d.objectives[ids[qid].objective] ||= { attempted: 0, correct: 0 };
+    s.attempted++; if (correct) s.correct++;
+    srsRecord(d.srs, qid, !!correct, today, true);
+    d.streak = srsTouchStreak(d.streak, today);
+    await this.save(d);
+    const shown = {}; for (const [k, r] of Object.entries(ids)) if (isSingleRec(r)) shown[k] = r;   // what a session can show
+    return { qid, correct: !!correct, card: d.srs[qid], streak: { ...d.streak, current: srsCurrentStreak(d.streak, today) },
+      due_total: srsDueIds(d.srs, today, shown).length, due_by_day: srsDueByDay(d.srs, today, 7, shown) };
+  },
   async save(d) {
     this.cache = d;
     try { localStorage.setItem("secplus-progress", JSON.stringify(d)); } catch { /* storage blocked */ }
@@ -396,6 +626,16 @@ function markNav(view, lab) {
 /* ------------------------------------------------------------------ views */
 const view = () => $("#view");
 
+/* "Today: N due" card on the Overview: filled in when the session is ready, never blocks the page. */
+function todayCard() {
+  const box = el("a", { class: "dcard", href: "#review", id: "today-card" }, el("span", { class: "label", text: "Daily review" }), el("span", { class: "muted", text: "Checking what is due…" }));
+  Progress.reviewSession().then(s => put(box,
+    el("span", { class: "label", text: `Daily review · ${streakText(s.streak.current)}` }),
+    el("b", { text: `Today: ${s.due_total} due` }),
+    el("span", { class: "muted", text: `${s.questions.length} questions ready: ${s.review_count} reviews, ${s.new_count} new from your weakest objectives. Start today's review →` })))
+    .catch(() => put(box, el("span", { class: "label", text: "Daily review" }), el("b", { text: "Start today's review →" })));
+  return box;
+}
 async function viewHome() {
   markNav("home");
   const prog = await Progress.get();
@@ -412,6 +652,7 @@ async function viewHome() {
         el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
         el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
         el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
+    todayCard(),
     el("div", { class: "grid5" }, CATALOG.domains.map(d => {
       const s = byDomain[d.id], labs = CATALOG.labs.filter(l => l.domains.includes(d.id));
       return el("a", { class: "dcard", href: `#lab-${(labs.find(l => l.primary_domain === d.id) || labs[0]).n}` },
@@ -588,11 +829,18 @@ async function startExam(count, minutes, domain = "", source = "bank") {
   const timer = el("span", { class: "timer" });
   const tick = () => { const s = Math.max(0, Math.round((deadline - Date.now()) / 1000)); timer.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")} left`; timer.classList.toggle("low", s < 120); if (s <= 0) done(true); };
   const panel = el("section", { class: "panel" });
-  const show = () => {
-    const q = qs[i];
-    const buttons = q.choices.map((c, k) => el("button", { class: "choice" + (answers[i] === c ? " picked" : ""), onclick: () => { answers[i] = c; if (i + 1 < qs.length) { i++; show(); } else show(); } },
-      el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
-    setKeys(ev => { const k = parseInt(ev.key, 10); if (k >= 1 && k <= q.choices.length) { ev.preventDefault(); buttons[k - 1].click(); } });
+  const show = (focus = null) => {
+    const q = qs[i], kind = q.kind || "single";
+    let buttons = [];
+    if (kind === "single") {
+      buttons = q.choices.map((c, k) => el("button", { class: "choice" + (answers[i] === c ? " picked" : ""), onclick: () => { answers[i] = c; if (i + 1 < qs.length) { i++; show(); } else show(); } },
+        el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
+      setKeys(ev => { const k = parseInt(ev.key, 10); if (k >= 1 && k <= q.choices.length) { ev.preventDefault(); buttons[k - 1].click(); } });
+    } else {
+      buttons = pbqControls(q, answers[i], v => { answers[i] = v; }, f => show(f));
+      setKeys(kind === "multi" ? ev => { const k = parseInt(ev.key, 10), box = panel.querySelector(`[data-focus="m${k - 1}"]`);
+        if (k >= 1 && box && !box.disabled && !(ev.target instanceof HTMLInputElement)) { ev.preventDefault(); box.click(); } } : null);
+    }
     const answeredCount = answers.filter(a => a != null).length;
     put(panel, 
       el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length}` }), timer),
@@ -601,20 +849,21 @@ async function startExam(count, minutes, domain = "", source = "bank") {
       el("div", { class: "prompt", text: q.prompt }), el("div", { class: "choices" }, buttons),
       el("div", { class: "btns" },
         el("button", { class: "btn", disabled: i === 0, onclick: () => { i--; show(); }, text: "Previous" }),
-        el("button", { class: "btn", disabled: i + 1 >= qs.length, onclick: () => { i++; show(); }, text: "Skip" }),
+        el("button", { class: "btn", disabled: i + 1 >= qs.length, onclick: () => { i++; show(); }, text: kind !== "single" && answers[i] != null ? "Next" : "Skip" }),
         el("span", { class: "muted", text: `${answeredCount} of ${qs.length} answered` }),
         el("button", { class: "btn primary", onclick: () => done(false), text: "Finish and score" })));
+    if (focus) { const f = panel.querySelector(`[data-focus="${CSS.escape(focus)}"]`); if (f && !f.disabled) f.focus(); }
   };
   let finished = false;
   async function done(timedOut) {
     if (finished) return; finished = true; clearInterval(examTimer); setKeys(null);
-    const results = qs.map((q, k) => ({ objective: q.objective, correct: answers[k] === q.answer }));
+    const results = qs.map((q, k) => ({ objective: q.objective, correct: isCorrect(q, answers[k]), qid: q.id || "" }));
     const correct = results.filter(r => r.correct).length, p = 100 * correct / qs.length, scaled = Math.round(100 + 8 * p);
     const target = CATALOG.domain_test_target;
     const passed = domain ? p >= target : scaled >= CATALOG.pass_scaled;
     try { await Progress.record(results, domain ? `domain ${domain} test` : "exam"); } catch { /* shown below */ }
     const dom = {}; qs.forEach((q, k) => { const d = q.objective.split(".")[0]; (dom[d] ||= [0, 0]); dom[d][1]++; if (results[k].correct) dom[d][0]++; });
-    const missed = qs.map((q, k) => [q, answers[k]]).filter(([q, a]) => a !== q.answer);
+    const missed = qs.map((q, k) => [q, answers[k]]).filter((_, k) => !results[k].correct);
     if (domain) return showDomainResult();
     put(view(), 
       el("section", { class: "panel" },
@@ -630,7 +879,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
       el("section", { class: "panel" }, el("h2", { text: `Review (${missed.length} missed)` }),
         missed.length ? el("div", { class: "choices" }, missed.slice(0, 40).map(([q, a]) =>
           el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
-            el("div", { text: `Answer: ${q.answer}${a ? " · you chose: " + a : " · not answered"}` }), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
+            reviewAnswer(q, a), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
         el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: () => viewExam(), text: "New exam" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
 
     function showDomainResult() {
@@ -654,12 +903,91 @@ async function startExam(count, minutes, domain = "", source = "bank") {
         el("section", { class: "panel" }, el("h2", { text: `Review (${missed.length} missed)` }),
           missed.length ? el("div", { class: "choices" }, missed.slice(0, 40).map(([q, a]) =>
             el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
-              el("div", { text: `Answer: ${q.answer}${a ? " · you chose: " + a : " · not answered"}` }), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
+              reviewAnswer(q, a), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
           el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: () => viewExam(domain), text: `New Domain ${domain} test` }),
             el("button", { class: "btn", onclick: () => viewExam(), text: "Other tests" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
     }
   }
   put(view(), panel); show(); tick(); examTimer = setInterval(tick, 1000);
+}
+
+/* ------------------------------------------------------------------ daily review (spaced repetition)
+   Due reviews first, then new questions from your weakest objectives. Immediate feedback;
+   each answer is saved as soon as it is given. Rules: see "spaced repetition" above.      */
+const dayLabel = (iso, today) => { const n = daysBetween(today, iso); return n === 0 ? "Today" : n === 1 ? "Tomorrow" : new Date(isoUTC(iso)).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric", timeZone: "UTC" }); };
+function dueTable(byDay, today) {
+  return el("div", { class: "tablewrap" }, el("table", {},
+    el("thead", {}, el("tr", {}, ["Day", "Due"].map(h => el("th", { text: h })))),
+    el("tbody", {}, Object.entries(byDay).map(([d, n]) => el("tr", {}, el("td", { text: dayLabel(d, today) + (d === today ? " (incl. overdue)" : "") }), el("td", { text: n }))))));
+}
+const streakText = n => n ? `${n}-day streak` : "no streak yet";
+
+async function viewReview() {
+  markNav("review"); setKeys(null);
+  put(view(), el("p", { class: "loading", text: "Building today's review…" }));
+  let s; try { s = await Progress.reviewSession(); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+  const qs = s.questions.filter(q => !q.type || q.type === "single");     // other question types join the review later
+  const body = el("section", { class: "panel" });
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: `Daily review · ${dayLabel(s.today, s.today)} · ${streakText(s.streak.current)}` }),
+      el("h1", { text: qs.length ? `${qs.length} questions for today` : "All caught up" }),
+      el("p", { class: "muted", text: `${s.review_count} due for review (questions you missed or are due to check again), then ${s.new_count} new from your weakest objectives. You see the answer and the reason straight away. A miss comes back tomorrow; each right answer waits longer (1, 3, 7 days, then more).` }),
+      el("div", { class: "btns" },
+        qs.length ? el("button", { class: "btn primary", id: "review-start", onclick: () => startReview(qs, body, s), text: s.review_count ? "Start today's review" : "Start" }) : null,
+        el("a", { class: "btn", href: "#progress", text: "My progress" }))),
+    body);
+  put(body, el("h2", { text: "Coming up" }), el("p", { class: "muted", text: `${s.tracked} questions are on your review schedule. Questions missed in practice exams are added automatically.` }), dueTable(s.due_by_day, s.today));
+}
+
+function startReview(qs, body, s) {
+  let i = 0, correct = 0, last = null, failed = false;
+  const show = () => {
+    if (i >= qs.length) return finish();
+    const q = qs[i]; let answered = false;
+    const next = el("button", { class: "btn primary", hidden: true, text: i + 1 < qs.length ? "Next question" : "See my summary", onclick: () => { i++; show(); } });
+    const fb = el("div", { class: "verdict", hidden: true, "aria-live": "polite" });
+    const buttons = q.choices.map((c, k) => el("button", { class: "choice", onclick: () => pick(k) }, el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
+    async function pick(k) {
+      if (answered) return; answered = true;
+      const ok = q.choices[k] === q.answer; if (ok) correct++;
+      buttons.forEach((b, j) => { b.disabled = true; if (q.choices[j] === q.answer) b.classList.add("right"); else if (j === k) b.classList.add("wrong"); });
+      fb.className = "verdict " + (ok ? "ok" : "no");
+      put(fb, el("b", { text: ok ? "Correct. " : `Not quite. The answer is: ${q.answer}. ` }), el("span", { text: q.explanation }));
+      fb.hidden = false; next.hidden = false; next.focus();
+      try { last = await Progress.reviewAnswer(q.id, ok); } catch { failed = true; }
+      put(when, ok ? (last ? `Next review: ${dayLabel(last.card.due, s.today).toLowerCase()} (in ${last.card.interval_days} day${last.card.interval_days === 1 ? "" : "s"})` : "") : "This one comes back tomorrow.");
+    }
+    const when = el("p", { class: "muted" });
+    setKeys(ev => {
+      if (ev.target.closest && ev.target.closest("input,select,textarea")) return;
+      const k = parseInt(ev.key, 10);
+      if (!answered && k >= 1 && k <= q.choices.length) { ev.preventDefault(); pick(k - 1); }
+      else if (answered && ev.key === "Enter") { ev.preventDefault(); next.click(); }
+    });
+    put(body,
+      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length} · objective ${q.objective} ${OBJ[q.objective] || ""}` }),
+        el("span", { class: "muted", text: `${correct} correct so far` })),
+      el("div", { class: "bar" }, el("i", { style: `width:${pct(i, qs.length)}%` })),
+      el("div", { class: "chips" }, el("span", { class: "chip", text: q.reason })),
+      el("div", { class: "prompt", text: q.prompt }),
+      el("div", { class: "choices" }, buttons), fb, when, el("div", { class: "btns" }, next));
+    body.scrollIntoView({ block: "nearest" });
+  };
+  const finish = () => {
+    setKeys(null);
+    const done = qs.length;
+    put(body,
+      el("span", { class: "label", text: "Review complete" }),
+      el("h2", { text: `${correct} of ${done} correct (${pct(correct, done)}%)` }),
+      el("p", { class: "muted", text: last ? `${streakText(last.streak.current)}. Missed questions come back tomorrow; the rest are spaced out.` : "" }),
+      failed ? el("p", { class: "notice", text: "Some answers could not be saved this time." }) : null,
+      last ? [el("h3", { text: "Next due" }), dueTable(last.due_by_day, s.today)] : null,
+      el("div", { class: "btns" },
+        el("button", { class: "btn primary", onclick: () => viewReview(), text: "Another round" }),
+        el("a", { class: "btn", href: "#progress", text: "My progress" }), el("a", { class: "btn", href: "#home", text: "Overview" })));
+  };
+  show();
 }
 
 /* ------------------------------------------------------------------ progress */
@@ -801,6 +1129,7 @@ function route() {
   const dm = h.match(/^exam-d([1-5])$/);
   if (dm) return viewExam(dm[1]);
   if (h === "progress") return viewProgress();
+  if (h === "review") return viewReview();
   if (h === "videos") return viewVideos();
   if (h === "career") return viewCareer();
   return viewHome();

@@ -1,0 +1,664 @@
+{
+  "title": "Multiple-response and performance-based questions",
+  "note": "Original practice questions written in the style of the CompTIA Security+ SY0-701 exam: select-two (multiple response), ordering and matching tasks. Not real exam questions.",
+  "questions": [
+    {
+      "id": "PBQ-001",
+      "type": "multi",
+      "objective": "1.2",
+      "stem": "A company is designing a zero trust architecture. Which TWO of the following components belong to the control plane rather than the data plane?",
+      "choices": [
+        "Policy engine",
+        "Policy administrator",
+        "Policy enforcement point",
+        "Implicit trust zones",
+        "Subject or system"
+      ],
+      "answers": [
+        "Policy engine",
+        "Policy administrator"
+      ],
+      "select": 2,
+      "explanation": "The control plane makes and communicates access decisions: the policy engine decides, and the policy administrator tells the enforcement point to open or close the session. The policy enforcement point, implicit trust zones and the subject requesting access are all part of the data plane."
+    },
+    {
+      "id": "PBQ-002",
+      "type": "match",
+      "objective": "1.1",
+      "stem": "Match each security control to the control type it BEST represents.",
+      "pairs": [
+        {
+          "item": "Motion-activated camera that records people entering a server room",
+          "match": "Detective"
+        },
+        {
+          "item": "Sign warning that the premises are patrolled by guard dogs",
+          "match": "Deterrent"
+        },
+        {
+          "item": "Restoring a server from a clean backup after a malware infection",
+          "match": "Corrective"
+        },
+        {
+          "item": "Door lock that opens only with an authorized badge",
+          "match": "Preventive"
+        },
+        {
+          "item": "Isolating a legacy system that cannot be patched on its own network segment",
+          "match": "Compensating"
+        }
+      ],
+      "explanation": "A camera records and reveals activity (detective); a warning sign discourages an attempt (deterrent); restoring from backup fixes the damage after an event (corrective); a badge lock stops entry before it happens (preventive); isolation is an alternative safeguard used because the normal control, patching, is not possible (compensating). A directive control, such as a written policy, tells people what to do and fits none of these.",
+      "targets_extra": [
+        "Directive"
+      ]
+    },
+    {
+      "id": "PBQ-003",
+      "type": "order",
+      "objective": "1.3",
+      "stem": "A systems administrator wants to upgrade the firmware on the core firewall. Put the change management steps in the order they should happen.",
+      "items": [
+        "Submit a change request that describes the upgrade",
+        "Perform an impact analysis of the upgrade",
+        "Obtain approval from the change advisory board",
+        "Implement the upgrade during the approved maintenance window, with a backout plan ready",
+        "Test that the firewall works as expected after the upgrade",
+        "Update the documentation and network diagrams"
+      ],
+      "explanation": "A change starts as a documented request, is analyzed for impact, and is approved by the change advisory board before anyone touches the device. It is then carried out in the maintenance window with a backout plan, verified by testing, and finally the documentation is updated so it matches the new state."
+    },
+    {
+      "id": "PBQ-004",
+      "type": "order",
+      "objective": "1.4",
+      "stem": "A web administrator needs a new TLS certificate from a public certificate authority. Put the steps in the order they occur.",
+      "items": [
+        "Generate a public and private key pair on the web server",
+        "Create a certificate signing request that contains the public key",
+        "Submit the certificate signing request to the certificate authority",
+        "The certificate authority validates the requester's control of the domain",
+        "The certificate authority signs and issues the certificate",
+        "Install the issued certificate on the web server"
+      ],
+      "explanation": "The key pair comes first because the signing request carries the public key (the private key never leaves the server). The CA receives the request, validates the requester, then signs and issues the certificate, which the administrator installs alongside the private key."
+    },
+    {
+      "id": "PBQ-005",
+      "type": "multi",
+      "objective": "2.2",
+      "stem": "An employee receives a text message with a link to \"verify\" a payroll account. An hour later, someone posing as the help desk phones the employee and asks for the code that was just sent to the employee's phone. Which TWO social engineering techniques were used?",
+      "choices": [
+        "Smishing",
+        "Vishing",
+        "Whaling",
+        "Pharming",
+        "Typosquatting",
+        "Watering hole"
+      ],
+      "answers": [
+        "Smishing",
+        "Vishing"
+      ],
+      "select": 2,
+      "explanation": "Phishing by text message is smishing, and phishing by voice call is vishing. Whaling targets senior executives, pharming redirects users to a fake site through DNS or host-file tampering, typosquatting relies on misspelled domain names, and a watering hole compromises a site the victims already visit."
+    },
+    {
+      "id": "PBQ-006",
+      "type": "multi",
+      "objective": "2.3",
+      "stem": "A developer is reviewing a list of weaknesses found in a C application. Which TWO of the following are memory-related vulnerabilities?",
+      "choices": [
+        "Buffer overflow",
+        "Memory injection",
+        "SQL injection",
+        "Cross-site scripting",
+        "Directory traversal"
+      ],
+      "answers": [
+        "Buffer overflow",
+        "Memory injection"
+      ],
+      "select": 2,
+      "explanation": "A buffer overflow writes past the end of allocated memory, and memory injection places malicious code into the memory of a running process. SQL injection and cross-site scripting are injection flaws in web input handling, and directory traversal abuses file paths; none of them is a memory flaw."
+    },
+    {
+      "id": "PBQ-007",
+      "type": "multi",
+      "objective": "2.4",
+      "stem": "A security analyst is reviewing one user account for signs that its credentials were stolen. Which TWO observations are the STRONGEST indicators of compromise?",
+      "choices": [
+        "Successful logins from two different countries within the same hour",
+        "The same account logged in on two workstations in different offices at the same time",
+        "A successful login from the user's usual office during business hours",
+        "A password change after the scheduled password expiry reminder",
+        "A software update installed by the patch management system"
+      ],
+      "answers": [
+        "Successful logins from two different countries within the same hour",
+        "The same account logged in on two workstations in different offices at the same time"
+      ],
+      "select": 2,
+      "explanation": "Logins from places too far apart to travel between (impossible travel) and concurrent sessions in different locations both suggest that someone else is using the account. A normal office login, a scheduled password change and a managed software update are expected activity."
+    },
+    {
+      "id": "PBQ-008",
+      "type": "multi",
+      "objective": "2.5",
+      "stem": "Ransomware has encrypted one workstation in the finance department. Which TWO mitigations would BEST limit the ransomware's ability to spread to other systems in the future?",
+      "choices": [
+        "Segmenting the network so departments cannot freely reach each other",
+        "Removing local administrator rights from standard users",
+        "Increasing the password expiration interval",
+        "Enabling broadcast of the wireless network name",
+        "Masking account numbers in reports"
+      ],
+      "answers": [
+        "Segmenting the network so departments cannot freely reach each other",
+        "Removing local administrator rights from standard users"
+      ],
+      "select": 2,
+      "explanation": "Segmentation limits which systems an infected host can reach, and least privilege (no local administrator rights) limits what the malware can install or change. Longer password expiration, broadcasting the network name and data masking do nothing to stop lateral movement."
+    },
+    {
+      "id": "PBQ-009",
+      "type": "multi",
+      "objective": "2.1",
+      "stem": "A threat intelligence report describes an attacker that spent months inside a defense contractor's network using custom malware. Which TWO attributes BEST describe a nation-state threat actor like this one?",
+      "choices": [
+        "A high level of sophistication and capability",
+        "Extensive funding and resources",
+        "Reliance on publicly available scripts with little skill",
+        "Usually an employee with authorized access",
+        "Typically acts alone for attention"
+      ],
+      "answers": [
+        "A high level of sophistication and capability",
+        "Extensive funding and resources"
+      ],
+      "select": 2,
+      "explanation": "Nation-state actors are typically highly sophisticated and well funded, which lets them run long, stealthy campaigns. Using public scripts with little skill describes an unskilled attacker, authorized access describes an insider, and acting alone for attention does not fit a state-sponsored group."
+    },
+    {
+      "id": "PBQ-010",
+      "type": "multi",
+      "objective": "2.2",
+      "stem": "Which TWO of the following are examples of a supply chain attack vector?",
+      "choices": [
+        "A compromised software update pushed by a trusted vendor",
+        "A managed service provider's remote management tool used to reach its customers",
+        "An employee clicking a link in a phishing email",
+        "Brute-forcing a remote desktop service exposed to the internet",
+        "A USB drive left in the company parking lot"
+      ],
+      "answers": [
+        "A compromised software update pushed by a trusted vendor",
+        "A managed service provider's remote management tool used to reach its customers"
+      ],
+      "select": 2,
+      "explanation": "Supply chain attacks reach the target through a trusted third party, such as a software vendor's update channel or a managed service provider's access. Phishing, brute-forcing an exposed service and baiting with a USB drive attack the organization directly."
+    },
+    {
+      "id": "PBQ-011",
+      "type": "match",
+      "objective": "2.4",
+      "stem": "A SOC analyst is triaging alerts. Match each attack to the indicator that BEST points to it.",
+      "pairs": [
+        {
+          "item": "Brute-force attack",
+          "match": "Hundreds of failed logins against one account within a few minutes"
+        },
+        {
+          "item": "Password spraying",
+          "match": "One or two failed logins on many different accounts from the same source"
+        },
+        {
+          "item": "Ransomware",
+          "match": "Many files renamed with a new extension and a note demanding payment"
+        },
+        {
+          "item": "Stolen session or credentials",
+          "match": "Logins from two countries an hour apart for the same user"
+        },
+        {
+          "item": "Data exfiltration over DNS",
+          "match": "Long, random-looking subdomain queries sent to a single domain"
+        }
+      ],
+      "explanation": "Brute force hammers one account; spraying tries a few common passwords across many accounts to avoid lockouts; ransomware leaves encrypted, renamed files and a ransom note; impossible travel suggests someone else holds the user's credentials or session; and encoded data hidden in unusual subdomain lookups is a sign of DNS tunneling. An expiring certificate warning is an operations issue, not an attack indicator.",
+      "targets_extra": [
+        "A warning that a web server certificate expires next month"
+      ]
+    },
+    {
+      "id": "PBQ-012",
+      "type": "multi",
+      "objective": "3.1",
+      "stem": "A company moves its application servers to an infrastructure as a service (IaaS) provider. Which TWO responsibilities remain with the company?",
+      "choices": [
+        "Patching the guest operating systems",
+        "Configuring access permissions for the stored data",
+        "Physical security of the data center",
+        "Replacing failed hypervisor hardware",
+        "Maintaining the provider's core network equipment"
+      ],
+      "answers": [
+        "Patching the guest operating systems",
+        "Configuring access permissions for the stored data"
+      ],
+      "select": 2,
+      "explanation": "In IaaS the provider secures the physical facility, hardware, hypervisor and its network, while the customer manages everything it builds on top: the operating systems, applications, data and who can access them."
+    },
+    {
+      "id": "PBQ-013",
+      "type": "multi",
+      "objective": "3.2",
+      "stem": "A network team needs devices installed inline that can block malicious traffic in real time. Which TWO devices meet this requirement?",
+      "choices": [
+        "Intrusion prevention system",
+        "Web application firewall",
+        "Intrusion detection system",
+        "Network tap",
+        "Switch port mirror"
+      ],
+      "answers": [
+        "Intrusion prevention system",
+        "Web application firewall"
+      ],
+      "select": 2,
+      "explanation": "An IPS and a WAF sit in the traffic path (active, inline) and can drop malicious requests. An IDS only alerts, and a network tap or port mirror passively copies traffic for monitoring, so none of them can block anything."
+    },
+    {
+      "id": "PBQ-014",
+      "type": "multi",
+      "objective": "3.3",
+      "stem": "A payment system must hide card numbers but still let an authorized back-end system recover the original values later. Which TWO methods meet this requirement?",
+      "choices": [
+        "Encryption",
+        "Tokenization",
+        "Hashing",
+        "Truncating the number to its last four digits",
+        "Overwriting the data with zeros"
+      ],
+      "answers": [
+        "Encryption",
+        "Tokenization"
+      ],
+      "select": 2,
+      "explanation": "Encrypted data can be decrypted with the key, and a token can be exchanged for the original value through the token vault. Hashing is one-way, truncation throws digits away, and overwriting destroys the data, so none of them lets the original be recovered."
+    },
+    {
+      "id": "PBQ-015",
+      "type": "multi",
+      "objective": "3.3",
+      "stem": "An organization is classifying its controls by the data state they protect. Which TWO controls protect data in transit?",
+      "choices": [
+        "TLS between the browser and the web server",
+        "An IPsec VPN between two branch offices",
+        "Full-disk encryption on laptops",
+        "Encrypted database columns",
+        "File system permissions on a shared drive"
+      ],
+      "answers": [
+        "TLS between the browser and the web server",
+        "An IPsec VPN between two branch offices"
+      ],
+      "select": 2,
+      "explanation": "TLS and IPsec encrypt data while it moves across a network. Full-disk encryption and encrypted database columns protect data at rest, and file permissions control access to stored files rather than protecting traffic."
+    },
+    {
+      "id": "PBQ-016",
+      "type": "multi",
+      "objective": "3.4",
+      "stem": "A company is comparing recovery site options. Which TWO statements about a hot site are correct?",
+      "choices": [
+        "It has equipment and current data ready to take over quickly",
+        "It is the most expensive type of recovery site to maintain",
+        "It is an empty facility that provides only power and cooling",
+        "All data must be restored from offsite tapes before it can be used",
+        "It offers the slowest recovery of the site types"
+      ],
+      "answers": [
+        "It has equipment and current data ready to take over quickly",
+        "It is the most expensive type of recovery site to maintain"
+      ],
+      "select": 2,
+      "explanation": "A hot site is a fully equipped, up-to-date copy of production that can take over within minutes or hours, which makes it the most expensive option. An empty facility with only power and cooling is a cold site, which is also the slowest to bring online."
+    },
+    {
+      "id": "PBQ-017",
+      "type": "multi",
+      "objective": "3.4",
+      "stem": "An online store must stay available even if one of its web servers fails. Which TWO measures BEST provide high availability?",
+      "choices": [
+        "A load balancer distributing traffic across several web servers",
+        "An active-active cluster of web servers in two data centers",
+        "A nightly full backup to tape",
+        "A single server with a larger processor",
+        "Weekly snapshots of the web server"
+      ],
+      "answers": [
+        "A load balancer distributing traffic across several web servers",
+        "An active-active cluster of web servers in two data centers"
+      ],
+      "select": 2,
+      "explanation": "Load balancing and active-active clustering keep the service running when one server fails, because other servers keep answering requests. Backups and snapshots help recover after an outage but do not prevent one, and a single larger server is still a single point of failure."
+    },
+    {
+      "id": "PBQ-018",
+      "type": "order",
+      "objective": "4.8",
+      "stem": "The organization has already completed preparation for incidents. Put the remaining incident response phases in the order they occur.",
+      "items": [
+        "Detection",
+        "Analysis",
+        "Containment",
+        "Eradication",
+        "Recovery",
+        "Lessons learned"
+      ],
+      "explanation": "After preparation, an incident is detected and then analyzed to confirm its scope. The team contains it to stop the spread, eradicates the cause, recovers systems to normal operation, and finishes with a lessons-learned review that feeds back into preparation."
+    },
+    {
+      "id": "PBQ-019",
+      "type": "order",
+      "objective": "4.8",
+      "stem": "A forensic analyst is collecting evidence from a running server. Put the sources in order of volatility, from MOST volatile to LEAST volatile.",
+      "items": [
+        "CPU registers and cache",
+        "System memory (RAM)",
+        "Temporary files and swap space",
+        "Local disk drive",
+        "Logs stored on a remote log server",
+        "Backup tapes in offsite storage"
+      ],
+      "explanation": "Evidence is collected from the most short-lived source first: registers and cache change in nanoseconds, memory is lost at power-off, temporary and swap files are overwritten quickly, a disk persists, remote logs are kept elsewhere, and archived backup tapes change least of all."
+    },
+    {
+      "id": "PBQ-020",
+      "type": "order",
+      "objective": "4.3",
+      "stem": "A security team is running its monthly vulnerability management cycle. Put the activities in the correct order.",
+      "items": [
+        "Run a credentialed vulnerability scan",
+        "Confirm the findings and rule out false positives",
+        "Prioritize the findings using CVSS scores and asset criticality",
+        "Apply patches or compensating controls",
+        "Rescan to validate the remediation",
+        "Report the results to stakeholders"
+      ],
+      "explanation": "Vulnerabilities are first identified, then analyzed (confirmed and prioritized), then remediated. Remediation is validated by rescanning, and the results are reported so owners and management can track risk."
+    },
+    {
+      "id": "PBQ-021",
+      "type": "multi",
+      "objective": "4.6",
+      "stem": "Users currently sign in with only a password. Which TWO additional methods would add a DIFFERENT authentication factor?",
+      "choices": [
+        "A code from an authenticator app on the user's phone",
+        "A fingerprint scan",
+        "A four-digit PIN",
+        "Answers to security questions",
+        "A second, longer password"
+      ],
+      "answers": [
+        "A code from an authenticator app on the user's phone",
+        "A fingerprint scan"
+      ],
+      "select": 2,
+      "explanation": "A password is something you know. An authenticator app code proves something you have, and a fingerprint is something you are, so either one creates multifactor authentication. A PIN, security questions and another password are all still something you know."
+    },
+    {
+      "id": "PBQ-022",
+      "type": "multi",
+      "objective": "4.1",
+      "stem": "A company is setting up a new wireless network for employees. Which TWO settings would BEST secure it?",
+      "choices": [
+        "WPA3 encryption",
+        "802.1X authentication with a RADIUS server",
+        "WEP encryption",
+        "WPS PIN pairing",
+        "TKIP encryption"
+      ],
+      "answers": [
+        "WPA3 encryption",
+        "802.1X authentication with a RADIUS server"
+      ],
+      "select": 2,
+      "explanation": "WPA3 is the current wireless encryption standard, and 802.1X with RADIUS (enterprise mode) authenticates each user individually. WEP and TKIP are outdated and easily broken, and WPS PIN pairing can be brute-forced."
+    },
+    {
+      "id": "PBQ-023",
+      "type": "multi",
+      "objective": "4.4",
+      "stem": "A company is buying a security information and event management (SIEM) system. Which TWO functions will it provide?",
+      "choices": [
+        "Aggregating logs from many sources in one place",
+        "Correlating events to generate alerts",
+        "Blocking malicious packets inline",
+        "Issuing digital certificates to servers",
+        "Installing patches on endpoints"
+      ],
+      "answers": [
+        "Aggregating logs from many sources in one place",
+        "Correlating events to generate alerts"
+      ],
+      "select": 2,
+      "explanation": "A SIEM collects and normalizes logs from across the environment and correlates them to spot patterns and raise alerts. Blocking traffic inline is an IPS or firewall job, certificates come from a certificate authority, and patching is done by patch management tools."
+    },
+    {
+      "id": "PBQ-024",
+      "type": "multi",
+      "objective": "4.9",
+      "stem": "Threat intelligence reports that a known malicious domain was active yesterday. An analyst needs to find which internal hosts contacted it. Which TWO data sources are MOST useful?",
+      "choices": [
+        "DNS server query logs",
+        "Firewall logs",
+        "Badge reader logs",
+        "Application crash dumps",
+        "Printer usage logs"
+      ],
+      "answers": [
+        "DNS server query logs",
+        "Firewall logs"
+      ],
+      "select": 2,
+      "explanation": "DNS logs show which hosts looked up the domain, and firewall logs show which hosts made connections to its addresses. Badge, crash and printer logs do not record network connections to external domains."
+    },
+    {
+      "id": "PBQ-025",
+      "type": "match",
+      "objective": "4.5",
+      "stem": "An audit found several insecure protocols in use. Match each one to its secure replacement.",
+      "pairs": [
+        {
+          "item": "Telnet",
+          "match": "SSH on TCP port 22"
+        },
+        {
+          "item": "FTP",
+          "match": "SFTP on TCP port 22"
+        },
+        {
+          "item": "HTTP",
+          "match": "HTTPS on TCP port 443"
+        },
+        {
+          "item": "LDAP",
+          "match": "LDAPS on TCP port 636"
+        },
+        {
+          "item": "SNMPv2c",
+          "match": "SNMPv3 on UDP port 161"
+        }
+      ],
+      "explanation": "SSH replaces Telnet for remote administration, and SFTP (which runs over SSH) replaces FTP for file transfer. HTTPS replaces HTTP, LDAPS replaces LDAP for directory queries, and SNMPv3 adds authentication and encryption that SNMPv2c lacks. IMAPS secures IMAP email retrieval, which is not in the list.",
+      "targets_extra": [
+        "IMAPS on TCP port 993"
+      ]
+    },
+    {
+      "id": "PBQ-026",
+      "type": "match",
+      "objective": "4.6",
+      "stem": "An identity team is comparing ways to grant access. Match each access control model to its description.",
+      "pairs": [
+        {
+          "item": "Mandatory access control",
+          "match": "Labels and clearances set by the system decide access; users cannot change them"
+        },
+        {
+          "item": "Discretionary access control",
+          "match": "The owner of a resource decides who can use it"
+        },
+        {
+          "item": "Role-based access control",
+          "match": "Permissions are assigned to job functions and users inherit them"
+        },
+        {
+          "item": "Attribute-based access control",
+          "match": "Decisions evaluate attributes such as department, device and location"
+        },
+        {
+          "item": "Rule-based access control",
+          "match": "Administrator-defined rules, such as time-of-day limits, apply to everyone"
+        }
+      ],
+      "explanation": "MAC relies on security labels and clearances; DAC lets the owner grant access; RBAC ties permissions to roles; ABAC evaluates many attributes of the user, resource and context; and rule-based access applies global rules set by an administrator. Granting access to anyone on the internal network is implicit trust, which is not an access control model.",
+      "targets_extra": [
+        "Anyone on the internal network is trusted automatically"
+      ]
+    },
+    {
+      "id": "PBQ-027",
+      "type": "order",
+      "objective": "5.2",
+      "stem": "A company is starting its first formal risk management program. Put the steps in the order they should happen.",
+      "items": [
+        "Identify risks to the organization's assets",
+        "Analyze the likelihood and impact of each risk",
+        "Choose a response for each risk: accept, avoid, transfer or mitigate",
+        "Implement the chosen controls",
+        "Monitor the risks and review them regularly"
+      ],
+      "explanation": "Risks must be identified before they can be analyzed, and analysis is what makes it possible to choose a sensible response. The chosen controls are then implemented, and risks are monitored over time because both threats and the business change."
+    },
+    {
+      "id": "PBQ-028",
+      "type": "multi",
+      "objective": "5.2",
+      "stem": "During a business impact analysis, which TWO values define how quickly a system must be restored and how much data loss is acceptable?",
+      "choices": [
+        "Recovery time objective (RTO)",
+        "Recovery point objective (RPO)",
+        "Annualized loss expectancy (ALE)",
+        "Annualized rate of occurrence (ARO)",
+        "Common Vulnerability Scoring System (CVSS) score"
+      ],
+      "answers": [
+        "Recovery time objective (RTO)",
+        "Recovery point objective (RPO)"
+      ],
+      "select": 2,
+      "explanation": "RTO is the maximum time a system can be down before it must be restored, and RPO is the maximum amount of data, measured in time, that can be lost. ALE and ARO are quantitative risk values, and CVSS rates the severity of a vulnerability."
+    },
+    {
+      "id": "PBQ-029",
+      "type": "multi",
+      "objective": "5.5",
+      "stem": "A penetration tester begins gathering information about a client. Which TWO activities are examples of passive reconnaissance?",
+      "choices": [
+        "Searching social media for employee names and job titles",
+        "Reviewing public DNS records through a third-party lookup site",
+        "Port scanning the client's external IP address range",
+        "Running a vulnerability scan against the client's web server",
+        "Banner grabbing on the client's mail server"
+      ],
+      "answers": [
+        "Searching social media for employee names and job titles",
+        "Reviewing public DNS records through a third-party lookup site"
+      ],
+      "select": 2,
+      "explanation": "Passive reconnaissance gathers information without sending traffic to the target's systems, for example from social media or third-party sources. Port scanning, vulnerability scanning and banner grabbing all interact directly with the target, which makes them active reconnaissance."
+    },
+    {
+      "id": "PBQ-030",
+      "type": "multi",
+      "objective": "5.6",
+      "stem": "Which TWO details in an email are the STRONGEST signs that it is a phishing attempt that should be reported?",
+      "choices": [
+        "The sender's domain is a slight misspelling of a supplier's real domain",
+        "It urgently asks to change the supplier's bank details before today's payment",
+        "It comes from a colleague's usual address and confirms a meeting you arranged together",
+        "It is the monthly newsletter from the company's usual internal address",
+        "It is a calendar invitation that you created yourself"
+      ],
+      "answers": [
+        "The sender's domain is a slight misspelling of a supplier's real domain",
+        "It urgently asks to change the supplier's bank details before today's payment"
+      ],
+      "select": 2,
+      "explanation": "A lookalike domain and an urgent request to change payment details are classic signs of phishing and business email compromise. Expected messages from known internal senders, or invitations you created yourself, are normal email."
+    },
+    {
+      "id": "PBQ-031",
+      "type": "match",
+      "objective": "5.1",
+      "stem": "A company is writing its data governance policy. Match each data role to its responsibility.",
+      "pairs": [
+        {
+          "item": "Data owner",
+          "match": "Senior leader accountable for classifying the data and approving who may access it"
+        },
+        {
+          "item": "Data custodian",
+          "match": "Carries out backups, encryption and day-to-day protection of the data"
+        },
+        {
+          "item": "Data controller",
+          "match": "Decides why and how personal data is processed"
+        },
+        {
+          "item": "Data processor",
+          "match": "Handles personal data on behalf of another organization, following its instructions"
+        }
+      ],
+      "explanation": "The owner is accountable for the data and its classification; the custodian does the hands-on protection; the controller determines the purposes and means of processing personal data; and the processor processes it on the controller's behalf. The person the data is about is the data subject, which is not one of the listed roles.",
+      "targets_extra": [
+        "The individual whom the personal data describes"
+      ]
+    },
+    {
+      "id": "PBQ-032",
+      "type": "match",
+      "objective": "5.3",
+      "stem": "A procurement team is reviewing contracts with a new vendor. Match each agreement to its purpose.",
+      "pairs": [
+        {
+          "item": "Service-level agreement (SLA)",
+          "match": "Defines measurable service targets such as uptime and response times"
+        },
+        {
+          "item": "Non-disclosure agreement (NDA)",
+          "match": "Requires the parties to keep shared information confidential"
+        },
+        {
+          "item": "Memorandum of understanding (MOU)",
+          "match": "Records a usually non-binding intent to cooperate"
+        },
+        {
+          "item": "Master service agreement (MSA)",
+          "match": "Sets the general terms that govern future work between two parties"
+        },
+        {
+          "item": "Statement of work (SOW)",
+          "match": "Describes the specific deliverables, tasks and timeline for one project"
+        }
+      ],
+      "explanation": "An SLA sets measurable service levels, an NDA protects confidential information, an MOU states an intent to work together, an MSA sets the overall terms for an ongoing relationship, and a SOW defines the work for a particular engagement under that relationship. Sharing profits, losses and decisions between partners is the purpose of a business partners agreement, which is not listed.",
+      "targets_extra": [
+        "Defines how partners share profits, losses and decision-making"
+      ]
+    }
+  ]
+}
