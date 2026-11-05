@@ -4,8 +4,8 @@ Desktop shortcut installer (``python main.py install-shortcut``).
 Puts a double-clickable launcher on your desktop that starts the course web
 app (``python main.py web``) and opens it in your browser:
 
-* Windows: ``Security+ Lab Engine.bat`` (uses the ``py`` launcher, else ``python``)
-* macOS:   ``Security+ Lab Engine.command`` (opens in Terminal)
+* Windows: ``IdentityOps Lab.bat`` (uses the ``py`` launcher, else ``python``)
+* macOS:   ``IdentityOps Lab.command`` (opens in Terminal)
 * Linux:   ``security-plus-lab-engine.desktop`` (runs in a terminal window)
 
 The launcher keeps a small terminal window open while you study; closing it
@@ -21,7 +21,7 @@ from pathlib import Path
 
 from utils.loader import ROOT
 
-APP_NAME = "Security+ Lab Engine"
+APP_NAME = "IdentityOps Lab"
 
 
 def detect_platform() -> str:

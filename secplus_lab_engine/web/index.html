@@ -1,4 +1,4 @@
-<title>Security+ Lab Engine</title>
+<title>IdentityOps Lab</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
@@ -157,6 +157,7 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 ol.path li { margin-bottom: 8px; }
 a.done { font-weight: 600; }
 @media print { .rail, .tabs, .noprint, .panel:not(#labbody) { display: none !important; } .main, #labbody { padding: 0; border: 0; box-shadow: none; } body { background: #fff; } }
+.countdown { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--sunken); border-radius: 6px; }
 .tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
@@ -164,7 +165,7 @@ a.done { font-weight: 600; }
 <div class="app">
   <aside class="rail" id="rail">
     <div class="railtop">
-      <div class="brand"><span class="label">CompTIA SY0-701</span><b>Security+ Lab Engine</b></div>
+      <div class="brand"><span class="label">Aligned to CompTIA Security+ SY0-701</span><b>IdentityOps Lab</b></div>
       <button class="btn maptoggle" id="maptoggle" aria-expanded="false" aria-controls="domains">Course map</button>
     </div>
     <nav class="nav" aria-label="Main">
@@ -636,6 +637,16 @@ function todayCard() {
     .catch(() => put(box, el("span", { class: "label", text: "Daily review" }), el("b", { text: "Start today's review →" })));
   return box;
 }
+function examCountdown() {
+  const t = CATALOG.exam_target; if (!t) return null;
+  const days = Math.ceil((new Date(t.retires + "T23:59:59") - new Date()) / 86400000);
+  const when = new Date(t.retires + "T12:00:00").toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+  return el("p", { class: "countdown" },
+    el("b", { text: days > 0 ? `${days} days left` : "This exam has retired" }),
+    ` to take ${t.name}: it retires ${when}. Book your exam date with time to spare. `,
+    el("a", { href: t.source, target: "_blank", rel: "noopener noreferrer", text: "CompTIA's dates" }));
+}
+
 async function viewHome() {
   markNav("home");
   const prog = await Progress.get();
@@ -647,6 +658,7 @@ async function viewHome() {
     el("section", { class: "panel" },
       el("span", { class: "label", text: "Course overview" }),
       el("h1", { text: "Practise every SY0-701 domain on working security engines" }),
+      examCountdown(),
       el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the 100–900 scale).` }),
       el("div", { class: "btns" },
         el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),

@@ -148,8 +148,8 @@ def test_no_cors_headers(server):
 # =========================================================================== #
 # desktop shortcut
 # =========================================================================== #
-@pytest.mark.parametrize("platform,name", [("windows", "Security+ Lab Engine.bat"),
-                                           ("macos", "Security+ Lab Engine.command"),
+@pytest.mark.parametrize("platform,name", [("windows", "IdentityOps Lab.bat"),
+                                           ("macos", "IdentityOps Lab.command"),
                                            ("linux", "security-plus-lab-engine.desktop")])
 def test_install_shortcut(tmp_path, platform, name):
     path = install_shortcut(tmp_path / "Desktop", platform, root=tmp_path / "engine")
@@ -195,7 +195,7 @@ def test_single_file_desktop_app():
     assert html.startswith("<!doctype html>") and "window.SECPLUS_BUNDLE = " in html
     data_script = html.split("<script>window.SECPLUS_BUNDLE = ", 1)[1].split("</script>", 1)[0]
     json.loads(data_script.rstrip(";").replace("<\\/", "</"))      # the embedded bundle is intact JSON
-    assert "<title>Security+ Lab Engine</title>" in html
+    assert "<title>IdentityOps Lab</title>" in html
 
 
 def test_anki_export(tmp_path):
