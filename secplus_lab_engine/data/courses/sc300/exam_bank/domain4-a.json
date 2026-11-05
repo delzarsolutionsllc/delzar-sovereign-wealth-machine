@@ -259,15 +259,15 @@
       "id": "D4-019",
       "objective": "4.1",
       "topic": "Expiration and separation of duties",
-      "stem": "Before turning on separation of duties checks between two access packages, a Litware administrator wants to know which users already hold assignments to both. What should you use?",
+      "stem": "A Litware administrator has just configured the Payments Approver access package as incompatible with the Payments Creator access package. Some users already held both packages before the setting was added. Where can the administrator view and download a list of those users?",
       "choices": [
         "The Microsoft Entra sign-in logs filtered by application",
         "The Identity Secure Score improvement actions",
         "The catalog's list of resources and resource roles",
-        "A list of users who already have incompatible access"
+        "The Additional access count on the access package's Separation of duties page"
       ],
-      "answer": "A list of users who already have incompatible access",
-      "explanation": "Entitlement management can list users who already have access that conflicts with a package's incompatible settings, so you can clean it up first. New checks only block future requests; they do not remove existing conflicting assignments."
+      "answer": "The Additional access count on the access package's Separation of duties page",
+      "explanation": "On the Separation of duties page of the access package, a non-zero Additional access count shows users who also hold the incompatible package; selecting it lists them and the list can be downloaded as a CSV file. The new setting only blocks future requests, so existing conflicting assignments must be cleaned up separately."
     },
     {
       "id": "D4-020",
@@ -301,7 +301,7 @@
       "id": "D4-022",
       "objective": "4.1",
       "topic": "Managing access requests and assignments",
-      "stem": "A request for the Engineering access package at Adatum shows a status of Delivery failed because one SharePoint Online site was briefly unavailable. The site is now available. What should you do with the LEAST administrative effort?",
+      "stem": "A request for the Engineering access package at Adatum shows a status of Failed because one SharePoint Online site was briefly unavailable. The site is now available. What should you do with the LEAST administrative effort?",
       "choices": [
         "Ask the user to cancel and submit a new request",
         "Delete the access package and create it again",
@@ -511,7 +511,7 @@
       "id": "D4-037",
       "objective": "4.1",
       "topic": "Connected organizations and external user lifecycle",
-      "stem": "Requests from Fabrikam's partner users must be approved by the partner's own project lead, who is a user in the partner's tenant. What should you configure?",
+      "stem": "Requests from Fabrikam's partner users must be approved by the partner's own project lead, who was previously invited and is already a guest user in Fabrikam's directory. What should you configure?",
       "choices": [
         "Make the project lead a catalog owner of the catalog",
         "Add the project lead as an external sponsor and use sponsors as approvers",
@@ -519,7 +519,7 @@
         "Assign the project lead the Guest Inviter role"
       ],
       "answer": "Add the project lead as an external sponsor and use sponsors as approvers",
-      "explanation": "A connected organization can list internal and external sponsors, and an access package policy can route approval to those sponsors. Making the partner lead a catalog owner would give management rights far beyond approving requests."
+      "explanation": "A connected organization can list internal sponsors (member users) and external sponsors (guest users from that organization already in your directory), and a policy for users not in your directory can use External sponsor as the approver. Making the partner lead a catalog owner would give management rights far beyond approving requests."
     },
     {
       "id": "D4-038",
@@ -1257,10 +1257,10 @@
         "Initializing",
         "In progress",
         "Not started",
-        "Applied"
+        "Result applied"
       ],
-      "answer": "Applied",
-      "explanation": "Applied means the review has ended and its decisions, such as removals, have been made on the resource. In progress means reviewers can still make decisions."
+      "answer": "Result applied",
+      "explanation": "After a review completes and its results are applied, the status moves from Completed through Applying to Result applied, meaning decisions such as removals have been made on the resource. In progress means reviewers can still make decisions."
     },
     {
       "id": "D4-088",

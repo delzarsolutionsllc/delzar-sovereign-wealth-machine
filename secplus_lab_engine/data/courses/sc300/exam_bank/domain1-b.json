@@ -7,7 +7,7 @@
    "id": "D1-101",
    "objective": "1.3",
    "topic": "External collaboration settings",
-   "stem": "Fabrikam lets partners join as guests. The security team wants guests to see only the properties and memberships of their own user objects, not to browse other users or groups. Which guest user access level should you set?",
+   "stem": "Fabrikam lets partners join as guests. The security team wants guests to be unable to view other users' profiles, groups or group memberships, even for groups the guests belong to. Which guest user access level should you set?",
    "choices": [
     "Limited access to properties and memberships of directory objects, the default level",
     "Same access as member users",
@@ -15,7 +15,7 @@
     "Restricted to properties and memberships of their own directory objects"
    ],
    "answer": "Restricted to properties and memberships of their own directory objects",
-   "explanation": "The most restrictive guest user access level limits guests to their own objects. The default level (limited access) still lets guests read some details of other users and groups they share, so it does not meet the requirement."
+   "explanation": "The most restrictive guest user access level lets guests view only their own profile and objects. The default level (limited access) still lets guests read some details of other users and the groups they belong to, so it does not meet the requirement."
   },
   {
    "id": "D1-102",
@@ -99,7 +99,7 @@
     "Microsoft Entra Connect Sync with a CSV import connector"
    ],
    "answer": "The bulk invite operation with a completed CSV template",
-   "explanation": "Bulk invite takes a CSV of email addresses and redirect URLs and creates all the invitations in one operation. Cross-tenant synchronization only works between tenants in your own multitenant organization, not with outside partners."
+   "explanation": "Bulk invite takes a CSV of email addresses and redirect URLs and creates all the invitations in one operation. Cross-tenant synchronization is designed for tenants that belong to the same organization and needs configuration in both tenants, so it does not fit a list of outside consultants."
   },
   {
    "id": "D1-108",
@@ -484,7 +484,7 @@
     "Redirection URL"
    ],
    "select": 2,
-   "explanation": "The bulk invite template requires the email address to invite and the redirection URL where the user lands after redeeming. The display name and a customized message are optional, and department and sponsor are not template fields."
+   "explanation": "The bulk invite template requires the email address to invite and the redirection URL where the user lands after redeeming. Settings such as a customized invitation message are optional, and department and sponsor are not set through the bulk invite template."
   },
   {
    "id": "D1-135",
@@ -636,7 +636,7 @@
    "id": "D1-144",
    "objective": "1.4",
    "topic": "Microsoft Entra Connect Sync",
-   "stem": "You must install and configure Microsoft Entra Connect Sync for a new tenant. Which Microsoft Entra role should the installing account hold, following the principle of least privilege?",
+   "stem": "You must install and configure Microsoft Entra Connect Sync with password hash synchronization for a new tenant. Which Microsoft Entra role should the installing account hold, following the principle of least privilege?",
    "choices": [
     "Global Administrator",
     "Security Administrator",
@@ -644,7 +644,7 @@
     "Hybrid Identity Administrator"
    ],
    "answer": "Hybrid Identity Administrator",
-   "explanation": "Hybrid Identity Administrator can configure Connect Sync and other hybrid identity features. Global Administrator also works but grants far more access, and Security Administrator and User Administrator cannot complete the setup."
+   "explanation": "Hybrid Identity Administrator, assigned directly to the installing account, can install and configure Connect Sync and features such as password hash synchronization. Global Administrator also works but grants far more access, and Security Administrator and User Administrator cannot complete the setup."
   },
   {
    "id": "D1-145",
@@ -938,7 +938,7 @@
     "The staged rollout sign-in report"
    ],
    "answer": "The AD FS application activity report",
-   "explanation": "The AD FS application activity report lists relying party trusts, their usage, and migration readiness with any blocking settings. The Risky IP report shows failed sign-in sources, not application readiness."
+   "explanation": "The AD FS application activity report lists relying party trusts, their usage, and migration readiness with any blocking settings; it needs the Connect Health agent for AD FS on the federation servers to collect the data. The Risky IP report shows failed sign-in sources, not application readiness."
   },
   {
    "id": "D1-166",
@@ -986,7 +986,7 @@
    "id": "D1-169",
    "objective": "1.4",
    "topic": "Microsoft Entra Connect Health",
-   "stem": "Tailspin Toys has just installed Microsoft Entra Connect Sync and wants to review synchronization errors, such as duplicate attributes, in Connect Health. What else must be installed on the sync server?",
+   "stem": "Tailspin Toys has just installed Microsoft Entra Connect Sync by using a Global Administrator account and wants to review synchronization errors, such as duplicate attributes, in Connect Health. What else must be installed on the sync server?",
    "choices": [
     "The Connect Health agent for AD FS",
     "Nothing, because Connect Sync installs the Connect Health sync agent",
@@ -994,7 +994,7 @@
     "A Log Analytics agent connected to a custom workspace on the sync server"
    ],
    "answer": "Nothing, because Connect Sync installs the Connect Health sync agent",
-   "explanation": "Connect Sync installs the Connect Health agent for sync automatically, so the sync errors report is available without extra setup. The AD FS and AD DS agents monitor other servers."
+   "explanation": "The Connect Sync installation includes the Connect Health agent for sync, so the sync errors report is available without extra setup. (If the installation is run with a Hybrid Identity Administrator account instead, the agent is installed in a disabled state.) The AD FS and AD DS agents monitor other servers."
   },
   {
    "id": "D1-170",

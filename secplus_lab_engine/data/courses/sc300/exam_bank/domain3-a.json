@@ -435,7 +435,7 @@
         "Self-service password reset"
       ],
       "answer": "Conditional Access for workload identities",
-      "explanation": "Conditional Access for workload identities can block service principals based on location or risk. User risk policies target users, not service principals."
+      "explanation": "Conditional Access for workload identities, licensed by Workload ID Premium, can block single-tenant service principals based on location or risk (managed identities are not covered). User risk policies target users, not service principals."
     },
     {
       "id": "D3-032",
@@ -476,15 +476,15 @@
       "type": "order",
       "objective": "3.1",
       "topic": "Creating and assigning managed identities",
-      "stem": "Put the steps in order to let several new virtual machines read secrets from Azure Key Vault by using a shared managed identity.",
+      "stem": "The security team requires that a shared identity be granted Key Vault access before any virtual machine receives it. Put the steps in order to let several new virtual machines read secrets from Azure Key Vault.",
       "items": [
         "Create a user-assigned managed identity",
         "Assign the Key Vault Secrets User role to the identity on the vault",
         "Attach the identity to each virtual machine",
-        "Configure the application to request a token with the identity's client ID",
+        "From each virtual machine, request a token from the Instance Metadata Service by using the identity's client ID",
         "Read the secret from Key Vault by using the token"
       ],
-      "explanation": "A user-assigned identity can be created and granted access first, then attached to the machines; the code then requests a token for that identity and uses it against Key Vault."
+      "explanation": "A user-assigned identity can be created first, and the requirement puts the role assignment before the identity is attached to the machines. Only an attached identity can get a token from the Instance Metadata Service, and the token is then used against Key Vault."
     },
     {
       "id": "D3-035",
@@ -750,7 +750,7 @@
       "id": "D3-052",
       "objective": "3.2",
       "topic": "Microsoft Entra Application Proxy",
-      "stem": "An on-premises app reads the user's identity from HTTP headers and has no support for SAML or OpenID Connect. Which Application Proxy SSO method should you configure?",
+      "stem": "An on-premises app was built to trust identity values that a front-end access gateway inserts into each incoming request, and it has no support for SAML, OpenID Connect or Windows authentication. Which Application Proxy SSO method should you configure?",
       "choices": [
         "Header-based single sign-on",
         "Kerberos constrained delegation",
@@ -1144,12 +1144,12 @@
       "stem": "Put the steps in order to set up automatic SCIM provisioning to a gallery SaaS app.",
       "items": [
         "Add the gallery application as an enterprise application",
+        "Set the provisioning mode to Automatic",
         "Enter the tenant URL and secret token as admin credentials and test the connection",
         "Review the attribute mappings and scoping filters",
-        "Assign users and groups to the application",
-        "Start provisioning and review the provisioning logs"
+        "Turn the provisioning status on and review the provisioning logs"
       ],
-      "explanation": "The app is added, then the provisioning service is connected with the SaaS app's credentials; mappings and scope are set, users are assigned, and provisioning is started and checked in the logs."
+      "explanation": "The app is added first, then automatic provisioning is selected so the admin credentials can be entered and tested; the mappings and scope are reviewed once the connection is saved, and only then is provisioning started and checked in the logs."
     }
   ]
 }

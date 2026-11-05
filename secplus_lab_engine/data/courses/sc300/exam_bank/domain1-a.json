@@ -63,7 +63,7 @@
       "id": "D1-005",
       "objective": "1.1",
       "topic": "Built-in and custom Microsoft Entra roles",
-      "stem": "External auditors at Tailspin Toys must be able to view every Microsoft Entra configuration setting and administrative report, but they must not be able to change anything. Which role should you assign?",
+      "stem": "External auditors at Tailspin Toys must be able to view Microsoft Entra configuration settings and administrative information across the tenant, but they must not be able to change anything. Which role should you assign?",
       "choices": [
         "Security Reader",
         "Reports Reader",
@@ -71,7 +71,7 @@
         "Directory Readers"
       ],
       "answer": "Global Reader",
-      "explanation": "Global Reader can read everything a Global Administrator can see but cannot make changes. Security Reader and Reports Reader are limited to security features and usage reports, and Directory Readers only reads basic directory information."
+      "explanation": "Global Reader is the read-only counterpart to Global Administrator: it can read settings and administrative information across Microsoft services but cannot take management actions. Security Reader and Reports Reader are limited to security features and reports, and Directory Readers only reads basic directory information."
     },
     {
       "id": "D1-006",
@@ -99,7 +99,7 @@
         "An administrative unit for French users, with User Administrator assigned at that scope"
       ],
       "answer": "An administrative unit for French users, with User Administrator assigned at that scope",
-      "explanation": "Administrative units restrict a role assignment to a subset of users, groups or devices, which is the intended way to delegate by region. Custom roles have no attribute-based conditions, and a group scope only grants control over the group object, not its members' accounts."
+      "explanation": "Administrative units restrict a role assignment to a subset of users, groups or devices, which is the intended way to delegate by region. Microsoft Entra custom roles have no attribute-based conditions, and a group is not a scope that gives User Administrator control over its members' accounts."
     },
     {
       "id": "D1-008",
@@ -301,15 +301,15 @@
       "id": "D1-022",
       "objective": "1.1",
       "topic": "Company branding",
-      "stem": "Adatum wants French-speaking users to see custom sign-in page text in French. When an administrator tries to add a French customization, the option is not available. What should the administrator do FIRST?",
+      "stem": "Adatum configured default company branding with a custom logo and background image. It then added a French browser-language customization that changes only the sign-in page text. What do users whose browser language is French see for the logo and background?",
       "choices": [
-        "Set the tenant country to France",
-        "Set the users' usage location to France",
-        "Configure the default company branding",
-        "Upload a custom CSS file for French"
+        "The standard Microsoft logo and background",
+        "No logo or background until French versions are uploaded",
+        "The logo and background from the default branding",
+        "A logo and background chosen from the tenant's country or region"
       ],
-      "answer": "Configure the default company branding",
-      "explanation": "Language-specific branding is built on top of the default branding, so the default sign-in experience must be configured before a language customization can be added. Usage location and tenant country do not control the branding language."
+      "answer": "The logo and background from the default branding",
+      "explanation": "A browser-language customization overrides only the elements you change for that language; any element you leave unchanged falls back to the default branding. The standard Microsoft design appears only where no custom branding exists, and the tenant's country does not select branding elements."
     },
     {
       "id": "D1-023",
@@ -323,7 +323,7 @@
         "Enable custom CSS for the default branding"
       ],
       "answer": "Have users sign in through a URL that includes the tenant's domain",
-      "explanation": "Microsoft cannot know which tenant's branding to show until it learns the user's domain, either from the username or from a tenant-specific URL such as one containing the company domain. Image quality and CSS change how branding looks, not when it appears."
+      "explanation": "Microsoft cannot know which tenant's branding to show until it learns the user's domain, either from the username or from a tenant-specific URL or domain hint (for example whr=contoso.com). Image quality and CSS change how branding looks, not when it appears."
     },
     {
       "id": "D1-024",
@@ -439,7 +439,7 @@
           "match": "Privileged Role Administrator"
         },
         {
-          "item": "Configure Microsoft Entra Connect Sync and federation settings",
+          "item": "Manage Microsoft Entra Connect Sync, pass-through authentication and seamless SSO settings",
           "match": "Hybrid Identity Administrator"
         },
         {

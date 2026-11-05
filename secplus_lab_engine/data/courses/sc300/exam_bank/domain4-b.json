@@ -407,7 +407,7 @@
         "Create an access review of all privileged roles every two years"
       ],
       "answer": "Send the Microsoft Entra audit logs to a storage account or Log Analytics workspace",
-      "explanation": "PIM activity is written to the Microsoft Entra audit logs, and a diagnostic setting can keep those logs for as long as needed. Built-in retention is much shorter than a year, so a yearly export would lose most of the records."
+      "explanation": "PIM activity is written to the Microsoft Entra audit logs, and a diagnostic setting can keep those logs for as long as needed. Built-in retention is only about 30 days (7 days on the Free tier), so a yearly export would lose most of the records."
     },
     {
       "id": "D4-130",
@@ -514,12 +514,12 @@
       "stem": "You are creating a Conditional Access policy that requires compliant devices for all users. How should you handle the emergency access accounts?",
       "choices": [
         "Convert the accounts to guest users before enabling it",
-        "Exclude at least one emergency access account from the policy",
+        "Exclude the emergency access accounts from the policy",
         "Disable the accounts until the policy has been tested",
         "Include the accounts so that their sign-ins are also protected"
       ],
-      "answer": "Exclude at least one emergency access account from the policy",
-      "explanation": "At least one emergency access account must be excluded from Conditional Access policies so that a misconfigured policy cannot lock everyone out. Disabled accounts cannot be used in an emergency."
+      "answer": "Exclude the emergency access accounts from the policy",
+      "explanation": "Microsoft recommends excluding emergency access accounts from any Conditional Access policy that blocks or restricts sign-in, so a misconfigured policy cannot lock everyone out. Disabled accounts cannot be used in an emergency, and including the accounts risks the very lockout they exist to prevent."
     },
     {
       "id": "D4-138",
@@ -716,7 +716,7 @@
       "choices": [
         "Provisioning logs",
         "Audit logs",
-        "Microsoft Graph activity logs",
+        "Identity Protection risk detections",
         "Sign-in logs"
       ],
       "answer": "Audit logs",
@@ -1098,7 +1098,7 @@
         "The score is recalculated periodically, so the change shows after the next refresh"
       ],
       "answer": "The score is recalculated periodically, so the change shows after the next refresh",
-      "explanation": "Identity Secure Score is not updated in real time; completed actions are reflected after the next scheduled calculation. Report-only mode does not earn points because it enforces nothing."
+      "explanation": "Identity Secure Score is not updated in real time; the tenant's configuration is evaluated about every 24 hours and the new score appears after that calculation. Report-only mode does not earn points because it enforces nothing."
     },
     {
       "id": "D4-176",

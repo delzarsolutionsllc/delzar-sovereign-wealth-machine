@@ -91,7 +91,7 @@
       "id": "D3-107",
       "objective": "3.3",
       "topic": "Redirect URIs and platforms",
-      "stem": "A development team at Litware is building a React single-page app that signs users in by using the authorization code flow with PKCE. Which platform should they add to the app registration?",
+      "stem": "A development team at Litware is building a React app that runs entirely in the user's browser and signs users in by using the authorization code flow with PKCE. Which platform should they add to the app registration?",
       "choices": [
         "Web",
         "Mobile and desktop applications",
@@ -673,12 +673,12 @@
       "topic": "Cloud Discovery",
       "stem": "Fabrikam needs ongoing Cloud Discovery data from an on-premises proxy that can send logs by syslog. What should you deploy?",
       "choices": [
-        "A log collector that receives the proxy's syslog feed",
+        "A log collector that the proxy forwards its logs to",
         "A weekly snapshot report uploaded by hand",
         "An app connector that reads the proxy appliance's management API",
         "A session policy for all discovered apps"
       ],
-      "answer": "A log collector that receives the proxy's syslog feed",
+      "answer": "A log collector that the proxy forwards its logs to",
       "explanation": "A log collector, run as a Docker container, receives logs over syslog or FTP and uploads them for continuous reports. Manual snapshots do not give ongoing data."
     },
     {
@@ -690,10 +690,10 @@
         "Integrate Defender for Endpoint with Defender for Cloud Apps",
         "Deploy a log collector on the corporate network",
         "Upload weekly snapshot reports exported from the head office firewall",
-        "Connect each SaaS app with an app connector"
+        "Create Defender for Endpoint custom indicators for each SaaS app"
       ],
       "answer": "Integrate Defender for Endpoint with Defender for Cloud Apps",
-      "explanation": "The Defender for Endpoint integration reports cloud app use from the devices themselves, wherever they connect. A log collector only sees traffic that passes through corporate appliances."
+      "explanation": "The Defender for Endpoint integration reports cloud app use from the devices themselves, wherever they connect. A log collector only sees traffic that passes through corporate appliances, and custom indicators block or allow specific destinations rather than collect discovery data."
     },
     {
       "id": "D3-148",
@@ -727,7 +727,7 @@
       "id": "D3-150",
       "objective": "3.4",
       "topic": "Cloud Discovery",
-      "stem": "Tailspin Toys wants an alert whenever Cloud Discovery finds a new app with a low risk score that is used by many users. Which policy type should you create?",
+      "stem": "Tailspin Toys wants an alert whenever its shadow IT reports show a newly seen app with a low risk score that is used by many users. Which policy type should you create?",
       "choices": [
         "An activity policy",
         "A file policy",
@@ -875,7 +875,7 @@
         "An Outlook on the web policy with app enforced restrictions"
       ],
       "answer": "An Outlook on the web policy with app enforced restrictions",
-      "explanation": "Exchange Online honors app enforced restrictions when the Outlook on the web mailbox policy is set for limited access on unmanaged devices. File policies scan stored files and do not control live sessions."
+      "explanation": "Exchange Online honors app enforced restrictions when the Outlook on the web mailbox policy is set for limited access (such as blocking attachments) and a Conditional Access policy uses the Use app enforced restrictions session control. File policies scan stored files and do not control live sessions."
     },
     {
       "id": "D3-161",
@@ -937,15 +937,15 @@
       "id": "D3-165",
       "objective": "3.4",
       "topic": "Conditional Access app control",
-      "stem": "You created a Conditional Access policy that uses Conditional Access App Control for a featured app, but the app does not yet appear in the list of apps protected by app control. What should you do?",
+      "stem": "Contoso plans to use Conditional Access App Control for two web apps: one uses Microsoft Entra ID for SSO, and the other uses a non-Microsoft identity provider. Which statement about onboarding the apps is correct?",
       "choices": [
-        "Create an app connector for the app",
-        "Upload a snapshot report that includes the app",
-        "Assign the app an app role for administrators",
-        "Sign in to the app as a user in scope of the policy"
+        "Both apps must be onboarded manually in the Defender portal",
+        "Both apps are onboarded only after an app connector is created for each",
+        "Only apps that use SAML can be onboarded, so OpenID Connect apps are unsupported",
+        "The Microsoft Entra ID app is onboarded automatically, and the other app must be onboarded manually"
       ],
-      "answer": "Sign in to the app as a user in scope of the policy",
-      "explanation": "An app is onboarded to Conditional Access App Control when a user covered by the policy first signs in to it. An app connector is a separate API integration and does not onboard the app to the proxy."
+      "answer": "The Microsoft Entra ID app is onboarded automatically, and the other app must be onboarded manually",
+      "explanation": "Microsoft Entra ID apps are onboarded to Conditional Access App Control automatically, while apps that use other identity providers must be onboarded manually. App connectors are a separate API integration, and OpenID Connect apps are supported."
     },
     {
       "id": "D3-166",
@@ -1026,9 +1026,9 @@
         "An access policy that requires a client certificate",
         "A file policy that removes external sharing",
         "An OAuth app policy that revokes the app",
-        "A session policy that blocks copy, paste and print"
+        "A session policy of the Block activities type"
       ],
-      "answer": "A session policy that blocks copy, paste and print",
+      "answer": "A session policy of the Block activities type",
       "explanation": "A session policy of the Block activities type can stop cut, copy, paste and print in the browser. An access policy only decides whether the session starts at all."
     },
     {
@@ -1037,12 +1037,12 @@
       "topic": "Access and session policies",
       "stem": "In a Defender for Cloud Apps session policy, how can Adatum treat Intune compliant devices as managed so that restrictions apply only to other devices?",
       "choices": [
-        "Use the device tag filter for Intune compliant",
+        "Use the device tag filter",
         "Use the IP address range tag filter",
         "Use the Sanctioned app tag filter",
         "Use the user agent string filter"
       ],
-      "answer": "Use the device tag filter for Intune compliant",
+      "answer": "Use the device tag filter",
       "explanation": "Device tags such as Intune compliant, Microsoft Entra hybrid joined or a valid client certificate identify managed devices in access and session policies. IP ranges describe network location, not device management."
     },
     {
@@ -1063,7 +1063,7 @@
       "id": "D3-174",
       "objective": "3.4",
       "topic": "OAuth app policies",
-      "stem": "Northwind Traders wants an alert when users authorize an OAuth app that has a high permission level and is rarely used by other organizations. What should you create?",
+      "stem": "Northwind Traders has connected Google Workspace. It wants an alert when users grant a third-party app high-level access to their Google Workspace data and the app is rarely seen elsewhere. What should you create?",
       "choices": [
         "An app discovery policy filtered on risk score and number of users",
         "An OAuth app policy on permission level and community use",
@@ -1071,7 +1071,7 @@
         "A file policy filtered on sharing level"
       ],
       "answer": "An OAuth app policy on permission level and community use",
-      "explanation": "OAuth app policies can filter on permission level, community use and how many users authorized the app. App discovery policies look at apps found in traffic logs, not consented OAuth apps."
+      "explanation": "OAuth app policies for Google Workspace and Salesforce, now managed under app governance (Policies > Other apps), can filter on permission level, community use and how many users authorized the app. App discovery policies look at apps found in traffic logs, not authorized OAuth apps."
     },
     {
       "id": "D3-175",
@@ -1085,13 +1085,13 @@
         "No snapshot report has been uploaded"
       ],
       "answer": "The Microsoft 365 app connector is not connected",
-      "explanation": "Visibility into OAuth apps authorized in Microsoft Entra ID comes from the Microsoft 365 app connector. Log collectors and app control show traffic and sessions, not consent grants."
+      "explanation": "Visibility into OAuth apps authorized in Microsoft Entra ID depends on the Microsoft 365 app connector (shown on the OAuth apps page, or in app governance when it is turned on). Log collectors and app control show traffic and sessions, not consent grants."
     },
     {
       "id": "D3-176",
       "objective": "3.4",
       "topic": "OAuth app policies",
-      "stem": "Users at Fabrikam consented to a malicious OAuth app that reads their mail. In Defender for Cloud Apps, what should the security team do to stop the app from using those consents?",
+      "stem": "Users at Fabrikam consented to a malicious third-party app that reads their mail. In Defender for Cloud Apps, what should the security team do to stop the app from using those consents?",
       "choices": [
         "Tag the app as Unsanctioned in Cloud Discovery",
         "Ban or disable the app from the OAuth apps view",
@@ -1099,7 +1099,7 @@
         "Add the app to a session policy as Monitor only"
       ],
       "answer": "Ban or disable the app from the OAuth apps view",
-      "explanation": "Banning or disabling an OAuth app stops it from accessing data through the permissions users granted. Unsanctioned tags apply to apps discovered in traffic and do not affect OAuth consents."
+      "explanation": "Banning the app on the OAuth apps page, or disabling it in app governance, stops it from accessing data through the permissions users granted. Unsanctioned tags apply to apps discovered in traffic and do not affect OAuth consents."
     },
     {
       "id": "D3-177",
@@ -1133,15 +1133,15 @@
       "id": "D3-179",
       "objective": "3.4",
       "topic": "OAuth app policies",
-      "stem": "On the OAuth apps page of Defender for Cloud Apps, what does an app's community use value indicate?",
+      "stem": "In Defender for Cloud Apps, what does an OAuth app's community use value indicate?",
       "choices": [
-        "How common the app is among other organizations",
-        "How many of your users authorized the app",
+        "Whether authorizing the app is common, uncommon or rare",
         "How many permissions the app requests",
+        "The app's risk score in the cloud app catalog",
         "How long ago the app was first authorized"
       ],
-      "answer": "How common the app is among other organizations",
-      "explanation": "Community use shows whether an app is common, uncommon or rare across other organizations, which helps spot unusual apps. The number of your own users who authorized it is shown separately."
+      "answer": "Whether authorizing the app is common, uncommon or rare",
+      "explanation": "Community use rates how common it is to authorize the app (common, uncommon or rare), which helps spot unusual apps that request high permissions. Permission level and the catalog risk score are shown separately."
     },
     {
       "id": "D3-180",
@@ -1221,11 +1221,11 @@
       "stem": "Put the steps in order to start controlling browser sessions for a Microsoft Entra integrated SaaS app with Conditional Access App Control.",
       "items": [
         "Create a Conditional Access policy for the users and app with the custom app control option",
-        "Sign in to the app as a user in scope so the app is onboarded",
         "Create a session policy in Defender for Cloud Apps for the app",
-        "Test the policy from an unmanaged device and review the activity log"
+        "Sign in to the app from an unmanaged device as a user in scope of both policies",
+        "Review the session's activities in the activity log"
       ],
-      "explanation": "The Conditional Access policy routes sessions first, and a scoped sign-in onboards the app to app control. Session policies are then created for the onboarded app and tested before rollout."
+      "explanation": "The Conditional Access policy routes sessions to Defender for Cloud Apps (Microsoft Entra ID apps are onboarded automatically), and session policies are created once that policy is ready. A test sign-in by a user in scope then produces the activities to review."
     },
     {
       "id": "D3-186",
