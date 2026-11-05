@@ -105,7 +105,7 @@
    "id": "D2-108",
    "objective": "2.3",
    "topic": "Risk-based Conditional Access policies",
-   "stem": "Proseware is creating a Conditional Access policy for users whose user risk is high. Which grant configuration does Microsoft recommend for users who sign in with a password?",
+   "stem": "Proseware is creating a Conditional Access policy for users whose user risk is high. Among the following grant configurations, which one lets users who sign in with a password remediate their own risk?",
    "choices": [
     "Require a device marked as compliant",
     "Require an approved client app",
@@ -113,7 +113,7 @@
     "Require acceptance of the terms of use"
    ],
    "answer": "Require MFA and require password change",
-   "explanation": "For high user risk, the recommended response is a secure password change, which in Conditional Access is combined with multifactor authentication so the user proves their identity first. A compliant device requirement does not remove the risk or change the possibly leaked password."
+   "explanation": "For high user risk, the remediation is a secure password change, which Conditional Access combines with multifactor authentication so the user proves their identity first (the newer Require risk remediation control does the same and also covers passwordless users). A compliant device requirement does not remove the risk or change the possibly leaked password."
   },
   {
    "id": "D2-109",
@@ -161,7 +161,7 @@
    "id": "D2-112",
    "objective": "2.3",
    "topic": "Risk-based Conditional Access policies",
-   "stem": "Northwind Traders still uses the legacy sign-in risk policy configured in ID Protection. The team now wants risk-based enforcement only for specific cloud apps and combined with a device platform condition. What should you do?",
+   "stem": "Northwind Traders relied on the legacy sign-in risk policy configured in ID Protection, which Microsoft retired on October 1, 2026. The team now wants risk-based enforcement only for specific cloud apps and combined with a device platform condition. What should you do?",
    "choices": [
     "Turn on security defaults and disable the legacy sign-in risk policy",
     "Enable the ID Protection multifactor authentication registration policy",
@@ -169,7 +169,7 @@
     "Add the cloud apps to a named location and mark the location as trusted"
    ],
    "answer": "Re-create it as a Conditional Access sign-in risk policy",
-   "explanation": "Conditional Access risk policies can scope target resources and combine risk with other conditions such as device platform, and Microsoft recommends them over the legacy ID Protection policies. Security defaults cannot be combined with Conditional Access and offer no risk-based scoping."
+   "explanation": "Conditional Access risk policies can scope target resources and combine risk with other conditions such as device platform, and they replace the legacy ID Protection risk policies, which were retired on October 1, 2026. Security defaults cannot be combined with Conditional Access and offer no risk-based scoping."
   },
   {
    "id": "D2-113",
@@ -309,7 +309,7 @@
    "id": "D2-122",
    "objective": "2.3",
    "topic": "Remediating risky users",
-   "stem": "Wingtip Toys synchronizes users from Active Directory Domain Services. Users with high user risk must be able to remediate themselves by changing their password at sign-in. What must be enabled in addition to self-service password reset?",
+   "stem": "Wingtip Toys synchronizes users from Active Directory Domain Services with password hash synchronization. Users with high user risk remediate themselves with a secure password change at sign-in, and the new password must also work for on-premises sign-ins. What must be enabled?",
    "choices": [
     "Device writeback",
     "Password writeback",
@@ -317,7 +317,7 @@
     "Group writeback"
    ],
    "answer": "Password writeback",
-   "explanation": "A synced user's secure password change in the cloud must be written back to Active Directory, which requires password writeback. Seamless single sign-on only signs users in silently from domain-joined devices."
+   "explanation": "A synced user's secure password change in the cloud must be written back to Active Directory, which requires password writeback in Microsoft Entra Connect Sync or Cloud Sync. Seamless single sign-on only signs users in silently from domain-joined devices, and device or group writeback do not carry passwords."
   },
   {
    "id": "D2-123",
@@ -416,7 +416,7 @@
     },
     {
      "item": "Dismiss user risk",
-     "match": "Clears the risk without changing any credentials"
+     "match": "Clears the user's risk without changing any credentials"
     },
     {
      "item": "Reset password",
@@ -615,7 +615,7 @@
    "id": "D2-142",
    "objective": "2.4",
    "topic": "Global Secure Access clients",
-   "stem": "Which device state is required to run the Global Secure Access client on a Windows device?",
+   "stem": "Which Windows device state supports every Global Secure Access traffic forwarding profile (Microsoft, Internet Access and Private Access) in the client?",
    "choices": [
     "Microsoft Entra joined or Microsoft Entra hybrid joined",
     "Joined to an on-premises domain that is not synchronized",
@@ -623,7 +623,7 @@
     "Joined to a workgroup with a local account"
    ],
    "answer": "Microsoft Entra joined or Microsoft Entra hybrid joined",
-   "explanation": "The Windows client needs a device that is Microsoft Entra joined or Microsoft Entra hybrid joined so it can get tokens for the device and user. Microsoft Entra registered devices are not supported by the Windows client."
+   "explanation": "The Windows client supports all traffic profiles on devices that are Microsoft Entra joined or Microsoft Entra hybrid joined. Support for Microsoft Entra registered devices is in preview and covers only Private Access traffic, and unsynchronized domain or workgroup devices with local accounts are not supported."
   },
   {
    "id": "D2-143",
