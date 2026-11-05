@@ -7,7 +7,7 @@ It's meant for building first-principles skill: work through each operation by h
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 24 labs (every SY0-701 objective has one), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
+* 26 labs (every SY0-701 objective has one, plus two identity-governance labs for an IAM career), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
 * **364 exam-style practice questions** (`data/exam_bank/`) for the exams and domain tests: short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
 * A **course web app** you can open from your desktop or from claude.ai
 * 565 pytest tests, run in CI on Python 3.10–3.13
@@ -33,6 +33,8 @@ python main.py web                  # or start it directly
 ```
 
 **Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
+
+**On-the-job format and your IAM portfolio:** every lab opens with a plain-English **work ticket** from a fictional colleague (the situation, your task, why it matters, done-when criteria, a glossary and the job titles that do this work) and ends with a one-page **Case study** tab you can screenshot or save as a PDF. The **IAM career & portfolio** page maps the labs to Microsoft SC-300 skill areas and SailPoint-style identity-governance concepts (lead with Labs 1, 2, 25 and 26), with a screenshot and screen-recording guide and Oklahoma/remote job-search tips. `python main.py case-study --all` writes every case study as Markdown + HTML to `dist/portfolio/` for a GitHub portfolio. Everything is clearly labelled as a simulated lab with fictional data.
 
 **Video course:** the app's *Video course* page (or `python main.py videos`) lays out [Professor Messer's free SY0-701 course](https://www.youtube.com/playlist?list=PLG49S3nxzAnl4QDVqK-hOnoqcSKEIDDuv) (121 videos, about 15 hours) in exam-objective order. Next to each objective it names the lab that practises it. Each lab's Lesson tab starts with a "Watch first" list, *My progress* suggests videos for your weakest objectives, and you can tick videos off as you watch them. Flashcards and CTFd hints link the matching video. The videos stay on YouTube: the course stores only titles, IDs and lengths (`data/video_course.json`). CLI: `python main.py videos [--lab N | --objective 1.4 | --open N | --mark ID]`.
 
@@ -130,6 +132,8 @@ You answer, and the engine reveals its own verdict with the reasoning. The quest
 | 22 | **Compliance & Privacy Tracker** (`labs/lab22_compliance_privacy.py`) | 5.4, 5.1 | Data subject requests, breach notifications, retention and attestations against configurable (illustrative) deadlines → COMPLIANT / AT_RISK / NON_COMPLIANT / EXEMPT, with consequence and internal/external reporting; controller vs processor |
 | 23 | **Pen-Test RoE Gate & Audit Planner** (`labs/lab23_audit_roe.py`) | 5.5, 4.3, 5.3 | Gates each planned pen-test action against the signed rules of engagement (authorization, scope, prohibited/unknown techniques, window, passive-recon rule) → ALLOW / NEEDS_APPROVAL / BLOCK; maps assessment needs to internal audit, self-assessment, examination, third-party audit or attestation |
 | 24 | **Security Awareness Analyzer** (`labs/lab24_awareness.py`) | 5.6, 2.2 | Phishing-simulation outcomes and training actions per employee and department, program KPIs, anomalous-behaviour classification (risky / unexpected / unintentional) and phishing-indicator checks on messages |
+| 25 | **Conditional Access & Just-in-Time Privileged Access** (`labs/lab25_conditional_access.py`) | 4.6, 1.2, 2.4 | Evaluates sign-ins against Conditional-Access-style policies (any block wins, otherwise every applicable policy's controls must be met, exclusions win, report-only is logged, deny-by-default for sensitive apps) and decides just-in-time admin role activations (eligibility, max duration, justification, ticket, MFA, approval, no self-approval); flags standing admin rights and mis-configured break-glass accounts. The SC-300 core |
+| 26 | **Identity Governance: Reconciliation & Access Certification** (`labs/lab26_identity_governance.py`) | 4.6, 5.1, 4.2 | Correlates application accounts to the HR source (orphaned, terminated-with-access, dormant, duplicate, unowned privileged accounts), then runs an access-review campaign (self-review, SoD, comments on high-risk approvals, rubber-stamp detection, no decision means revoke) and produces a de-provisioning list. The SailPoint-style IGA core |
 
 ---
 
@@ -164,6 +168,11 @@ secplus_lab_engine/
 │   ├── sample_privacy_cases.json   # Lab 22 DSRs, breaches, retention, attestations
 │   ├── sample_engagement.json      # Lab 23 pen-test RoE + planned actions + audit needs
 │   ├── sample_awareness.json       # Lab 24 phishing simulation, behaviours, messages
+│   ├── sample_signins.json         # Lab 25 conditional access policies, sign-ins, admin role requests
+│   ├── sample_governance.json      # Lab 26 HR source, app accounts, access-review campaign
+│   ├── briefings/labNN.json        # plain-English work ticket for each lab
+│   ├── career_tracks.json          # IAM career path: SC-300 / SailPoint skill areas -> labs
+│   ├── exam_bank/domainN.json      # 364 exam-style practice questions
 │   └── video_course.json           # Professor Messer video index (titles/IDs only)
 ├── labs/                         # one module per lab (+ registry in __init__.py)
 ├── utils/

@@ -50,8 +50,8 @@ def career_tags(n: int) -> dict[str, list[str]]:
     return out
 
 
-_ACRONYMS = {"sod": "SoD", "hitl": "HITL", "mfa": "MFA", "ip": "IP", "ips": "IPs", "rto": "RTO", "rpo": "RPO",
-             "kev": "KEV", "sla": "SLA", "dlp": "DLP", "iam": "IAM", "ale": "ALE", "pim": "PIM", "ca": "CA"}
+_ACRONYMS = {"signins": "Sign-ins", "sod": "SoD", "hitl": "HITL", "mfa": "MFA", "ip": "IP", "ips": "IPs", "rto": "RTO", "rpo": "RPO",
+             "kev": "KEV", "sla": "SLA", "dlp": "DLP", "iam": "IAM", "ale": "ALE", "pim": "PIM", "ca": "CA", "pct": "%"}
 
 
 def _label(key) -> str:
@@ -71,14 +71,20 @@ def summarize(summary) -> list[tuple[str, str]]:
     if values and all(isinstance(v, str) for v in values) and len(values) > 3:
         # {item_id: decision} -> decision counts
         for decision, count in Counter(values).most_common():
-            rows.append((decision.replace("_", " ").title(), f"{count} of {len(values)}"))
+            rows.append((_label(decision.lower()), f"{count} of {len(values)}"))
         return rows
     for k, v in summary.items():
         label = _label(k)
         if isinstance(v, (list, tuple)):
             v = ", ".join(map(str, v)) or "none"
+        elif isinstance(v, dict) and v and all(isinstance(x, str) for x in v.values()):
+            counts = Counter(v.values())
+            v = f"{len(v)} total: " + ", ".join(f"{_label(d.lower())} {c}" for d, c in counts.most_common())
+        elif isinstance(v, dict) and v and not any(isinstance(x, dict) for x in v.values()):
+            v = ", ".join(f"{_label(a).lower() if i else _label(a)}: {', '.join(map(str, b)) if isinstance(b, (list, tuple)) else b}"
+                          for i, (a, b) in enumerate(v.items()))
         elif isinstance(v, dict):
-            v = ", ".join(f"{a}: {b}" for a, b in v.items())
+            v = f"{len(v)}: " + ", ".join(map(str, v)) if v else "none"
         rows.append((label, str(v)))
     return rows
 

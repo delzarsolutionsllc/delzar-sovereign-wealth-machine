@@ -1999,5 +1999,436 @@
       "Archiving": "Keeping logs for the retention period required by policy or law",
       "Validation": "Confirming that a remediation actually worked, e.g. by rescanning"
     }
+  },
+
+  "identity_governance_iga": {
+    "correlation_rules": [
+      {
+        "name": "employee_id",
+        "account_attribute": "employee_id",
+        "identity_attribute": "employee_id"
+      },
+      {
+        "name": "email",
+        "account_attribute": "email",
+        "identity_attribute": "email"
+      }
+    ],
+    "status_handling": {
+      "active": "allowed",
+      "leave": "allowed",
+      "terminated": "revoke"
+    },
+    "dormant_after_days": 90,
+    "service_account_types": [
+      "service"
+    ],
+    "finding_severity": [
+      "TERMINATED_WITH_ACCESS",
+      "PRIVILEGED_UNOWNED",
+      "ORPHAN",
+      "DUPLICATE",
+      "DORMANT",
+      "CORRELATED"
+    ],
+    "finding_actions": {
+      "CORRELATED": "NO_ACTION",
+      "TERMINATED_WITH_ACCESS": "REVOKE",
+      "PRIVILEGED_UNOWNED": "DISABLE",
+      "ORPHAN": "DISABLE",
+      "DUPLICATE": "REVOKE",
+      "DORMANT": "DISABLE"
+    },
+    "finding_definitions": {
+      "CORRELATED": "The account is linked to exactly one known identity (or a service account to an active named owner) and needs no action.",
+      "ORPHAN": "An account that no identity in the authoritative HR source owns: nobody is accountable for it.",
+      "TERMINATED_WITH_ACCESS": "The owner left the organisation (HR status terminated) but the account is still enabled: de-provisioning failed.",
+      "DORMANT": "An enabled account with no login for longer than the policy limit (or no login recorded at all).",
+      "PRIVILEGED_UNOWNED": "A privileged or service (non-human) account without an active named owner: deny by default.",
+      "DUPLICATE": "A second account for the same identity in the same application, which splits audit trails and doubles access."
+    },
+    "campaign": {
+      "allowed_reviewers": [
+        "manager",
+        "entitlement_owner"
+      ],
+      "allow_self_review": false,
+      "risk_levels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "comment_required_risk": [
+        "high",
+        "critical"
+      ],
+      "unknown_entitlement_risk": "critical",
+      "no_decision_action": "REVOKE",
+      "rubber_stamp": {
+        "min_approvals": 5,
+        "max_median_seconds": 10
+      }
+    },
+    "sod_conflicts": [
+      {
+        "name": "create vendor + approve payment",
+        "pair": [
+          "ERP:AP_CREATE_VENDOR",
+          "ERP:AP_APPROVE_PAYMENT"
+        ]
+      },
+      {
+        "name": "file-server admin + delete audit logs",
+        "pair": [
+          "FileShare:ADMIN",
+          "FileShare:AUDIT_LOG_DELETE"
+        ]
+      }
+    ],
+    "concepts": {
+      "authoritative source": "The system of record for who works here (usually HR); it decides whether an identity exists and is active.",
+      "aggregation": "Collecting the account lists from every connected application into one place.",
+      "correlation": "Linking each application account to the person (identity) who owns it, using matching rules.",
+      "entitlement": "One specific permission inside an application, such as a group, role or right.",
+      "role": "A named bundle of entitlements matched to a job function, granted together.",
+      "access profile": "A bundle of entitlements from ONE application that is requested and reviewed as a unit.",
+      "access certification": "A periodic attestation where a manager or owner confirms each person still needs each entitlement."
+    }
+  },
+
+  "conditional_access": {
+    "_comment": "Lab 25: Conditional Access evaluator + just-in-time privileged role activation. Every applicable policy is evaluated; any BLOCK wins; otherwise ALL grant requirements of ALL applicable policies must be met.",
+    "named_locations": {
+      "HQ-Tulsa": [
+        "10.20.0.0/16",
+        "198.51.100.0/25"
+      ],
+      "Branch-OKC": [
+        "192.0.2.0/26"
+      ]
+    },
+    "trusted_locations": [
+      "HQ-Tulsa",
+      "Branch-OKC"
+    ],
+    "client_app_categories": {
+      "browser": "browser",
+      "mobile_app": "mobile_desktop",
+      "desktop_app": "mobile_desktop",
+      "legacy_imap": "legacy",
+      "legacy_pop": "legacy",
+      "legacy_smtp": "legacy",
+      "activesync_basic": "legacy"
+    },
+    "risk_levels": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "sensitive_apps": [
+      "Payroll",
+      "Admin-Portal",
+      "Finance-ERP"
+    ],
+    "block_if_no_policy_for": [
+      "Finance-ERP"
+    ],
+    "grant_controls": {
+      "mfa": "multifactor authentication completed",
+      "compliant_device": "device marked compliant by device management (MDM)",
+      "approved_app": "an approved client app with app protection",
+      "terms_of_use": "terms of use accepted"
+    },
+    "policies": [
+      {
+        "name": "CA01 Block legacy authentication",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "client_apps": [
+            "legacy"
+          ]
+        },
+        "grant": {
+          "block": true
+        }
+      },
+      {
+        "name": "CA02 Require MFA for administrators",
+        "state": "on",
+        "users": {
+          "include": [
+            "Admins"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "mfa"
+          ],
+          "operator": "all"
+        },
+        "session": {
+          "sign_in_frequency_hours": 4
+        }
+      },
+      {
+        "name": "CA03 Require MFA for medium/high sign-in risk",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "sign_in_risk": [
+            "medium",
+            "high"
+          ]
+        },
+        "grant": {
+          "require": [
+            "mfa"
+          ],
+          "operator": "all"
+        },
+        "session": {
+          "sign_in_frequency_hours": 1
+        }
+      },
+      {
+        "name": "CA04 Payroll off-network needs MFA and compliant device",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "Payroll"
+          ]
+        },
+        "conditions": {
+          "locations": {
+            "include": [
+              "any"
+            ],
+            "exclude": [
+              "trusted"
+            ]
+          }
+        },
+        "grant": {
+          "require": [
+            "mfa",
+            "compliant_device"
+          ],
+          "operator": "all"
+        }
+      },
+      {
+        "name": "CA05 Mobile mail needs approved app or compliant device",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "Mail"
+          ]
+        },
+        "conditions": {
+          "platforms": [
+            "ios",
+            "android"
+          ]
+        },
+        "grant": {
+          "require": [
+            "approved_app",
+            "compliant_device"
+          ],
+          "operator": "one"
+        }
+      },
+      {
+        "name": "CA06 Block high sign-in risk (pilot)",
+        "state": "report_only",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "sign_in_risk": [
+            "high"
+          ]
+        },
+        "grant": {
+          "block": true
+        }
+      },
+      {
+        "name": "CA07 Guests must accept terms of use",
+        "state": "on",
+        "users": {
+          "include": [
+            "Guests"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "terms_of_use"
+          ],
+          "operator": "all"
+        }
+      },
+      {
+        "name": "CA08 Old pilot: compliant device for everyone",
+        "state": "off",
+        "users": {
+          "include": [
+            "all"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "compliant_device"
+          ],
+          "operator": "all"
+        }
+      }
+    ],
+    "indicators": {
+      "impossible_travel_minutes": 180,
+      "concurrent_session_minutes": 10
+    },
+    "privileged_roles": [
+      "Global Administrator",
+      "Privileged Role Administrator",
+      "Security Administrator",
+      "User Administrator",
+      "Helpdesk Administrator"
+    ],
+    "role_settings": {
+      "Global Administrator": {
+        "max_hours": 4,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": true,
+        "approvers": [
+          "sec-lead",
+          "ciso"
+        ]
+      },
+      "Privileged Role Administrator": {
+        "max_hours": 4,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": true,
+        "approvers": [
+          "sec-lead",
+          "ciso"
+        ]
+      },
+      "User Administrator": {
+        "max_hours": 8,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      },
+      "Helpdesk Administrator": {
+        "max_hours": 8,
+        "require_justification": true,
+        "require_ticket": false,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      },
+      "Security Reader": {
+        "max_hours": 8,
+        "require_justification": false,
+        "require_ticket": false,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      }
+    },
+    "concepts": {
+      "just-in-time permissions": "privileges granted only when needed, for a limited time, then removed automatically",
+      "standing privilege": "an admin role held permanently, active 24x7 whether or not it is being used",
+      "password vaulting": "privileged passwords stored in a vault and checked out (and rotated) per use",
+      "ephemeral credentials": "short-lived credentials created for one session or task and then discarded",
+      "break-glass account": "an emergency admin account excluded from normal access policies, tightly monitored",
+      "report-only mode": "a policy is evaluated and logged but not enforced, to test its impact first",
+      "legacy authentication": "older protocols (IMAP, POP, basic auth SMTP) that cannot perform MFA",
+      "adaptive identity": "access decisions that change with real-time context such as risk, location and device"
+    }
   }
 }

@@ -34,6 +34,8 @@ from . import (
     lab22_compliance_privacy,
     lab23_audit_roe,
     lab24_awareness,
+    lab25_conditional_access,
+    lab26_identity_governance,
 )
 
 # lab number -> (module, default data file)
@@ -62,4 +64,6 @@ LABS = {
     22: (lab22_compliance_privacy, "sample_privacy_cases.json"),
     23: (lab23_audit_roe, "sample_engagement.json"),
     24: (lab24_awareness, "sample_awareness.json"),
+    25: (lab25_conditional_access, "sample_signins.json"),
+    26: (lab26_identity_governance, "sample_governance.json"),
 }

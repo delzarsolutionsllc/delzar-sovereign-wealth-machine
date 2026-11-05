@@ -692,7 +692,124 @@ def gen_lab19(rng: random.Random, policies: dict) -> dict:
             "events": evs}
 
 
-GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 18: gen_lab18, 19: gen_lab19, 20: gen_lab20, 21: gen_lab21, 22: gen_lab22, 23: gen_lab23, 24: gen_lab24}
+# --------------------------------------------------------------------------- #
+# Lab 26
+# --------------------------------------------------------------------------- #
+def gen_lab26(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["identity_governance_iga"]
+    statuses = list(cfg["status_handling"]) + ["active", "active", "active"]
+    depts = ["Finance", "IT", "Sales", "HR"]
+    identities = [{"employee_id": "E2000", "name": "Exec Leader", "email": "exec.leader@example.com",
+                   "department": "Operations", "job_code": "OPS-EXEC", "status": "active", "manager": None}]
+    for i in range(1, rng.randint(7, 11) + 1):
+        dept = rng.choice(depts)
+        identities.append({"employee_id": f"E2{i:03d}", "name": f"User {i}", "email": f"user{i}@example.com",
+                           "department": dept, "job_code": f"{dept[:3].upper()}-{rng.randint(1, 4)}",
+                           "status": rng.choice(statuses),
+                           "manager": rng.choice([x["employee_id"] for x in identities])})
+    ids = [x["employee_id"] for x in identities]
+    apps = ["ERP", "CRM", "FileShare"]
+    accounts = []
+    for n in range(1, rng.randint(15, 26) + 1):
+        app, kind = rng.choice(apps), rng.random()
+        acct = {"id": f"A{n:02d}", "app": app, "account": f"acct{n}"}
+        if kind < 0.15:
+            acct.update(type=cfg["service_account_types"][0], privileged=True, account=f"svc_{app.lower()}_{n}")
+            if rng.random() < 0.6:
+                acct["owner"] = rng.choice(ids)
+        elif kind < 0.30:
+            acct[rng.choice(["employee_id", "email"])] = rng.choice(["E9999", "temp@partner.example.net"])
+        else:
+            ident = rng.choice(identities)
+            if rng.random() < 0.7:
+                acct["employee_id"] = ident["employee_id"]
+            else:
+                acct["email"] = ident["email"]
+            if rng.random() < 0.2:
+                acct["privileged"] = True
+        if rng.random() < 0.15:
+            acct["enabled"] = False
+        if rng.random() < 0.9:
+            acct["last_login_days_ago"] = rng.choice([0, 2, 7, 30, 60, 89, 90, 91, 150, 400])
+        accounts.append(acct)
+    risks = cfg["campaign"]["risk_levels"]
+    sod = [e for rule in cfg["sod_conflicts"] for e in rule["pair"]]
+    names = list(dict.fromkeys(sod + ["ERP:GL_VIEW", "CRM:CRM_USER", "FileShare:TEAM_DRIVE"]))
+    catalog = {e: {"risk": rng.choice(risks), "owner": rng.choice(ids), "description": "generated"} for e in names}
+    stamper = rng.choice(ids) if rng.random() < 0.6 else None
+    items, clock = [], {}
+    for n in range(1, rng.randint(8, 16) + 1):
+        ident = rng.choice(identities + [{"employee_id": "E9999", "manager": None}])
+        ent = rng.choice(names + ["CRM:UNCATALOGUED"])
+        rel = rng.random()
+        reviewer = (stamper if stamper and rel < 0.3 else ident.get("manager") if rel < 0.55
+                    else catalog.get(ent, {}).get("owner") if rel < 0.75
+                    else ident["employee_id"] if rel < 0.85 else rng.choice(ids))
+        decision = rng.choice(["approve", "approve", "approve", "revoke", "none"])
+        fast = reviewer == stamper
+        if fast:
+            decision = "approve"
+        clock[reviewer] = clock.get(reviewer, 0) + (rng.randint(2, 6) if fast else rng.randint(20, 400))
+        items.append({"id": f"C{n:02d}", "identity": ident["employee_id"], "app": ent.split(":")[0],
+                      "entitlement": ent.split(":")[1], "reviewer": reviewer, "decision": decision,
+                      "decided_at_seconds": None if decision == "none" else clock[reviewer],
+                      "comment": rng.choice(["", "", "still needed for current role", "ok"])})
+    return {"_description": "Generated identity governance scenario", "identities": identities,
+            "accounts": accounts, "entitlements": catalog, "campaign": {"name": "Generated campaign", "items": items}}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 25
+# --------------------------------------------------------------------------- #
+def gen_lab25(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["conditional_access"]
+    apps = sorted(set(cfg["sensitive_apps"]) | {"Wiki", "Mail"})
+    trusted_ips = ["10.20.%d.%d" % (rng.randint(0, 255), rng.randint(1, 254)), "192.0.2.%d" % rng.randint(1, 60)]
+    clients = sorted(cfg["client_app_categories"]) + ["browser", "browser", "mobile_app"]
+    platforms = ["windows", "windows", "macos", "ios", "android", "linux"]
+    group_sets = [["Staff"], ["Staff"], ["Staff", "Finance"], ["Staff", "Admins"], ["Guests"], ["BreakGlass", "Admins"]]
+    names = ["alice", "bob", "carol", "dave", "erin", "frank", "grace", "heidi"]
+    signins, minute = [], rng.randint(400, 500)
+    for i in range(1, rng.randint(8, 13) + 1):
+        groups = list(rng.choice(group_sets))
+        user = "bg-admin01" if "BreakGlass" in groups else rng.choice(names)
+        minute += rng.choice([3, 5, 20, 45, 90])
+        s = {"id": f"S{i:02d}", "user": user, "groups": groups, "app": rng.choice(apps),
+             "ip": rng.choice(trusted_ips + ["203.0.113.%d" % rng.randint(1, 254)] * 2),
+             "country": rng.choice(["US", "US", "US", "NL", "CA"]), "minute": minute,
+             "device": {"platform": rng.choice(platforms), "compliant": rng.random() < 0.6},
+             "client_app": rng.choice(clients), "mfa_satisfied": rng.random() < 0.55}
+        if rng.random() < 0.9:
+            s["risk"] = rng.choice(cfg["risk_levels"])
+        if rng.random() < 0.5:
+            s["approved_app"] = rng.random() < 0.6
+        if "Guests" in groups:
+            s["tou_accepted"] = rng.random() < 0.5
+        signins.append(s)
+    roles = sorted(cfg["role_settings"])
+    people = ["heidi", "oscar", "peggy", "trent", "sybil"]
+    assignments = [{"user": "bg-admin01", "role": roles[0], "type": "active", "permanent": True}]
+    for u in people:
+        assignments.append({"user": u, "role": rng.choice(roles), "type": "eligible"})
+    for u in rng.sample(["mallory", "frank", "walter"], rng.randint(0, 2)):
+        assignments.append({"user": u, "role": rng.choice(cfg["privileged_roles"]), "type": "active", "permanent": True})
+    requests = []
+    for i in range(1, rng.randint(4, 7) + 1):
+        a = rng.choice(assignments[1:]) if rng.random() < 0.8 else {"user": "victor", "role": rng.choice(roles)}
+        r = {"id": f"R{i}", "user": a["user"], "role": a["role"], "duration_hours": rng.choice([1, 2, 4, 8, 12]),
+             "justification": rng.choice(["Scheduled maintenance", "Incident follow-up", ""]),
+             "ticket": rng.choice(["CHG-%05d" % rng.randint(10000, 99999), ""]), "mfa_done": rng.random() < 0.8}
+        appr = rng.choice([None, None, "sec-lead", "ciso", a["user"], "intern"])
+        if appr:
+            r["approver"] = appr
+        requests.append(r)
+    return {"signins": signins,
+            "break_glass_accounts": [{"user": "bg-admin01", "groups": ["BreakGlass", "Admins"],
+                                      "alert_on_signin": rng.random() < 0.7}],
+            "assignments": assignments, "activation_requests": requests}
+
+
+GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 18: gen_lab18, 19: gen_lab19, 20: gen_lab20, 21: gen_lab21, 22: gen_lab22, 23: gen_lab23, 24: gen_lab24, 25: gen_lab25, 26: gen_lab26}
 
 
 def generate(lab: int, policies: dict, seed: int | None = None) -> dict:
