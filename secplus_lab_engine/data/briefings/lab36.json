@@ -1,0 +1,39 @@
+{
+  "lab": 36,
+  "ticket": "IAM-36114",
+  "type": "Service request",
+  "priority": "P3",
+  "requested_by": "Priya Okafor, IT Service Desk Manager, Harrowgate Instruments",
+  "title": "Validate HR profile changes, review group rules and answer group membership tickets",
+  "situation": "Harrowgate Instruments uses Okta Identity Engine as its identity provider, and apps are assigned to groups, so a person in the wrong group gets the wrong apps. HR sent 10 profile requests (new hires and changes) for Universal Directory, the identity team keeps 7 group rules written in Okta Expression Language, and the service desk has 12 tickets asking why someone is, or is not, in a group.",
+  "your_task": [
+    "Check each profile request against the profile schema (the Okta base attributes plus the custom attributes businessUnit, badgeNumber, remoteWorker and certifications) and mark it ACCEPTED or REJECTED with the reason: unknown attribute, wrong data type, missing required attribute or unknown user.",
+    "Apply the accepted requests, then review every group rule: is it active, can its expression be read, and does it target only Okta-mastered groups?",
+    "Work out the resulting group memberships from the active rules, their exclude lists and the manually added members.",
+    "For each ticket give the cause: RULE_MATCHED, RULE_INACTIVE, ATTRIBUTE_MISMATCH, USER_EXCLUDED, MANUAL_ASSIGNMENT, USER_NOT_ACTIVE or NO_RULE."
+  ],
+  "why_it_matters": "Group rules decide app access for most of the company. A lower-case department value, an attribute name typed in the wrong case or a rule left inactive silently keeps people out of the apps they need, while a forgotten manual member keeps access they should have lost.",
+  "done_when": [
+    "All 10 profile requests are ACCEPTED or REJECTED with the reason.",
+    "All 7 group rules are marked OK, INACTIVE, UNPARSEABLE or INVALID_TARGET.",
+    "The membership of every group is listed.",
+    "All 12 tickets have a cause and a reason the service desk can pass on."
+  ],
+  "glossary": {
+    "Okta Identity Engine (OIE)": "The current Okta platform that runs sign-in, policies and the user directory.",
+    "Universal Directory": "Okta's directory of user profiles, holding the base attributes and any custom attributes.",
+    "Custom attribute": "A profile attribute added by an administrator in the Profile Editor, with a fixed data type.",
+    "Okta Expression Language (OEL)": "The expression syntax used in group rules, for example user.department == \"Sales\".",
+    "Group rule": "A condition that adds every matching user to one or more Okta groups automatically.",
+    "Okta-mastered group": "A group created in Okta; only these can be targets of group rules.",
+    "App group": "A group imported from another system such as Active Directory (AD), whose membership that system controls.",
+    "Human resources (HR)": "The team, and its system, that is the source of employee data such as department and title."
+  },
+  "job_roles": [
+    "Okta Administrator",
+    "Identity and Access Management (IAM) Analyst",
+    "Service Desk Analyst",
+    "Systems Administrator"
+  ],
+  "talking_point": "Validated 10 HR profile requests in Okta Universal Directory (4 accepted, 6 rejected for an unknown attribute, wrong data types, missing required attributes or an unknown user), found 3 of 7 group rules needing attention (one inactive, one targeting an Active Directory group and one that could not be parsed), and closed 12 group membership tickets, 3 of them caused by attribute mismatches such as a lower-case department."
+}

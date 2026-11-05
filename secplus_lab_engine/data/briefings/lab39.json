@@ -1,0 +1,35 @@
+{
+  "lab": 39,
+  "ticket": "IAM-43915",
+  "type": "Change and audit request",
+  "priority": "P2",
+  "requested_by": "Rosa Delgado, Identity and Access Manager",
+  "title": "Check this week's profile mappings, status changes and leaver offboarding in Okta",
+  "situation": "Larkspur Example Co uses PeopleHub HR as the profile source for employees: HR data is imported into Okta, and Okta pushes profiles to Expense Portal and Team Chat. The help desk says some edits to users 'keep reverting', a few app profiles failed to update, and an admin has queued 11 status changes. Two people left this week: Marcus was deactivated and Ines was only suspended. Security wants proof, app by app, that neither can still get in.",
+  "your_task": [
+    "Work out each of the 9 users' Okta profile and app profiles from the attribute mappings, and flag any mapping errors (missing source attribute, wrong data type, unknown source) and any edits that the source will overwrite.",
+    "Check each requested user status change against the Okta lifecycle and say whether it is allowed.",
+    "For each allowed change, say whether the user can sign in, whether sessions are cleared, whether app assignments are kept, and what happens to each app account.",
+    "Run the offboarding checklist for both leavers and mark every app ACCESS_REMOVED or STILL_HAS_ACCESS with the reason."
+  ],
+  "why_it_matters": "If an attribute is owned by HR, fixing it in Okta only lasts until the next import, so the help desk keeps doing the same work. A wrong mapping can also give someone an approver flag they should not have. And a leaver who is only suspended, or whose app has no deprovisioning, can still get in: that is exactly what auditors and attackers look for.",
+  "done_when": [
+    "All 9 users have a mapping outcome and computed profiles, with a reason for every error or overwritten edit.",
+    "All 11 status changes are marked ALLOWED or INVALID_TRANSITION, and allowed deactivations list each app account as DEACTIVATED, LEFT_ACTIVE_ORPHAN or NO_ACCOUNT.",
+    "Every offboarding check has an outcome, and each STILL_HAS_ACCESS has a named fix (deactivate instead of suspend, enable Deactivate Users, or disable the app account by hand).",
+    "The orphaned app accounts are listed for the app owners."
+  ],
+  "glossary": {
+    "Profile source": "The app or directory, here the HR system, that owns a user's profile; Okta imports from it, and its values win over edits made in Okta.",
+    "Profile Editor": "The Okta Admin Console page where you see the Okta user profile, each app user profile, and the attribute mappings between them.",
+    "Attribute mapping": "A rule that copies or transforms an attribute from one profile to another, for example from HR into Okta or from Okta into an app.",
+    "Okta Expression Language (EL)": "The small expression syntax used in mappings, such as String.toLowerCase(user.email).",
+    "Apply on create only": "A mapping setting that fills a value once when the account is created and never updates it later.",
+    "Single sign-on (SSO)": "Signing in once with Okta and reaching apps without typing a separate password, using standards such as SAML (Security Assertion Markup Language) or OIDC (OpenID Connect).",
+    "Secure Web Authentication (SWA)": "An Okta sign-in method where Okta stores the user's app username and password and fills them in; the app keeps its own password.",
+    "Deactivate Users": "A provisioning feature that deactivates the user's account in an app when the user is deactivated in Okta.",
+    "Orphaned account": "An app account that stays active after its owner has left or lost the Okta assignment."
+  },
+  "job_roles": ["Okta Administrator", "IAM Analyst", "Identity Engineer", "IT Service Desk Lead"],
+  "talking_point": "Checked attribute mappings for 9 users (4 OK, 2 edits overwritten by the source, 3 mapping errors such as text 'Yes' sent to a true/false field), validated 11 Okta status changes (7 allowed, 4 invalid, such as deleting a user who was not deactivated), found 3 app accounts left active as orphans after deactivation, and showed that 5 of 9 offboarding checks still had access, because a leaver was suspended instead of deactivated two apps accept their own passwords and one app was missing from the catalog."
+}

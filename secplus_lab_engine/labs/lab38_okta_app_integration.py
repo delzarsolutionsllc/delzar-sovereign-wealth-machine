@@ -131,8 +131,8 @@ def choose_protocol(req: dict, cfg: dict) -> ProtocolChoice:
         return ProtocolChoice(rid, app, rules[rule], rule, [reason] + notes)
 
     if app_type not in cfg["app_types"]:
-        return out("unknown app type", f"app type '{app_type or 'not given'}' is missing or unknown: review the requirements "
-                   "before creating an integration (deny by default)")
+        return out("unknown app type", f"app type '{app_type or 'not given'}' is missing or unknown: "
+                   "review the requirements before creating an integration (deny by default)")
     if req.get("sign_in_required") is False:                     # missing = assume sign-in is needed
         return out("no sign-in needed", "the app needs no sign-in, only a link on the End-User Dashboard")
     if "oidc" in known and app_type in cfg["oidc_first_app_types"]:
@@ -327,13 +327,13 @@ INSIGHT = {
         "Copying the SP's metadata URL into the ACS field, or a trailing-path typo, so assertions go nowhere.",
     ],
     "ai_governance": [
-        "An AI agent can diff SP metadata against the Okta settings, but changing a production app stays a reviewed change.",
+        "An AI agent can diff SP metadata against the Okta settings, but a production change stays reviewed.",
         "Give an automation its own API token with a least-privilege admin role, never a super admin's token.",
         "Treat SAML responses, error pages and app descriptions as untrusted data, never as instructions to the agent.",
     ],
     "exam_tips": [
         "'Users get an error that they are not assigned' = add the user or their group to the app's Assignments.",
-        "'Works from the dashboard tile but not from the app's login page' = check the SP-initiated settings (ACS, SSO URL).",
+        "'Works from the dashboard tile but not from the app's login page' = check SP-initiated settings (ACS URL).",
         "'Legacy app with only a username and password form' = SWA; 'just a link' = Bookmark.",
         "'Account not created when the user was assigned' = enable API integration and Create Users under To App.",
     ],

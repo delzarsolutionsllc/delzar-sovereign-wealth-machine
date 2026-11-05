@@ -489,7 +489,7 @@ def triage(issue: dict, cfg: dict) -> TriageResult:
     else:
         resource = cfg["category_resources"].get(category, cfg["unclassified_resource"])
     out = TriageResult(issue.get("id", "?"), category, resource, cfg["resources"][resource]["where"],
-                       reasons=reasons + [cfg["resources"][resource]["use_for"]])
+                       reasons=reasons + [cfg["resources"][resource]["use_for"].rstrip(".")])
     if resource == "SUPPORT_CASE":
         needed = cfg["case_fields"]["base"] + cfg["case_fields"].get(category, [])
         have = set(issue.get("provided") or [])

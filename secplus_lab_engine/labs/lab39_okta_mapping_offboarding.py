@@ -512,7 +512,9 @@ def build_challenges(policies: dict, data: dict) -> list:
                                    objective="3.1"))
                 break
     for t in trans:
-        qs.append(Question(prompt=f"{t.id}: {t.user} is {t.current}. Is a change to {t.requested} allowed?",
+        label = cfg["statuses"].get
+        qs.append(Question(prompt=f"{t.id}: {t.user} is {label(t.current, t.current)}. Is a change to "
+                                  f"{label(t.requested, t.requested)} allowed?",
                            choices=LIFECYCLE_OUTCOMES, answer=t.outcome, explanation="; ".join(t.reasons),
                            objective="3.2"))
     asked = set()

@@ -1,0 +1,1077 @@
+{
+ "domain": "3",
+ "title": "Okta Domain 3 questions (3.1, 3.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
+ "questions": [
+  {
+   "id": "D3-001",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "An admin needs to store each employee's cost center on their Okta profile. Where should the attribute be added?",
+   "choices": [
+    "Directory > Profile Editor, in the Okta default user profile",
+    "Applications > the HR app > Sign On tab attribute statements",
+    "Security > Authenticators > Profile settings",
+    "Directory > Groups > the Finance group profile"
+   ],
+   "answer": "Directory > Profile Editor, in the Okta default user profile",
+   "explanation": "Custom user attributes are added to the Okta user profile in the Profile Editor. Attribute statements only send values in a SAML assertion and do not create a profile attribute."
+  },
+  {
+   "id": "D3-002",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "A new custom attribute will hold a short text code such as CC-Sales. Which data type should the admin choose?",
+   "choices": [
+    "boolean",
+    "integer",
+    "string",
+    "number"
+   ],
+   "answer": "string",
+   "explanation": "Text values use the string type. Integer and number only accept numeric values, and boolean only true or false."
+  },
+  {
+   "id": "D3-003",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "Each user may hold several certifications, and all of them must be stored in one attribute. Which data type fits BEST?",
+   "choices": [
+    "string",
+    "string array",
+    "boolean",
+    "integer"
+   ],
+   "answer": "string array",
+   "explanation": "An array type holds multiple values in one attribute. A plain string holds a single value."
+  },
+  {
+   "id": "D3-004",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "Users should see their employee number on their Okta profile but not be able to change it. Which attribute setting should the admin use?",
+   "choices": [
+    "User permission set to Hide",
+    "Attribute marked as Required",
+    "Attribute type changed to boolean with a default",
+    "User permission set to Read Only"
+   ],
+   "answer": "User permission set to Read Only",
+   "explanation": "Read Only lets users view the value without editing it. Hide removes it from the user's view entirely."
+  },
+  {
+   "id": "D3-005",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "After creating a custom attribute, which property can the admin no longer change?",
+   "choices": [
+    "Display name",
+    "Description",
+    "User permission",
+    "Variable name"
+   ],
+   "answer": "Variable name",
+   "explanation": "The variable name is how the attribute is referenced in mappings and expressions, so it is fixed after creation. Display name and description stay editable."
+  },
+  {
+   "id": "D3-006",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "An admin is cleaning up the Okta user profile. Which attribute can be deleted from it?",
+   "choices": [
+    "The base login attribute",
+    "A custom attribute the admin created earlier",
+    "The base email attribute",
+    "The base firstName attribute, if no app maps it"
+   ],
+   "answer": "A custom attribute the admin created earlier",
+   "explanation": "Base attributes are part of every Okta user profile and cannot be removed. Custom attributes can be deleted."
+  },
+  {
+   "id": "D3-007",
+   "objective": "3.1",
+   "topic": "Profile Editor and Attribute Types",
+   "stem": "A Region attribute must only accept the values North, South, East or West. How should the admin define it?",
+   "choices": [
+    "Define an enumerated list of values for the attribute",
+    "Make the attribute required and change its type to integer",
+    "Set the attribute's user permission to Hide",
+    "Create a group rule for each allowed region"
+   ],
+   "answer": "Define an enumerated list of values for the attribute",
+   "explanation": "An enumerated list restricts the attribute to the listed values. Making it required only forces some value to be present."
+  },
+  {
+   "id": "D3-008",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "What is an app user profile in the Okta Profile Editor?",
+   "choices": [
+    "The Okta user profile shared by every app in the org",
+    "The list of authenticators that a user has enrolled for use with one app",
+    "The attributes Okta keeps for the user's account in one app",
+    "The admin role a user holds for one app integration"
+   ],
+   "answer": "The attributes Okta keeps for the user's account in one app",
+   "explanation": "Each app integration has its own user profile describing the account in that app. The Okta user profile is the central profile that mappings read from."
+  },
+  {
+   "id": "D3-009",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "An admin wants to see which attributes an app integration accepts for its users, such as its role field. Where should the admin look?",
+   "choices": [
+    "The Okta default user profile in the Profile Editor",
+    "The app's Sign On tab under credentials details",
+    "The app's user profile in the Profile Editor",
+    "The app's Push Groups tab"
+   ],
+   "answer": "The app's user profile in the Profile Editor",
+   "explanation": "The Profile Editor lists each app's user profile and its attributes. The Okta default profile only holds Okta's own attributes."
+  },
+  {
+   "id": "D3-010",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "An app attribute must hold a value set separately for each person and never be taken from a group assignment. How should the attribute's scope be set?",
+   "choices": [
+    "User personal",
+    "Group",
+    "Read Only",
+    "Required"
+   ],
+   "answer": "User personal",
+   "explanation": "User personal scope keeps the value per user so group assignment values do not apply. Read Only and Required are separate attribute settings, not scopes."
+  },
+  {
+   "id": "D3-011",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "When assigning an app to a group, the admin fills in a License type field in the assignment dialog. What happens to that value?",
+   "choices": [
+    "It is written to each member's Okta user profile as a custom attribute",
+    "It replaces the app's SAML attribute statements",
+    "It is ignored until the admin runs an import",
+    "It is applied to the app profile of each group member"
+   ],
+   "answer": "It is applied to the app profile of each group member",
+   "explanation": "Values entered at group assignment populate the app user profile for the group's members. They are not written back to the Okta user profile."
+  },
+  {
+   "id": "D3-012",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "In an Okta-to-app mapping, which profile receives the mapped values?",
+   "choices": [
+    "The Okta user profile",
+    "The app user profile",
+    "The group profile",
+    "The admin's profile"
+   ],
+   "answer": "The app user profile",
+   "explanation": "Okta-to-app mappings read the Okta user profile and write to the app user profile, which provisioning then sends to the app."
+  },
+  {
+   "id": "D3-013",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "An admin needs to check the value of one app attribute for a single assigned user. What is the quickest place to look?",
+   "choices": [
+    "Open the mapping Preview tab for a random user",
+    "Edit that user's assignment on the app's Assignments tab",
+    "Search the System Log for the attribute name",
+    "Open the Okta default user profile in the Profile Editor and search"
+   ],
+   "answer": "Edit that user's assignment on the app's Assignments tab",
+   "explanation": "The user's app assignment shows their app user profile values. The Profile Editor shows attribute definitions, not one user's values."
+  },
+  {
+   "id": "D3-014",
+   "objective": "3.1",
+   "topic": "App User Profiles",
+   "stem": "A company runs two instances of the same OIN app for two subsidiaries. How are their app user profiles handled?",
+   "choices": [
+    "Both instances share one app user profile",
+    "Only the first instance gets an app user profile",
+    "Their attributes merge into the Okta user profile under one app name",
+    "Each instance has its own app user profile and mappings"
+   ],
+   "answer": "Each instance has its own app user profile and mappings",
+   "explanation": "Every app instance has a separate app user profile, so mappings can differ per subsidiary. They do not share or merge profiles."
+  },
+  {
+   "id": "D3-015",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "An admin wants the Okta title attribute sent to an app's jobTitle field. Which mapping should the admin edit?",
+   "choices": [
+    "The app to Okta User",
+    "The group attribute statement",
+    "Okta User to the app",
+    "The Okta default profile source"
+   ],
+   "answer": "Okta User to the app",
+   "explanation": "Values flowing from Okta into the app are set in the Okta User to app mapping. The app to Okta User direction brings data from the app into Okta."
+  },
+  {
+   "id": "D3-016",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "An HR app is the trusted source of department data, and Okta should receive those values. Which mapping direction applies?",
+   "choices": [
+    "The HR app to Okta User",
+    "Okta User to the HR app",
+    "Okta User to every downstream app",
+    "Group to Okta User"
+   ],
+   "answer": "The HR app to Okta User",
+   "explanation": "Importing values from an app into Okta uses the app to Okta User mapping. The Okta User to app direction pushes Okta's values out."
+  },
+  {
+   "id": "D3-017",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "An app's username should be set from Okta when the account is created, but the app team may change it later. Which apply option fits?",
+   "choices": [
+    "Apply mapping on user create only",
+    "Apply mapping on user create and update",
+    "Do not apply the mapping at all",
+    "Apply the mapping only during group push"
+   ],
+   "answer": "Apply mapping on user create only",
+   "explanation": "Create only sets the value once, so later changes in the app are not overwritten. Create and update would keep resetting it to Okta's value."
+  },
+  {
+   "id": "D3-018",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "An app must always reflect the user's current manager from Okta. Which apply option should the admin choose for the mapping?",
+   "choices": [
+    "Apply mapping on user create only",
+    "Apply the mapping only on deactivation",
+    "Apply mapping on user create and update",
+    "Apply the mapping only during import"
+   ],
+   "answer": "Apply mapping on user create and update",
+   "explanation": "Create and update pushes the value at creation and again whenever it changes. Create only would leave the manager stale after the first push."
+  },
+  {
+   "id": "D3-019",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "Before saving a new mapping expression, the admin wants to see the result for a real user. What should the admin use?",
+   "choices": [
+    "The System Log with an eventType filter",
+    "The Preview tab on the mappings page",
+    "The Test API Credentials button",
+    "The app's Sign On tab preview"
+   ],
+   "answer": "The Preview tab on the mappings page",
+   "explanation": "The mapping Preview shows what the expression produces for a chosen user. Test API Credentials only checks the API connection."
+  },
+  {
+   "id": "D3-020",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "After saving changes to a mapping, the admin wants existing users' app profiles updated right away. Which option should the admin choose?",
+   "choices": [
+    "Push Groups now",
+    "Clear user sessions",
+    "Reset the mapping",
+    "Apply updates now"
+   ],
+   "answer": "Apply updates now",
+   "explanation": "Okta offers to apply updated mappings to existing users when the mapping is saved. Pushing groups and clearing sessions do not recalculate attributes."
+  },
+  {
+   "id": "D3-021",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "A mapping from Okta title to an app is set to create and update, but a title change never reaches the app. What is the MOST likely cause?",
+   "choices": [
+    "The app's SAML signing certificate expired and was not yet replaced",
+    "The user has not enrolled in Okta Verify",
+    "The app's Default RelayState is empty",
+    "Update User Attributes is not enabled on the Provisioning tab"
+   ],
+   "answer": "Update User Attributes is not enabled on the Provisioning tab",
+   "explanation": "Mappings calculate the value, but provisioning must have Update User Attributes on to send it. Certificates and RelayState only affect SSO."
+  },
+  {
+   "id": "D3-022",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "Which expression returns the part of a user's email address before the @ sign?",
+   "choices": [
+    "String.substringAfter(user.email, \"@\")",
+    "String.substringBefore(user.email, \"@\")",
+    "String.toUpperCase(user.email)",
+    "user.email + \"@\""
+   ],
+   "answer": "String.substringBefore(user.email, \"@\")",
+   "explanation": "substringBefore returns the text before the given separator. substringAfter would return the domain instead."
+  },
+  {
+   "id": "D3-023",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "An app needs a displayName such as Jane Smith built from Okta attributes. Which expression is correct?",
+   "choices": [
+    "user.firstName + \" \" + user.lastName",
+    "user.firstName - user.lastName",
+    "String.join(user.lastName)",
+    "appuser.firstName + appuser.lastName"
+   ],
+   "answer": "user.firstName + \" \" + user.lastName",
+   "explanation": "The + operator joins strings, and the quoted space separates the names. appuser refers to the app profile, not the Okta profile, in an Okta-to-app mapping."
+  },
+  {
+   "id": "D3-024",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "An app requires last names in capital letters. Which expression should the admin map?",
+   "choices": [
+    "String.toLowerCase(user.lastName)",
+    "String.substringBefore(user.lastName, \" \")",
+    "String.toUpperCase(user.lastName)",
+    "user.lastName + \"UPPER\""
+   ],
+   "answer": "String.toUpperCase(user.lastName)",
+   "explanation": "toUpperCase converts the value to capitals. toLowerCase does the opposite."
+  },
+  {
+   "id": "D3-025",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "In an app to Okta User mapping, how does an expression refer to an attribute from the app user profile?",
+   "choices": [
+    "user.attributeName",
+    "group.attributeName",
+    "appuser.attributeName",
+    "org.attributeName"
+   ],
+   "answer": "appuser.attributeName",
+   "explanation": "The app profile is referenced as appuser in app-to-Okta mappings. user refers to the Okta user profile."
+  },
+  {
+   "id": "D3-026",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "In an Okta User to app mapping, how does an expression refer to the Okta user's department?",
+   "choices": [
+    "user.department",
+    "appuser.department",
+    "source.department",
+    "profile.department"
+   ],
+   "answer": "user.department",
+   "explanation": "Okta user attributes are referenced with the user prefix. appuser refers to the app profile being written to."
+  },
+  {
+   "id": "D3-027",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "Users in the Sales department should get the role sales_rep in an app, and everyone else standard. Which expression does this?",
+   "choices": [
+    "user.department = \"Sales\" + \"sales_rep\" + \"standard\"",
+    "String.substringBefore(user.department, \"sales_rep\")",
+    "user.department != \"Sales\" ? \"sales_rep\" : \"standard\"",
+    "user.department == \"Sales\" ? \"sales_rep\" : \"standard\""
+   ],
+   "answer": "user.department == \"Sales\" ? \"sales_rep\" : \"standard\"",
+   "explanation": "The conditional (ternary) operator returns the first value when the test is true and the second otherwise. The last option reverses the logic."
+  },
+  {
+   "id": "D3-028",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "An app treats usernames as case sensitive and expects them in lower case. Which expression should be mapped to the app username?",
+   "choices": [
+    "String.toUpperCase(user.login)",
+    "String.toLowerCase(user.login)",
+    "String.substringAfter(user.login, \"@\")",
+    "user.login + \".lower\""
+   ],
+   "answer": "String.toLowerCase(user.login)",
+   "explanation": "toLowerCase normalizes the login to lower case. substringAfter would return only the domain."
+  },
+  {
+   "id": "D3-029",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "An HR system should be the source of truth for user profiles and lifecycle in Okta. What should the admin enable in that app's To Okta settings?",
+   "choices": [
+    "Enable Create Users for the HR app",
+    "Allow the HR app to source Okta users",
+    "Enable Sync Password for the HR app",
+    "Push the Everyone group to the HR app"
+   ],
+   "answer": "Allow the HR app to source Okta users",
+   "explanation": "Profile sourcing makes the app the master of the users it imports. Create Users pushes accounts out of Okta, the opposite direction."
+  },
+  {
+   "id": "D3-030",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "An admin tries to edit a user's title in Okta, but the field cannot be changed. What is the MOST likely reason?",
+   "choices": [
+    "The user is in Password expired status",
+    "The user has not enrolled in Okta Verify",
+    "The title attribute's user permission is set to Hide for end users",
+    "The attribute is sourced from Active Directory or an HR app"
+   ],
+   "answer": "The attribute is sourced from Active Directory or an HR app",
+   "explanation": "Attributes mastered by a profile source are read-only in Okta. Password status and authenticators do not lock profile fields."
+  },
+  {
+   "id": "D3-031",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "Users can come from both Active Directory and an HR app. Where does the admin set which source wins for a user who exists in both?",
+   "choices": [
+    "Directory > Groups, by ranking the groups",
+    "Security > Authentication Policies, by ordering the policy rules",
+    "Directory > Profile Sources, by ordering the sources",
+    "Applications > Assignments, by group priority"
+   ],
+   "answer": "Directory > Profile Sources, by ordering the sources",
+   "explanation": "Profile Sources lists the sourcing apps in priority order. Group priority on an app only resolves conflicting app attribute values."
+  },
+  {
+   "id": "D3-032",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "Users are sourced from Active Directory, but their mobile phone number should be maintained in Okta. What should the admin configure?",
+   "choices": [
+    "Set that attribute's source priority to Inherit from Okta",
+    "Remove the users from the Active Directory integration",
+    "Make the attribute Read Only for end users",
+    "Map the attribute in the Okta User to AD direction only"
+   ],
+   "answer": "Set that attribute's source priority to Inherit from Okta",
+   "explanation": "Attribute-level sourcing lets one attribute be mastered by Okta while the rest still come from AD. Removing users from AD would break their whole sourcing."
+  },
+  {
+   "id": "D3-033",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "Users created directly in the Okta Admin Console have no other profile source. Which system masters their profile?",
+   "choices": [
+    "Okta",
+    "Active Directory",
+    "The first app they are assigned",
+    "The HR app with the highest priority"
+   ],
+   "answer": "Okta",
+   "explanation": "Users created in Okta are Okta-sourced, so Okta is their master. Only imported users can be mastered by another system."
+  },
+  {
+   "id": "D3-034",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "A user's department is sourced from Active Directory and is wrong. How should the admin fix it permanently?",
+   "choices": [
+    "Change it in Okta; the new value will be written back to Active Directory",
+    "Change it in Okta and set the attribute to Read Only",
+    "Correct it in Active Directory and let the next import update Okta",
+    "Delete the user in Okta and import them again"
+   ],
+   "answer": "Correct it in Active Directory and let the next import update Okta",
+   "explanation": "The source system wins, so the change belongs in AD and flows to Okta at the next import. An edit in Okta is blocked or overwritten."
+  },
+  {
+   "id": "D3-035",
+   "objective": "3.1",
+   "topic": "Profile Sourcing",
+   "stem": "What is the main effect of making an app a profile source for the users it imports?",
+   "choices": [
+    "The app receives every change made in Okta",
+    "The app masters their profile attributes and lifecycle",
+    "The app becomes the only authenticator the users can sign in with",
+    "The app is hidden from users' dashboards"
+   ],
+   "answer": "The app masters their profile attributes and lifecycle",
+   "explanation": "A profile source controls the users' attributes and can drive their status. It does not change authentication or dashboards."
+  },
+  {
+   "id": "D3-068",
+   "type": "order",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "An admin must add a cost center attribute and send it to an app. Put the steps in order.",
+   "items": [
+    "Open Directory > Profile Editor and select the Okta user profile",
+    "Add a custom string attribute named costCenter",
+    "Open the app's mappings in the Okta User to app direction",
+    "Map user.costCenter to the app attribute and check it in Preview",
+    "Save the mapping and apply updates to existing users"
+   ],
+   "explanation": "The Okta attribute must exist before it can be mapped, and Preview checks the result before saving. Applying updates pushes the value to existing users."
+  },
+  {
+   "id": "D3-069",
+   "type": "match",
+   "objective": "3.1",
+   "topic": "Expression Language in Mappings",
+   "stem": "Match each expression to the value it returns for a user named Jane Smith with email jane.smith@example.com.",
+   "pairs": [
+    {
+     "item": "String.substringBefore(user.email, \"@\")",
+     "match": "jane.smith"
+    },
+    {
+     "item": "String.substringAfter(user.email, \"@\")",
+     "match": "example.com"
+    },
+    {
+     "item": "user.firstName + \" \" + user.lastName",
+     "match": "Jane Smith"
+    },
+    {
+     "item": "String.toUpperCase(user.lastName)",
+     "match": "SMITH"
+    }
+   ],
+   "targets_extra": [
+    "Smith, Jane"
+   ],
+   "explanation": "substringBefore and substringAfter split at the separator, + joins strings and toUpperCase capitalizes. A lower-case smith would need toLowerCase."
+  },
+  {
+   "id": "D3-070",
+   "type": "multi",
+   "objective": "3.1",
+   "topic": "Mapping Direction and Apply Rules",
+   "stem": "A change to a user's title in Okta must reach an app automatically. Which TWO settings are needed?",
+   "choices": [
+    "An Okta User to app mapping set to create and update",
+    "Update User Attributes enabled under To App",
+    "An app to Okta User mapping for title",
+    "Group Push enabled for the user's group",
+    "The attribute's user permission set to Read Only"
+   ],
+   "answers": [
+    "An Okta User to app mapping set to create and update",
+    "Update User Attributes enabled under To App"
+   ],
+   "select": 2,
+   "explanation": "The mapping must apply on update and provisioning must be allowed to send updates. An app-to-Okta mapping goes the wrong direction."
+  },
+  {
+   "id": "D3-036",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "An admin creates a user without activating them, so no email is sent and the user cannot sign in yet. What status does the user have?",
+   "choices": [
+    "Pending user action",
+    "Active",
+    "Suspended",
+    "Staged"
+   ],
+   "answer": "Staged",
+   "explanation": "Users created but not yet activated are Staged. Pending user action means activation was sent and the user has not completed it."
+  },
+  {
+   "id": "D3-037",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "A user received an activation email but has not clicked the link or set a password. What status does the Admin Console show?",
+   "choices": [
+    "Staged",
+    "Password reset",
+    "Locked out",
+    "Pending user action"
+   ],
+   "answer": "Pending user action",
+   "explanation": "After activation is sent and before the user completes it, the status is Pending user action. Staged is before activation starts."
+  },
+  {
+   "id": "D3-038",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "An admin resets a user's password from the Admin Console and the user has not yet finished the reset. What is the user's status?",
+   "choices": [
+    "Password expired",
+    "Password reset",
+    "Pending user action",
+    "Deactivated"
+   ],
+   "answer": "Password reset",
+   "explanation": "An admin-initiated reset puts the account in Password reset until the user completes it. Password expired results from an expiry, not a reset request."
+  },
+  {
+   "id": "D3-039",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "A user enters a wrong password more times than the password policy allows. What status does the account move to?",
+   "choices": [
+    "Locked out",
+    "Suspended",
+    "Password expired",
+    "Deactivated"
+   ],
+   "answer": "Locked out",
+   "explanation": "Exceeding the lockout threshold sets the account to Locked out. Suspended is only set when an admin suspends the user."
+  },
+  {
+   "id": "D3-040",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "An admin selects Expire password on a user. What happens at the user's next sign-in?",
+   "choices": [
+    "They are blocked until an admin unlocks the account for them",
+    "They receive a new activation email to start over",
+    "They must change their password before going further",
+    "They lose all app assignments until reassigned"
+   ],
+   "answer": "They must change their password before going further",
+   "explanation": "Expiring the password sets Password expired, so the user must choose a new one at sign-in. Unlocking applies to Locked out accounts."
+  },
+  {
+   "id": "D3-041",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "A contractor starts in two weeks. The admin wants the account ready now but no email sent and no sign-in possible until day one. What is the BEST approach?",
+   "choices": [
+    "Create and activate the user, then suspend until day one",
+    "Create and activate the user, then deactivate the account until day one",
+    "Create the user without activation, then activate on day one",
+    "Create the user and expire the password until day one"
+   ],
+   "answer": "Create the user without activation, then activate on day one",
+   "explanation": "A Staged user exists with no activation email and cannot sign in until the admin activates them. Suspending requires the user to be activated first, which already sends the email."
+  },
+  {
+   "id": "D3-042",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "A user is Locked out after repeated failed attempts, but their password is not compromised. How should the admin restore access with the least disruption?",
+   "choices": [
+    "Unlock the user",
+    "Reset the user's password",
+    "Deactivate and reactivate the user",
+    "Clear the user's sessions"
+   ],
+   "answer": "Unlock the user",
+   "explanation": "Unlock returns the account to Active with the same password. A reset forces a new password the user does not need."
+  },
+  {
+   "id": "D3-043",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "An employee is going on a three-month leave. They must not sign in, but their app assignments should be untouched for their return. What should the admin do?",
+   "choices": [
+    "Deactivate the user",
+    "Delete the user",
+    "Expire the user's password",
+    "Suspend the user"
+   ],
+   "answer": "Suspend the user",
+   "explanation": "Suspension blocks sign-in while leaving app assignments unaffected. Deactivation removes all app assignments."
+  },
+  {
+   "id": "D3-044",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "An employee was terminated today and must lose access to Okta and all assigned apps. Which action fits BEST?",
+   "choices": [
+    "Suspend the user",
+    "Deactivate the user",
+    "Expire the user's password",
+    "Clear the user's sessions only"
+   ],
+   "answer": "Deactivate the user",
+   "explanation": "Deactivation removes app assignments, deletes the password and blocks sign-in, which is the offboarding action. Suspension keeps the assignments in place."
+  },
+  {
+   "id": "D3-045",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "An admin wants to permanently remove an Active user's account from Okta. What must happen first?",
+   "choices": [
+    "The user must be suspended",
+    "The user must be deactivated",
+    "The user's password must be expired",
+    "The user must be moved to Staged"
+   ],
+   "answer": "The user must be deactivated",
+   "explanation": "Okta only allows deleting users that are already deactivated. Suspending does not make a user deletable."
+  },
+  {
+   "id": "D3-046",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "What is a key difference between a suspended user and a deactivated user?",
+   "choices": [
+    "Deactivated users keep app assignments; suspended users lose them",
+    "Suspended users can still sign in to the End-User Dashboard",
+    "Deactivated users can still be edited and then signed in",
+    "Suspended users keep app assignments; deactivated users lose them"
+   ],
+   "answer": "Suspended users keep app assignments; deactivated users lose them",
+   "explanation": "Suspension is temporary and leaves assignments alone; deactivation removes all assignments and the password. Neither status allows sign-in."
+  },
+  {
+   "id": "D3-047",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "A suspended employee returns from leave. What should the admin do to restore their access?",
+   "choices": [
+    "Reactivate the user",
+    "Reset the user's authenticators",
+    "Unsuspend the user",
+    "Create a new account for the user"
+   ],
+   "answer": "Unsuspend the user",
+   "explanation": "Unsuspending returns the user to Active with their assignments intact. Reactivation is the action for deactivated users."
+  },
+  {
+   "id": "D3-048",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "Which user status is required before an admin can suspend an account?",
+   "choices": [
+    "Active",
+    "Staged",
+    "Deactivated",
+    "Pending user action"
+   ],
+   "answer": "Active",
+   "explanation": "Only Active users can be suspended. Staged or pending users have not been activated, and deactivated users are already blocked."
+  },
+  {
+   "id": "D3-049",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "A former employee is rehired. Their old Okta account is still in Deactivated status. What is the BEST approach?",
+   "choices": [
+    "Reactivate the existing account and then confirm their app access",
+    "Create a second account with a slightly different username for the rehire",
+    "Delete the old account and import the user from a CSV file",
+    "Unsuspend the old account so its assignments come back"
+   ],
+   "answer": "Reactivate the existing account and then confirm their app access",
+   "explanation": "Reactivating the existing account avoids duplicate identities; since deactivation removed app assignments, access must be checked afterwards. Unsuspend applies only to suspended users."
+  },
+  {
+   "id": "D3-050",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "A user is deactivated in Okta. Their account in a provisioned app is also disabled. Which feature made this happen?",
+   "choices": [
+    "Update User Attributes under To App",
+    "Profile sourcing under To Okta",
+    "Deactivate Users under To App",
+    "Group Push for the user's group"
+   ],
+   "answer": "Deactivate Users under To App",
+   "explanation": "Deactivate Users deprovisions the app account when the Okta user is deactivated or unassigned. Update User Attributes only changes attribute values."
+  },
+  {
+   "id": "D3-051",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "A user is removed from the only group that assigns them a provisioned app with Deactivate Users enabled. What happens to the app account?",
+   "choices": [
+    "It stays active until the user is also deactivated in Okta",
+    "It is deactivated because the user lost the assignment",
+    "It is deleted from Okta but stays active in the app",
+    "It is moved to a suspended group in the app"
+   ],
+   "answer": "It is deactivated because the user lost the assignment",
+   "explanation": "Losing the group means losing the assignment, which triggers deprovisioning. The user does not need to be deactivated in Okta for this."
+  },
+  {
+   "id": "D3-052",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "A user is suspended in Okta. What happens to their accounts in provisioned apps?",
+   "choices": [
+    "Every app account is deactivated in the apps through provisioning",
+    "Every app account is deleted from the apps",
+    "Every app password is reset to a random value",
+    "Nothing changes in the apps; only Okta sign-in is blocked"
+   ],
+   "answer": "Nothing changes in the apps; only Okta sign-in is blocked",
+   "explanation": "Suspension leaves app assignments untouched, so no deprovisioning is sent. Deactivation is what removes assignments and triggers it."
+  },
+  {
+   "id": "D3-053",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "A SAML-only app has no provisioning. A user is deactivated in Okta. What is true about their account in the app?",
+   "choices": [
+    "Okta deletes the app account through the SAML connection at next sign-in",
+    "The app account is deactivated by the SAML certificate",
+    "The app account is suspended until the user is deleted",
+    "The app account still exists and must be handled in the app"
+   ],
+   "answer": "The app account still exists and must be handled in the app",
+   "explanation": "SAML only handles sign-in, so Okta stops issuing assertions but cannot change the account. The account must be disabled in the app or by another process."
+  },
+  {
+   "id": "D3-054",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "Before offboarding a user, an admin wants a list of every app they have so non-provisioned apps can be handled manually. Where is this found?",
+   "choices": [
+    "The Profile Editor's list of app user profiles",
+    "The Applications tab on the user's profile page",
+    "The global session policy rules list",
+    "The Push Groups tab of each app"
+   ],
+   "answer": "The Applications tab on the user's profile page",
+   "explanation": "The user's Applications tab lists all their assigned apps. The Profile Editor lists app profiles for the org, not one user's apps."
+  },
+  {
+   "id": "D3-055",
+   "objective": "3.2",
+   "topic": "Deprovisioning Apps",
+   "stem": "A departing employee used an SWA app where they set their own username and password, and the app has no provisioning. What else should the admin do after deactivating them in Okta?",
+   "choices": [
+    "Disable the account or change its password inside the app",
+    "Nothing, because SWA deletes the app account on deactivation",
+    "Push the user's group to the app to remove them",
+    "Clear the user's sessions so the app password stops working"
+   ],
+   "answer": "Disable the account or change its password inside the app",
+   "explanation": "The user knows the app password and could sign in directly, so the app account must be disabled there. Okta sessions do not affect a password known to the user."
+  },
+  {
+   "id": "D3-056",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "After deactivating a user, how can an admin confirm the action in the System Log?",
+   "choices": [
+    "Filter with eventType eq \"user.session.start\"",
+    "Filter with eventType eq \"user.account.lock\"",
+    "Filter with eventType eq \"user.lifecycle.deactivate\"",
+    "Filter with eventType eq \"policy.evaluate_sign_on\""
+   ],
+   "answer": "Filter with eventType eq \"user.lifecycle.deactivate\"",
+   "explanation": "The user.lifecycle.deactivate event records the deactivation. user.session.start records sign-ins, not lifecycle changes."
+  },
+  {
+   "id": "D3-057",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "A user was deactivated in Okta, yet an hour later they are still working inside a SAML app opened earlier. What is the MOST likely reason?",
+   "choices": [
+    "Deactivation only takes effect after 24 hours",
+    "The user's Okta Verify enrollment keeps them signed in",
+    "The app has its own session that has not expired yet",
+    "The deactivation was undone by the next group rule run"
+   ],
+   "answer": "The app has its own session that has not expired yet",
+   "explanation": "Okta controls new sign-ins, but an app's own session lasts until it expires or the account is disabled in the app. Deactivation in Okta is immediate."
+  },
+  {
+   "id": "D3-058",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "An admin wants to end every current Okta session of a user immediately, forcing a new sign-in. What should the admin use?",
+   "choices": [
+    "Clear user sessions on the user's profile",
+    "Expire password on the user's profile",
+    "Reset authenticators on the user's profile",
+    "Unlock on the user's profile"
+   ],
+   "answer": "Clear user sessions on the user's profile",
+   "explanation": "Clear user sessions ends their existing Okta sessions. Expiring the password changes what happens at the next sign-in but is not meant to end sessions."
+  },
+  {
+   "id": "D3-059",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "An admin needs to show that a deactivated user can no longer reach an app. Which check is BEST?",
+   "choices": [
+    "Look at the app's attribute statements on the Sign On tab",
+    "Open the Profile Editor and check the app's mappings",
+    "Review the authenticator enrollment policy for the user",
+    "Attempt a sign-in as the user, then check the System Log"
+   ],
+   "answer": "Attempt a sign-in as the user, then check the System Log",
+   "explanation": "A failed sign-in attempt plus the System Log record proves the user is blocked. Mappings and enrollment policies say nothing about whether access was removed."
+  },
+  {
+   "id": "D3-060",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "An admin wants a list of every user currently deactivated in the org. What is the quickest way?",
+   "choices": [
+    "Search the Profile Editor for deactivated attributes",
+    "Filter Directory > People by the Deactivated status",
+    "Open the Everyone group and sort by name",
+    "Check each app's Assignments tab"
+   ],
+   "answer": "Filter Directory > People by the Deactivated status",
+   "explanation": "The People page can be filtered by user status. Deactivated users have no app assignments to find on the Assignments tab."
+  },
+  {
+   "id": "D3-061",
+   "objective": "3.2",
+   "topic": "Verifying Lost Access",
+   "stem": "After a user's deactivation, the admin wants to confirm their account in a provisioned app was disabled. Which check is BEST?",
+   "choices": [
+    "Confirm the user's tile is missing from the admin's own End-User Dashboard",
+    "Look for the deprovisioning event in the System Log and check the app",
+    "Open the mapping Preview tab for the user",
+    "Check that the user's group still exists in the app"
+   ],
+   "answer": "Look for the deprovisioning event in the System Log and check the app",
+   "explanation": "The System Log shows the provisioning call and the app's console confirms the account state. The mapping Preview only shows attribute calculations."
+  },
+  {
+   "id": "D3-062",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "Users are sourced from Active Directory. When an account is disabled in AD, it should be deactivated in Okta. Which setting achieves this?",
+   "choices": [
+    "Enable Deactivate Users under To App for AD",
+    "Create a group rule that removes disabled users",
+    "Set the AD option for deactivated users to Do nothing",
+    "Set the AD option for deactivated users to Deactivate"
+   ],
+   "answer": "Set the AD option for deactivated users to Deactivate",
+   "explanation": "The directory's To Okta lifecycle setting decides what Okta does when the source account is disabled. Deactivate Users under To App acts in the other direction."
+  },
+  {
+   "id": "D3-063",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "Users are mastered by an HR app. HR records a termination. What deactivates the user in Okta?",
+   "choices": [
+    "The Deactivate Users feature in each downstream app",
+    "A manual password expiry by the help desk",
+    "The HR app's lifecycle sourcing at the next import",
+    "A sign-in attempt that fails the session policy"
+   ],
+   "answer": "The HR app's lifecycle sourcing at the next import",
+   "explanation": "When the HR app is a profile source, a termination there changes the user's Okta status at import. Downstream app features act only after Okta's status changes."
+  },
+  {
+   "id": "D3-064",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "AD accounts are sometimes disabled briefly during investigations. The admin wants Okta to block these users while keeping their app assignments. Which option fits?",
+   "choices": [
+    "Set the AD option for deactivated users to Suspend",
+    "Set the AD option for deactivated users to Deactivate",
+    "Set the AD option for deactivated users to Do nothing",
+    "Remove the AD option and expire passwords manually"
+   ],
+   "answer": "Set the AD option for deactivated users to Suspend",
+   "explanation": "Suspending blocks sign-in but leaves assignments untouched, ideal for temporary disablement. Deactivate would remove all assignments."
+  },
+  {
+   "id": "D3-065",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "A user disabled in Active Directory two days ago is still Active in Okta, although imports run every hour. What is the MOST likely cause?",
+   "choices": [
+    "The AD option for deactivated users is set to Do nothing",
+    "The user's Okta password has not been expired",
+    "The user is not enrolled in Okta FastPass",
+    "The AD app is missing an attribute statement"
+   ],
+   "answer": "The AD option for deactivated users is set to Do nothing",
+   "explanation": "With Do nothing, a disabled source account leaves the Okta user unchanged. Authenticators and attribute statements do not drive lifecycle from AD."
+  },
+  {
+   "id": "D3-066",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "Okta should restore access automatically when a previously disabled AD account is enabled again. Which setting should the admin configure?",
+   "choices": [
+    "The Create Users feature under To App on the AD integration's Provisioning tab",
+    "A global session policy rule for reactivated AD users",
+    "The AD option to reactivate users when they are reactivated in AD",
+    "The Sync Password feature for the AD integration"
+   ],
+   "answer": "The AD option to reactivate users when they are reactivated in AD",
+   "explanation": "The To Okta lifecycle settings can reactivate Okta users when the source account is enabled. Create Users makes accounts in a target app, not in Okta."
+  },
+  {
+   "id": "D3-067",
+   "objective": "3.2",
+   "topic": "Source-Driven Offboarding",
+   "stem": "Accounts with no sign-in for 90 days should be suspended automatically in Okta. What should the admin set up?",
+   "choices": [
+    "A password policy with a 90-day maximum password age",
+    "An automation with a user inactivity condition and a lifecycle action",
+    "A global session policy rule with a maximum session lifetime of 90 days",
+    "A group rule that removes inactive users from Everyone"
+   ],
+   "answer": "An automation with a user inactivity condition and a lifecycle action",
+   "explanation": "Okta Automations can act on user inactivity and change the user's lifecycle state. Password age only forces a password change."
+  },
+  {
+   "id": "D3-071",
+   "type": "order",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "Put the steps of offboarding a terminated employee in order.",
+   "items": [
+    "Review the user's Applications tab for apps without provisioning",
+    "Deactivate the user in Okta",
+    "Disable the accounts in apps that Okta does not provision",
+    "Confirm the user.lifecycle.deactivate event in the System Log",
+    "Test that the user can no longer sign in"
+   ],
+   "explanation": "Assignments disappear on deactivation, so the app list is reviewed first. Then the user is deactivated, leftover accounts are handled and the result is verified."
+  },
+  {
+   "id": "D3-072",
+   "type": "match",
+   "objective": "3.2",
+   "topic": "User Status Lifecycle",
+   "stem": "Match each user status to the situation that causes it.",
+   "pairs": [
+    {
+     "item": "Staged",
+     "match": "Created but not yet activated"
+    },
+    {
+     "item": "Pending user action",
+     "match": "Activation sent but not completed"
+    },
+    {
+     "item": "Locked out",
+     "match": "Too many failed sign-in attempts"
+    },
+    {
+     "item": "Suspended",
+     "match": "Admin blocked sign-in but kept assignments"
+    },
+    {
+     "item": "Deactivated",
+     "match": "Admin removed access and app assignments"
+    }
+   ],
+   "targets_extra": [
+    "User changed their own display name"
+   ],
+   "explanation": "Each status reflects a lifecycle step or admin action. A profile change by the user does not alter account status."
+  },
+  {
+   "id": "D3-073",
+   "type": "multi",
+   "objective": "3.2",
+   "topic": "Suspend, Deactivate and Delete",
+   "stem": "Which TWO results occur when an admin deactivates an Active user?",
+   "choices": [
+    "All of the user's app assignments are removed",
+    "The user's password is permanently deleted",
+    "The user's profile is permanently deleted from Okta",
+    "The user is moved back to Staged status",
+    "The user's app assignments are kept for later"
+   ],
+   "answers": [
+    "All of the user's app assignments are removed",
+    "The user's password is permanently deleted"
+   ],
+   "select": 2,
+   "explanation": "Deactivation removes app assignments and the password but keeps the profile until the user is deleted. Keeping assignments describes suspension."
+  }
+ ]
+}

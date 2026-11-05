@@ -518,6 +518,9 @@ def build_challenges(policies: dict, data: dict) -> list:
     users = data.get("users", [])
     pol_names = sorted({p.get("name") for p in data.get("password_policies", [])} | {cfg["fallback_policy"]["name"]})
     asked_pol = set()
+    order = "; ".join(f"{p.get('priority')} {p.get('name')} ({', '.join(p.get('groups') or [])}, "
+                      f"{str(p.get('status', 'ACTIVE')).lower()})"
+                      for p in sorted(data.get("password_policies", []), key=lambda p: p.get("priority", 10 ** 6)))
     for u in users:
         pol, why = policy_for(u, data, cfg)
         if len(why) > 1 or len(u.get("groups") or []) > 1:
@@ -525,7 +528,7 @@ def build_challenges(policies: dict, data: dict) -> list:
                 continue
             asked_pol.add(pol.get("name"))
             qs.append(Question(prompt=f"Which password policy applies to {u.get('login')}?",
-                               context=f"groups: {', '.join(u.get('groups') or [])} (plus Everyone)",
+                               context=f"groups: {', '.join(u.get('groups') or [])} (plus Everyone)\npolicies by priority: {order}",
                                choices=choices_with(pol.get("name"), pol_names, key=u.get("login", "")),
                                answer=pol.get("name"), explanation="; ".join(why), objective="4.4"))
     attempts = {a.get("id"): a for a in data.get("password_changes", [])}

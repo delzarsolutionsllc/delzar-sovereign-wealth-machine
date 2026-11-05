@@ -118,13 +118,15 @@ def test_acs_mismatch_config_and_sp_initiated_request(cfg):
 
 
 def test_audience_mismatch(cfg):
-    assert sso(cfg, mutate=lambda a: a["saml"].update(audience="https://app.example/metadata")).outcome == "AUDIENCE_MISMATCH"
+    r = sso(cfg, mutate=lambda a: a["saml"].update(audience="https://app.example/metadata"))
+    assert r.outcome == "AUDIENCE_MISMATCH"
 
 
 def test_cert_mismatch_rotation_and_unsigned(cfg):
     assert sso(cfg, mutate=lambda a: a["saml"].update(signing_cert="c2")).outcome == "CERT_MISMATCH"
     assert sso(cfg, mutate=lambda a: a["saml"].update(assertion_signed=False)).outcome == "CERT_MISMATCH"
-    assert sso(cfg, mutate=lambda a: a["saml"].pop("assertion_signed")).outcome == "CERT_MISMATCH"   # missing = unsigned
+    # a missing signature setting counts as unsigned
+    assert sso(cfg, mutate=lambda a: a["saml"].pop("assertion_signed")).outcome == "CERT_MISMATCH"
 
 
 def test_nameid_username_vs_email(cfg):
@@ -193,7 +195,8 @@ def test_sample_outcomes(policies, quiet_ui, sample):
                                "S07": "ACS_MISMATCH", "S08": "AUDIENCE_MISMATCH", "S09": "NOT_ASSIGNED",
                                "S10": "APP_INACTIVE", "S11": "ACS_MISMATCH", "S12": "CERT_MISMATCH",
                                "S13": "CERT_MISMATCH"}
-    assert out["provisioning"]["P05"] == ["NONE", "VERIFIED"] and out["provisioning"]["P08"] == ["NONE", "ACCESS_REMAINS"]
+    assert out["provisioning"]["P05"] == ["NONE", "VERIFIED"]
+    assert out["provisioning"]["P08"] == ["NONE", "ACCESS_REMAINS"]
     assert set(out["protocols"].values()) == set(PROTOCOLS)
     assert set(out["sign_ins"].values()) == set(SSO_OUTCOMES)
     assert {a for a, _ in out["provisioning"].values()} == set(ACTIONS)

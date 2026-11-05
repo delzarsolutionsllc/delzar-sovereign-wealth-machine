@@ -1,0 +1,1735 @@
+{
+  "domain": "1",
+  "title": "Okta Domain 1 questions (1.1 Users, profiles and custom attributes; 1.2 Groups and group rules; 1.3 Administrator roles, custom roles and resource sets)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
+  "questions": [
+    {
+      "id": "D1-001",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "A new Okta admin must create an account by hand for a single new employee. Where in the Admin Console does the admin start?",
+      "choices": [
+        "Security > Administrators, then Add administrator",
+        "Directory > People, then Add person",
+        "Applications > Applications, then Assign to People",
+        "Directory > Profile Editor, then Add Attribute"
+      ],
+      "answer": "Directory > People, then Add person",
+      "explanation": "Individual users are created from Directory > People with Add person. Profile Editor changes the profile schema; it does not create user accounts."
+    },
+    {
+      "id": "D1-002",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "HR asks for a new hire's Okta account to be created today, but the person starts in three weeks and must not receive an activation email until then. Which option should the admin choose when adding the person?",
+      "choices": [
+        "Activate now, then deactivate the account until the start date",
+        "Activate now, with the password set by the user",
+        "Activate later, so the account stays in Staged status",
+        "Activate now, then suspend the account until the start date"
+      ],
+      "answer": "Activate later, so the account stays in Staged status",
+      "explanation": "Activate later creates the account in Staged status without starting the activation flow, so nothing is sent. Suspending or deactivating an activated account is a workaround that still starts activation and adds cleanup work."
+    },
+    {
+      "id": "D1-003",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "An admin adds a person with Activate now selected and the password set by the user. The user has not opened the activation email yet. Which status does the Admin Console show for this user?",
+      "choices": [
+        "Staged",
+        "Password reset",
+        "Active",
+        "Pending user action"
+      ],
+      "answer": "Pending user action",
+      "explanation": "Pending user action (Provisioned in the API) means activation started but the user has not completed the email link or set a password. Staged means activation was never started."
+    },
+    {
+      "id": "D1-004",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "An admin adds a person, sets the password directly and selects the option that requires the user to change it at first sign-in. What status will the new account show?",
+      "choices": [
+        "Active",
+        "Password expired",
+        "Staged",
+        "Pending user action"
+      ],
+      "answer": "Active",
+      "explanation": "When an admin sets the password at creation, with or without a first sign-in change, Okta lists the account as Active. Pending user action applies when the user still has to set a password from the activation email."
+    },
+    {
+      "id": "D1-005",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "A user created last week still shows Pending user action and says the activation email never arrived. The primary email address is correct. What should the admin do FIRST?",
+      "choices": [
+        "Delete the user and create the account again from scratch",
+        "Resend the activation email from the user's profile page",
+        "Suspend the user and then unsuspend the account",
+        "Add the user to the Everyone group so activation completes"
+      ],
+      "answer": "Resend the activation email from the user's profile page",
+      "explanation": "Okta lets an admin resend the activation email for a user in Pending user action, which is the quickest fix when the address is right. Deleting and recreating loses history and is unnecessary; suspend and unsuspend do not restart activation."
+    },
+    {
+      "id": "D1-006",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "When an admin creates two users in the same Okta org, which value must be different for each of them?",
+      "choices": [
+        "Last name",
+        "Display name",
+        "Username",
+        "Primary email"
+      ],
+      "answer": "Username",
+      "explanation": "The username (login) identifies the account and must be unique in the org. Primary email addresses and names can repeat, for example when two accounts share a mailbox."
+    },
+    {
+      "id": "D1-007",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "A team lead wants each new marketing hire to be in the Marketing group the moment the account is created. The admin is creating these users one at a time. What is the simplest way to do this?",
+      "choices": [
+        "Create the user, then wait for the next Active Directory import",
+        "Create the user, then open Profile Editor and add a group attribute",
+        "Create the user, then assign the Marketing group an admin role",
+        "Enter Marketing in the Groups field of the Add person dialog"
+      ],
+      "answer": "Enter Marketing in the Groups field of the Add person dialog",
+      "explanation": "The Add person dialog has an optional Groups field, so the user lands in the group at creation. Profile Editor defines attributes, not group membership, and an admin role has nothing to do with joining a group."
+    },
+    {
+      "id": "D1-008",
+      "objective": "1.1",
+      "topic": "Creating and Activating Users",
+      "stem": "By default, what format does Okta expect for the username when an admin adds a person?",
+      "choices": [
+        "An email address format, such as jane.doe@example.com",
+        "A numeric employee ID with no letters or symbols",
+        "A down-level domain name followed by a backslash and the name",
+        "A first initial and last name with no domain part"
+      ],
+      "answer": "An email address format, such as jane.doe@example.com",
+      "explanation": "Okta usernames are in email format by default, although they do not have to be a working mailbox. The other formats are common in directories but are not the Okta default."
+    },
+    {
+      "id": "D1-009",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "In the Admin Console, a contractor's account shows the status Staged. What does this status mean?",
+      "choices": [
+        "An admin has blocked sign-in while keeping all app assignments",
+        "The account exists but its activation flow has not been started",
+        "The user opened the activation email but has not set a password",
+        "The password reached its maximum age and must be changed"
+      ],
+      "answer": "The account exists but its activation flow has not been started",
+      "explanation": "Staged accounts are created but not yet activated. The activation email waiting for the user is Pending user action, and a blocked account with kept assignments is Suspended."
+    },
+    {
+      "id": "D1-010",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "A user mistyped their password too many times and now shows Locked out. The user remembers the correct password. What should the help desk do to restore access FASTEST?",
+      "choices": [
+        "Reset all of the user's authenticators",
+        "Deactivate and then reactivate the user",
+        "Unlock the user account",
+        "Reset the user's password"
+      ],
+      "answer": "Unlock the user account",
+      "explanation": "Unlocking clears the lockout so the user can sign in with the password they already know. A password reset also works but forces a new password, which is more disruptive than needed."
+    },
+    {
+      "id": "D1-011",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "An employee is starting a three-month leave. Security wants sign-in blocked during the leave, but the employee's app assignments must be intact when they return. Which action should the admin take?",
+      "choices": [
+        "Delete the user",
+        "Reset the user's password",
+        "Deactivate the user",
+        "Suspend the user"
+      ],
+      "answer": "Suspend the user",
+      "explanation": "Suspending blocks access to Okta and apps while leaving app assignments unaffected, and Unsuspend returns the user to Active. Deactivation removes all app assignments, so access would have to be rebuilt."
+    },
+    {
+      "id": "D1-012",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "An admin selects Reset password on a user's profile and sends the reset email. Until the user completes it, which status does the account show?",
+      "choices": [
+        "Password reset",
+        "Pending user action",
+        "Locked out",
+        "Password expired"
+      ],
+      "answer": "Password reset",
+      "explanation": "An admin-requested reset puts the account in Password reset (Recovery in the API). Password expired is caused by the password policy's age setting, not by an admin action."
+    },
+    {
+      "id": "D1-013",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "An admin wants to permanently delete an old test account, but the Delete option is not available on its profile. What is the MOST likely reason?",
+      "choices": [
+        "The account must be removed from the Everyone group first",
+        "The account must be deactivated before it can be deleted",
+        "Only accounts in Staged status can ever be deleted",
+        "Deletion is only possible through a case with Okta Support"
+      ],
+      "answer": "The account must be deactivated before it can be deleted",
+      "explanation": "Okta only allows deleting a user that is already deactivated. Removing someone from the Everyone group is not possible, and deletion does not require Okta Support."
+    },
+    {
+      "id": "D1-014",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "Which statement BEST describes what happens when an admin deactivates a user in Okta?",
+      "choices": [
+        "Sign-in is blocked, but app assignments stay so access returns on unsuspend",
+        "The user is moved to Staged status and the activation email is sent again",
+        "All app assignments are removed and the password is permanently deleted",
+        "The account is erased at once along with its System Log history"
+      ],
+      "answer": "All app assignments are removed and the password is permanently deleted",
+      "explanation": "Deactivation (Deprovisioned in the API) removes every app assignment and deletes the password. Keeping assignments while blocking sign-in describes Suspended."
+    },
+    {
+      "id": "D1-015",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "Several users suddenly show Password expired, although no admin touched their accounts. What is the MOST likely cause?",
+      "choices": [
+        "They exceeded the failed sign-in limit in the password policy",
+        "Their accounts were imported from a CSV file without passwords",
+        "An admin selected Reset password for each user overnight",
+        "Their passwords reached the maximum age set in the password policy"
+      ],
+      "answer": "Their passwords reached the maximum age set in the password policy",
+      "explanation": "Password expired is triggered when a password passes the policy's maximum age. Too many failed attempts would show Locked out, and an admin reset would show Password reset."
+    },
+    {
+      "id": "D1-016",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "A suspended user's department changed while they were away. Can the admin update the department attribute before the user returns?",
+      "choices": [
+        "Yes, a suspended user's profile can still be updated",
+        "No, the user must be deactivated before profile edits",
+        "Yes, but only by deleting and recreating the attribute",
+        "No, the user must be unsuspended before any profile edit"
+      ],
+      "answer": "Yes, a suspended user's profile can still be updated",
+      "explanation": "Okta keeps a suspended user's profile editable and their app assignments unaffected; only access is blocked. There is no need to unsuspend first."
+    },
+    {
+      "id": "D1-017",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "An admin needs to correct the job title of one Okta-sourced user. Which path takes the admin to the right place?",
+      "choices": [
+        "Reports > Reports, open the user, then edit the Profile column",
+        "Directory > People, open the user, then edit the Profile tab",
+        "Security > Administrators, open the user, then edit the Roles tab",
+        "Directory > Profile Editor, open the user, then edit the Title value"
+      ],
+      "answer": "Directory > People, open the user, then edit the Profile tab",
+      "explanation": "Attribute values for a person are edited on that user's Profile tab under Directory > People. Profile Editor changes the attribute definitions for every user, not one user's value."
+    },
+    {
+      "id": "D1-018",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "Which base attributes are required on every Okta user profile?",
+      "choices": [
+        "First name, last name, display name and secondary email",
+        "Username, employee number, manager and department",
+        "Username, first name, last name and primary email",
+        "Primary email, mobile phone, title and cost center"
+      ],
+      "answer": "Username, first name, last name and primary email",
+      "explanation": "The Okta user profile requires login (username), firstName, lastName and email. Attributes such as department, manager and mobile phone are optional base attributes."
+    },
+    {
+      "id": "D1-019",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "An admin wants to tidy the Okta user profile by removing the unused base attribute Nickname. What should the admin expect in Profile Editor?",
+      "choices": [
+        "The attribute can be deleted only during a full directory import",
+        "The attribute is deleted, and its values are moved to a custom attribute",
+        "The attribute is deleted after it is removed from every app mapping",
+        "Base attributes cannot be deleted from the Okta user profile"
+      ],
+      "answer": "Base attributes cannot be deleted from the Okta user profile",
+      "explanation": "Base attributes are part of the standard Okta user schema and cannot be deleted; only custom attributes can be removed. Mappings do not change that rule."
+    },
+    {
+      "id": "D1-020",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "A user changed her last name and wants to sign in with a new username that uses it. Her account is sourced from Okta. What should the admin do?",
+      "choices": [
+        "Edit the Username and Last name values on her Profile tab",
+        "Ask the user to change her username on the End-User Dashboard",
+        "Add a custom attribute for the new username in Profile Editor",
+        "Create a second account with the new username and delete the old one"
+      ],
+      "answer": "Edit the Username and Last name values on her Profile tab",
+      "explanation": "For an Okta-sourced user, an admin can edit the login and name attributes directly on the Profile tab, keeping the same account and its history. A second account would lose assignments and history."
+    },
+    {
+      "id": "D1-021",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "An auditor wants to know which admin changed a user's manager attribute last Tuesday. Where should the admin look?",
+      "choices": [
+        "The user's Profile tab, under the attribute history view",
+        "The System Log, filtered to that user's profile update events",
+        "The Okta status site, under recent incident history",
+        "Profile Editor, under the attribute's change history panel"
+      ],
+      "answer": "The System Log, filtered to that user's profile update events",
+      "explanation": "The System Log records profile updates with the actor, target and time. The Profile tab shows current values only, and status.okta.com reports service health, not org changes."
+    },
+    {
+      "id": "D1-022",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "Which Okta user profile attribute holds the value a person types into the Okta sign-in page to identify themselves?",
+      "choices": [
+        "Display name",
+        "Nickname",
+        "Username (login)",
+        "Primary email (email)"
+      ],
+      "answer": "Username (login)",
+      "explanation": "Okta signs users in with the login attribute, shown as Username. It often looks like the primary email, but the email attribute is a separate value used for messages."
+    },
+    {
+      "id": "D1-023",
+      "objective": "1.1",
+      "topic": "Editing User Profiles",
+      "stem": "An admin opens a user's Profile tab and sees the Department field is read-only while the user's Okta-sourced colleague's field is editable. What is the MOST likely reason?",
+      "choices": [
+        "Department was hidden from the first user by an admin role",
+        "The first user has not yet enrolled in Okta Verify",
+        "The first user is suspended, which locks every profile field",
+        "The first user's profile is sourced from a directory or HR app"
+      ],
+      "answer": "The first user's profile is sourced from a directory or HR app",
+      "explanation": "When a user's profile source is an external system such as Active Directory or an HR app, sourced attributes are read-only in Okta. Suspended users can still have their profiles updated."
+    },
+    {
+      "id": "D1-024",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "An admin must add a custom attribute named Cost Center for all Okta users. Which path is correct?",
+      "choices": [
+        "Directory > Profile Editor, Okta User (default) profile, Add Attribute",
+        "Directory > People, choose a user, Profile tab, Add Attribute",
+        "Settings > Account, User profile section, Add Attribute",
+        "Directory > Groups, choose Everyone, Profile tab, Add Attribute"
+      ],
+      "answer": "Directory > Profile Editor, Okta User (default) profile, Add Attribute",
+      "explanation": "Custom user attributes are added to the Okta User (default) profile in Profile Editor. A user's Profile tab only edits values of attributes that already exist."
+    },
+    {
+      "id": "D1-025",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "A Region attribute must accept only North, South, East or West so that group rules stay reliable. Which attribute setting should the admin use?",
+      "choices": [
+        "Value must be unique for each user",
+        "Define enumerated list of values",
+        "User permission set to Read-Write",
+        "Attribute length minimum and maximum"
+      ],
+      "answer": "Define enumerated list of values",
+      "explanation": "An enumerated list limits the attribute to the defined values, which avoids misspelled entries. A uniqueness restriction would stop two users from sharing a region."
+    },
+    {
+      "id": "D1-026",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "Each user can work on several projects, and an attribute must store all of the user's project codes at once. Which data type fits BEST?",
+      "choices": [
+        "string",
+        "integer",
+        "string array",
+        "boolean"
+      ],
+      "answer": "string array",
+      "explanation": "A string array holds an ordered list of string values in one attribute. A plain string would force codes into one delimited value that rules and mappings handle poorly."
+    },
+    {
+      "id": "D1-027",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "An admin creates a custom attribute with the display name Cost Center and the variable name costCenter. Which value is referenced in profile mappings and expressions?",
+      "choices": [
+        "The attribute's internal row number",
+        "Cost Center, the display name",
+        "The attribute description text",
+        "costCenter, the variable name"
+      ],
+      "answer": "costCenter, the variable name",
+      "explanation": "The variable name is the attribute's reference in mappings and Okta Expression Language, such as user.costCenter. The display name is only the label shown in the Admin Console."
+    },
+    {
+      "id": "D1-028",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "A custom attribute stores an internal risk rating. Users must not see it on their own profile settings page. Which user permission should the admin select?",
+      "choices": [
+        "Hide",
+        "Read Only",
+        "Attribute required",
+        "Read-Write"
+      ],
+      "answer": "Hide",
+      "explanation": "Hide keeps the attribute off the end user's profile view. Read Only would still display the value to the user; Attribute required is not a user permission."
+    },
+    {
+      "id": "D1-029",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "No two users may ever share the same Employee ID value in Okta. Which option should the admin turn on for the custom attribute?",
+      "choices": [
+        "Define enumerated list of values",
+        "Value must be unique for each user",
+        "Attribute required set to Yes",
+        "User permission set to Hide"
+      ],
+      "answer": "Value must be unique for each user",
+      "explanation": "The uniqueness restriction rejects a value already held by another user. Making the attribute required only ensures a value exists; it does not prevent duplicates."
+    },
+    {
+      "id": "D1-030",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "A Badge Number attribute will always hold whole numbers with no decimals. Which data type is the BEST fit?",
+      "choices": [
+        "number",
+        "string array",
+        "integer",
+        "boolean"
+      ],
+      "answer": "integer",
+      "explanation": "The integer type stores whole numbers. The number type is a floating-point decimal, so it allows fractional values the attribute should never contain."
+    },
+    {
+      "id": "D1-031",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "Contractors need several attributes that employees never use, and the admin wants each population to have its own profile schema. What should the admin create?",
+      "choices": [
+        "A resource set that contains only contractor attributes",
+        "A new group named Contractors with a group profile",
+        "A group rule that hides employee attributes from contractors",
+        "A new user type with its own profile in Profile Editor"
+      ],
+      "answer": "A new user type with its own profile in Profile Editor",
+      "explanation": "User types give each population a separate profile schema in Profile Editor. Groups and group rules control membership, not which attributes a profile has."
+    },
+    {
+      "id": "D1-032",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "What does it mean when an Okta user's profile source is an HR system?",
+      "choices": [
+        "The HR system owns the sourced attributes, and they are read-only in Okta",
+        "Okta pushes every attribute change from Okta back into the HR system",
+        "The user can edit all sourced attributes from the End-User Dashboard",
+        "The HR system can be used only for single sign-on, not for user data"
+      ],
+      "answer": "The HR system owns the sourced attributes, and they are read-only in Okta",
+      "explanation": "A profile source is the system of record: its values flow into Okta and the sourced attributes cannot be edited there. Pushing changes out of Okta is provisioning to an app, a different direction."
+    },
+    {
+      "id": "D1-033",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "A user imported from Active Directory has the wrong department. The field is read-only in Okta. What should the admin do?",
+      "choices": [
+        "Remove the user from all groups, then edit the field in Okta",
+        "Correct the department in Active Directory and let the next import update Okta",
+        "Change the user's type in Okta so the field becomes editable",
+        "Create a custom attribute in Okta and enter the new department there"
+      ],
+      "answer": "Correct the department in Active Directory and let the next import update Okta",
+      "explanation": "For an AD-sourced user, the change must be made in Active Directory, and Okta picks it up on the next import. A separate custom attribute would leave the real department wrong in every rule and mapping."
+    },
+    {
+      "id": "D1-034",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "An organization wants Okta to read users from its on-premises Active Directory. What must be in place for this integration?",
+      "choices": [
+        "An Okta Verify enrollment on every domain controller",
+        "A SAML app integration for each organizational unit",
+        "The Okta Active Directory agent on a domain-joined Windows server",
+        "A network zone that contains every domain controller"
+      ],
+      "answer": "The Okta Active Directory agent on a domain-joined Windows server",
+      "explanation": "The AD integration relies on the Okta AD agent installed on a Windows server that can reach the domain. SAML apps and network zones are used for sign-in, not directory import."
+    },
+    {
+      "id": "D1-035",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "After an Active Directory import finishes, the new AD accounts do not appear as active Okta users. What is the MOST likely reason?",
+      "choices": [
+        "The import needs a custom attribute for every AD field",
+        "The AD agent can import groups only, not user accounts",
+        "Imported users appear only after each user signs in once",
+        "The imported users are waiting for confirmation on the import results"
+      ],
+      "answer": "The imported users are waiting for confirmation on the import results",
+      "explanation": "Unless automatic confirmation is turned on, imported users wait in the import results until an admin confirms them. The AD agent imports both users and groups."
+    },
+    {
+      "id": "D1-036",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "An admin must load 300 contractors listed in a spreadsheet into Okta, and no directory holds them. Which approach is BEST?",
+      "choices": [
+        "Import users from a CSV file on the Directory > People page",
+        "Add each contractor one at a time from the Groups page",
+        "Upload the spreadsheet as a custom attribute in Profile Editor",
+        "Create a group rule that reads the spreadsheet columns"
+      ],
+      "answer": "Import users from a CSV file on the Directory > People page",
+      "explanation": "Okta can import users from a CSV file from the People page, which suits a one-time bulk load without a source directory. Group rules evaluate existing Okta users and cannot read files."
+    },
+    {
+      "id": "D1-037",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "Active Directory is the profile source for all employees, but the admin wants the mobile phone attribute to stay editable in Okta. Which setting should the admin change?",
+      "choices": [
+        "Give the users the Read-Write permission on all attributes",
+        "Set that attribute's source priority to inherit from Okta",
+        "Remove mobile phone from the AD agent's import scope list",
+        "Change the users' type so that AD no longer sources them"
+      ],
+      "answer": "Set that attribute's source priority to inherit from Okta",
+      "explanation": "Attribute-level sourcing lets a single attribute be owned by Okta while the rest of the profile still comes from the profile source. The Read-Write permission only controls end-user editing of Okta-owned values."
+    },
+    {
+      "id": "D1-038",
+      "objective": "1.1",
+      "topic": "Profile Sourcing and User Imports",
+      "stem": "Where does an admin configure an HR app such as Workday to act as the profile source for Okta users?",
+      "choices": [
+        "In Directory > Groups, under the Rules tab of a group",
+        "In Security > Administrators, under the Resources tab",
+        "In the app's Provisioning tab, under the To Okta settings",
+        "In Profile Editor, under the Okta User (default) profile"
+      ],
+      "answer": "In the app's Provisioning tab, under the To Okta settings",
+      "explanation": "Sourcing from an app is enabled in that app integration's Provisioning settings for the direction into Okta. Profile Editor shows attributes but is not where the app is made a source."
+    },
+    {
+      "id": "D1-039",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "An admin tries to remove a user from the Everyone group and finds no way to do it. Why?",
+      "choices": [
+        "Membership in Everyone is controlled by a hidden group rule",
+        "Only a Super Administrator may change the Everyone group's members",
+        "Everyone is a built-in group that contains every user automatically",
+        "The user must be suspended before leaving the Everyone group"
+      ],
+      "answer": "Everyone is a built-in group that contains every user automatically",
+      "explanation": "Everyone is a built-in Okta group whose membership is every user in the org, so members cannot be added or removed by hand. No role or user status changes that."
+    },
+    {
+      "id": "D1-040",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "An admin cannot add an Okta user to the group VPN-Users, which was imported from Active Directory. What is the MOST likely reason?",
+      "choices": [
+        "The admin must first assign VPN-Users an admin role",
+        "The group must be activated before members can be added",
+        "Users can join only one AD-sourced group at a time",
+        "Membership of an AD-sourced group is managed in Active Directory"
+      ],
+      "answer": "Membership of an AD-sourced group is managed in Active Directory",
+      "explanation": "AD-sourced groups take their membership from Active Directory, so changes are made there and imported. Groups have no activation step; that applies to group rules."
+    },
+    {
+      "id": "D1-041",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "Groups imported from a connected app such as Google Workspace appear in Okta. How should an admin think about their membership?",
+      "choices": [
+        "It is sourced from that app, not managed directly in Okta",
+        "It can be edited freely in Okta like any Okta group",
+        "It is controlled only by group rules created in Okta",
+        "It is copied from the Everyone group every night"
+      ],
+      "answer": "It is sourced from that app, not managed directly in Okta",
+      "explanation": "Groups imported from an app are app groups whose membership comes from the source app. Okta groups are the ones whose members you manage directly in the Admin Console."
+    },
+    {
+      "id": "D1-042",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "A manager asks the admin to place the group Sales-East inside the group Sales so its members inherit access. What should the admin know?",
+      "choices": [
+        "Nesting is set on the group's Profile tab under Parent group",
+        "Okta groups do not nest, so a rule or app assignment is needed instead",
+        "Nesting works only for groups imported from Active Directory",
+        "Nesting is available once both groups are given admin roles"
+      ],
+      "answer": "Okta groups do not nest, so a rule or app assignment is needed instead",
+      "explanation": "Okta groups are flat and cannot contain other groups. A group rule that checks membership of Sales-East, or assigning the app to both groups, achieves the same result."
+    },
+    {
+      "id": "D1-043",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "An admin needs a new group named Project Falcon for a temporary team. Where is it created?",
+      "choices": [
+        "Security > Administrators, then Add group",
+        "Directory > People, then Add person",
+        "Directory > Groups, then Add group",
+        "Directory > Profile Editor, then Add Attribute"
+      ],
+      "answer": "Directory > Groups, then Add group",
+      "explanation": "Okta groups are created from Directory > Groups with Add group, entering a name and optional description. Profile Editor manages attributes, not groups."
+    },
+    {
+      "id": "D1-044",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "Which kind of group can an Okta admin add members to directly in the Admin Console?",
+      "choices": [
+        "The built-in Everyone group",
+        "A group imported from a connected app",
+        "A group imported from Active Directory",
+        "An Okta-sourced group created in Okta"
+      ],
+      "answer": "An Okta-sourced group created in Okta",
+      "explanation": "Okta groups are mastered in Okta, so members can be added by hand or by rules. AD and app groups take their membership from the source, and Everyone is automatic."
+    },
+    {
+      "id": "D1-045",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "Groups imported from Active Directory now appear in Okta. Which statement about using them is correct?",
+      "choices": [
+        "They can be assigned to apps and used in policies, but membership changes happen in AD",
+        "They are hidden from app assignment until an admin converts them to Okta groups",
+        "They can be used only for import scoping and never for app assignment",
+        "They become Okta groups after import, so membership is edited only in Okta"
+      ],
+      "answer": "They can be assigned to apps and used in policies, but membership changes happen in AD",
+      "explanation": "AD-sourced groups are fully usable for app assignment and policy targeting while their membership stays owned by Active Directory. They are not converted into Okta groups."
+    },
+    {
+      "id": "D1-046",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "An admin must add three named people to the Okta group Finance. Which path is the MOST direct?",
+      "choices": [
+        "Applications > Applications, open Finance, then Assign to Groups",
+        "Directory > Groups, open Finance, then Assign people",
+        "Directory > Profile Editor, open Finance, then Add Attribute",
+        "Security > Administrators, open Finance, then Add assignment"
+      ],
+      "answer": "Directory > Groups, open Finance, then Assign people",
+      "explanation": "Members are added to an Okta group from the group's page under Directory > Groups using Assign people. The other paths change attributes, admin roles or app assignments."
+    },
+    {
+      "id": "D1-047",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "A small project team has no common department, title or other attribute, and its membership changes rarely. Which way of populating the group is BEST?",
+      "choices": [
+        "Use the Everyone group and an exclusion list",
+        "Import the group from Active Directory",
+        "Add the members manually to an Okta group",
+        "Create a group rule on the department attribute"
+      ],
+      "answer": "Add the members manually to an Okta group",
+      "explanation": "With no attribute to key on, a rule has nothing to evaluate, so manual membership is simplest. Using Everyone would give the access to every user."
+    },
+    {
+      "id": "D1-048",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "A user is in the group Sales because a group rule matched, and an admin manually removes the user from Sales. What does Okta do?",
+      "choices": [
+        "It deactivates the group rule so that no other members are affected",
+        "It blocks the removal because rule members cannot be removed by hand",
+        "It removes the user but the rule adds the user back within minutes",
+        "It adds the user to the rule's Except list so the rule does not re-add them"
+      ],
+      "answer": "It adds the user to the rule's Except list so the rule does not re-add them",
+      "explanation": "Removing a rule-managed member by hand places the user on that rule's Except list, so the change sticks. The rule itself remains active for everyone else."
+    },
+    {
+      "id": "D1-049",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "An admin manually adds a new hire to the group Designers, which is assigned to a design app. What happens to the new hire's app access?",
+      "choices": [
+        "The new hire gets the app through the group's assignment",
+        "The new hire must also be assigned to the app individually",
+        "The new hire gets the app only after an admin activates the group",
+        "The app becomes available only after the next directory import"
+      ],
+      "answer": "The new hire gets the app through the group's assignment",
+      "explanation": "Group-based app assignments apply to every member, including people added later. Individual assignment is not needed, and groups have no activation step."
+    },
+    {
+      "id": "D1-050",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "An Organization Administrator tries to add a user to the group IT-Admins, which holds an admin role, and Okta refuses. Why?",
+      "choices": [
+        "The group must be deactivated before it can receive new members",
+        "Only a Super Administrator can add users to a group with admin privileges",
+        "The user must first be given an individual Help Desk Administrator role",
+        "Groups that hold admin roles can be populated only by group rules"
+      ],
+      "answer": "Only a Super Administrator can add users to a group with admin privileges",
+      "explanation": "Okta reserves membership changes for groups with admin roles to Super Administrators, because joining such a group grants admin rights. Group rules cannot assign users to admin groups at all."
+    },
+    {
+      "id": "D1-051",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "The security team wants to confirm who added a user to the group Payroll yesterday. Which System Log filter is BEST?",
+      "choices": [
+        "eventType eq \"user.session.start\"",
+        "eventType eq \"user.account.lock\"",
+        "eventType eq \"group.user_membership.add\"",
+        "eventType eq \"user.lifecycle.create\""
+      ],
+      "answer": "eventType eq \"group.user_membership.add\"",
+      "explanation": "Adding a member to a group writes a group.user_membership.add event that names the actor and the target. user.session.start records sign-ins, not membership changes."
+    },
+    {
+      "id": "D1-052",
+      "objective": "1.2",
+      "topic": "Manual Group Membership",
+      "stem": "An admin wants to see every group one particular user belongs to and add that user to two more groups. Where can this be done from a single page?",
+      "choices": [
+        "The Profile Editor page for Okta User (default)",
+        "The Resources tab in Security > Administrators",
+        "The Rules tab on the Directory > Groups page",
+        "The Groups tab on the user's page in Directory > People"
+      ],
+      "answer": "The Groups tab on the user's page in Directory > People",
+      "explanation": "A user's Groups tab lists current memberships and allows adding the user to more groups. The Rules tab manages group rules, not one user's memberships."
+    },
+    {
+      "id": "D1-053",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin wants a rule that adds users to groups automatically. Where does the admin start?",
+      "choices": [
+        "Directory > Groups, Rules tab, Add Rule",
+        "Directory > Profile Editor, Mappings, Add Rule",
+        "Directory > People, More actions, Add Rule",
+        "Security > Authentication Policies, Add Rule"
+      ],
+      "answer": "Directory > Groups, Rules tab, Add Rule",
+      "explanation": "Group rules are created from the Rules tab on the Directory > Groups page. Authentication policy rules decide sign-in requirements, not group membership."
+    },
+    {
+      "id": "D1-054",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin saved a new group rule for the Sales department an hour ago, but no users have joined the Sales group. What is the MOST likely reason?",
+      "choices": [
+        "The Sales group must first be assigned to an app",
+        "The rule is still inactive and needs to be activated",
+        "Group rules run only once a day at midnight",
+        "Each user has to sign out and back in before the rule applies"
+      ],
+      "answer": "The rule is still inactive and needs to be activated",
+      "explanation": "A newly saved group rule is inactive by default and adds nobody until it is activated. Rules do not wait for an app assignment or a user sign-in."
+    },
+    {
+      "id": "D1-055",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "A rule adds all users whose department is Engineering to the group Engineering, but a visiting auditor in that department must be left out. What should the admin do?",
+      "choices": [
+        "Suspend the auditor so the rule ignores the account",
+        "Remove the department attribute from the auditor's user type",
+        "Add the auditor to the rule's Except the following users field",
+        "Create a second rule that removes the auditor from Engineering"
+      ],
+      "answer": "Add the auditor to the rule's Except the following users field",
+      "explanation": "The Except field excludes named users from a rule while it keeps working for everyone else. Group rules only add members; there is no removal rule, and suspending would block the auditor entirely."
+    },
+    {
+      "id": "D1-056",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin activates a rule that adds users with the title Nurse to the group Clinical. Which users does the rule add?",
+      "choices": [
+        "Only users created after the rule was activated",
+        "Only users who were manually added to Clinical before",
+        "Only users who sign in during the next 24 hours",
+        "Existing and future users whose title matches the condition"
+      ],
+      "answer": "Existing and future users whose title matches the condition",
+      "explanation": "An active rule applies across the org, so existing users who match are added as well as new ones. It does not wait for new accounts or sign-ins."
+    },
+    {
+      "id": "D1-057",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "A Group Administrator who manages several groups says the option to create a group rule is missing. What is the MOST likely reason?",
+      "choices": [
+        "Only Super Administrators and Organization Administrators can manage group rules",
+        "Group Administrators can create rules only for the Everyone group",
+        "Group rules are available only after an AD integration exists",
+        "Group rules must be created by the Okta Support team"
+      ],
+      "answer": "Only Super Administrators and Organization Administrators can manage group rules",
+      "explanation": "Creating and editing group rules is limited to Super and Organization Administrators. A Group Administrator manages users in assigned groups but not rules."
+    },
+    {
+      "id": "D1-058",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin builds a group rule whose target is the group Help Desk Admins, which holds the Help Desk Administrator role. The rule cannot use that target. Why?",
+      "choices": [
+        "Group rules require the target group to have fewer than ten members",
+        "Group rules cannot assign users to groups that hold admin roles",
+        "Group rules can target only groups with no app assignments",
+        "Group rules can target only groups imported from Active Directory"
+      ],
+      "answer": "Group rules cannot assign users to groups that hold admin roles",
+      "explanation": "Okta prevents rules from adding users to admin groups so that admin rights are never granted automatically by an attribute. That protects against privilege creep from profile changes."
+    },
+    {
+      "id": "D1-059",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "A user's department changes from Sales to Marketing. A rule had added them to Sales because their department was Sales. What happens to their Sales membership?",
+      "choices": [
+        "The user stays in Sales until an admin removes them",
+        "The user stays in Sales and is also added to Marketing",
+        "The rule removes the user from Sales automatically",
+        "The rule is deactivated because a member no longer matches"
+      ],
+      "answer": "The rule removes the user from Sales automatically",
+      "explanation": "Rule-managed membership follows the attributes, so a user who no longer meets the condition is removed. This is why rules suit attribute-driven access."
+    },
+    {
+      "id": "D1-060",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "A rule must add users whose boolean custom attribute isContractor is true, but the basic condition list does not offer the attribute. What should the admin do?",
+      "choices": [
+        "Convert the attribute to a string array first",
+        "Use the Except field with the attribute name",
+        "Add the attribute to a resource set first",
+        "Write the condition in Okta Expression Language"
+      ],
+      "answer": "Write the condition in Okta Expression Language",
+      "explanation": "Basic conditions support string attributes only, so other data types need an Okta Expression Language condition. The Except field lists individual users, not attributes."
+    },
+    {
+      "id": "D1-061",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "Which Okta Expression Language condition adds users whose department is exactly Sales?",
+      "choices": [
+        "user.department == \"Sales\"",
+        "department eq Sales",
+        "user.department = \"Sales\"",
+        "user.profile.department eq \"Sales\""
+      ],
+      "answer": "user.department == \"Sales\"",
+      "explanation": "Group rule expressions compare with == and reference attributes as user.<variable name>. The eq form is filter syntax used in the System Log and API, not in group rule expressions."
+    },
+    {
+      "id": "D1-062",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "A rule must add every user whose title includes the word Manager anywhere, such as Senior Manager or Manager of IT. Which expression fits?",
+      "choices": [
+        "user.title != \"Manager\"",
+        "String.stringContains(user.title, \"Manager\")",
+        "isMemberOfGroupName(\"Manager\")",
+        "user.title == \"Manager\""
+      ],
+      "answer": "String.stringContains(user.title, \"Manager\")",
+      "explanation": "String.stringContains matches the text anywhere in the value. An exact comparison with == would only match users whose title is exactly Manager."
+    },
+    {
+      "id": "D1-063",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "Users who belong to any of three AD-sourced groups must also be in one Okta group used for app assignment. What is the BEST approach?",
+      "choices": [
+        "Manually copying members every week from the three AD groups",
+        "Assigning the three AD groups an admin role and the app",
+        "A group rule whose condition checks membership of the three AD groups",
+        "Nesting the three AD groups inside the new Okta group"
+      ],
+      "answer": "A group rule whose condition checks membership of the three AD groups",
+      "explanation": "Group rules can use group membership as the condition, which keeps the Okta group in step with the AD groups. Okta does not support nested groups, and weekly copying drifts."
+    },
+    {
+      "id": "D1-064",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "A rule must match users whose department is Sales AND whose country is Canada. Which condition type should the admin use?",
+      "choices": [
+        "A basic condition on department, with Canada in Except",
+        "Two separate rules that each assign the same group",
+        "A basic condition, repeated once for each attribute",
+        "An Okta Expression Language condition combining both attributes"
+      ],
+      "answer": "An Okta Expression Language condition combining both attributes",
+      "explanation": "Basic conditions suit simple single-attribute or group checks; combining attributes needs an expression. Two separate rules would add anyone matching either condition, not both."
+    },
+    {
+      "id": "D1-065",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "An admin created a custom attribute with display name Cost Center and variable name costCenter. How is it referenced in a group rule expression?",
+      "choices": [
+        "user.costCenter",
+        "user.Cost Center",
+        "custom.costCenter",
+        "profile[Cost Center]"
+      ],
+      "answer": "user.costCenter",
+      "explanation": "Expressions use the attribute's variable name on the user object, so user.costCenter. The display name is only a label and can include spaces that expressions cannot use."
+    },
+    {
+      "id": "D1-066",
+      "objective": "1.2",
+      "topic": "Group Rule Conditions and Expressions",
+      "stem": "A rule should add everyone in Sales except people whose title contains Intern, and new interns are hired every month. What should the admin do?",
+      "choices": [
+        "Create a second group rule that removes users with Intern in their title",
+        "Exclude interns in the IF expression, because the Except field lists only individual users",
+        "Manually remove each intern after the rule adds them to Sales",
+        "Type the word Intern into the Except field so the rule skips that title"
+      ],
+      "answer": "Exclude interns in the IF expression, because the Except field lists only individual users",
+      "explanation": "The Except field names specific users, so a condition-based exclusion belongs in the expression, which also handles future hires. Rules only add members, and manual removal does not scale."
+    },
+    {
+      "id": "D1-067",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "Which practice does Okta recommend for giving many users access to an app?",
+      "choices": [
+        "Assign the app to admins, who then share their access",
+        "Assign the app to each user from their profile page",
+        "Assign the app to groups rather than to individual users",
+        "Assign the app to the Everyone group in every case"
+      ],
+      "answer": "Assign the app to groups rather than to individual users",
+      "explanation": "Group assignments scale, are easy to audit and follow membership changes automatically. Assigning Everyone gives access to people who may not need it."
+    },
+    {
+      "id": "D1-068",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "A user was removed from the group that grants an expense app, but the app is still on their dashboard. What is the MOST likely cause?",
+      "choices": [
+        "Group removals take effect only after the next password change",
+        "The user's profile source must approve the group removal first",
+        "The app keeps users until the group rule is deactivated",
+        "The user is also assigned to the app individually or through another group"
+      ],
+      "answer": "The user is also assigned to the app individually or through another group",
+      "explanation": "App access remains while any assignment remains, whether individual or from another group. Removing a group membership takes effect without a password change."
+    },
+    {
+      "id": "D1-069",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "New engineers should get the code repository app automatically when HR sets their department to Engineering. What should the admin configure?",
+      "choices": [
+        "A group rule on department that fills a group assigned to the app",
+        "An authentication policy rule that grants the app to engineers",
+        "A resource set that contains the app and the department",
+        "A custom attribute that stores the name of the app"
+      ],
+      "answer": "A group rule on department that fills a group assigned to the app",
+      "explanation": "A rule keeps the group in step with the department attribute, and the app assignment on the group gives the access. Authentication policies decide how users sign in, not who is assigned."
+    },
+    {
+      "id": "D1-070",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "Finance users must face stronger sign-in requirements than other staff. How should the admin use groups to achieve this?",
+      "choices": [
+        "Put the Finance group's members in the Except list",
+        "Target the Finance group in a dedicated policy rule",
+        "Add a custom attribute named Finance to the profile",
+        "Assign the Finance group an admin role with stronger rights"
+      ],
+      "answer": "Target the Finance group in a dedicated policy rule",
+      "explanation": "Okta policy rules can be scoped to groups, so a rule for the Finance group can require stronger authentication. An admin role grants rights rather than adding sign-in checks."
+    },
+    {
+      "id": "D1-071",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "A new service desk analyst should automatically gain help desk admin rights when added to the Service Desk group. What should the Super Administrator do?",
+      "choices": [
+        "Add the role as a custom attribute on each analyst's profile",
+        "Assign the Service Desk group to the Okta Admin Console app",
+        "Assign the Help Desk Administrator role to the Service Desk group",
+        "Create a group rule that grants the role to Service Desk"
+      ],
+      "answer": "Assign the Help Desk Administrator role to the Service Desk group",
+      "explanation": "Admin roles can be assigned to a group, so every member holds the role. Group rules cannot grant roles or add users to admin groups."
+    },
+    {
+      "id": "D1-072",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "An admin wants to review which app integrations the group Contractors currently grants. Where is this shown?",
+      "choices": [
+        "The Resources tab in Security > Administrators",
+        "The Rules tab on the Directory > Groups page",
+        "The Contractors user type in Profile Editor",
+        "The Applications tab on the Contractors group page"
+      ],
+      "answer": "The Applications tab on the Contractors group page",
+      "explanation": "A group's page lists the apps assigned to that group. The Rules tab only shows group rules, and Profile Editor shows attributes."
+    },
+    {
+      "id": "D1-073",
+      "objective": "1.2",
+      "topic": "Using Groups for Access and Policy",
+      "stem": "A team's access to a reporting app must end today for everyone in the group Analytics, while their other access stays. What is the quickest correct action?",
+      "choices": [
+        "Remove the app assignment from the Analytics group",
+        "Deactivate every user who is in the Analytics group",
+        "Delete the Analytics group and create it again",
+        "Suspend the reporting app for the whole org"
+      ],
+      "answer": "Remove the app assignment from the Analytics group",
+      "explanation": "Unassigning the app from the group removes that app for its members without touching other access. Deactivating users would remove every app they have."
+    },
+    {
+      "id": "D1-074",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "Which standard Okta administrator role is the only one that can add and remove other administrators?",
+      "choices": [
+        "Application Administrator",
+        "Organization Administrator",
+        "Group Administrator",
+        "Super Administrator"
+      ],
+      "answer": "Super Administrator",
+      "explanation": "Managing admin assignments is reserved for Super Administrators. Organization Administrators manage users, groups and settings but cannot grant admin roles."
+    },
+    {
+      "id": "D1-075",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "An Organization Administrator wants to give a colleague the Help Desk Administrator role but cannot find a way to do it. Why?",
+      "choices": [
+        "Granting admin roles requires the Super Administrator role",
+        "Help Desk Administrator can be granted only to groups",
+        "Admin roles can be granted only through Okta Support",
+        "The colleague must first be a Read-only Administrator"
+      ],
+      "answer": "Granting admin roles requires the Super Administrator role",
+      "explanation": "Only Super Administrators can add administrators or assign admin privileges to groups. No prior role or support case is needed."
+    },
+    {
+      "id": "D1-076",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "Which standard role allows viewing and running reports and viewing the System Log, without other admin permissions?",
+      "choices": [
+        "Group Membership Administrator",
+        "Report Administrator",
+        "Application Administrator",
+        "Help Desk Administrator"
+      ],
+      "answer": "Report Administrator",
+      "explanation": "The Report Administrator role is limited to reports and the System Log. The Help Desk Administrator handles password and MFA resets, not reporting."
+    },
+    {
+      "id": "D1-077",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "What can a Read-only Administrator do in the Admin Console?",
+      "choices": [
+        "Edit user profiles but not create or delete any user accounts",
+        "Reset passwords for users while being unable to change settings",
+        "View most settings, users, groups, apps and logs without making changes",
+        "Create apps and assign them but never change any user accounts"
+      ],
+      "answer": "View most settings, users, groups, apps and logs without making changes",
+      "explanation": "A Read-only Administrator can see much of the org's configuration and the System Log but cannot change anything. Password resets belong to the help desk and group admin roles."
+    },
+    {
+      "id": "D1-078",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "A Help Desk Administrator tries to change a user's job title and cannot. What explains this?",
+      "choices": [
+        "Help Desk Administrators edit profiles only through Profile Editor",
+        "Help Desk Administrators can edit profiles only for suspended users",
+        "Help Desk Administrators must enroll Okta Verify before editing",
+        "Help Desk Administrators can reset passwords and MFA but not edit profiles"
+      ],
+      "answer": "Help Desk Administrators can reset passwords and MFA but not edit profiles",
+      "explanation": "The Help Desk Administrator role covers password resets, MFA resets and clearing sessions for users in scope, not profile edits. Group Administrators can edit profiles in their groups."
+    },
+    {
+      "id": "D1-079",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "What does the Group Membership Administrator role allow within its assigned groups?",
+      "choices": [
+        "Adding and removing users in those groups",
+        "Creating new groups and new group rules",
+        "Creating new users and resetting passwords",
+        "Assigning apps to the groups' members"
+      ],
+      "answer": "Adding and removing users in those groups",
+      "explanation": "Group Membership Administrators can view users and change membership of the groups in scope only. Creating groups and rules needs an Organization or Super Administrator."
+    },
+    {
+      "id": "D1-080",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "Which standard role can add and configure app integrations and assign users to the apps it manages, but cannot create users?",
+      "choices": [
+        "Read-only Administrator",
+        "Application Administrator",
+        "Report Administrator",
+        "Group Administrator"
+      ],
+      "answer": "Application Administrator",
+      "explanation": "The Application Administrator manages app integrations and their assignments, optionally constrained to specific apps. User creation belongs to the Group, Organization and Super Administrator roles."
+    },
+    {
+      "id": "D1-081",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "Service desk analysts need to reset passwords and MFA and clear sessions for employees, and nothing more. Which role is the BEST fit?",
+      "choices": [
+        "Group Administrator",
+        "Read-only Administrator",
+        "Help Desk Administrator",
+        "Organization Administrator"
+      ],
+      "answer": "Help Desk Administrator",
+      "explanation": "Help Desk Administrator covers exactly these recovery tasks. Group Administrator would also allow creating, deleting and editing users, which is more than needed."
+    },
+    {
+      "id": "D1-082",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "A regional IT lead must create users, edit their profiles and deactivate them, but only for people in the EMEA group. Which assignment is BEST?",
+      "choices": [
+        "Group Membership Administrator for the EMEA group",
+        "Help Desk Administrator constrained to the EMEA group",
+        "Organization Administrator for the whole org",
+        "Group Administrator constrained to the EMEA group"
+      ],
+      "answer": "Group Administrator constrained to the EMEA group",
+      "explanation": "Group Administrator includes user creation, profile edits and lifecycle actions for the groups it manages. Help Desk cannot edit profiles, and Organization Administrator is not limited to EMEA."
+    },
+    {
+      "id": "D1-083",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "A project coordinator only needs to add and remove people in three project groups. Which role follows least privilege?",
+      "choices": [
+        "Group Membership Administrator for those three groups",
+        "Organization Administrator with a note to stay in scope",
+        "Super Administrator for the duration of the project",
+        "Group Administrator for those three groups"
+      ],
+      "answer": "Group Membership Administrator for those three groups",
+      "explanation": "Group Membership Administrator is limited to membership changes in the groups in scope. Group Administrator would also allow user edits and lifecycle actions the coordinator does not need."
+    },
+    {
+      "id": "D1-084",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "An external auditor needs to review reports and System Log events, with no access to change or browse other configuration. Which role is BEST?",
+      "choices": [
+        "Super Administrator",
+        "Report Administrator",
+        "Help Desk Administrator",
+        "Read-only Administrator"
+      ],
+      "answer": "Report Administrator",
+      "explanation": "Report Administrator gives reports and the System Log only. Read-only Administrator is also non-changing but exposes far more configuration than the auditor needs."
+    },
+    {
+      "id": "D1-085",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "An integration engineer must set up SAML apps from the OIN and assign them, but only for the HR apps. What is the BEST assignment?",
+      "choices": [
+        "Super Administrator, removed when the work is done",
+        "Organization Administrator for the whole org",
+        "Application Administrator constrained to the HR apps",
+        "Group Administrator constrained to the HR group"
+      ],
+      "answer": "Application Administrator constrained to the HR apps",
+      "explanation": "The Application Administrator role can be limited to specific apps, which matches the task. Organization Administrators do not manage app integrations in the standard role table."
+    },
+    {
+      "id": "D1-086",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "A contractor will build and maintain group rules for the whole org. Which is the least-privileged standard role that allows this?",
+      "choices": [
+        "Application Administrator",
+        "Group Membership Administrator",
+        "Group Administrator",
+        "Organization Administrator"
+      ],
+      "answer": "Organization Administrator",
+      "explanation": "Only Super and Organization Administrators can manage group rules, so Organization Administrator is the lowest standard role that works. Group roles can view rules but cannot create them."
+    },
+    {
+      "id": "D1-087",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "A security analyst must inspect policies, zones and app settings across the org to prepare a review, without the ability to change anything. Which role fits BEST?",
+      "choices": [
+        "Read-only Administrator",
+        "Organization Administrator",
+        "Report Administrator",
+        "Help Desk Administrator"
+      ],
+      "answer": "Read-only Administrator",
+      "explanation": "Read-only Administrator can view configuration broadly without making changes. Report Administrator is limited to reports and logs, so it would not show policy settings."
+    },
+    {
+      "id": "D1-088",
+      "objective": "1.3",
+      "topic": "Choosing Least-Privilege Roles",
+      "stem": "Five people in IT currently hold Super Administrator. Which change BEST follows least privilege?",
+      "choices": [
+        "Remove every Super Administrator and rely on Okta Support",
+        "Keep a few Super Administrators and move others to narrower roles",
+        "Give every IT staff member Super Administrator for consistency",
+        "Replace all Super Administrators with a single shared account"
+      ],
+      "answer": "Keep a few Super Administrators and move others to narrower roles",
+      "explanation": "Limiting Super Administrator to a small number of named accounts while others get roles that match their duties reduces risk. A shared account destroys accountability in the System Log."
+    },
+    {
+      "id": "D1-089",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "Where does a Super Administrator go to give a user a standard admin role?",
+      "choices": [
+        "Directory > People, open the user, then the Groups tab",
+        "Settings > Account, then the Admin roles section",
+        "Security > Administrators, then add an administrator assignment",
+        "Directory > Profile Editor, then the admin role attribute"
+      ],
+      "answer": "Security > Administrators, then add an administrator assignment",
+      "explanation": "Admin role assignments are managed under Security > Administrators. Adding a user to a group grants a role only if that group already has a role assignment."
+    },
+    {
+      "id": "D1-090",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "The service desk team changes often, and every member should hold the Help Desk Administrator role. What is the BEST way to manage this?",
+      "choices": [
+        "Store the role name in a custom attribute",
+        "Assign the role to each analyst one at a time",
+        "Write a group rule that grants the role",
+        "Assign the role to the Service Desk group"
+      ],
+      "answer": "Assign the role to the Service Desk group",
+      "explanation": "Assigning the role to a group means membership controls who is an admin, and new members inherit the role. Group rules cannot grant roles."
+    },
+    {
+      "id": "D1-091",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "Help desk staff in Canada must reset passwords only for users in the Canada group. How should the role be assigned?",
+      "choices": [
+        "Help Desk Administrator constrained to the Canada group",
+        "Help Desk Administrator for all users and groups",
+        "Read-only Administrator plus a Canada resource set",
+        "Group Membership Administrator for the Canada group"
+      ],
+      "answer": "Help Desk Administrator constrained to the Canada group",
+      "explanation": "Standard roles such as Help Desk Administrator can be constrained to specific groups during assignment. Group Membership Administrator cannot reset passwords, and resource sets apply only to custom roles."
+    },
+    {
+      "id": "D1-092",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "A Super Administrator tries to assign an admin role to the group IT-Ops, but Okta blocks it. IT-Ops is populated by a group rule. What is the MOST likely reason?",
+      "choices": [
+        "Only Organization Administrators can assign roles to any group",
+        "A group that is the target of a group rule cannot be granted admin privileges",
+        "The group must hold no members at all before a role can be assigned",
+        "Admin roles can be assigned only to groups imported from Active Directory"
+      ],
+      "answer": "A group that is the target of a group rule cannot be granted admin privileges",
+      "explanation": "Okta does not let a rule-populated group hold admin privileges, so admin rights never follow attribute changes. Super Administrators are the ones who assign roles, so permission is not the issue."
+    },
+    {
+      "id": "D1-093",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "A Group Administrator managed the group Field Staff. After a Super Administrator assigned an admin role to Field Staff, the Group Administrator can no longer change its members. Why?",
+      "choices": [
+        "Field Staff became an AD-sourced group when the role was added",
+        "The Group Administrator's assignment expired automatically",
+        "Only Super Administrators can manage groups that hold admin roles",
+        "Admin-role groups are read-only until an Okta Support review"
+      ],
+      "answer": "Only Super Administrators can manage groups that hold admin roles",
+      "explanation": "Once a group carries an admin role, changing it or its members is reserved for Super Administrators to protect admin access. The group's source does not change."
+    },
+    {
+      "id": "D1-094",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "A newly assigned Help Desk Administrator signs in to Okta. How does this person reach the Admin Console?",
+      "choices": [
+        "Open Profile Editor from the user settings page",
+        "Enroll in Okta Verify, which unlocks a new admin URL",
+        "Ask the Super Administrator for a separate admin username",
+        "Select the Admin button on the End-User Dashboard"
+      ],
+      "answer": "Select the Admin button on the End-User Dashboard",
+      "explanation": "Users with an admin role see an Admin button on their dashboard that opens the Admin Console with their role's permissions. No separate account is needed."
+    },
+    {
+      "id": "D1-095",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "A user holds the Help Desk Administrator role only because they are in the group Support-Admins, which has that role. How should the Super Administrator remove the role from this one user?",
+      "choices": [
+        "Remove the user from the Support-Admins group",
+        "Suspend the user for one day to clear the role",
+        "Edit the role to exclude that one user by name",
+        "Delete the Support-Admins group and create it again"
+      ],
+      "answer": "Remove the user from the Support-Admins group",
+      "explanation": "A role inherited from a group is removed by taking the user out of that group. Changing the role or deleting the group would affect every other member."
+    },
+    {
+      "id": "D1-096",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "Which three parts make up a custom admin role assignment in Okta?",
+      "choices": [
+        "A group, a network zone and a role",
+        "An admin, a role and a resource set",
+        "A role, an app and an authenticator",
+        "A user, a group rule and a policy"
+      ],
+      "answer": "An admin, a role and a resource set",
+      "explanation": "A custom assignment binds an admin (user or group) to a role (permissions) over a resource set (what those permissions apply to). Group rules and policies are not part of the assignment."
+    },
+    {
+      "id": "D1-097",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "Where does a Super Administrator create a new custom admin role?",
+      "choices": [
+        "Security > Authenticators, Add authenticator",
+        "Directory > Groups, Rules tab, Add Rule",
+        "Security > Administrators, Roles tab, Create new role",
+        "Directory > Profile Editor, Add Attribute"
+      ],
+      "answer": "Security > Administrators, Roles tab, Create new role",
+      "explanation": "Custom roles are created on the Roles tab of Security > Administrators by choosing permissions. Resource sets are created on the Resources tab of the same page."
+    },
+    {
+      "id": "D1-098",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "HR coordinators must update users' profile attributes but must not reset passwords or change lifecycle states. No standard role fits. What should the admin do?",
+      "choices": [
+        "Assign the Help Desk Administrator role with a group constraint",
+        "Assign the Read-only Administrator role with profile editing added",
+        "Assign the Group Administrator role and ask them not to reset passwords",
+        "Create a custom role with only the permission to edit profile attributes"
+      ],
+      "answer": "Create a custom role with only the permission to edit profile attributes",
+      "explanation": "A custom role can carry just the profile-editing permission. Group Administrator includes password resets and lifecycle actions, and Help Desk cannot edit profiles at all."
+    },
+    {
+      "id": "D1-099",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "A custom role that manages group membership is scoped to an AD-sourced group, but the delegated admin cannot add members. What is the MOST likely reason?",
+      "choices": [
+        "Group membership permissions do not apply to AD-sourced groups",
+        "The delegated admin must also hold Super Administrator",
+        "The group must be converted into a resource set first",
+        "Custom roles can be scoped only to the Everyone group"
+      ],
+      "answer": "Group membership permissions do not apply to AD-sourced groups",
+      "explanation": "Okta notes that permissions such as managing group membership, creating users and editing profile attributes do not apply to AD- or LDAP-sourced groups, because AD owns that data."
+    },
+    {
+      "id": "D1-100",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "A Super Administrator is assigning the standard Help Desk Administrator role and looks for a resource set picker, but none appears. Why?",
+      "choices": [
+        "Resource sets work only for Application Administrators",
+        "Resource sets are used only with custom admin roles",
+        "Help Desk Administrator can be assigned only to users",
+        "Resource sets must be activated before they appear"
+      ],
+      "answer": "Resource sets are used only with custom admin roles",
+      "explanation": "Resource sets apply to custom roles. Standard roles such as Help Desk Administrator are scoped with their own group or app constraints instead."
+    },
+    {
+      "id": "D1-101",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "An Organization Administrator wants to create a custom admin role and resource set for a delegated team. What is required?",
+      "choices": [
+        "A group rule must be created for the team first",
+        "An Okta Support case must approve the new role",
+        "The work must be done by a Super Administrator",
+        "The Organization Administrator needs Okta Verify"
+      ],
+      "answer": "The work must be done by a Super Administrator",
+      "explanation": "Creating custom roles, resource sets and admin assignments is a Super Administrator task. Organization Administrators cannot manage administrators."
+    },
+    {
+      "id": "D1-102",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "A custom role named Profile Editors is used in three different admin assignments. A Super Administrator adds a new permission to the role. Who gains that permission?",
+      "choices": [
+        "No one until each admin signs out and back in",
+        "Only admins assigned to the role after the change",
+        "Only the admin assignment created most recently",
+        "Every admin in all three assignments that use the role"
+      ],
+      "answer": "Every admin in all three assignments that use the role",
+      "explanation": "The role is a shared definition, so editing its permissions changes what every assignment using it can do. That is why custom roles should be edited with care."
+    },
+    {
+      "id": "D1-103",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "Where does a Super Administrator create a resource set?",
+      "choices": [
+        "Security > Administrators, Resources tab, Create new resource set",
+        "Directory > Profile Editor, Resources, Add resource",
+        "Directory > Groups, open a group, Resources tab",
+        "Applications > Applications, Resource sets, Add"
+      ],
+      "answer": "Security > Administrators, Resources tab, Create new resource set",
+      "explanation": "Resource sets are built on the Resources tab of Security > Administrators. Group pages show members and apps, not resource sets."
+    },
+    {
+      "id": "D1-104",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "A custom role should let delegated admins manage only the users in the groups Sales-East and Sales-West. How should the resource set be built?",
+      "choices": [
+        "Add a Customizations resource for the Sales brand",
+        "Add a Users resource for users from those two groups",
+        "Add the Everyone group and an exclusion for other groups",
+        "Add an Applications resource for every Sales app"
+      ],
+      "answer": "Add a Users resource for users from those two groups",
+      "explanation": "The Users resource can be limited to members of chosen groups, so user permissions act only on them. Applications and Customizations resources cover other kinds of objects."
+    },
+    {
+      "id": "D1-105",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "A custom role must manage every user in the org, now and in the future. Which resource setting fits BEST?",
+      "choices": [
+        "Applications resource set to all apps",
+        "Groups resource listing the Everyone group",
+        "Users resource constrained to all users",
+        "Users resource listing each user by name"
+      ],
+      "answer": "Users resource constrained to all users",
+      "explanation": "The Users resource offers an option for all users in the org, which also covers future users. Listing names would miss new hires."
+    },
+    {
+      "id": "D1-106",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "A delegated admin must manage every Salesforce app instance the company adds, now and later, but no other apps. How should the Applications resource be set?",
+      "choices": [
+        "Select the Salesforce user type in Profile Editor",
+        "Select each current Salesforce instance by name only",
+        "Select all applications in the org and trust the admin",
+        "Select the Salesforce app type rather than individual instances"
+      ],
+      "answer": "Select the Salesforce app type rather than individual instances",
+      "explanation": "The Applications resource can target an app type, which includes instances added later. Choosing named instances would miss new ones, and all apps is too broad."
+    },
+    {
+      "id": "D1-107",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "Two regional teams need the same permissions, each over its own region's users. What is the cleanest design?",
+      "choices": [
+        "One custom role, two resource sets and two assignments",
+        "Two Super Administrators, one for each regional team",
+        "Two custom roles with identical permissions, one resource set",
+        "One custom role and one resource set holding both regions"
+      ],
+      "answer": "One custom role, two resource sets and two assignments",
+      "explanation": "Reusing one role keeps permissions consistent, while separate resource sets scope each team to its own users. A shared resource set would let each team manage the other region."
+    },
+    {
+      "id": "D1-108",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "A custom role has the permission to manage group membership, and its resource set lists users from the group Interns. The delegated admin still cannot add people to Interns. What is MOST likely missing?",
+      "choices": [
+        "An Applications resource with the Interns app",
+        "A Groups resource that includes the Interns group",
+        "A second custom role with user permissions",
+        "A group rule that targets the Interns group"
+      ],
+      "answer": "A Groups resource that includes the Interns group",
+      "explanation": "Group permissions act on the groups listed in the resource set's Groups resource, while the Users resource scopes user permissions. Adding Interns as a group resource gives the admin group-level rights."
+    },
+    {
+      "id": "D1-109",
+      "objective": "1.3",
+      "topic": "Resource Sets",
+      "stem": "A Super Administrator adds a new group to an existing resource set that is used in two admin assignments. What is the effect?",
+      "choices": [
+        "The change waits until each assignment is deleted and recreated",
+        "The new group is added only to the most recently created assignment",
+        "Both assignments' admins can now act on that group as their roles allow",
+        "Only assignments created after the change include the new group"
+      ],
+      "answer": "Both assignments' admins can now act on that group as their roles allow",
+      "explanation": "A resource set is shared by every assignment that uses it, so editing it widens or narrows scope for all of them at once. Review resource set changes as carefully as role changes."
+    },
+    {
+      "id": "D1-110",
+      "type": "multi",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "An admin suspends a user who is under investigation. Which TWO statements about the suspended account are true?",
+      "choices": [
+        "The user cannot sign in to Okta or reach any assigned apps",
+        "The user's app assignments stay in place for when the account is unsuspended",
+        "The user's apps are deprovisioned and the password is deleted",
+        "The account moves to Deactivated automatically after a set period",
+        "The account must be deactivated first before it can be suspended"
+      ],
+      "answers": [
+        "The user cannot sign in to Okta or reach any assigned apps",
+        "The user's app assignments stay in place for when the account is unsuspended"
+      ],
+      "select": 2,
+      "explanation": "Suspension blocks access to Okta and apps while app assignments are unaffected, so unsuspending restores access. Removing assignments and deleting the password describes deactivation."
+    },
+    {
+      "id": "D1-111",
+      "type": "order",
+      "objective": "1.1",
+      "topic": "Custom Attributes in Profile Editor",
+      "stem": "An admin must add a custom attribute named Cost Center and enter a value for one user. Put the steps in order.",
+      "items": [
+        "Go to Directory > Profile Editor in the Admin Console",
+        "Open the profile for Okta User (default)",
+        "Click Add Attribute and choose the data type",
+        "Enter the display name and variable name, then save",
+        "Open the user in Directory > People and enter the value on the Profile tab"
+      ],
+      "explanation": "The attribute must exist in the Okta user profile schema before any user can hold a value, so Profile Editor comes first and the user's Profile tab comes last."
+    },
+    {
+      "id": "D1-112",
+      "type": "match",
+      "objective": "1.1",
+      "topic": "User Account Statuses",
+      "stem": "Match each Okta user status to the description that BEST fits it.",
+      "pairs": [
+        {
+          "item": "Staged",
+          "match": "Created, but activation has not been started"
+        },
+        {
+          "item": "Pending user action",
+          "match": "Activation started, user has not completed it"
+        },
+        {
+          "item": "Locked out",
+          "match": "Too many failed sign-in attempts"
+        },
+        {
+          "item": "Suspended",
+          "match": "Sign-in blocked by an admin, app assignments kept"
+        },
+        {
+          "item": "Deactivated",
+          "match": "App assignments removed and password deleted"
+        }
+      ],
+      "targets_extra": [
+        "Signed in successfully within the last day"
+      ],
+      "explanation": "Each status reflects where the account is in its lifecycle. Okta has no status for a recent successful sign-in; that detail is found in the System Log."
+    },
+    {
+      "id": "D1-113",
+      "type": "multi",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin is planning group rules for a new org. Which TWO statements about Okta group rules are true?",
+      "choices": [
+        "A newly saved rule is inactive until an admin activates it",
+        "Manually removing a rule-managed user adds that user to the rule's Except list",
+        "A basic condition can evaluate boolean custom attributes",
+        "A rule can add users to a group that holds an admin role",
+        "Group Membership Administrators can create and edit rules"
+      ],
+      "answers": [
+        "A newly saved rule is inactive until an admin activates it",
+        "Manually removing a rule-managed user adds that user to the rule's Except list"
+      ],
+      "select": 2,
+      "explanation": "Rules start inactive, and a manual removal is recorded as an exception so it sticks. Basic conditions support string attributes only, rules cannot fill admin groups, and only Super and Organization Administrators edit rules."
+    },
+    {
+      "id": "D1-114",
+      "type": "order",
+      "objective": "1.2",
+      "topic": "Creating and Activating Group Rules",
+      "stem": "An admin must create a rule that adds Sales department users to the Sales group. Put the steps in order.",
+      "items": [
+        "Go to Directory > Groups and open the Rules tab",
+        "Click Add Rule and enter a name for the rule",
+        "Define the IF condition on the department attribute",
+        "Choose the Sales group in the Then assign to field",
+        "Save the rule",
+        "Activate the rule"
+      ],
+      "explanation": "A rule is built and saved first, and because saved rules are inactive by default, activation is the final step that starts adding users."
+    },
+    {
+      "id": "D1-115",
+      "type": "match",
+      "objective": "1.2",
+      "topic": "Group Types and Sources",
+      "stem": "Match each kind of group in Okta to how its membership is managed.",
+      "pairs": [
+        {
+          "item": "Everyone group",
+          "match": "Built in and contains every user automatically"
+        },
+        {
+          "item": "Okta group",
+          "match": "Members added in Okta by hand or by group rules"
+        },
+        {
+          "item": "AD-sourced group",
+          "match": "Membership changes are made in Active Directory"
+        },
+        {
+          "item": "App group",
+          "match": "Membership imported from a connected app"
+        }
+      ],
+      "targets_extra": [
+        "Membership inherited from a parent group nested above it"
+      ],
+      "explanation": "Membership follows the group's source: Okta for Okta groups, the directory or app for imported groups, and the system itself for Everyone. Okta groups do not nest."
+    },
+    {
+      "id": "D1-116",
+      "type": "multi",
+      "objective": "1.3",
+      "topic": "Custom Admin Roles and Permissions",
+      "stem": "A Super Administrator is creating a custom admin role assignment. Besides the custom role, which TWO components does the assignment need?",
+      "choices": [
+        "A resource set that defines what the role can act on",
+        "A user or group that receives the assignment",
+        "A group rule that targets the admin group",
+        "An authentication policy assigned to the role",
+        "A network zone that limits where the role works"
+      ],
+      "answers": [
+        "A resource set that defines what the role can act on",
+        "A user or group that receives the assignment"
+      ],
+      "select": 2,
+      "explanation": "A custom assignment is an admin, a role and a resource set. Group rules, policies and zones are separate features and are not part of the assignment."
+    },
+    {
+      "id": "D1-117",
+      "type": "order",
+      "objective": "1.3",
+      "topic": "Assigning Roles to Users and Groups",
+      "stem": "A Super Administrator must give the whole Service Desk team the Help Desk Administrator role, scoped to the Employees group. Put the steps in order.",
+      "items": [
+        "Create the Service Desk Okta group",
+        "Go to Security > Administrators and start a new admin assignment",
+        "Select the Service Desk group as the admin",
+        "Choose Help Desk Administrator and constrain it to the Employees group",
+        "Save the assignment",
+        "Sign in as a team member and confirm the Admin Console shows only help desk tasks"
+      ],
+      "explanation": "The group must exist before it can be selected, the role and its constraint are chosen during the assignment, and verification as a member happens after saving."
+    },
+    {
+      "id": "D1-118",
+      "type": "match",
+      "objective": "1.3",
+      "topic": "Standard Administrator Roles",
+      "stem": "Match each standard Okta administrator role to the task it is BEST suited for.",
+      "pairs": [
+        {
+          "item": "Super Administrator",
+          "match": "Add and remove other administrators"
+        },
+        {
+          "item": "Report Administrator",
+          "match": "View reports and the System Log only"
+        },
+        {
+          "item": "Help Desk Administrator",
+          "match": "Reset passwords and MFA for users in scope"
+        },
+        {
+          "item": "Group Membership Administrator",
+          "match": "Add and remove users in groups in scope"
+        },
+        {
+          "item": "Application Administrator",
+          "match": "Add and configure app integrations"
+        }
+      ],
+      "targets_extra": [
+        "Build and run Okta Workflows flows only"
+      ],
+      "explanation": "Each standard role bundles a fixed set of permissions; choose the narrowest one that covers the task. Workflows building is handled in the Workflows console, not by these roles."
+    }
+  ]
+}

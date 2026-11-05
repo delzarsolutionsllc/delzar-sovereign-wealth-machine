@@ -10,7 +10,7 @@
       "stem": "An admin has added three rules to an app sign-in policy above the catch-all rule. How does Okta decide which rule governs a particular sign-in attempt?",
       "choices": [
         "It applies the most restrictive rule whose conditions match",
-        "It merges the requirements of every rule whose conditions match",
+        "It merges the requirements of every rule whose conditions match the request",
         "It applies the first rule in priority order whose conditions all match",
         "It applies the rule that was created or edited most recently"
       ],
@@ -37,12 +37,12 @@
       "topic": "Authentication Policy Rules and Conditions",
       "stem": "Contractors must never reach the payroll app, while employees should get in after MFA. Both groups are assigned the app. What should the admin configure in the payroll app's sign-in policy?",
       "choices": [
-        "A rule for the Contractors group with Access set to Denied, placed above the employee rule",
+        "A Contractors rule with Access Denied, ranked above the employee rule",
         "A change to the catch-all rule so that it excludes the Contractors group",
         "A deny rule for the payroll app inside the global session policy",
         "A blocklist network zone that lists the Contractors group members"
       ],
-      "answer": "A rule for the Contractors group with Access set to Denied, placed above the employee rule",
+      "answer": "A Contractors rule with Access Denied, ranked above the employee rule",
       "explanation": "A group-scoped rule with THEN Access is Denied, ranked above the allow rule, blocks contractors for that app only. The catch-all rule's conditions cannot be edited, and the global session policy is not scoped to individual apps."
     },
     {
@@ -54,7 +54,7 @@
         "The next matching rule in priority order, which may be the catch-all rule",
         "Rule 1, because the user's group membership matches",
         "No rule, so Okta denies access to the app",
-        "Only the global session policy, since no app rule matched"
+        "Only the global session policy, because no app sign-in rule matched the request"
       ],
       "answer": "The next matching rule in priority order, which may be the catch-all rule",
       "explanation": "All IF conditions of a rule must match. Because the network condition fails, Okta moves on to the next rule and ultimately the catch-all rule; it does not deny by default."
@@ -66,11 +66,11 @@
       "stem": "An app sign-in rule should apply to everyone assigned the app except the two members of a break-glass group. What is the BEST way to configure the rule?",
       "choices": [
         "Create a second policy for the break-glass group with a lower priority",
-        "Add the break-glass group to the excluded groups in the group membership condition",
+        "Exclude the break-glass group in the group membership condition",
         "Add a custom expression that checks whether the user is active",
         "Put the break-glass users' home IP addresses in an excluded network zone"
       ],
-      "answer": "Add the break-glass group to the excluded groups in the group membership condition",
+      "answer": "Exclude the break-glass group in the group membership condition",
       "explanation": "The group membership condition supports both include and exclude lists, so excluding the break-glass group keeps those accounts out of the rule. An app has only one sign-in policy, and IP-based exclusions are unreliable for identifying people."
     },
     {
@@ -79,7 +79,7 @@
       "topic": "Authentication Policy Rules and Conditions",
       "stem": "An org created a Contractor user type and wants a rule that targets those accounts without maintaining a separate group. Which IF condition should the admin use?",
       "choices": [
-        "Device platform is",
+        "Device assurance policy is",
         "User's IP is",
         "User's user type is",
         "Risk is"
@@ -123,7 +123,7 @@
       "choices": [
         "Okta Verify push and SMS codes",
         "Email magic links and security questions",
-        "Google Authenticator and voice call codes",
+        "Google Authenticator codes and voice call codes",
         "Okta FastPass and Passkey (FIDO2 WebAuthn)"
       ],
       "answer": "Okta FastPass and Passkey (FIDO2 WebAuthn)",
@@ -135,12 +135,12 @@
       "topic": "Authentication Requirements and Constraints",
       "stem": "HR wants users to verify again every time they open the HR app, even when they already have an active Okta session. Which change BEST meets this?",
       "choices": [
-        "Shorten the maximum session lifetime in the global session policy",
-        "In the HR app's rule, set the authentication prompt to every time the user signs in to the resource",
+        "Shorten the maximum session lifetime in the global session policy for all users",
+        "Set the HR app rule to prompt every time the user signs in to the app",
         "Turn on the option to stay signed in for the HR app rule",
         "Add a Registered device state condition to the HR app rule"
       ],
-      "answer": "In the HR app's rule, set the authentication prompt to every time the user signs in to the resource",
+      "answer": "Set the HR app rule to prompt every time the user signs in to the app",
       "explanation": "The re-authentication frequency in the app sign-in rule controls how often that one app prompts. Shortening the global session affects every app, and stay signed in reduces prompts rather than adding them."
     },
     {
@@ -151,10 +151,10 @@
       "choices": [
         "Deactivate the phone authenticator under Security > Authenticators",
         "Remove phone from the password policy's recovery options",
-        "In that app's rule, choose Disallow specific authentication methods and select the phone methods",
+        "Use Disallow specific authentication methods in that app's rule",
         "Create a dynamic zone that excludes mobile carrier networks"
       ],
-      "answer": "In that app's rule, choose Disallow specific authentication methods and select the phone methods",
+      "answer": "Use Disallow specific authentication methods in that app's rule",
       "explanation": "The Authentication methods setting in an app sign-in rule can disallow specific methods for just that app. Deactivating the authenticator would affect every user and app, and recovery settings do not control app access."
     },
     {
@@ -179,10 +179,10 @@
       "choices": [
         "Okta grants access because a global session already exists",
         "Okta denies access because the two policies conflict",
-        "Okta ends the session and restarts sign-in with two factors",
-        "Okta prompts the user for another factor before granting access to the finance app"
+        "Okta ends the global session and restarts sign-in with two factors",
+        "Okta prompts for another factor before opening the finance app"
       ],
-      "answer": "Okta prompts the user for another factor before granting access to the finance app",
+      "answer": "Okta prompts for another factor before opening the finance app",
       "explanation": "The app sign-in policy is evaluated when the app is accessed, and Okta steps the user up to meet its requirement. An existing global session does not satisfy a stricter app rule on its own."
     },
     {
@@ -191,7 +191,7 @@
       "topic": "Authentication Requirements and Constraints",
       "stem": "Auditors require that users of a clinical app prove they are physically present with a PIN or biometric when they use Okta Verify. Which constraint settings should the admin select?",
       "choices": [
-        "Hardware protection only",
+        "Hardware protection alone, without requiring user interaction or verification",
         "Device state is Registered",
         "Any 1 factor type with no constraints",
         "Require user interaction, then Require PIN or biometric user verification"
@@ -233,12 +233,12 @@
       "topic": "Assigning Policies to Apps",
       "stem": "An admin created a policy named High Assurance and wants a dozen finance apps to use exactly the same rules. What is the BEST approach?",
       "choices": [
-        "Add all the finance apps to the High Assurance policy so they share it",
+        "Add every finance app to the High Assurance policy",
         "Clone the policy once for each app and keep the copies in sync",
         "Add the finance apps to a rule in the global session policy",
         "Assign the policy to the group that is assigned the apps"
       ],
-      "answer": "Add all the finance apps to the High Assurance policy so they share it",
+      "answer": "Add every finance app to the High Assurance policy",
       "explanation": "One app sign-in policy can be shared by any number of apps, so changes are made once. Policies are applied to apps, not to groups, and the global session policy cannot target apps."
     },
     {
@@ -291,10 +291,10 @@
       "choices": [
         "The app sign-in policy is evaluated first and can skip the global session policy",
         "Only the stricter of the two policies is applied to each sign-in",
-        "The global session policy governs creating the Okta session; the app sign-in policy is checked whenever a user opens that app",
-        "The global session policy covers SAML apps and app sign-in policies cover OIDC apps"
+        "The global session policy sets up the session; each app's policy is checked when it is opened",
+        "The global session policy only covers SAML apps, while app sign-in policies only cover OIDC apps"
       ],
-      "answer": "The global session policy governs creating the Okta session; the app sign-in policy is checked whenever a user opens that app",
+      "answer": "The global session policy sets up the session; each app's policy is checked when it is opened",
       "explanation": "Users must satisfy the global session policy to establish a session and then the app sign-in policy of each app they access. Both apply; neither replaces the other, and protocol does not decide which one is used."
     },
     {
@@ -345,12 +345,12 @@
       "topic": "IP Zones and Trusted Proxies",
       "stem": "All employee traffic passes through a cloud web proxy, so Okta sees the proxy's addresses instead of the real client IPs and zone rules stop matching. What should the admin configure?",
       "choices": [
-        "Add the proxy's addresses as gateway IPs in the Corporate zone",
+        "Add the proxy's addresses as gateway IPs in the existing Corporate zone",
         "Create a dynamic zone with the IP type set to Any proxy",
         "Add the proxy's addresses to a blocklist zone",
-        "Add the proxy's addresses as trusted proxy IPs so Okta reads the client IP from the forwarded chain"
+        "Define the proxy's addresses as trusted proxy IPs in an IP zone"
       ],
-      "answer": "Add the proxy's addresses as trusted proxy IPs so Okta reads the client IP from the forwarded chain",
+      "answer": "Define the proxy's addresses as trusted proxy IPs in an IP zone",
       "explanation": "When an address is defined as a proxy, Okta walks the IP chain past it to find the real client IP. Listing the proxy as a gateway would make every proxied request look corporate, including those from home."
     },
     {
@@ -362,7 +362,7 @@
         "Single IP addresses, CIDR ranges and IP address ranges",
         "Host names and DNS domain names",
         "Country and region codes",
-        "Autonomous system numbers and ISP names"
+        "Autonomous system numbers and internet service provider names"
       ],
       "answer": "Single IP addresses, CIDR ranges and IP address ranges",
       "explanation": "IP zones take individual addresses, CIDR blocks and start-end ranges. Locations and ASNs belong to dynamic zones, and host names are not accepted."
@@ -388,7 +388,7 @@
       "stem": "A new branch office opens and its egress IP is added to the existing Corporate IP zone. Several rules already reference that zone. What else must the admin do for those rules to recognise the branch?",
       "choices": [
         "Nothing; rules that reference the zone use its updated address list",
-        "Recreate each rule that references the Corporate zone",
+        "Recreate each policy rule that references the Corporate zone so it reloads",
         "Deactivate and reactivate each affected policy",
         "Wait for the next directory import to sync the zone"
       ],
@@ -416,11 +416,11 @@
       "stem": "Security wants all requests from Tor exit nodes kept away from every page of the Okta org. What should the admin configure?",
       "choices": [
         "A deny rule for Tor traffic in the Okta Dashboard app sign-in policy",
-        "A dynamic zone with IP type Tor anonymizer proxy, set to block access from IPs matching it",
+        "A blocklisted dynamic zone with IP type Tor anonymizer proxy",
         "Okta ThreatInsight set to log mode",
         "A trusted proxy entry for the known Tor exit nodes"
       ],
-      "answer": "A dynamic zone with IP type Tor anonymizer proxy, set to block access from IPs matching it",
+      "answer": "A blocklisted dynamic zone with IP type Tor anonymizer proxy",
       "explanation": "A blocklisted dynamic zone with the Tor anonymizer IP type stops that traffic for the whole org. A Dashboard rule protects only one app, and log mode records threats without blocking them."
     },
     {
@@ -443,12 +443,12 @@
       "topic": "Dynamic Zones and Blocklists",
       "stem": "Attacks keep arriving from many addresses that all belong to one hosting provider's network. What is the MOST efficient way to block the whole provider?",
       "choices": [
-        "Add the provider's ASN to a dynamic zone and set the zone to block access",
+        "Add the provider's ASN to a blocklisted dynamic zone",
         "List each address as a trusted proxy in an IP zone",
         "Add a custom expression that checks for the provider's name",
         "Add a rule that denies access when Risk is High"
       ],
-      "answer": "Add the provider's ASN to a dynamic zone and set the zone to block access",
+      "answer": "Add the provider's ASN to a blocklisted dynamic zone",
       "explanation": "An ASN represents an entire network, so one entry covers every address the provider uses. Proxies are not blocks, and risk scoring may not flag every request."
     },
     {
@@ -459,7 +459,7 @@
       "choices": [
         "Only requests that come from New Zealand through an anonymizing proxy",
         "Every request that matches either condition",
-        "Nothing, because a zone cannot combine location and IP type",
+        "Nothing, because one dynamic zone cannot combine a location with an IP type",
         "Only Tor requests, from any country"
       ],
       "answer": "Only requests that come from New Zealand through an anonymizing proxy",
@@ -473,10 +473,10 @@
       "choices": [
         "Dynamic zones can only be used in password policy rules",
         "Okta ignores network zones in rules that deny access",
-        "IP geolocation is not guaranteed and users can route traffic through VPNs or proxies",
-        "Dynamic zones stop matching after their locations are cached"
+        "IP geolocation is approximate and traffic can be routed through VPNs",
+        "Dynamic zones stop matching once Okta has cached the locations they contain"
       ],
-      "answer": "IP geolocation is not guaranteed and users can route traffic through VPNs or proxies",
+      "answer": "IP geolocation is approximate and traffic can be routed through VPNs",
       "explanation": "IPs are dynamic and geolocation is approximate, so location should be one signal among several, combined with strong authentication. The other statements are not how network zones behave."
     },
     {
@@ -485,12 +485,12 @@
       "topic": "Dynamic Zones and Blocklists",
       "stem": "A regional app must only be reachable from the United States and Canada. Users elsewhere should be refused. Which configuration BEST meets this?",
       "choices": [
-        "A dynamic zone with both countries, and a deny rule for that app when User's IP is not in the zone",
+        "A dynamic zone with both countries plus a deny rule for IPs outside it",
         "An IP zone that lists both countries as gateway IPs",
-        "A blocklist zone that lists every other country in the world",
+        "A blocklist dynamic zone that lists every country except the two allowed",
         "A Device platform condition limited to North American devices"
       ],
-      "answer": "A dynamic zone with both countries, and a deny rule for that app when User's IP is not in the zone",
+      "answer": "A dynamic zone with both countries plus a deny rule for IPs outside it",
       "explanation": "A dynamic zone captures countries, and a deny rule for requests outside it limits only that app. A blocklist would stop those countries from the entire org, and gateway lists accept addresses, not countries."
     },
     {
@@ -513,12 +513,12 @@
       "topic": "Device and Risk Signals",
       "stem": "Security requires disk encryption and a minimum operating system version on laptops that open the finance app. What should the admin do?",
       "choices": [
-        "Create a device assurance policy and select it in the app rule's device assurance condition",
-        "Set Device platform to the newest operating system releases",
+        "Create a device assurance policy and require it in the app rule",
+        "Set the Device platform condition to the newest operating system releases",
         "Store the operating system version in a custom user attribute",
         "Create a dynamic zone that contains company laptops"
       ],
-      "answer": "Create a device assurance policy and select it in the app rule's device assurance condition",
+      "answer": "Create a device assurance policy and require it in the app rule",
       "explanation": "Device assurance policies check posture such as OS version and disk encryption, and an app sign-in rule can require them for registered devices. Platform only checks the OS family, and zones describe networks rather than devices."
     },
     {
@@ -530,7 +530,7 @@
         "Device state is Registered and Risk is Low",
         "Device state is Registered and Device management is Managed",
         "Device platform is iOS and User's IP is Corporate",
-        "Possession factor constraints are Hardware protection"
+        "Possession factor constraints are set to Hardware protection"
       ],
       "answer": "Device state is Registered and Device management is Managed",
       "explanation": "The Device management condition appears once Registered is chosen and limits the rule to managed devices. Risk, platform and hardware key storage do not prove the device is managed."
@@ -555,12 +555,12 @@
       "topic": "Device and Risk Signals",
       "stem": "A credential-stuffing campaign is hitting the org from thousands of rotating IP addresses. The admin wants Okta to block requests from IPs it identifies as malicious before authentication. What should the admin configure?",
       "choices": [
-        "Set Okta ThreatInsight to log and enforce security based on threat level",
+        "Set Okta ThreatInsight to log and enforce mode",
         "Set Okta ThreatInsight to log mode only",
         "Create an IP zone listing the attacking IPs as gateways",
         "Raise the password lockout threshold in the password policy"
       ],
-      "answer": "Set Okta ThreatInsight to log and enforce security based on threat level",
+      "answer": "Set Okta ThreatInsight to log and enforce mode",
       "explanation": "ThreatInsight in enforce mode uses Okta's threat intelligence to block suspicious IPs before they reach authentication. Log mode only records the activity, and manual zones cannot keep up with rotating addresses."
     },
     {
@@ -571,7 +571,7 @@
       "choices": [
         "Add the service's IPs to a blocklist zone",
         "Turn off Okta ThreatInsight for the org",
-        "Add the service's IPs to the global session policy",
+        "Add the service's IPs to an allow rule in the global session policy",
         "Add the service's network zone to the ThreatInsight exempt zones"
       ],
       "answer": "Add the service's network zone to the ThreatInsight exempt zones",
@@ -597,12 +597,12 @@
       "topic": "Device and Risk Signals",
       "stem": "An admin wants an app rule to require MFA when Okta notices a user signing in from a country they have not used before. Which approach fits Okta Identity Engine?",
       "choices": [
-        "Define a new-country behavior in Behavior Detection and reference it in the rule's custom expression",
-        "Create a dynamic zone for every country the user has visited",
+        "Reference a new-country behavior from Behavior Detection in a custom expression",
+        "Create a dynamic zone listing every country each user has signed in from before",
         "Set Device state to Registered for all users",
         "Add the country to the ThreatInsight exempt zones"
       ],
-      "answer": "Define a new-country behavior in Behavior Detection and reference it in the rule's custom expression",
+      "answer": "Reference a new-country behavior from Behavior Detection in a custom expression",
       "explanation": "Behavior Detection tracks signals such as a new country, and policy rules can reference those behaviors through a custom expression. Per-user country zones are unworkable, and exempt zones reduce protection."
     },
     {
@@ -614,9 +614,9 @@
         "Security > Authentication Policies, then the Password tab",
         "Security > General, under Password settings",
         "Directory > People, then the password menu on a user",
-        "Security > Authenticators, then Actions > Edit on the Password row"
+        "Security > Authenticators, Password row, Actions > Edit"
       ],
-      "answer": "Security > Authenticators, then Actions > Edit on the Password row",
+      "answer": "Security > Authenticators, Password row, Actions > Edit",
       "explanation": "In Identity Engine, password policies belong to the password authenticator and are edited from its row under Security > Authenticators. Authentication policies control app access, not password rules."
     },
     {
@@ -626,11 +626,11 @@
       "stem": "A user belongs to two groups, and each group is assigned a different password policy. Which policy applies to the user?",
       "choices": [
         "The policy with the strongest complexity settings",
-        "The highest-priority policy assigned to one of the user's groups",
+        "The highest-priority policy assigned to any of the user's groups",
         "Both policies, with their settings combined",
-        "The Default Policy, because it applies to everyone"
+        "The Default Policy, because it always applies to everyone in the org"
       ],
-      "answer": "The highest-priority policy assigned to one of the user's groups",
+      "answer": "The highest-priority policy assigned to any of the user's groups",
       "explanation": "Password policies are evaluated in priority order, and the first one assigned to any of the user's groups wins. Okta does not merge policies or pick the strictest."
     },
     {
@@ -640,11 +640,11 @@
       "stem": "An admin built a stricter password policy for IT staff, but IT users still see the Default Policy requirements when they change passwords. What is the MOST likely cause?",
       "choices": [
         "The Default Policy always overrides custom password policies",
-        "The new policy is not assigned to a group that the IT users belong to",
+        "The policy isn't assigned to a group the IT users belong to",
         "Password policies only apply to users created after the policy",
         "The global session policy must also reference the new policy"
       ],
-      "answer": "The new policy is not assigned to a group that the IT users belong to",
+      "answer": "The policy isn't assigned to a group the IT users belong to",
       "explanation": "A password policy only applies to members of the groups it is assigned to; otherwise users fall through to the Default Policy. The Default Policy sits at the lowest priority, so it never overrides a matching custom policy."
     },
     {
@@ -655,7 +655,7 @@
       "choices": [
         "It can be deleted once another password policy exists",
         "It applies to everyone and always stays at the lowest priority",
-        "It applies only to users sourced from Active Directory",
+        "It applies only to users who are sourced from Active Directory or LDAP",
         "It is always evaluated before any custom policy"
       ],
       "answer": "It applies to everyone and always stays at the lowest priority",
@@ -667,12 +667,12 @@
       "topic": "Password Policy Priority and Assignment",
       "stem": "Employees and contractors share the same complexity rules, but only employees may use self-service password reset. What is the BEST configuration?",
       "choices": [
-        "Create a password policy for the contractors group, ranked above the employee policy, with password reset not allowed",
+        "A separate contractors password policy, ranked higher, with reset not allowed",
         "Add a contractors exclusion to the global session policy",
-        "Create an app sign-in policy for the Okta Dashboard that blocks contractors",
+        "Create an app sign-in policy for the Okta Dashboard that blocks the contractors",
         "Change the contractors' user type to remove password reset"
       ],
-      "answer": "Create a password policy for the contractors group, ranked above the employee policy, with password reset not allowed",
+      "answer": "A separate contractors password policy, ranked higher, with reset not allowed",
       "explanation": "Password policies are assigned to groups and ranked, so a separate contractor policy can carry its own self-service settings. Session and app sign-in policies do not decide who may reset a password."
     },
     {
@@ -682,7 +682,7 @@
       "stem": "Users are sourced from Active Directory and sign in with delegated authentication. Which system enforces the complexity rules for their passwords?",
       "choices": [
         "The Okta Default Policy password policy",
-        "The app sign-in policy of the Okta Dashboard",
+        "The app sign-in policy assigned to the Okta Dashboard",
         "The authenticator enrollment policy",
         "Active Directory, through its own password policy"
       ],
@@ -695,12 +695,12 @@
       "topic": "Password Complexity Settings",
       "stem": "A security standard requires passwords of at least 12 characters and forbids well-known weak passwords such as Password123. Which password policy settings meet this?",
       "choices": [
-        "Minimum length of 12 characters and Restrict use of common passwords",
+        "Minimum length 12 and Restrict use of common passwords",
         "Password history of 12 passwords and a minimum age of 1 day",
         "Lock out after 12 unsuccessful attempts",
         "Password expires after 12 days with a reminder"
       ],
-      "answer": "Minimum length of 12 characters and Restrict use of common passwords",
+      "answer": "Minimum length 12 and Restrict use of common passwords",
       "explanation": "Minimum length and the common-password check are complexity settings that directly address the standard. History, age and lockout settings control reuse, rotation and guessing, not password strength."
     },
     {
@@ -724,11 +724,11 @@
       "stem": "An admin raises the minimum password length from 8 to 14 characters. What happens to users whose current passwords are only 10 characters long?",
       "choices": [
         "Their status changes to Password expired immediately",
-        "Their current passwords keep working, and the new rule applies at their next password change",
-        "Their accounts are locked out until an admin unlocks them",
+        "They keep working; the new rule applies at the next password change",
+        "Their accounts are immediately locked out until an admin unlocks them",
         "Their passwords are reset and they receive a reset email"
       ],
-      "answer": "Their current passwords keep working, and the new rule applies at their next password change",
+      "answer": "They keep working; the new rule applies at the next password change",
       "explanation": "Complexity rules are checked when a password is set, so existing passwords are unaffected until they are changed. To force an immediate change, the admin would expire the passwords separately."
     },
     {
@@ -737,12 +737,12 @@
       "topic": "Password Complexity Settings",
       "stem": "Which combination does Okta recommend as a baseline for password policies?",
       "choices": [
-        "No lockout, history of one password and at least six characters",
-        "Lockout, history, a minimum age, at least eight characters and no common passwords",
+        "No lockout, a history of one password, no minimum age and at least six characters",
+        "Lockout, history, minimum age, eight or more characters, no common passwords",
         "Expiry every 7 days with no history or minimum age",
         "At least four characters with common passwords allowed"
       ],
-      "answer": "Lockout, history, a minimum age, at least eight characters and no common passwords",
+      "answer": "Lockout, history, minimum age, eight or more characters, no common passwords",
       "explanation": "Okta's guidance is to combine lockout, history and minimum age with a minimum length of eight and the common-password check. The other options leave obvious gaps such as short passwords or no protection against guessing."
     },
     {
@@ -765,7 +765,7 @@
       "topic": "Password Complexity Settings",
       "stem": "Compliance asks that every password include an uppercase letter, a lowercase letter, a number and a symbol. Where does the admin configure this?",
       "choices": [
-        "In the authenticator enrollment policy for passwords",
+        "In the authenticator enrollment policy that covers the password authenticator",
         "In a rule of the global session policy",
         "In the complexity requirements of the applicable password policy",
         "In the password attribute in Profile Editor"
@@ -807,7 +807,7 @@
       "topic": "Password Age and History",
       "stem": "Policy requires passwords to expire every 90 days, with users warned two weeks ahead. Which settings should the admin configure?",
       "choices": [
-        "Minimum password age of 90 days and history of 14 passwords",
+        "Minimum password age of 90 days and enforce history for the last 14 passwords",
         "Password expires after 90 days and prompt the user 14 days before expiry",
         "Global session policy maximum session lifetime of 90 days",
         "Lock out after 14 attempts and unlock after 90 minutes"
@@ -823,7 +823,7 @@
       "choices": [
         "Locked out; an admin must unlock the account first",
         "Suspended; the user cannot sign in until reactivated",
-        "Deactivated; the account must be reactivated by an admin",
+        "Deactivated; the account must be reactivated by an admin before sign-in",
         "Password expired; the user must choose a new password at next sign-in"
       ],
       "answer": "Password expired; the user must choose a new password at next sign-in",
@@ -835,12 +835,12 @@
       "topic": "Password Age and History",
       "stem": "Following current NIST guidance, a company drops forced periodic password changes but still wants to prevent weak and reused passwords. What should the admin do?",
       "choices": [
-        "Turn off password expiry while keeping history and the common-password check",
+        "Turn off expiry but keep history and the common-password check",
         "Turn off password history and keep expiry every 30 days",
-        "Set the minimum length to four characters and keep expiry",
+        "Set the minimum length to four characters and keep expiry every 90 days",
         "Remove the password policy and rely on the Default Policy"
       ],
-      "answer": "Turn off password expiry while keeping history and the common-password check",
+      "answer": "Turn off expiry but keep history and the common-password check",
       "explanation": "Modern guidance favours long, non-common passwords and history without arbitrary expiry. The Default Policy cannot be removed and is not a way to turn off settings."
     },
     {
@@ -850,11 +850,11 @@
       "stem": "A password policy prompts users several days before their password expires. What do users see during that window?",
       "choices": [
         "An immediate lockout until they reset the password",
-        "An email asking them to call the help desk",
+        "An email asking them to call the help desk before the password expires",
         "A forced change with no option to continue",
-        "A sign-in reminder that the password will expire soon, with the chance to change it"
+        "A reminder that it expires soon, with an option to change it now"
       ],
-      "answer": "A sign-in reminder that the password will expire soon, with the chance to change it",
+      "answer": "A reminder that it expires soon, with an option to change it now",
       "explanation": "The advance prompt warns users while their password is still valid and lets them change it early. A forced change only happens once the password has actually expired."
     },
     {
@@ -865,10 +865,10 @@
       "choices": [
         "Minimum password age of 5 hours and expiry after 30 days",
         "Password history of 5 passwords and a reminder 30 days ahead",
-        "Lock out after 5 unsuccessful attempts and automatically unlock after 30 minutes",
-        "Session idle timeout of 30 minutes in the global session policy"
+        "Lock out after 5 failed attempts; unlock automatically after 30 minutes",
+        "Set a session idle timeout of 30 minutes in the global session policy rule"
       ],
-      "answer": "Lock out after 5 unsuccessful attempts and automatically unlock after 30 minutes",
+      "answer": "Lock out after 5 failed attempts; unlock automatically after 30 minutes",
       "explanation": "Both the threshold and the automatic unlock time are in the password policy's lockout section. Session timeouts and password age settings do not count failed attempts."
     },
     {
@@ -877,12 +877,12 @@
       "topic": "Lockout and Account Unlock",
       "stem": "Users who lock themselves out should be able to recover without calling the help desk by using a link on the Sign-In Widget. What should the admin enable?",
       "choices": [
-        "Unlock account in the password policy rule's self-service options",
+        "Unlock account in the password policy rule",
         "Okta Verify push in the authenticator enrollment policy only",
         "An app sign-in rule that allows locked-out users",
         "A shorter session lifetime in the global session policy"
       ],
-      "answer": "Unlock account in the password policy rule's self-service options",
+      "answer": "Unlock account in the password policy rule",
       "explanation": "The password policy rule's self-service options include Unlock account, which adds the Unlock account? link. Enrolling an authenticator alone does not turn the feature on."
     },
     {
@@ -919,12 +919,12 @@
       "topic": "Lockout and Account Unlock",
       "stem": "LDAP-sourced users are allowed to unlock their own accounts through self-service. What happens when one of them uses it?",
       "choices": [
-        "The account is unlocked in both Okta and the LDAP directory",
-        "The account is unlocked in Okta but stays locked in the on-premises LDAP directory",
+        "The account is unlocked in both Okta and the on-premises LDAP directory",
+        "It is unlocked in Okta but stays locked in the LDAP directory",
         "The account stays locked until the next LDAP import",
         "The unlock fails because LDAP users cannot use self-service"
       ],
-      "answer": "The account is unlocked in Okta but stays locked in the on-premises LDAP directory",
+      "answer": "It is unlocked in Okta but stays locked in the LDAP directory",
       "explanation": "Self-service unlock only clears the Okta lockout for LDAP-sourced users; the lock in the on-premises directory remains. Admins must account for this when the directory enforces its own lockout."
     },
     {
@@ -975,12 +975,12 @@
       "topic": "Self-Service Recovery Configuration",
       "stem": "An admin selects Phone as a recovery option, but many users never see it when they click Forgot password. Phone is optional in the authenticator enrollment policy. What is the MOST likely cause?",
       "choices": [
-        "Phone recovery only works for users in the Default Policy",
-        "Those users never enrolled a phone because enrollment is optional",
+        "Phone recovery only works for users covered by the Default Policy",
+        "Those users never enrolled a phone, since enrollment is optional",
         "The global session policy blocks phone during recovery",
         "Phone recovery requires a dynamic network zone"
       ],
-      "answer": "Those users never enrolled a phone because enrollment is optional",
+      "answer": "Those users never enrolled a phone, since enrollment is optional",
       "explanation": "Users can only recover with an authenticator they have enrolled, so optional enrollment leaves many without a phone. Okta recommends requiring the recovery authenticators in the enrollment policy."
     },
     {
@@ -990,7 +990,7 @@
       "stem": "An admin wants Okta Verify to be offered as a way to start password recovery, but the option cannot be used. Which prerequisite is MOST likely missing?",
       "choices": [
         "Okta FastPass is not enabled for macOS devices",
-        "The password policy lacks a minimum password age",
+        "The password policy has no minimum password age configured yet",
         "Okta Verify is not set as a gateway in a network zone",
         "Push is not enabled in the Okta Verify authenticator settings"
       ],
@@ -1005,10 +1005,10 @@
       "choices": [
         "Password reset works, but only through the help desk",
         "Okta automatically allows password changes for the rule",
-        "Users can reset their password but cannot sign in afterward",
-        "Password reset cannot be enabled until the rule allows password changes"
+        "Users can reset their password but cannot sign in to apps afterward",
+        "Reset can't be enabled until the rule allows password changes"
       ],
-      "answer": "Password reset cannot be enabled until the rule allows password changes",
+      "answer": "Reset can't be enabled until the rule allows password changes",
       "explanation": "Okta only permits self-service reset when the policy also allows password changes. The admin must allow changes first, then enable reset."
     },
     {
@@ -1019,7 +1019,7 @@
       "choices": [
         "Delete every user's enrolled phone number",
         "Remove phone from the password policy's recovery options",
-        "Move the password policy below the Default Policy",
+        "Move the password policy so it sits below the Default Policy",
         "Turn off Okta ThreatInsight for the org"
       ],
       "answer": "Remove phone from the password policy's recovery options",
@@ -1032,11 +1032,11 @@
       "stem": "Email is set to be used for recovery only, phone is enabled for authentication and recovery, and no other authenticators exist. Recovery starts with email or phone, and additional verification is Any enrolled authenticator used for MFA/SSO. Users who start with phone cannot finish. Why?",
       "choices": [
         "Phone cannot start recovery when email is also enabled",
-        "Additional verification only accepts security questions",
-        "Email is recovery-only, so nothing else is available for the additional verification step",
+        "Additional verification only accepts security questions in Identity Engine",
+        "Email is recovery-only, so no authenticator remains for the second check",
         "Phone must be set for recovery only to start recovery"
       ],
-      "answer": "Email is recovery-only, so nothing else is available for the additional verification step",
+      "answer": "Email is recovery-only, so no authenticator remains for the second check",
       "explanation": "After phone starts recovery, Okta needs a different authenticator used for MFA/SSO, and recovery-only email cannot fill that role. Requiring more authentication authenticators, or starting only with email, avoids the dead end."
     },
     {
@@ -1046,11 +1046,11 @@
       "stem": "The security team wants users to prove possession with an authenticator meeting a stronger standard before they can reset a password or unlock their account. Which approach does Okta Identity Engine provide?",
       "choices": [
         "Add a rule to the Okta Dashboard app sign-in policy",
-        "Set recovery access control to Authentication policy and add a rule to the Okta account management policy",
+        "Hand recovery access control to the Okta account management policy",
         "Enable a stricter minimum password length",
-        "Set Additional verification to Not required in every rule"
+        "Set Additional verification to Not required in every password policy rule"
       ],
-      "answer": "Set recovery access control to Authentication policy and add a rule to the Okta account management policy",
+      "answer": "Hand recovery access control to the Okta account management policy",
       "explanation": "The Okta account management policy can govern recovery and unlock when the password policy rule hands access control to it. The Dashboard policy only controls opening the dashboard."
     },
     {
@@ -1060,7 +1060,7 @@
       "stem": "Where does an end user begin self-service password reset in Okta Identity Engine?",
       "choices": [
         "The Okta Help Center support case form",
-        "The Applications tab of their user profile",
+        "The Applications tab of their profile in the End-User Dashboard",
         "The Forgot password? link on the Okta Sign-In Widget",
         "The Okta status page at status.okta.com"
       ],
@@ -1075,10 +1075,10 @@
       "choices": [
         "Clear the user's sessions",
         "Reset the user's authenticators",
-        "Use Reset password on the user's profile to send a reset link",
-        "Suspend and then unsuspend the user"
+        "Reset password on the user's profile to send a reset link",
+        "Suspend the user and then unsuspend them to refresh the account"
       ],
-      "answer": "Use Reset password on the user's profile to send a reset link",
+      "answer": "Reset password on the user's profile to send a reset link",
       "explanation": "An admin-initiated reset sends the user a link to set a new password without needing a recovery authenticator. Clearing sessions or resetting authenticators does not give the user a new password."
     },
     {
@@ -1129,7 +1129,7 @@
       "topic": "Admin Resets and Directory Passwords",
       "stem": "An Active Directory-sourced user with delegated authentication completes self-service password reset in Okta. What happens to their password?",
       "choices": [
-        "The new password is stored only in Okta and AD keeps the old one",
+        "The new password is stored only in Okta, and AD keeps the old password",
         "The reset fails because AD users cannot reset in Okta",
         "Okta sends the new password to Active Directory through the AD agent",
         "Okta disables delegated authentication for that user"

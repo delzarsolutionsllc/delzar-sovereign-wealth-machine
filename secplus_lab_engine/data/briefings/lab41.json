@@ -1,0 +1,37 @@
+{
+  "lab": 41,
+  "ticket": "REQ-41207",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Hannah Lindqvist, Service Desk Lead",
+  "title": "Check our Okta password policies and clear the backlog of 'I cannot sign in' tickets",
+  "situation": "Larkspur Example Co moved its staff to Okta Identity Engine last quarter. Since then the service desk gets a steady flow of password complaints: people say Okta rejects good passwords, some cannot reset their own password, and 16 'user cannot sign in' tickets are waiting. The company has four password policies (privileged admins, a Finance draft, the workforce policy and the Default Policy) and nobody is sure which one applies to whom. You have the policy settings, 14 user records, 11 password change attempts and 9 self-service recovery attempts from the System Log, and the ticket queue.",
+  "your_task": [
+    "Work out which password policy applies to each user: policies are checked by priority, and the first active policy assigned to one of the user's groups wins.",
+    "For each password change attempt, say whether Okta accepts it or which rule rejects it: too short, a missing character class, part of the username, a common password, a recently used password, or a change too soon after the last one.",
+    "For each self-service reset or unlock, say whether it can go ahead: the method must be allowed by the policy and the user must have enrolled that authenticator.",
+    "For each ticket, find the cause from the user's status, failed attempts, password age and enrolled authenticators, and pick the one admin action that fixes it, or none.",
+    "Escalate anything with a status you do not recognise instead of guessing."
+  ],
+  "why_it_matters": "A wrong policy order quietly gives administrators the weaker workforce rules. Unlocking or reactivating the wrong account can let an attacker or a former employee back in, and a phished account that is only unsuspended stays in the attacker's hands. Getting the fix right first time also cuts repeat calls to the service desk.",
+  "done_when": [
+    "Every user has its applied policy, with the reason when a policy was skipped.",
+    "All 11 password changes are marked ACCEPTED or REJECTED with the rule that fired first.",
+    "All 9 recovery attempts are marked RECOVERY_ALLOWED or RECOVERY_BLOCKED with the reason.",
+    "All 16 tickets have a cause and an admin fix, and the compromised accounts are handled before any unlock or unsuspend."
+  ],
+  "glossary": {
+    "Okta Identity Engine (OIE)": "The current Okta platform, where password rules live in password policies under the Password authenticator.",
+    "Password policy": "A set of password rules (complexity, history, age, lockout and recovery) assigned to groups and ordered by priority.",
+    "Password history": "How many recent passwords a user may not reuse.",
+    "Minimum password age": "How long a user must keep a new password before changing it again.",
+    "Self-service password reset (SSPR)": "Users reset a forgotten password themselves after proving who they are with an allowed authenticator.",
+    "Self-service unlock": "Users unlock their own locked-out account with an allowed recovery authenticator.",
+    "Okta Verify": "Okta's authenticator app, which can approve sign-ins and recovery with a push notification.",
+    "Short Message Service (SMS)": "Text messages to a phone, one of the phone authenticator's methods along with a voice call.",
+    "Expire password": "Admin action that makes the user choose a new password at the next sign-in.",
+    "Clear user sessions": "Admin action that signs the user out of their current Okta sessions."
+  },
+  "job_roles": ["Okta Administrator", "IAM Analyst", "Identity Support Engineer", "Service Desk Analyst (Tier 2)"],
+  "talking_point": "Mapped 14 users to 4 Okta password policies (including one inactive draft that was silently skipped), checked 11 password changes (3 accepted, 8 rejected for length, character classes, username, common password, history, minimum age or an unknown user) and 9 self-service recovery attempts (3 allowed, 6 blocked), and triaged 16 'cannot sign in' tickets: 10 needed an admin action, 5 needed none (self-service unlock, auto-unlock, forgot-password reset, a password past its maximum age and an offboarded leaver) and 1 unknown status was escalated."
+}
