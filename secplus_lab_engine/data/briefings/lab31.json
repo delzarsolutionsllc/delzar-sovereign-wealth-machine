@@ -1,7 +1,7 @@
 {
   "lab": 31,
-  "ticket": "SEC-31014",
-  "type": "Security incident",
+  "ticket": "INC-31014",
+  "type": "Incident",
   "priority": "P1",
   "requested_by": "Marta Kowalczyk, Security Operations Lead",
   "title": "Overnight sign-in alerts at Kestrel Ridge Logistics: find what happened and decide who to block",
@@ -30,6 +30,11 @@
     "Legacy authentication": "Older mail protocols such as IMAP4 and Authenticated SMTP that send a password and cannot do MFA.",
     "Log Analytics workspace": "An Azure Monitor store where logs are kept for as long as you choose and queried with Kusto Query Language (KQL) and workbooks."
   },
-  "job_roles": ["Identity and Access Administrator", "IAM Analyst", "Security Operations (SOC) Analyst", "Identity Threat Detection Engineer"],
+  "job_roles": [
+    "Identity and Access Administrator",
+    "IAM Analyst",
+    "Security Operations (SOC) Analyst",
+    "Identity Threat Detection Engineer"
+  ],
   "talking_point": "Reviewed 38 sign-in records and 4 audit entries for 12 users: reported 2 records with a missing timestamp or IP address, raised 8 detections (a password spray from one IP address across 4 accounts, a brute-force run, an MFA fatigue attack that ended in a Global Administrator grant, 2 legacy-protocol users, an impossible-travel pair and 2 privileged role assignments), and applied ID Protection responses: blocked and revoked sessions for 2 users, required a secure password change for 1, required MFA for 3 and closed 6 with no action."
 }

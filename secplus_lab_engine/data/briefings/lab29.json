@@ -1,7 +1,7 @@
 {
   "lab": 29,
-  "ticket": "SEC-42907",
-  "type": "Security review",
+  "ticket": "AUD-42907",
+  "type": "Audit finding",
   "priority": "P2",
   "requested_by": "Priya Halvorsen, Cloud Platform Lead",
   "title": "Pick identities for the Azure migration and clean up existing app logins before the platform security review",
@@ -28,6 +28,11 @@
     "Azure role-based access control (RBAC)": "Permissions in Azure given as a role (what you can do) at a scope (subscription, resource group or single resource).",
     "Privileged Identity Management (PIM)": "A Microsoft Entra ID Governance feature that makes powerful roles eligible rather than permanent, so people activate them for a limited time with justification or approval."
   },
-  "job_roles": ["Identity and Access Administrator", "Cloud Security Engineer", "Azure Platform Engineer", "DevSecOps Engineer"],
+  "job_roles": [
+    "Identity and Access Administrator",
+    "Cloud Security Engineer",
+    "Azure Platform Engineer",
+    "DevSecOps Engineer"
+  ],
   "talking_point": "Chose identities for 7 workloads (1 system-assigned and 2 user-assigned managed identities, 1 federated service principal for GitHub Actions and 3 certificate-based service principals, never a client secret) and audited 9 existing workload identities, flagging 7 for a fix: 1 secret replaced with federation, 2 secrets rotated (one expired, one expiring in 12 days), 1 owner assigned, 2 broad privileged roles reduced (including an unknown custom role treated as privileged) and 1 unused migration account disabled, with 2 left as OK."
 }

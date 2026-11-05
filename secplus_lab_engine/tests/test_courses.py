@@ -58,7 +58,7 @@ ex = webapi.exam(pol, 50, 3)
 dt = webapi.exam(pol, 30, 4, domain="2")
 r = exam.ExamResult(10, 7, 10, False, {}, [])
 print(json.dumps({
-  "code": course.code(), "objectives": exam_bank.OBJECTIVES, "weights": exam.DOMAIN_WEIGHTS, "pass": exam.PASS_SCALED,
+  "code": course.code(), "objectives": exam_bank.OBJECTIVES, "objectives_all": list(course.objectives()), "weights": exam.DOMAIN_WEIGHTS, "pass": exam.PASS_SCALED,
   "scaled70": r.scaled, "progress": DEFAULT_PROGRESS_PATH.name,
   "labs": {str(l["n"]): l["objective_codes"] for l in cat["labs"]}, "course": cat["course"]["exam_code"],
   "videos": len(cat["video_course"]["videos"]), "retires": cat["exam_target"]["retires"],
@@ -84,7 +84,12 @@ def test_sc300_registry_and_engine(sc300):
     assert sc300["weights"] == {"1": 0.24, "2": 0.28, "3": 0.24, "4": 0.24} and sc300["pass"] == 700
     assert sc300["scaled70"] == 700                       # 70 % on the 1-1000 scale
     assert sc300["progress"] == "progress-sc300.json"     # separate from Security+ progress
-    assert sc300["labs"] == {"1": ["1.2", "4.2"], "2": ["2.2", "2.3"], "25": ["2.2", "4.3"], "26": ["4.2", "4.1"]}
+    assert sc300["labs"] == {"1": ["1.2", "4.2"], "2": ["2.2", "2.3"], "25": ["2.2", "4.3"], "26": ["4.2", "4.1"],
+                             "27": ["4.1", "1.3"], "28": ["3.3", "3.2", "3.4"], "29": ["3.1", "4.3"], "30": ["1.4", "2.1"],
+                             "31": ["4.4", "2.3"], "32": ["1.3", "2.2"], "33": ["2.1", "2.2"], "34": ["2.4", "2.2"],
+                             "35": ["1.1", "1.2"]}
+    covered = {o for codes in sc300["labs"].values() for o in codes}
+    assert covered == set(sc300["objectives_all"]), "every SC-300 objective has a hands-on lab"
     assert sc300["videos"] == 0 and sc300["retires"] is None
 
 
@@ -112,6 +117,13 @@ def test_sc300_lab_practice_scores_under_sc300_objectives():
     assert got == ["2.2"]
 
 
+def test_sc300_only_labs_stay_out_of_security_plus():
+    from labs import LABS
+    from webapi import course_labs
+    assert course_labs() == list(range(1, 27))
+    assert all(getattr(LABS[n][0], "COURSES", None) == ("sc300",) for n in range(27, 36))
+
+
 def test_sc300_cli_and_bundle(tmp_path):
     env = {**os.environ, "PYTHONPATH": str(ROOT)}
     env.pop(course.ENV, None)
@@ -123,5 +135,5 @@ def test_sc300_cli_and_bundle(tmp_path):
                          capture_output=True, text=True, cwd=ROOT, env=env, timeout=180)
     assert out.returncode == 0, out.stderr[-2000:]
     data = json.loads(b.read_text())
-    assert data["catalog"]["course"]["code"] == "sc300" and sorted(data["labs"]) == ["1", "2", "25", "26"]
+    assert data["catalog"]["course"]["code"] == "sc300" and sorted(data["labs"], key=int) == ["1", "2", *map(str, range(25, 36))]
     assert data["exam_bank"] and data["glossary"] and data["catalog"]["objectives"]["2.2"] == "Microsoft Entra Conditional Access"

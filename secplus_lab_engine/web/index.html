@@ -238,7 +238,14 @@ const el = (tag, attrs = {}, ...kids) => {
   for (const c of kids.flat(Infinity)) if (c != null && c !== false) n.append(c instanceof Node ? c : document.createTextNode(String(c)));
   return n;
 };
-const put = (node, ...kids) => node.replaceChildren(...kids.flat().filter(c => c != null && c !== false));
+/* Content that scrolls sideways (wide reports, tables) must be reachable by keyboard: give it a tab stop. */
+function focusScrollers(root) {
+  for (const e of root.querySelectorAll("pre, table, .tablewrap, .lesson div")) {
+    if (e.scrollWidth > e.clientWidth + 1 && !e.hasAttribute("tabindex")) e.setAttribute("tabindex", "0");
+  }
+}
+const put = (node, ...kids) => { node.replaceChildren(...kids.flat().filter(c => c != null && c !== false)); requestAnimationFrame(() => focusScrollers(node)); };
+addEventListener("resize", () => focusScrollers(document.body));
 function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function shuffle(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 const newSeed = () => Math.floor(Math.random() * 1e9);

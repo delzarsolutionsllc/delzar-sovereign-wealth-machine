@@ -36,6 +36,15 @@ from . import (
     lab24_awareness,
     lab25_conditional_access,
     lab26_identity_governance,
+    lab27_entitlement_management,
+    lab28_app_consent,
+    lab29_workload_identities,
+    lab30_hybrid_identity,
+    lab31_identity_monitoring,
+    lab32_external_identities,
+    lab33_authentication_methods,
+    lab34_global_secure_access,
+    lab35_tenant_delegation,
 )
 
 # lab number -> (module, default data file)
@@ -66,6 +75,16 @@ LABS = {
     24: (lab24_awareness, "sample_awareness.json"),
     25: (lab25_conditional_access, "sample_signins.json"),
     26: (lab26_identity_governance, "sample_governance.json"),
+    # SC-300 labs (COURSES = ("sc300",))
+    27: (lab27_entitlement_management, "sample_entitlement_management.json"),
+    28: (lab28_app_consent, "sample_app_consent.json"),
+    29: (lab29_workload_identities, "sample_workload_identities.json"),
+    30: (lab30_hybrid_identity, "sample_hybrid_identity.json"),
+    31: (lab31_identity_monitoring, "sample_identity_monitoring.json"),
+    32: (lab32_external_identities, "sample_external_identities.json"),
+    33: (lab33_authentication_methods, "sample_authentication_methods.json"),
+    34: (lab34_global_secure_access, "sample_global_secure_access.json"),
+    35: (lab35_tenant_delegation, "sample_tenant_delegation.json"),
 }
 
 
