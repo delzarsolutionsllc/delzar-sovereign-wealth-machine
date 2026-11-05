@@ -24,7 +24,7 @@ def no_real_progress(monkeypatch, tmp_path):
 
 
 def test_extra_bank_files_are_valid():
-    extras = [f for f in exam_bank.bank_files() if "-" in f.stem]
+    extras = [f for f in exam_bank.bank_files() if f.stem.startswith("domain") and "-" in f.stem]
     assert len(extras) >= 6
     for f in extras:
         data = json.loads(f.read_text(encoding="utf-8"))

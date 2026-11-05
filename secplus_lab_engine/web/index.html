@@ -387,7 +387,8 @@ function pbqControls(q, cur, save, redraw) {
     });
     const done = q.pairs.filter(([it]) => m[it]).length;
     return [el("div", { class: "label", text: "Match each item" }),
-      el("p", { class: "pbq-how", text: `Choose the best match for each item (${done} of ${q.pairs.length} done). Some options may not be used.` }),
+      el("p", { class: "pbq-how", text: `Choose the best match for each item (${done} of ${q.pairs.length} done). ` +
+        (new Set(q.pairs.map(p => p[1])).size < q.pairs.length ? "An option can be used more than once." : "Some options may not be used.") }),
       el("div", { class: "choices" }, rows)];
   }
   return [];

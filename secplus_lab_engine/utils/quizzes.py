@@ -44,30 +44,18 @@ def _sort_key(q: dict):
     return (0, int(m.group(1)), int(m.group(2)), "") if m else (1, 0, 0, q["id"])
 
 
-def _interleave(groups: list[list[dict]]) -> list[dict]:
-    """Round-robin across topics, so consecutive questions (and each set) mix the topics."""
-    out, queues = [], [list(g) for g in groups if g]
-    while queues:
-        for g in list(queues):
-            out.append(g.pop(0))
-            if not g:
-                queues.remove(g)
-    return out
-
-
 def _chunks(qs: list, size: int = SET_SIZE, min_last: int = MIN_LAST_SET) -> list[list]:
+    """
+    Deal ``qs`` (grouped topic by topic) round-robin into about len/size sets, like cards:
+    sets differ in size by at most one, and every topic with at least as many questions as
+    there are sets lands in every set.
+    """
     if not qs:
         return []
     n = max(1, round(len(qs) / size))
     if len(qs) - (n - 1) * size < min_last and n > 1:
         n -= 1
-    base, extra = divmod(len(qs), n)                 # near-equal sets: 31 -> 11/10/10, 34 -> 12/11/11
-    out, i = [], 0
-    for k in range(n):
-        step = base + (1 if k < extra else 0)
-        out.append(qs[i:i + step])
-        i += step
-    return out
+    return [qs[k::n] for k in range(n)]
 
 
 @lru_cache(maxsize=1)
@@ -94,7 +82,8 @@ def catalog() -> dict:
             if by_topic[t]:
                 quizzes.append({"id": f"{obj}-t{k}", "kind": "topic", "title": t, "topic": t,
                                 "qids": [q["id"] for q in by_topic[t]]})
-        for k, part in enumerate(_chunks(_interleave(list(by_topic.values()))), 1):
+        grouped = [q for t in order for q in by_topic[t]]      # topic by topic; dealing then spreads each topic over every set
+        for k, part in enumerate(_chunks(grouped), 1):
             quizzes.append({"id": f"{obj}-set{k}", "kind": "set", "title": f"Set {k}", "topic": None,
                             "qids": [q["id"] for q in part]})
         out[obj] = {"name": names.get(obj, ""), "domain": obj.split(".")[0], "count": len(qs),
