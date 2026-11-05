@@ -1,0 +1,91 @@
+{
+  "okta_policy_evaluator": {
+    "_comment": "Lab 40: Okta Identity Engine (OIE) sign-on policy evaluation. 'org' is the fictional org's configuration (network zones, global session policies, per-app authentication policies, authenticator enrollment policies); a scenario may override any 'org' key. 'authenticator_methods' maps each sign-in method to its authenticator and factor types.",
+    "everyone_group": "Everyone",
+    "factor_types": ["knowledge", "possession", "inherence"],
+    "authenticator_methods": {
+      "password": {"authenticator": "password", "label": "Password", "factor_types": ["knowledge"], "phishing_resistant": false, "hardware_protected": false},
+      "security_question": {"authenticator": "security_question", "label": "Security question", "factor_types": ["knowledge"], "phishing_resistant": false, "hardware_protected": false},
+      "email": {"authenticator": "email", "label": "Email magic link or code", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": false},
+      "phone_sms": {"authenticator": "phone", "label": "Phone (SMS code)", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": false},
+      "phone_voice": {"authenticator": "phone", "label": "Phone (voice call)", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": false},
+      "google_authenticator": {"authenticator": "google_authenticator", "label": "Google Authenticator (TOTP)", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": false},
+      "okta_verify_push": {"authenticator": "okta_verify", "label": "Okta Verify push", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": true},
+      "okta_verify_totp": {"authenticator": "okta_verify", "label": "Okta Verify one-time code", "factor_types": ["possession"], "phishing_resistant": false, "hardware_protected": false},
+      "okta_verify_fastpass": {"authenticator": "okta_verify", "label": "Okta FastPass (no biometrics)", "factor_types": ["possession"], "phishing_resistant": true, "hardware_protected": true},
+      "okta_verify_fastpass_biometric": {"authenticator": "okta_verify", "label": "Okta FastPass with biometrics", "factor_types": ["possession", "inherence"], "phishing_resistant": true, "hardware_protected": true},
+      "webauthn": {"authenticator": "webauthn", "label": "FIDO2 (WebAuthn) security key or platform authenticator", "factor_types": ["possession", "inherence"], "phishing_resistant": true, "hardware_protected": true},
+      "smart_card": {"authenticator": "smart_card", "label": "Smart card (PIV/CAC) via IdP", "factor_types": ["possession", "knowledge"], "phishing_resistant": true, "hardware_protected": true}
+    },
+    "org": {
+      "network_zones": [
+        {"id": "Z-HQ", "name": "HQ and VPN egress", "type": "IP", "usage": "POLICY", "status": "ACTIVE", "gateways": ["198.51.100.0/24"]},
+        {"id": "Z-WAREHOUSE", "name": "Warehouse networks", "type": "IP", "usage": "POLICY", "status": "ACTIVE", "gateways": ["203.0.113.64/26"]},
+        {"id": "Z-ALLOWED-COUNTRIES", "name": "Operating countries", "type": "DYNAMIC", "usage": "POLICY", "status": "ACTIVE", "locations": ["US", "CA"]},
+        {"id": "Z-HOSTING-ASN", "name": "Cloud hosting providers", "type": "DYNAMIC", "usage": "POLICY", "status": "ACTIVE", "asns": [64512, 64513]},
+        {"id": "BlockedIpZone", "name": "BlockedIpZone (known bad IPs)", "type": "IP", "usage": "BLOCKLIST", "status": "ACTIVE", "gateways": ["192.0.2.0/28"]},
+        {"id": "DefaultEnhancedDynamicZone", "name": "Block anonymizers and Tor", "type": "DYNAMIC", "usage": "BLOCKLIST", "status": "ACTIVE", "anonymizer": true},
+        {"id": "Z-OLD-VPN", "name": "Retired VPN range (deactivated)", "type": "IP", "usage": "BLOCKLIST", "status": "INACTIVE", "gateways": ["198.18.0.0/15"]}
+      ],
+      "global_session_policies": [
+        {"id": "GSP-ADMINS", "name": "Administrators", "priority": 1, "groups": ["Okta Admins"], "rules": [
+          {"id": "GSP-ADMINS-R1", "name": "Admins outside operating countries", "priority": 1, "zone": {"exclude": ["Z-ALLOWED-COUNTRIES"]}, "access": "DENY"},
+          {"id": "GSP-ADMINS-R2", "name": "Admins: password and MFA, 1 hour session", "priority": 2, "access": "ALLOW", "primary_factor": "password", "mfa_required": true, "session_lifetime_minutes": 60}
+        ]},
+        {"id": "GSP-CONTRACTORS", "name": "Contractors", "priority": 2, "groups": ["Contractors"], "rules": [
+          {"id": "GSP-CONTRACTORS-R1", "name": "Contractors from cloud hosting", "priority": 1, "zone": {"include": ["Z-HOSTING-ASN"]}, "access": "DENY"},
+          {"id": "GSP-CONTRACTORS-R2", "name": "Contractors on warehouse network", "priority": 2, "zone": {"include": ["Z-WAREHOUSE"]}, "access": "ALLOW", "primary_factor": "password", "mfa_required": false, "session_lifetime_minutes": 480}
+        ]},
+        {"id": "GSP-DEFAULT", "name": "Default Policy", "priority": 99, "groups": ["Everyone"], "rules": [
+          {"id": "GSP-DEFAULT-R1", "name": "Passwordless on the corporate network", "priority": 1, "zone": {"include": ["Z-HQ"]}, "access": "ALLOW", "primary_factor": "any", "mfa_required": false, "session_lifetime_minutes": 720},
+          {"id": "GSP-DEFAULT-CATCHALL", "name": "Default Rule (catch-all)", "priority": 99, "catch_all": true, "access": "ALLOW", "primary_factor": "password", "mfa_required": true, "session_lifetime_minutes": 120}
+        ]}
+      ],
+      "authentication_policies": [
+        {"id": "AP-ADMIN-CONSOLE", "name": "Okta Admin Console", "rules": [
+          {"id": "AP-ADMIN-R1", "name": "Admins on registered devices, phishing-resistant", "priority": 1, "groups": ["Okta Admins"], "device": {"registered": true}, "access": "ALLOW", "factor_types_required": 2, "possession_constraints": ["phishing_resistant"], "reauthenticate_minutes": 15},
+          {"id": "AP-ADMIN-CATCHALL", "name": "Catch-all Rule", "priority": 99, "catch_all": true, "access": "DENY"}
+        ]},
+        {"id": "AP-FINANCE", "name": "Finance apps", "rules": [
+          {"id": "AP-FINANCE-R1", "name": "Finance on managed, compliant devices", "priority": 1, "groups": ["Finance"], "device": {"registered": true, "managed": true, "assurance_any_of": ["DA-WINDOWS-BASELINE", "DA-MACOS-BASELINE"]}, "access": "ALLOW", "factor_types_required": 2, "possession_constraints": ["hardware_protected"], "reauthenticate_minutes": 120},
+          {"id": "AP-FINANCE-R2", "name": "Contractors never reach finance apps", "priority": 2, "groups": ["Contractors"], "access": "DENY"},
+          {"id": "AP-FINANCE-CATCHALL", "name": "Catch-all Rule", "priority": 99, "catch_all": true, "access": "DENY"}
+        ]},
+        {"id": "AP-STANDARD", "name": "Any two factors", "rules": [
+          {"id": "AP-STANDARD-R1", "name": "One factor on the corporate network", "priority": 1, "zone": {"include": ["Z-HQ"]}, "access": "ALLOW", "factor_types_required": 1, "reauthenticate_minutes": 720},
+          {"id": "AP-STANDARD-CATCHALL", "name": "Catch-all Rule", "priority": 99, "catch_all": true, "access": "ALLOW", "factor_types_required": 2, "reauthenticate_minutes": 240}
+        ]}
+      ],
+      "enrollment_policies": [
+        {"id": "EP-ADMINS", "name": "Administrators enrollment", "priority": 1, "groups": ["Okta Admins"], "authenticators": {
+          "password": "required", "email": "required", "okta_verify": "required", "webauthn": "optional",
+          "phone": "disabled", "google_authenticator": "disabled", "security_question": "disabled", "smart_card": "disabled"}},
+        {"id": "EP-CONTRACTORS", "name": "Contractors enrollment", "priority": 2, "groups": ["Contractors"], "authenticators": {
+          "password": "required", "email": "required", "phone": "optional", "okta_verify": "disabled",
+          "webauthn": "disabled", "google_authenticator": "disabled", "security_question": "disabled", "smart_card": "disabled"}},
+        {"id": "EP-DEFAULT", "name": "Default Policy", "priority": 99, "groups": ["Everyone"], "authenticators": {
+          "password": "required", "email": "required", "okta_verify": "optional", "webauthn": "optional", "phone": "optional",
+          "google_authenticator": "disabled", "security_question": "disabled", "smart_card": "disabled"}}
+      ]
+    },
+    "outcome_definitions": {
+      "ACCESS_GRANTED": "Both policies allow the sign-in and one factor type is enough.",
+      "MFA_REQUIRED_SATISFIED": "Both policies allow the sign-in, two factor types were required and the user presented them.",
+      "DENIED_BY_GLOBAL_SESSION_POLICY": "The global session policy rule that matched (or the lack of one) denies the Okta session.",
+      "DENIED_BY_AUTHENTICATION_POLICY": "The app's authentication policy rule that matched denies access to the app.",
+      "DENIED_BLOCKED_ZONE": "The request comes from an active blocklist network zone and is rejected before authentication.",
+      "ENROLLMENT_REQUIRED": "The user must enroll an authenticator the enrollment policy allows before access completes.",
+      "INSUFFICIENT_AUTHENTICATORS": "The authenticators presented do not meet the combined policy requirements."
+    },
+    "concepts": {
+      "network zone": "A named set of IP ranges, or of locations, ASNs and anonymizer types, that policy rules and blocklists refer to.",
+      "blocklist zone": "A network zone whose requests Okta rejects before any authentication or policy rule is evaluated.",
+      "dynamic zone": "A network zone defined by country or region, autonomous system number (ASN) or proxy and anonymizer type instead of fixed IP ranges.",
+      "global session policy": "The org-level policy, assigned to groups, that decides whether an Okta session may be created, with which primary factor, whether MFA is needed and how long the session lasts.",
+      "authentication policy": "The policy attached to one or more apps that decides, per sign-in context, whether the user may open that app and with what assurance.",
+      "authenticator enrollment policy": "The policy, assigned to groups, that sets each authenticator as required, optional or disabled for enrollment.",
+      "catch-all rule": "The lowest-priority rule of a policy that matches every request no other rule matched.",
+      "possession factor constraint": "An authentication policy setting that only lets possession authenticators with chosen properties, such as phishing resistance or hardware protection, count."
+    }
+  }
+}
