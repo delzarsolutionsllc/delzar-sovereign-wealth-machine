@@ -35,7 +35,7 @@ def build(variants: int = 12, seed_base: int = 1000) -> dict:
     bundle = {"version": 1, "catalog": webapi.catalog(policies), "labs": {}}
     for n in LABS:
         entry = {"sample": {"run": webapi.run(policies, n)["text"],
-                            "questions": webapi.challenge(policies, n)["questions"]},
+                            "questions": webapi.challenge(policies, n, seed=0)["questions"]},
                  "variants": []}
         if n in GENERATORS:
             for k in range(variants):
