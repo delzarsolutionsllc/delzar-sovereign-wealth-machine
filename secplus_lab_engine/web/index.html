@@ -220,21 +220,27 @@ const Engine = {
     const src = random && L.variants.length ? L.variants[seed % L.variants.length] : L.sample;
     return { questions: shuffle(src.questions, mulberry32(seed || 1)), seed: src.seed ?? null };
   },
-  async exam(count, seed, fixed, domain) {
-    if (LIVE) return post("exam", { count, seed, fixed, domain: domain || null });
-    return domain ? buildDomainTestLocal(count, seed, domain) : buildExamLocal(count, seed);
+  async exam(count, seed, fixed, domain, source = "bank") {
+    if (LIVE) return post("exam", { count, seed, fixed, domain: domain || null, source });
+    return domain ? buildDomainTestLocal(count, seed, domain, source) : buildExamLocal(count, seed, source);
   },
 };
 
-function buildExamLocal(count, seed) {
+/* Exam questions: the exam-style bank (original questions written like SY0-701) by default,
+   or the labs' hands-on scenario questions. Bank options are shuffled per exam.            */
+const useBank = source => source !== "labs" && (BUNDLE.exam_bank || []).length > 0;
+const bankQ = (r, rnd) => ({ prompt: r.stem, context: "", choices: shuffle(r.choices, rnd), answer: r.answer, explanation: r.explanation, objective: r.objective });
+function* allExamQuestions(source, rnd) {
+  if (useBank(source)) { for (const r of BUNDLE.exam_bank) yield bankQ(r, rnd); return; }
+  for (const L of Object.values(BUNDLE.labs)) for (const src of [L.sample, ...L.variants]) yield* src.questions;
+}
+function buildExamLocal(count, seed, source = "bank") {
   const rnd = mulberry32(seed);
   const pool = {}; const seen = new Set();
   CATALOG.domains.forEach(d => pool[d.id] = []);
-  for (const L of Object.values(BUNDLE.labs)) {
-    for (const src of [L.sample, ...L.variants]) for (const q of src.questions) {
-      const key = [q.prompt, q.context, ...q.choices].join("\u0000"), d = q.objective.split(".")[0];
-      if (seen.has(key) || !pool[d]) continue; seen.add(key); pool[d].push(q);
-    }
+  for (const q of allExamQuestions(source, rnd)) {
+    const key = [q.prompt, q.context, ...[...q.choices].sort()].join("\u0000"), d = q.objective.split(".")[0];
+    if (seen.has(key) || !pool[d]) continue; seen.add(key); pool[d].push(q);
   }
   // largest-remainder allocation by official weight, shortfall moved to other domains
   const raw = Object.fromEntries(CATALOG.domains.map(d => [d.id, count * d.weight]));
@@ -250,11 +256,11 @@ function buildExamLocal(count, seed) {
   return { questions: shuffle(qs, rnd), allocation: alloc, shortfall };
 }
 
-function buildDomainTestLocal(count, seed, domain) {
+function buildDomainTestLocal(count, seed, domain, source = "bank") {
   // one domain only, spread evenly over its objectives (round-robin), like utils/exam.build_domain_test
   const rnd = mulberry32(seed), seen = new Set(), byObj = {};
-  for (const L of Object.values(BUNDLE.labs)) for (const src of [L.sample, ...L.variants]) for (const q of src.questions) {
-    const key = [q.prompt, q.context, ...q.choices].join("\u0000");
+  for (const q of allExamQuestions(source, rnd)) {
+    const key = [q.prompt, q.context, ...[...q.choices].sort()].join("\u0000");
     if (q.objective.split(".")[0] !== domain || seen.has(key)) continue; seen.add(key); (byObj[q.objective] ||= []).push(q);
   }
   const order = Object.keys(byObj).sort((a, b) => parseFloat(a) - parseFloat(b) || a.localeCompare(b));
@@ -531,6 +537,8 @@ function viewExam(domain = "") {
     CATALOG.domains.map(d => el("option", { value: d.id, selected: d.id === domain || null, text: `Domain ${d.id} test: ${d.name}` })));
   const count = el("select", { id: "exam-count" });
   const mins = el("input", { id: "exam-minutes", type: "number", min: 5, max: 180 });
+  const source = el("select", { id: "exam-source" },
+    el("option", { value: "bank", text: "Exam-style questions" }), el("option", { value: "labs", text: "Lab scenario questions" }));
   const blurb = el("p", { class: "muted" }), title = el("h1");
   const sync = () => {
     const d = kind.value, opts = d ? [15, 30, 45] : [30, 60, 90], def = d ? 30 : 90;
@@ -540,22 +548,23 @@ function viewExam(domain = "") {
     title.textContent = d ? `Domain ${d} test: ${dom.name}` : "A timed, mixed-domain exam";
     blurb.textContent = d
       ? `Questions from Domain ${d} only (${Math.round(dom.weight * 100)}% of the real exam), spread evenly across its objectives. You get a score per objective; the target is ${CATALOG.domain_test_target}%, a study goal (CompTIA publishes no per-domain pass mark).`
-      : "Questions are drawn from every lab and weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong.";
+      : "Weighted like SY0-701: 12% general concepts, 22% threats, 18% architecture, 28% operations, 20% program management. No feedback until the end; unanswered questions count as wrong.";
+    blurb.textContent += " Exam-style questions are original practice questions written like the real exam (short scenarios, four options); lab scenario questions come from the hands-on labs.";
   };
   kind.addEventListener("change", sync); count.addEventListener("change", () => { mins.value = count.value; }); sync();
   put(view(), el("section", { class: "panel" },
     el("span", { class: "label", text: "Practice exam & domain tests" }), title, blurb,
-    el("div", { class: "form" }, el("label", {}, "Test", kind), el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
-      el("button", { class: "btn primary", text: "Start", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 30), kind.value) }))),
+    el("div", { class: "form" }, el("label", {}, "Test", kind), el("label", {}, "Questions", source), el("label", {}, "Length", count), el("label", {}, "Minutes", mins),
+      el("button", { class: "btn primary", text: "Start", onclick: () => startExam(parseInt(count.value, 10), Math.max(5, parseInt(mins.value, 10) || 30), kind.value, source.value) }))),
     el("section", { class: "panel" }, el("h2", { text: "Domain tests" }),
       el("div", { class: "grid5" }, CATALOG.domains.map(d => el("a", { class: "dcard", href: `#exam-d${d.id}` },
         el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
         el("span", { class: "muted", text: `${Math.round(d.weight * 100)}% of the exam · 30 questions` }))))));
 }
 
-async function startExam(count, minutes, domain = "") {
+async function startExam(count, minutes, domain = "", source = "bank") {
   put(view(), el("p", { class: "loading", text: domain ? `Assembling your Domain ${domain} test…` : "Assembling your exam…" }));
-  let ex; try { ex = await Engine.exam(count, newSeed(), false, domain); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
+  let ex; try { ex = await Engine.exam(count, newSeed(), false, domain, source); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
   if (!ex.questions.length) return put(view(), el("p", { class: "notice", text: "No questions available for this test." }));
   const qs = ex.questions, answers = new Array(qs.length).fill(null);
   const deadline = Date.now() + minutes * 60000; let i = 0;

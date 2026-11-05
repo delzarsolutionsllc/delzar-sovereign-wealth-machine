@@ -44,6 +44,9 @@ def build(variants: int = 12, seed_base: int = 1000) -> dict:
                                           "run": webapi.run(policies, n, True, seed)["text"],
                                           "questions": webapi.challenge(policies, n, True, seed)["questions"]})
         bundle["labs"][str(n)] = entry
+    from utils.exam_bank import load_bank
+    bundle["exam_bank"] = [{k: q[k] for k in ("objective", "stem", "choices", "answer", "explanation")}
+                           for q in load_bank()]
     return bundle
 
 

@@ -165,8 +165,9 @@ def show_videos(ui: UI, lab: int | None = None, objective: str | None = None, ma
 
 
 def domain_test(ui: UI, policies: dict, domain: str, count: int = 30, minutes: float | None = None,
-                seed: int | None = None, randomize: bool = True, ask=None, progress_path: str | None = None):
-    questions, per_obj = build_domain_test(policies, str(domain), count, seed, randomize)
+                seed: int | None = None, randomize: bool = True, ask=None, progress_path: str | None = None,
+                source: str = "bank"):
+    questions, per_obj = build_domain_test(policies, str(domain), count, seed, randomize, source)
     minutes = minutes if minutes is not None else float(len(questions))
     ui.header(f"DOMAIN {domain} TEST · {DOMAIN_NAMES[str(domain)]}",
               f"{len(questions)} questions · {minutes:g} minutes · per objective {per_obj} · "
@@ -176,8 +177,8 @@ def domain_test(ui: UI, policies: dict, domain: str, count: int = 30, minutes: f
 
 
 def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int | None = None,
-         randomize: bool = True, ask=None, progress_path: str | None = None):
-    questions, alloc, shortfall = build_exam(policies, count, seed, randomize)
+         randomize: bool = True, ask=None, progress_path: str | None = None, source: str = "bank"):
+    questions, alloc, shortfall = build_exam(policies, count, seed, randomize, source)
     ui.header("PRACTICE EXAM · SY0-701", f"{len(questions)} questions · {minutes:g} minutes · per domain {alloc} · "
                                          "no feedback until the end")
     progress = Progress(progress_path) if progress_path is not None else Progress()
@@ -264,6 +265,8 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("--minutes", type=float, help="time limit in minutes (default: one per question)")
     ex.add_argument("--seed", type=int, help="make the exam reproducible")
     ex.add_argument("--fixed", action="store_true", help="use bundled sample data only (no generated scenarios)")
+    ex.add_argument("--source", choices=["bank", "labs"], default="bank",
+                    help="bank = exam-style questions (default); labs = the labs' hands-on scenario questions")
     ex.add_argument("--domain", choices=list("12345"),
                     help="domain test: questions from one domain only (default 30 questions, 1 minute each)")
     sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
@@ -321,11 +324,12 @@ def main(argv: list[str] | None = None) -> int:
         ui.print(f"Created {path}\nDouble-click it to open the Security+ Lab Engine in your browser.", style="green")
     elif args.command == "exam":
         if args.domain:
-            domain_test(ui, policies, args.domain, args.count or 30, args.minutes, args.seed, randomize=not args.fixed)
+            domain_test(ui, policies, args.domain, args.count or 30, args.minutes, args.seed, randomize=not args.fixed,
+                        source=args.source)
         else:
             count = args.count or 90
             exam(ui, policies, count, args.minutes if args.minutes is not None else float(count), args.seed,
-                 randomize=not args.fixed)
+                 randomize=not args.fixed, source=args.source)
     elif args.command == "all":
         ui.header(BANNER, SUBTITLE)
         for n in LABS:

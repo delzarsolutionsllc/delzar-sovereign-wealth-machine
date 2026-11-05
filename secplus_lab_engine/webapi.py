@@ -170,15 +170,16 @@ def challenge(policies: dict, lab: int, randomize: bool = False, seed=None, data
     return {"lab": lab, "random": randomize, "seed": seed, "questions": qs}
 
 
-def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True, domain=None) -> dict:
+def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True, domain=None, source: str = "bank") -> dict:
     """Full exam (weighted by domain) or, with ``domain``, a single-domain test."""
     count = max(5, min(int(count), 150))
+    source = source if source in ("bank", "labs") else "bank"
     if domain not in (None, ""):
-        qs, per_obj = build_domain_test(policies, str(domain), count, seed, randomize)
+        qs, per_obj = build_domain_test(policies, str(domain), count, seed, randomize, source)
         return {"questions": [_q(q) for q in qs], "domain": str(domain), "allocation": per_obj,
-                "shortfall": {}, "target": DOMAIN_TEST_TARGET}
-    qs, alloc, short = build_exam(policies, count, seed, randomize)
-    return {"questions": [_q(q) for q in qs], "allocation": alloc, "shortfall": short}
+                "shortfall": {}, "target": DOMAIN_TEST_TARGET, "source": source}
+    qs, alloc, short = build_exam(policies, count, seed, randomize, source)
+    return {"questions": [_q(q) for q in qs], "allocation": alloc, "shortfall": short, "source": source}
 
 
 def progress_get(path=None) -> dict:
@@ -240,7 +241,8 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
     if method == "challenge":
         return challenge(policies, int(a["lab"]), bool(a.get("random")), seed)
     if method == "exam":
-        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"), a.get("domain"))
+        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"), a.get("domain"),
+                    a.get("source") or "bank")
     if method == "progress_get":
         return progress_get(progress_path)
     if method == "progress_record":

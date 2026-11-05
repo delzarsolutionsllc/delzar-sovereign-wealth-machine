@@ -1,8 +1,10 @@
 """
 Exam simulator.
 
-Draws a timed, mixed-domain practice exam from every lab's challenge
-questions, weighted by the official SY0-701 domain percentages:
+Draws a timed, mixed-domain practice exam weighted by the official SY0-701
+domain percentages. By default the questions come from the exam-style bank
+(data/exam_bank: original scenario questions written like the real exam);
+``--source labs`` uses the labs' hands-on challenge questions instead:
 
     1 General Security Concepts            12 %
     2 Threats, Vulnerabilities & Mitigations 22 %
@@ -73,8 +75,34 @@ class ExamResult:
         return self.scaled >= PASS_SCALED
 
 
-def collect_questions(policies: dict, seed: int | None = None, randomize: bool = True, rounds: int = 3) -> dict:
-    """All available questions grouped by domain, de-duplicated by (prompt, context)."""
+SOURCES = ("bank", "labs")
+
+
+def bank_pool() -> dict:
+    """Exam-style bank questions grouped by domain (empty lists if the bank is missing)."""
+    from utils.exam_bank import as_questions
+    pool: dict[str, list] = {d: [] for d in DOMAIN_WEIGHTS}
+    for q in as_questions():
+        pool[q.objective.split(".")[0]].append(q)
+    return pool
+
+
+def collect_questions(policies: dict, seed: int | None = None, randomize: bool = True, rounds: int = 3,
+                      source: str = "bank") -> dict:
+    """
+    Questions grouped by domain.
+
+    source="bank" (default): the exam-style question bank (data/exam_bank), which
+    reads like the real exam. Falls back to the lab questions if the bank is empty.
+    source="labs": the labs' challenge questions (de-duplicated), useful for
+    practising the hands-on scenarios under exam conditions.
+    """
+    if source not in SOURCES:
+        raise ValueError(f"unknown question source '{source}' (use {', '.join(SOURCES)})")
+    if source == "bank":
+        pool = bank_pool()
+        if any(pool.values()):
+            return pool
     from labs import LABS
     from utils.loader import load_data
     from utils.scenario_generator import GENERATORS, generate
@@ -122,19 +150,30 @@ def allocate(count: int, available: dict) -> tuple[dict, dict]:
     return alloc, shortfall
 
 
-def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomize: bool = True):
+def _shuffled_choices(q, rng: random.Random):
+    """Copy of a question with its options in a random order (the answer letter varies between exams)."""
+    from dataclasses import replace
+    choices = list(q.choices)
+    rng.shuffle(choices)
+    return replace(q, choices=choices)
+
+
+def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomize: bool = True,
+               source: str = "bank"):
     rng = random.Random(seed)
-    pool = collect_questions(policies, seed, randomize)
+    pool = collect_questions(policies, seed, randomize, source=source)
     alloc, shortfall = allocate(count, {d: len(q) for d, q in pool.items()})
     questions = []
     for d, n in alloc.items():
         questions += rng.sample(pool[d], n)
     rng.shuffle(questions)
+    if source == "bank":
+        questions = [_shuffled_choices(q, rng) for q in questions]
     return questions, alloc, shortfall
 
 
 def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | None = None,
-                      randomize: bool = True) -> tuple[list, dict]:
+                      randomize: bool = True, source: str = "bank") -> tuple[list, dict]:
     """
     Questions from one domain only, spread evenly over its objectives (round-robin),
     so a 30-question Domain 3 test covers 3.1, 3.2, 3.3 and 3.4 rather than
@@ -144,7 +183,7 @@ def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | 
     if domain not in DOMAIN_WEIGHTS:
         raise ValueError(f"unknown domain '{domain}' (use 1-5)")
     rng = random.Random(seed)
-    pool = collect_questions(policies, seed, randomize)[domain]
+    pool = collect_questions(policies, seed, randomize, source=source)[domain]
     by_obj: dict[str, list] = {}
     for q in pool:
         by_obj.setdefault(q.objective, []).append(q)
@@ -156,6 +195,8 @@ def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | 
             if by_obj[o] and len(picked) < count:
                 picked.append(by_obj[o].pop())
     rng.shuffle(picked)
+    if source == "bank":
+        picked = [_shuffled_choices(q, rng) for q in picked]
     counts: dict[str, int] = {}
     for q in picked:
         counts[q.objective] = counts.get(q.objective, 0) + 1
