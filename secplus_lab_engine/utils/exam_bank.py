@@ -174,12 +174,12 @@ def answer_position_spread(questions: list[dict]) -> Counter:
 
 
 def bank_files() -> list[Path]:
-    """domain1.json, domain1-extra.json, ... domain5*.json, then pbq.json (the files that exist)."""
+    """domain1.json, domain1-extra.json, ... domain5*.json, pbq.json, then pbq-*.json (e.g. the lab-built PBQs)."""
     files: list[Path] = []
     for d in sorted(OBJECTIVES):
         main = BANK_DIR / f"domain{d}.json"
         files += ([main] if main.exists() else []) + sorted(BANK_DIR.glob(f"domain{d}-*.json"))
-    return files + ([PBQ_FILE] if PBQ_FILE.exists() else [])
+    return files + ([PBQ_FILE] if PBQ_FILE.exists() else []) + sorted(BANK_DIR.glob("pbq-*.json"))
 
 
 @lru_cache(maxsize=1)

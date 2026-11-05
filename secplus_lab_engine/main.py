@@ -444,6 +444,10 @@ def build_parser() -> argparse.ArgumentParser:
     w.add_argument("--no-browser", action="store_true", help="don't open a browser window")
     sc = sub.add_parser("install-shortcut", help="create a desktop launcher for the web app")
     sc.add_argument("--desktop", metavar="DIR", help="folder to put the shortcut in (default: your desktop)")
+    mc = sub.add_parser("mcp", help="AI tutor: an MCP server for Claude or another MCP client (stdio)")
+    mc.add_argument("--grant", action="append", default=[], metavar="SCOPE",
+                    help="extra scope to grant, e.g. progress:write (default grants: read, quiz)")
+    mc.add_argument("--audit", metavar="FILE", help="audit log path (default mcp_audit.jsonl)")
     sub.add_parser("all", help="run every lab")
     t = sub.add_parser("test", help="run the pytest suite")
     t.add_argument("pytest_args", nargs=argparse.REMAINDER)
@@ -508,6 +512,9 @@ def main(argv: list[str] | None = None) -> int:
             count = args.count or 90
             exam(ui, policies, count, args.minutes if args.minutes is not None else float(count), args.seed,
                  randomize=not args.fixed, source=args.source)
+    elif args.command == "mcp":
+        from utils.mcp_server import main as mcp_main
+        return mcp_main(args.grant, args.audit)
     elif args.command == "all":
         ui.header(BANNER, SUBTITLE)
         for n in LABS:

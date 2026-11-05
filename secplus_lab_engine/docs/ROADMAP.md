@@ -20,7 +20,7 @@ This platform teaches SY0-701, so you can take that exam any time before June 11
 
 ## Phase 2: go public as your portfolio (BUILT, 2026-11-05)
 
-Status: renamed to IdentityOps Lab and published at https://delzarsolutionsllc.github.io/delzar-sovereign-wealth-machine/ (owner's go-ahead), progress export/import with merge, exam realism (no auto-advance, flag for review, question grid, review screen, "approximate" scaled score) and accessibility (skip link, live announcements, arrow-key tabs, focus management). Added at the owner's request: **objective quizzes**, 251 short quizzes across all 28 objectives (concept quizzes per topic plus mixed sets), backed by 550 new reviewed questions (bank: 946). Still open from this phase: a formal WCAG 2.2 AA audit with a screen reader on real devices.
+Status: renamed to IdentityOps Lab and published at https://delzarsolutionsllc.github.io/delzar-sovereign-wealth-machine/ (owner's go-ahead), progress export/import with merge, exam realism (no auto-advance, flag for review, question grid, review screen, "approximate" scaled score) and accessibility (skip link, live announcements, arrow-key tabs, focus management). Added at the owner's request: **objective quizzes**, 251 short quizzes across all 28 objectives (concept quizzes per topic plus mixed sets), backed by 550 new reviewed questions (bank: 946). Accessibility audit done 2026-11-05 (docs/ACCESSIBILITY.md): axe-core WCAG 2.2 AA, 0 violations on 22 screens in light and dark mode, keyboard, reflow and text-spacing checks. Still open: screen-reader passes on real devices (VoiceOver, TalkBack, NVDA).
 
 | Scope | Success metric |
 |---|---|
@@ -30,13 +30,15 @@ Status: renamed to IdentityOps Lab and published at https://delzarsolutionsllc.g
 | **Exam realism:** flag-for-review, a question grid, no auto-advance, and "approximate" on the scaled score. | Feels like the Pearson VUE exam interface |
 | **Accessibility:** `aria-live` announcements for verdicts and the timer, proper tabs with arrow keys, a skip link, and keeping focus after re-renders. | WCAG 2.2 AA keyboard and screen-reader checks pass |
 
-## Phase 3: AI tutor and lab-based exam questions (about 3–5 days)
+## Phase 3: AI tutor and lab-based exam questions (BUILT, 2026-11-05)
+
+Status: AI tutor MCP server (`python main.py mcp`, docs/AI_TUTOR.md) with deny-by-default scopes, hidden answers, schema validation and an audit log, tested with the official MCP SDK client; 25 lab-backed PBQs from 16 labs (`tools/build_lab_pbqs.py`, answers computed by the engines), including 2 for 4.2 and 4 for 4.7; every objective has 30+ items.
 
 | Scope | Success metric |
 |---|---|
 | **MCP server / AI tutor:** expose `webapi` methods (catalog, run, challenge, case_study, review) as MCP tools with a fixed allow-list and deny by default. An AI assistant can then quiz you, explain a lab or plan your day. This doubles as an identity and authorization showcase. | Claude (or another MCP client) runs a lab and explains it |
 | **PBQs from the labs:** turn firewall-rule, incident-order and Conditional Access decisions from the engines into exam performance-based questions. | 20+ lab-backed PBQs in the exam |
-| **Content gaps:** DONE in Phase 2: every objective now has 30+ exam-style items, tagged by topic. Remaining: PBQs for objectives without one (4.2, 4.7). | 2+ PBQs per objective |
+| **Content gaps:** DONE: every objective has 30+ exam-style items, tagged by topic, and 4.2 / 4.7 now have PBQs. Next: 2+ PBQs for every objective. | 2+ PBQs per objective |
 
 ## Phase 4: V8 (SY0-801) update (after CompTIA publishes the objectives)
 
