@@ -27,6 +27,10 @@ other kinds the real exam uses, across all five domains:
 
 Their stems may be an instruction ending with "." ("Put the steps in order.").
 
+Extra questions per domain may sit beside the main file (``domain3-extra.json``), and
+``data/exam_bank/topics/*.json`` tags every question with a concept topic of its
+objective (used by the objective quizzes, utils/quizzes.py).
+
 Check a file:  python -m utils.exam_bank data/exam_bank/domain3.json
 """
 
@@ -169,16 +173,45 @@ def answer_position_spread(questions: list[dict]) -> Counter:
                    if q.get("type", "single") == "single" and q.get("answer") in q.get("choices", []))
 
 
+def bank_files() -> list[Path]:
+    """domain1.json, domain1-extra.json, ... domain5*.json, then pbq.json (the files that exist)."""
+    files: list[Path] = []
+    for d in sorted(OBJECTIVES):
+        main = BANK_DIR / f"domain{d}.json"
+        files += ([main] if main.exists() else []) + sorted(BANK_DIR.glob(f"domain{d}-*.json"))
+    return files + ([PBQ_FILE] if PBQ_FILE.exists() else [])
+
+
+@lru_cache(maxsize=1)
+def load_topics() -> tuple[dict, dict]:
+    """
+    Concept topics per objective, from data/exam_bank/topics/*.json:
+    ``({"2.4": ["Malware", ...]}, {"D2-001": "Malware", ...})``. Each topic file holds
+    ``{"topics": {objective: [names]}, "tags": {question id: topic}}``; new questions may
+    instead carry their own ``topic`` field.
+    """
+    topics: dict[str, list[str]] = {}
+    tags: dict[str, str] = {}
+    folder = BANK_DIR / "topics"
+    for f in sorted(folder.glob("*.json")) if folder.exists() else []:
+        data = json.loads(f.read_text(encoding="utf-8"))
+        for obj, names in data.get("topics", {}).items():
+            topics.setdefault(obj, [])
+            topics[obj] += [n for n in names if n not in topics[obj]]
+        tags.update(data.get("tags", {}))
+    return topics, tags
+
+
 @lru_cache(maxsize=1)
 def load_bank() -> tuple[dict, ...]:
-    """All bank questions (empty if the bank has not been built yet)."""
+    """All bank questions (empty if the bank has not been built yet), each with its ``topic`` when known."""
     out: list[dict] = []
-    for d in sorted(OBJECTIVES):
-        f = BANK_DIR / f"domain{d}.json"
-        if f.exists():
-            out += json.loads(f.read_text(encoding="utf-8"))["questions"]
-    if PBQ_FILE.exists():
-        out += json.loads(PBQ_FILE.read_text(encoding="utf-8"))["questions"]
+    _, tags = load_topics()
+    for f in bank_files():
+        for q in json.loads(f.read_text(encoding="utf-8"))["questions"]:
+            if not q.get("topic") and q.get("id") in tags:
+                q = {**q, "topic": tags[q["id"]]}
+            out.append(q)
     return tuple(out)
 
 
@@ -205,7 +238,7 @@ def as_questions(records=None) -> list:
 
 
 def main(argv=None) -> int:
-    files = [Path(a) for a in (argv or sys.argv[1:])] or sorted(BANK_DIR.glob("domain*.json")) + [PBQ_FILE]
+    files = [Path(a) for a in (argv or sys.argv[1:])] or bank_files()
     bad = 0
     for f in files:
         data = json.loads(f.read_text(encoding="utf-8"))

@@ -1,0 +1,1379 @@
+{
+  "domain": "4",
+  "title": "Domain 4 extra questions (4.1-4.5)",
+  "note": "Original questions written for IdentityOps Lab. Not from exam dumps or commercial banks.",
+  "questions": [
+    {
+      "id": "D4-101",
+      "objective": "4.1",
+      "topic": "Secure Baselines",
+      "stem": "Which of the following BEST describes a secure baseline?",
+      "choices": [
+        "A record of normal network traffic volumes for each hour",
+        "A complete list of every hardware and software asset owned by the company",
+        "A documented set of minimum security settings that systems must meet",
+        "A calendar showing when each system will be patched"
+      ],
+      "answer": "A documented set of minimum security settings that systems must meet",
+      "explanation": "A secure baseline defines the approved minimum security configuration that every system of a given type must match. A record of normal traffic is a performance or behavior baseline used for anomaly detection, not a configuration standard."
+    },
+    {
+      "id": "D4-102",
+      "objective": "4.1",
+      "topic": "Secure Baselines",
+      "stem": "A security team has written and approved a hardened configuration standard for its database servers. The team now uses a configuration management tool to push those settings to every database server. Which phase of the secure baseline process is this?",
+      "choices": [
+        "Establishing",
+        "Deploying",
+        "Maintaining",
+        "Decommissioning"
+      ],
+      "answer": "Deploying",
+      "explanation": "Pushing an approved baseline out to systems is the deploy phase. Establishing happened earlier, when the team wrote and approved the standard."
+    },
+    {
+      "id": "D4-103",
+      "objective": "4.1",
+      "topic": "Secure Baselines",
+      "stem": "A year after rolling out a workstation baseline, the company upgrades to a new operating system version, and the vendor publishes updated hardening guidance. The security team reviews the guidance and revises the baseline. Which baseline activity is the team performing?",
+      "choices": [
+        "Establishing",
+        "Deploying",
+        "Enumerating",
+        "Maintaining"
+      ],
+      "answer": "Maintaining",
+      "explanation": "Reviewing and updating an existing baseline as software and threats change is maintenance. Establishing refers to creating the first version of the baseline, which already exists here."
+    },
+    {
+      "id": "D4-104",
+      "objective": "4.1",
+      "topic": "Secure Baselines",
+      "stem": "An administrator wants to be notified automatically whenever a server's settings drift away from the approved hardened configuration, for example if someone turns off the host firewall. Which of the following BEST meets this need?",
+      "choices": [
+        "Automated compliance scanning against the baseline",
+        "Quarterly penetration testing by an outside firm against each server",
+        "Full disk encryption on each server",
+        "Nightly image backups of each server"
+      ],
+      "answer": "Automated compliance scanning against the baseline",
+      "explanation": "Regularly scanning systems against the baseline detects configuration drift and can alert on it. A penetration test is periodic and looks for exploitable weaknesses, so it would not reliably catch a single setting change in time."
+    },
+    {
+      "id": "D4-105",
+      "objective": "4.1",
+      "topic": "Secure Baselines",
+      "stem": "A company has finished building a new hardened baseline for its Windows laptops. Which of the following should the team do FIRST before applying it to all 3,000 laptops?",
+      "choices": [
+        "Push it to every laptop overnight",
+        "Apply it only to laptops issued to new hires starting next month",
+        "Test it on a small, representative group of laptops",
+        "Wait for users to report any problems"
+      ],
+      "answer": "Test it on a small, representative group of laptops",
+      "explanation": "Testing a baseline on a pilot group finds settings that break business applications before they affect everyone. Pushing it to every laptop at once risks a large outage if a setting conflicts with a critical application."
+    },
+    {
+      "id": "D4-106",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "A network administrator is hardening the access switches in a branch office. Which of the following would BEST stop a visitor from plugging a laptop into an empty wall jack and reaching the internal network?",
+      "choices": [
+        "Disable unused switch ports",
+        "Enable spanning tree on all ports",
+        "Rename the default VLAN",
+        "Configure link aggregation"
+      ],
+      "answer": "Disable unused switch ports",
+      "explanation": "Shutting down ports that are not in use means a live connection is not available at unused jacks. Spanning tree prevents switching loops and does nothing to keep unauthorized devices off an active port."
+    },
+    {
+      "id": "D4-107",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "An auditor finds that the company's edge routers are still using the vendor's default administrator password and are managed over Telnet. Which of the following should be done to harden the routers?",
+      "choices": [
+        "Enable SNMPv1 so the routers can be monitored",
+        "Add more memory to the routers",
+        "Add a second internet connection so the routers have redundant uplinks",
+        "Change the default credentials and manage the routers over SSH"
+      ],
+      "answer": "Change the default credentials and manage the routers over SSH",
+      "explanation": "Default passwords are widely published, and Telnet sends credentials in cleartext, so replacing both directly closes the weaknesses found. SNMPv1 uses cleartext community strings and would add another weakness rather than remove one."
+    },
+    {
+      "id": "D4-108",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "A company installs smart thermostats and IP cameras throughout its offices. Which of the following should be done FIRST to harden these IoT devices?",
+      "choices": [
+        "Install an EDR agent on each device",
+        "Change the default passwords and update the firmware",
+        "Assign each device a public IP address",
+        "Enable Universal Plug and Play so each device can configure the firewall"
+      ],
+      "answer": "Change the default passwords and update the firmware",
+      "explanation": "IoT devices often ship with known default credentials and outdated firmware, so changing passwords and updating firmware are the first hardening steps. Most IoT devices cannot run EDR agents, so that option is usually not possible."
+    },
+    {
+      "id": "D4-109",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "Malware on several employee workstations was able to install drivers and change system-wide settings because it ran with the logged-in user's rights. Which of the following hardening steps would BEST prevent this in the future?",
+      "choices": [
+        "Enforce a screen-lock timeout",
+        "Enable full disk encryption",
+        "Remove local administrator rights from users",
+        "Require longer passwords"
+      ],
+      "answer": "Remove local administrator rights from users",
+      "explanation": "Applying least privilege by removing local admin rights means malware running as the user cannot make system-wide changes. Full disk encryption protects data on a lost or stolen device but does nothing to limit what running malware can do."
+    },
+    {
+      "id": "D4-110",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "A company moves its servers to an IaaS provider. A review finds that administrators sign in to the provider's management console with only a username and password. Which of the following would BEST harden access to the cloud infrastructure?",
+      "choices": [
+        "Enable autoscaling for all workloads",
+        "Require multifactor authentication for administrative accounts",
+        "Move the workloads to larger instance sizes",
+        "Serve the public website through a global content delivery network"
+      ],
+      "answer": "Require multifactor authentication for administrative accounts",
+      "explanation": "The cloud management console controls the whole environment, so protecting administrator sign-ins with MFA is a key cloud hardening step. Autoscaling and larger instances improve capacity, not security."
+    },
+    {
+      "id": "D4-111",
+      "objective": "4.1",
+      "topic": "Hardening Targets",
+      "stem": "A factory robot controller runs a real-time operating system on dedicated hardware and must respond to sensor input within milliseconds. Which of the following is the MOST likely reason the vendor does not allow third-party security software on the controller?",
+      "choices": [
+        "The software could delay time-critical processing",
+        "Real-time operating systems have no network stack",
+        "Real-time operating systems can never be updated",
+        "Real-time operating systems encrypt all storage by default"
+      ],
+      "answer": "The software could delay time-critical processing",
+      "explanation": "An RTOS must guarantee response times, and extra software such as an antivirus scanner can introduce delays that break that guarantee. Many RTOS devices are networked and can be updated by the vendor, so those options are not the reason."
+    },
+    {
+      "id": "D4-112",
+      "objective": "4.1",
+      "topic": "Wireless Installation",
+      "stem": "A heat map of a new wireless network shows that the corporate signal is strong in the public parking lot across the street. Which of the following should the administrator do to reduce the chance of outsiders connecting?",
+      "choices": [
+        "Hide the network's SSID",
+        "Switch the access points to 2.4 GHz only",
+        "Add more access points near the windows to improve indoor coverage",
+        "Lower the transmit power and reposition the nearby access points"
+      ],
+      "answer": "Lower the transmit power and reposition the nearby access points",
+      "explanation": "Reducing power and moving access points away from exterior walls shrinks the signal footprint outside the building. Hiding the SSID does not stop anyone from detecting the network, because the name still appears in client traffic."
+    },
+    {
+      "id": "D4-113",
+      "objective": "4.1",
+      "topic": "Wireless Installation",
+      "stem": "When planning where to mount access points in a new office, which of the following is the MOST important security reason to avoid placing them right next to exterior walls and windows?",
+      "choices": [
+        "To limit how far the signal leaks outside the building",
+        "To keep the access points from overheating",
+        "To make firmware updates easier for the network team to install",
+        "To reduce the length of the network cables"
+      ],
+      "answer": "To limit how far the signal leaks outside the building",
+      "explanation": "Access points near exterior walls push usable signal outdoors, where attackers can reach it from outside the physical perimeter. Cabling length is a cost concern, not a security reason."
+    },
+    {
+      "id": "D4-114",
+      "objective": "4.1",
+      "topic": "Wireless Installation",
+      "stem": "A wireless engineer reviews a site survey and finds that neighboring access points in the office all use overlapping 2.4 GHz channels, causing interference. Which of the following should the engineer do?",
+      "choices": [
+        "Assign every access point to channel 6",
+        "Assign non-overlapping channels such as 1, 6, and 11",
+        "Enable WPS on each access point",
+        "Disable the 5 GHz band on every access point in the office"
+      ],
+      "answer": "Assign non-overlapping channels such as 1, 6, and 11",
+      "explanation": "On 2.4 GHz, channels 1, 6, and 11 do not overlap, so spreading adjacent access points across them reduces interference. Putting every access point on the same channel makes interference worse, not better."
+    },
+    {
+      "id": "D4-115",
+      "objective": "4.1",
+      "topic": "Mobile Solutions",
+      "stem": "A startup allows employees to read work email on their personal phones. The company wants to keep corporate data separate from personal data and be able to remove only the work data when someone leaves. Which of the following BEST meets this need?",
+      "choices": [
+        "A full remote wipe of the device when the employee leaves",
+        "A carrier lock on the SIM card",
+        "Disabling the camera on the device",
+        "MDM containerization with a separate work profile"
+      ],
+      "answer": "MDM containerization with a separate work profile",
+      "explanation": "Containerization keeps corporate apps and data in a managed work profile that can be wiped without touching personal content. A full remote wipe would also erase the employee's personal photos and apps, which is not acceptable on a personally owned phone."
+    },
+    {
+      "id": "D4-116",
+      "objective": "4.1",
+      "topic": "Mobile Solutions",
+      "stem": "A company lets each employee pick a phone from a short list of approved models. The company buys the phone, owns it, and manages it. Which of the following deployment models is this?",
+      "choices": [
+        "BYOD",
+        "COPE",
+        "CYOD",
+        "VDI"
+      ],
+      "answer": "CYOD",
+      "explanation": "In choose your own device (CYOD), users select from approved models that the company purchases and manages. COPE also uses company-owned devices, but it is defined by the company issuing the device for both work and personal use, not by letting users choose from an approved list."
+    },
+    {
+      "id": "D4-117",
+      "objective": "4.1",
+      "topic": "Mobile Solutions",
+      "stem": "A sales manager's company phone often shows pairing requests from unknown devices at trade shows, and the security team is worried about bluesnarfing. Which connection method should the MDM policy restrict?",
+      "choices": [
+        "Cellular",
+        "Wi-Fi",
+        "USB tethering",
+        "Bluetooth"
+      ],
+      "answer": "Bluetooth",
+      "explanation": "Bluesnarfing is an attack over Bluetooth, so the MDM policy should turn off discoverability or limit Bluetooth use. Restricting Wi-Fi would not stop an attack carried out over a Bluetooth connection."
+    },
+    {
+      "id": "D4-118",
+      "objective": "4.1",
+      "topic": "Wireless Security Settings",
+      "stem": "A company uses 802.1X for its wireless network. It wants clients to verify a certificate on the authentication server and then send the user's password inside an encrypted tunnel, without issuing certificates to every client. Which authentication protocol BEST fits?",
+      "choices": [
+        "PEAP",
+        "EAP-TLS",
+        "WPS",
+        "PAP"
+      ],
+      "answer": "PEAP",
+      "explanation": "PEAP uses only a server-side certificate to build a TLS tunnel, and the user's credentials travel inside it. EAP-TLS requires a certificate on every client as well, which the company wants to avoid."
+    },
+    {
+      "id": "D4-119",
+      "objective": "4.1",
+      "topic": "Wireless Security Settings",
+      "stem": "A wireless controller must send authentication, authorization, and accounting requests for every Wi-Fi user to a central server. Which of the following protocols is MOST commonly used for this?",
+      "choices": [
+        "TACACS+",
+        "RADIUS",
+        "LDAP",
+        "SNMP"
+      ],
+      "answer": "RADIUS",
+      "explanation": "RADIUS is the standard AAA protocol used with 802.1X wireless authentication. TACACS+ is also an AAA protocol but is mainly used for administrator access to network devices, not for end-user Wi-Fi access."
+    },
+    {
+      "id": "D4-120",
+      "objective": "4.1",
+      "topic": "Application Security",
+      "stem": "Before code is merged, a development team wants an automated tool to review the source code for problems such as hard-coded passwords and unsafe functions without running the application. Which of the following should the team use?",
+      "choices": [
+        "Dynamic analysis",
+        "Fuzzing",
+        "Static code analysis",
+        "Sandboxing"
+      ],
+      "answer": "Static code analysis",
+      "explanation": "Static analysis examines source code without executing it, so it can flag hard-coded secrets and dangerous function calls early. Dynamic analysis and fuzzing both require the application to be running."
+    },
+    {
+      "id": "D4-121",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "Which of the following is the BEST reason to include the security team in the procurement process for new software?",
+      "choices": [
+        "To confirm security requirements are met before the purchase is final",
+        "To negotiate the lowest possible price",
+        "To install the software after it is delivered",
+        "To print asset tags for the software licenses"
+      ],
+      "answer": "To confirm security requirements are met before the purchase is final",
+      "explanation": "Security requirements are cheapest to enforce before the contract is signed, when the vendor can still be asked to meet them or be rejected. Negotiating price is a purchasing function and does not address security risk."
+    },
+    {
+      "id": "D4-122",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "The marketing department bought a cloud file-sharing service with a corporate credit card without telling IT. Customer data is now stored there with no security review. Which of the following would BEST prevent this from happening again?",
+      "choices": [
+        "Block all cloud services at the company's internet firewall",
+        "Increase the marketing department's budget",
+        "Run vulnerability scans more frequently",
+        "Route all technology purchases through formal procurement"
+      ],
+      "answer": "Route all technology purchases through formal procurement",
+      "explanation": "A formal procurement process makes sure IT and security review any service before it is bought and used. Blocking every cloud service would disrupt legitimate business and does not fix the underlying process gap."
+    },
+    {
+      "id": "D4-123",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "A company wants to buy network equipment only from suppliers that have already passed a security and reliability review. Which of the following should the procurement team maintain?",
+      "choices": [
+        "An asset inventory",
+        "A data retention schedule",
+        "An approved vendor list",
+        "A risk exception register"
+      ],
+      "answer": "An approved vendor list",
+      "explanation": "An approved vendor list records the suppliers that have been vetted, so buyers can choose only from them. An asset inventory tracks items the company already owns, not which suppliers are allowed."
+    },
+    {
+      "id": "D4-124",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "Two vendors offer similar firewalls. Vendor A's model will reach end of support next year, while Vendor B commits to security updates for six years. From an asset management perspective, why is Vendor B the better choice?",
+      "choices": [
+        "The firewall will cost less to buy",
+        "The firewall will keep receiving security patches",
+        "The firewall will be easier to classify",
+        "The firewall will not need to be tracked in the asset inventory"
+      ],
+      "answer": "The firewall will keep receiving security patches",
+      "explanation": "A device that reaches end of support stops receiving fixes, leaving known vulnerabilities open. Every asset still needs to be inventoried regardless of how long its vendor supports it."
+    },
+    {
+      "id": "D4-125",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "To save money, a buyer orders network switches from an unknown online reseller at a steep discount. Which of the following is the GREATEST security concern with this purchase?",
+      "choices": [
+        "The switches could arrive several weeks later than expected",
+        "The switches could have a shorter warranty",
+        "The switches could be counterfeit or tampered with",
+        "The switches could use more electricity"
+      ],
+      "answer": "The switches could be counterfeit or tampered with",
+      "explanation": "Unauthorized resellers are a supply chain risk because counterfeit or modified hardware may contain backdoors or flawed firmware. A late delivery or shorter warranty is a business inconvenience, not a security threat."
+    },
+    {
+      "id": "D4-126",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "Before buying a new software product, a security team asks the vendor for a list of every open-source and third-party component included in the product. Which of the following is the team requesting?",
+      "choices": [
+        "A software bill of materials",
+        "A certificate of destruction",
+        "A service-level agreement",
+        "A memorandum of understanding"
+      ],
+      "answer": "A software bill of materials",
+      "explanation": "A software bill of materials (SBOM) lists the components inside a product so the buyer can track vulnerabilities in them. A service-level agreement defines performance and support commitments, not product contents."
+    },
+    {
+      "id": "D4-127",
+      "objective": "4.2",
+      "topic": "Acquisition and Procurement",
+      "stem": "During the purchase of a design application, IT records how many licenses were bought and the terms of use for each. Which risk does this MOST directly reduce?",
+      "choices": [
+        "Malware spreading through email attachments",
+        "Using unlicensed software and facing compliance penalties",
+        "Data loss caused by a failed hard drive",
+        "Unauthorized people entering the server room without an escort"
+      ],
+      "answer": "Using unlicensed software and facing compliance penalties",
+      "explanation": "Tracking license counts and terms keeps the company within its agreements and avoids legal and financial penalties. License records do nothing to stop malware, which is handled by other controls."
+    },
+    {
+      "id": "D4-128",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "Which of the following is the PRIMARY responsibility of an asset owner?",
+      "choices": [
+        "Running the daily backups of the asset",
+        "Physically installing the asset in the rack",
+        "Writing the source code that runs on the asset",
+        "Deciding who can access the asset and how it must be protected"
+      ],
+      "answer": "Deciding who can access the asset and how it must be protected",
+      "explanation": "The owner is accountable for the asset and decides its classification, access, and protection requirements. Running backups is a custodian task carried out on the owner's behalf."
+    },
+    {
+      "id": "D4-129",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "A file server holds both public marketing brochures and unreleased quarterly financial results. Which of the following should determine how strongly each set of files is protected?",
+      "choices": [
+        "The age of the server hardware",
+        "The classification assigned to each set of data",
+        "The number of users who use the share",
+        "The total size of the files"
+      ],
+      "answer": "The classification assigned to each set of data",
+      "explanation": "Classification ties each set of data to handling and protection requirements based on its sensitivity. The number of users affects capacity planning, not how sensitive the information is."
+    },
+    {
+      "id": "D4-130",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "When a laptop is issued to a new employee, the help desk records the employee's name, the laptop's asset tag, and the issue date in the asset system. Which of the following does this MOST directly support?",
+      "choices": [
+        "Sanitization of the device",
+        "Patch management on the device",
+        "Vulnerability scanning of the device",
+        "Accountability for the device"
+      ],
+      "answer": "Accountability for the device",
+      "explanation": "Assigning each asset to a named person creates accountability, so the company knows who is responsible for it. Patching depends on knowing the device exists, but the name and issue date are about responsibility, not updates."
+    },
+    {
+      "id": "D4-131",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "The VP of Sales decides who may access the customer database. A database administrator performs the backups and applies patches as the VP's policy requires. Which role does the database administrator hold?",
+      "choices": [
+        "Custodian",
+        "Owner",
+        "Controller",
+        "Data subject"
+      ],
+      "answer": "Custodian",
+      "explanation": "A custodian carries out the day-to-day care of an asset following the owner's requirements. The VP is the owner, because the VP decides access and protection."
+    },
+    {
+      "id": "D4-132",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "A company ranks every server as critical, important, or standard based on how much the business depends on it. Which of the following decisions will this ranking MOST directly help with?",
+      "choices": [
+        "Choosing the color of each asset tag",
+        "Calculating depreciation for tax purposes",
+        "Choosing which systems to patch and restore first",
+        "Selecting which vendor to buy replacement servers from next year"
+      ],
+      "answer": "Choosing which systems to patch and restore first",
+      "explanation": "Ranking assets by business criticality lets the team prioritize patching and recovery for the systems that matter most. Depreciation is an accounting calculation based on cost and age, not on how critical a system is."
+    },
+    {
+      "id": "D4-133",
+      "objective": "4.2",
+      "topic": "Assignment and Accounting",
+      "stem": "The finance team asks IT to link each laptop and software license to the department that pays for it, so costs and responsibility can be tracked. Which asset management activity is this?",
+      "choices": [
+        "Sanitization",
+        "Enumeration",
+        "Destruction",
+        "Accounting"
+      ],
+      "answer": "Accounting",
+      "explanation": "Assignment and accounting connect assets to the people and departments responsible for them. Enumeration discovers which assets exist, but it does not tie them to a cost center or owner."
+    },
+    {
+      "id": "D4-134",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "Which of the following is the MOST important security reason to keep an accurate hardware and software inventory?",
+      "choices": [
+        "An inventory lowers the company's electricity costs",
+        "An inventory removes the need for separate vulnerability scans of each system",
+        "An organization cannot protect assets it does not know it has",
+        "An inventory makes user logins faster"
+      ],
+      "answer": "An organization cannot protect assets it does not know it has",
+      "explanation": "Unknown assets go unpatched and unmonitored, so an accurate inventory is the foundation of most other security activities. An inventory supports vulnerability scanning by defining what to scan, but it does not replace scanning."
+    },
+    {
+      "id": "D4-135",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "A critical vulnerability is announced in a popular PDF reader. The security team must find out within an hour which computers have the affected version installed. Which of the following would BEST support this?",
+      "choices": [
+        "An up-to-date software inventory",
+        "A data retention policy",
+        "A certificate of destruction",
+        "An acceptable use policy"
+      ],
+      "answer": "An up-to-date software inventory",
+      "explanation": "A current software inventory shows which systems run which versions, so affected computers can be found quickly. An acceptable use policy tells users what they may do but records nothing about installed software."
+    },
+    {
+      "id": "D4-136",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "A company suspects developers have been creating cloud virtual machines outside the approved process. Which of the following would BEST identify these machines?",
+      "choices": [
+        "Checking the physical asset tags in the data center",
+        "Querying the cloud provider's management API",
+        "Reviewing the data retention policy",
+        "Reviewing badge reader logs"
+      ],
+      "answer": "Querying the cloud provider's management API",
+      "explanation": "Querying the provider's console or API lists every resource in the account, including ones never recorded in the inventory. Cloud virtual machines have no physical asset tags, so checking tags would not find them."
+    },
+    {
+      "id": "D4-137",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "During an annual audit, staff scan the barcode label on each laptop and compare the results with the asset database. Which of the following is being performed?",
+      "choices": [
+        "Physical inventory reconciliation",
+        "Penetration testing",
+        "Data sanitization",
+        "Secure baseline review"
+      ],
+      "answer": "Physical inventory reconciliation",
+      "explanation": "Comparing physical items against inventory records confirms that each asset is where the records say it is and finds missing items. A baseline review checks configuration settings, not whether the devices are present."
+    },
+    {
+      "id": "D4-138",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "A delivery company wants to be able to locate tablets that its drivers lose or that are stolen while out on routes. Which of the following asset tracking capabilities would BEST help?",
+      "choices": [
+        "RFID tags that are read at the warehouse loading door",
+        "Barcode labels on each tablet",
+        "A printed register of serial numbers",
+        "GPS location reporting through the MDM"
+      ],
+      "answer": "GPS location reporting through the MDM",
+      "explanation": "MDM location reporting can show where a tablet is wherever it has a connection. RFID readers at the warehouse door only detect a tablet when it passes that door, so they cannot locate one lost on a route."
+    },
+    {
+      "id": "D4-139",
+      "objective": "4.2",
+      "topic": "Monitoring and Asset Tracking",
+      "stem": "Which of the following details is MOST useful to record for each asset to support vulnerability management?",
+      "choices": [
+        "Purchase order number",
+        "Installed operating system and software versions",
+        "Warranty expiration date for each hardware component",
+        "Name of the shipping carrier"
+      ],
+      "answer": "Installed operating system and software versions",
+      "explanation": "Vulnerabilities affect specific software versions, so recording versions lets the team match new advisories to affected assets. The warranty date matters for hardware replacement, not for identifying vulnerable systems."
+    },
+    {
+      "id": "D4-140",
+      "objective": "4.2",
+      "topic": "Disposal and Decommissioning",
+      "stem": "A company is retiring a batch of magnetic hard drives that will not be reused. Which of the following methods makes the data unrecoverable but works only on magnetic media?",
+      "choices": [
+        "Shredding",
+        "Quick formatting",
+        "Degaussing",
+        "Pulverizing"
+      ],
+      "answer": "Degaussing",
+      "explanation": "Degaussing uses a strong magnetic field to erase magnetic media and has no effect on solid-state storage. Shredding and pulverizing also destroy data, but they work on any type of media, not just magnetic drives."
+    },
+    {
+      "id": "D4-141",
+      "objective": "4.2",
+      "topic": "Disposal and Decommissioning",
+      "stem": "Before donating old laptops to a school, a technician ran a quick format on each drive. Which of the following BEST describes the problem with this approach?",
+      "choices": [
+        "The laptops can no longer boot an operating system",
+        "The data can still be recovered with common tools",
+        "The drives are physically damaged by the format",
+        "The laptops will fail a certificate of destruction"
+      ],
+      "answer": "The data can still be recovered with common tools",
+      "explanation": "A quick format only removes the file system index, so the underlying data remains and can be recovered. Formatting does not damage a drive; the problem is that it leaves the data in place."
+    },
+    {
+      "id": "D4-142",
+      "objective": "4.2",
+      "topic": "Disposal and Decommissioning",
+      "stem": "A server that is scheduled for disposal holds email that is subject to an active lawsuit. Which of the following should the administrator do?",
+      "choices": [
+        "Preserve the data under the legal hold",
+        "Wipe the drives immediately to protect privacy",
+        "Shred the drives and keep the certificate of destruction",
+        "Move the server to a test network and leave it running"
+      ],
+      "answer": "Preserve the data under the legal hold",
+      "explanation": "Data under a legal hold must be preserved until legal counsel releases it, even if the hardware is being retired. Shredding the drives would destroy evidence and could expose the company to sanctions, even with a destruction certificate."
+    },
+    {
+      "id": "D4-143",
+      "objective": "4.2",
+      "topic": "Disposal and Decommissioning",
+      "stem": "A data center team is decommissioning a server. In addition to sanitizing its drives, which of the following should the team do?",
+      "choices": [
+        "Add the server to the nightly backup schedule for one more year",
+        "Renew the server's software licenses",
+        "Update the asset inventory to show the server is retired",
+        "Assign the server a new asset owner"
+      ],
+      "answer": "Update the asset inventory to show the server is retired",
+      "explanation": "Marking the asset as retired keeps the inventory accurate, so the server is not expected in scans or audits. Renewing licenses for a retired server wastes money and suggests it is still in use."
+    },
+    {
+      "id": "D4-144",
+      "objective": "4.2",
+      "topic": "Disposal and Decommissioning",
+      "stem": "Which of the following terms describes removing data from storage media so that it cannot be recovered, while leaving the media usable afterward?",
+      "choices": [
+        "Destruction",
+        "Certification",
+        "Classification",
+        "Sanitization"
+      ],
+      "answer": "Sanitization",
+      "explanation": "Sanitization removes data so it cannot be recovered but leaves the media intact for reuse. Destruction also makes data unrecoverable, but it physically ruins the media so it cannot be used again."
+    },
+    {
+      "id": "D4-145",
+      "objective": "4.3",
+      "topic": "Identification Methods",
+      "stem": "A company hires an outside firm to actively try to exploit weaknesses in its external network and report how far it could get. Which of the following identification methods is this?",
+      "choices": [
+        "Vulnerability scanning",
+        "Threat feed review",
+        "System audit",
+        "Penetration testing"
+      ],
+      "answer": "Penetration testing",
+      "explanation": "A penetration test goes beyond finding weaknesses and actually attempts to exploit them to show real impact. A vulnerability scan identifies likely weaknesses but does not try to exploit them."
+    },
+    {
+      "id": "D4-146",
+      "objective": "4.3",
+      "topic": "Identification Methods",
+      "stem": "A compliance analyst checks whether the change management process was followed for the last 50 firewall changes and whether the current rules match the approved requests. Which of the following vulnerability identification methods is this?",
+      "choices": [
+        "System and process audit",
+        "Penetration test",
+        "Dynamic analysis",
+        "Bug bounty"
+      ],
+      "answer": "System and process audit",
+      "explanation": "An audit compares how systems and processes actually operate against the documented requirements, finding gaps such as unapproved rule changes. A penetration test attacks systems and does not review whether change approvals were followed."
+    },
+    {
+      "id": "D4-147",
+      "objective": "4.3",
+      "topic": "Identification Methods",
+      "stem": "A security team wants to learn what an outside attacker without any account access would see when scanning the company's servers. Which of the following should the team run?",
+      "choices": [
+        "Credentialed scan",
+        "Non-credentialed scan",
+        "Static code analysis",
+        "Agent-based scan"
+      ],
+      "answer": "Non-credentialed scan",
+      "explanation": "A non-credentialed scan probes systems from the outside, showing exposed services and banners the way an unauthenticated attacker would. A credentialed scan logs in to the system, which gives a deeper view than an outsider would have."
+    },
+    {
+      "id": "D4-148",
+      "objective": "4.3",
+      "topic": "Threat Feeds and Disclosure Programs",
+      "stem": "An analyst reads public vulnerability databases, vendor security blogs, and posts by researchers on social media to stay informed about new threats. Which type of threat intelligence source is the analyst using?",
+      "choices": [
+        "Proprietary threat feed",
+        "Dark web monitoring",
+        "Open-source intelligence",
+        "Information-sharing organization"
+      ],
+      "answer": "Open-source intelligence",
+      "explanation": "OSINT comes from publicly available sources such as databases, blogs, and social media. A proprietary feed is a paid, vendor-curated source rather than freely available public material."
+    },
+    {
+      "id": "D4-149",
+      "objective": "4.3",
+      "topic": "Threat Feeds and Disclosure Programs",
+      "stem": "A company pays a security vendor for a subscription that delivers curated indicators of compromise directly into its SIEM. Which type of threat intelligence source is this?",
+      "choices": [
+        "Open-source intelligence",
+        "Proprietary third-party feed",
+        "Information-sharing organization",
+        "Responsible disclosure program"
+      ],
+      "answer": "Proprietary third-party feed",
+      "explanation": "A paid vendor subscription is a proprietary or third-party threat feed. An information-sharing organization is a membership group where peers exchange intelligence, not a commercial product."
+    },
+    {
+      "id": "D4-150",
+      "objective": "4.3",
+      "topic": "Threat Feeds and Disclosure Programs",
+      "stem": "A company publishes a web page explaining how outside researchers can report security flaws they find in its products. The page promises not to take legal action against good-faith reporters but offers no payment. Which of the following does this page describe?",
+      "choices": [
+        "Bug bounty program",
+        "Penetration testing contract",
+        "Responsible disclosure program",
+        "Threat feed subscription"
+      ],
+      "answer": "Responsible disclosure program",
+      "explanation": "A responsible disclosure program gives researchers a safe, defined way to report flaws. A bug bounty is a type of disclosure program that pays rewards, and this page offers no payment."
+    },
+    {
+      "id": "D4-151",
+      "objective": "4.3",
+      "topic": "Analysis and Prioritization",
+      "stem": "Which of the following provides a unique identifier for a publicly known vulnerability so that different scanners, vendors, and advisories can refer to the same flaw?",
+      "choices": [
+        "CVSS",
+        "SCAP",
+        "OVAL",
+        "CVE"
+      ],
+      "answer": "CVE",
+      "explanation": "The Common Vulnerabilities and Exposures (CVE) list gives each publicly known flaw a unique ID. CVSS scores how severe a flaw is but does not identify it."
+    },
+    {
+      "id": "D4-152",
+      "objective": "4.3",
+      "topic": "Analysis and Prioritization",
+      "stem": "Two servers have the same vulnerability with a CVSS base score of 8.1. One is an internet-facing customer portal, and the other is an isolated training server with no sensitive data. Which of the following explains why the team gives the portal's finding a higher priority?",
+      "choices": [
+        "Environmental factors such as exposure and asset value",
+        "The CVE identifier assigned to the flaw",
+        "The vulnerability classification",
+        "The vendor and version of the vulnerability scanner used"
+      ],
+      "answer": "Environmental factors such as exposure and asset value",
+      "explanation": "Environmental variables adjust priority based on how exposed and how valuable the affected system is, even when the base score is the same. The CVE identifier is identical for both servers, so it cannot explain the difference."
+    },
+    {
+      "id": "D4-153",
+      "objective": "4.3",
+      "topic": "Analysis and Prioritization",
+      "stem": "Company leadership states that low-severity findings may stay open for up to 90 days, but critical findings must be fixed within 7 days. Which of the following does this statement reflect?",
+      "choices": [
+        "Risk tolerance",
+        "Exposure factor",
+        "Vulnerability classification",
+        "Industry impact"
+      ],
+      "answer": "Risk tolerance",
+      "explanation": "Risk tolerance is the amount of risk the organization is willing to accept, which here sets how long findings of each severity may remain open. Exposure factor is the percentage of an asset's value lost in an incident, a different measure."
+    },
+    {
+      "id": "D4-154",
+      "objective": "4.3",
+      "topic": "Response and Remediation",
+      "stem": "A vendor releases a fix for a remotely exploitable flaw in the company's VPN appliances. Which of the following is the MOST appropriate response?",
+      "choices": [
+        "Purchase cybersecurity insurance",
+        "Request an exception for the appliances",
+        "Accept the risk without any action",
+        "Test and apply the vendor's patch"
+      ],
+      "answer": "Test and apply the vendor's patch",
+      "explanation": "When a vendor fix exists for a remotely exploitable flaw on an exposed device, patching removes the vulnerability itself. Insurance only offsets financial loss after an incident and leaves the flaw open."
+    },
+    {
+      "id": "D4-155",
+      "objective": "4.3",
+      "topic": "Response and Remediation",
+      "stem": "A company cannot remove all risk of a costly data breach, so it buys a policy that will cover part of the financial losses if one occurs. Which of the following vulnerability response approaches is this?",
+      "choices": [
+        "Compensating control",
+        "Segmentation",
+        "Insurance",
+        "Exemption"
+      ],
+      "answer": "Insurance",
+      "explanation": "Cybersecurity insurance transfers part of the financial impact of an incident to an insurer. A compensating control reduces the likelihood or impact of exploitation through a technical or process safeguard, which a policy does not do."
+    },
+    {
+      "id": "D4-156",
+      "objective": "4.3",
+      "topic": "Response and Remediation",
+      "stem": "Which of the following remediation approaches limits an attacker's ability to move from a vulnerable device to other systems, without fixing the vulnerability itself?",
+      "choices": [
+        "Patching",
+        "Segmentation",
+        "Insurance",
+        "Rescanning"
+      ],
+      "answer": "Segmentation",
+      "explanation": "Segmentation isolates the vulnerable device on its own network zone, which contains an attacker even though the flaw remains. Patching fixes the flaw itself, so it does not match the description."
+    },
+    {
+      "id": "D4-157",
+      "objective": "4.3",
+      "topic": "Response and Remediation",
+      "stem": "A critical patch must be applied to a database server, but a previous patch from the same vendor broke the main business application. Which of the following should the administrator do FIRST?",
+      "choices": [
+        "Apply the patch to production during business hours",
+        "Request a permanent exception for the server",
+        "Buy cybersecurity insurance for the server",
+        "Test the patch in a non-production environment"
+      ],
+      "answer": "Test the patch in a non-production environment",
+      "explanation": "Testing first confirms the patch fixes the flaw without breaking the application, so it can then be applied safely. A permanent exception would leave a critical vulnerability open when a fix is available."
+    },
+    {
+      "id": "D4-158",
+      "objective": "4.3",
+      "topic": "Validation and Reporting",
+      "stem": "The network team reports that it disabled a vulnerable service on a server. A security analyst then connects to the service's port to confirm that it no longer responds. Which of the following validation activities is this?",
+      "choices": [
+        "Exemption",
+        "Verification",
+        "Classification",
+        "Enumeration"
+      ],
+      "answer": "Verification",
+      "explanation": "Verification confirms that a reported fix actually took effect. Enumeration discovers which assets or services exist and is not used to confirm a fix."
+    },
+    {
+      "id": "D4-159",
+      "objective": "4.3",
+      "topic": "Validation and Reporting",
+      "stem": "An outside compliance firm reviews patch records and change tickets and inspects evidence from a sample of servers to confirm that the vulnerabilities closed last quarter are still fixed. Which remediation validation method is this?",
+      "choices": [
+        "Rescanning",
+        "Bug bounty",
+        "Audit",
+        "Threat feed"
+      ],
+      "answer": "Audit",
+      "explanation": "An audit reviews records and evidence to confirm that remediation happened and is being sustained. Rescanning uses a scanner to check systems again, whereas this firm is reviewing records and evidence."
+    },
+    {
+      "id": "D4-160",
+      "objective": "4.3",
+      "topic": "Validation and Reporting",
+      "stem": "The CISO wants a monthly summary for executives showing the number of open critical vulnerabilities, the average time to fix them, and how those numbers are trending. Which vulnerability management activity is this?",
+      "choices": [
+        "Reporting",
+        "Remediation",
+        "Identification",
+        "Exemption"
+      ],
+      "answer": "Reporting",
+      "explanation": "Reporting communicates the state of the vulnerability program to stakeholders so they can make decisions. Remediation is the act of fixing vulnerabilities, not summarizing results for leadership."
+    },
+    {
+      "id": "D4-161",
+      "objective": "4.3",
+      "topic": "Validation and Reporting",
+      "stem": "Which of the following metrics would BEST show leadership whether the vulnerability management program is improving over time?",
+      "choices": [
+        "Number of scanner licenses purchased",
+        "Total number of open ports found on each server last month",
+        "Mean time to remediate critical findings",
+        "Version number of the scanning software"
+      ],
+      "answer": "Mean time to remediate critical findings",
+      "explanation": "A falling mean time to remediate shows the program is closing serious vulnerabilities faster. The number of scanner licenses measures spending, not whether risk is being reduced."
+    },
+    {
+      "id": "D4-162",
+      "objective": "4.4",
+      "topic": "Monitoring Computing Resources",
+      "stem": "A server administrator wants to be alerted if CPU usage on a domain controller stays above 95% or if the server's security log stops recording events. Which category of monitoring is this?",
+      "choices": [
+        "Application monitoring",
+        "System monitoring",
+        "Infrastructure monitoring",
+        "Physical monitoring"
+      ],
+      "answer": "System monitoring",
+      "explanation": "System monitoring watches the health, resources, and logs of individual hosts such as servers and workstations. Infrastructure monitoring focuses on network devices such as switches, routers, and firewalls."
+    },
+    {
+      "id": "D4-163",
+      "objective": "4.4",
+      "topic": "Monitoring Computing Resources",
+      "stem": "An e-commerce team tracks failed customer logins, error rates, and unusual order volumes produced by its web storefront software. Which type of monitoring is the team performing?",
+      "choices": [
+        "System monitoring",
+        "Infrastructure monitoring",
+        "Physical monitoring",
+        "Application monitoring"
+      ],
+      "answer": "Application monitoring",
+      "explanation": "Application monitoring tracks events and behavior generated by software, such as logins, errors, and transactions. System monitoring looks at the underlying host's resources, not the business activity inside the application."
+    },
+    {
+      "id": "D4-164",
+      "objective": "4.4",
+      "topic": "Monitoring Computing Resources",
+      "stem": "A network operations team watches switches, routers, firewalls, and wireless controllers for interface errors, outages, and configuration changes. Which monitoring category BEST describes this work?",
+      "choices": [
+        "Infrastructure monitoring",
+        "Application monitoring",
+        "System monitoring",
+        "User behavior monitoring"
+      ],
+      "answer": "Infrastructure monitoring",
+      "explanation": "Infrastructure monitoring covers the network devices that connect and protect systems. System monitoring refers to individual hosts, not the network gear between them."
+    },
+    {
+      "id": "D4-165",
+      "objective": "4.4",
+      "topic": "Monitoring Computing Resources",
+      "stem": "A company's online store suddenly shows a spike in server errors and in requests containing SQL keywords in URL parameters. Which of the following sources would MOST likely show this activity?",
+      "choices": [
+        "Switch port statistics",
+        "DHCP lease logs",
+        "Web application logs",
+        "Badge reader logs"
+      ],
+      "answer": "Web application logs",
+      "explanation": "Application logs record each request and the errors it caused, so they would show the injected SQL keywords. Switch port statistics show traffic volume and errors at the network level but not what the requests contained."
+    },
+    {
+      "id": "D4-166",
+      "objective": "4.4",
+      "topic": "Monitoring Computing Resources",
+      "stem": "An attacker who gained administrator access to a core switch configured it to copy traffic to an unused port. Which of the following would MOST likely have detected this change?",
+      "choices": [
+        "Antivirus scans on the endpoints",
+        "Error logs collected from the company's web application",
+        "Query auditing on the database",
+        "Configuration change alerts on network devices"
+      ],
+      "answer": "Configuration change alerts on network devices",
+      "explanation": "Monitoring network infrastructure for configuration changes would flag the new port mirroring setting. Endpoint antivirus runs on hosts and cannot see changes made inside a switch."
+    },
+    {
+      "id": "D4-167",
+      "objective": "4.4",
+      "topic": "Aggregation, Reporting and Archiving",
+      "stem": "During an investigation, analysts have to log in to 40 different servers one by one to read their logs, which slows the response. Which of the following activities would BEST address this?",
+      "choices": [
+        "Log archiving",
+        "Log aggregation",
+        "Alert tuning",
+        "Quarantine"
+      ],
+      "answer": "Log aggregation",
+      "explanation": "Log aggregation collects logs from many sources into one place where they can be searched together. Archiving moves older logs to long-term storage, which does not make current logs easier to search."
+    },
+    {
+      "id": "D4-168",
+      "objective": "4.4",
+      "topic": "Aggregation, Reporting and Archiving",
+      "stem": "While investigating an incident, an analyst sees events from the firewall and the web server appear in the SIEM in an impossible order. Which of the following is the MOST likely cause?",
+      "choices": [
+        "The devices' clocks are not synchronized",
+        "The SIEM is running low on storage for new events",
+        "The firewall logs are encrypted",
+        "The alert rules are too sensitive"
+      ],
+      "answer": "The devices' clocks are not synchronized",
+      "explanation": "If devices do not use a common time source such as NTP, their timestamps disagree and correlated events appear out of order. Sensitive alert rules create extra alerts but do not change the timestamps on events."
+    },
+    {
+      "id": "D4-169",
+      "objective": "4.4",
+      "topic": "Aggregation, Reporting and Archiving",
+      "stem": "A compliance manager needs the SIEM to produce a monthly document listing every privileged account login so it can be handed to auditors. Which monitoring activity is this?",
+      "choices": [
+        "Archiving",
+        "Scanning",
+        "Quarantining",
+        "Reporting"
+      ],
+      "answer": "Reporting",
+      "explanation": "Reporting summarizes collected data into a regular document for stakeholders such as auditors. Archiving keeps old data for retention but does not produce a summary."
+    },
+    {
+      "id": "D4-170",
+      "objective": "4.4",
+      "topic": "Aggregation, Reporting and Archiving",
+      "stem": "Archived security logs may be needed as evidence in court. Which of the following would BEST protect the logs' integrity?",
+      "choices": [
+        "Storing them on write-once media and recording their hashes",
+        "Compressing them into ZIP files",
+        "Keeping them on the SIEM's local disk alongside the current logs",
+        "Emailing them to the legal department"
+      ],
+      "answer": "Storing them on write-once media and recording their hashes",
+      "explanation": "Write-once storage prevents changes, and recorded hashes prove the logs have not been altered since they were archived. Compressing logs saves space but does nothing to prevent or detect tampering."
+    },
+    {
+      "id": "D4-171",
+      "objective": "4.4",
+      "topic": "Aggregation, Reporting and Archiving",
+      "stem": "A SIEM receives logs in different formats from Windows servers, Linux servers, and firewalls. Which of the following does the SIEM perform so that these events can be searched and correlated together?",
+      "choices": [
+        "Archiving",
+        "Tokenization",
+        "Normalization",
+        "Sanitization"
+      ],
+      "answer": "Normalization",
+      "explanation": "Normalization converts logs from many formats into a common structure so fields such as time, user, and source address line up for correlation. Tokenization replaces sensitive values with tokens and does not make formats consistent."
+    },
+    {
+      "id": "D4-172",
+      "objective": "4.4",
+      "topic": "Alerting and Response",
+      "stem": "After an alert about malware on a laptop, an analyst removes the malware and reimages the system. Which of the following should the analyst do NEXT?",
+      "choices": [
+        "Reconnect the laptop to the network immediately",
+        "Rescan the laptop to validate the remediation",
+        "Disable the detection rule that fired",
+        "Archive the alert without further review"
+      ],
+      "answer": "Rescan the laptop to validate the remediation",
+      "explanation": "Validation confirms the threat is gone before the laptop goes back into service. Reconnecting it right away skips that check and could let any remaining infection spread."
+    },
+    {
+      "id": "D4-173",
+      "objective": "4.4",
+      "topic": "Alerting and Response",
+      "stem": "A rule raises an alert for every failed login and produces thousands of alerts a day. The team changes it to alert only after 10 failures within 5 minutes for the same account. Which of the following BEST describes this change?",
+      "choices": [
+        "Archiving the alert logs",
+        "Quarantining the accounts",
+        "Normalizing the log data",
+        "Adjusting the alert threshold"
+      ],
+      "answer": "Adjusting the alert threshold",
+      "explanation": "Raising the threshold is a form of alert tuning that keeps the rule useful while removing noise from normal mistyped passwords. Quarantining accounts is a response action, not a change to how the rule triggers."
+    },
+    {
+      "id": "D4-174",
+      "objective": "4.4",
+      "topic": "Alerting and Response",
+      "stem": "Which of the following is the MAIN risk when a security operations team receives far more low-value alerts than its analysts can review?",
+      "choices": [
+        "Real attacks may be missed because of alert fatigue",
+        "The SIEM license may expire early",
+        "The log data may become encrypted",
+        "Endpoints may be quarantined automatically by the SIEM"
+      ],
+      "answer": "Real attacks may be missed because of alert fatigue",
+      "explanation": "When analysts are flooded with noise, they start ignoring alerts and can overlook genuine attacks. Excess alerts do not encrypt data or affect licensing."
+    },
+    {
+      "id": "D4-175",
+      "objective": "4.4",
+      "topic": "Alerting and Response",
+      "stem": "A company wants an analyst to be paged immediately whenever a domain administrator account signs in outside business hours. Which monitoring activity BEST meets this need?",
+      "choices": [
+        "Monthly reporting",
+        "Log archiving",
+        "Real-time alerting",
+        "Weekly vulnerability scanning"
+      ],
+      "answer": "Real-time alerting",
+      "explanation": "Real-time alerting notifies staff as soon as a matching event occurs, so they can respond right away. Monthly reporting would show the sign-in weeks later, too late to stop an attack."
+    },
+    {
+      "id": "D4-176",
+      "objective": "4.4",
+      "topic": "Configuration Monitoring Tools",
+      "stem": "A company wants detailed monitoring of its laptops, including file changes and running processes, even when the laptops are used away from the corporate network. Which approach is BEST?",
+      "choices": [
+        "Agentless monitoring",
+        "Agent-based monitoring",
+        "SNMP polling",
+        "NetFlow collection"
+      ],
+      "answer": "Agent-based monitoring",
+      "explanation": "An agent runs on the laptop itself, collects detailed local data, and reports it wherever the device is. Agentless monitoring relies on reaching the device over the network, which fails when the laptop is off the corporate network."
+    },
+    {
+      "id": "D4-177",
+      "objective": "4.4",
+      "topic": "Configuration Monitoring Tools",
+      "stem": "Which of the following tools should a team use to regularly check its servers for missing patches and known weaknesses?",
+      "choices": [
+        "NetFlow collector",
+        "Data loss prevention",
+        "SNMP trap receiver",
+        "Vulnerability scanner"
+      ],
+      "answer": "Vulnerability scanner",
+      "explanation": "A vulnerability scanner compares systems against databases of known flaws and missing patches. A NetFlow collector records traffic metadata, which cannot show whether patches are installed."
+    },
+    {
+      "id": "D4-178",
+      "objective": "4.4",
+      "topic": "Configuration Monitoring Tools",
+      "stem": "A configuration scanner reports that 30% of servers fail the minimum password-length check defined in the company's hardening benchmark. Which of the following BEST describes what the scanner is measuring?",
+      "choices": [
+        "Compliance with the secure configuration standard",
+        "Network bandwidth usage",
+        "Accuracy of the data classification labels on each server",
+        "Anomalies in user behavior"
+      ],
+      "answer": "Compliance with the secure configuration standard",
+      "explanation": "Benchmark-based scans measure whether each system's settings match the required secure configuration. User behavior anomalies are detected by analytics tools, not by checking configuration settings."
+    },
+    {
+      "id": "D4-179",
+      "objective": "4.4",
+      "topic": "Security Monitoring Tools",
+      "stem": "A user downloads a file, and the workstation's security software immediately deletes it because it matches a known malware signature. Which tool MOST likely took this action?",
+      "choices": [
+        "Data loss prevention",
+        "Antivirus",
+        "NetFlow",
+        "SIEM"
+      ],
+      "answer": "Antivirus",
+      "explanation": "Antivirus compares files against known malware signatures and removes matches. A SIEM correlates logs and raises alerts but does not delete files on the workstation."
+    },
+    {
+      "id": "D4-180",
+      "objective": "4.4",
+      "topic": "Security Monitoring Tools",
+      "stem": "A monitoring server contacts each router every five minutes to request interface counters and CPU usage. Which of the following is being used?",
+      "choices": [
+        "SNMP traps",
+        "NetFlow",
+        "SNMP polling",
+        "Syslog"
+      ],
+      "answer": "SNMP polling",
+      "explanation": "In polling, the manager queries the device on a schedule using SNMP get requests. An SNMP trap is the opposite direction: the device sends an unsolicited message when an event happens."
+    },
+    {
+      "id": "D4-181",
+      "objective": "4.5",
+      "topic": "Firewalls",
+      "stem": "A firewall administrator adds explicit rules to allow web and email traffic. Which rule should be placed at the end of the rule list to follow security best practice?",
+      "choices": [
+        "A rule that denies all other traffic",
+        "A rule that allows all other traffic",
+        "A rule that logs only allowed traffic",
+        "A rule that allows ICMP from any source"
+      ],
+      "answer": "A rule that denies all other traffic",
+      "explanation": "Ending the list with a deny-all rule (implicit deny) means anything not explicitly allowed is blocked. An allow-all rule at the end would make the earlier allow rules pointless."
+    },
+    {
+      "id": "D4-182",
+      "objective": "4.5",
+      "topic": "Firewalls",
+      "stem": "Users cannot reach a new internal HTTPS application hosted at 10.1.1.20. The firewall currently permits only TCP 80 to that host. Which of the following changes should the administrator make?",
+      "choices": [
+        "Permit UDP 53 to 10.1.1.20",
+        "Permit TCP 22 to 10.1.1.20",
+        "Permit TCP 3389 to 10.1.1.20",
+        "Permit TCP 443 to 10.1.1.20"
+      ],
+      "answer": "Permit TCP 443 to 10.1.1.20",
+      "explanation": "HTTPS uses TCP port 443, so the firewall must allow that port to the server. TCP 22 is SSH, which is used for remote administration rather than web traffic."
+    },
+    {
+      "id": "D4-183",
+      "objective": "4.5",
+      "topic": "Firewalls",
+      "stem": "A database server should accept connections only from the application servers, and only on TCP 1433. Which of the following firewall rules BEST follows least privilege?",
+      "choices": [
+        "Allow TCP 1433 from any source to the database server",
+        "Allow TCP 1433 from the application server subnet to the database server",
+        "Allow all traffic from the application server subnet to the database server",
+        "Allow TCP 1433 from the database server to any destination"
+      ],
+      "answer": "Allow TCP 1433 from the application server subnet to the database server",
+      "explanation": "This rule limits both the source and the port to exactly what is required. Allowing all traffic from the application subnet permits far more ports than the database needs."
+    },
+    {
+      "id": "D4-184",
+      "objective": "4.5",
+      "topic": "IDS and IPS",
+      "stem": "An intrusion detection system raises an alert when network traffic matches a known byte pattern used by a specific exploit. Which detection method is being used?",
+      "choices": [
+        "Anomaly-based",
+        "Reputation-based",
+        "Signature-based",
+        "Trend-based"
+      ],
+      "answer": "Signature-based",
+      "explanation": "Signature-based detection compares traffic against known attack patterns. Anomaly-based detection flags deviations from normal behavior and does not need a known pattern."
+    },
+    {
+      "id": "D4-185",
+      "objective": "4.5",
+      "topic": "IDS and IPS",
+      "stem": "A company wants a security device that can automatically drop malicious traffic as it passes through, rather than only sending alerts. Which of the following should be deployed?",
+      "choices": [
+        "An IDS connected to a SPAN port",
+        "An IPS placed inline",
+        "A NetFlow collector",
+        "An SNMP manager"
+      ],
+      "answer": "An IPS placed inline",
+      "explanation": "An inline IPS sits in the traffic path and can block packets in real time. An IDS on a SPAN port only receives a copy of the traffic, so it can alert but cannot stop it."
+    },
+    {
+      "id": "D4-186",
+      "objective": "4.5",
+      "topic": "IDS and IPS",
+      "stem": "Over three months, the IDS dashboard shows steadily rising scans against the company's VPN gateway from one region. Which of the following is the PRIMARY value of reviewing this kind of trend?",
+      "choices": [
+        "It removes the need to update IDS signatures",
+        "It proves that attackers have already compromised the VPN gateway",
+        "It replaces the need to review individual alerts",
+        "It lets the team strengthen defenses before an attack succeeds"
+      ],
+      "answer": "It lets the team strengthen defenses before an attack succeeds",
+      "explanation": "Trend analysis reveals growing interest from attackers so the team can act early, for example by tightening VPN access or adding MFA. Rising scans show reconnaissance, not proof of a compromise."
+    },
+    {
+      "id": "D4-187",
+      "objective": "4.5",
+      "topic": "IDS and IPS",
+      "stem": "An IPS failed to block a widely reported exploit that was published two weeks ago. Its signature database was last updated six months ago. Which of the following should the administrator do?",
+      "choices": [
+        "Switch the IPS to passive monitoring mode",
+        "Turn off anomaly detection",
+        "Enable automatic signature updates",
+        "Move the IPS outside the perimeter firewall"
+      ],
+      "answer": "Enable automatic signature updates",
+      "explanation": "A signature-based IPS can only block attacks it has signatures for, so keeping signatures current is essential. Switching to passive mode would stop it from blocking anything at all."
+    },
+    {
+      "id": "D4-188",
+      "objective": "4.5",
+      "topic": "Web and DNS Filtering",
+      "stem": "A company wants all office web traffic to pass through a single device that checks each URL and blocks malicious sites before they reach users. Which of the following should be deployed?",
+      "choices": [
+        "Centralized web proxy",
+        "Host-based firewall",
+        "Email security gateway",
+        "File integrity monitor"
+      ],
+      "answer": "Centralized web proxy",
+      "explanation": "A centralized proxy sits between users and the internet and filters every web request in one place. A host-based firewall controls connections on a single device and does not inspect URLs for the whole office."
+    },
+    {
+      "id": "D4-189",
+      "objective": "4.5",
+      "topic": "Web and DNS Filtering",
+      "stem": "A web filter blocks a newly registered domain that began hosting malware yesterday, even though the domain has not yet been placed in any content category. Which of the following features MOST likely blocked it?",
+      "choices": [
+        "Reputation-based filtering",
+        "Content categorization",
+        "A manual block rule",
+        "Agent-based filtering"
+      ],
+      "answer": "Reputation-based filtering",
+      "explanation": "Reputation scoring rates sites by their observed behavior, such as hosting malware, so new bad domains are blocked quickly. Content categorization depends on the site already being assigned to a category, which has not happened here."
+    },
+    {
+      "id": "D4-190",
+      "objective": "4.5",
+      "topic": "Operating System Security",
+      "stem": "Which of the following is the MOST likely reason an administrator links a Group Policy Object to one organizational unit instead of to the entire domain?",
+      "choices": [
+        "To encrypt the settings while they are sent to clients",
+        "To prevent the settings from being changed by domain administrators",
+        "To make the settings apply to computers that are not domain-joined",
+        "To apply the settings only to the users or computers in that unit"
+      ],
+      "answer": "To apply the settings only to the users or computers in that unit",
+      "explanation": "Linking a GPO to a specific OU targets its settings at the objects in that OU. Group Policy only applies to domain-joined systems, so linking it differently cannot reach computers outside the domain."
+    },
+    {
+      "id": "D4-191",
+      "objective": "4.5",
+      "topic": "Operating System Security",
+      "stem": "After SELinux is turned on, a web server can no longer read files in a new directory, even though standard Linux file permissions allow access. Which of the following is the MOST likely cause?",
+      "choices": [
+        "The web server's service account is not listed in the server's sudoers file",
+        "The host firewall is blocking TCP 443",
+        "The directory is missing the correct security context label",
+        "The directory is owned by the root account"
+      ],
+      "answer": "The directory is missing the correct security context label",
+      "explanation": "SELinux enforces mandatory access control using security labels, so a directory with the wrong context is blocked even when normal permissions allow access. A firewall block would stop network connections, not local file reads."
+    },
+    {
+      "id": "D4-192",
+      "objective": "4.5",
+      "topic": "Operating System Security",
+      "stem": "An administrator wants SELinux to log policy violations without blocking them while a new policy is being tested. Which SELinux mode should be used?",
+      "choices": [
+        "Enforcing",
+        "Permissive",
+        "Disabled",
+        "Targeted"
+      ],
+      "answer": "Permissive",
+      "explanation": "Permissive mode logs actions that would be denied but allows them, which is useful for testing. Targeted is a policy type that decides which processes are confined, not a mode for logging without blocking."
+    },
+    {
+      "id": "D4-193",
+      "objective": "4.5",
+      "topic": "Secure Protocols",
+      "stem": "Employees' mail clients must download email from the server using IMAP over an encrypted connection. Which port should the firewall allow?",
+      "choices": [
+        "TCP 143",
+        "TCP 993",
+        "TCP 110",
+        "TCP 25"
+      ],
+      "answer": "TCP 993",
+      "explanation": "IMAP over TLS (IMAPS) uses TCP 993. TCP 143 is standard IMAP, which sends traffic without encryption by default."
+    },
+    {
+      "id": "D4-194",
+      "objective": "4.5",
+      "topic": "Secure Protocols",
+      "stem": "A company wants all traffic between two branch offices to be encrypted while it crosses the internet, no matter which application generates it. Which of the following BEST meets this need?",
+      "choices": [
+        "Site-to-site IPsec VPN",
+        "HTTPS on each web server",
+        "SFTP for file transfers",
+        "SNMPv3 on the routers"
+      ],
+      "answer": "Site-to-site IPsec VPN",
+      "explanation": "A site-to-site IPsec tunnel encrypts all traffic between the two networks at the network layer. HTTPS protects only web sessions, so other applications would still be unencrypted."
+    },
+    {
+      "id": "D4-195",
+      "objective": "4.5",
+      "topic": "Email Security",
+      "stem": "A receiving mail server checks a digital signature in a message header using a public key published in the sending domain's DNS. Which email security mechanism is this?",
+      "choices": [
+        "SPF",
+        "DMARC",
+        "DKIM",
+        "S/MIME"
+      ],
+      "answer": "DKIM",
+      "explanation": "DKIM signs messages with the sending domain's private key and publishes the public key in DNS for verification. SPF checks whether the sending IP address is authorized and does not involve signatures."
+    },
+    {
+      "id": "D4-196",
+      "objective": "4.5",
+      "topic": "Email Security",
+      "stem": "A company wants to scan all inbound email for malicious attachments and phishing links before the messages reach user mailboxes. Which of the following should be deployed?",
+      "choices": [
+        "DMARC record",
+        "SPF record",
+        "DNS filtering appliance",
+        "Email security gateway"
+      ],
+      "answer": "Email security gateway",
+      "explanation": "An email gateway inspects message content and attachments and quarantines threats before delivery. SPF and DMARC records help verify sender identity but do not scan attachments or links."
+    },
+    {
+      "id": "D4-197",
+      "objective": "4.5",
+      "topic": "Email Security",
+      "stem": "A company has monitored its DMARC reports for a month and confirmed that its legitimate mail passes SPF and DKIM. It now wants receiving servers to send failing messages to the spam folder rather than reject them. Which DMARC policy should it publish?",
+      "choices": [
+        "p=quarantine",
+        "p=none",
+        "p=reject",
+        "p=monitor"
+      ],
+      "answer": "p=quarantine",
+      "explanation": "A quarantine policy tells receivers to treat failing messages as suspicious, usually by sending them to spam. A reject policy tells receivers to refuse failing messages outright, which is stricter than requested."
+    },
+    {
+      "id": "D4-198",
+      "objective": "4.5",
+      "topic": "Endpoint and User Monitoring",
+      "stem": "A company wants software on each laptop that records process activity, detects suspicious behavior such as credential dumping, and lets analysts isolate the laptop remotely. Which of the following should be deployed?",
+      "choices": [
+        "Antivirus",
+        "EDR",
+        "NAC",
+        "DLP"
+      ],
+      "answer": "EDR",
+      "explanation": "Endpoint detection and response continuously records endpoint activity, detects malicious behavior, and supports remote response such as isolation. Traditional antivirus mainly blocks known malware files and lacks detailed recording and remote response."
+    }
+  ]
+}

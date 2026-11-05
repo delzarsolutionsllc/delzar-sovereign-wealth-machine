@@ -18,7 +18,9 @@ This platform teaches SY0-701, so you can take that exam any time before June 11
 | **Real exam question types:** "Select TWO", plus performance-based questions (put steps in order, match items) in the exam bank and the practice exam. | Each exam includes some of the new types; they are scored all-or-nothing |
 | **Fixes from the audit:** the CLI accepts A–D letter answers, and the app carries a "not affiliated with CompTIA" notice. | No silent wrong scoring |
 
-## Phase 2: go public as your portfolio (needs your yes; about 1–2 days)
+## Phase 2: go public as your portfolio (BUILT, 2026-11-05)
+
+Status: renamed to IdentityOps Lab and published at https://delzarsolutionsllc.github.io/delzar-sovereign-wealth-machine/ (owner's go-ahead), progress export/import with merge, exam realism (no auto-advance, flag for review, question grid, review screen, "approximate" scaled score) and accessibility (skip link, live announcements, arrow-key tabs, focus management). Added at the owner's request: **objective quizzes**, 251 short quizzes across all 28 objectives (concept quizzes per topic plus mixed sets), backed by 550 new reviewed questions (bank: 946). Still open from this phase: a formal WCAG 2.2 AA audit with a screen reader on real devices.
 
 | Scope | Success metric |
 |---|---|
@@ -34,7 +36,7 @@ This platform teaches SY0-701, so you can take that exam any time before June 11
 |---|---|
 | **MCP server / AI tutor:** expose `webapi` methods (catalog, run, challenge, case_study, review) as MCP tools with a fixed allow-list and deny by default. An AI assistant can then quiz you, explain a lab or plan your day. This doubles as an identity and authorization showcase. | Claude (or another MCP client) runs a lab and explains it |
 | **PBQs from the labs:** turn firewall-rule, incident-order and Conditional Access decisions from the engines into exam performance-based questions. | 20+ lab-backed PBQs in the exam |
-| **Content gaps:** more items on the thinnest objectives (1.3, 4.2, 4.7 and 4.9 have 8 each), plus topics with no question yet (TACACS+, DNS sinkhole, Bluetooth attacks). | At least 12 exam-style items per objective |
+| **Content gaps:** DONE in Phase 2: every objective now has 30+ exam-style items, tagged by topic. Remaining: PBQs for objectives without one (4.2, 4.7). | 2+ PBQs per objective |
 
 ## Phase 4: V8 (SY0-801) update (after CompTIA publishes the objectives)
 

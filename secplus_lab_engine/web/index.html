@@ -157,11 +157,37 @@ th { font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color:
 ol.path li { margin-bottom: 8px; }
 a.done { font-weight: 600; }
 @media print { .rail, .tabs, .noprint, .panel:not(#labbody) { display: none !important; } .main, #labbody { padding: 0; border: 0; box-shadow: none; } body { background: #fff; } }
+/* accessibility helpers */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.skip { position: absolute; left: 12px; top: -48px; z-index: 10; background: var(--accent); color: var(--on-accent); padding: 8px 14px; border-radius: 6px; text-decoration: none; font-weight: 600; }
+.skip:focus { top: 12px; }
+h1[tabindex="-1"]:focus { outline: none; }
+/* exam navigator: question grid, flags */
+.qgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(42px, 1fr)); gap: 6px; }
+.qgrid button { position: relative; font-family: var(--mono); font-size: .8rem; padding: 7px 0; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); cursor: pointer; font-variant-numeric: tabular-nums; }
+.qgrid button.answered { background: var(--accent-soft); border-color: var(--accent); }
+.qgrid button.current { outline: 2px solid var(--ink); outline-offset: 1px; }
+.qgrid button.flagged::after { content: ""; position: absolute; top: 3px; right: 3px; width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .8rem; color: var(--muted); }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); vertical-align: -2px; margin-right: 4px; }
+.legend i.a { background: var(--accent-soft); border-color: var(--accent); } .legend i.f { background: var(--warn); border-color: var(--warn); border-radius: 50%; }
+.btn[aria-pressed="true"] { background: var(--warn-soft); border-color: var(--warn); color: var(--warn); }
+details.navigator > summary { cursor: pointer; color: var(--muted); font-size: .9rem; margin-bottom: 8px; }
+/* objective quizzes */
+.qcards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+.qcard { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); text-decoration: none; color: var(--ink); }
+.qcard:hover { border-color: var(--accent); }
+.qcard b { font-weight: 600; } .qcard .score { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.qcard.done { border-left: 4px solid var(--pass); }
+.objnav { display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.dropzone { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 .countdown { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--sunken); border-radius: 6px; }
 .tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
 
+<a class="skip" href="#view" id="skiplink">Skip to content</a>
+<div class="sr-only" id="announcer" aria-live="polite" aria-atomic="true"></div>
 <div class="app">
   <aside class="rail" id="rail">
     <div class="railtop">
@@ -172,6 +198,7 @@ a.done { font-weight: 600; }
       <a href="#review" data-view="review">Daily review</a>
       <a href="#home" data-view="home">Overview</a>
       <a href="#videos" data-view="videos">Video course</a>
+      <a href="#quizzes" data-view="quizzes">Objective quizzes</a>
       <a href="#exam" data-view="exam">Practice exam</a>
       <a href="#progress" data-view="progress">My progress</a>
       <a href="#career" data-view="career">IAM career &amp; portfolio</a>
@@ -180,7 +207,7 @@ a.done { font-weight: 600; }
     <div class="mode" id="mode"></div>
     <p class="tm">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
   </aside>
-  <main class="main"><div class="wrap" id="view"><p class="loading">Loading course…</p></div></main>
+  <main class="main" id="main"><div class="wrap" id="view" tabindex="-1"><p class="loading">Loading course…</p></div></main>
 </div>
 
 <script>
@@ -202,6 +229,9 @@ const put = (node, ...kids) => node.replaceChildren(...kids.flat().filter(c => c
 function mulberry32(a) { return () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function shuffle(arr, rnd) { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
 const newSeed = () => Math.floor(Math.random() * 1e9);
+/* Screen-reader announcement (the polite live region at the top of the page). */
+let announceT = null;
+function announce(msg) { const a = $("#announcer"); if (!a) return; a.textContent = ""; clearTimeout(announceT); announceT = setTimeout(() => { a.textContent = msg; }, 60); }
 const pct = (c, t) => (t ? Math.round(100 * c / t) : 0);
 
 const OBJ = {
@@ -253,6 +283,15 @@ const Engine = {
   async caseStudy(lab) {
     if (LIVE) return post("case_study", { lab });
     return BUNDLE.labs[lab].case_study;
+  },
+  /* Objective quiz: the quiz's questions (from the exam-style bank), order and options shuffled. */
+  async quiz(id, seed) {
+    if (LIVE) return post("quiz", { quiz: id, seed });
+    const obj = String(id).split("-")[0], def = ((CATALOG.objective_quizzes[obj] || {}).quizzes || []).find(q => q.id === id);
+    if (!def) throw new Error("This quiz does not exist (the question bank may have changed). Pick one from Objective quizzes.");
+    const rnd = mulberry32(seed || 1), by = {};
+    for (const r of BUNDLE.exam_bank) by[r.id] = r;
+    return { quiz: def, objective: obj, questions: shuffle(def.qids.filter(i => by[i]).map(i => bankQ(by[i], rnd)), rnd) };
   },
   async exam(count, seed, fixed, domain, source = "bank") {
     if (LIVE) return post("exam", { count, seed, fixed, domain: domain || null, source });
@@ -488,7 +527,55 @@ function buildReviewSession(data, bank, today, size = SRS.size, seed = null) {
 /* ------------------------------------------------------------------ progress store
    Live: progress.json on this computer. Hosted: your private document in this
    page's store (claude.ai account), else this browser's storage, else memory.   */
-const EMPTY = () => ({ objectives: {}, sessions: [], watched: [], srs: {}, streak: { last_day: null, count: 0 } });
+const EMPTY = () => ({ objectives: {}, sessions: [], watched: [], srs: {}, streak: { last_day: null, count: 0 }, quizzes: {} });
+
+/* Move progress between devices. Same rules as utils/sync.py (keep the two in step):
+   objective scores: the side with MORE answers wins (never added, so importing twice changes nothing) ·
+   review cards: the most recently reviewed wins (due minus interval), ties → more misses ·
+   quizzes: higher best, larger attempt count, last score from the most recent day ·
+   videos: union · sessions: union by time+activity+score, last 50 · streak: most recent day, then longer. */
+const SYNC_MAX_SESSIONS = 50;
+const isObj = x => !!x && typeof x === "object" && !Array.isArray(x);
+function cleanProgress(raw) {
+  if (isObj(raw) && isObj(raw.progress)) raw = raw.progress;
+  if (!isObj(raw) || !["objectives", "srs", "sessions", "watched", "quizzes"].some(k => k in raw)) throw new Error("This file does not contain IdentityOps Lab progress.");
+  const int = (v, lo = 0, hi = 1e7) => { let n = typeof v === "number" ? Math.trunc(v) : typeof v === "boolean" ? Number(v) : typeof v === "string" && /^\s*[-+]?\d+\s*$/.test(v) ? parseInt(v, 10) : NaN; if (!Number.isFinite(n)) n = lo; return Math.max(lo, Math.min(hi, n)); };
+  const day = v => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null);
+  const KEY = /^[\w.\-]{1,40}$/, OBJK = /^[1-5]\.[1-9]$/, out = EMPTY();
+  if (isObj(raw.objectives)) for (const [o, x] of Object.entries(raw.objectives)) if (OBJK.test(o) && isObj(x)) { const a = int(x.attempted); out.objectives[o] = { attempted: a, correct: Math.min(a, int(x.correct)) }; }
+  if (isObj(raw.srs)) for (const [q, c] of Object.entries(raw.srs)) if (KEY.test(q) && isObj(c) && day(c.due)) {
+    const e = typeof c.ease === "number" && Number.isFinite(c.ease) ? c.ease : 2.5;
+    out.srs[q] = { due: c.due, interval_days: int(c.interval_days, 0, 3650), ease: Math.max(1.3, Math.min(2.8, e)), reps: int(c.reps, 0, 10000), lapses: int(c.lapses, 0, 10000),
+      last_result: ["right", "wrong"].includes(c.last_result) ? c.last_result : null };
+  }
+  if (Array.isArray(raw.sessions)) for (const x of raw.sessions) if (isObj(x) && typeof x.ts === "string") out.sessions.push({ ts: x.ts.slice(0, 25), lab: String(x.lab ?? "").slice(0, 40), score: String(x.score ?? "").slice(0, 40) });
+  out.sessions = out.sessions.slice(-SYNC_MAX_SESSIONS);
+  out.watched = [...new Set((Array.isArray(raw.watched) ? raw.watched : []).filter(v => typeof v === "string" && KEY.test(v)))];
+  const st = isObj(raw.streak) ? raw.streak : {};
+  out.streak = { last_day: day(st.last_day), count: int(st.count, 0, 100000) };
+  if (isObj(raw.quizzes)) for (const [q, x] of Object.entries(raw.quizzes)) if (KEY.test(q) && isObj(x))
+    out.quizzes[q] = { best: int(x.best, 0, 100), last: int(x.last, 0, 100), attempts: int(x.attempts), last_day: day(x.last_day) };
+  return out;
+}
+function cmpTuple(a, b) { for (let k = 0; k < a.length; k++) { const c = typeof a[k] === "number" ? a[k] - b[k] : cmpStr(a[k], b[k]); if (c) return c; } return 0; }
+const pickMax = (xs, key) => xs.filter(Boolean).reduce((best, x) => (best == null || cmpTuple(key(x), key(best)) > 0 ? x : best), null);
+function mergeProgress(mine, theirs) {
+  const a = cleanProgress(mine), b = cleanProgress(theirs), out = EMPTY();
+  const keys = (x, y) => [...new Set([...Object.keys(x), ...Object.keys(y)])].sort(cmpStr);
+  for (const o of keys(a.objectives, b.objectives)) out.objectives[o] = pickMax([a.objectives[o], b.objectives[o]], s => [s.attempted, s.correct]);
+  const lastReview = c => addDays(c.due, -c.interval_days);
+  for (const q of keys(a.srs, b.srs)) out.srs[q] = pickMax([a.srs[q], b.srs[q]], c => [lastReview(c), c.lapses, c.reps, c.due]);
+  const seen = new Set();
+  out.sessions = [...a.sessions, ...b.sessions].sort((x, y) => cmpStr(x.ts, y.ts))
+    .filter(x => { const k = [x.ts, x.lab, x.score].join("\u0000"); if (seen.has(k)) return false; seen.add(k); return true; }).slice(-SYNC_MAX_SESSIONS);
+  out.watched = [...new Set([...a.watched, ...b.watched])].sort(cmpStr);
+  out.streak = pickMax([a.streak, b.streak], s => [s.last_day || "", s.count]);
+  for (const q of keys(a.quizzes, b.quizzes)) {
+    const both = [a.quizzes[q], b.quizzes[q]].filter(Boolean), latest = pickMax(both, s => [s.last_day || "", s.attempts]);
+    out.quizzes[q] = { best: Math.max(...both.map(s => s.best)), last: latest.last, attempts: Math.max(...both.map(s => s.attempts)), last_day: latest.last_day };
+  }
+  return out;
+}
 function rating(p, n) { if (n < 3) return p < 50 ? "LOW" : "MEDIUM"; return p >= 85 ? "PASS" : p >= 65 ? "WARN" : "FAIL"; }
 function rowsOf(data) {
   return Object.entries(data.objectives).map(([o, s]) => [o, s.attempted, s.correct, pct(s.correct, s.attempted) + "%", rating(pct(s.correct, s.attempted), s.attempted)])
@@ -503,6 +590,7 @@ const Progress = {
     d.objectives ||= {}; d.sessions ||= []; d.watched ||= [];
     if (!d.srs || typeof d.srs !== "object") d.srs = {};
     if (!d.streak || typeof d.streak !== "object") d.streak = { last_day: null, count: 0 };
+    if (!isObj(d.quizzes)) d.quizzes = {};
     return d;
   },
   async init() {
@@ -550,6 +638,27 @@ const Progress = {
     return { ...d, rows: rowsOf(d) };
   },
   async reset() { if (LIVE) return post("progress_reset"); await this.save(EMPTY()); return { ...EMPTY(), rows: [] }; },
+  /* One finished objective quiz: answers count per objective and feed the daily review; the quiz keeps best / last. */
+  async quizRecord(id, results) {
+    const today = todayISO();
+    if (LIVE) return post("quiz_record", { quiz: id, results, today });
+    await this.record(results, `quiz ${id}`);
+    const d = this.local(), c = results.filter(r => r.correct).length, p = results.length ? Math.floor(100 * c / results.length + 0.5) : 0;
+    const s = d.quizzes[id] ||= { best: 0, last: 0, attempts: 0, last_day: null };
+    Object.assign(s, { best: Math.max(s.best | 0, p), last: p, attempts: (s.attempts | 0) + 1, last_day: today });
+    await this.save(d);
+    return { ...d, rows: rowsOf(d), quiz_score: s };
+  },
+  async exportData() {
+    if (LIVE) return post("progress_export");
+    return { app: "IdentityOps Lab", format: 1, exported: new Date().toISOString().slice(0, 19) + "+00:00", progress: cleanProgress(this.local()) };
+  },
+  async importData(raw, replace = false) {
+    if (LIVE) return post("progress_import", { data: raw, replace: !!replace });
+    const incoming = cleanProgress(raw), d = replace ? incoming : mergeProgress(this.local(), incoming);
+    await this.save(d);
+    return { ...d, rows: rowsOf(d) };
+  },
   bankIds() { const ids = {}; for (const r of (BUNDLE && BUNDLE.exam_bank) || []) ids[r.id] = r; return ids; },
   /* Daily review: today's session, and one answer at a time (saved at once, so a reload loses nothing). */
   async reviewSession(size = SRS.size, seed = null) {
@@ -662,6 +771,7 @@ async function viewHome() {
       el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (pass mark ${CATALOG.pass_scaled} on the 100–900 scale).` }),
       el("div", { class: "btns" },
         el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: weakest ? `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}: Lab ${suggestion.n}` : "Start with Lab 1" }),
+        el("a", { class: "btn", href: "#quizzes", text: "Quiz one objective at a time" }),
         el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
         el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
     todayCard(),
@@ -674,20 +784,29 @@ async function viewHome() {
     })),
     el("p", { class: "btns" }, el("span", { class: "muted", text: "Test one domain: " }), CATALOG.domains.map(d => el("a", { class: "btn", href: `#exam-d${d.id}`, text: `Domain ${d.id} test` }))));
 }
-async function viewLab(n, tab = "lesson") {
+async function viewLab(n, tab = "lesson", focusTab = false) {
   const lab = CATALOG.labs.find(l => l.n === n);
   if (!lab) return viewHome();
   markNav(null, n);
   const tabs = [["lesson", "Lesson"], ["scenario", "Run the scenario"], ["practice", "Practice"], ["case", "Case study"]];
-  const body = el("div", { class: "panel", id: "labbody" });
-  const tabbar = el("div", { class: "tabs", role: "tablist" }, tabs.map(([k, t]) =>
-    el("button", { class: "tab" + (k === tab ? " on" : ""), role: "tab", "aria-selected": String(k === tab), onclick: () => viewLab(n, k), text: t })));
+  const body = el("div", { class: "panel", id: "labbody", role: "tabpanel", "aria-labelledby": `tab-${tab}`, tabindex: "0" });
+  /* WAI-ARIA tabs: one tab stop, arrow keys / Home / End move between tabs and open them. */
+  const keys = tabs.map(([k]) => k);
+  const tabbar = el("div", { class: "tabs", role: "tablist", "aria-label": "Lab sections" }, tabs.map(([k, t]) =>
+    el("button", { class: "tab" + (k === tab ? " on" : ""), role: "tab", id: `tab-${k}`, "aria-selected": String(k === tab), "aria-controls": "labbody",
+      tabindex: k === tab ? "0" : "-1", onclick: () => viewLab(n, k, true), text: t,
+      onkeydown: ev => {
+        const at = keys.indexOf(k), to = { ArrowRight: at + 1, ArrowLeft: at - 1, Home: 0, End: keys.length - 1 }[ev.key];
+        if (to == null) return;
+        ev.preventDefault(); viewLab(n, keys[(to + keys.length) % keys.length], true);
+      } })));
   put(view(), 
     el("section", { class: "panel" },
       el("span", { class: "label", text: `Lab ${lab.n} · Domain ${lab.domains.join(", ")}` }),
       el("h1", { text: lab.title.replace(/^Lab \d+ — /, "") }),
       el("div", { class: "chips" }, lab.objectives.replace(/^SY0-701\s*/, "").split(" · ").map(o => el("span", { class: "chip", text: o })))),
     tabbar, body);
+  if (focusTab) { const t = $(`#tab-${tab}`); if (t) t.focus(); }
   if (tab === "lesson") renderLesson(lab, body);
   else if (tab === "scenario") renderScenario(lab, body);
   else if (tab === "case") renderCaseStudy(lab, body);
@@ -715,7 +834,9 @@ function renderLesson(lab, body) {
       sec("Governing an AI agent here", ins.ai_governance, "gov"), sec("Exam tips", ins.exam_tips)),
     el("div", { class: "btns" },
       el("button", { class: "btn primary", onclick: () => viewLab(lab.n, "scenario"), text: "Run the scenario" }),
-      el("button", { class: "btn", onclick: () => viewLab(lab.n, "practice"), text: "Practise this lab" })));
+      el("button", { class: "btn", onclick: () => viewLab(lab.n, "practice"), text: "Practise this lab" })),
+    (lab.objective_codes || []).some(o => OQ()[o]) ? el("p", { class: "muted" }, "Exam-style quizzes for this lab's objectives: ",
+      (lab.objective_codes || []).filter(o => OQ()[o]).flatMap((o, i) => [i ? " · " : "", el("a", { href: `#obj-${o}`, text: `${o} ${OQ()[o].name}` })])) : null);
 }
 
 async function renderScenario(lab, body, random = false) {
@@ -754,7 +875,7 @@ async function startQuiz(lab, body, random) {
     if (i >= qs.length) return finish();
     const q = qs[i]; let answered = false;
     const next = el("button", { class: "btn primary", hidden: true, text: i + 1 < qs.length ? "Next question" : "See my score", onclick: () => { i++; show(); } });
-    const fb = el("div", { class: "verdict", hidden: true });
+    const fb = el("div", { class: "verdict", hidden: true, role: "status" });
     const buttons = q.choices.map((c, k) => el("button", { class: "choice", onclick: () => pick(k) }, el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
     function pick(k) {
       if (answered) return; answered = true;
@@ -836,35 +957,85 @@ async function startExam(count, minutes, domain = "", source = "bank") {
   put(view(), el("p", { class: "loading", text: domain ? `Assembling your Domain ${domain} test…` : "Assembling your exam…" }));
   let ex; try { ex = await Engine.exam(count, newSeed(), false, domain, source); } catch (e) { return put(view(), el("p", { class: "notice", text: e.message })); }
   if (!ex.questions.length) return put(view(), el("p", { class: "notice", text: "No questions available for this test." }));
-  const qs = ex.questions, answers = new Array(qs.length).fill(null);
-  const deadline = Date.now() + minutes * 60000; let i = 0;
-  const timer = el("span", { class: "timer" });
-  const tick = () => { const s = Math.max(0, Math.round((deadline - Date.now()) / 1000)); timer.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")} left`; timer.classList.toggle("low", s < 120); if (s <= 0) done(true); };
-  const panel = el("section", { class: "panel" });
+  const qs = ex.questions, answers = new Array(qs.length).fill(null), flags = new Set();
+  const deadline = Date.now() + minutes * 60000; let i = 0, reviewing = false, navOpen = qs.length <= 45;   // long exams start with the grid folded
+  const timer = el("span", { class: "timer", role: "timer", "aria-label": "Time left" });
+  const warned = new Set();
+  const tick = () => {
+    const s = Math.max(0, Math.round((deadline - Date.now()) / 1000));
+    timer.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")} left`; timer.classList.toggle("low", s < 120);
+    for (const m of [10, 5, 1]) if (s <= m * 60 && s > 0 && !warned.has(m) && minutes > m) { warned.add(m); announce(`${m} minute${m === 1 ? "" : "s"} left.`); }
+    if (s <= 0) done(true);
+  };
+  const panel = el("section", { class: "panel", "aria-label": "Exam" });
+  const answeredCount = () => answers.filter(a => a != null).length;
+  /* Question grid, like the real exam's navigator: answered, flagged, current. */
+  const grid = () => el("div", { class: "qgrid", role: "group", "aria-label": "Go to question" }, qs.map((_, k) => {
+    const st = [answers[k] != null ? "answered" : "not answered", flags.has(k) ? "flagged" : null, !reviewing && k === i ? "current" : null].filter(Boolean);
+    const b = el("button", { type: "button", class: [answers[k] != null ? "answered" : "", flags.has(k) ? "flagged" : "", !reviewing && k === i ? "current" : ""].join(" ").trim() || null,
+      "aria-label": `Question ${k + 1}, ${st.join(", ")}`, "aria-current": !reviewing && k === i ? "step" : null, text: k + 1,
+      onclick: () => { reviewing = false; i = k; show(`g${k}`); } });
+    b.dataset.focus = `g${k}`;
+    return b;
+  }));
+  const legend = () => el("div", { class: "legend" }, el("span", {}, el("i", { class: "a" }), "answered"), el("span", {}, el("i", { class: "f" }), "flagged for review"), el("span", {}, el("i"), "not answered"));
+  const toggleFlag = () => { if (flags.has(i)) flags.delete(i); else flags.add(i); announce(flags.has(i) ? `Question ${i + 1} flagged for review.` : `Flag removed from question ${i + 1}.`); show("flag"); };
   const show = (focus = null) => {
+    if (reviewing) return showReview(focus);
     const q = qs[i], kind = q.kind || "single";
     let buttons = [];
     if (kind === "single") {
-      buttons = q.choices.map((c, k) => el("button", { class: "choice" + (answers[i] === c ? " picked" : ""), onclick: () => { answers[i] = c; if (i + 1 < qs.length) { i++; show(); } else show(); } },
-        el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
-      setKeys(ev => { const k = parseInt(ev.key, 10); if (k >= 1 && k <= q.choices.length) { ev.preventDefault(); buttons[k - 1].click(); } });
+      // Picking an answer never moves on by itself (like the real exam): use Next, the grid or the keys.
+      buttons = q.choices.map((c, k) => { const b = el("button", { class: "choice" + (answers[i] === c ? " picked" : ""), "aria-pressed": String(answers[i] === c),
+          onclick: () => { answers[i] = answers[i] === c ? null : c; show(`c${k}`); } },
+        el("span", { class: "k", text: k + 1 }), el("span", { text: c })); b.dataset.focus = `c${k}`; return b; });
     } else {
       buttons = pbqControls(q, answers[i], v => { answers[i] = v; }, f => show(f));
-      setKeys(kind === "multi" ? ev => { const k = parseInt(ev.key, 10), box = panel.querySelector(`[data-focus="m${k - 1}"]`);
-        if (k >= 1 && box && !box.disabled && !(ev.target instanceof HTMLInputElement)) { ev.preventDefault(); box.click(); } } : null);
     }
-    const answeredCount = answers.filter(a => a != null).length;
-    put(panel, 
-      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length}` }), timer),
-      el("div", { class: "bar" }, el("i", { style: `width:${pct(answeredCount, qs.length)}%` })),
+    setKeys(ev => {
+      if (ev.target.closest && ev.target.closest("select,textarea,input:not([type=checkbox]):not([type=radio])")) return;   // typing, not choosing
+      if (ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      const k = parseInt(ev.key, 10);
+      if (kind === "single" && k >= 1 && k <= q.choices.length) { ev.preventDefault(); buttons[k - 1].click(); }
+      else if (kind === "multi" && k >= 1) { const box = panel.querySelector(`[data-focus="m${k - 1}"]`); if (box && !box.disabled) { ev.preventDefault(); box.click(); } }
+      else if (ev.key === "n" || ev.key === "N") { ev.preventDefault(); goNext(); }
+      else if ((ev.key === "p" || ev.key === "P") && i > 0) { ev.preventDefault(); i--; show("prev"); }
+      else if (ev.key === "f" || ev.key === "F") { ev.preventDefault(); toggleFlag(); }
+    });
+    const goNext = () => { if (i + 1 < qs.length) { i++; show("next"); } else { reviewing = true; show(); } };
+    const flagBtn = el("button", { class: "btn", type: "button", "aria-pressed": String(flags.has(i)), text: flags.has(i) ? "Flagged for review" : "Flag for review", onclick: toggleFlag });
+    flagBtn.dataset.focus = "flag";
+    const prev = el("button", { class: "btn", disabled: i === 0 || null, onclick: () => { i--; show("prev"); }, text: "Previous" }); prev.dataset.focus = "prev";
+    const nxt = el("button", { class: "btn", onclick: goNext, text: i + 1 < qs.length ? "Next" : "Review answers" }); nxt.dataset.focus = "next";
+    put(panel,
+      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length}` + (flags.has(i) ? " · flagged" : "") }), timer),
+      el("div", { class: "bar" }, el("i", { style: `width:${pct(answeredCount(), qs.length)}%` })),
       q.context ? el("pre", { class: "ctx", text: q.context }) : null,
-      el("div", { class: "prompt", text: q.prompt }), el("div", { class: "choices" }, buttons),
+      el("div", { class: "prompt", id: "qprompt", tabindex: "-1", text: q.prompt }), el("div", { class: "choices" }, buttons),
+      el("div", { class: "btns" }, prev, nxt, flagBtn,
+        el("span", { class: "muted", text: `${answeredCount()} of ${qs.length} answered` }),
+        el("button", { class: "btn primary", onclick: () => { reviewing = true; show(); }, text: "Review & finish" })),
+      el("details", { class: "navigator", open: navOpen || null, ontoggle: e => { navOpen = e.target.open; } }, el("summary", { text: "All questions" }), grid(), legend()),
+      el("p", { class: "muted", text: "Keys: 1–4 choose · N next · P previous · F flag. Picking an answer does not move on, so you can change it." }));
+    if (focus === "next" || focus === "prev") { const pr = $("#qprompt"); if (pr) pr.focus({ preventScroll: true }); panel.scrollIntoView({ block: "nearest" }); }
+    else if (focus) { const f = panel.querySelector(`[data-focus="${CSS.escape(focus)}"]`); if (f && !f.disabled) f.focus(); }
+  };
+  /* Review screen before scoring: what is unanswered or flagged, with a jump to each. */
+  const showReview = focus => {
+    setKeys(null);
+    const un = qs.map((_, k) => k).filter(k => answers[k] == null), fl = [...flags].sort((a, b) => a - b);
+    const jump = k => el("button", { class: "btn", type: "button", text: `Question ${k + 1}`, onclick: () => { reviewing = false; i = k; show("next"); } });
+    put(panel,
+      el("div", { class: "q-head" }, el("h2", { id: "rv-h", tabindex: "-1", text: "Review your answers" }), timer),
+      el("p", { text: `${answeredCount()} of ${qs.length} answered · ${un.length} not answered · ${fl.length} flagged for review.` }),
+      un.length ? el("p", { class: "notice", text: "Unanswered questions count as wrong, as on the real exam." }) : null,
+      fl.length ? [el("h3", { text: "Flagged for review" }), el("div", { class: "btns" }, fl.map(jump))] : null,
+      un.length ? [el("h3", { text: "Not answered" }), el("div", { class: "btns" }, un.slice(0, 40).map(jump))] : null,
+      grid(), legend(),
       el("div", { class: "btns" },
-        el("button", { class: "btn", disabled: i === 0, onclick: () => { i--; show(); }, text: "Previous" }),
-        el("button", { class: "btn", disabled: i + 1 >= qs.length, onclick: () => { i++; show(); }, text: kind !== "single" && answers[i] != null ? "Next" : "Skip" }),
-        el("span", { class: "muted", text: `${answeredCount} of ${qs.length} answered` }),
+        el("button", { class: "btn", onclick: () => { reviewing = false; show("next"); }, text: "Back to the exam" }),
         el("button", { class: "btn primary", onclick: () => done(false), text: "Finish and score" })));
-    if (focus) { const f = panel.querySelector(`[data-focus="${CSS.escape(focus)}"]`); if (f && !f.disabled) f.focus(); }
+    if (!focus) { const h = $("#rv-h"); if (h) h.focus({ preventScroll: true }); }
   };
   let finished = false;
   async function done(timedOut) {
@@ -876,11 +1047,12 @@ async function startExam(count, minutes, domain = "", source = "bank") {
     try { await Progress.record(results, domain ? `domain ${domain} test` : "exam"); } catch { /* shown below */ }
     const dom = {}; qs.forEach((q, k) => { const d = q.objective.split(".")[0]; (dom[d] ||= [0, 0]); dom[d][1]++; if (results[k].correct) dom[d][0]++; });
     const missed = qs.map((q, k) => [q, answers[k]]).filter((_, k) => !results[k].correct);
-    if (domain) return showDomainResult();
+    const focusResult = () => { const h = $("#result-h"); if (h) h.focus({ preventScroll: true }); announce(timedOut ? "Time is up. Your exam has been scored." : "Your exam has been scored."); };
+    if (domain) { showDomainResult(); return focusResult(); }
     put(view(), 
       el("section", { class: "panel" },
         el("span", { class: "label", text: timedOut ? "Time is up" : "Exam complete" }),
-        el("h1", { text: `${correct} of ${qs.length} correct · approx. ${scaled} / 900 · ${passed ? "PASS" : "below the pass mark"}` }),
+        el("h1", { tabindex: "-1", id: "result-h", text: `${correct} of ${qs.length} correct · approximate scaled score ${scaled} / 900 · ${passed ? "PASS" : "below the pass mark"}` }),
         el("div", { class: "scale", role: "img", "aria-label": `Scaled score ${scaled}, pass mark ${CATALOG.pass_scaled}` },
           el("div", { class: "track" }), el("div", { class: "pass", style: `left:${(CATALOG.pass_scaled - 100) / 8}%` }),
           el("div", { class: "you", style: `left:${(scaled - 100) / 8}%; background: var(${passed ? "--pass" : "--fail"})` })),
@@ -893,6 +1065,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
           el("div", { class: "verdict no" }, el("div", { class: "label", text: `${q.objective} ${OBJ[q.objective] || ""}` }), el("b", { text: q.prompt }),
             reviewAnswer(q, a), el("div", { class: "muted", text: q.explanation })))) : el("p", { text: "Nothing missed." }),
         el("div", { class: "btns" }, el("button", { class: "btn primary", onclick: () => viewExam(), text: "New exam" }), el("a", { class: "btn", href: "#progress", text: "My progress" }))));
+    focusResult();
 
     function showDomainResult() {
       const d = CATALOG.domains.find(x => x.id === domain), obj = {};
@@ -902,7 +1075,7 @@ async function startExam(count, minutes, domain = "", source = "bank") {
       put(view(),
         el("section", { class: "panel" },
           el("span", { class: "label", text: timedOut ? "Time is up" : `Domain ${domain} test complete` }),
-          el("h1", { text: `${correct} of ${qs.length} correct · ${Math.round(p)}% · ${passed ? "target met" : "below the " + target + "% target"}` }),
+          el("h1", { tabindex: "-1", id: "result-h", text: `${correct} of ${qs.length} correct · ${Math.round(p)}% · ${passed ? "target met" : "below the " + target + "% target"}` }),
           el("p", { class: "muted", text: `Domain ${domain} ${d.name} is ${Math.round(d.weight * 100)}% of the real exam. The ${target}% target is a study goal, not a CompTIA pass mark.` }),
           el("div", { class: "tablewrap" }, el("table", {},
             el("thead", {}, el("tr", {}, ["Objective", "Correct", "Score", "Study"].map(h => el("th", { text: h })))),
@@ -958,7 +1131,7 @@ function startReview(qs, body, s) {
     if (i >= qs.length) return finish();
     const q = qs[i]; let answered = false;
     const next = el("button", { class: "btn primary", hidden: true, text: i + 1 < qs.length ? "Next question" : "See my summary", onclick: () => { i++; show(); } });
-    const fb = el("div", { class: "verdict", hidden: true, "aria-live": "polite" });
+    const fb = el("div", { class: "verdict", hidden: true, role: "status" });
     const buttons = q.choices.map((c, k) => el("button", { class: "choice", onclick: () => pick(k) }, el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
     async function pick(k) {
       if (answered) return; answered = true;
@@ -1002,6 +1175,149 @@ function startReview(qs, body, s) {
   show();
 }
 
+/* ------------------------------------------------------------------ objective quizzes
+   Several short quizzes per objective: mixed sets that together cover every question once,
+   and one concept quiz per topic of the objective (utils/quizzes.py builds the list).
+   Untimed, with the answer and the reason after each question. Misses go to the daily review. */
+const OQ = () => CATALOG.objective_quizzes || {};
+const objOrder = () => Object.keys(OQ()).sort((a, b) => cmpTuple(a.split(".").map(Number), b.split(".").map(Number)));
+const quizTitle = q => (q.kind === "set" ? q.title : `Concept: ${q.title}`);
+const scoreText = s => (s ? `best ${s.best}% · last ${s.last}% · ${s.attempts} attempt${s.attempts === 1 ? "" : "s"}` : "not taken yet");
+
+async function viewQuizzes() {
+  markNav("quizzes"); setKeys(null);
+  const prog = await Progress.get(), done = prog.quizzes || {};
+  const total = objOrder().reduce((n, o) => n + OQ()[o].quizzes.length, 0), taken = Object.keys(done).filter(k => OQ()[k.split("-")[0]]).length;
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "Objective quizzes" }),
+      el("h1", { text: "Learn one objective at a time" }),
+      el("p", { class: "muted", text: `Every SY0-701 objective has short mixed sets (about ${CATALOG.quiz_set_size || 10} questions; together they cover every question for that objective once) and a concept quiz for each of its topics, so you can learn one idea at a time. No timer: you see the answer and the reason straight away. Missed questions come back in your daily review.` }),
+      el("p", { class: "muted" }, el("span", { class: "meter" }, el("i", { style: `width:${pct(taken, total)}%; background:var(--pass)` })), ` ${taken} of ${total} quizzes taken`)),
+    CATALOG.domains.map(d => el("section", { class: "panel" },
+      el("span", { class: "label", text: `Domain ${d.id} · ${Math.round(d.weight * 100)}% of the exam` }), el("h2", { text: d.name }),
+      el("div", { class: "qcards" }, objOrder().filter(o => o.split(".")[0] === d.id).map(o => {
+        const info = OQ()[o], s = prog.objectives[o], n = info.quizzes.filter(q => done[q.id]).length;
+        return el("a", { class: "qcard" + (n === info.quizzes.length ? " done" : ""), href: `#obj-${o}` },
+          el("span", { class: "label", text: o }), el("b", { text: info.name || OBJ[o] || "" }),
+          el("span", { class: "muted", text: `${info.count} questions · ${info.topics.length} concepts` }),
+          el("span", { class: "score", text: `${n}/${info.quizzes.length} quizzes taken` + (s && s.attempted ? ` · ${pct(s.correct, s.attempted)}% overall` : "") }));
+      })))));
+}
+
+async function viewObjective(o) {
+  const info = OQ()[o]; if (!info) return viewQuizzes();
+  markNav("quizzes"); setKeys(null);
+  const prog = await Progress.get(), done = prog.quizzes || {}, s = prog.objectives[o];
+  const order = objOrder(), at = order.indexOf(o), prev = order[at - 1], next = order[at + 1];
+  const labs = labsFor(o), vids = VC().videos.filter(v => v.objective === o);
+  const card = q => el("a", { class: "qcard" + (done[q.id] ? " done" : ""), href: `#quiz-${q.id}` },
+    el("b", { text: quizTitle(q) }), el("span", { class: "muted", text: `${q.qids.length} questions` }),
+    el("span", { class: "score", text: scoreText(done[q.id]) }));
+  const sets = info.quizzes.filter(q => q.kind === "set"), topics = info.quizzes.filter(q => q.kind === "topic");
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: `Objective ${o} · Domain ${info.domain}` }),
+      el("h1", { text: info.name || OBJ[o] || o }),
+      el("p", { class: "muted", text: `${info.count} questions in ${info.topics.length} concepts: ${info.topics.map(t => `${t.name} (${t.count})`).join(" · ")}.` + (s && s.attempted ? ` Your score so far: ${pct(s.correct, s.attempted)}% of ${s.attempted} answers.` : "") }),
+      el("p", { class: "muted" }, labs.length ? ["Hands-on: ", ...labs.flatMap((l, i) => [i ? ", " : "", el("a", { href: `#lab-${l.n}`, text: `Lab ${l.n}` })]), " · "] : null,
+        vids.length ? el("a", { href: "#videos", text: `${vids.length} video${vids.length === 1 ? "" : "s"} for ${o}` }) : null),
+      el("div", { class: "objnav" },
+        prev ? el("a", { class: "btn", href: `#obj-${prev}`, text: `← ${prev} ${OQ()[prev].name}` }) : el("span"),
+        el("a", { class: "btn", href: "#quizzes", text: "All objectives" }),
+        next ? el("a", { class: "btn", href: `#obj-${next}`, text: `${next} ${OQ()[next].name} →` }) : el("span"))),
+    el("section", { class: "panel" }, el("h2", { text: "One concept at a time" }),
+      el("p", { class: "muted", text: "Start here: each quiz is about one idea in this objective." }), el("div", { class: "qcards" }, topics.map(card))),
+    el("section", { class: "panel" }, el("h2", { text: "Mixed sets" }),
+      el("p", { class: "muted", text: "Then check yourself: each set mixes the concepts, and the sets together cover every question once." }), el("div", { class: "qcards" }, sets.map(card))));
+}
+
+async function startObjectiveQuiz(id) {
+  markNav("quizzes"); setKeys(null);
+  put(view(), el("p", { class: "loading", text: "Building your quiz…" }));
+  let qz; try { qz = await Engine.quiz(id, newSeed()); } catch (e) { return put(view(), el("section", { class: "panel" }, el("p", { class: "notice", text: e.message }), el("a", { class: "btn", href: "#quizzes", text: "Objective quizzes" }))); }
+  const o = qz.objective, info = OQ()[o], def = qz.quiz, qs = qz.questions, results = [], missed = [];
+  const body = el("section", { class: "panel", "aria-label": "Quiz question" });
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: `Objective ${o} · ${info ? info.name : ""}` }),
+      el("h1", { text: quizTitle(def) }),
+      el("p", { class: "muted", text: `${qs.length} questions · no timer · you see the answer and why after each one.` })),
+    body);
+  let i = 0;
+  const show = () => {
+    if (i >= qs.length) return finish();
+    const q = qs[i], kind = q.kind || "single"; let cur = null, answered = false;
+    const fb = el("div", { class: "verdict", hidden: true, role: "status" });
+    const next = el("button", { class: "btn primary", hidden: true, text: i + 1 < qs.length ? "Next question" : "See my score", onclick: () => { i++; show(); } });
+    const area = el("div");
+    const conclude = (ok, a) => {
+      answered = true; results.push({ objective: q.objective, correct: ok, qid: q.id || "" }); if (!ok) missed.push([q, a]);
+      fb.className = "verdict " + (ok ? "ok" : "no");
+      put(fb, el("b", { text: ok ? "Correct. " : "Not quite. " }), ok ? null : kind === "single" ? el("span", { text: `The answer is: ${q.answer}. ` }) : reviewAnswer(q, a), el("span", { text: q.explanation }));
+      fb.hidden = false; next.hidden = false; next.focus();
+    };
+    if (kind === "single") {
+      const buttons = q.choices.map((c, k) => el("button", { class: "choice", onclick: () => pick(k) }, el("span", { class: "k", text: k + 1 }), el("span", { text: c })));
+      const pick = k => {
+        if (answered) return;
+        buttons.forEach((b, j) => { b.disabled = true; if (q.choices[j] === q.answer) b.classList.add("right"); else if (j === k) b.classList.add("wrong"); });
+        conclude(q.choices[k] === q.answer, q.choices[k]);
+      };
+      put(area, el("div", { class: "choices" }, buttons));
+      setKeys(ev => {
+        if (ev.target.closest && ev.target.closest("input,select,textarea")) return;
+        const k = parseInt(ev.key, 10);
+        if (!answered && k >= 1 && k <= q.choices.length) { ev.preventDefault(); pick(k - 1); }
+        else if (answered && ev.key === "Enter" && ev.target !== next) { ev.preventDefault(); next.click(); }
+      });
+    } else {
+      const check = el("button", { class: "btn primary", text: "Check my answer", onclick: () => {
+        if (answered || cur == null) return;
+        const ok = isCorrect(q, cur);
+        put(area, el("p", { class: "pbq-how", text: "Your answer is locked in." }));
+        conclude(ok, cur);
+      } });
+      const draw = focus => {
+        put(area, pbqControls(q, cur, v => { cur = v; }, f => draw(f)), el("div", { class: "btns" }, check));
+        check.disabled = cur == null;
+        if (focus) { const f = area.querySelector(`[data-focus="${CSS.escape(focus)}"]`); if (f && !f.disabled) f.focus(); }
+      };
+      draw(null);
+      setKeys(null);
+    }
+    put(body,
+      el("div", { class: "q-head" }, el("span", { class: "label", text: `Question ${i + 1} of ${qs.length}` }),
+        el("span", { class: "muted", text: `${results.filter(r => r.correct).length} correct so far` })),
+      el("div", { class: "bar" }, el("i", { style: `width:${pct(i, qs.length)}%` })),
+      q.topic && def.kind === "set" ? el("div", { class: "chips" }, el("span", { class: "chip", text: q.topic })) : null,
+      el("div", { class: "prompt", id: "qprompt", tabindex: "-1", text: q.prompt }), area, fb, el("div", { class: "btns" }, next));
+    if (i > 0) { const pr = $("#qprompt"); if (pr) pr.focus({ preventScroll: true }); body.scrollIntoView({ block: "nearest" }); }
+  };
+  const finish = async () => {
+    setKeys(null);
+    const c = results.filter(r => r.correct).length, p = pct(c, results.length);
+    put(body, el("p", { class: "loading", text: "Saving your score…" }));
+    let saved = null; try { saved = await Progress.quizRecord(id, results); } catch { /* shown below */ }
+    const list = info ? info.quizzes : [], at = list.findIndex(q => q.id === id), nextQ = list[at + 1];
+    put(body,
+      el("span", { class: "label", text: "Quiz complete" }),
+      el("h2", { tabindex: "-1", id: "quizdone", text: `${c} of ${results.length} correct (${p}%)` + (saved ? ` · best ${saved.quiz_score.best}%` : "") }),
+      el("p", { class: "muted", text: p >= 85 ? "You have this concept. Move on to the next quiz." : p >= 65 ? "Nearly there. Read the explanations below, then retake it tomorrow." : "Read the explanations below, watch the objective's videos, and retake this quiz." }),
+      saved ? null : el("p", { class: "notice", text: "Your score could not be saved this time." }),
+      el("div", { class: "btns" },
+        nextQ ? el("a", { class: "btn primary", href: `#quiz-${nextQ.id}`, text: `Next: ${quizTitle(nextQ)}` }) : null,
+        el("button", { class: "btn" + (nextQ ? "" : " primary"), onclick: () => startObjectiveQuiz(id), text: "Retake this quiz" }),
+        el("a", { class: "btn", href: `#obj-${o}`, text: `Back to ${o}` }),
+        el("a", { class: "btn", href: "#review", text: "Daily review" })),
+      missed.length ? [el("h3", { text: `Review (${missed.length} missed)` }), el("div", { class: "choices" }, missed.map(([q, a]) =>
+        el("div", { class: "verdict no" }, q.topic ? el("div", { class: "label", text: q.topic }) : null, el("b", { text: q.prompt }), reviewAnswer(q, a), el("div", { class: "muted", text: q.explanation }))))] : null);
+    const h = $("#quizdone"); if (h) h.focus({ preventScroll: true });
+    announce(`Quiz complete. ${c} of ${results.length} correct.`);
+  };
+  show();
+}
+
 /* ------------------------------------------------------------------ progress */
 async function viewProgress() {
   markNav("progress"); setKeys(null);
@@ -1037,7 +1353,41 @@ async function viewProgress() {
     el("section", { class: "panel" }, el("h2", { text: "Recent sessions" }),
       prog.sessions.length ? el("div", { class: "tablewrap" }, el("table", {}, el("thead", {}, el("tr", {}, ["When (UTC)", "Activity", "Score"].map(h => el("th", { text: h })))),
         el("tbody", {}, prog.sessions.slice().reverse().slice(0, 15).map(s => el("tr", {}, el("td", { text: s.ts.replace("T", " ") }), el("td", { text: s.lab }), el("td", { text: s.score })))))) : el("p", { class: "muted", text: "Nothing yet." }),
-      el("div", { class: "btns" }, el("button", { class: "btn", text: "Reset my progress", onclick: () => { confirmBox.hidden = false; } }), confirmBox)));
+      el("div", { class: "btns" }, el("button", { class: "btn", text: "Reset my progress", onclick: () => { confirmBox.hidden = false; } }), confirmBox)),
+    syncPanel());
+}
+
+/* Export / import: move progress between a phone, a laptop and the local app (rules: mergeProgress). */
+function syncPanel() {
+  const status = el("p", { class: "muted", role: "status" });
+  const mode = el("select", { "aria-label": "How to import" },
+    el("option", { value: "merge", text: "Merge with what is here" }), el("option", { value: "replace", text: "Replace what is here" }));
+  const file = el("input", { type: "file", accept: ".json,application/json", hidden: true, id: "import-file",
+    onchange: async e => {
+      const f = e.target.files && e.target.files[0]; e.target.value = ""; if (!f) return;
+      put(status, "Importing…");
+      try {
+        if (f.size > 900000) throw new Error("That file is too large to be a progress file.");
+        let raw; try { raw = JSON.parse(await f.text()); } catch { throw new Error("That file is not valid JSON."); }
+        const d = await Progress.importData(raw, mode.value === "replace");
+        put(status, `${mode.value === "replace" ? "Replaced your progress with" : "Merged"} ${f.name}: ${Object.keys(d.objectives).length} objectives, ${Object.keys(d.srs || {}).length} review cards, ${Object.keys(d.quizzes || {}).length} quiz scores. Reloading the page…`);
+        setTimeout(() => viewProgress(), 1200);
+      } catch (err) { put(status, el("span", { class: "notice", text: err.message })); }
+    } });
+  const exportBtn = el("button", { class: "btn primary", text: "Export my progress", onclick: async () => {
+    try {
+      const data = await Progress.exportData();
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const a = el("a", { href: URL.createObjectURL(blob), download: `identityops-progress-${todayISO()}.json` });
+      document.body.append(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      put(status, "Saved a progress file to your downloads. Open this app on your other device, go to My progress → Import, and pick that file.");
+    } catch (err) { put(status, el("span", { class: "notice", text: `Export failed: ${err.message}` })); }
+  } });
+  return el("section", { class: "panel", "aria-labelledby": "sync-h" },
+    el("h2", { id: "sync-h", text: "Move your progress between devices" }),
+    el("p", { class: "muted", text: `Progress is saved per device (${Progress.where}). Export it to a file here, then import it on your phone, laptop or the local app. Merging keeps the larger score per objective and the most recent review of each question, so importing the same file twice never double-counts.` }),
+    el("div", { class: "dropzone" }, exportBtn, el("button", { class: "btn", text: "Import a progress file…", onclick: () => file.click() }), file, el("label", { class: "muted" }, "Import: ", mode)),
+    status);
 }
 
 /* ------------------------------------------------------------------ video course view */
@@ -1138,6 +1488,11 @@ function route() {
   const m = h.match(/^lab-(\d+)$/);
   if (m) return viewLab(parseInt(m[1], 10));
   if (h === "exam") return viewExam();
+  if (h === "quizzes") return viewQuizzes();
+  const om = h.match(/^obj-([1-5]\.[1-9])$/);
+  if (om) return viewObjective(om[1]);
+  const qm = h.match(/^quiz-([1-5]\.[1-9]-(?:set|t)\d{1,2})$/);
+  if (qm) return startObjectiveQuiz(qm[1]);
   const dm = h.match(/^exam-d([1-5])$/);
   if (dm) return viewExam(dm[1]);
   if (h === "progress") return viewProgress();
@@ -1153,7 +1508,13 @@ $("#maptoggle").addEventListener("click", () => { const r = $("#rail"); r.classL
   try {
     CATALOG = await Engine.catalog();
     renderRail(); renderMode(); route();
-    window.addEventListener("hashchange", route);
+    /* After navigating, move keyboard and screen-reader focus to the new page's heading. */
+    window.addEventListener("hashchange", async () => {
+      await route();
+      const h = view().querySelector("h1"); if (h) { if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1"); h.focus({ preventScroll: true }); }
+      window.scrollTo(0, 0);
+    });
+    $("#skiplink").addEventListener("click", ev => { ev.preventDefault(); const h = view().querySelector("h1") || view(); if (h !== view() && !h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1"); h.focus(); });
     Progress.init();
   } catch (e) {
     put(view(), el("section", { class: "panel" }, el("h2", { text: "The course could not load" }),
