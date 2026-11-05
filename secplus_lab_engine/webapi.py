@@ -22,10 +22,10 @@ import re
 
 from labs import LABS
 from utils.challenge import Progress
-from utils.exam import DOMAIN_NAMES, DOMAIN_WEIGHTS, PASS_SCALED, build_exam
+from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import videos
+from utils import portfolio, videos
 from utils.terminal_ui import UI
 
 
@@ -136,9 +136,11 @@ def catalog(policies: dict) -> dict:
         labs.append({"n": n, "title": m.TITLE, "objectives": m.OBJECTIVES, "domains": doms,
                      "primary_domain": doms[0] if doms else "1", "has_generator": n in GENERATORS,
                      "data_file": data_file, "lesson_html": docstring_html(m.__doc__), "insight": m.INSIGHT,
-                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)]})
-    return {"labs": labs, "pass_scaled": PASS_SCALED,
+                     "objective_codes": videos.lab_objectives(m), "videos": [v["id"] for v in videos.for_lab(m)],
+                     "briefing": portfolio.briefing(n), "career": portfolio.career_tags(n)})
+    return {"labs": labs, "pass_scaled": PASS_SCALED, "domain_test_target": DOMAIN_TEST_TARGET,
             "video_course": {"source": videos.course()["source"], "videos": videos.videos()},
+            "career_tracks": portfolio.career(),
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}
 
 
@@ -170,10 +172,16 @@ def challenge(policies: dict, lab: int, randomize: bool = False, seed=None, data
     return {"lab": lab, "random": randomize, "seed": seed, "questions": qs}
 
 
-def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True) -> dict:
+def exam(policies: dict, count: int = 90, seed=None, randomize: bool = True, domain=None, source: str = "bank") -> dict:
+    """Full exam (weighted by domain) or, with ``domain``, a single-domain test."""
     count = max(5, min(int(count), 150))
-    qs, alloc, short = build_exam(policies, count, seed, randomize)
-    return {"questions": [_q(q) for q in qs], "allocation": alloc, "shortfall": short}
+    source = source if source in ("bank", "labs") else "bank"
+    if domain not in (None, ""):
+        qs, per_obj = build_domain_test(policies, str(domain), count, seed, randomize, source)
+        return {"questions": [_q(q) for q in qs], "domain": str(domain), "allocation": per_obj,
+                "shortfall": {}, "target": DOMAIN_TEST_TARGET, "source": source}
+    qs, alloc, short = build_exam(policies, count, seed, randomize, source)
+    return {"questions": [_q(q) for q in qs], "allocation": alloc, "shortfall": short, "source": source}
 
 
 def progress_get(path=None) -> dict:
@@ -217,7 +225,8 @@ def progress_reset(path=None) -> dict:
     return progress_get(path)
 
 
-METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch"}
+METHODS = {"catalog", "run", "challenge", "exam", "progress_get", "progress_record", "progress_reset", "progress_watch",
+           "case_study"}
 
 
 def dispatch(method: str, args: dict, policies: dict | None = None, progress_path=None) -> dict:
@@ -235,7 +244,8 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
     if method == "challenge":
         return challenge(policies, int(a["lab"]), bool(a.get("random")), seed)
     if method == "exam":
-        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"))
+        return exam(policies, int(a.get("count", 90)), seed, not a.get("fixed"), a.get("domain"),
+                    a.get("source") or "bank")
     if method == "progress_get":
         return progress_get(progress_path)
     if method == "progress_record":
@@ -243,6 +253,8 @@ def dispatch(method: str, args: dict, policies: dict | None = None, progress_pat
         if not isinstance(res, list):
             raise ValueError("results must be a list")
         return progress_record(res, a.get("label", "web"), progress_path)
+    if method == "case_study":
+        return portfolio.case_study(int(a["lab"]), policies)
     if method == "progress_watch":
         return progress_watch(str(a.get("video", "")), bool(a.get("watched", True)), progress_path)
     return progress_reset(progress_path)

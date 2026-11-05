@@ -1,8 +1,10 @@
 """
 Exam simulator.
 
-Draws a timed, mixed-domain practice exam from every lab's challenge
-questions, weighted by the official SY0-701 domain percentages:
+Draws a timed, mixed-domain practice exam weighted by the official SY0-701
+domain percentages. By default the questions come from the exam-style bank
+(data/exam_bank: original scenario questions written like the real exam);
+``--source labs`` uses the labs' hands-on challenge questions instead:
 
     1 General Security Concepts            12 %
     2 Threats, Vulnerabilities & Mitigations 22 %
@@ -24,6 +26,12 @@ Usage
     python main.py exam                        # 90 questions, 90 minutes
     python main.py exam --count 30 --minutes 30 --seed 7
     python main.py exam --fixed                # sample data only, no random scenarios
+    python main.py exam --domain 4             # domain test: 30 questions from Domain 4 only
+
+Domain tests draw only from one domain, spread evenly across its objectives,
+and report a score per objective. They are marked against a target of
+``DOMAIN_TEST_TARGET`` percent; that is a study target, not a CompTIA figure
+(CompTIA publishes no per-domain pass mark).
 """
 
 from __future__ import annotations
@@ -37,6 +45,7 @@ DOMAIN_WEIGHTS = {"1": 0.12, "2": 0.22, "3": 0.18, "4": 0.28, "5": 0.20}
 DOMAIN_NAMES = {"1": "General Security Concepts", "2": "Threats, Vulnerabilities & Mitigations",
                 "3": "Security Architecture", "4": "Security Operations", "5": "Security Program Management"}
 PASS_SCALED = 750
+DOMAIN_TEST_TARGET = 80          # percent; a study target for domain tests, not an official number
 
 
 @dataclass
@@ -48,6 +57,8 @@ class ExamResult:
     by_domain: dict = field(default_factory=dict)      # domain -> [correct, total]
     missed: list = field(default_factory=list)
     shortfall: dict = field(default_factory=dict)      # domain -> questions short of target
+    domain: str | None = None                          # set for a single-domain test
+    by_objective: dict = field(default_factory=dict)   # objective -> [correct, total]
 
     @property
     def percent(self) -> float:
@@ -59,11 +70,39 @@ class ExamResult:
 
     @property
     def passed(self) -> bool:
+        if self.domain:
+            return self.percent >= DOMAIN_TEST_TARGET
         return self.scaled >= PASS_SCALED
 
 
-def collect_questions(policies: dict, seed: int | None = None, randomize: bool = True, rounds: int = 3) -> dict:
-    """All available questions grouped by domain, de-duplicated by (prompt, context)."""
+SOURCES = ("bank", "labs")
+
+
+def bank_pool() -> dict:
+    """Exam-style bank questions grouped by domain (empty lists if the bank is missing)."""
+    from utils.exam_bank import as_questions
+    pool: dict[str, list] = {d: [] for d in DOMAIN_WEIGHTS}
+    for q in as_questions():
+        pool[q.objective.split(".")[0]].append(q)
+    return pool
+
+
+def collect_questions(policies: dict, seed: int | None = None, randomize: bool = True, rounds: int = 3,
+                      source: str = "bank") -> dict:
+    """
+    Questions grouped by domain.
+
+    source="bank" (default): the exam-style question bank (data/exam_bank), which
+    reads like the real exam. Falls back to the lab questions if the bank is empty.
+    source="labs": the labs' challenge questions (de-duplicated), useful for
+    practising the hands-on scenarios under exam conditions.
+    """
+    if source not in SOURCES:
+        raise ValueError(f"unknown question source '{source}' (use {', '.join(SOURCES)})")
+    if source == "bank":
+        pool = bank_pool()
+        if any(pool.values()):
+            return pool
     from labs import LABS
     from utils.loader import load_data
     from utils.scenario_generator import GENERATORS, generate
@@ -111,26 +150,71 @@ def allocate(count: int, available: dict) -> tuple[dict, dict]:
     return alloc, shortfall
 
 
-def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomize: bool = True):
+def _shuffled_choices(q, rng: random.Random):
+    """Copy of a question with its options in a random order (the answer letter varies between exams)."""
+    from dataclasses import replace
+    choices = list(q.choices)
+    rng.shuffle(choices)
+    return replace(q, choices=choices)
+
+
+def build_exam(policies: dict, count: int = 90, seed: int | None = None, randomize: bool = True,
+               source: str = "bank"):
     rng = random.Random(seed)
-    pool = collect_questions(policies, seed, randomize)
+    pool = collect_questions(policies, seed, randomize, source=source)
     alloc, shortfall = allocate(count, {d: len(q) for d, q in pool.items()})
     questions = []
     for d, n in alloc.items():
         questions += rng.sample(pool[d], n)
     rng.shuffle(questions)
+    if source == "bank":
+        questions = [_shuffled_choices(q, rng) for q in questions]
     return questions, alloc, shortfall
 
 
+def build_domain_test(policies: dict, domain: str, count: int = 30, seed: int | None = None,
+                      randomize: bool = True, source: str = "bank") -> tuple[list, dict]:
+    """
+    Questions from one domain only, spread evenly over its objectives (round-robin),
+    so a 30-question Domain 3 test covers 3.1, 3.2, 3.3 and 3.4 rather than
+    whichever objective has the most questions. Returns (questions, per-objective counts).
+    """
+    domain = str(domain)
+    if domain not in DOMAIN_WEIGHTS:
+        raise ValueError(f"unknown domain '{domain}' (use 1-5)")
+    rng = random.Random(seed)
+    pool = collect_questions(policies, seed, randomize, source=source)[domain]
+    by_obj: dict[str, list] = {}
+    for q in pool:
+        by_obj.setdefault(q.objective, []).append(q)
+    for qs in by_obj.values():
+        rng.shuffle(qs)
+    picked, order = [], sorted(by_obj, key=lambda o: tuple(map(int, o.split("."))))
+    while len(picked) < count and any(by_obj[o] for o in order):
+        for o in order:
+            if by_obj[o] and len(picked) < count:
+                picked.append(by_obj[o].pop())
+    rng.shuffle(picked)
+    if source == "bank":
+        picked = [_shuffled_choices(q, rng) for q in picked]
+    counts: dict[str, int] = {}
+    for q in picked:
+        counts[q.objective] = counts.get(q.objective, 0) + 1
+    return picked, dict(sorted(counts.items(), key=lambda kv: tuple(map(int, kv[0].split(".")))))
+
+
 def run_exam(ui, questions: list, minutes: float = 90, ask: Callable[[str], str] | None = None,
-             clock: Callable[[], float] = time.monotonic, progress=None, shortfall: dict | None = None) -> ExamResult:
+             clock: Callable[[], float] = time.monotonic, progress=None, shortfall: dict | None = None,
+             domain: str | None = None) -> ExamResult:
     from utils.challenge import _resolve
 
     ask = ask or ui.ask
     deadline = clock() + minutes * 60
-    res = ExamResult(len(questions), 0, 0, False, {d: [0, 0] for d in DOMAIN_WEIGHTS}, [], shortfall or {})
+    res = ExamResult(len(questions), 0, 0, False, {d: [0, 0] for d in DOMAIN_WEIGHTS}, [], shortfall or {},
+                     str(domain) if domain else None)
     for q in questions:
         res.by_domain[q.objective.split(".")[0]][1] += 1
+        res.by_objective.setdefault(q.objective, [0, 0])[1] += 1
     for i, q in enumerate(questions, 1):
         left = deadline - clock()
         if left <= 0:
@@ -154,18 +238,30 @@ def run_exam(ui, questions: list, minutes: float = 90, ask: Callable[[str], str]
         if ok:
             res.correct += 1
             res.by_domain[q.objective.split(".")[0]][0] += 1
+            res.by_objective[q.objective][0] += 1
         else:
             res.missed.append((q, chosen or raw))
         if progress:
             progress.record(q.objective, ok)
 
-    rows = [[d, DOMAIN_NAMES[d], f"{int(DOMAIN_WEIGHTS[d] * 100)}%", f"{c}/{t}", f"{(100 * c / t):.0f}%" if t else "-"]
-            for d, (c, t) in res.by_domain.items()]
-    ui.table("Score by domain", ["Domain", "Name", "Weight", "Correct", "Score"], rows)
     verdict = "PASS" if res.passed else "FAIL"
-    ui.panel("Practice exam result",
-             f"{res.correct}/{res.total} correct ({res.percent:.0f}%) → approx. scaled score {res.scaled} "
-             f"(pass {PASS_SCALED}): {verdict}"
+    if res.domain:
+        rows = [[o, f"{c}/{t}", f"{(100 * c / t):.0f}%" if t else "-", "weak" if t and 100 * c / t < DOMAIN_TEST_TARGET else ""]
+                for o, (c, t) in sorted(res.by_objective.items(), key=lambda kv: tuple(map(int, kv[0].split("."))))]
+        ui.table(f"Domain {res.domain} {DOMAIN_NAMES[res.domain]}: score by objective",
+                 ["Objective", "Correct", "Score", ""], rows)
+        headline = (f"{res.correct}/{res.total} correct ({res.percent:.0f}%) · target {DOMAIN_TEST_TARGET}%: {verdict}\n"
+                    f"Domain {res.domain} is {int(DOMAIN_WEIGHTS[res.domain] * 100)}% of the real exam. "
+                    "The target is a study goal; CompTIA publishes no per-domain pass mark.")
+        title = f"Domain {res.domain} test result"
+    else:
+        rows = [[d, DOMAIN_NAMES[d], f"{int(DOMAIN_WEIGHTS[d] * 100)}%", f"{c}/{t}", f"{(100 * c / t):.0f}%" if t else "-"]
+                for d, (c, t) in res.by_domain.items()]
+        ui.table("Score by domain", ["Domain", "Name", "Weight", "Correct", "Score"], rows)
+        headline = (f"{res.correct}/{res.total} correct ({res.percent:.0f}%) → approx. scaled score {res.scaled} "
+                    f"(pass {PASS_SCALED}): {verdict}")
+        title = "Practice exam result"
+    ui.panel(title, headline
              + ("\nTime ran out: unanswered questions count as wrong." if res.timed_out else "")
              + (f"\nNot enough questions for domain(s) {res.shortfall}; extra questions came from other domains."
                 if res.shortfall else ""),
@@ -176,7 +272,9 @@ def run_exam(ui, questions: list, minutes: float = 90, ask: Callable[[str], str]
             ui.bullet(f"[{q.objective}] {q.prompt} → {q.answer}" + (f" (you: {given})" if given else " (unanswered)"))
             ui.print(f"      {q.explanation}", style="dim")
     if progress:
-        progress.data["sessions"].append({"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "lab": "exam",
-                                          "score": f"{res.correct}/{res.total} (scaled {res.scaled})"})
+        progress.data["sessions"].append({
+            "ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "lab": f"domain {res.domain} test" if res.domain else "exam",
+            "score": f"{res.correct}/{res.total} ({res.percent:.0f}%)" if res.domain
+            else f"{res.correct}/{res.total} (scaled {res.scaled})"})
         progress.save()
     return res

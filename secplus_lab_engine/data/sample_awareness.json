@@ -1,0 +1,39 @@
+{
+  "_description": "Lab 24 sample: one phishing simulation at fictional Contoso Freight (example.com), behaviour observations and messages to check.",
+  "campaign": {"id": "PH-2026-Q4", "day": 400, "template": "Password expiry notice from a lookalike IT helpdesk"},
+  "employees": [
+    {"id": "E01", "dept": "Finance", "role": "finance", "events": ["delivered", "opened", "reported"], "report_minutes": 4, "prior_failures": 0, "training_completed_day": 300},
+    {"id": "E02", "dept": "Finance", "role": "finance", "events": ["delivered", "opened", "clicked"], "prior_failures": 0, "training_completed_day": 350},
+    {"id": "E03", "dept": "Finance", "role": "exec", "events": ["delivered", "opened", "clicked", "submitted_credentials"], "prior_failures": 1, "training_completed_day": 200},
+    {"id": "E04", "dept": "Engineering", "role": "it_admin", "events": ["delivered", "reported"], "report_minutes": 2, "prior_failures": 0, "training_completed_day": 380},
+    {"id": "E05", "dept": "Engineering", "role": "staff", "events": ["delivered", "opened"], "prior_failures": 0, "training_completed_day": 390},
+    {"id": "E06", "dept": "Engineering", "role": "staff", "events": ["delivered", "opened", "reported"], "report_minutes": 9, "prior_failures": 1, "training_completed_day": 100},
+    {"id": "E07", "dept": "Sales", "role": "staff", "events": ["delivered", "opened", "clicked"], "prior_failures": 2, "training_completed_day": 250},
+    {"id": "E08", "dept": "Sales", "role": "staff", "events": ["delivered", "opened", "clicked", "submitted_credentials"], "prior_failures": 0, "training_completed_day": 330},
+    {"id": "E09", "dept": "Sales", "role": "staff", "events": ["delivered"], "prior_failures": 0},
+    {"id": "E10", "dept": "HR", "role": "staff", "events": ["delivered", "opened", "reported"], "report_minutes": 30, "prior_failures": 0, "training_completed_day": 20},
+    {"id": "E11", "dept": "HR", "role": "contractor", "events": [], "prior_failures": 0, "training_completed_day": 360},
+    {"id": "E12", "dept": "HR", "role": "staff", "events": ["delivered", "opened", "clicked", "reported"], "report_minutes": 6, "prior_failures": 0, "training_completed_day": 310}
+  ],
+  "behaviours": [
+    {"id": "B1", "description": "Sales lead copied the full customer list to personal cloud storage two days after resigning", "category": "data_exfiltration", "intentional": true, "policy_violation": true, "expected_for_role": false},
+    {"id": "B2", "description": "Receptionist plugged in a USB drive found in the car park to find its owner", "category": "removable_media", "intentional": false, "policy_violation": true, "expected_for_role": false},
+    {"id": "B3", "description": "Developer signed in at 03:00 from a country never seen before for this account", "category": "unusual_login", "intentional": true, "policy_violation": false, "expected_for_role": false},
+    {"id": "B4", "description": "Admin account stopped the EDR agent on six hosts; intent not yet established", "category": "endpoint_tamper", "policy_violation": true, "expected_for_role": false},
+    {"id": "B5", "description": "Payroll specialist exported the monthly payroll report on the usual day", "category": "data_export", "intentional": true, "policy_violation": false, "expected_for_role": true}
+  ],
+  "messages": [
+    {"id": "MSG-1", "from": "helpdesk@examp1e.com", "subject": "URGENT: your password expires in 2 hours",
+     "body": "Your mailbox will be suspended. Verify your account and confirm your password immediately.",
+     "links": [{"text": "https://portal.example.com", "href": "http://portal.examp1e-login.net/reset"}], "attachments": []},
+    {"id": "MSG-2", "from": "hr@example.com", "subject": "Benefits enrolment opens next month",
+     "body": "The guide is attached and the HR portal has the details. No action is needed yet.",
+     "links": [{"text": "HR portal", "href": "https://hr.example.com/benefits"}], "attachments": ["benefits_guide.pdf"]},
+    {"id": "MSG-3", "from": "accounts@northwind-supplies.example.net", "subject": "Overdue invoice 4471",
+     "body": "Our bank details changed. Please make the payment by wire transfer today; the invoice is attached.",
+     "links": [], "attachments": ["Invoice_4471.pdf.html"]},
+    {"id": "MSG-4", "from": "news@fabrikam-events.example.org", "subject": "Conference agenda published",
+     "body": "The agenda for the logistics summit is now online.",
+     "links": [{"text": "fabrikam-events.example.org/agenda", "href": "https://fabrikam-events.example.org/agenda"}], "attachments": []}
+  ]
+}

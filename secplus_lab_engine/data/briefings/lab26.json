@@ -1,0 +1,34 @@
+{
+  "lab": 26,
+  "ticket": "AUD-30726",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Lena Marsh, Internal Audit Manager",
+  "title": "Clean up accounts in ERP, CRM and FileShare before the Q4 access review closes",
+  "situation": "Internal audit found that Redbud Example Co cannot prove who owns every login in its three main applications: the ERP (finance system), the CRM (customer system) and FileShare. HR has exported its list of 10 people, and each app has exported its accounts, 25 in total. At the same time, managers have just finished the quarterly access review, and audit thinks some of them clicked 'approve' without reading.",
+  "your_task": [
+    "Match every app account to a person in the HR list, by employee ID first and by email if there is no ID.",
+    "Flag accounts nobody owns, accounts of people who have left, unused accounts, extra accounts and service accounts without an owner.",
+    "Check each review decision: was the reviewer allowed to decide, was a reason given for risky access, and does the approval break a separation-of-duties rule?",
+    "Spot reviewers who approved everything too fast, and remove access that nobody decided on.",
+    "Hand the app teams one de-provisioning list of accounts and permissions to remove."
+  ],
+  "why_it_matters": "A login that belongs to nobody, or to someone who has left, is an open door for an attacker and a failed audit. An access review that people rubber-stamp gives false comfort and will not satisfy auditors.",
+  "done_when": [
+    "All 25 accounts have a finding and an action, and every flagged account has a written reason.",
+    "Every review item is marked KEEP, REVOKE or ESCALATE with the reason.",
+    "The reviewer who rubber-stamped is named, and completion and revocation rates are reported.",
+    "The de-provisioning list is ready for the application owners."
+  ],
+  "glossary": {
+    "Identity governance and administration (IGA)": "The practice and tools that track who has which access, why they have it, and whether they still need it.",
+    "Authoritative source": "The system of record for who works here, usually HR, which decides whether a person exists and is active.",
+    "Correlation": "Linking each application account to the person who owns it, using matching rules such as employee ID or email.",
+    "Orphaned account": "An account that no current person in HR owns, so nobody is accountable for it.",
+    "Entitlement": "One specific permission inside an application, such as 'approve payments'.",
+    "Access certification (attestation)": "A regular review where a manager or the permission's owner confirms that each person still needs their access.",
+    "Separation of duties (SoD)": "A rule that one person must not hold two powers that together allow fraud, such as creating a supplier and paying it."
+  },
+  "job_roles": ["IAM Analyst", "Identity Governance (IGA) Analyst", "IGA Engineer", "IT Audit / GRC Analyst"],
+  "talking_point": "Reconciled 25 accounts across 3 applications against HR, flagging 13 for action (2 leavers with live access, 3 orphans, 3 unowned privileged accounts, 3 dormant and 2 duplicates), and certified 16 review items: kept 3, revoked 4 and escalated 9, including a separation-of-duties conflict (supplier creation plus payment approval), a self-review and a reviewer who approved 5 items at a median of 4 seconds each."
+}

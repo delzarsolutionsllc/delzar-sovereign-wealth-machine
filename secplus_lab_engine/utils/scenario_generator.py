@@ -318,7 +318,498 @@ def gen_lab17(rng: random.Random, policies: dict) -> dict:
     return {"as_of": AS_OF, "scenarios": scenarios}
 
 
-GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17}
+# --------------------------------------------------------------------------- #
+# Lab 23
+# --------------------------------------------------------------------------- #
+def gen_lab23(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["audit"]
+    techs = sorted(cfg["techniques"])
+    recon = sorted(t for t in techs if cfg["techniques"][t]["category"] in ("passive_recon", "active_recon"))
+    allowed = sorted(set(rng.sample(recon, rng.randint(3, len(recon)))) - set(cfg["always_prohibited"]))
+    others = [t for t in techs if t not in allowed]
+    prohibited = sorted(set(rng.sample(others, rng.randint(1, min(3, len(others))))) | set(cfg["always_prohibited"]))
+    start = rng.choice([7, 8, 9, 20])
+    end = (start + rng.choice([8, 9, 10])) % 24
+    lo, hi = rng.randint(1, 3), rng.randint(6, 12)
+    domain = rng.choice(["northwind.example", "contoso-lab.example", "fabrikam.example"])
+    eng = {
+        "client": rng.choice(["Northwind Fabrication", "Contoso Lab", "Fabrikam Ltd"]) + " (fictional)",
+        "authorization": {"signed_by": "A. Tester", "role": rng.choice(cfg["authorized_signer_roles"] * 4 + ["intern"]),
+                          "signed": rng.random() < 0.9, "valid_from_day": lo, "valid_to_day": hi},
+        "scope": {"in_scope_cidrs": ["198.51.100.0/24", "10.20.0.0/16"], "in_scope_domains": [domain],
+                  "out_of_scope": ["10.20.5.0/24", "198.51.100.200", "mail." + domain]},
+        "allowed_techniques": allowed, "prohibited": prohibited,
+        "window": {"start_hour": start, "end_hour": end},
+        "environment": rng.choice(sorted(cfg["environment_types"])),
+        "emergency_contact": "SOC duty manager, +1-555-0100" if rng.random() < 0.9 else "",
+    }
+    targets = ["198.51.100.%d" % rng.randint(1, 254), "10.20.%d.%d" % (rng.randint(0, 9), rng.randint(1, 254)),
+               "10.20.5.%d" % rng.randint(1, 254), "198.51.100.200", "203.0.113.%d" % rng.randint(1, 254),
+               domain, "portal." + domain, "mail." + domain, "shop.other.example"]
+    actions = []
+    for i in range(1, rng.randint(6, 10) + 1):
+        tech = rng.choice(techs + allowed * 2 + ["unlisted_tool"])
+        cat = cfg["techniques"].get(tech, {}).get("category")
+        declared = "passive" if cat == "passive_recon" or rng.random() < 0.15 else "active"
+        actions.append({"id": f"PT-{i:02d}", "tester": rng.choice(["ai-agent-1", "j.diaz"]),
+                        "day": rng.randint(max(0, lo - 1), hi + 2), "hour": rng.choice([rng.randint(0, 23), (start + rng.randint(0, 7)) % 24]),
+                        "target": rng.choice(targets + targets[:2] * 2 + targets[5:7]), "technique": tech, "recon": declared})
+    drivers = sorted(cfg["assessment_rules"])
+    needs = [{"id": f"AN-{i}", "description": "generated assessment need",
+              "driver": rng.choice(drivers + ["unknown_driver"]) if i > 1 else rng.choice(drivers),
+              "independence_required": rng.random() < 0.5} for i in range(1, rng.randint(3, 5) + 1)]
+    return {"engagement": eng, "actions": actions, "assessment_needs": needs}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 20
+# --------------------------------------------------------------------------- #
+def gen_lab20(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["iac"]
+    bad = lambda p=0.12: rng.random() < p                     # noqa: E731
+    owners = ["web-team", "platform", "data-team", "it-ops", "payments"]
+    resources = []
+    for i in range(1, rng.randint(6, 10) + 1):
+        rtype = rng.choice(cfg["known_types"] + ["dns_zone"]) if bad(0.08) else rng.choice(cfg["known_types"])
+        tags = {"owner": rng.choice(owners), "data_classification": rng.choice(["public", "internal", "confidential"])}
+        if bad(0.15):
+            del tags[rng.choice(sorted(tags))]
+        if rng.random() < 0.3:
+            tags["criticality"] = "critical"
+        r = {"id": f"{rtype.split('_')[0]}-{i}", "type": rtype, "tags": tags}
+        if rtype in ("vm", "database", "load_balancer", "container"):
+            r["availability_zones"] = ["zone-a"] if bad(0.3) else ["zone-a", "zone-b"]
+        if rtype == "storage_bucket":
+            r.update(acl="public-read" if bad(0.15) else "private", encryption_at_rest=not bad(), logging=not bad())
+        elif rtype == "security_group":
+            r["ingress"] = [{"port": 443, "cidr": "0.0.0.0/0"},
+                            {"port": rng.choice([22, 3389, 5432]), "cidr": "0.0.0.0/0" if bad(0.2) else "10.0.0.0/8"}]
+        elif rtype == "vm":
+            r.update(encrypted_disk=not bad(), public_ip=bad())
+        elif rtype == "database":
+            r.update(publicly_accessible=bad(0.15), encryption_at_rest=not bad(), backup_retention_days=rng.choice([1, 7, 14, 35]))
+        elif rtype == "iam_policy":
+            r["statements"] = [{"effect": "Allow", "action": "*" if bad(0.15) else "storage:GetObject",
+                                "resource": "*" if bad(0.5) else "arn:example:storage:::bucket-1/*"}]
+        elif rtype == "container":
+            r.update(privileged=bad(0.15), run_as_root=bad(0.3), secrets_in_env=bad(0.1))
+        elif rtype == "function":
+            r.update(secrets_in_env=bad(0.15), logging=not bad())
+        elif rtype == "load_balancer":
+            r.update(https_only=not bad(0.15), logging=not bad())
+        for k in [k for k in r if k not in ("id", "type", "tags")]:
+            if bad(0.04):                                       # an undeclared property -> deny by default
+                del r[k]
+        resources.append(r)
+    return {"plan": {"name": f"generated-plan-{rng.randint(100, 999)}", "resources": resources}}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 22
+# --------------------------------------------------------------------------- #
+def gen_lab22(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["compliance"]
+    today = rng.randint(900, 1200)
+    regimes = sorted(cfg["regimes"]) + ["unknown_regime"] * (rng.random() < 0.15)
+    cases = []
+    for i in range(1, rng.randint(2, 3) + 1):
+        rtype = rng.choice(sorted(cfg["dsr_types"]))
+        received = today - rng.randint(0, 60)
+        c = {"id": f"DSR-{i}", "kind": "dsr", "summary": f"generated {rtype} request", "regime": rng.choice(regimes),
+             "request_type": rtype, "received_day": received,
+             "completed_day": rng.choice([None, min(today, received + rng.randint(5, 60))]),
+             "identity_verified": rng.random() < 0.8, "received_by": rng.choice(["controller", "controller", "processor"]),
+             "forwarded_to_controller": rng.random() < 0.6}
+        if rtype == "erasure" and rng.random() < 0.5:
+            c["hold"] = rng.choice(sorted(cfg["erasure_exemption_grounds"]) + ["business_preference"])
+            c["hold_documented"] = rng.random() < 0.7
+        if rng.random() < 0.08:
+            del c["identity_verified"]
+        cases.append(c)
+    for i in range(1, rng.randint(1, 3) + 1):
+        found = today * 24 - rng.randint(1, 200)
+        sent = found + rng.randint(1, 120)
+        cases.append({"id": f"BR-{i}", "kind": "breach", "summary": "generated breach", "regime": rng.choice(regimes),
+                      "discovered_hour": found, "regulator_notified_hour": sent if sent <= today * 24 and rng.random() < 0.7 else None,
+                      "risk": rng.choice(["low", "medium", "high"]), "subjects_notified": rng.random() < 0.6})
+    for i in range(1, rng.randint(1, 3) + 1):
+        rtype = rng.choice(sorted(cfg["retention_schedule"]))
+        hi = cfg["retention_schedule"][rtype]["max_days"]
+        created = today - rng.randint(1, hi + 120)
+        destroyed = rng.randint(created, today) if rng.random() < 0.4 else None
+        cases.append({"id": f"RT-{i}", "kind": "retention", "summary": f"generated {rtype}", "record_type": rtype,
+                      "created_day": created, "destroyed_day": destroyed, "legal_hold": rng.random() < 0.25})
+    for i in range(1, rng.randint(1, 2) + 1):
+        atype = rng.choice(sorted(cfg["attestations"]))
+        c = {"id": f"AT-{i}", "kind": "attestation", "summary": f"generated {atype}", "attestation": atype,
+             "subject": f"employee E-{rng.randint(1000, 9999)}",
+             "signed_day": None if rng.random() < 0.15 else today - rng.randint(0, 420)}
+        if rng.random() < 0.1:
+            c["exception"] = {"documented": True, "reason": "on documented leave; acknowledge on return"}
+        cases.append(c)
+    return {"as_of_day": today, "cases": cases}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 21
+# --------------------------------------------------------------------------- #
+def gen_lab21(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["asset_mgmt"]
+    today, limit = 300, cfg["missing_after_days"]
+    names = ["web", "db", "laptop", "print", "vm", "cam", "nas", "kiosk", "badge", "voip"]
+    cmdb, scan = [], []
+    for i in range(1, rng.randint(5, 9) + 1):
+        mac = f"00:1a:2b:00:00:{i:02x}"
+        host = f"{rng.choice(names)}-{i:02d}"
+        status = rng.choices(["active", "retired", "in_storage"], [0.8, 0.1, 0.1])[0]
+        online = status == "active" and rng.random() < 0.6
+        last = today if online else today - rng.choice([1, limit - 1, limit, limit + 1, limit + 10, 120])
+        cmdb.append({"asset_id": f"A-{i:03d}", "hostname": host, "mac": mac,
+                     "owner": rng.choice(["", "it-ops", "dev-team", "hr-it", "finance"]) if rng.random() < 0.3
+                     else rng.choice(["it-ops", "dev-team", "hr-it", "finance"]),
+                     "classification": "" if rng.random() < 0.2 else rng.choice(cfg["classifications"]),
+                     "status": status, "last_seen": last})
+        if online:
+            scan.append({"mac": mac.upper() if rng.random() < 0.3 else mac, "hostname": host,
+                         "ip": f"10.20.{rng.randint(1, 9)}.{10 + i}"})
+    for j in range(rng.randint(1, 3)):
+        scan.append({"mac": f"b8:27:eb:{rng.randint(0, 255):02x}:{rng.randint(0, 255):02x}:{j:02x}",
+                     "hostname": rng.choice(["raspberrypi", "android-phone", "smart-tv", "personal-laptop"]),
+                     "ip": f"10.20.7.{100 + j}"})
+    media = list(cfg["media_types"])
+    methods = sorted(cfg["methods"]) + ["quick_format", "delete_files"]
+    disposals = []
+    for k in range(1, rng.randint(5, 8) + 1):
+        third = rng.random() < 0.4
+        disposals.append({
+            "id": f"D-{k}", "asset_id": f"A-{100 + k}",
+            "media": rng.choice(media) if rng.random() < 0.95 else "floppy",
+            "classification": rng.choice(cfg["classifications"]),
+            "method": rng.choice(methods),
+            "destination": rng.choice(["reuse_within_org", "leaving_org"]),
+            "performed_by": "third_party" if third else "internal",
+            "certificate_of_destruction": third and rng.random() < 0.7,
+            "legal_hold": rng.random() < 0.1,
+            "retention_until": rng.choice([0, 0, 150, today - 1, today, today + 30]),
+        })
+    return {"today": today, "cmdb": cmdb, "scan": scan, "disposals": disposals}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 24
+# --------------------------------------------------------------------------- #
+def gen_lab24(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["awareness"]
+    day = rng.randint(380, 420)
+    paths = [["delivered"], ["delivered", "opened"], ["delivered", "reported"], ["delivered", "opened", "reported"],
+             ["delivered", "opened", "clicked"], ["delivered", "opened", "clicked", "reported"],
+             ["delivered", "opened", "clicked", "submitted_credentials"], []]
+    roles = cfg["known_roles"] + ["staff", "staff", "contractor"]
+    employees = []
+    for i in range(1, rng.randint(8, 14) + 1):
+        events = list(rng.choice(paths))
+        emp = {"id": f"E{i:02d}", "dept": rng.choice(["Finance", "Engineering", "Sales", "HR"]),
+               "role": rng.choice(roles), "events": events, "prior_failures": rng.choice([0, 0, 0, 1, 1, 2, 3])}
+        if "reported" in events:
+            emp["report_minutes"] = rng.choice([1, 3, 5, 8, 15, 30, 90])
+        if rng.random() < 0.85:
+            emp["training_completed_day"] = day - rng.randint(0, 450)
+        employees.append(emp)
+    cats = sorted(cfg["technical_controls"]) + ["data_export"]
+    behaviours = []
+    for i in range(1, rng.randint(3, 6) + 1):
+        obs = {"id": f"B{i}", "description": "generated behaviour observation", "category": rng.choice(cats)}
+        for attr in cfg["behaviour_required_attributes"]:
+            if rng.random() < 0.92:
+                obs[attr] = rng.random() < 0.5
+        behaviours.append(obs)
+    trusted = cfg["trusted_domains"][0]
+    look = trusted.replace("l", "1", 1) if "l" in trusted else trusted.replace("o", "0", 1)
+    messages = []
+    for i in range(1, rng.randint(2, 4) + 1):
+        sender = rng.choice([f"it@{trusted}", f"hr@{trusted}", f"helpdesk@{look}", "billing@vendor.example.net", ""])
+        subject = rng.choice(["Quarterly update", "URGENT: action required", "Invoice attached", "Team lunch"])
+        body = rng.choice(["See the notes below.", "Verify your account password immediately.",
+                           "Please send payment by wire transfer today.", "Agenda is on the intranet."])
+        links = rng.choice([[], [{"text": "Intranet", "href": f"https://intranet.{trusted}/"}],
+                            [{"text": f"https://portal.{trusted}", "href": "http://portal.example-login.net/"}]])
+        attachments = rng.choice([[], ["notes.pdf"], ["invoice.html"], ["update.zip"]])
+        messages.append({"id": f"MSG-{i}", "from": sender, "subject": subject, "body": body,
+                         "links": links, "attachments": attachments})
+    return {"campaign": {"id": f"PH-GEN-{day}", "day": day, "template": "generated campaign"},
+            "employees": employees, "behaviours": behaviours, "messages": messages}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 18
+# --------------------------------------------------------------------------- #
+def gen_lab18(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["data_protection"]
+
+    def pan(valid: bool) -> str:
+        body = [rng.choice([4, 5])] + [rng.randint(0, 9) for _ in range(14)]
+        total = 0
+        for i, d in enumerate(reversed(body)):          # check digit position is index 0 after append
+            d = d * 2 if i % 2 == 0 else d
+            total += d - 9 if d > 9 else d
+        check = (10 - total % 10) % 10
+        digits = "".join(map(str, body + [(check + (0 if valid else rng.randint(1, 9))) % 10]))
+        return " ".join(digits[i:i + 4] for i in range(0, 16, 4))
+
+    content = {
+        "plain": lambda: f"Store {rng.randint(10, 99)} weekly footfall report",
+        "random_number": lambda: f"Order ref {pan(False)} shipped",
+        "card": lambda: f"refund to card {pan(True)}",
+        "ssn": lambda: f"emp=E{rng.randint(1000, 9999)} ssn={rng.randint(100, 665)}-{rng.randint(10, 99)}-{rng.randint(1000, 9999)}",
+        "email": lambda: f"member=user{rng.randint(1, 999)}@example.eu phone=+49 301-555-01{rng.randint(10, 99)}",
+        "health": lambda: f"patient MRN-{rng.randint(100000, 9999999)} follow-up",
+        "password": lambda: f"user=u{rng.randint(1, 99)} password=Pw{rng.randint(1000, 9999)}!",
+        "api_key": lambda: "aws_access_key_id=AKIA" + "".join(rng.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ234567") for _ in range(16)),
+        "trade_secret": lambda: "CONFIDENTIAL - TRADE SECRET: laminate ratios",
+        "legal": lambda: "ATTORNEY-CLIENT PRIVILEGED: draft settlement",
+    }
+    dest_types = sorted({t for v in cfg["allowed_destinations"].values() for t in v} | {"secrets_vault"})
+    regions = ["us"] * 5 + ["eu", "uk", "apac"]
+    labels = sorted(cfg["classification_rank"]) + ["internal"]
+    methods = ["encryption", "hashing", "masking", "tokenization", "permission_restrictions"]
+    flows = []
+    for i in range(1, rng.randint(5, 8) + 1):
+        kinds = rng.sample(sorted(content), rng.choice([1, 1, 2]))
+        flow = {"id": f"DF-{i}", "description": f"generated flow ({', '.join(kinds)})",
+                "records": [content[k]() for k in kinds],
+                "declared_classification": rng.choice(labels) if rng.random() < 0.2 else rng.choice(["public", "private", "confidential"]),
+                "state": rng.choice(["at_rest", "in_transit", "in_use"]),
+                "destination": {"type": rng.choice(dest_types if rng.random() < 0.3 else ["internal_db", "internal_app", "support_console"]),
+                                "region": rng.choice(regions), "approved": rng.random() < 0.9},
+                "encrypted_channel": rng.random() < 0.7,
+                "protection": rng.sample(methods, rng.choice([0, 1, 1, 2]))}
+        if rng.random() < 0.3:
+            flow["data_origin"] = rng.choice(["eu", "uk", "us"])
+        flows.append(flow)
+    return {"flows": flows}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 19
+# --------------------------------------------------------------------------- #
+def gen_lab19(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["siem"]
+    rules = {r["id"]: r for r in cfg["rules"]}
+    base = 1791936000                              # 2026-10-14T00:00:00Z (a Wednesday)
+    evs, scen = [], {"S0": {"label": "benign", "description": "normal background activity"}}
+
+    def ts(sec, as_int=None):
+        if as_int if as_int is not None else rng.random() < 0.3:
+            return base + sec
+        return f"2026-10-14T{sec // 3600:02d}:{sec % 3600 // 60:02d}:{sec % 60:02d}Z"
+
+    def add(sec, sc, **kw):
+        evs.append({"ts": ts(sec), "scenario": sc, **kw})
+
+    def S(label, text):
+        sid = f"S{len(scen)}"
+        scen[sid] = {"label": label, "description": text}
+        return sid
+
+    def fail(user, ip):
+        return {"source": "auth", "host": "VPN-1", "user": user, "src_ip": ip, "action": "login", "outcome": "failure"}
+
+    def ok(user, ip, geo):
+        return {**fail(user, ip), "outcome": "success", "geo": geo}
+
+    # background: every source except possibly a silent one
+    gaps = rules["SIEM-005"]["params"]["max_gap_seconds"]
+    silent = rng.choice(sorted(gaps)) if rng.random() < 0.6 else None
+    for src in sorted(gaps):
+        if src == silent:
+            sid = S("actionable", f"the {src} log forwarder stops sending events")
+            add(rng.randint(600, 3600), sid, source=src, host="LOG-1", action="heartbeat", outcome="ok")
+            continue
+        for h in (1, 4, 7, 10):
+            add(h * 3600 + rng.randint(0, 1500), "S0", source=src, host="WS-11", action="heartbeat", outcome="ok")
+
+    bf = rules["SIEM-001"]["params"]
+    n = bf["count"] + rng.choice([-2, -1, 0, 1])
+    t = rng.randint(2, 3) * 3600
+    sid = S("actionable" if n >= bf["count"] else "benign",
+            f"{n} failed logins for user dana from one IP" if n >= bf["count"] else "dana mistypes her password")
+    for i in range(n):
+        add(t + i * 15, sid, **fail("dana", "203.0.113.50"))
+    if rng.random() < 0.5:
+        add(t + n * 15 + rng.choice([30, 120, 900]), sid, **ok("dana", "203.0.113.50", "Lagos"))
+
+    sp = rules["SIEM-002"]["params"]
+    m = sp["count"] + rng.choice([-1, 0, 1])
+    sid = S("actionable" if m >= sp["count"] else "benign", f"one IP fails against {m} different users")
+    for i in range(m):
+        add(4 * 3600 + i * 20, sid, **fail(f"user{i + 1}", "198.51.100.23"))
+
+    cities = sorted(cfg["geo"])
+    a, b = rng.sample(cities, 2)
+    gap_min = rng.choice([45, 90, 600])
+    sid = S(rng.choice(["actionable", "benign"]), f"erin logs in from {a} then {b} {gap_min} min later")
+    add(6 * 3600, sid, **ok("erin", "198.51.100.40", a))
+    add(6 * 3600 + gap_min * 60, sid, **ok("erin", "192.0.2.150", b))
+
+    ah = rules["SIEM-004"]["params"]
+    hour = rng.choice([2, 3, 6, 10, 11])
+    lo, hi = ah["business_hours"]
+    sid = S("benign" if lo <= hour < hi else "actionable", f"privileged change at {hour:02d}:30 UTC")
+    add(hour * 3600 + 1800, sid, source="app", host="ERP-1", user="frank", action=rng.choice(ah["actions"]),
+        outcome="success")
+
+    ps = rules["SIEM-007"]["params"]
+    sups = [s for s in cfg.get("suppressions", []) if s.get("rule") == "SIEM-007" and s.get("match", {}).get("src_ip")]
+    for k, s in enumerate(rng.sample(sups, min(len(sups), rng.randint(1, 2)))):
+        valid = bool(s.get("owner")) and str(s.get("expires", "")) > "2026-10-14"
+        sid = S("benign" if valid else "actionable", f"port scan from {s['match']['src_ip']} ({s.get('reason')})")
+        for i in range(ps["count"] + rng.choice([-1, 0, 2])):
+            add(7 * 3600 + k * 600 + i * 5, sid, source="firewall", host="FW-1", src_ip=s["match"]["src_ip"],
+                dst_ip="10.0.2.10", dst_port=20 + i * 3, action="connection", outcome="denied")
+
+    ti = cfg["threat_intel"]
+    if rng.random() < 0.7:
+        sid = S("actionable", "workstation contacts a known-bad indicator")
+        if rng.random() < 0.5:
+            add(8 * 3600, sid, source="dns", host="WS-17", src_ip="10.0.3.17", domain=rng.choice(ti["domains"]),
+                action="query", outcome="ok")
+        else:
+            add(8 * 3600, sid, source="firewall", host="FW-1", src_ip="10.0.3.17", dst_ip=rng.choice(ti["ips"]),
+                dst_port=443, action="connection", outcome="allowed")
+
+    outcome = rng.choice(["allowed", "quarantined"])
+    sid = S("actionable" if outcome == "allowed" else "benign", f"EDR detects malware, outcome {outcome}")
+    add(9 * 3600, sid, source="edr", host="WS-22", action="malware_detected", outcome=outcome, file="dropper.exe")
+
+    if rng.random() < 0.4:
+        sid = S("actionable", "an app writes a non-ISO timestamp after an update")
+        evs.append({"ts": "14/10/2026 10:15", "source": "app", "host": "HR-APP-2", "action": "export_database",
+                    "outcome": "success", "scenario": sid})
+
+    for i, e in enumerate(evs, 1):
+        e["id"] = f"EV-{i:02d}"
+    return {"window": {"start": "2026-10-14T00:00:00Z", "end": "2026-10-14T12:00:00Z"}, "scenarios": scen,
+            "events": evs}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 26
+# --------------------------------------------------------------------------- #
+def gen_lab26(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["identity_governance_iga"]
+    statuses = list(cfg["status_handling"]) + ["active", "active", "active"]
+    depts = ["Finance", "IT", "Sales", "HR"]
+    identities = [{"employee_id": "E2000", "name": "Exec Leader", "email": "exec.leader@example.com",
+                   "department": "Operations", "job_code": "OPS-EXEC", "status": "active", "manager": None}]
+    for i in range(1, rng.randint(7, 11) + 1):
+        dept = rng.choice(depts)
+        identities.append({"employee_id": f"E2{i:03d}", "name": f"User {i}", "email": f"user{i}@example.com",
+                           "department": dept, "job_code": f"{dept[:3].upper()}-{rng.randint(1, 4)}",
+                           "status": rng.choice(statuses),
+                           "manager": rng.choice([x["employee_id"] for x in identities])})
+    ids = [x["employee_id"] for x in identities]
+    apps = ["ERP", "CRM", "FileShare"]
+    accounts = []
+    for n in range(1, rng.randint(15, 26) + 1):
+        app, kind = rng.choice(apps), rng.random()
+        acct = {"id": f"A{n:02d}", "app": app, "account": f"acct{n}"}
+        if kind < 0.15:
+            acct.update(type=cfg["service_account_types"][0], privileged=True, account=f"svc_{app.lower()}_{n}")
+            if rng.random() < 0.6:
+                acct["owner"] = rng.choice(ids)
+        elif kind < 0.30:
+            acct[rng.choice(["employee_id", "email"])] = rng.choice(["E9999", "temp@partner.example.net"])
+        else:
+            ident = rng.choice(identities)
+            if rng.random() < 0.7:
+                acct["employee_id"] = ident["employee_id"]
+            else:
+                acct["email"] = ident["email"]
+            if rng.random() < 0.2:
+                acct["privileged"] = True
+        if rng.random() < 0.15:
+            acct["enabled"] = False
+        if rng.random() < 0.9:
+            acct["last_login_days_ago"] = rng.choice([0, 2, 7, 30, 60, 89, 90, 91, 150, 400])
+        accounts.append(acct)
+    risks = cfg["campaign"]["risk_levels"]
+    sod = [e for rule in cfg["sod_conflicts"] for e in rule["pair"]]
+    names = list(dict.fromkeys(sod + ["ERP:GL_VIEW", "CRM:CRM_USER", "FileShare:TEAM_DRIVE"]))
+    catalog = {e: {"risk": rng.choice(risks), "owner": rng.choice(ids), "description": "generated"} for e in names}
+    stamper = rng.choice(ids) if rng.random() < 0.6 else None
+    items, clock = [], {}
+    for n in range(1, rng.randint(8, 16) + 1):
+        ident = rng.choice(identities + [{"employee_id": "E9999", "manager": None}])
+        ent = rng.choice(names + ["CRM:UNCATALOGUED"])
+        rel = rng.random()
+        reviewer = (stamper if stamper and rel < 0.3 else ident.get("manager") if rel < 0.55
+                    else catalog.get(ent, {}).get("owner") if rel < 0.75
+                    else ident["employee_id"] if rel < 0.85 else rng.choice(ids))
+        decision = rng.choice(["approve", "approve", "approve", "revoke", "none"])
+        fast = reviewer == stamper
+        if fast:
+            decision = "approve"
+        clock[reviewer] = clock.get(reviewer, 0) + (rng.randint(2, 6) if fast else rng.randint(20, 400))
+        items.append({"id": f"C{n:02d}", "identity": ident["employee_id"], "app": ent.split(":")[0],
+                      "entitlement": ent.split(":")[1], "reviewer": reviewer, "decision": decision,
+                      "decided_at_seconds": None if decision == "none" else clock[reviewer],
+                      "comment": rng.choice(["", "", "still needed for current role", "ok"])})
+    return {"_description": "Generated identity governance scenario", "identities": identities,
+            "accounts": accounts, "entitlements": catalog, "campaign": {"name": "Generated campaign", "items": items}}
+
+
+# --------------------------------------------------------------------------- #
+# Lab 25
+# --------------------------------------------------------------------------- #
+def gen_lab25(rng: random.Random, policies: dict) -> dict:
+    cfg = policies["conditional_access"]
+    apps = sorted(set(cfg["sensitive_apps"]) | {"Wiki", "Mail"})
+    trusted_ips = ["10.20.%d.%d" % (rng.randint(0, 255), rng.randint(1, 254)), "192.0.2.%d" % rng.randint(1, 60)]
+    clients = sorted(cfg["client_app_categories"]) + ["browser", "browser", "mobile_app"]
+    platforms = ["windows", "windows", "macos", "ios", "android", "linux"]
+    group_sets = [["Staff"], ["Staff"], ["Staff", "Finance"], ["Staff", "Admins"], ["Guests"], ["BreakGlass", "Admins"]]
+    names = ["alice", "bob", "carol", "dave", "erin", "frank", "grace", "heidi"]
+    signins, minute = [], rng.randint(400, 500)
+    for i in range(1, rng.randint(8, 13) + 1):
+        groups = list(rng.choice(group_sets))
+        user = "bg-admin01" if "BreakGlass" in groups else rng.choice(names)
+        minute += rng.choice([3, 5, 20, 45, 90])
+        s = {"id": f"S{i:02d}", "user": user, "groups": groups, "app": rng.choice(apps),
+             "ip": rng.choice(trusted_ips + ["203.0.113.%d" % rng.randint(1, 254)] * 2),
+             "country": rng.choice(["US", "US", "US", "NL", "CA"]), "minute": minute,
+             "device": {"platform": rng.choice(platforms), "compliant": rng.random() < 0.6},
+             "client_app": rng.choice(clients), "mfa_satisfied": rng.random() < 0.55}
+        if rng.random() < 0.9:
+            s["risk"] = rng.choice(cfg["risk_levels"])
+        if rng.random() < 0.5:
+            s["approved_app"] = rng.random() < 0.6
+        if "Guests" in groups:
+            s["tou_accepted"] = rng.random() < 0.5
+        signins.append(s)
+    roles = sorted(cfg["role_settings"])
+    people = ["heidi", "oscar", "peggy", "trent", "sybil"]
+    assignments = [{"user": "bg-admin01", "role": roles[0], "type": "active", "permanent": True}]
+    for u in people:
+        assignments.append({"user": u, "role": rng.choice(roles), "type": "eligible"})
+    for u in rng.sample(["mallory", "frank", "walter"], rng.randint(0, 2)):
+        assignments.append({"user": u, "role": rng.choice(cfg["privileged_roles"]), "type": "active", "permanent": True})
+    requests = []
+    for i in range(1, rng.randint(4, 7) + 1):
+        a = rng.choice(assignments[1:]) if rng.random() < 0.8 else {"user": "victor", "role": rng.choice(roles)}
+        r = {"id": f"R{i}", "user": a["user"], "role": a["role"], "duration_hours": rng.choice([1, 2, 4, 8, 12]),
+             "justification": rng.choice(["Scheduled maintenance", "Incident follow-up", ""]),
+             "ticket": rng.choice(["CHG-%05d" % rng.randint(10000, 99999), ""]), "mfa_done": rng.random() < 0.8}
+        appr = rng.choice([None, None, "sec-lead", "ciso", a["user"], "intern"])
+        if appr:
+            r["approver"] = appr
+        requests.append(r)
+    return {"signins": signins,
+            "break_glass_accounts": [{"user": "bg-admin01", "groups": ["BreakGlass", "Admins"],
+                                      "alert_on_signin": rng.random() < 0.7}],
+            "assignments": assignments, "activation_requests": requests}
+
+
+GENERATORS = {2: gen_lab2, 6: gen_lab6, 9: gen_lab9, 11: gen_lab11, 12: gen_lab12, 13: gen_lab13, 14: gen_lab14, 15: gen_lab15, 17: gen_lab17, 18: gen_lab18, 19: gen_lab19, 20: gen_lab20, 21: gen_lab21, 22: gen_lab22, 23: gen_lab23, 24: gen_lab24, 25: gen_lab25, 26: gen_lab26}
 
 
 def generate(lab: int, policies: dict, seed: int | None = None) -> dict:

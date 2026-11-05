@@ -1,0 +1,36 @@
+{
+  "lab": 18,
+  "ticket": "CHG-30518",
+  "type": "Change request",
+  "priority": "P2",
+  "requested_by": "Tomas Reyes, Data Protection Officer",
+  "title": "Review eight outbound data flows before the new DLP gate goes live",
+  "situation": "A retail company is turning on a data loss prevention (DLP) gate that checks data before it leaves a system. Eight flows are queued for review, including card payments, a payroll backup going overseas, a European customer list going to a US analytics tool, and a new service that stores passwords. Some flows are labelled with a lower sensitivity than the data inside them.",
+  "your_task": [
+    "Scan each flow's content for card numbers, Social Security numbers, personal details, passwords, keys and trade secrets, and raise the label if needed.",
+    "Check each flow's data state, destination and region against policy, including data sovereignty rules.",
+    "Check that the protection fits the data: masking, tokenization, encryption, or hashing for passwords.",
+    "Decide ALLOW, ALLOW_WITH_PROTECTION or BLOCK for each flow."
+  ],
+  "why_it_matters": "Sending card numbers or personal data to the wrong place can bring fines and breach notices. Passwords stored with reversible encryption can all be read at once if the key leaks.",
+  "done_when": [
+    "All 8 flows have an effective label, a decision and a reason.",
+    "Flows whose content outranks their label are relabelled.",
+    "The password-storage flow (DF-6) is blocked until it uses salted hashing, and the IAM team signs off on the credential-storage design."
+  ],
+  "glossary": {
+    "DLP (data loss prevention)": "Tools and rules that stop sensitive data from leaving where it should stay.",
+    "Data classification": "A label for how sensitive data is, such as public, confidential or restricted.",
+    "Data sovereignty": "Laws that say certain data must stay in a specific country or region.",
+    "Tokenization": "Replacing a real value, like a card number, with a random stand-in.",
+    "Masking": "Hiding most of a value on screen, like showing only the last four card digits.",
+    "Hashing": "A one-way scramble; with a salt (random extra value) it is the right way to store passwords."
+  },
+  "job_roles": [
+    "Data Protection Analyst",
+    "DLP Engineer",
+    "Privacy Analyst",
+    "IAM Engineer"
+  ],
+  "talking_point": "Reviewed 8 outbound data flows: allowed 2, allowed 2 with added protection and blocked 4, including an EU customer list bound for a US tool, a payroll backup headed to an unapproved region and a service storing passwords with reversible encryption."
+}

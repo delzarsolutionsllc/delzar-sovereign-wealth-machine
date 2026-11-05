@@ -1,0 +1,119 @@
+{
+  "_description": "Fictional SIEM feed for 2026-10-14 00:00-12:00 UTC (fictional Example Corp). ts is an ISO-8601 UTC string or integer epoch seconds. 'scenario' is the analyst's ground-truth label used to score alert quality.",
+  "window": {
+    "start": "2026-10-14T00:00:00Z",
+    "end": "2026-10-14T12:00:00Z"
+  },
+  "scenarios": {
+    "S0": {
+      "label": "benign",
+      "description": "normal background activity"
+    },
+    "S1": {
+      "label": "actionable",
+      "description": "attacker guesses jdoe's VPN password, then gets in"
+    },
+    "S2": {
+      "label": "actionable",
+      "description": "one IP tries a common password against five accounts"
+    },
+    "S3": {
+      "label": "actionable",
+      "description": "asmith's stolen session token is replayed from Singapore"
+    },
+    "S4": {
+      "label": "actionable",
+      "description": "mlee creates a second admin account at 02:14 with no change ticket"
+    },
+    "S5": {
+      "label": "actionable",
+      "description": "WS-17 resolves and contacts a known C2 domain/IP"
+    },
+    "S6": {
+      "label": "benign",
+      "description": "the authorised vulnerability scanner's weekly scan"
+    },
+    "S7": {
+      "label": "actionable",
+      "description": "the old pen-test box scans servers after the engagement ended: unauthorised"
+    },
+    "S8": {
+      "label": "actionable",
+      "description": "the DNS log forwarder crashed at 02:30: no DNS visibility afterwards"
+    },
+    "S9": {
+      "label": "benign",
+      "description": "kwong mistypes a password three times, then logs in"
+    },
+    "S10": {
+      "label": "actionable",
+      "description": "low-and-slow guessing against pchan, one try every few hours"
+    },
+    "S12": {
+      "label": "benign",
+      "description": "bnguyen's laptop switches to the cloud VPN egress in Frankfurt"
+    },
+    "S13": {
+      "label": "actionable",
+      "description": "the EDR agent detects keygen.exe but its policy is detect-only"
+    },
+    "S14": {
+      "label": "actionable",
+      "description": "HR app writes a non-ISO timestamp after an update: its events are not parsed"
+    }
+  },
+  "events": [
+    {"id": "EV-01", "ts": "2026-10-14T00:10:00Z", "source": "edr", "host": "WS-11", "action": "heartbeat", "outcome": "ok", "scenario": "S0"},
+    {"id": "EV-02", "ts": 1791937200, "source": "firewall", "host": "FW-1", "src_ip": "10.0.3.11", "dst_ip": "198.51.100.10", "dst_port": 443, "action": "connection", "outcome": "allowed", "scenario": "S0"},
+    {"id": "EV-03", "ts": "2026-10-14T00:30:00Z", "source": "dns", "host": "WS-11", "src_ip": "10.0.3.11", "domain": "intranet.example.com", "action": "query", "outcome": "ok", "scenario": "S0"},
+    {"id": "EV-04", "ts": "2026-10-14T01:00:00Z", "source": "auth", "host": "DC-1", "user": "pchan", "src_ip": "203.0.113.77", "action": "login", "outcome": "failure", "scenario": "S10"},
+    {"id": "EV-05", "ts": "2026-10-14T02:00:00Z", "source": "dns", "host": "WS-17", "src_ip": "10.0.3.17", "domain": "update-checker.example.net", "action": "query", "outcome": "ok", "scenario": "S5"},
+    {"id": "EV-06", "ts": 1791943500, "source": "firewall", "host": "FW-1", "src_ip": "10.0.3.17", "dst_ip": "192.0.2.66", "dst_port": 443, "action": "connection", "outcome": "allowed", "scenario": "S5"},
+    {"id": "EV-07", "ts": "2026-10-14T02:14:00Z", "source": "app", "host": "ERP-1", "user": "mlee", "action": "add_admin", "outcome": "success", "target": "mlee-adm", "scenario": "S4"},
+    {"id": "EV-08", "ts": "2026-10-14T02:30:00Z", "source": "dns", "host": "WS-12", "src_ip": "10.0.3.12", "domain": "mail.example.com", "action": "query", "outcome": "ok", "scenario": "S8"},
+    {"id": "EV-09", "ts": "2026-10-14T03:00:00Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-10", "ts": "2026-10-14T03:00:15Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-11", "ts": "2026-10-14T03:00:30Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-12", "ts": "2026-10-14T03:00:45Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-13", "ts": "2026-10-14T03:01:00Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-14", "ts": "2026-10-14T03:01:15Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "failure", "scenario": "S1"},
+    {"id": "EV-15", "ts": "2026-10-14T03:02:00Z", "source": "auth", "host": "VPN-1", "user": "jdoe", "src_ip": "203.0.113.50", "action": "login", "outcome": "success", "geo": "Lagos", "scenario": "S1"},
+    {"id": "EV-16", "ts": "2026-10-14T04:00:00Z", "source": "auth", "host": "VPN-1", "user": "asmith", "src_ip": "198.51.100.23", "action": "login", "outcome": "failure", "scenario": "S2"},
+    {"id": "EV-17", "ts": "2026-10-14T04:00:20Z", "source": "auth", "host": "VPN-1", "user": "bnguyen", "src_ip": "198.51.100.23", "action": "login", "outcome": "failure", "scenario": "S2"},
+    {"id": "EV-18", "ts": "2026-10-14T04:00:40Z", "source": "auth", "host": "VPN-1", "user": "kwong", "src_ip": "198.51.100.23", "action": "login", "outcome": "failure", "scenario": "S2"},
+    {"id": "EV-19", "ts": "2026-10-14T04:01:00Z", "source": "auth", "host": "VPN-1", "user": "rpatel", "src_ip": "198.51.100.23", "action": "login", "outcome": "failure", "scenario": "S2"},
+    {"id": "EV-20", "ts": "2026-10-14T04:01:20Z", "source": "auth", "host": "VPN-1", "user": "mlee", "src_ip": "198.51.100.23", "action": "login", "outcome": "failure", "scenario": "S2"},
+    {"id": "EV-21", "ts": "2026-10-14T04:30:00Z", "source": "auth", "host": "DC-1", "user": "pchan", "src_ip": "203.0.113.77", "action": "login", "outcome": "failure", "scenario": "S10"},
+    {"id": "EV-22", "ts": 1791954000, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.20", "dst_ip": "10.0.2.10", "dst_port": 22, "action": "connection", "outcome": "denied", "scenario": "S6"},
+    {"id": "EV-23", "ts": 1791954005, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.20", "dst_ip": "10.0.2.10", "dst_port": 80, "action": "connection", "outcome": "denied", "scenario": "S6"},
+    {"id": "EV-24", "ts": 1791954010, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.20", "dst_ip": "10.0.2.10", "dst_port": 443, "action": "connection", "outcome": "denied", "scenario": "S6"},
+    {"id": "EV-25", "ts": 1791954015, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.20", "dst_ip": "10.0.2.10", "dst_port": 445, "action": "connection", "outcome": "denied", "scenario": "S6"},
+    {"id": "EV-26", "ts": 1791954020, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.20", "dst_ip": "10.0.2.10", "dst_port": 3389, "action": "connection", "outcome": "denied", "scenario": "S6"},
+    {"id": "EV-27", "ts": 1791955800, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.99", "dst_ip": "10.0.2.20", "dst_port": 21, "action": "connection", "outcome": "denied", "scenario": "S7"},
+    {"id": "EV-28", "ts": 1791955806, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.99", "dst_ip": "10.0.2.20", "dst_port": 22, "action": "connection", "outcome": "denied", "scenario": "S7"},
+    {"id": "EV-29", "ts": 1791955812, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.99", "dst_ip": "10.0.2.20", "dst_port": 23, "action": "connection", "outcome": "denied", "scenario": "S7"},
+    {"id": "EV-30", "ts": 1791955818, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.99", "dst_ip": "10.0.2.20", "dst_port": 139, "action": "connection", "outcome": "denied", "scenario": "S7"},
+    {"id": "EV-31", "ts": 1791955824, "source": "firewall", "host": "FW-1", "src_ip": "10.0.5.99", "dst_ip": "10.0.2.20", "dst_port": 445, "action": "connection", "outcome": "denied", "scenario": "S7"},
+    {"id": "EV-32", "ts": "2026-10-14T06:00:00Z", "source": "edr", "host": "WS-11", "action": "heartbeat", "outcome": "ok", "scenario": "S0"},
+    {"id": "EV-33", "ts": "2026-10-14T06:30:00Z", "source": "app", "host": "ERP-1", "user": "rpatel", "action": "view_report", "outcome": "success", "scenario": "S0"},
+    {"id": "EV-34", "ts": "2026-10-14T06:45:00Z", "source": "edr", "host": "WS-14", "action": "malware_detected", "outcome": "quarantined", "file": "invoice.pdf.exe", "scenario": "S0"},
+    {"id": "EV-35", "ts": "2026-10-14T07:00:00Z", "source": "edr", "host": "WS-22", "action": "malware_detected", "outcome": "allowed", "file": "keygen.exe", "scenario": "S13"},
+    {"id": "EV-36", "ts": "2026-10-14T08:00:00Z", "source": "auth", "host": "SSO-1", "user": "asmith", "src_ip": "198.51.100.40", "action": "login", "outcome": "success", "geo": "London", "scenario": "S3"},
+    {"id": "EV-37", "ts": "2026-10-14T08:00:30Z", "source": "auth", "host": "DC-1", "user": "pchan", "src_ip": "203.0.113.77", "action": "login", "outcome": "failure", "scenario": "S10"},
+    {"id": "EV-38", "ts": 1791965100, "source": "firewall", "host": "FW-1", "src_ip": "10.0.3.14", "dst_ip": "198.51.100.10", "dst_port": 443, "action": "connection", "outcome": "allowed", "scenario": "S0"},
+    {"id": "EV-39", "ts": "2026-10-14T08:10:00Z", "source": "auth", "host": "SSO-1", "user": "bnguyen", "src_ip": "198.51.100.41", "action": "login", "outcome": "success", "geo": "New York", "scenario": "S12"},
+    {"id": "EV-40", "ts": "2026-10-14T09:05:00Z", "source": "auth", "host": "SSO-1", "user": "bnguyen", "src_ip": "192.0.2.140", "action": "login", "outcome": "success", "geo": "Frankfurt", "scenario": "S12"},
+    {"id": "EV-41", "ts": "2026-10-14T09:30:00Z", "source": "auth", "host": "SSO-1", "user": "asmith", "src_ip": "192.0.2.150", "action": "login", "outcome": "success", "geo": "Singapore", "scenario": "S3"},
+    {"id": "EV-42", "ts": "2026-10-14T09:35:00Z", "source": "app", "host": "ERP-1", "user": "rpatel", "action": "add_admin", "outcome": "success", "target": "new-hire-adm", "scenario": "S0"},
+    {"id": "EV-43", "ts": "2026-10-14T09:40:00Z", "source": "auth", "host": "SSO-1", "user": "kwong", "src_ip": "198.51.100.42", "action": "login", "outcome": "failure", "scenario": "S9"},
+    {"id": "EV-44", "ts": "2026-10-14T09:40:20Z", "source": "auth", "host": "SSO-1", "user": "kwong", "src_ip": "198.51.100.42", "action": "login", "outcome": "failure", "scenario": "S9"},
+    {"id": "EV-45", "ts": "2026-10-14T09:40:40Z", "source": "auth", "host": "SSO-1", "user": "kwong", "src_ip": "198.51.100.42", "action": "login", "outcome": "failure", "scenario": "S9"},
+    {"id": "EV-46", "ts": "2026-10-14T09:41:00Z", "source": "auth", "host": "SSO-1", "user": "kwong", "src_ip": "198.51.100.42", "action": "login", "outcome": "success", "geo": "London", "scenario": "S9"},
+    {"id": "EV-47", "ts": "14/10/2026 25:61", "source": "app", "host": "HR-APP-2", "user": "svc-hr", "action": "export_database", "outcome": "success", "scenario": "S14"},
+    {"id": "EV-48", "ts": "2026-10-14T11:00:00Z", "source": "edr", "host": "WS-11", "action": "heartbeat", "outcome": "ok", "scenario": "S0"},
+    {"id": "EV-49", "ts": "2026-10-14T11:00:30Z", "source": "auth", "host": "DC-1", "user": "pchan", "src_ip": "203.0.113.77", "action": "login", "outcome": "failure", "scenario": "S10"},
+    {"id": "EV-50", "ts": "2026-10-14T11:15:00Z", "source": "app", "host": "ERP-1", "user": "rpatel", "action": "view_report", "outcome": "success", "scenario": "S0"},
+    {"id": "EV-51", "ts": 1791977400, "source": "firewall", "host": "FW-1", "src_ip": "10.0.3.11", "dst_ip": "198.51.100.10", "dst_port": 443, "action": "connection", "outcome": "allowed", "scenario": "S0"},
+    {"id": "EV-52", "ts": "2026-10-14T11:40:00Z", "source": "auth", "host": "SSO-1", "user": "rpatel", "src_ip": "198.51.100.43", "action": "login", "outcome": "success", "geo": "Chicago", "scenario": "S0"}
+  ]
+}

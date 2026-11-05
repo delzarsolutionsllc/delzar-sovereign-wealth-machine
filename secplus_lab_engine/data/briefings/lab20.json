@@ -1,0 +1,36 @@
+{
+  "lab": 20,
+  "ticket": "CHG-30520",
+  "type": "Change request",
+  "priority": "P1",
+  "requested_by": "Devon Price, Cloud Platform Lead",
+  "title": "Gate the 'northwind-shop-prod' cloud deployment before it ships",
+  "situation": "The cloud team wants to deploy the production online shop from an infrastructure-as-code plan with 11 resources. Before it goes live, every resource must pass the security checks: no admin ports open to the internet, no public storage or databases, encryption on, and no over-powered permissions. One permission policy for the build pipeline grants full access to everything.",
+  "your_task": [
+    "Scan all 11 resources in the plan against the security checks.",
+    "Record each failed check with its severity and the fix.",
+    "Deny any resource type that has no reviewed checks.",
+    "Make the deploy decision using the gate rules: any critical finding, or more high findings than allowed, blocks the release."
+  ],
+  "why_it_matters": "One open admin port or public database can be found by attackers within hours. A build-pipeline account with full access means anyone who steals that pipeline can control the whole cloud account.",
+  "done_when": [
+    "All 11 resources show PASS or FAIL with the checks that failed.",
+    "The gate decision is BLOCK, with the 5 critical and 3 high findings listed.",
+    "The wildcard IAM policy (iam-ci-deployer) is sent to the IAM team to be rewritten with only the actions and resources the deployer needs."
+  ],
+  "glossary": {
+    "IaC (infrastructure as code)": "Defining servers, networks and permissions in files, so they can be reviewed before they are built.",
+    "Security group": "A cloud firewall that controls which traffic can reach a resource.",
+    "IAM policy": "A rule in Identity and Access Management that says which actions an account may take on which resources.",
+    "Least privilege": "Giving an account only the access it needs, nothing more.",
+    "Availability zone": "A separate data centre within a cloud region; using two keeps a service up if one fails.",
+    "Shared responsibility model": "The split of security duties between the cloud provider and the customer."
+  },
+  "job_roles": [
+    "Cloud Security Engineer",
+    "DevSecOps Engineer",
+    "Cloud IAM Engineer",
+    "Security Analyst"
+  ],
+  "talking_point": "Scanned an 11-resource infrastructure-as-code plan, passed 3 resources and failed 8, and blocked the release on 5 critical and 3 high findings, including a build-pipeline (CI, continuous integration) deployer IAM policy that allowed every action on every resource."
+}

@@ -1,0 +1,37 @@
+{
+  "lab": 9,
+  "ticket": "REQ-10377",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Owen Brightwater, Vulnerability Management Lead",
+  "title": "Prioritize nine scanner findings and rule on three risk exceptions",
+  "situation": "This week's vulnerability scan found nine weaknesses. Some are on internet-facing systems and are known to be actively exploited, one is on a workstation nobody has registered, and one has no patch yet. Three teams also asked to delay fixes by accepting the risk. One of those requests was approved by someone who is not allowed to approve it.",
+  "your_task": [
+    "Score each finding using its severity rating, whether it is known to be exploited, how exposed the system is and how critical it is.",
+    "Assign P1 to P4 priority and a fix-by date based on the deadline for that priority.",
+    "Review the three risk exceptions for an authorized approver, strong enough compensating controls and expiry dates.",
+    "List the remediation action for each finding, including escalations for overdue items."
+  ],
+  "why_it_matters": "Attackers go after known, exploited weaknesses on internet-facing systems first. A risk exception signed by the wrong person leaves a hole open that nobody actually agreed to accept.",
+  "done_when": [
+    "4 findings are P1, 3 are P2 and 2 are P3, each with a due date.",
+    "The auth-service exception is rejected because ops_lead cannot accept risk.",
+    "V-01 and V-07 are escalated to their risk owners as overdue.",
+    "The unregistered workstation ws-9999 is sent for registration in the asset database with an owner assigned."
+  ],
+  "glossary": {
+    "Common Vulnerability Scoring System (CVSS)": "A 0 to 10 score for how severe a weakness is.",
+    "Known Exploited Vulnerabilities (KEV)": "A government list of weaknesses that attackers are already using.",
+    "Risk exception": "A formal, time-limited agreement to leave a weakness unfixed for now.",
+    "Compensating control": "Another safeguard that lowers the risk while the real fix waits.",
+    "Configuration management database (CMDB)": "The official list of company systems and who owns them.",
+    "Rescan": "Running the scanner again to prove a fix actually worked."
+  },
+  "job_roles": [
+    "Vulnerability Management Analyst",
+    "Security Analyst",
+    "IT Risk Analyst",
+    "Systems Administrator"
+  ],
+  "talking_point": "Prioritized 9 vulnerabilities into 4 P1, 3 P2 and 2 P3 fixes, rejected a risk exception signed by an unauthorized approver, and escalated 2 overdue findings to their owners."
+}

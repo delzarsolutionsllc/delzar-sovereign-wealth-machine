@@ -1,0 +1,37 @@
+{
+  "lab": 21,
+  "ticket": "AUD-30521",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Rachel Kim, IT Asset Manager",
+  "title": "Reconcile the asset inventory with the network scan and approve disposal requests",
+  "situation": "Our asset records (the CMDB) list 8 devices, but a network scan found extra devices nobody registered, and one laptop has not been seen in 20 days. Some assets have no owner or no data label. Separately, nine requests to wipe or destroy old drives, tapes, USB sticks and paper are waiting for approval.",
+  "your_task": [
+    "Compare the CMDB with the scan and flag missing, unowned, unclassified and unmanaged devices.",
+    "Give each finding an action, such as locate the asset, assign an owner, or quarantine with network access control.",
+    "Check each disposal request: the method must meet the needed level (clear, purge, destroy) for the media type and data label.",
+    "Reject any request under legal hold, still inside its retention period, or missing a certificate of destruction."
+  ],
+  "why_it_matters": "A lost laptop or an unknown device on the network can leak data or give attackers a foothold. A drive wiped the wrong way can be recovered by whoever buys it.",
+  "done_when": [
+    "Every CMDB entry and scanned device has a finding and an action.",
+    "All 9 disposal requests have a decision and a reason.",
+    "The IAM team is asked to revoke sessions and device access for the owner of missing laptop-17, and to record a named owner for print-02 and cam-lobby so every asset maps to a real person."
+  ],
+  "glossary": {
+    "CMDB (configuration management database)": "The official record of an organization's devices and who owns them.",
+    "Shadow IT": "Devices or services used without IT's approval.",
+    "NAC (network access control)": "Technology that checks a device before letting it onto the network.",
+    "Clear / purge / destroy": "Three levels of data removal: overwrite, make unrecoverable even in a lab, or physically destroy.",
+    "Degaussing": "Erasing magnetic media with a strong magnet; it does nothing to SSDs (solid-state drives).",
+    "Legal hold": "An order to keep data because of a lawsuit or investigation.",
+    "Certificate of destruction": "Proof from a disposal vendor that the media was really destroyed."
+  },
+  "job_roles": [
+    "IT Asset Analyst",
+    "IT Auditor",
+    "Endpoint Administrator",
+    "IAM Analyst"
+  ],
+  "talking_point": "Reconciled an 8-asset CMDB with a discovery scan, finding 1 missing laptop, 3 unmanaged devices, 2 assets without owners and 2 unclassified, and approved 3 of 9 disposal requests while rejecting 6, including an SSD set for degaussing and media under legal hold."
+}

@@ -1,0 +1,36 @@
+{
+  "_description": "Lab 20: a simplified Terraform-like plan for the fictional Northwind Shop (example.com). Expected gate decision: BLOCK.",
+  "plan": {
+    "name": "northwind-shop-prod",
+    "resources": [
+      {"id": "sg-web", "type": "security_group",
+       "ingress": [{"port": 443, "cidr": "0.0.0.0/0"}, {"port": 22, "cidr": "10.20.0.0/16"}],
+       "tags": {"owner": "web-team", "data_classification": "public"}},
+      {"id": "sg-admin", "type": "security_group",
+       "ingress": [{"port": 22, "cidr": "0.0.0.0/0"}, {"port": 3389, "cidr": "0.0.0.0/0"}],
+       "tags": {"owner": "it-ops", "data_classification": "internal"}},
+      {"id": "lb-shop", "type": "load_balancer", "https_only": true, "logging": true,
+       "availability_zones": ["zone-a", "zone-b"],
+       "tags": {"owner": "web-team", "data_classification": "public", "criticality": "critical"}},
+      {"id": "bucket-marketing", "type": "storage_bucket", "acl": "public-read", "encryption_at_rest": true, "logging": false,
+       "tags": {"owner": "marketing", "data_classification": "internal"}},
+      {"id": "db-orders", "type": "database", "publicly_accessible": false, "encryption_at_rest": true, "backup_retention_days": 14,
+       "availability_zones": ["zone-a"],
+       "tags": {"owner": "orders-team", "data_classification": "confidential", "criticality": "critical"}},
+      {"id": "db-analytics", "type": "database", "publicly_accessible": true, "encryption_at_rest": false, "backup_retention_days": 7,
+       "availability_zones": ["zone-a"],
+       "tags": {"owner": "data-team", "data_classification": "confidential"}},
+      {"id": "iam-ci-deployer", "type": "iam_policy",
+       "statements": [{"effect": "Allow", "action": "*", "resource": "*"}],
+       "tags": {"owner": "platform", "data_classification": "internal"}},
+      {"id": "vm-bastion", "type": "vm", "encrypted_disk": true, "public_ip": false,
+       "availability_zones": ["zone-a"], "tags": {"owner": "it-ops"}},
+      {"id": "ctr-payments", "type": "container", "privileged": true, "run_as_root": true, "secrets_in_env": false,
+       "tags": {"owner": "payments", "data_classification": "regulated"}},
+      {"id": "fn-thumbnails", "type": "function", "secrets_in_env": false, "logging": true,
+       "tags": {"owner": "web-team", "data_classification": "public"}},
+      {"id": "dns-shop", "type": "dns_zone", "domain": "shop.example.com",
+       "tags": {"owner": "web-team", "data_classification": "public"}}
+    ]
+  }
+}

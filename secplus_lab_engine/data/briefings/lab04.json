@@ -1,0 +1,38 @@
+{
+  "lab": 4,
+  "ticket": "CHG-30562",
+  "type": "Change request",
+  "priority": "P2",
+  "requested_by": "Gavin Holt, Change Advisory Board Chair",
+  "title": "Pre-review six change requests before Thursday's change board meeting",
+  "situation": "Six change requests are on the agenda, from a routine monthly patch to an emergency fix for the xz/liblzma backdoor on the sign-in service. Some would break older systems that still depend on them, one requester approved their own change, and one is scheduled on a change-freeze date. The board wants a clear decision and a tested backout plan for each.",
+  "your_task": [
+    "Check each request's maintenance window, approvals, test results and backout plan.",
+    "Map the blast radius: which other systems go down or break if this change goes ahead.",
+    "Rehearse each change with a failure partway through and confirm the backout returns the system to its starting state.",
+    "Record APPROVE, APPROVE_WITH_CONDITIONS or REJECT for each, with the blockers or conditions."
+  ],
+  "why_it_matters": "Most outages are caused by our own changes, not by attackers. A change with no working backout plan can take payroll or the website down for hours.",
+  "done_when": [
+    "1 request is approved, 2 are approved with conditions and 3 are rejected, each with its reasons.",
+    "The port 1521 change is rejected with all 6 blockers, including the self-approval.",
+    "The SMBv1 change is rejected because its backout rehearsal failed to restore the server.",
+    "A backout runbook exists for the payroll migration and the emergency patch."
+  ],
+  "glossary": {
+    "Request for change (RFC)": "A formal request to change a system, reviewed before anyone makes the change.",
+    "Change Advisory Board (CAB)": "The group that reviews and approves changes.",
+    "Emergency change board (ECAB)": "A smaller group that can approve urgent changes quickly, with a review afterward.",
+    "Blast radius": "Everything else that could be affected if this change goes wrong.",
+    "Backout plan": "The steps to undo a change and return to the way things were.",
+    "Maintenance window": "An agreed time slot when planned downtime is allowed.",
+    "Fail forward": "Fixing a problem by pushing a new fix, used when a change cannot simply be undone."
+  },
+  "job_roles": [
+    "Change Manager",
+    "IT Operations Analyst",
+    "GRC Analyst",
+    "Systems Administrator"
+  ],
+  "talking_point": "Pre-reviewed 6 change requests for the change board (1 approved, 2 approved with conditions, 3 rejected), catching a self-approved change, a change-freeze conflict and a backout plan that failed rehearsal."
+}

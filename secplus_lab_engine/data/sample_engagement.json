@@ -1,0 +1,36 @@
+{
+  "_description": "Lab 23: one fictional penetration-test engagement (rules of engagement), the test actions planned against it, and assessment needs to classify.",
+  "engagement": {
+    "client": "Northwind Fabrication (fictional)",
+    "authorization": {"signed_by": "R. Okafor", "role": "CISO", "signed": true, "valid_from_day": 1, "valid_to_day": 10},
+    "scope": {
+      "in_scope_cidrs": ["198.51.100.0/24", "10.20.0.0/16"],
+      "in_scope_domains": ["northwind.example"],
+      "out_of_scope": ["10.20.5.0/24", "198.51.100.200", "mail.northwind.example"]
+    },
+    "allowed_techniques": ["osint_search", "whois_dns_lookup", "cert_transparency", "port_scan", "banner_grab", "vuln_scan"],
+    "prohibited": ["dos_flood", "exec_spear_phishing", "prod_data_modify"],
+    "window": {"start_hour": 8, "end_hour": 18},
+    "environment": "partially_known",
+    "emergency_contact": "SOC duty manager, +1-555-0100"
+  },
+  "actions": [
+    {"id": "PT-01", "tester": "ai-agent-1", "day": 2, "hour": 22, "target": "northwind.example", "technique": "osint_search", "recon": "passive"},
+    {"id": "PT-02", "tester": "ai-agent-1", "day": 2, "hour": 10, "target": "198.51.100.10", "technique": "port_scan", "recon": "active"},
+    {"id": "PT-03", "tester": "j.diaz", "day": 3, "hour": 9, "target": "10.20.5.15", "technique": "vuln_scan", "recon": "active"},
+    {"id": "PT-04", "tester": "ai-agent-1", "day": 3, "hour": 11, "target": "203.0.113.5", "technique": "port_scan", "recon": "active"},
+    {"id": "PT-05", "tester": "j.diaz", "day": 4, "hour": 14, "target": "198.51.100.20", "technique": "dos_flood", "recon": "active"},
+    {"id": "PT-06", "tester": "ai-agent-1", "day": 4, "hour": 21, "target": "198.51.100.11", "technique": "port_scan", "recon": "active"},
+    {"id": "PT-07", "tester": "j.diaz", "day": 5, "hour": 11, "target": "portal.northwind.example", "technique": "web_app_test", "recon": "active"},
+    {"id": "PT-08", "tester": "ai-agent-1", "day": 12, "hour": 10, "target": "198.51.100.12", "technique": "port_scan", "recon": "active"},
+    {"id": "PT-09", "tester": "ai-agent-1", "day": 6, "hour": 13, "target": "10.20.1.7", "technique": "zero_click_wormer", "recon": "active"},
+    {"id": "PT-10", "tester": "ai-agent-1", "day": 6, "hour": 23, "target": "198.51.100.30", "technique": "banner_grab", "recon": "passive"}
+  ],
+  "assessment_needs": [
+    {"id": "AN-1", "description": "The state banking regulator announces its annual examination", "driver": "regulator_requires", "independence_required": true},
+    {"id": "AN-2", "description": "Audit committee wants this year's review of access-control compliance", "driver": "audit_committee", "independence_required": false},
+    {"id": "AN-3", "description": "A large customer asks for our SOC 2 Type II report", "driver": "customer_soc2", "independence_required": true},
+    {"id": "AN-4", "description": "IT ops checks its servers against the CIS benchmark each quarter", "driver": "self_check", "independence_required": false},
+    {"id": "AN-5", "description": "The board wants an unbiased opinion on the ransomware controls", "driver": "audit_committee", "independence_required": true}
+  ]
+}

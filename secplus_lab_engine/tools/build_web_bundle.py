@@ -43,7 +43,12 @@ def build(variants: int = 12, seed_base: int = 1000) -> dict:
                 entry["variants"].append({"seed": seed,
                                           "run": webapi.run(policies, n, True, seed)["text"],
                                           "questions": webapi.challenge(policies, n, True, seed)["questions"]})
+        from utils.portfolio import case_study
+        entry["case_study"] = case_study(n, policies)
         bundle["labs"][str(n)] = entry
+    from utils.exam_bank import load_bank
+    bundle["exam_bank"] = [{k: q[k] for k in ("objective", "stem", "choices", "answer", "explanation")}
+                           for q in load_bank()]
     return bundle
 
 

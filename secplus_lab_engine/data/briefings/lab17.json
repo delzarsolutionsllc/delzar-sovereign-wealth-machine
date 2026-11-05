@@ -1,0 +1,36 @@
+{
+  "lab": 17,
+  "ticket": "INC-30517",
+  "type": "Incident",
+  "priority": "P1",
+  "requested_by": "Lena Ortiz, Infrastructure Team Lead",
+  "title": "Browsers and apps are showing certificate warnings on our sites",
+  "situation": "Users report security warnings on several of our websites, the VPN (virtual private network) and the mobile banking app. We collected the certificate each server presented on ten connections, plus the revocation lists we could reach, as of 2026-11-03. We need to know which connections are safe and what is wrong with each of the others.",
+  "your_task": [
+    "Check each connection's certificate chain back to a trusted root certificate authority.",
+    "Check expiry dates, whether the name matches the site, key strength and signature type.",
+    "Check revocation status with the CRL or OCSP, and check the mobile app's pinned keys.",
+    "Give each connection a verdict and a specific fix."
+  ],
+  "why_it_matters": "An expired or revoked certificate can take an API (application programming interface) or the VPN offline, and a pin mismatch can mean someone is intercepting traffic. Teaching users to click through warnings makes real attacks easy.",
+  "done_when": [
+    "All 10 connections have a verdict: TRUSTED, TRUSTED_WITH_WARNINGS or UNTRUSTED.",
+    "Each problem has a named fix, such as renewing, re-issuing with the right names, or sending the full chain.",
+    "The revoked VPN certificate (P-06) is escalated as a possible key compromise, and IAM is told so certificate-based sign-in to the VPN can be checked."
+  ],
+  "glossary": {
+    "PKI (public key infrastructure)": "The system of certificates and authorities that proves a website or device is who it claims to be.",
+    "Certificate authority (CA)": "A trusted organization that issues and signs certificates.",
+    "Certificate chain": "The links from a site's certificate up through intermediates to a trusted root.",
+    "Revocation (CRL / OCSP)": "Cancelling a certificate early; a CRL (certificate revocation list) or OCSP (online certificate status protocol) is how clients check.",
+    "Wildcard / SAN": "Ways one certificate covers several names; a wildcard covers only one level of subdomain.",
+    "Certificate pinning": "An app accepts only specific keys, so a swapped-in certificate is rejected."
+  },
+  "job_roles": [
+    "PKI Administrator",
+    "Systems Administrator",
+    "Network Security Engineer",
+    "IAM Engineer"
+  ],
+  "talking_point": "Validated 10 TLS (encrypted web) connections: 1 trusted, 1 trusted with warnings and 8 untrusted, finding an expired API certificate, a revoked VPN certificate, an overstretched wildcard, a missing intermediate, a self-signed console, weak RSA-1024 crypto, a leaf certificate misused as a CA and a pin mismatch that pointed to interception."
+}

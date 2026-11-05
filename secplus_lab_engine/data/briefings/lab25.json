@@ -1,0 +1,35 @@
+{
+  "lab": 25,
+  "ticket": "AUD-40725",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Renee Holloway, IT Audit Manager, Prairie Wind Credit Union",
+  "title": "Check our sign-in rules and who holds admin rights before the identity audit",
+  "situation": "Auditors want proof that our sign-in rules work and that nobody keeps admin rights they do not need. We have eight Conditional Access policies (if-then rules that decide what a sign-in needs), a log of 13 recent sign-ins, a list of who holds admin roles, and seven requests from staff to switch on an admin role for a short time. Some rules may be missing, and two people have had full admin rights for years.",
+  "your_task": [
+    "Run each sign-in through every policy and record the outcome: allowed, allowed after MFA (multifactor authentication), stopped for MFA, or blocked.",
+    "Note what the report-only (test-mode) policy would have done, without enforcing it.",
+    "Flag sensitive apps that no policy protects, and suspicious patterns such as impossible travel.",
+    "Review admin role assignments: flag permanent admin rights and check the two emergency (break-glass) accounts.",
+    "Approve, hold for approval, or deny each request to switch on an admin role, using the role's rules."
+  ],
+  "why_it_matters": "One stolen password on an account that always has admin rights can hand an attacker the whole company. Sign-in rules that silently miss an app, or old email protocols that skip MFA, are how most account takeovers start.",
+  "done_when": [
+    "Every sign-in has an outcome and the list of policies that applied, with a reason.",
+    "Coverage gaps, impossible travel and the report-only results are written up for the auditor.",
+    "Each permanent admin assignment has a fix (make it eligible, just-in-time) and the break-glass findings are logged.",
+    "Every role activation request has a decision with the rule that drove it."
+  ],
+  "glossary": {
+    "Conditional Access": "If-then sign-in rules: if this user, app, location, device or risk matches, then block or require extra checks.",
+    "MFA (multifactor authentication)": "Proving who you are with two or more kinds of proof, such as a password plus a phone prompt.",
+    "Report-only mode": "A policy that is tested and logged but not enforced, so you can see its effect before switching it on.",
+    "Legacy authentication": "Old email sign-in methods (IMAP, POP, basic SMTP) that cannot ask for MFA.",
+    "Just-in-time (JIT) access": "Admin rights switched on only when needed, for a few hours, then removed automatically.",
+    "Standing privilege": "Admin rights that are switched on all the time, whether or not they are being used.",
+    "Break-glass account": "An emergency admin account kept out of normal sign-in rules so you are never locked out, and watched closely.",
+    "Impossible travel": "Two sign-ins for one person from places too far apart to travel between in the time shown."
+  },
+  "job_roles": ["IAM Analyst", "Identity and Access Administrator", "Privileged Access Management (PAM) Analyst", "SOC Analyst I"],
+  "talking_point": "Evaluated 13 sign-ins against 8 Conditional Access policies (4 blocked, 3 allowed after MFA, 2 stopped for MFA), caught an impossible-travel sign-in and an unprotected payroll app, flagged 2 permanent admin assignments and a mis-configured break-glass account, and decided 7 just-in-time admin requests (2 approved, 1 sent for approval, 4 denied)."
+}

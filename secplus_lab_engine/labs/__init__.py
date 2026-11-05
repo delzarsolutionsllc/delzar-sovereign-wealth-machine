@@ -27,6 +27,15 @@ from . import (
     lab15_vendor_risk,
     lab16_control_classifier,
     lab17_pki_validator,
+    lab18_data_protection,
+    lab19_siem_alerting,
+    lab20_iac_scanner,
+    lab21_asset_management,
+    lab22_compliance_privacy,
+    lab23_audit_roe,
+    lab24_awareness,
+    lab25_conditional_access,
+    lab26_identity_governance,
 )
 
 # lab number -> (module, default data file)
@@ -48,4 +57,13 @@ LABS = {
     15: (lab15_vendor_risk, "sample_vendors.json"),
     16: (lab16_control_classifier, "sample_controls.json"),
     17: (lab17_pki_validator, "sample_certificates.json"),
+    18: (lab18_data_protection, "sample_data_flows.json"),
+    19: (lab19_siem_alerting, "sample_security_events.json"),
+    20: (lab20_iac_scanner, "sample_iac.json"),
+    21: (lab21_asset_management, "sample_assets.json"),
+    22: (lab22_compliance_privacy, "sample_privacy_cases.json"),
+    23: (lab23_audit_roe, "sample_engagement.json"),
+    24: (lab24_awareness, "sample_awareness.json"),
+    25: (lab25_conditional_access, "sample_signins.json"),
+    26: (lab26_identity_governance, "sample_governance.json"),
 }

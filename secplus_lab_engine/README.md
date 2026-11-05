@@ -7,7 +7,8 @@ It's meant for building first-principles skill: work through each operation by h
 * Pure Python 3.10+ standard library (`dataclasses`, `json`, `hashlib`, `hmac`, `argparse`, `logging`)
 * `rich` is **optional** for coloured tables and panels. Without it you get clean plain-text output.
 * No network, no API keys, no cloud services
-* 17 labs, a random scenario generator and a timed, domain-weighted practice exam
+* 26 labs (every SY0-701 objective has one, plus two identity-governance labs for an IAM career), a random scenario generator, a timed, domain-weighted practice exam, and a **test for each of the five domains** (questions spread across that domain's objectives, scored per objective)
+* **364 exam-style practice questions** (`data/exam_bank/`) for the exams and domain tests: short workplace scenarios in plain language, four options, BEST / MOST likely / FIRST qualifiers and an explanation for each. They are original, written in the style of SY0-701 (not real exam questions), and every one was checked by an independent reviewer
 * A **course web app** you can open from your desktop or from claude.ai
 * 565 pytest tests, run in CI on Python 3.10–3.13
 
@@ -33,11 +34,13 @@ python main.py web                  # or start it directly
 
 **Hosted (no Python needed):** the same app is published as a private page on claude.ai, using a pre-built course bundle (`web/course_data.json`). After changing labs, data or policies, rebuild it with `python tools/build_web_bundle.py`.
 
+**On-the-job format and your IAM portfolio:** every lab opens with a plain-English **work ticket** from a fictional colleague (the situation, your task, why it matters, done-when criteria, a glossary and the job titles that do this work) and ends with a one-page **Case study** tab you can screenshot or save as a PDF. The **IAM career & portfolio** page maps the labs to Microsoft SC-300 skill areas and SailPoint-style identity-governance concepts (lead with Labs 1, 2, 25 and 26), with a screenshot and screen-recording guide and Oklahoma/remote job-search tips. `python main.py case-study --all` writes every case study as Markdown + HTML to `dist/portfolio/` for a GitHub portfolio. Everything is clearly labelled as a simulated lab with fictional data.
+
 **Video course:** the app's *Video course* page (or `python main.py videos`) lays out [Professor Messer's free SY0-701 course](https://www.youtube.com/playlist?list=PLG49S3nxzAnl4QDVqK-hOnoqcSKEIDDuv) (121 videos, about 15 hours) in exam-objective order. Next to each objective it names the lab that practises it. Each lab's Lesson tab starts with a "Watch first" list, *My progress* suggests videos for your weakest objectives, and you can tick videos off as you watch them. Flashcards and CTFd hints link the matching video. The videos stay on YouTube: the course stores only titles, IDs and lengths (`data/video_course.json`). CLI: `python main.py videos [--lab N | --objective 1.4 | --open N | --mark ID]`.
 
-**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 1,600 cards sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
+**Flashcards on your phone:** `python tools/export_anki.py` writes `dist/SecurityPlus_SY0-701.apkg`, about 3,900 cards (lab questions plus the exam-style bank) sorted into decks by domain and objective. Import it into the free Anki app ([apps.ankiweb.net](https://apps.ankiweb.net), AnkiMobile or AnkiDroid) for spaced-repetition review. Re-importing a newer export updates your cards and keeps your review history.
 
-**Your own scoreboard (CTFd):** `python tools/export_ctfd.py` turns every challenge question into a scored [CTFd](https://github.com/CTFd/CTFd) challenge (about 320, 100 points each), with the five exam domains as categories so the scoreboard shows your strength per domain. It writes `dist/ctfd/challenges.csv` and `dist/ctfd/challenges/*/challenge.yml` (for ctfcli). To play:
+**Your own scoreboard (CTFd):** `python tools/export_ctfd.py` turns every challenge question into a scored [CTFd](https://github.com/CTFd/CTFd) challenge (about 990: lab questions plus the exam-style bank, 100 points each), with the five exam domains as categories so the scoreboard shows your strength per domain. It writes `dist/ctfd/challenges.csv` and `dist/ctfd/challenges/*/challenge.yml` (for ctfcli). To play:
 
 ```
 docker run -p 8000:8000 ctfd/ctfd          # then open http://localhost:8000 and finish setup
@@ -65,16 +68,18 @@ python main.py                       # interactive menu
 python main.py list                  # list labs
 python main.py lab 1                 # run a lab's example scenario
 python main.py lab 3 --file my.json  # run a lab against your own scenario data
-python main.py all                   # run all seventeen labs
+python main.py all                   # run all 24 labs
 python main.py challenge 4           # quiz mode: predict each verdict before it is revealed
 python main.py challenge all         # quiz every lab
 python main.py lab 4 --challenge     # same as "challenge 4"
 python main.py progress              # your scores per SY0-701 objective, weakest first
 python main.py videos                # Professor Messer's free video course, mapped to the labs (--lab N, --open N, --mark ID)
-python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17)
+python main.py challenge 9 --random  # quiz on a freshly generated scenario (labs 2, 6, 9, 11–15, 17–24)
 python main.py lab 12 --random --seed 7   # run a lab on a generated scenario (same seed = same scenario)
-python main.py exam                  # 90 questions / 90 minutes, weighted 12/22/18/28/20 % by domain
+python main.py exam                  # 90 exam-style questions / 90 minutes, weighted 12/22/18/28/20 % by domain
+python main.py exam --source labs    # the same, using the labs' hands-on scenario questions instead
 python main.py exam --count 30 --minutes 30 --seed 3
+python main.py exam --domain 4         # domain test: 30 questions from Domain 4 only, scored per objective (target 80%)
 python main.py test                  # run the pytest suite  (= python -m pytest tests -q)
 python main.py --plain lab 4         # plain text, no colour
 python main.py --policies alt.json lab 2   # swap in a different policy file
@@ -120,6 +125,15 @@ You answer, and the engine reveals its own verdict with the reasoning. The quest
 | 15 | **Third-Party / Vendor Risk Assessor** (`labs/lab15_vendor_risk.py`) | 5.3 | Inherent risk = data sensitivity × access level × criticality; weighted questionnaire (unanswered = no) reduces it to residual risk; required clauses depend on exposure (MSA/NDA, SLA, right-to-audit, breach notification, DPA, security schedule, BPA); hard REJECT for unverifiable sensitive vendors and undisclosed conflicts of interest; SLA uptime/notification checks; monitoring cadence; agreement-type (SLA/MSA/SOW/NDA/MOU/MOA/BPA) drills |
 | 16 | **Security Control Classifier** (`labs/lab16_control_classifier.py`) | 1.1 | Classifies control descriptions by category (technical/managerial/operational/physical) and type (preventive/detective/corrective/deterrent/compensating/directive) with whole-word weighted phrases; a unique winner is required, otherwise "Unclassified"; shows evidence and agreement with an answer key (19/19 on the sample) |
 | 17 | **PKI & Certificate Validator** (`labs/lab17_pki_validator.py`) | 1.4 | Browser-style TLS chain validation: path building + CA flags + trusted roots (incomplete chain, self-signed, untrusted root, leaf-as-CA), validity windows and 398-day limit, SAN/wildcard hostname matching (one label only), key length and SHA-2 signatures, serverAuth EKU, CRL/OCSP revocation with soft/hard-fail policy, SPKI pinning (detects TLS interception); generator applies random faults to healthy chains |
+| 18 | **Data Protection & DLP Gate** (`labs/lab18_data_protection.py`) | 3.3, 4.5, 5.4 | Scans outbound data flows for PII, card numbers (Luhn-checked), secrets and trade-secret/IP/legal markings; raises the label to the effective classification; ALLOW / ALLOW_WITH_PROTECTION (mask, tokenize, encrypt, hash) / BLOCK by destination, region, data sovereignty and state of data |
+| 19 | **SIEM Correlation & Alert Tuning** (`labs/lab19_siem_alerting.py`) | 4.4, 4.9 | Correlates auth/firewall/EDR/DNS/app events (brute force, spraying, impossible travel, after-hours privilege, log-source silence, threat intel, port scan, malware); owned, expiring suppressions (critical never suppressed); response per alert; precision/recall before and after tuning |
+| 20 | **Cloud Architecture & IaC Gate** (`labs/lab20_iac_scanner.py`) | 3.1, 3.3, 4.1, 4.6 | Policy-as-code scan of a Terraform-like plan (public buckets, internet-open admin ports, unencrypted data, IAM `*` on `*`, privileged containers, single-AZ critical resources, missing tags, unreviewed types) → BLOCK / WARN / PASS with a fix per finding; shared-responsibility matrix and architecture-model trade-offs |
+| 21 | **Asset Inventory & Secure Disposal** (`labs/lab21_asset_management.py`) | 4.2, 3.3, 4.5 | Reconciles the CMDB against a discovery scan (unmanaged / missing / no owner / unclassified); approves or rejects media disposal with NIST SP 800-88 Clear/Purge/Destroy, media-method fit, certificates of destruction, legal hold and retention |
+| 22 | **Compliance & Privacy Tracker** (`labs/lab22_compliance_privacy.py`) | 5.4, 5.1 | Data subject requests, breach notifications, retention and attestations against configurable (illustrative) deadlines → COMPLIANT / AT_RISK / NON_COMPLIANT / EXEMPT, with consequence and internal/external reporting; controller vs processor |
+| 23 | **Pen-Test RoE Gate & Audit Planner** (`labs/lab23_audit_roe.py`) | 5.5, 4.3, 5.3 | Gates each planned pen-test action against the signed rules of engagement (authorization, scope, prohibited/unknown techniques, window, passive-recon rule) → ALLOW / NEEDS_APPROVAL / BLOCK; maps assessment needs to internal audit, self-assessment, examination, third-party audit or attestation |
+| 24 | **Security Awareness Analyzer** (`labs/lab24_awareness.py`) | 5.6, 2.2 | Phishing-simulation outcomes and training actions per employee and department, program KPIs, anomalous-behaviour classification (risky / unexpected / unintentional) and phishing-indicator checks on messages |
+| 25 | **Conditional Access & Just-in-Time Privileged Access** (`labs/lab25_conditional_access.py`) | 4.6, 1.2, 2.4 | Evaluates sign-ins against Conditional-Access-style policies (any block wins, otherwise every applicable policy's controls must be met, exclusions win, report-only is logged, deny-by-default for sensitive apps) and decides just-in-time admin role activations (eligibility, max duration, justification, ticket, MFA, approval, no self-approval); flags standing admin rights and mis-configured break-glass accounts. The SC-300 core |
+| 26 | **Identity Governance: Reconciliation & Access Certification** (`labs/lab26_identity_governance.py`) | 4.6, 5.1, 4.2 | Correlates application accounts to the HR source (orphaned, terminated-with-access, dormant, duplicate, unowned privileged accounts), then runs an access-review campaign (self-review, SoD, comments on high-risk approvals, rubber-stamp detection, no decision means revoke) and produces a de-provisioning list. The SailPoint-style IGA core |
 
 ---
 
@@ -146,13 +160,26 @@ secplus_lab_engine/
 │   ├── sample_resilience.json      # Lab 14 systems: RTO/RPO targets vs current design
 │   ├── sample_vendors.json         # Lab 15 vendor questionnaires + contracts
 │   ├── sample_controls.json        # Lab 16 control descriptions + answer key
-│   └── sample_certificates.json    # Lab 17 TLS chains + CRL/OCSP data
+│   ├── sample_certificates.json    # Lab 17 TLS chains + CRL/OCSP data
+│   ├── sample_data_flows.json      # Lab 18 outbound data flows for the DLP gate
+│   ├── sample_security_events.json # Lab 19 SIEM events, suppressions, ground truth
+│   ├── sample_iac.json             # Lab 20 Terraform-like cloud plan
+│   ├── sample_assets.json          # Lab 21 CMDB, discovery scan, disposal requests
+│   ├── sample_privacy_cases.json   # Lab 22 DSRs, breaches, retention, attestations
+│   ├── sample_engagement.json      # Lab 23 pen-test RoE + planned actions + audit needs
+│   ├── sample_awareness.json       # Lab 24 phishing simulation, behaviours, messages
+│   ├── sample_signins.json         # Lab 25 conditional access policies, sign-ins, admin role requests
+│   ├── sample_governance.json      # Lab 26 HR source, app accounts, access-review campaign
+│   ├── briefings/labNN.json        # plain-English work ticket for each lab
+│   ├── career_tracks.json          # IAM career path: SC-300 / SailPoint skill areas -> labs
+│   ├── exam_bank/domainN.json      # 364 exam-style practice questions
+│   └── video_course.json           # Professor Messer video index (titles/IDs only)
 ├── labs/                         # one module per lab (+ registry in __init__.py)
 ├── utils/
 │   ├── crypto_helpers.py         # SHA-256, salting, PBKDF2, HMAC, hash chains
 │   ├── challenge.py              # challenge mode + progress.json tracking
 │   ├── scenario_generator.py     # seeded random scenarios (--random)
-│   ├── exam.py                   # timed, domain-weighted practice exam
+│   ├── exam.py                   # timed, domain-weighted practice exam + per-domain tests
 │   ├── webserver.py              # local server for the web app (127.0.0.1 only)
 │   ├── desktop.py                # desktop shortcut installer
 │   ├── terminal_ui.py            # rich / plain-text rendering, Insight panel
@@ -162,7 +189,7 @@ secplus_lab_engine/
 ├── tools/build_web_bundle.py     # rebuilds web/course_data.json
 ├── launch/                       # double-click launchers for Windows / macOS / Linux
 ├── docs/                         # HANDBOOK.pdf (+ HTML source and render script)
-└── tests/                        # pytest suite: one file per lab 9–17, web app, generator/exam, labs 1–8
+└── tests/                        # pytest suite: one file per lab 9–24, web app, generator/exam, labs 1–8
 ```
 
 ## Practise with your own scenarios
@@ -183,6 +210,11 @@ The labs are data-driven, so the best way to learn is to **break the sample data
 * **Lab 11**: Move rule 4 (the Tor block) above rule 1. Which finding disappears?
 * **Lab 13**: Give T-07 the indicator `political_message`. Is the actor still decisive?
 * **Lab 17**: Set `revocation_hard_fail` to `true`. Which connection flips to UNTRUSTED, and why is soft-fail risky?
+* **Lab 18**: Change DF-4's destination region to `us`. Does the SSN-bearing backup pass now, and which protection rule still applies at rest?
+* **Lab 19**: Remove the owner from SUP-1. Why does the scanner alert come back, and what does that do to precision?
+* **Lab 20**: Fix every critical finding. Is the plan now WARN or BLOCK, and how does `max_high_before_block` decide?
+* **Lab 21**: Try `degauss` on an HDD that is leaving the organisation with restricted data. Why is Purge not enough?
+* **Lab 23**: Add `web_app_test` to the allowed techniques. Which action changes from NEEDS_APPROVAL to ALLOW?
 
 Then run your changes with `python main.py lab N --file your_copy.json`.
 

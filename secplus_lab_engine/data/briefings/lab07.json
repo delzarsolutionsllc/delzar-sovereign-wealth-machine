@@ -1,0 +1,38 @@
+{
+  "lab": 7,
+  "ticket": "INC-20433",
+  "type": "Incident",
+  "priority": "P1",
+  "requested_by": "Marcus Bell, Incident Response Manager",
+  "title": "Grade two response playbooks for the WS-0142 malware incident",
+  "situation": "Endpoint protection caught a fake invoice file (invoice_Q4.pdf.exe) on workstation WS-0142 calling out to an attacker's server. The same attacker guessed jdoe's password and then cleared the domain controller's security log. A new analyst and a senior responder each wrote a response plan. We need to know which one keeps the evidence usable and stops the attacker.",
+  "your_task": [
+    "Replay the new analyst's playbook and score each step for order, missing steps and destroyed evidence.",
+    "Replay the senior responder's playbook the same way.",
+    "Check the chain of custody: every piece of evidence must be hashed when it is collected.",
+    "Confirm the custody ledger flags any later edit to who collected the evidence."
+  ],
+  "why_it_matters": "Pulling the power plug wipes the computer's memory, which is often where the best evidence is. Evidence without a proper record of who handled it can be thrown out, and an attacker left with account access keeps causing damage.",
+  "done_when": [
+    "The new analyst's playbook scores 0/100 (grade F), with each mistake explained.",
+    "The senior responder's playbook scores 100/100 (grade A) with no issues.",
+    "All 5 evidence items in the expert run show a valid SHA-256 hash.",
+    "A rewritten custody record is flagged as tampered."
+  ],
+  "glossary": {
+    "Incident response (IR)": "The planned steps a team follows to handle a security incident.",
+    "Containment": "Stopping the attack from spreading, for example by cutting a computer off the network.",
+    "Eradication": "Removing the malware and closing the hole the attacker used.",
+    "Volatile evidence": "Evidence that disappears when power is lost, such as memory contents and network connections.",
+    "Chain of custody": "A record of who collected, handled and stored each piece of evidence, and when.",
+    "Legal hold": "An order to keep certain data and not delete it because it may be needed for legal reasons.",
+    "Write blocker": "A device that lets you copy a disk without changing anything on it."
+  },
+  "job_roles": [
+    "Incident Responder",
+    "SOC Analyst II",
+    "Digital Forensics Analyst",
+    "Cyber Defense Analyst"
+  ],
+  "talking_point": "Scored two incident response playbooks for a malware and stolen-account case (0/100 versus 100/100), identifying evidence-destroying steps and late account containment, and verified a 5-item chain of custody with SHA-256 hashes."
+}

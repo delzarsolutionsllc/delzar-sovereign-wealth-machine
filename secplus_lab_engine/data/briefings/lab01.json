@@ -1,0 +1,39 @@
+{
+  "lab": 1,
+  "ticket": "REQ-10241",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Marisol Reyes, HR Business Partner",
+  "title": "Process this week's HR feed: 5 new hires, 2 role changes, 2 extra grants, 2 departures",
+  "situation": "The HR system sent the identity team this week's changes. Five people joined, two changed jobs, two were given extra roles on top of their jobs, and two are leaving. One departure, Erin Walsh in IT, is a termination for cause. Nobody removed old access when people changed jobs, so some accounts now hold more than they should.",
+  "your_task": [
+    "Replay the HR feed to create accounts for joiners and update access for movers and extra grants.",
+    "Scan every account for separation-of-duties conflicts (one person holding two powers that should never be combined).",
+    "Process the two leavers and produce a deprovisioning ticket for each, with the right deadline.",
+    "Run five access requests through the account-status, role and attribute checks and record each decision.",
+    "Write up access review findings for anyone who kept old roles after a job change."
+  ],
+  "why_it_matters": "If a fired admin keeps access for even a few hours, they can steal or destroy data. If one person can both create and pay a vendor, they can send company money to a fake company and nobody notices until the audit.",
+  "done_when": [
+    "All 4 separation-of-duties conflicts are listed with the risk each one creates.",
+    "Two deprovisioning tickets exist: P3 with a 24-hour deadline for the resignation, P1 with a 1-hour deadline for the termination for cause.",
+    "The 3 denied access requests show which gate stopped them (account status or role).",
+    "The 3 privilege-creep findings are ready for the managers to recertify."
+  ],
+  "glossary": {
+    "Joiner / Mover / Leaver (JML)": "The three moments in an employee's life where access must change: they start, they change jobs, or they leave.",
+    "Role-based access control (RBAC)": "Access is given through a job role, so everyone in the same job gets the same permissions.",
+    "Attribute-based access control (ABAC)": "Access also depends on facts like employment status, clearance level, department or time of day.",
+    "Separation of duties (SoD)": "A rule that no single person can finish a risky task alone, such as creating and approving the same purchase.",
+    "Privilege creep": "Access piling up over time because old permissions are never taken away.",
+    "Deprovisioning": "Shutting off an account and removing every permission when someone leaves.",
+    "Service-level agreement (SLA)": "The deadline the team has promised to meet for a type of ticket."
+  },
+  "job_roles": [
+    "IAM Analyst",
+    "Identity Governance Administrator",
+    "IAM Engineer",
+    "Access Management Specialist"
+  ],
+  "talking_point": "Processed 11 joiner/mover/leaver events for 5 identities, caught 4 separation-of-duties conflicts and 3 privilege-creep cases, and issued 2 deprovisioning tickets, including a 1-hour P1 for a termination for cause."
+}

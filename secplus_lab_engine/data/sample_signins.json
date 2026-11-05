@@ -1,0 +1,63 @@
+{
+  "_description": "Lab 25: sign-in events at Prairie Wind Credit Union (fictional) evaluated against Conditional Access policies, plus privileged role assignments and just-in-time activation requests. IPs are RFC 1918 / RFC 5737.",
+  "signins": [
+    {"id": "S01", "user": "alice", "groups": ["Staff"], "app": "Mail", "ip": "10.20.4.15", "country": "US", "minute": 480,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "legacy_imap", "risk": "none", "mfa_satisfied": false},
+    {"id": "S02", "user": "bob", "groups": ["Staff"], "app": "Wiki", "ip": "198.51.100.140", "country": "US", "minute": 500,
+     "device": {"platform": "macos", "compliant": true}, "client_app": "browser", "risk": "medium", "mfa_satisfied": true},
+    {"id": "S03", "user": "carol", "groups": ["Staff"], "app": "Wiki", "ip": "10.20.8.9", "country": "US", "minute": 540,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "risk": "low", "mfa_satisfied": false},
+    {"id": "S04", "user": "carol", "groups": ["Staff"], "app": "Wiki", "ip": "203.0.113.77", "country": "NL", "minute": 600,
+     "device": {"platform": "linux", "compliant": false}, "client_app": "browser", "risk": "medium", "mfa_satisfied": false},
+    {"id": "S05", "user": "dave", "groups": ["Staff", "Finance"], "app": "Payroll", "ip": "203.0.113.20", "country": "US", "minute": 610,
+     "device": {"platform": "windows", "compliant": false}, "client_app": "browser", "risk": "low", "mfa_satisfied": true},
+    {"id": "S06", "user": "erin", "groups": ["Staff"], "app": "Wiki", "ip": "203.0.113.45", "country": "US", "minute": 620,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "risk": "high", "mfa_satisfied": true},
+    {"id": "S07", "user": "bg-admin01", "groups": ["BreakGlass", "Admins"], "app": "Admin-Portal", "ip": "203.0.113.99", "country": "US", "minute": 630,
+     "device": {"platform": "windows", "compliant": false}, "client_app": "browser", "risk": "low", "mfa_satisfied": false},
+    {"id": "S08", "user": "frank", "groups": ["Staff", "Finance"], "app": "Payroll", "ip": "10.20.12.30", "country": "US", "minute": 640,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "risk": "none", "mfa_satisfied": false},
+    {"id": "S09", "user": "grace", "groups": ["Staff"], "app": "Mail", "ip": "203.0.113.150", "country": "US", "minute": 650,
+     "device": {"platform": "ios", "compliant": false}, "client_app": "mobile_app", "risk": "low", "mfa_satisfied": false, "approved_app": true},
+    {"id": "S10", "user": "heidi", "groups": ["Staff", "Admins"], "app": "Admin-Portal", "ip": "10.20.1.5", "country": "US", "minute": 660,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "risk": "low", "mfa_satisfied": true},
+    {"id": "S11", "user": "ivan", "groups": ["Guests"], "app": "Wiki", "ip": "203.0.113.200", "country": "CA", "minute": 670,
+     "device": {"platform": "macos", "compliant": false}, "client_app": "browser", "risk": "low", "mfa_satisfied": false, "tou_accepted": false},
+    {"id": "S12", "user": "judy", "groups": ["Staff", "Finance"], "app": "Finance-ERP", "ip": "192.0.2.10", "country": "US", "minute": 680,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "risk": "none", "mfa_satisfied": false},
+    {"id": "S13", "user": "kim", "groups": ["Staff"], "app": "Wiki", "ip": "10.20.3.3", "country": "US", "minute": 690,
+     "device": {"platform": "windows", "compliant": true}, "client_app": "browser", "mfa_satisfied": false}
+  ],
+  "break_glass_accounts": [
+    {"user": "bg-admin01", "groups": ["BreakGlass", "Admins"], "alert_on_signin": true},
+    {"user": "bg-admin02", "groups": ["Admins"], "alert_on_signin": false}
+  ],
+  "assignments": [
+    {"user": "bg-admin01", "role": "Global Administrator", "type": "active", "permanent": true},
+    {"user": "bg-admin02", "role": "Global Administrator", "type": "active", "permanent": true},
+    {"user": "mallory", "role": "Global Administrator", "type": "active", "permanent": true},
+    {"user": "frank", "role": "User Administrator", "type": "active", "permanent": true},
+    {"user": "heidi", "role": "Global Administrator", "type": "eligible"},
+    {"user": "heidi", "role": "User Administrator", "type": "eligible"},
+    {"user": "oscar", "role": "Helpdesk Administrator", "type": "eligible"},
+    {"user": "peggy", "role": "Privileged Role Administrator", "type": "eligible"},
+    {"user": "trent", "role": "User Administrator", "type": "eligible"},
+    {"user": "sybil", "role": "Security Reader", "type": "active", "permanent": false, "end_day": 30}
+  ],
+  "activation_requests": [
+    {"id": "R1", "user": "heidi", "role": "Global Administrator", "duration_hours": 2, "justification": "Rotate tenant signing keys",
+     "ticket": "CHG-20418", "mfa_done": true, "approver": "sec-lead"},
+    {"id": "R2", "user": "peggy", "role": "Privileged Role Administrator", "duration_hours": 4, "justification": "Quarterly role review fixes",
+     "ticket": "CHG-20422", "mfa_done": true},
+    {"id": "R3", "user": "peggy", "role": "Privileged Role Administrator", "duration_hours": 1, "justification": "Urgent fix",
+     "ticket": "INC-30117", "mfa_done": true, "approver": "peggy"},
+    {"id": "R4", "user": "victor", "role": "Global Administrator", "duration_hours": 1, "justification": "Need to check a setting",
+     "ticket": "REQ-10990", "mfa_done": true, "approver": "ciso"},
+    {"id": "R5", "user": "heidi", "role": "User Administrator", "duration_hours": 12, "justification": "Bulk onboarding",
+     "ticket": "REQ-11002", "mfa_done": true},
+    {"id": "R6", "user": "oscar", "role": "Helpdesk Administrator", "duration_hours": 8, "justification": "Password reset queue shift",
+     "mfa_done": true},
+    {"id": "R7", "user": "trent", "role": "User Administrator", "duration_hours": 2, "justification": "",
+     "ticket": "REQ-11010", "mfa_done": false}
+  ]
+}

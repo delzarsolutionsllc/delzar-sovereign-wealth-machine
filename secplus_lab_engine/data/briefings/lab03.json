@@ -1,0 +1,38 @@
+{
+  "lab": 3,
+  "ticket": "INC-20417",
+  "type": "Incident",
+  "priority": "P1",
+  "requested_by": "Priya Raman, SOC Shift Lead",
+  "title": "Review this morning's mixed logs for a break-in and seal them as evidence",
+  "situation": "Overnight logs from the firewall, Windows servers, the web server and endpoint protection were pulled into one file. Early signs point to a password-guessing attack and a cleared security log on the domain controller (the server that handles company sign-ins). We need to know what happened, pull out the indicators, and make sure nobody can quietly change the logs later.",
+  "your_task": [
+    "Parse and normalize the raw log lines and note any lines that will not parse.",
+    "Run the correlation rules and list each finding with its severity and the exact log lines behind it.",
+    "Extract the indicators of compromise: IP addresses, file hashes, user agents and domains.",
+    "Seal the logs with a hash chain and confirm that deleting, editing or injecting a line is detected."
+  ],
+  "why_it_matters": "If the break-in is missed, the attacker keeps using a real employee's account. If the logs can be changed without anyone knowing, they will not stand up in an investigation or in court.",
+  "done_when": [
+    "38 events are parsed and the 1 bad line is reported, not silently dropped.",
+    "14 findings are listed, including the 3 critical ones: brute force followed by a successful login, a known-bad file hash, and the cleared audit log.",
+    "The indicator list is ready to share with the firewall and threat intelligence teams.",
+    "Every tampering test is flagged, including a forged manifest."
+  ],
+  "glossary": {
+    "Brute force": "Guessing one account's password over and over until it works.",
+    "Password spray": "Trying a few common passwords against many accounts, so no single account locks out.",
+    "Impossible travel": "One account signing in from two places too far apart to travel between in the time given.",
+    "Indicator of compromise (IOC)": "A clue that an attack happened, such as a bad IP address or a malware file hash.",
+    "Hash": "A short fingerprint of data; if the data changes even slightly, the fingerprint changes.",
+    "Hash-based message authentication code (HMAC)": "A hash made with a secret key, which proves who sealed the data.",
+    "Event ID 1102": "The Windows event recorded when someone clears the security log."
+  },
+  "job_roles": [
+    "SOC Analyst I",
+    "Security Analyst",
+    "Digital Forensics Analyst",
+    "Threat Detection Analyst"
+  ],
+  "talking_point": "Correlated 38 events from 4 log sources into 14 findings (3 critical, including brute force to compromise and a cleared audit log), extracted the IOCs, and sealed the evidence with a hash chain that caught every tampering attempt."
+}

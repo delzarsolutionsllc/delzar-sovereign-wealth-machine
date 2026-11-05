@@ -443,5 +443,1992 @@
       "Certificate pinning": "An application only accepts a specific certificate or public key for a site, even if another CA-signed one is presented",
       "Self-signed certificate": "A certificate signed by its own key, not by a CA the client already trusts"
     }
+  },
+
+  "audit": {
+    "authorized_signer_roles": [
+      "CISO",
+      "CIO",
+      "CEO",
+      "system owner",
+      "general counsel"
+    ],
+    "environment_types": {
+      "known": "Known environment (formerly white box): testers get full details such as network diagrams, source code and credentials.",
+      "partially_known": "Partially known environment (formerly gray box): testers get some information, e.g. a user account or an IP range, but not full documentation.",
+      "unknown": "Unknown environment (formerly black box): testers get no prior information and must discover everything, like an outside attacker."
+    },
+    "passive_recon_ignores_window": true,
+    "passive_recon_note": "Passive reconnaissance only reads public third-party sources (search engines, WHOIS, certificate transparency logs) and sends nothing to client systems, so it may run outside the testing window hours. It still needs signed, in-date authorization and an in-scope target: the RoE covers the whole engagement, not only the packets.",
+    "always_prohibited": [
+      "dos_flood"
+    ],
+    "techniques": {
+      "osint_search": {
+        "category": "passive_recon",
+        "description": "Search engines, social media and public filings about the client (OSINT)"
+      },
+      "whois_dns_lookup": {
+        "category": "passive_recon",
+        "description": "WHOIS records and public DNS data from third-party resolvers"
+      },
+      "cert_transparency": {
+        "category": "passive_recon",
+        "description": "Read certificate transparency logs to find subdomains"
+      },
+      "port_scan": {
+        "category": "active_recon",
+        "description": "Send probes to target ports to find listening services"
+      },
+      "banner_grab": {
+        "category": "active_recon",
+        "description": "Connect to services and read their version banners"
+      },
+      "vuln_scan": {
+        "category": "active_recon",
+        "description": "Run a vulnerability scanner against target hosts"
+      },
+      "web_app_test": {
+        "category": "exploitation",
+        "description": "Attempt injection and authentication attacks on a web app"
+      },
+      "password_spray": {
+        "category": "exploitation",
+        "description": "Try a few common passwords against many accounts"
+      },
+      "exec_spear_phishing": {
+        "category": "social_engineering",
+        "description": "Targeted phishing of executives"
+      },
+      "physical_tailgating": {
+        "category": "physical",
+        "description": "Follow staff through a secured door"
+      },
+      "dos_flood": {
+        "category": "availability",
+        "description": "Flood a service to make it unavailable (denial of service)"
+      },
+      "prod_data_modify": {
+        "category": "data_integrity",
+        "description": "Change records in a production database"
+      }
+    },
+    "pentest_types": {
+      "offensive": "Offensive testing (red team): attack the organisation the way an adversary would to find exploitable weaknesses.",
+      "defensive": "Defensive testing (blue team): test how well detection and response controls identify and stop attacks.",
+      "integrated": "Integrated testing (purple team): attackers and defenders work together, sharing results to improve controls in real time.",
+      "physical": "Physical penetration testing: test locks, badges, guards and doors, e.g. tailgating into a data centre."
+    },
+    "assessment_types": {
+      "INTERNAL_AUDIT": {
+        "category": "internal",
+        "definition": "Internal audit: the organisation's own audit function checks compliance with policies and laws and reports to the audit committee."
+      },
+      "SELF_ASSESSMENT": {
+        "category": "internal",
+        "definition": "Self-assessment: a team reviews its own controls against a standard or checklist; quick and cheap but not independent."
+      },
+      "REGULATORY_EXAMINATION": {
+        "category": "external",
+        "definition": "Regulatory examination: a government regulator inspects the organisation to verify it meets legal requirements."
+      },
+      "INDEPENDENT_THIRD_PARTY_AUDIT": {
+        "category": "external",
+        "definition": "Independent third-party audit: an outside firm with no stake in the result audits the controls and gives an unbiased opinion."
+      },
+      "ATTESTATION": {
+        "category": "external",
+        "definition": "Attestation: an independent auditor formally states (attests) that controls are in place and working, e.g. a SOC 2 Type II report."
+      }
+    },
+    "assessment_rules": {
+      "regulator_requires": {
+        "default": "REGULATORY_EXAMINATION",
+        "if_independent": "REGULATORY_EXAMINATION",
+        "why": "a regulator mandates it, so the regulator (or its examiners) performs an external examination"
+      },
+      "audit_committee": {
+        "default": "INTERNAL_AUDIT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "the board's audit committee oversees internal audit; when independence is required an outside firm is engaged"
+      },
+      "compliance_review": {
+        "default": "INTERNAL_AUDIT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "checking adherence to internal policy and law is the internal audit compliance function"
+      },
+      "customer_soc2": {
+        "default": "ATTESTATION",
+        "if_independent": "ATTESTATION",
+        "why": "a customer wants a SOC 2 report, which is an independent auditor's attestation"
+      },
+      "self_check": {
+        "default": "SELF_ASSESSMENT",
+        "if_independent": "INDEPENDENT_THIRD_PARTY_AUDIT",
+        "why": "a team checking its own controls is a self-assessment; it cannot satisfy an independence requirement"
+      }
+    }
+  },
+
+  "iac": {
+    "_comment": "Lab 20 IaC gate. A check PASSES only when the declared property satisfies 'op'; a missing property FAILS (deny by default).",
+    "known_types": [
+      "storage_bucket",
+      "security_group",
+      "vm",
+      "database",
+      "iam_policy",
+      "container",
+      "function",
+      "load_balancer"
+    ],
+    "unknown_type_severity": "critical",
+    "severity_order": [
+      "critical",
+      "high",
+      "medium",
+      "low"
+    ],
+    "decision": {
+      "block_if_any": [
+        "critical"
+      ],
+      "max_high_before_block": 1,
+      "warn_if_any": [
+        "high",
+        "medium",
+        "low"
+      ]
+    },
+    "internet_cidrs": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "admin_ports": {
+      "22": "SSH",
+      "3389": "RDP",
+      "3306": "MySQL",
+      "5432": "PostgreSQL",
+      "1433": "SQL Server",
+      "1521": "Oracle",
+      "27017": "MongoDB",
+      "6379": "Redis"
+    },
+    "required_tags": [
+      "owner",
+      "data_classification"
+    ],
+    "ha_min_zones": 2,
+    "ha_tag": {
+      "key": "criticality",
+      "value": "critical"
+    },
+    "checks": [
+      {
+        "id": "IAC-S1",
+        "title": "Public storage bucket ACL",
+        "types": [
+          "storage_bucket"
+        ],
+        "property": "acl",
+        "op": "not_in",
+        "value": [
+          "public-read",
+          "public-read-write"
+        ],
+        "severity": "critical",
+        "rationale": "A public bucket exposes every object to the internet (data exposure is the #1 cloud breach cause).",
+        "fix": "Set acl = \"private\" and enable block-public-access; serve public content through a CDN."
+      },
+      {
+        "id": "IAC-S2",
+        "title": "Storage not encrypted at rest",
+        "types": [
+          "storage_bucket"
+        ],
+        "property": "encryption_at_rest",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Data at rest must be encrypted so lost media or a mis-scoped snapshot does not leak it.",
+        "fix": "Set encryption_at_rest = true with a KMS-managed key."
+      },
+      {
+        "id": "IAC-S3",
+        "title": "Access logging disabled",
+        "types": [
+          "storage_bucket",
+          "load_balancer",
+          "function"
+        ],
+        "property": "logging",
+        "op": "is_true",
+        "severity": "medium",
+        "rationale": "Without access logs there is no audit trail for incident response.",
+        "fix": "Set logging = true and ship logs to the central SIEM bucket."
+      },
+      {
+        "id": "IAC-N1",
+        "title": "Admin/database port open to the internet",
+        "types": [
+          "security_group"
+        ],
+        "property": "ingress",
+        "op": "no_open_ingress",
+        "severity": "critical",
+        "rationale": "SSH/RDP/database ports reachable from 0.0.0.0/0 invite brute force and exploitation.",
+        "fix": "Restrict the source CIDR to a bastion/VPN range (RFC 1918) or use a managed session service."
+      },
+      {
+        "id": "IAC-V1",
+        "title": "VM disk not encrypted",
+        "types": [
+          "vm"
+        ],
+        "property": "encrypted_disk",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Unencrypted volumes and their snapshots expose data at rest.",
+        "fix": "Set encrypted_disk = true (full-disk/volume encryption)."
+      },
+      {
+        "id": "IAC-V2",
+        "title": "VM has a public IP",
+        "types": [
+          "vm"
+        ],
+        "property": "public_ip",
+        "op": "is_false",
+        "severity": "medium",
+        "rationale": "Directly exposed hosts enlarge the attack surface; put them behind a load balancer or bastion.",
+        "fix": "Set public_ip = false and reach the VM through the load balancer or a bastion."
+      },
+      {
+        "id": "IAC-D1",
+        "title": "Database publicly accessible",
+        "types": [
+          "database"
+        ],
+        "property": "publicly_accessible",
+        "op": "is_false",
+        "severity": "critical",
+        "rationale": "A database endpoint on the internet bypasses network segmentation.",
+        "fix": "Set publicly_accessible = false and place it in a private subnet."
+      },
+      {
+        "id": "IAC-D2",
+        "title": "Database not encrypted at rest",
+        "types": [
+          "database"
+        ],
+        "property": "encryption_at_rest",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Database files, replicas and backups must be encrypted at rest.",
+        "fix": "Set encryption_at_rest = true (re-create from an encrypted snapshot)."
+      },
+      {
+        "id": "IAC-D3",
+        "title": "Backup retention too short",
+        "types": [
+          "database"
+        ],
+        "property": "backup_retention_days",
+        "op": "min",
+        "value": 7,
+        "severity": "medium",
+        "rationale": "Short retention hurts ease of recovery (e.g. ransomware found after a week).",
+        "fix": "Set backup_retention_days >= 7."
+      },
+      {
+        "id": "IAC-I1",
+        "title": "IAM policy grants * on *",
+        "types": [
+          "iam_policy"
+        ],
+        "property": "statements",
+        "op": "no_wildcard_admin",
+        "severity": "critical",
+        "rationale": "Action '*' on resource '*' is full admin: it breaks least privilege and maximises blast radius.",
+        "fix": "Grant only the specific actions on the specific resource ARNs the role needs."
+      },
+      {
+        "id": "IAC-C1",
+        "title": "Privileged container",
+        "types": [
+          "container"
+        ],
+        "property": "privileged",
+        "op": "is_false",
+        "severity": "high",
+        "rationale": "A privileged container can reach the host kernel and devices: container escape.",
+        "fix": "Set privileged = false and add only the specific capabilities needed."
+      },
+      {
+        "id": "IAC-C2",
+        "title": "Container runs as root",
+        "types": [
+          "container"
+        ],
+        "property": "run_as_root",
+        "op": "is_false",
+        "severity": "medium",
+        "rationale": "Root inside the container makes escape and tampering easier.",
+        "fix": "Set run_as_root = false (USER non-root in the image, runAsNonRoot)."
+      },
+      {
+        "id": "IAC-F1",
+        "title": "Secrets in plaintext environment variables",
+        "types": [
+          "function",
+          "container"
+        ],
+        "property": "secrets_in_env",
+        "op": "is_false",
+        "severity": "high",
+        "rationale": "Plaintext secrets in config leak through logs, consoles and the IaC repo itself.",
+        "fix": "Reference the secret from a secrets manager/vault instead of the environment."
+      },
+      {
+        "id": "IAC-L1",
+        "title": "Listener allows plain HTTP",
+        "types": [
+          "load_balancer"
+        ],
+        "property": "https_only",
+        "op": "is_true",
+        "severity": "high",
+        "rationale": "Data in transit must be encrypted with TLS.",
+        "fix": "Set https_only = true and redirect port 80 to 443."
+      },
+      {
+        "id": "IAC-H1",
+        "title": "Critical resource in a single availability zone",
+        "types": [
+          "vm",
+          "database",
+          "load_balancer",
+          "container"
+        ],
+        "property": "availability_zones",
+        "op": "multi_az_if_critical",
+        "severity": "high",
+        "rationale": "A resource tagged critical needs high availability: one zone is a single point of failure.",
+        "fix": "Deploy across at least 2 availability zones (multi-AZ replica / auto-scaling group)."
+      },
+      {
+        "id": "IAC-T1",
+        "title": "Missing required tags",
+        "types": [
+          "*"
+        ],
+        "property": "tags",
+        "op": "has_tags",
+        "severity": "medium",
+        "rationale": "Owner and data_classification tags drive accountability, data handling and cost allocation.",
+        "fix": "Add tags owner and data_classification."
+      }
+    ],
+    "responsibility_layers": {
+      "physical_datacenter": "Physical data centre and hardware",
+      "hypervisor": "Virtualisation layer / hypervisor",
+      "network_controls": "Network controls (security groups)",
+      "guest_os_patching": "Guest operating system patching",
+      "runtime_middleware": "Runtime and middleware",
+      "application_code": "Application code",
+      "data": "Data classification and protection",
+      "identities_access": "User identities and access"
+    },
+    "responsibility_matrix": {
+      "IaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "customer",
+        "guest_os_patching": "customer",
+        "runtime_middleware": "customer",
+        "application_code": "customer",
+        "data": "customer",
+        "identities_access": "customer"
+      },
+      "PaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "shared",
+        "guest_os_patching": "provider",
+        "runtime_middleware": "provider",
+        "application_code": "customer",
+        "data": "customer",
+        "identities_access": "customer"
+      },
+      "SaaS": {
+        "physical_datacenter": "provider",
+        "hypervisor": "provider",
+        "network_controls": "provider",
+        "guest_os_patching": "provider",
+        "runtime_middleware": "provider",
+        "application_code": "provider",
+        "data": "customer",
+        "identities_access": "customer"
+      }
+    },
+    "quiz_layers": [
+      "guest_os_patching",
+      "application_code",
+      "data"
+    ],
+    "architecture_models": {
+      "serverless": "Code runs as functions on provider-managed compute: you never patch an OS, but you still secure code, permissions and secrets.",
+      "microservices": "An application split into small independently deployed services talking over APIs: more API surface, smaller blast radius.",
+      "containerization": "Applications packaged with their dependencies sharing the host kernel: fast and portable, but a kernel escape hits every container.",
+      "virtualization": "Multiple guest OSes on one hypervisor: VM escape and VM sprawl are the key risks.",
+      "air-gapped network": "Physical isolation with no network connection to other networks: strongest isolation, but updates and data move by removable media.",
+      "logical segmentation": "VLANs/subnets and ACLs separate traffic on shared hardware: limits lateral movement without separate equipment.",
+      "software-defined networking (SDN)": "Network control plane separated from the data plane and managed centrally in software: agile, but the controller is a high-value target.",
+      "ICS/SCADA": "Industrial control of physical processes on legacy protocols: availability first, often unable to patch, so segmentation is the main control.",
+      "IoT": "Many low-cost connected sensors and devices: weak default credentials and limited patch availability.",
+      "RTOS": "An operating system that must respond within strict timing deadlines: security controls must not add latency.",
+      "embedded system": "Firmware-based hardware built for one dedicated function with limited compute and power: hard to update.",
+      "hybrid cloud": "On-premises infrastructure combined with public cloud: consistent policy and identity across both is the challenge.",
+      "infrastructure as code (IaC)": "Infrastructure defined in version-controlled templates: repeatable, scannable deployments, but one bad template misconfigures every copy."
+    }
+  },
+
+  "compliance": {
+    "_note": "All deadlines and periods are configurable ILLUSTRATIONS for learning, not legal advice. Real obligations depend on the jurisdiction, the facts and counsel.",
+    "regimes": {
+      "gdpr_style": {
+        "label": "GDPR-style regulation (illustrative)",
+        "scope": "regional",
+        "dsr_days": 30,
+        "breach_hours": 72,
+        "regulator_notify_risk": [
+          "medium",
+          "high"
+        ],
+        "subject_notify_risk": [
+          "high"
+        ]
+      },
+      "state_privacy_law": {
+        "label": "Generic state privacy law (fictional, illustrative)",
+        "scope": "local",
+        "dsr_days": 45,
+        "breach_hours": 720,
+        "regulator_notify_risk": [
+          "high"
+        ],
+        "subject_notify_risk": [
+          "medium",
+          "high"
+        ]
+      }
+    },
+    "at_risk_margin": {
+      "dsr_days": 5,
+      "breach_hours": 12,
+      "retention_days": 30,
+      "attestation_days": 30
+    },
+    "dsr_types": [
+      "access",
+      "erasure",
+      "rectification"
+    ],
+    "erasure_exemption_grounds": [
+      "legal_hold",
+      "retention_obligation"
+    ],
+    "dsr_required_fields": [
+      "regime",
+      "request_type",
+      "received_day",
+      "identity_verified",
+      "received_by"
+    ],
+    "breach_required_fields": [
+      "regime",
+      "discovered_hour",
+      "risk"
+    ],
+    "retention_required_fields": [
+      "record_type",
+      "created_day"
+    ],
+    "attestation_required_fields": [
+      "attestation",
+      "subject"
+    ],
+    "retention_schedule": {
+      "payroll_records": {
+        "min_days": 2190,
+        "max_days": 2555
+      },
+      "marketing_leads": {
+        "min_days": 0,
+        "max_days": 730
+      },
+      "cctv_footage": {
+        "min_days": 0,
+        "max_days": 30
+      },
+      "security_audit_logs": {
+        "min_days": 365,
+        "max_days": 1095
+      }
+    },
+    "attestations": {
+      "acceptable_use_ack": {
+        "label": "Annual acceptable-use / security policy acknowledgement",
+        "valid_days": 365,
+        "scope": "internal"
+      },
+      "control_attestation": {
+        "label": "Annual control attestation to a customer / auditor",
+        "valid_days": 365,
+        "scope": "external"
+      }
+    },
+    "consequence_by_code": {
+      "MISSING_FIELDS": "fines",
+      "UNKNOWN_REGIME": "fines",
+      "UNKNOWN_TYPE": "fines",
+      "NOT_FORWARDED": "contractual impacts",
+      "UNVERIFIED_IDENTITY": "fines",
+      "UNDOCUMENTED_EXCEPTION": "fines",
+      "DSR_LATE": "fines",
+      "DSR_DUE_SOON": "fines",
+      "BREACH_LATE": "fines",
+      "BREACH_DUE_SOON": "fines",
+      "SUBJECTS_NOT_NOTIFIED": "reputational damage",
+      "OVER_RETENTION": "fines",
+      "RETENTION_DUE_SOON": "fines",
+      "EARLY_DESTRUCTION": "sanctions",
+      "DESTROYED_UNDER_HOLD": "sanctions",
+      "ATTESTATION_MISSING": "contractual impacts",
+      "ATTESTATION_EXPIRED": "contractual impacts",
+      "ATTESTATION_DUE_SOON": "contractual impacts"
+    },
+    "external_attestation_consequence": "loss of license",
+    "rule_labels": {
+      "MISSING_FIELDS": "a required field is missing (deny by default)",
+      "UNKNOWN_REGIME": "the regime is not in the policy (deny by default)",
+      "UNKNOWN_TYPE": "the request/record/attestation type is not in the policy",
+      "NOT_FORWARDED": "a processor received the request and did not forward it to the controller",
+      "UNVERIFIED_IDENTITY": "the request was fulfilled without verifying the data subject's identity",
+      "UNDOCUMENTED_EXCEPTION": "an exception was claimed but not documented",
+      "DSR_LATE": "the data subject request deadline was missed",
+      "BREACH_LATE": "the regulator was notified after the regime's limit (or not at all)",
+      "SUBJECTS_NOT_NOTIFIED": "affected data subjects were not notified of a high-risk breach",
+      "OVER_RETENTION": "records were kept beyond the retention period with no hold",
+      "EARLY_DESTRUCTION": "records were destroyed before the minimum retention period",
+      "DESTROYED_UNDER_HOLD": "records were destroyed while under legal hold",
+      "ATTESTATION_MISSING": "the attestation/acknowledgement was never signed",
+      "ATTESTATION_EXPIRED": "the attestation/acknowledgement has expired"
+    },
+    "data_roles": {
+      "data subject": "The identifiable living person the personal data is about; holds rights such as access, rectification and erasure.",
+      "data controller": "Decides WHY and HOW personal data is processed and is accountable for compliance and subject requests.",
+      "data processor": "Processes personal data on behalf of, and only on the instructions of, the controller (e.g. a payroll SaaS).",
+      "data owner": "A senior business role accountable for a data set: classifies it and approves who may access it.",
+      "data custodian/steward": "Handles the data day to day: custodian implements storage, backup and security controls; steward manages quality, labelling and metadata."
+    },
+    "consequences": {
+      "fines": "Monetary penalties imposed by a regulator for violating a law or regulation.",
+      "sanctions": "Formal penalties from a court, government or regulator, e.g. restrictions or orders for destroying evidence.",
+      "reputational damage": "Loss of customer and public trust after a publicised failure.",
+      "loss of license": "Revocation of the permission (license, certification, authority) needed to operate or process certain data.",
+      "contractual impacts": "Breach of contract with customers or partners: penalties, termination or lost business."
+    },
+    "diligence_terms": {
+      "due diligence": "Investigating and verifying BEFORE and while acting: research, assessments, audits to understand risk.",
+      "due care": "Acting as a reasonable, prudent organisation would: implementing and maintaining the controls and policies."
+    }
+  },
+
+  "asset_mgmt": {
+    "missing_after_days": 14,
+    "tracked_statuses": [
+      "active"
+    ],
+    "classifications": [
+      "public",
+      "internal",
+      "confidential",
+      "restricted"
+    ],
+    "finding_priority": [
+      "MISSING",
+      "NO_OWNER",
+      "UNCLASSIFIED",
+      "OK"
+    ],
+    "finding_actions": {
+      "UNMANAGED": "shadow IT: onboard it into the CMDB (owner + classification) or quarantine/block it with NAC",
+      "MISSING": "possible loss or theft: locate the asset, check for a lost/stolen report, consider remote wipe",
+      "NO_OWNER": "assign an accountable owner (asset ownership is part of assignment/accounting)",
+      "UNCLASSIFIED": "classify the asset so the right controls and disposal level apply",
+      "OK": "no action"
+    },
+    "sanitization_levels": [
+      "clear",
+      "purge",
+      "destroy"
+    ],
+    "min_level": {
+      "public": {
+        "reuse_within_org": "clear",
+        "leaving_org": "clear"
+      },
+      "internal": {
+        "reuse_within_org": "clear",
+        "leaving_org": "purge"
+      },
+      "confidential": {
+        "reuse_within_org": "purge",
+        "leaving_org": "purge"
+      },
+      "restricted": {
+        "reuse_within_org": "purge",
+        "leaving_org": "destroy"
+      }
+    },
+    "media_types": [
+      "hdd",
+      "ssd",
+      "usb",
+      "mobile",
+      "tape",
+      "optical",
+      "paper"
+    ],
+    "methods": {
+      "clear": {
+        "level": "clear",
+        "media": [
+          "hdd",
+          "usb",
+          "tape",
+          "mobile"
+        ]
+      },
+      "overwrite": {
+        "level": "clear",
+        "media": [
+          "hdd",
+          "usb",
+          "tape"
+        ]
+      },
+      "factory_reset": {
+        "level": "clear",
+        "media": [
+          "mobile"
+        ]
+      },
+      "purge": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd",
+          "tape",
+          "mobile"
+        ]
+      },
+      "crypto_erase": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd",
+          "mobile"
+        ]
+      },
+      "secure_erase": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd"
+        ]
+      },
+      "degauss": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "tape"
+        ]
+      },
+      "destroy": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      },
+      "shred": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      },
+      "pulverize": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "optical",
+          "paper"
+        ]
+      },
+      "incinerate": {
+        "level": "destroy",
+        "media": [
+          "usb",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      }
+    },
+    "incompatibility_notes": {
+      "degauss:ssd": "degaussing only affects magnetic media; flash memory in an SSD is untouched",
+      "degauss:usb": "degaussing only affects magnetic media; a USB flash drive is untouched",
+      "degauss:mobile": "degaussing only affects magnetic media; phone flash storage is untouched",
+      "overwrite:ssd": "overwriting is unreliable on SSDs: wear levelling and over-provisioned blocks keep old data; use crypto-erase/secure erase or destroy",
+      "overwrite:mobile": "overwriting is unreliable on flash; use the built-in crypto-erase or destroy",
+      "clear:ssd": "logical clearing is unreliable on SSDs because of wear levelling; purge (crypto-erase) or destroy instead"
+    },
+    "certificate_required": {
+      "performed_by": [
+        "third_party"
+      ],
+      "levels": [
+        "purge",
+        "destroy"
+      ]
+    },
+    "glossary": {
+      "certificate of destruction": "Signed evidence from the disposal provider listing the assets, method and date: proves the media was sanitized/destroyed and transfers accountability.",
+      "data retention": "Keeping records for a defined period required by law, regulation or policy before they may be disposed of.",
+      "legal hold": "A litigation or investigation order that suspends normal deletion and disposal of the relevant data.",
+      "shadow IT": "Devices or services used without IT approval, so they are missing from the inventory and unmanaged.",
+      "enumeration": "Actively discovering every device and service on the network (e.g. a discovery scan) to compare against the inventory.",
+      "asset ownership": "The person or team accountable for an asset, its classification and its lifecycle decisions.",
+      "clear": "Logical sanitization (e.g. overwriting) that defeats simple recovery tools; suitable when media stays in the organisation.",
+      "purge": "Sanitization that defeats laboratory recovery (crypto-erase, secure erase, degaussing) while the media may still be reusable.",
+      "destroy": "Physical destruction (shredding, pulverizing, incinerating) so the media cannot be reused or recovered."
+    }
+  },
+
+  "awareness": {
+    "known_roles": [
+      "finance",
+      "exec",
+      "it_admin",
+      "staff"
+    ],
+    "high_risk_roles": [
+      "finance",
+      "exec",
+      "it_admin"
+    ],
+    "outcome_action": {
+      "standard": {
+        "REPORTED": "NONE",
+        "PASSED": "NONE",
+        "CLICKED": "MICRO_TRAINING",
+        "COMPROMISED": "REMEDIAL_TRAINING",
+        "NO_DATA": "MICRO_TRAINING"
+      },
+      "high_risk": {
+        "REPORTED": "NONE",
+        "PASSED": "NONE",
+        "CLICKED": "REMEDIAL_TRAINING",
+        "COMPROMISED": "REMEDIAL_TRAINING",
+        "NO_DATA": "REMEDIAL_TRAINING"
+      }
+    },
+    "escalate_after_failures": {
+      "standard": 3,
+      "high_risk": 2
+    },
+    "recurring_training_days": 365,
+    "untrained_action": "REMEDIAL_TRAINING",
+    "overdue_action": "MICRO_TRAINING",
+    "department_thresholds": {
+      "max_click_rate": 20,
+      "max_credential_rate": 5,
+      "min_report_rate": 50
+    },
+    "program_targets": {
+      "report_rate_min": 40,
+      "click_rate_max": 15,
+      "credential_rate_max": 5,
+      "median_report_minutes_max": 10,
+      "training_completion_min": 95
+    },
+    "behaviour_required_attributes": [
+      "intentional",
+      "policy_violation",
+      "expected_for_role"
+    ],
+    "behaviour_rules": [
+      {
+        "match": {
+          "intentional": true,
+          "policy_violation": true
+        },
+        "class": "RISKY"
+      },
+      {
+        "match": {
+          "intentional": false
+        },
+        "class": "UNINTENTIONAL"
+      },
+      {
+        "match": {
+          "expected_for_role": false
+        },
+        "class": "UNEXPECTED"
+      },
+      {
+        "match": {
+          "intentional": true,
+          "policy_violation": false,
+          "expected_for_role": true
+        },
+        "class": "NOT_ANOMALOUS"
+      }
+    ],
+    "behaviour_default_class": "RISKY",
+    "behaviour_responses": {
+      "RISKY": "open an investigation and refer to the insider-threat team (HR + legal + security)",
+      "UNEXPECTED": "verify with the user and their manager and tune UEBA monitoring",
+      "UNINTENTIONAL": "coaching and targeted just-in-time training; no disciplinary action",
+      "NOT_ANOMALOUS": "close as expected behaviour and document the baseline"
+    },
+    "technical_controls": {
+      "removable_media": "endpoint policy blocking unapproved USB mass storage",
+      "data_exfiltration": "DLP rule and CASB block on personal cloud storage",
+      "unusual_login": "conditional access with impossible-travel alerting",
+      "endpoint_tamper": "EDR tamper protection and alert on agent stop",
+      "misdirected_email": "DLP warning on external recipients with sensitive labels"
+    },
+    "trusted_domains": [
+      "example.com"
+    ],
+    "lookalike_max_distance": 2,
+    "homoglyphs": {
+      "0": "o",
+      "1": "l",
+      "3": "e",
+      "5": "s",
+      "rn": "m",
+      "vv": "w"
+    },
+    "urgency_keywords": [
+      "urgent",
+      "immediately",
+      "within 24 hours",
+      "expires",
+      "final notice",
+      "today",
+      "suspended",
+      "act now"
+    ],
+    "request_keywords": [
+      "password",
+      "verify your account",
+      "login",
+      "credentials",
+      "mfa code",
+      "wire transfer",
+      "bank details",
+      "gift card",
+      "payment"
+    ],
+    "risky_attachment_extensions": [
+      ".exe",
+      ".js",
+      ".vbs",
+      ".scr",
+      ".iso",
+      ".img",
+      ".html",
+      ".htm",
+      ".docm",
+      ".xlsm",
+      ".zip",
+      ".lnk"
+    ],
+    "indicator_weights": {
+      "missing_sender": 3,
+      "lookalike_sender_domain": 3,
+      "external_sender": 1,
+      "urgency_language": 1,
+      "mismatched_link": 3,
+      "credential_or_payment_request": 2,
+      "unexpected_attachment_type": 3
+    },
+    "report_threshold": 3,
+    "report_procedure": {
+      "do": "Report it with the Report Phishing button and do not interact with it further",
+      "dont": [
+        "Click the link to check whether it is real",
+        "Forward it to colleagues to warn them",
+        "Reply to the sender and ask if it is genuine",
+        "Open the attachment in a sandbox yourself"
+      ]
+    },
+    "training_types": {
+      "initial": "Delivered at onboarding before access is granted: policy/handbook acknowledgement and core topics",
+      "recurring": "Repeated on a fixed cadence (e.g. annually) plus simulations to keep skills current"
+    },
+    "guidance_topics": {
+      "policy_handbooks": "Read and acknowledge the acceptable use policy and the employee security handbook",
+      "situational_awareness": "Notice tailgaters, shoulder surfers and unexpected visitors in secure areas",
+      "insider_threat": "Report colleagues who bypass controls, hoard data or show signs of malicious intent",
+      "password_management": "Use a password manager, unique passphrases and MFA; never share credentials",
+      "removable_media_and_cables": "Never plug in found USB drives or unknown charging cables; use approved encrypted media",
+      "social_engineering": "Verify unusual requests by calling back on a known number, even if they seem to come from an executive",
+      "operational_security": "Do not post badge photos, project names or travel plans on social media",
+      "hybrid_remote_work": "Use the VPN, lock screens at home, and avoid working on sensitive data on public Wi-Fi"
+    }
+  },
+
+  "data_protection": {
+    "classification_rank": {
+      "public": 0,
+      "private": 1,
+      "sensitive": 2,
+      "confidential": 3,
+      "restricted": 4,
+      "critical": 5
+    },
+    "detectors": {
+      "us_ssn": {
+        "pattern": "\\b(?!000|666|9\\d\\d)\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}\\b",
+        "data_type": "regulated",
+        "classification": "restricted",
+        "label": "US Social Security number (PII)"
+      },
+      "payment_card": {
+        "pattern": "(?<!\\d)(?:\\d[ -]?){12,18}\\d(?!\\d)",
+        "validator": "luhn",
+        "data_type": "financial",
+        "classification": "restricted",
+        "label": "payment card number (PAN, PCI DSS)"
+      },
+      "health_record_id": {
+        "pattern": "\\bMRN[- ]?\\d{6,10}\\b",
+        "data_type": "regulated",
+        "classification": "restricted",
+        "label": "medical record number (PHI)"
+      },
+      "email": {
+        "pattern": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b",
+        "data_type": "regulated",
+        "classification": "private",
+        "label": "email address (personal data)"
+      },
+      "phone": {
+        "pattern": "(?<![\\d-])(?:\\+\\d{1,3}[ .-]?)?\\(?\\d{3}\\)?[ .-]\\d{3}[ .-]\\d{4}(?![\\d-])",
+        "data_type": "regulated",
+        "classification": "private",
+        "label": "phone number (personal data)"
+      },
+      "password": {
+        "pattern": "(?i)\\b(?:password|passwd|pwd)\\s*[=:]\\s*\\S+",
+        "data_type": "credential",
+        "classification": "critical",
+        "label": "password"
+      },
+      "api_key": {
+        "pattern": "\\bAKIA[0-9A-Z]{16}\\b|(?i:\\b(?:api[_-]?key|secret|token)\\s*[=:]\\s*['\"]?[A-Za-z0-9_\\-]{20,})",
+        "data_type": "credential",
+        "classification": "critical",
+        "label": "API key / secret"
+      },
+      "trade_secret": {
+        "pattern": "(?i)\\btrade secret\\b",
+        "data_type": "trade_secret",
+        "classification": "confidential",
+        "label": "trade-secret marking"
+      },
+      "intellectual_property": {
+        "pattern": "(?i)\\b(?:patent pending|proprietary source code)\\b",
+        "data_type": "intellectual_property",
+        "classification": "confidential",
+        "label": "intellectual-property marking"
+      },
+      "legal": {
+        "pattern": "(?i)\\b(?:attorney[- ]client privileged|legal hold)\\b",
+        "data_type": "legal",
+        "classification": "confidential",
+        "label": "privileged legal material"
+      }
+    },
+    "allowed_destinations": {
+      "public": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "payment_processor",
+        "analytics",
+        "public_web",
+        "external_email"
+      ],
+      "private": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "analytics",
+        "external_email"
+      ],
+      "sensitive": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "analytics"
+      ],
+      "confidential": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner"
+      ],
+      "restricted": [
+        "internal_db",
+        "internal_app",
+        "support_console",
+        "payment_processor"
+      ],
+      "critical": [
+        "internal_db",
+        "secrets_vault"
+      ]
+    },
+    "allowed_regions": {
+      "public": [
+        "*"
+      ],
+      "private": [
+        "us",
+        "eu",
+        "uk"
+      ],
+      "sensitive": [
+        "us",
+        "eu",
+        "uk"
+      ],
+      "confidential": [
+        "us",
+        "eu"
+      ],
+      "restricted": [
+        "us"
+      ],
+      "critical": [
+        "us"
+      ]
+    },
+    "sovereignty": {
+      "_comment": "personal (regulated) data collected from subjects in these regions may only be processed in the listed regions",
+      "eu": [
+        "eu",
+        "uk"
+      ],
+      "uk": [
+        "uk",
+        "eu"
+      ]
+    },
+    "protection_rules": {
+      "financial": {
+        "at_rest": {
+          "accept": [
+            "tokenization",
+            "encryption",
+            "hashing"
+          ],
+          "action": "PROTECT",
+          "method": "tokenize the PAN (or encrypt it at rest); never store it in clear text"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption",
+            "tokenization"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS 1.2+ (or send a token instead of the PAN)"
+        },
+        "in_use": {
+          "accept": [
+            "masking",
+            "tokenization"
+          ],
+          "action": "PROTECT",
+          "method": "mask the PAN to the last 4 digits"
+        }
+      },
+      "regulated": {
+        "at_rest": {
+          "accept": [
+            "encryption",
+            "tokenization",
+            "masking",
+            "hashing"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest (e.g. AES-256)"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "masking",
+            "tokenization",
+            "permission_restrictions"
+          ],
+          "action": "PROTECT",
+          "method": "mask direct identifiers (e.g. SSN to last 4)"
+        }
+      },
+      "credential": {
+        "at_rest": {
+          "accept": [
+            "hashing"
+          ],
+          "action": "BLOCK",
+          "method": "store only a salted, key-stretched hash (bcrypt/PBKDF2/Argon2), never reversible encryption"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "BLOCK",
+          "method": "send credentials only over an encrypted channel (TLS)"
+        },
+        "in_use": {
+          "accept": [
+            "masking"
+          ],
+          "action": "PROTECT",
+          "method": "mask secrets in screens and logs"
+        }
+      },
+      "trade_secret": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions",
+            "segmentation"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to need-to-know"
+        }
+      },
+      "intellectual_property": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions",
+            "segmentation",
+            "obfuscation"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to need-to-know"
+        }
+      },
+      "legal": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to the legal team"
+        }
+      }
+    },
+    "protection_methods": {
+      "encryption": "Encryption: reversibly transforms data with a key so only key holders can read it (at rest: AES; in transit: TLS/IPsec).",
+      "hashing": "Hashing: one-way fixed-length digest that cannot be reversed; salt + key stretching for stored passwords.",
+      "masking": "Masking: hides part of a value on display or in copies (e.g. ************1111) while keeping its format.",
+      "tokenization": "Tokenization: replaces the value with a random surrogate token; the real value is mapped in a secure token vault.",
+      "obfuscation": "Obfuscation: makes data or code hard to understand without a key (e.g. code obfuscation, steganography).",
+      "segmentation": "Segmentation: keeps sensitive data in separate networks/systems so a breach of one does not expose all.",
+      "permission_restrictions": "Permission restrictions: access controls (least privilege, ACLs) limit who can read or change the data.",
+      "geographic_restrictions": "Geographic restrictions: allow storage or access only from approved locations (geolocation / geofencing)."
+    }
+  },
+
+  "siem": {
+    "sources": {
+      "auth": "Authentication / OS security logs (logon success and failure, account changes)",
+      "firewall": "Firewall logs (allowed and denied connections, ports)",
+      "edr": "Endpoint logs from the EDR/antivirus agent (detections, quarantine)",
+      "dns": "DNS query logs (domains resolved by each host)",
+      "app": "Application logs (business actions, admin changes)"
+    },
+    "severity_order": [
+      "low",
+      "medium",
+      "high",
+      "critical"
+    ],
+    "geo": {
+      "London": [
+        51.51,
+        -0.13
+      ],
+      "New York": [
+        40.71,
+        -74.01
+      ],
+      "Singapore": [
+        1.35,
+        103.82
+      ],
+      "Frankfurt": [
+        50.11,
+        8.68
+      ],
+      "Chicago": [
+        41.88,
+        -87.63
+      ],
+      "Lagos": [
+        6.52,
+        3.38
+      ]
+    },
+    "threat_intel": {
+      "fields": [
+        "src_ip",
+        "dst_ip",
+        "domain"
+      ],
+      "ips": [
+        "192.0.2.66",
+        "203.0.113.200"
+      ],
+      "domains": [
+        "update-checker.example.net",
+        "cdn-sync.example.org"
+      ]
+    },
+    "never_suppress_severities": [
+      "critical"
+    ],
+    "rules": [
+      {
+        "id": "SIEM-000",
+        "name": "Log parse failure",
+        "logic": "normalization",
+        "severity": "medium",
+        "description": "An event is missing id/ts/source, has an unparseable timestamp or comes from an unknown source",
+        "params": {
+          "required": [
+            "id",
+            "ts",
+            "source"
+          ]
+        },
+        "response": "fix the collector/parser and re-ingest; an unparsed event is invisible to every other rule"
+      },
+      {
+        "id": "SIEM-001",
+        "name": "Brute force",
+        "logic": "threshold",
+        "severity": "high",
+        "description": "At least N failed logins for one user from one IP within W seconds",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "failure"
+          },
+          "group_by": [
+            "user",
+            "src_ip"
+          ],
+          "count": 5,
+          "window_seconds": 300,
+          "escalate": {
+            "filter": {
+              "source": "auth",
+              "action": "login",
+              "outcome": "success"
+            },
+            "within_seconds": 600,
+            "severity": "critical",
+            "response": "possible compromise: disable the account, revoke sessions, quarantine the user's host via EDR"
+          }
+        },
+        "response": "lock the account temporarily and block the source IP at the firewall"
+      },
+      {
+        "id": "SIEM-002",
+        "name": "Password spraying",
+        "logic": "threshold",
+        "severity": "high",
+        "description": "One source IP fails against at least M distinct users within W seconds",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "failure"
+          },
+          "group_by": [
+            "src_ip"
+          ],
+          "distinct": "user",
+          "count": 4,
+          "window_seconds": 600
+        },
+        "response": "block the source IP and force password resets / MFA enrolment for the targeted users"
+      },
+      {
+        "id": "SIEM-003",
+        "name": "Impossible travel",
+        "logic": "impossible_travel",
+        "severity": "high",
+        "description": "Two successive successful logins by one user from places too far apart for the time between them",
+        "params": {
+          "filter": {
+            "source": "auth",
+            "action": "login",
+            "outcome": "success"
+          },
+          "max_speed_kmh": 900
+        },
+        "response": "revoke the user's sessions, require MFA re-authentication and verify with the user"
+      },
+      {
+        "id": "SIEM-004",
+        "name": "After-hours privileged action",
+        "logic": "after_hours",
+        "severity": "high",
+        "description": "A privileged action outside business hours (UTC)",
+        "params": {
+          "actions": [
+            "add_admin",
+            "disable_logging",
+            "export_database",
+            "change_audit_policy"
+          ],
+          "business_hours": [
+            7,
+            19
+          ],
+          "weekdays_only": true
+        },
+        "response": "confirm with the account owner and their manager; revert the change if not approved"
+      },
+      {
+        "id": "SIEM-005",
+        "name": "Log source silence",
+        "logic": "source_silence",
+        "severity": "medium",
+        "description": "An expected log source sent no events for longer than its allowed gap (monitoring blind spot)",
+        "params": {
+          "max_gap_seconds": {
+            "auth": 21600,
+            "firewall": 21600,
+            "edr": 21600,
+            "dns": 14400,
+            "app": 21600
+          }
+        },
+        "response": "check the agent/forwarder and its heartbeat (SNMP trap, agent health), restore collection, then validate events arrive"
+      },
+      {
+        "id": "SIEM-006",
+        "name": "Threat-intel match",
+        "logic": "threat_intel",
+        "severity": "high",
+        "description": "An event involves an IP or domain on the threat-intelligence list",
+        "params": {},
+        "response": "block the IP / sinkhole the domain and quarantine the host via EDR for investigation"
+      },
+      {
+        "id": "SIEM-007",
+        "name": "Port scan",
+        "logic": "threshold",
+        "severity": "medium",
+        "description": "One source IP touches at least N distinct destination ports within W seconds",
+        "params": {
+          "filter": {
+            "source": "firewall"
+          },
+          "group_by": [
+            "src_ip"
+          ],
+          "distinct": "dst_port",
+          "count": 5,
+          "window_seconds": 120
+        },
+        "response": "identify the scanning host; block it at the firewall if it is not an authorised scanner"
+      },
+      {
+        "id": "SIEM-008",
+        "name": "Malware not blocked",
+        "logic": "match",
+        "severity": "high",
+        "description": "The EDR/antivirus agent detected malware but did not block or quarantine it",
+        "params": {
+          "filter": {
+            "source": "edr",
+            "action": "malware_detected",
+            "outcome": "allowed"
+          }
+        },
+        "response": "quarantine the host via EDR, remove the malware, then validate with a rescan before release"
+      }
+    ],
+    "suppressions": [
+      {
+        "id": "SUP-1",
+        "rule": "SIEM-007",
+        "match": {
+          "src_ip": "10.0.5.20"
+        },
+        "owner": "vuln-mgmt team",
+        "expires": "2026-12-31T00:00:00Z",
+        "reason": "authorised vulnerability scanner (weekly credentialed scan)"
+      },
+      {
+        "id": "SUP-2",
+        "rule": "SIEM-007",
+        "match": {
+          "src_ip": "10.0.5.99"
+        },
+        "owner": "red team",
+        "expires": "2026-09-30T00:00:00Z",
+        "reason": "Q3 penetration test engagement"
+      },
+      {
+        "id": "SUP-3",
+        "rule": "SIEM-003",
+        "match": {
+          "user": "bnguyen"
+        },
+        "owner": "",
+        "expires": "2026-12-31T00:00:00Z",
+        "reason": "travels often, uses a cloud VPN"
+      }
+    ],
+    "tools": {
+      "SIEM": "Aggregates and correlates logs from many sources and raises alerts",
+      "SCAP": "Standard formats (e.g. XCCDF, OVAL) so tools can check configurations against a benchmark automatically",
+      "Benchmarks": "Published secure-configuration guides such as CIS Benchmarks",
+      "Agent-based monitoring": "Software installed on the host that collects and forwards data",
+      "Agentless monitoring": "Collects data remotely (e.g. over SSH, WMI or an API) without installing software",
+      "SNMP traps": "Unsolicited alert messages a network device sends to the management station",
+      "NetFlow": "Records metadata about traffic flows (who talked to whom, ports, volume), not the content",
+      "DLP": "Detects and blocks sensitive data leaving the organisation",
+      "Vulnerability scanner": "Probes systems for known weaknesses and missing patches"
+    },
+    "activities": {
+      "Log aggregation": "Collecting logs from many systems into one place in a common format",
+      "Alert tuning": "Adjusting rules, thresholds and suppressions to cut false positives without missing real attacks",
+      "Quarantine": "Isolating a suspect host or file so it cannot spread or communicate",
+      "Archiving": "Keeping logs for the retention period required by policy or law",
+      "Validation": "Confirming that a remediation actually worked, e.g. by rescanning"
+    }
+  },
+
+  "identity_governance_iga": {
+    "correlation_rules": [
+      {
+        "name": "employee_id",
+        "account_attribute": "employee_id",
+        "identity_attribute": "employee_id"
+      },
+      {
+        "name": "email",
+        "account_attribute": "email",
+        "identity_attribute": "email"
+      }
+    ],
+    "status_handling": {
+      "active": "allowed",
+      "leave": "allowed",
+      "terminated": "revoke"
+    },
+    "dormant_after_days": 90,
+    "service_account_types": [
+      "service"
+    ],
+    "finding_severity": [
+      "TERMINATED_WITH_ACCESS",
+      "PRIVILEGED_UNOWNED",
+      "ORPHAN",
+      "DUPLICATE",
+      "DORMANT",
+      "CORRELATED"
+    ],
+    "finding_actions": {
+      "CORRELATED": "NO_ACTION",
+      "TERMINATED_WITH_ACCESS": "REVOKE",
+      "PRIVILEGED_UNOWNED": "DISABLE",
+      "ORPHAN": "DISABLE",
+      "DUPLICATE": "REVOKE",
+      "DORMANT": "DISABLE"
+    },
+    "finding_definitions": {
+      "CORRELATED": "The account is linked to exactly one known identity (or a service account to an active named owner) and needs no action.",
+      "ORPHAN": "An account that no identity in the authoritative HR source owns: nobody is accountable for it.",
+      "TERMINATED_WITH_ACCESS": "The owner left the organisation (HR status terminated) but the account is still enabled: de-provisioning failed.",
+      "DORMANT": "An enabled account with no login for longer than the policy limit (or no login recorded at all).",
+      "PRIVILEGED_UNOWNED": "A privileged or service (non-human) account without an active named owner: deny by default.",
+      "DUPLICATE": "A second account for the same identity in the same application, which splits audit trails and doubles access."
+    },
+    "campaign": {
+      "allowed_reviewers": [
+        "manager",
+        "entitlement_owner"
+      ],
+      "allow_self_review": false,
+      "risk_levels": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "comment_required_risk": [
+        "high",
+        "critical"
+      ],
+      "unknown_entitlement_risk": "critical",
+      "no_decision_action": "REVOKE",
+      "rubber_stamp": {
+        "min_approvals": 5,
+        "max_median_seconds": 10
+      }
+    },
+    "sod_conflicts": [
+      {
+        "name": "create vendor + approve payment",
+        "pair": [
+          "ERP:AP_CREATE_VENDOR",
+          "ERP:AP_APPROVE_PAYMENT"
+        ]
+      },
+      {
+        "name": "file-server admin + delete audit logs",
+        "pair": [
+          "FileShare:ADMIN",
+          "FileShare:AUDIT_LOG_DELETE"
+        ]
+      }
+    ],
+    "concepts": {
+      "authoritative source": "The system of record for who works here (usually HR); it decides whether an identity exists and is active.",
+      "aggregation": "Collecting the account lists from every connected application into one place.",
+      "correlation": "Linking each application account to the person (identity) who owns it, using matching rules.",
+      "entitlement": "One specific permission inside an application, such as a group, role or right.",
+      "role": "A named bundle of entitlements matched to a job function, granted together.",
+      "access profile": "A bundle of entitlements from ONE application that is requested and reviewed as a unit.",
+      "access certification": "A periodic attestation where a manager or owner confirms each person still needs each entitlement."
+    }
+  },
+
+  "conditional_access": {
+    "_comment": "Lab 25: Conditional Access evaluator + just-in-time privileged role activation. Every applicable policy is evaluated; any BLOCK wins; otherwise ALL grant requirements of ALL applicable policies must be met.",
+    "named_locations": {
+      "HQ-Tulsa": [
+        "10.20.0.0/16",
+        "198.51.100.0/25"
+      ],
+      "Branch-OKC": [
+        "192.0.2.0/26"
+      ]
+    },
+    "trusted_locations": [
+      "HQ-Tulsa",
+      "Branch-OKC"
+    ],
+    "client_app_categories": {
+      "browser": "browser",
+      "mobile_app": "mobile_desktop",
+      "desktop_app": "mobile_desktop",
+      "legacy_imap": "legacy",
+      "legacy_pop": "legacy",
+      "legacy_smtp": "legacy",
+      "activesync_basic": "legacy"
+    },
+    "risk_levels": [
+      "none",
+      "low",
+      "medium",
+      "high"
+    ],
+    "sensitive_apps": [
+      "Payroll",
+      "Admin-Portal",
+      "Finance-ERP"
+    ],
+    "block_if_no_policy_for": [
+      "Finance-ERP"
+    ],
+    "grant_controls": {
+      "mfa": "multifactor authentication completed",
+      "compliant_device": "device marked compliant by device management (MDM)",
+      "approved_app": "an approved client app with app protection",
+      "terms_of_use": "terms of use accepted"
+    },
+    "policies": [
+      {
+        "name": "CA01 Block legacy authentication",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "client_apps": [
+            "legacy"
+          ]
+        },
+        "grant": {
+          "block": true
+        }
+      },
+      {
+        "name": "CA02 Require MFA for administrators",
+        "state": "on",
+        "users": {
+          "include": [
+            "Admins"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "mfa"
+          ],
+          "operator": "all"
+        },
+        "session": {
+          "sign_in_frequency_hours": 4
+        }
+      },
+      {
+        "name": "CA03 Require MFA for medium/high sign-in risk",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "sign_in_risk": [
+            "medium",
+            "high"
+          ]
+        },
+        "grant": {
+          "require": [
+            "mfa"
+          ],
+          "operator": "all"
+        },
+        "session": {
+          "sign_in_frequency_hours": 1
+        }
+      },
+      {
+        "name": "CA04 Payroll off-network needs MFA and compliant device",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "Payroll"
+          ]
+        },
+        "conditions": {
+          "locations": {
+            "include": [
+              "any"
+            ],
+            "exclude": [
+              "trusted"
+            ]
+          }
+        },
+        "grant": {
+          "require": [
+            "mfa",
+            "compliant_device"
+          ],
+          "operator": "all"
+        }
+      },
+      {
+        "name": "CA05 Mobile mail needs approved app or compliant device",
+        "state": "on",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "Mail"
+          ]
+        },
+        "conditions": {
+          "platforms": [
+            "ios",
+            "android"
+          ]
+        },
+        "grant": {
+          "require": [
+            "approved_app",
+            "compliant_device"
+          ],
+          "operator": "one"
+        }
+      },
+      {
+        "name": "CA06 Block high sign-in risk (pilot)",
+        "state": "report_only",
+        "users": {
+          "include": [
+            "all"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {
+          "sign_in_risk": [
+            "high"
+          ]
+        },
+        "grant": {
+          "block": true
+        }
+      },
+      {
+        "name": "CA07 Guests must accept terms of use",
+        "state": "on",
+        "users": {
+          "include": [
+            "Guests"
+          ],
+          "exclude": [
+            "BreakGlass"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "terms_of_use"
+          ],
+          "operator": "all"
+        }
+      },
+      {
+        "name": "CA08 Old pilot: compliant device for everyone",
+        "state": "off",
+        "users": {
+          "include": [
+            "all"
+          ]
+        },
+        "apps": {
+          "include": [
+            "all"
+          ]
+        },
+        "conditions": {},
+        "grant": {
+          "require": [
+            "compliant_device"
+          ],
+          "operator": "all"
+        }
+      }
+    ],
+    "indicators": {
+      "impossible_travel_minutes": 180,
+      "concurrent_session_minutes": 10
+    },
+    "privileged_roles": [
+      "Global Administrator",
+      "Privileged Role Administrator",
+      "Security Administrator",
+      "User Administrator",
+      "Helpdesk Administrator"
+    ],
+    "role_settings": {
+      "Global Administrator": {
+        "max_hours": 4,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": true,
+        "approvers": [
+          "sec-lead",
+          "ciso"
+        ]
+      },
+      "Privileged Role Administrator": {
+        "max_hours": 4,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": true,
+        "approvers": [
+          "sec-lead",
+          "ciso"
+        ]
+      },
+      "User Administrator": {
+        "max_hours": 8,
+        "require_justification": true,
+        "require_ticket": true,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      },
+      "Helpdesk Administrator": {
+        "max_hours": 8,
+        "require_justification": true,
+        "require_ticket": false,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      },
+      "Security Reader": {
+        "max_hours": 8,
+        "require_justification": false,
+        "require_ticket": false,
+        "require_mfa": true,
+        "require_approval": false,
+        "approvers": []
+      }
+    },
+    "concepts": {
+      "just-in-time permissions": "privileges granted only when needed, for a limited time, then removed automatically",
+      "standing privilege": "an admin role held permanently, active 24x7 whether or not it is being used",
+      "password vaulting": "privileged passwords stored in a vault and checked out (and rotated) per use",
+      "ephemeral credentials": "short-lived credentials created for one session or task and then discarded",
+      "break-glass account": "an emergency admin account excluded from normal access policies, tightly monitored",
+      "report-only mode": "a policy is evaluated and logged but not enforced, to test its impact first",
+      "legacy authentication": "older protocols (IMAP, POP, basic auth SMTP) that cannot perform MFA",
+      "adaptive identity": "access decisions that change with real-time context such as risk, location and device"
+    }
   }
 }

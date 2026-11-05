@@ -79,7 +79,7 @@ def letters_ok(q: dict) -> bool:
 
 def describe(q: dict, mc_plugin: bool) -> str:
     parts = [f"**Objective {q['objective']} {OBJECTIVE_NAMES.get(q['objective'], '')}** · "
-             f"{_md(LABS[q['lab']][0].TITLE)}", ""]
+             f"{_md(LABS[q['lab']][0].TITLE) if q['lab'] else 'Exam-style question'}", ""]
     if q["context"]:
         parts += [_fence(q["context"]), ""]
     parts += [_md(q["prompt"]), ""]
@@ -105,10 +105,15 @@ def flags(q: dict, mc_plugin: bool) -> list[dict]:
 
 
 def hints(q: dict, hint_cost: int) -> list[dict]:
-    lab = LABS[q["lab"]][0]
     watch = videos.link_text(q["objective"])
-    return [{"content": f"Revisit {lab.TITLE}: read its Lesson, then run the scenario "
-                        f"(python main.py lab {q['lab']})." + (f" {watch}" if watch else ""), "cost": 0},
+    if q["lab"]:
+        lab = LABS[q["lab"]][0]
+        first = f"Revisit {lab.TITLE}: read its Lesson, then run the scenario (python main.py lab {q['lab']})."
+    else:
+        labs = videos.labs_for_objective(q["objective"])
+        first = (f"Objective {q['objective']} {OBJECTIVE_NAMES.get(q['objective'], '')}"
+                 + (f": practise it in Lab {', Lab '.join(map(str, labs))}." if labs else "."))
+    return [{"content": first + (f" {watch}" if watch else ""), "cost": 0},
             {"content": f"Explanation: {q['explanation']}", "cost": hint_cost}]
 
 
@@ -120,7 +125,7 @@ def build_challenges(variants: int = 0, points: int = 100, hint_cost: int = 25, 
         assert cid not in seen, f"challenge id collision: {cid}"
         seen.add(cid)
         out.append({
-            "name": f"Lab {q['lab']} · {q['objective']} · {cid}",
+            "name": f"{'Lab ' + str(q['lab']) if q['lab'] else 'Exam'} · {q['objective']} · {cid}",
             "description": describe(q, mc_plugin),
             "category": category(q["objective"]),
             "value": points,
@@ -128,9 +133,9 @@ def build_challenges(variants: int = 0, points: int = 100, hint_cost: int = 25, 
             "state": "visible",
             "max_attempts": attempts,
             "flags": flags(q, mc_plugin),
-            "tags": [f"SY0-701 {q['objective']}", f"lab{q['lab']}"],
+            "tags": [f"SY0-701 {q['objective']}", f"lab{q['lab']}" if q["lab"] else "exam-style"],
             "hints": hints(q, hint_cost),
-            "_slug": f"lab{q['lab']:02d}-{q['objective'].replace('.', '_')}-{cid}",
+            "_slug": f"{'lab%02d' % q['lab'] if q['lab'] else 'exam'}-{q['objective'].replace('.', '_')}-{cid}",
             "_question": q,
         })
     return out
