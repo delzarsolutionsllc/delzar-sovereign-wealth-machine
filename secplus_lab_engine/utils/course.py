@@ -98,5 +98,5 @@ def summary(c: dict | None = None) -> dict:
     """What the web app needs to label itself and offer the course switcher."""
     c = c or active()
     keys = ("code", "name", "short", "vendor", "exam_code", "exam_name", "aligned", "notice", "pass_scaled", "scale",
-            "exam_questions", "exam_minutes")
+            "exam_questions", "exam_minutes", "pass_label")
     return {**{k: c.get(k) for k in keys}, "courses": [{k: load(x).get(k) for k in ("code", "name", "short")} for x in available()]}

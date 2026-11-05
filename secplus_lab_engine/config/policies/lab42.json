@@ -1,0 +1,117 @@
+{
+  "okta_system_log": {
+    "_note": "Simplified model of the Okta System Log (Okta Identity Engine) and Okta's help and support resources. Event types and outcome values follow Okta's System Log event shape; the field list is a subset.",
+    "filter": {
+      "operators": ["eq", "sw", "co"],
+      "logical": ["and", "or"],
+      "case_insensitive": true,
+      "attributes": [
+        "uuid", "published", "eventType", "displayMessage", "severity",
+        "actor.id", "actor.type", "actor.alternateId", "actor.displayName",
+        "target.id", "target.type", "target.alternateId", "target.displayName",
+        "outcome.result", "outcome.reason",
+        "client.ipAddress", "client.geographicalContext.city", "client.geographicalContext.country"
+      ]
+    },
+    "outcome_results": ["SUCCESS", "FAILURE", "SKIPPED", "ALLOW", "DENY", "CHALLENGE", "UNKNOWN"],
+    "success_results": ["SUCCESS"],
+    "policy_allow_results": ["ALLOW", "CHALLENGE"],
+    "event_types": {
+      "deactivate": ["user.lifecycle.deactivate", "user.lifecycle.suspend"],
+      "reactivate": ["user.lifecycle.activate", "user.lifecycle.reactivate", "user.lifecycle.unsuspend"],
+      "lock": ["user.account.lock"],
+      "unlock": ["user.account.unlock", "user.account.unlock_by_admin"],
+      "app_assign": ["application.user_membership.add"],
+      "app_unassign": ["application.user_membership.remove"],
+      "provisioning": ["application.provision.user.push", "app.user_management.push_new_user_success"],
+      "policy_evaluation": ["policy.evaluate_sign_on"],
+      "failed_sign_in": ["user.session.start", "user.authentication.auth_via_mfa"],
+      "group_add": ["group.user_membership.add"]
+    },
+    "changes": {
+      "group_add": {"event_types": ["group.user_membership.add"], "label": "added the user to the group"},
+      "app_assign": {"event_types": ["application.user_membership.add"], "label": "assigned the app to the user"},
+      "deactivate": {"event_types": ["user.lifecycle.deactivate"], "label": "deactivated the user"},
+      "api_token": {"event_types": ["system.api_token.create"], "label": "created the API token"}
+    },
+    "lock_lookback_minutes": 30,
+    "app_access_checks": ["USER_DEACTIVATED", "LOCKED_OUT", "NOT_ASSIGNED_TO_APP", "PROVISIONING_FAILED",
+                          "DENIED_BY_POLICY"],
+    "triage_rules": [
+      {"category": "security_incident",
+       "keywords": ["compromise", "suspicious", "unauthorized", "unauthorised", "phishing", "breach",
+                    "did not do it", "didn't do it", "stolen"]},
+      {"category": "outage",
+       "keywords": ["outage", "is down", "timing out", "timed out", "http 500", "unavailable",
+                    "service disruption", "cannot reach okta", "can't reach okta", "degraded"]},
+      {"category": "bug",
+       "keywords": ["bug", "reproducible", "regression", "unexpected error", "stopped working after",
+                    "broken after", "drops"]},
+      {"category": "how_to",
+       "keywords": ["how do i", "how to", "how can i", "configure", "set up", "setup", "steps for", "documentation"]},
+      {"category": "feature_idea",
+       "keywords": ["feature request", "would like okta to", "it would be great", "please add", "idea",
+                    "wish okta"]},
+      {"category": "discussion",
+       "keywords": ["best practice", "how do other", "share experience", "what do others", "recommendations from"]}
+    ],
+    "category_resources": {
+      "security_incident": "SUPPORT_CASE",
+      "bug": "SUPPORT_CASE",
+      "how_to": "OKTA_HELP_CENTER",
+      "feature_idea": "OKTA_COMMUNITY",
+      "discussion": "OKTA_COMMUNITY"
+    },
+    "outage_rule": {"listed_on_status_page": "OKTA_STATUS_PAGE", "not_listed": "SUPPORT_CASE",
+                    "not_checked": "SUPPORT_CASE"},
+    "unclassified_resource": "SUPPORT_CASE",
+    "resources": {
+      "OKTA_STATUS_PAGE": {"where": "status.okta.com",
+                           "use_for": "Service-wide incidents and maintenance: check it first, subscribe to updates, follow the incident until it is resolved."},
+      "OKTA_HELP_CENTER": {"where": "help.okta.com (product documentation) and the Okta Help Center knowledge base at support.okta.com",
+                           "use_for": "How-to and configuration questions: product documentation and knowledge base articles."},
+      "OKTA_COMMUNITY": {"where": "Okta Community and Okta Ideas, reached from the Okta Help Center",
+                         "use_for": "Feature ideas (posted to Okta Ideas, where others vote) and peer discussion of best practices."},
+      "SUPPORT_CASE": {"where": "Open a case from the Okta Help Center (support.okta.com) or the Admin Console Help menu",
+                       "use_for": "A problem in YOUR org: a bug, an outage that the status page does not show, or a security incident."}
+    },
+    "case_fields": {
+      "base": ["org_id", "time_window", "system_log_evidence", "impact"],
+      "bug": ["steps_to_reproduce"],
+      "outage": ["affected_users"],
+      "security_incident": ["affected_accounts", "containment_done"],
+      "unclassified": []
+    },
+    "case_field_labels": {
+      "org_id": "Okta org ID and org URL (for example example.okta.com)",
+      "time_window": "time window with time zone (UTC)",
+      "system_log_evidence": "System Log evidence: event uuids or transaction IDs, the filter used, exported events",
+      "impact": "business impact: how many users, which apps, production or preview org",
+      "steps_to_reproduce": "steps to reproduce, expected versus actual result, screenshots or HAR file",
+      "affected_users": "affected users or groups and whether every user is affected",
+      "affected_accounts": "affected accounts, tokens or apps",
+      "containment_done": "containment already taken (sessions cleared, token revoked, admin suspended)"
+    },
+    "severity": {"security_incident": "critical", "outage": "critical", "bug": "normal", "unclassified": "normal",
+                 "_note": "Generic severity labels; check Okta's current support case priority definitions in the Okta Help Center."},
+    "concepts": {
+      "System Log": "Okta's record of every org event (sign-ins, admin changes, provisioning, policy decisions), searchable in the Admin Console and through the System Log API.",
+      "eventType": "The dotted name of what happened in an event, such as user.session.start or group.user_membership.add.",
+      "actor": "Who or what performed the action in an event: a user, an admin, an app or Okta itself.",
+      "target": "The list of objects an event acted on, such as the user, the group and the app instance.",
+      "outcome": "The result of an event (SUCCESS, FAILURE, ALLOW, DENY and others) with an optional reason explaining a failure.",
+      "filter expression": "A query such as eventType eq \"user.account.lock\" and outcome.result eq \"SUCCESS\" that narrows the System Log to matching events.",
+      "status.okta.com": "Okta's public service status page, which shows service-wide incidents and planned maintenance.",
+      "org ID": "The unique identifier of an Okta org, which Okta Support needs to find your tenant."
+    },
+    "finding_definitions": {
+      "NOT_ASSIGNED_TO_APP": "No current assignment of the app to the user, directly or through a group, appears in the log.",
+      "PROVISIONING_FAILED": "The app is assigned, but pushing the user's account to the app failed.",
+      "DENIED_BY_POLICY": "A sign-on (authentication) policy evaluation denied access to the app.",
+      "LOCKED_OUT": "The account was locked after too many failed sign-in attempts.",
+      "USER_DEACTIVATED": "The user is deactivated or suspended, so no app can be opened.",
+      "CHANGE_BY_ADMIN": "A successful change event names the actor who made the change.",
+      "NO_EVIDENCE": "No event in the log explains the ticket: widen the search or escalate, never close it as fixed."
+    }
+  }
+}

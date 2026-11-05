@@ -1,0 +1,39 @@
+{
+  "lab": 42,
+  "ticket": "INC-44201",
+  "type": "Incident",
+  "priority": "P2",
+  "requested_by": "Marisol Vega, IT Service Desk Lead",
+  "title": "Answer seven open access tickets from the Okta System Log and route six issues to the right Okta resource",
+  "situation": "It has been a busy morning at Larkspur Example Co. The service desk has seven tickets it cannot close: people who cannot open Workday, Salesforce, Zoom, Slack and Box, a locked account, and a question about who put Sam in the Admins group. At the same time six issues are waiting to be sent to Okta: a sign-in outage, an HTTP 500 error that only hits this company, a configuration question, a Profile Editor bug, a feature wish and a suspicious API token. You have 29 System Log events from the morning to work with.",
+  "your_task": [
+    "Run the three saved System Log filter expressions and say which ones return events, which return nothing and which are broken.",
+    "For each 'why can't this person open this app?' ticket, check in order: is the user deactivated, locked out, not assigned to the app, failed to provision, or denied by a sign-on policy.",
+    "Name the administrator whose change actually succeeded, not the one whose attempt failed, and give the time of the lockout with the failed sign-ins before it.",
+    "Send every issue to the right place: status.okta.com, the Okta Help Center and documentation, the Okta Community and Okta Ideas, or a support case.",
+    "Make sure every support case has the org ID, a time window, System Log evidence and the business impact before it is submitted."
+  ],
+  "why_it_matters": "The System Log is the evidence for every identity question: guessing wastes hours and can blame the wrong person. Sending an issue to the wrong place wastes even more: a duplicate case during a public outage, or a status-page watch for a problem only your org has.",
+  "done_when": [
+    "Every query has a result (MATCHES, NO_MATCH or INVALID_EXPRESSION) and a broken filter returned no events.",
+    "Every ticket has a finding with the event IDs (uuids) that prove it, or is clearly marked NO_EVIDENCE and kept open.",
+    "Every issue has a resource, and every support case is marked READY or INCOMPLETE with the missing items listed."
+  ],
+  "glossary": {
+    "System Log": "Okta's record of everything that happens in an org, such as sign-ins, admin changes, provisioning and policy decisions.",
+    "Event type (eventType)": "The dotted name of what happened, for example user.account.lock for a lockout.",
+    "Actor and target": "The actor is who or what did the action; the targets are the objects it was done to, such as a user, a group or an app.",
+    "Outcome": "The result of the event, such as SUCCESS, FAILURE, ALLOW or DENY, with a reason when it failed.",
+    "Filter expression": "A search such as eventType eq \"user.account.lock\" that shows only matching events; eq means equals, sw means starts with and co means contains.",
+    "Provisioning": "Okta creating or updating the user's account inside the app, for example through SCIM (System for Cross-domain Identity Management) or an app API.",
+    "Org ID": "The unique identifier of your Okta organization (org), which Okta Support needs to find it.",
+    "Single sign-on (SSO)": "Signing in once to Okta and then opening apps without signing in again."
+  },
+  "job_roles": [
+    "Okta Administrator",
+    "IAM Analyst",
+    "Identity Support Engineer",
+    "Service Desk Analyst (Tier 2)"
+  ],
+  "talking_point": "Worked 29 Okta System Log events to close 6 of 7 access tickets with evidence (one each of not assigned, provisioning failed, denied by policy, locked out, deactivated and an admin change, with the failed attempt by another admin ruled out), kept 1 ticket open as no evidence, caught 1 broken filter before it was trusted, and routed 6 issues: 1 to status.okta.com, 1 to the Help Center, 1 to Okta Ideas and 3 support cases, of which 2 were ready and 1 still needed a time window, System Log evidence and steps to reproduce."
+}

@@ -1,0 +1,39 @@
+{
+  "lab": 40,
+  "ticket": "INC-40217",
+  "type": "Incident",
+  "priority": "P2",
+  "requested_by": "Grace Whitfield, IT Security Manager, Larkspur Freight Co",
+  "title": "Explain Monday's sign-in results and prove the Okta sign-on policies work as designed",
+  "situation": "Larkspur Freight Co moved to Okta Identity Engine (OIE) last month. On Monday the help desk received complaints: an administrator abroad was locked out, a new admin was asked to set up Okta Verify, a contractor could not open the finance system, and one sales rep was refused while another was let in without a password. Security wants each of the 16 sign-in attempts explained by the exact policy and rule that decided it before anyone changes a setting.",
+  "your_task": [
+    "Check every attempt against the network zones first: requests from an active blocklist zone, such as known bad IP addresses or anonymizing services like Tor, are refused before authentication.",
+    "Find the global session policy (GSP) that applies to the user's groups and the first rule that matches; note the primary factor, whether multifactor authentication (MFA) is required and the session lifetime.",
+    "Find the first matching rule of the app's authentication policy, checking groups, network zone, device registration, device management and device assurance, and note the assurance it asks for.",
+    "Combine both policies, compare them with the authenticators the user has enrolled and presented, and record the outcome, including whether the enrollment policy lets the user enroll the missing authenticator."
+  ],
+  "why_it_matters": "In OIE an app sign-in must satisfy both the global session policy and the app's authentication policy, and policies are checked in priority order with the first matching rule winning. A rule in the wrong place, a deactivated blocklist zone or an enrollment policy that disables the only phishing-resistant authenticator can either lock out the people who need access or let an attacker in with a stolen password.",
+  "done_when": [
+    "All 16 attempts have an outcome: ACCESS_GRANTED, MFA_REQUIRED_SATISFIED, DENIED_BY_GLOBAL_SESSION_POLICY, DENIED_BY_AUTHENTICATION_POLICY, DENIED_BLOCKED_ZONE, ENROLLMENT_REQUIRED or INSUFFICIENT_AUTHENTICATORS.",
+    "Each attempt names the blocklist zone, or the global session policy rule and the authentication policy rule, that decided it.",
+    "Every enrollment outcome lists the authenticators the user may enroll.",
+    "The deactivated blocklist zone found in the logs is reported to Security."
+  ],
+  "glossary": {
+    "Okta Identity Engine (OIE)": "The current Okta platform, where app access is controlled by global session and authentication policies.",
+    "Network zone": "A named list of IP ranges, or of countries, autonomous system numbers (ASNs) and anonymizer types, used in policy rules or as a blocklist.",
+    "Global session policy (GSP)": "The org-wide policy, assigned to groups, that controls how an Okta session is created and how long it lasts.",
+    "Authentication policy": "The policy attached to an app that decides who may open it and with what level of assurance.",
+    "Authenticator enrollment policy": "The policy that sets each authenticator as required, optional or disabled for a group.",
+    "Factor types": "Knowledge (something you know), possession (something you have) and inherence (something you are).",
+    "Phishing-resistant authenticator": "An authenticator, such as Okta FastPass or a FIDO2 (WebAuthn) security key, bound to the real site so a fake page cannot replay it.",
+    "Device assurance policy": "A set of device requirements, such as minimum operating system version and disk encryption, that a device must meet."
+  },
+  "job_roles": [
+    "Okta Administrator",
+    "Identity and Access Management (IAM) Engineer",
+    "Security Operations Analyst",
+    "Help Desk Team Lead"
+  ],
+  "talking_point": "Traced 16 Okta sign-in attempts to the exact policy and rule that decided each one: 5 granted (4 after multifactor authentication), 7 denied (2 by blocklist zones before authentication, 3 by the global session policy and 2 by app authentication policies), 2 users prompted to enroll a missing authenticator and 2 who presented the wrong authenticators, and found a deactivated blocklist zone that no longer protects the retired VPN range."
+}

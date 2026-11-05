@@ -45,6 +45,13 @@ from . import (
     lab33_authentication_methods,
     lab34_global_secure_access,
     lab35_tenant_delegation,
+    lab36_okta_groups,
+    lab37_okta_admin_roles,
+    lab38_okta_app_integration,
+    lab39_okta_mapping_offboarding,
+    lab40_okta_policy_evaluator,
+    lab41_okta_password_recovery,
+    lab42_okta_system_log,
 )
 
 # lab number -> (module, default data file)
@@ -85,6 +92,14 @@ LABS = {
     33: (lab33_authentication_methods, "sample_authentication_methods.json"),
     34: (lab34_global_secure_access, "sample_global_secure_access.json"),
     35: (lab35_tenant_delegation, "sample_tenant_delegation.json"),
+    # Okta Certified Professional labs (COURSES = ("okta",))
+    36: (lab36_okta_groups, "sample_okta_groups.json"),
+    37: (lab37_okta_admin_roles, "sample_okta_admin_roles.json"),
+    38: (lab38_okta_app_integration, "sample_okta_app_integration.json"),
+    39: (lab39_okta_mapping_offboarding, "sample_okta_mapping_offboarding.json"),
+    40: (lab40_okta_policy_evaluator, "sample_okta_policy_evaluator.json"),
+    41: (lab41_okta_password_recovery, "sample_okta_password_recovery.json"),
+    42: (lab42_okta_system_log, "sample_okta_system_log.json"),
 }
 
 

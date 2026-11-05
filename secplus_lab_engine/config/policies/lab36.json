@@ -1,0 +1,32 @@
+{
+  "okta_groups": {
+    "_comment": "Lab 36 (Okta Professional 1.2 / 1.1 / 5.2). Base profile attributes follow the Okta user profile (login, email, firstName and lastName are required). Group rule behaviour follows the Okta Help Center 'About group rules' (OIE) page, checked 2026-11-05: rules can populate Okta and Active Directory groups but can't assign users to admin groups, and a group already targeted by a rule can't be granted admin privileges; rules can exclude users, inactive rules assign nobody, manually added members are not removed by rules. Deactivated users keep their group memberships until deleted (deactivation removes app assignments). Which user statuses group rules evaluate is kept as a list here: re-check it against the Help Center (deactivated users are not evaluated; the other statuses are this simulation's assumption).",
+    "base_attributes": {
+      "login":        {"type": "string", "required": true},
+      "email":        {"type": "string", "required": true},
+      "firstName":    {"type": "string", "required": true},
+      "lastName":     {"type": "string", "required": true},
+      "department":   {"type": "string"},
+      "title":        {"type": "string"},
+      "countryCode":  {"type": "string"},
+      "employeeType": {"type": "string"},
+      "city":         {"type": "string"},
+      "mobilePhone":  {"type": "string"},
+      "manager":      {"type": "string"}
+    },
+    "evaluated_statuses": ["ACTIVE", "STAGED", "PROVISIONED", "RECOVERY", "PASSWORD_EXPIRED", "LOCKED_OUT",
+                           "SUSPENDED"],
+    "create_status_default": "STAGED",
+    "create_status_active": "ACTIVE",
+    "concepts": {
+      "Universal Directory": "Okta's store of every user profile, holding the base attributes and any custom attributes, whatever system the user came from.",
+      "custom attribute": "An attribute an administrator adds to the user profile in the Profile Editor, with a fixed data type such as string, boolean, integer or array.",
+      "profile schema": "The list of attributes a profile may hold, with each one's data type and whether it is required; values that break it are rejected.",
+      "admin group": "A group that holds an administrator role; group rules can't add users to it, and a group already targeted by a rule can't be given admin privileges.",
+      "group rule": "A saved condition that adds every evaluated user whose profile matches it to one or more Okta groups, and removes them when they stop matching.",
+      "Okta Expression Language": "The small expression syntax used in group rules and mappings, such as user.department == \"Sales\" AND String.startsWith(user.title, \"VP\").",
+      "rule exclusion": "A list of named users that a group rule must never add, even when their profile matches the expression.",
+      "manual assignment": "Adding a person to a group by hand; rules do not remove such a member, so an administrator must remove them when they no longer need access."
+    }
+  }
+}

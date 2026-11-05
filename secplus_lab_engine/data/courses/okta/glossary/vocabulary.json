@@ -1,0 +1,1470 @@
+{
+  "part": "Vocabulary",
+  "entries": [
+    {
+      "term": "Access testing tool",
+      "kind": "term",
+      "definition": "An Admin Console simulator where admins pick a person, app and context like zone or device to see which policies and rules would apply and whether access is granted.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Account unlock",
+      "kind": "term",
+      "definition": "A self-service option, permitted by the password policy, letting people who hit the failed-attempt threshold regain access by verifying with an allowed method instead of calling the help desk.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "ACS URL",
+      "kind": "term",
+      "definition": "The Assertion Consumer Service endpoint at the service provider where Okta posts the SAML response, entered in Okta as the Single sign-on URL; a wrong value sends assertions to the wrong place.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Activation email",
+      "kind": "term",
+      "definition": "The message Okta sends a newly created person with a time-limited link to set a password and enroll required factors, moving the account out of pending state once completed.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "5.1"
+      ]
+    },
+    {
+      "term": "Active status",
+      "kind": "term",
+      "definition": "The normal lifecycle state of an account that has completed activation and can sign in and reach assigned apps, subject to policies; most admin actions such as suspend or reset start from here.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.2"
+      ]
+    },
+    {
+      "term": "Actor",
+      "kind": "term",
+      "definition": "The log field naming who or what performed the action, such as a person, admin, API token or Okta system process.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Admin Console",
+      "kind": "term",
+      "definition": "Okta's web interface for administrators, reached from the org's admin URL, where they manage people, groups, apps, policies, authenticators, logs and reports.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "6.1"
+      ]
+    },
+    {
+      "term": "API token",
+      "kind": "term",
+      "definition": "A secret string an admin creates to call Okta's management APIs; it inherits the creator's admin permissions and expires automatically after 30 days of no use.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "App assignment",
+      "kind": "term",
+      "definition": "The link granting a person or group access to an app integration; it makes the tile appear, allows sign-on, and triggers account creation when provisioning is enabled.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "5.2"
+      ]
+    },
+    {
+      "term": "App group",
+      "kind": "term",
+      "definition": "A group imported from a connected application such as Google Workspace or Microsoft 365; its membership is mastered in that app, so admins view it in Okta but cannot edit members there.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "App import",
+      "kind": "term",
+      "definition": "Pulling accounts and groups from a connected app or directory into Okta, either on a schedule or on demand, so they can be matched to existing people or created as new ones.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "App integration",
+      "kind": "term",
+      "definition": "The configured connection between Okta and one application, holding its sign-on method, settings, assignments and any provisioning options, so people can reach that app through Okta.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "App integration deactivation",
+      "kind": "term",
+      "definition": "Turning off an app in Okta so its tile disappears and SSO and provisioning stop for all assigned people, while the configuration is kept and can be reactivated later.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "App session",
+      "kind": "term",
+      "definition": "The separate logged-in state an application keeps after accepting Okta's SSO; ending the person's Okta sign-in does not always end it unless single logout or app revocation applies.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "App unassignment",
+      "kind": "term",
+      "definition": "Removing a person or group from an app integration, which removes the tile and, with provisioning, disables or deletes the downstream account depending on the app's settings.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "5.2"
+      ]
+    },
+    {
+      "term": "App user profile",
+      "kind": "term",
+      "definition": "The per-app set of attributes Okta keeps for an assigned person, such as role or license, which feeds that app's account; its values come from mappings or group assignment settings.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "App visibility",
+      "kind": "term",
+      "definition": "Integration settings that hide an app's tile from the dashboard or mobile app while keeping the assignment, used for apps that should only be launched from the app itself.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "App-to-Okta mapping",
+      "kind": "term",
+      "definition": "The inbound direction, applied during imports, where values from an app or directory profile populate Okta profile attributes; it matters most when that app is the source of truth.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Application Administrator",
+      "kind": "term",
+      "definition": "A built-in role that can add, configure and assign app integrations, either for all apps or a chosen subset, without broader rights over people or org-wide security settings.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "2.1"
+      ]
+    },
+    {
+      "term": "Application Usage report",
+      "kind": "term",
+      "definition": "A prebuilt summary showing how often people sign in to each app through Okta, useful for license reviews and spotting unused integrations.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Application username format",
+      "kind": "term",
+      "definition": "The setting that decides which value Okta sends to an app as the person's account name, such as Okta username, email, a prefix or a custom expression.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Apply mapping on create and update",
+      "kind": "term",
+      "definition": "A per-attribute option deciding whether a mapped value is written whenever the profile changes or only when the account is first created, so later manual edits are not overwritten.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Assurance level",
+      "kind": "term",
+      "definition": "The verification strength an app sign-in rule demands, such as any one factor type, any two factor types, or phishing-resistant and hardware-protected possession.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Attribute data type",
+      "kind": "term",
+      "definition": "The kind of value a profile field holds, such as string, boolean, number, integer or array; it is fixed at creation and mappings must produce a compatible value.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Attribute enumeration",
+      "kind": "term",
+      "definition": "A setting on a custom field that restricts allowed values to a defined list, shown to admins as a drop-down, keeping data consistent for rules and mappings.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Attribute mapping",
+      "kind": "term",
+      "definition": "A rule defining how a value moves between an app or directory profile and the Okta profile, either copied directly or transformed with an expression, during import or provisioning.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Attribute statement",
+      "kind": "term",
+      "definition": "A SAML setting that adds a named value taken from the person's profile or an expression, such as department or email, into the assertion so the app receives extra details.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Attribute user permission",
+      "kind": "term",
+      "definition": "A field setting of Hide, Read only or Read-Write that controls whether people can see or change that value about themselves in their own account settings.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "1.1"
+      ]
+    },
+    {
+      "term": "Attribute-level mastering",
+      "kind": "term",
+      "definition": "A configuration that lets different attributes of one person come from different sources, such as job title from HR and phone from Okta, instead of one system owning the whole record.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Audience restriction",
+      "kind": "term",
+      "definition": "The SAML condition naming the service provider entity the assertion is intended for, set as the Audience URI in Okta; a mismatch with the app's entity ID makes the app reject the sign-in.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Authentication policy",
+      "kind": "term",
+      "definition": "Also called an app sign-in policy: a set of rules evaluated each time a person opens a specific app, deciding allowed or denied access and the factors required; the org-wide sign-in policy is separate.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Authenticator",
+      "kind": "term",
+      "definition": "A method a person uses to prove identity, such as password, email, phone, Okta Verify, a security key or security question; admins enable these and control their use in policies.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Authenticator enrollment policy",
+      "kind": "term",
+      "definition": "A policy, assigned to groups, deciding which sign-in methods people must, may or cannot set up and when they are prompted to enroll them; it does not decide when methods are used.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Base attribute",
+      "kind": "term",
+      "definition": "A built-in field Okta defines for every person, such as login, firstName, lastName or email; admins cannot delete these, though some optional ones can be made required or hidden.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Blocklist zone",
+      "kind": "term",
+      "definition": "A network zone whose sources Okta refuses before any authentication or policy processing, used to stop known bad IP ranges or locations from attempting sign-in.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Bookmark app",
+      "kind": "term",
+      "definition": "A simple integration that only places a link tile on the dashboard pointing to a URL, with no SSO, used to give people quick, assignment-controlled access to a web page.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Catch-all rule",
+      "kind": "term",
+      "definition": "The default last rule in each policy that applies when no rule above it matches; it cannot be deleted or moved, though some of its settings can be edited.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Clear user sessions",
+      "kind": "term",
+      "definition": "An admin action that ends a person's active Okta sign-ins on all devices, optionally revoking OAuth tokens, used after a suspected compromise or a role change.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Client ID",
+      "kind": "term",
+      "definition": "The public identifier Okta issues for an OpenID Connect or OAuth app integration, which the app sends with authorization requests so Okta knows which configuration and policies apply.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Common password check",
+      "kind": "term",
+      "definition": "A password policy option that rejects new credentials found in Okta's list of widely used or breached passwords, even if they meet length and character rules.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Convert assignment",
+      "kind": "term",
+      "definition": "An app option that changes direct per-person grants into group-based ones, so access then follows group membership and removal is managed centrally.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "CSV import",
+      "kind": "term",
+      "definition": "A bulk onboarding option in the Admin Console where an admin uploads a spreadsheet file of people and their attributes so Okta creates many accounts at once instead of adding them one by one.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Custom admin role",
+      "kind": "term",
+      "definition": "An admin-built bundle of granular permissions, such as view users or manage group membership, that is paired with a resource set when assigned so a delegate gets exactly the needed rights.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Custom attribute",
+      "kind": "term",
+      "definition": "An admin-defined field added in Profile Editor, such as costCenter or badgeNumber, to hold organization-specific data that Okta's built-in fields do not cover and that rules or mappings can then reference.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Deactivated status",
+      "kind": "term",
+      "definition": "The state of an account whose access has been revoked: sessions end, app assignments are removed and deprovisioning runs downstream; unlike a temporary hold, it is the required step before deletion.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "Default relay state",
+      "kind": "term",
+      "definition": "An optional page address included with IdP-initiated SAML sign-ons that tells the app where to land the person after accepting the assertion, instead of its default home page.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Delegated authentication",
+      "kind": "term",
+      "definition": "A setup where Okta forwards a person's password check to Active Directory or LDAP through an agent, so the on-premises directory stays the authority for credentials and password policy.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "4.4"
+      ]
+    },
+    {
+      "term": "Deprovisioning",
+      "kind": "term",
+      "definition": "The removal or disabling of a person's downstream app accounts when they lose access in Okta, through unassignment or deactivation, so former staff keep no lingering access.",
+      "domain": "3",
+      "objectives": [
+        "3.2",
+        "2.2"
+      ]
+    },
+    {
+      "term": "Device assurance policy",
+      "kind": "term",
+      "definition": "A set of device posture requirements, such as minimum OS version, disk encryption, screen lock and no jailbreak, that app sign-in rules can require before granting access.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Directory group",
+      "kind": "term",
+      "definition": "A group imported from Active Directory or LDAP through an agent; members are maintained on-premises and synced into Okta, where the group can still be used for app assignments and policies.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Dynamic zone",
+      "kind": "term",
+      "definition": "A network zone defined by attributes rather than addresses, such as country, region, ASN or anonymizing proxy and Tor use, letting policies treat risky origins differently.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Early Access feature",
+      "kind": "term",
+      "definition": "A new capability Okta offers before general availability, which admins can turn on themselves in the Features settings to try ahead of the full rollout.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Email authenticator",
+      "kind": "term",
+      "definition": "A method that sends a one-time code or magic link to the person's primary email, commonly used for account recovery and activation, though it is a weaker possession proof.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.4"
+      ]
+    },
+    {
+      "term": "End-User Settings",
+      "kind": "term",
+      "definition": "The page where people manage their own profile fields, change their credential, and add or remove sign-in methods, subject to policies.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "Event hook",
+      "kind": "term",
+      "definition": "An outbound HTTP call Okta makes to an external service when chosen events occur, letting other systems react automatically, such as notifying when an account is deactivated.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Event type",
+      "kind": "term",
+      "definition": "The dotted identifier categorizing each log entry, such as user.session.start or user.lifecycle.deactivate, used to filter searches and subscribe hooks.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Everyone group",
+      "kind": "term",
+      "definition": "The built-in group Okta maintains that automatically contains every person in the org; it cannot be edited and is often used as the default target of policies and broad app assignments.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Expire password",
+      "kind": "term",
+      "definition": "An admin action that forces a person to choose a new credential at next sign-in while the current one still works once; unlike a reset, no email link is involved.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "4.4"
+      ]
+    },
+    {
+      "term": "FIDO2 (WebAuthn)",
+      "kind": "term",
+      "definition": "An open standard for public-key sign-in using security keys or platform biometrics like Windows Hello and Touch ID, enabled in Okta as a strong, phishing-resistant method.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Filter expression",
+      "kind": "term",
+      "definition": "A query written in Okta's SCIM-style syntax, such as eventType eq \"user.session.start\", to narrow log results to specific events, people, outcomes or fields.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Global session policy",
+      "kind": "term",
+      "definition": "The org-wide policy evaluated when someone signs in to Okta itself, setting the primary factor, whether MFA is required to establish the Okta session, and lifetime and idle limits; per-app access is decided separately.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "Google Authenticator",
+      "kind": "term",
+      "definition": "A third-party app that generates time-based one-time passcodes after scanning an enrollment QR code; Okta supports it as a possession method without push capability.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Group Administrator",
+      "kind": "term",
+      "definition": "A built-in role that can edit profiles, activate, unlock and reset credentials for people within the groups it is scoped to, used to delegate day-to-day account work for one team or region.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Group attribute statement",
+      "kind": "term",
+      "definition": "A SAML setting that sends the names of a person's groups, filtered by a starts-with, contains or regex condition, in the assertion so the app can grant roles from membership.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Group priority",
+      "kind": "term",
+      "definition": "The ordering of groups assigned to an app; when a person reaches the app through several groups, the highest-priority group's app attribute values are used.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Group push",
+      "kind": "term",
+      "definition": "A provisioning feature that copies selected Okta groups and their memberships into a connected app, keeping the downstream group in sync as members change in Okta.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "1.2"
+      ]
+    },
+    {
+      "term": "Group rule",
+      "kind": "term",
+      "definition": "An automation that places people into one or more Okta groups when an expression on their profile attributes or existing memberships is true, and removes them when it stops being true.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Help Desk Administrator",
+      "kind": "term",
+      "definition": "A built-in role limited to support tasks such as resetting passwords and factors, unlocking accounts and clearing sessions, optionally scoped to selected groups, without rights to change configuration.",
+      "domain": "1",
+      "objectives": [
+        "1.3",
+        "5.1"
+      ]
+    },
+    {
+      "term": "ID token",
+      "kind": "term",
+      "definition": "A signed JSON Web Token returned in an OpenID Connect flow that tells the client app who signed in, when, and with which claims, used to establish the person's identity in that app.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Identity provider metadata",
+      "kind": "term",
+      "definition": "An XML document Okta generates for a SAML app containing its issuer, sign-on URL and signing certificate, which the admin uploads to the service provider to configure trust.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "IdP-initiated flow",
+      "kind": "term",
+      "definition": "A SAML sign-on that begins at Okta, for example by clicking a tile on the dashboard, after which Okta sends an unsolicited assertion to the app without any prior request from it.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Import matching rule",
+      "kind": "term",
+      "definition": "The criteria, such as identical email or username, that Okta uses during an import to link incoming accounts to existing people, with options to confirm matches automatically or manually.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Individual assignment",
+      "kind": "term",
+      "definition": "Granting an app to one person directly rather than through a group; it persists when group membership changes, a frequent cause of unexpected remaining access.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Inherence factor",
+      "kind": "term",
+      "definition": "A proof based on something the person is, such as a fingerprint or face scan, typically verified on-device through Okta Verify biometrics or WebAuthn platform methods.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "IP zone",
+      "kind": "term",
+      "definition": "A network zone defined by specific gateway addresses or CIDR ranges, plus any trusted proxies, typically representing corporate offices or VPN egress points.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Knowledge factor",
+      "kind": "term",
+      "definition": "A proof based on something the person knows, such as a password or answer to a security question; easiest to steal, so policies usually pair it with another type.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "Locked out status",
+      "kind": "term",
+      "definition": "The state an account enters after too many failed sign-in attempts exceed the password policy threshold; it stays blocked until the auto-unlock period ends, the person self-unlocks, or an admin unlocks it.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "4.4"
+      ]
+    },
+    {
+      "term": "Lockout threshold",
+      "kind": "term",
+      "definition": "The number of consecutive failed sign-in attempts allowed before the account is blocked, set in the password policy along with optional automatic unlock time.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Log streaming",
+      "kind": "term",
+      "definition": "A feature that sends System Log events in near real time to a security tool such as Splunk Cloud or Amazon EventBridge, so they can be kept beyond the 90-day retention.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Mapping preview",
+      "kind": "term",
+      "definition": "A Profile Editor feature that shows the values a chosen person would receive under the current mapping expressions, letting admins test transformations before saving them.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Maximum password age",
+      "kind": "term",
+      "definition": "The number of days before a credential must be changed; once reached the account is forced to choose a new one at next sign-in, and a warning period can precede it.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "MFA Usage report",
+      "kind": "term",
+      "definition": "A prebuilt summary listing which sign-in methods each person has enrolled, used to find people with no strong method before tightening policies.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Minimum password age",
+      "kind": "term",
+      "definition": "A setting requiring a period to pass before a credential can be changed again, preventing people from cycling quickly through changes to get back an old one.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "NameID",
+      "kind": "term",
+      "definition": "The SAML subject element that tells the service provider which account is signing in; Okta fills it from the app username in a chosen format, such as email address or unspecified.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Network zone",
+      "kind": "term",
+      "definition": "An admin-defined set of network locations, by IP range or by country, ASN and proxy type, used in policy conditions, ThreatInsight exemptions and blocklists.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Number challenge",
+      "kind": "term",
+      "definition": "An Okta Verify push option that shows a number on the sign-in screen which the person must select in the app, defeating approval fatigue attacks.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Offboarding",
+      "kind": "term",
+      "definition": "The process of removing a departing person's access: deactivating or suspending the account, ending sessions, reclaiming app accounts and licenses, and keeping log evidence for audit.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "Okta AD agent",
+      "kind": "term",
+      "definition": "A lightweight Windows service installed in the customer network that connects Okta to Active Directory, importing people and groups and handling delegated authentication against domain controllers.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "1.2"
+      ]
+    },
+    {
+      "term": "Okta Browser Plugin",
+      "kind": "term",
+      "definition": "An extension for desktop browsers that submits stored credentials into SWA app login pages and can prompt people to save new ones; missing or outdated plugins are a common cause of SWA failures.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Okta Community",
+      "kind": "term",
+      "definition": "Okta's discussion forum where customers, partners and staff share questions and answers about configuration, useful for practical advice beyond official docs.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Okta End-User Dashboard",
+      "kind": "term",
+      "definition": "The portal people see after signing in, showing tiles for every app assigned to them so they can launch SSO, plus links to settings and app catalog requests.",
+      "domain": "2",
+      "objectives": [
+        "2.2",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Okta Expression Language",
+      "kind": "term",
+      "definition": "Okta's syntax for referencing and transforming values, for example user.department or String.substringBefore(user.email, \"@\"), used in mappings, group rules, username formats and claims.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "1.2"
+      ]
+    },
+    {
+      "term": "Okta FastPass",
+      "kind": "term",
+      "definition": "A passwordless capability of Okta Verify that uses a credential bound to the registered device, optionally with biometrics, to sign people in; it resists phishing and can supply device context.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "Okta group",
+      "kind": "term",
+      "definition": "A group created and managed directly in the Admin Console, either by hand or by group rules, that admins use to assign apps, scope policies and push memberships to downstream apps.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Okta Help Center",
+      "kind": "term",
+      "definition": "Okta's documentation and support portal with product guides, knowledge articles, release notes and case submission; the reference allowed during the performance exam.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Okta Integration Network",
+      "kind": "term",
+      "definition": "Okta's catalog of thousands of prebuilt, vendor-tested app connectors with SSO and often provisioning already defined, letting admins add a common app without building the configuration from scratch.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Okta Sign-In Widget",
+      "kind": "term",
+      "definition": "The embeddable JavaScript sign-in form Okta uses on its hosted page and that developers embed in apps, collecting identifier, password and factor responses.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Okta status page",
+      "kind": "term",
+      "definition": "Okta's public service health site, status.okta.com, showing current incidents, maintenance and history per cell, checked first to rule out a vendor outage.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Okta username",
+      "kind": "term",
+      "definition": "The unique login identifier a person types to sign in, stored in email format in the login attribute; it need not be a real mailbox and is often formatted from directory data.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Okta Verify",
+      "kind": "term",
+      "definition": "Okta's mobile and desktop app that verifies people through push notifications, one-time codes or device-bound credentials, and underpins passwordless sign-in.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Okta-to-app mapping",
+      "kind": "term",
+      "definition": "The outbound direction, applied when provisioning, where Okta profile values populate the app's account fields; it controls what the downstream app receives rather than what Okta stores.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "Org2Org",
+      "kind": "term",
+      "definition": "An OIN integration that links one Okta org to another, letting a hub org provide SSO into a spoke org and provision people and groups to it.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "Organization Administrator",
+      "kind": "term",
+      "definition": "A built-in role that manages people, groups, group rules and most org settings, but in Okta's role comparison cannot add or configure app integrations or manage Super Admin role holders.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Outcome",
+      "kind": "term",
+      "definition": "The log field recording whether an event succeeded, failed, was allowed, denied or challenged, plus a reason, key evidence when troubleshooting sign-in problems.",
+      "domain": "6",
+      "objectives": [
+        "6.1",
+        "5.1"
+      ]
+    },
+    {
+      "term": "Password complexity requirements",
+      "kind": "term",
+      "definition": "Password policy settings for minimum length and required character types, plus options to block parts of the username or first and last name.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Password expired status",
+      "kind": "term",
+      "definition": "The state of an account whose credential has passed its maximum age or was expired by an admin; the person can still sign in once with the old password but must change it immediately.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "4.4"
+      ]
+    },
+    {
+      "term": "Password history",
+      "kind": "term",
+      "definition": "A policy setting that remembers a number of previous credentials and blocks people from reusing them when they choose a new one.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Password policy",
+      "kind": "term",
+      "definition": "A group-assigned policy that sets credential complexity, age, history and lockout rules, plus rules controlling which recovery methods people may use to reset or unlock.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Password reset status",
+      "kind": "term",
+      "definition": "The state an account enters after an admin resets its credential: the old password stops working and the person must follow the emailed link or temporary password to choose a new one.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "5.1"
+      ]
+    },
+    {
+      "term": "Password vaulting",
+      "kind": "term",
+      "definition": "The Secure Web Authentication approach for apps without federation support, where Okta stores encrypted app credentials and the browser plugin fills them into the app's login form for the person.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Pending user action status",
+      "kind": "term",
+      "definition": "The state of an account that an admin has activated but the person has not finished setting up, because the activation link has not been used to set a password and enroll factors.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.2"
+      ]
+    },
+    {
+      "term": "Permission",
+      "kind": "term",
+      "definition": "A single granted action, such as editing profiles or managing app assignments, that is combined with others into a custom admin role to control exactly what a delegated admin can do.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Phishing-resistant authenticator",
+      "kind": "term",
+      "definition": "A method that cryptographically binds sign-in to the real Okta origin so stolen codes or proxy sites cannot reuse it, such as FIDO2 security keys or FastPass; policies can require it.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "Phone authenticator",
+      "kind": "term",
+      "definition": "A method delivering one-time codes by SMS or voice call to an enrolled number; convenient but vulnerable to SIM swapping and interception, so not phishing resistant.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Policy rule",
+      "kind": "term",
+      "definition": "A condition-and-action entry inside a policy, matching on factors like group, network zone, device or risk, and then allowing, denying or requiring certain verification.",
+      "domain": "4",
+      "objectives": [
+        "4.2",
+        "4.3"
+      ]
+    },
+    {
+      "term": "Possession factor",
+      "kind": "term",
+      "definition": "A proof based on something the person has, such as a phone with Okta Verify, a security key or an email inbox, used alongside other factor types to reach higher assurance.",
+      "domain": "4",
+      "objectives": [
+        "4.1",
+        "4.3"
+      ]
+    },
+    {
+      "term": "Preview org",
+      "kind": "term",
+      "definition": "A sandbox Okta tenant that receives each release before production, used to test configuration changes and new features without affecting real people.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Profile Editor",
+      "kind": "term",
+      "definition": "The Admin Console area where admins view and change the attribute schemas of Okta and of each app or directory, adding custom fields and opening the mappings between them.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Profile source",
+      "kind": "term",
+      "definition": "Formerly called the profile master: the directory or app, such as Active Directory or Workday, that owns a person's attributes and lifecycle, so edits made in Okta are overwritten and status changes follow that system.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Profile source priority",
+      "kind": "term",
+      "definition": "The ranking used when several apps or directories can supply the same person's profile, deciding which one wins; Okta takes data from the highest-ranked source the person is assigned to.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Provisioning",
+      "kind": "term",
+      "definition": "Automated lifecycle management in which Okta creates, updates and deactivates accounts in a connected app, usually via SCIM or an API connector, based on assignments and profile changes.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Provisioning task",
+      "kind": "term",
+      "definition": "An item on the Admin Console dashboard tasks list showing a failed create, update or deactivation in a connected app, which an admin can retry or dismiss after fixing the cause.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Push notification",
+      "kind": "term",
+      "definition": "An Okta Verify prompt sent to the enrolled phone asking the person to approve or deny a sign-in attempt, faster than typing codes but open to fatigue attacks.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Rate limit",
+      "kind": "term",
+      "definition": "A cap on how many API requests an org or endpoint may make per time window; exceeding it causes 429 errors and warnings in the System Log.",
+      "domain": "6",
+      "objectives": [
+        "6.1",
+        "6.2"
+      ]
+    },
+    {
+      "term": "Re-authentication frequency",
+      "kind": "term",
+      "definition": "An app sign-in rule setting that decides how often a person must prove identity again for that app, from every attempt to never within the Okta session.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Read-only Administrator",
+      "kind": "term",
+      "definition": "A built-in role that can view nearly all settings, people, groups, apps and logs but cannot change anything, suited to auditors and staff who need visibility for troubleshooting.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Redirect URI",
+      "kind": "term",
+      "definition": "An allowed callback address registered on an OpenID Connect app where Okta returns codes or tokens after sign-in; requests using an unregistered address are refused.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Report",
+      "kind": "term",
+      "definition": "A prebuilt Admin Console summary of usage or security data, such as app usage, MFA enrollment or suspicious activity, that can be viewed or downloaded for audits.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Required attribute",
+      "kind": "term",
+      "definition": "A profile field marked mandatory, so accounts cannot be created or saved without a value; marking fields this way can break imports that lack the data.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Reset authenticators",
+      "kind": "term",
+      "definition": "An admin action that removes a person's enrolled factors, such as Okta Verify on a lost phone, so they must enroll again at next sign-in.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "Reset password",
+      "kind": "term",
+      "definition": "An admin action that invalidates a person's current credential and sends a recovery link or displays a temporary one, used when someone forgot it or it may be compromised.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Resource set",
+      "kind": "term",
+      "definition": "A named collection of objects, such as specific groups, apps or all users, that defines where a custom admin role's permissions apply when that role is assigned to someone.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Rule priority",
+      "kind": "term",
+      "definition": "The top-to-bottom order of rules in a policy; Okta applies the first rule whose conditions match and ignores the rest, so specific rules must sit above broad ones.",
+      "domain": "4",
+      "objectives": [
+        "4.3",
+        "5.1"
+      ]
+    },
+    {
+      "term": "SAML assertion",
+      "kind": "term",
+      "definition": "The signed XML message an identity provider sends to a service provider after sign-in, stating who the person is, when the statement is valid and which attributes apply.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "SAML tracer",
+      "kind": "term",
+      "definition": "A browser extension that captures and decodes SAML messages in transit, letting admins inspect NameID, audience, attributes and timestamps when an app rejects SSO.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Security question",
+      "kind": "term",
+      "definition": "A knowledge method where the person answers a prompt chosen at enrollment; weak because answers can be guessed or researched, it is mainly used for recovery.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Self-service password recovery",
+      "kind": "term",
+      "definition": "A feature letting people who forgot their credential reset it themselves after verifying with allowed methods like email, SMS or Okta Verify, reducing help desk calls.",
+      "domain": "4",
+      "objectives": [
+        "4.4"
+      ]
+    },
+    {
+      "term": "Session",
+      "kind": "term",
+      "definition": "The authenticated state Okta keeps after someone signs in, held in a browser cookie, letting them open apps without re-entering credentials until it expires or is revoked.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Session lifetime",
+      "kind": "term",
+      "definition": "Global session policy settings for maximum duration and idle time after which an Okta sign-in expires and the person must authenticate again.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "Signing certificate",
+      "kind": "term",
+      "definition": "The X.509 key pair Okta uses to sign SAML assertions so the app can verify they are genuine; when it is rotated the app must receive the new public key or sign-ins fail.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Single logout",
+      "kind": "term",
+      "definition": "An optional SAML feature where signing out of the app also sends a logout request to Okta, or the reverse, so both ends end the person's access together.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "SP-initiated flow",
+      "kind": "term",
+      "definition": "A SAML sign-on that begins at the application, which redirects the person to Okta with an authentication request and then accepts the assertion Okta returns to its ACS URL.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "5.2"
+      ]
+    },
+    {
+      "term": "Staged status",
+      "kind": "term",
+      "definition": "The first lifecycle state of a newly created account that has not been activated yet: no activation email has gone out and the person cannot sign in until an admin activates it.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.2"
+      ]
+    },
+    {
+      "term": "Super Administrator",
+      "kind": "term",
+      "definition": "The highest built-in admin role, with full control over every setting, including assigning admin roles to others; best practice keeps few holders and protects them with strong factors.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Support case",
+      "kind": "term",
+      "definition": "A ticket opened with Okta Support through the Help Center, with org details, logs and steps to reproduce, when an issue cannot be solved through docs or configuration.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Suspended status",
+      "kind": "term",
+      "definition": "A reversible hold, set only on an account that can currently sign in, that blocks sign-in while keeping app assignments and group memberships; unlike deactivation it triggers no deprovisioning.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "System Log",
+      "kind": "term",
+      "definition": "Okta's audit record of org activity, kept 90 days, showing sign-ins, policy decisions, admin changes and provisioning events; admins search it first when investigating failures.",
+      "domain": "6",
+      "objectives": [
+        "6.1",
+        "5.1"
+      ]
+    },
+    {
+      "term": "Target",
+      "kind": "term",
+      "definition": "The log field listing the objects acted upon in an event, such as the person, group, app or policy that was changed or accessed.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Temporary access code",
+      "kind": "term",
+      "definition": "A short-lived code an admin generates for a person who lost their factors, accepted as a sign-in method so they can get in and enroll new ones.",
+      "domain": "5",
+      "objectives": [
+        "5.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "ThreatInsight",
+      "kind": "term",
+      "definition": "An Okta security feature that uses sign-in activity across many customer orgs to spot suspicious IP addresses and can log or block their attempts before authentication, with exempt zones.",
+      "domain": "4",
+      "objectives": [
+        "4.3",
+        "6.1"
+      ]
+    },
+    {
+      "term": "Transaction ID",
+      "kind": "term",
+      "definition": "An identifier shared by all log events from one request, letting admins group related entries, such as every policy evaluation within a single sign-in attempt.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Universal Directory",
+      "kind": "term",
+      "definition": "Okta's cloud store of people and their profiles, which can combine identities pulled from Active Directory, LDAP, HR systems and apps into one place admins search, edit and use as the basis for access decisions.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "Unlock user",
+      "kind": "term",
+      "definition": "An admin or help desk action that clears the failed-attempt block on an account so the person can sign in again without waiting for auto-unlock.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Unsuspend",
+      "kind": "term",
+      "definition": "The admin action that returns a held account to normal sign-in with its existing apps and groups intact, used when a temporary block such as leave or investigation ends.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "User deletion",
+      "kind": "term",
+      "definition": "The permanent removal of an account and its profile from Okta, possible only after the account has been deactivated, and not reversible.",
+      "domain": "3",
+      "objectives": [
+        "3.2"
+      ]
+    },
+    {
+      "term": "User profile",
+      "kind": "term",
+      "definition": "The set of attribute values describing one person in Okta, such as name, login, email and department; admins edit it on the person's page and its values drive group rules, mappings and policy conditions.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Variable name",
+      "kind": "term",
+      "definition": "The internal key of a profile field, such as costCenter, used in expressions, the API and mappings; unlike the display name it cannot be changed after creation.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "lab": 36,
+  "ticket": "REQ-36114",
+  "type": "Service request",
+  "priority": "P3",
+  "requested_by": "Priya Okafor, IT Service Desk Manager, Harrowgate Instruments",
+  "title": "Validate HR profile changes, review group rules and answer group membership tickets",
+  "situation": "Harrowgate Instruments uses Okta Identity Engine as its identity provider, and apps are assigned to groups, so a person in the wrong group gets the wrong apps. HR sent 10 profile requests (new hires and changes) for Universal Directory, the identity team keeps 8 group rules written in Okta Expression Language, and the service desk has 14 tickets asking why someone is, or is not, in a group.",
+  "your_task": [
+    "Check each profile request against the profile schema (the Okta base attributes plus the custom attributes businessUnit, badgeNumber, remoteWorker and certifications) and mark it ACCEPTED or REJECTED with the reason: unknown attribute, wrong data type, missing required attribute or unknown user.",
+    "Apply the accepted requests, then review every group rule: is it active, can its expression be read, and are its target groups ones a rule may populate (Okta groups and Active Directory groups, but never admin groups)?",
+    "Work out the resulting group memberships from the active rules, their exclude lists and the manually added members, remembering that deactivated users keep the memberships they already have.",
+    "For each ticket give the cause: RULE_MATCHED, RULE_INACTIVE, ATTRIBUTE_MISMATCH, USER_EXCLUDED, MANUAL_ASSIGNMENT, USER_NOT_ACTIVE or NO_RULE."
+  ],
+  "why_it_matters": "Group rules decide app access for most of the company. A lower-case department value, an attribute name typed in the wrong case or a rule left inactive silently keeps people out of the apps they need, while a forgotten manual member, or a deactivated user who still sits in groups, keeps access that should be reviewed.",
+  "done_when": [
+    "All 10 profile requests are ACCEPTED or REJECTED with the reason.",
+    "All 8 group rules are marked OK, INACTIVE, UNPARSEABLE or INVALID_TARGET.",
+    "The membership of every group is listed.",
+    "All 14 tickets have a cause and a reason the service desk can pass on."
+  ],
+  "glossary": {
+    "Okta Identity Engine (OIE)": "The current Okta platform that runs sign-in, policies and the user directory.",
+    "Universal Directory": "Okta's directory of user profiles, holding the base attributes and any custom attributes.",
+    "Custom attribute": "A profile attribute added by an administrator in the Profile Editor, with a fixed data type.",
+    "Okta Expression Language (OEL)": "The expression syntax used in group rules, for example user.department == \"Sales\".",
+    "Group rule": "A condition that adds every matching user to one or more Okta groups automatically.",
+    "Human resources (HR)": "The team, and its system, that is the source of employee data such as department and title.",
+    "Admin group": "A group that holds an Okta administrator role; group rules can't add users to it.",
+    "Active Directory (AD) group": "A group in Microsoft's on-premises directory; Okta group rules can populate it from user attributes through the AD integration.",
+    "Deactivated user": "A user whose status is DEPROVISIONED: app assignments are removed, group memberships stay until the user is deleted, and group rules stop evaluating them."
+  },
+  "job_roles": [
+    "Okta Administrator",
+    "Identity and Access Management (IAM) Analyst",
+    "Service Desk Analyst",
+    "Systems Administrator"
+  ],
+  "talking_point": "Validated 10 HR profile requests in Okta Universal Directory (4 accepted, 6 rejected for an unknown attribute, wrong data types, missing required attributes or an unknown user), found 3 of 8 group rules needing attention (one inactive, one targeting an admin group and one that could not be parsed), and closed 14 group membership tickets, 3 of them caused by attribute mismatches such as a lower-case department and 2 by deactivated users, who keep their group memberships until deleted."
+}

@@ -1,0 +1,621 @@
+{
+  "_description": "Larkspur Example Co (fictional): PeopleHub HR is the profile source for employees, Okta pushes profiles to Expense Portal and Team Chat, and this week's joiners, movers and leavers need their mappings, status changes and offboarding checked.",
+  "company": "Larkspur Example Co",
+  "okta_schema": {
+    "login": "string",
+    "email": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "department": "string",
+    "title": "string",
+    "employeeNumber": "string",
+    "costCenter": "string",
+    "mobilePhone": "string",
+    "isManager": "boolean",
+    "managerId": "string"
+  },
+  "profile_sources": {
+    "PeopleHub HR": {
+      "okta_owned_attributes": [
+        "mobilePhone"
+      ],
+      "mappings": [
+        {
+          "target": "login",
+          "expression": "String.toLowerCase(appuser.workEmail)",
+          "apply": "create_only"
+        },
+        {
+          "target": "email",
+          "expression": "String.toLowerCase(appuser.workEmail)",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "firstName",
+          "expression": "appuser.givenName",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "lastName",
+          "expression": "appuser.familyName",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "department",
+          "expression": "appuser.dept != null ? appuser.dept : \"Unassigned\"",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "title",
+          "expression": "appuser.jobTitle",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "employeeNumber",
+          "expression": "appuser.empId",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "isManager",
+          "expression": "appuser.isPeopleManager",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "mobilePhone",
+          "expression": "appuser.mobile",
+          "apply": "create_and_update"
+        }
+      ]
+    }
+  },
+  "apps": {
+    "Expense Portal": {
+      "sso": "SAML",
+      "local_login": false,
+      "provisioning": {
+        "create_users": true,
+        "update_attributes": true,
+        "deactivate_users": true
+      },
+      "schema": {
+        "userName": "string",
+        "email": "string",
+        "displayName": "string",
+        "department": "string",
+        "costCenter": "string",
+        "approver": "boolean"
+      },
+      "mappings": [
+        {
+          "target": "userName",
+          "expression": "user.login",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "email",
+          "expression": "user.email",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "displayName",
+          "expression": "user.firstName + \" \" + user.lastName",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "department",
+          "expression": "user.department",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "costCenter",
+          "expression": "user.costCenter != null ? user.costCenter : \"CC-000\"",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "approver",
+          "expression": "user.isManager",
+          "apply": "create_and_update"
+        }
+      ]
+    },
+    "Team Chat": {
+      "sso": "OIDC",
+      "local_login": false,
+      "provisioning": {
+        "create_users": true,
+        "update_attributes": true,
+        "deactivate_users": false
+      },
+      "schema": {
+        "handle": "string",
+        "email": "string",
+        "jobTitle": "string",
+        "manager": "string"
+      },
+      "mappings": [
+        {
+          "target": "handle",
+          "expression": "String.toLowerCase(user.firstName + \".\" + user.lastName)",
+          "apply": "create_only"
+        },
+        {
+          "target": "email",
+          "expression": "user.email",
+          "apply": "create_and_update"
+        },
+        {
+          "target": "jobTitle",
+          "expression": "user.title",
+          "apply": "create_only"
+        },
+        {
+          "target": "manager",
+          "expression": "user.managerId",
+          "apply": "create_and_update"
+        }
+      ]
+    },
+    "Vendor Wiki": {
+      "sso": "SWA",
+      "local_login": true,
+      "provisioning": {}
+    },
+    "Legacy CRM": {
+      "sso": "SAML",
+      "local_login": true,
+      "provisioning": {}
+    },
+    "Analytics Hub": {
+      "sso": "SAML",
+      "local_login": false,
+      "provisioning": {}
+    },
+    "Benefits Link": {
+      "sso": "BOOKMARK",
+      "provisioning": {}
+    }
+  },
+  "users": [
+    {
+      "id": "U01",
+      "login": "priya.natarajan@larkspur.example",
+      "event": "create",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Priya.Natarajan@larkspur.example",
+        "givenName": "Priya",
+        "familyName": "Natarajan",
+        "dept": "Finance",
+        "jobTitle": "Accounts Payable Specialist",
+        "empId": "E1311",
+        "isPeopleManager": false,
+        "mobile": "+1-555-0131"
+      },
+      "okta_profile": {
+        "managerId": "E1002"
+      },
+      "assigned_apps": [
+        "Expense Portal",
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "U02",
+      "login": "tomas.brennan@larkspur.example",
+      "event": "update",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Tomas.Brennan@larkspur.example",
+        "givenName": "Tomas",
+        "familyName": "Brennan",
+        "dept": "Finance",
+        "jobTitle": "Financial Analyst",
+        "empId": "E1187",
+        "isPeopleManager": false,
+        "mobile": "+1-555-0118"
+      },
+      "okta_profile": {
+        "login": "tomas.brennan@larkspur.example",
+        "email": "tomas.brennan@larkspur.example",
+        "firstName": "Tomas",
+        "lastName": "Brennan",
+        "department": "Finance",
+        "title": "Financial Analyst",
+        "employeeNumber": "E1187",
+        "isManager": false,
+        "mobilePhone": "+1-555-0118",
+        "managerId": "E1002",
+        "costCenter": "CC-410"
+      },
+      "okta_admin_edits": {
+        "department": "Sales"
+      },
+      "assigned_apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "U03",
+      "login": "grace.okafor@larkspur.example",
+      "event": "update",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Grace.Okafor@larkspur.example",
+        "givenName": "Grace",
+        "familyName": "Okafor",
+        "dept": "Marketing",
+        "jobTitle": "Brand Manager",
+        "empId": "E1054",
+        "isPeopleManager": true,
+        "mobile": "+1-555-0105"
+      },
+      "okta_profile": {
+        "login": "grace.okafor@larkspur.example",
+        "email": "grace.okafor@larkspur.example",
+        "firstName": "Grace",
+        "lastName": "Okafor",
+        "department": "Marketing",
+        "title": "Brand Manager",
+        "employeeNumber": "E1054",
+        "isManager": true,
+        "mobilePhone": "+1-555-0105",
+        "managerId": "E1002",
+        "costCenter": "CC-410"
+      },
+      "assigned_apps": [
+        "Team Chat"
+      ],
+      "app_profiles": {
+        "Team Chat": {
+          "handle": "grace.okafor",
+          "email": "grace.okafor@larkspur.example",
+          "jobTitle": "Brand Manager",
+          "manager": "E1002"
+        }
+      },
+      "app_edits": {
+        "Team Chat": {
+          "email": "grace.o@personal.example"
+        }
+      }
+    },
+    {
+      "id": "U04",
+      "login": "henrik.solberg@larkspur.example",
+      "event": "update",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Henrik.Solberg@larkspur.example",
+        "givenName": "Henrik",
+        "familyName": "Solberg",
+        "dept": "Operations",
+        "jobTitle": "Warehouse Lead",
+        "empId": "E1220",
+        "isPeopleManager": "Yes",
+        "mobile": "+1-555-0122"
+      },
+      "okta_profile": {
+        "login": "henrik.solberg@larkspur.example",
+        "email": "henrik.solberg@larkspur.example",
+        "firstName": "Henrik",
+        "lastName": "Solberg",
+        "department": "Operations",
+        "title": "Warehouse Lead",
+        "employeeNumber": "E1220",
+        "isManager": false,
+        "mobilePhone": "+1-555-0122",
+        "managerId": "E1002",
+        "costCenter": "CC-410"
+      },
+      "assigned_apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "U05",
+      "login": "lucia.ferrante@larkspur.example",
+      "event": "create",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Lucia.Ferrante@larkspur.example",
+        "givenName": "Lucia",
+        "familyName": "Ferrante",
+        "dept": "Engineering",
+        "jobTitle": "Chief Technology Officer",
+        "empId": "E1003",
+        "isPeopleManager": true,
+        "mobile": "+1-555-0103"
+      },
+      "okta_profile": {},
+      "assigned_apps": [
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "U06",
+      "login": "arjun.mehta@larkspur.example",
+      "event": "update",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Arjun.Mehta@larkspur.example",
+        "givenName": "Arjun",
+        "familyName": "Mehta",
+        "dept": null,
+        "jobTitle": "Data Engineer",
+        "empId": "E1290",
+        "isPeopleManager": false,
+        "mobile": "+1-555-0129"
+      },
+      "okta_profile": {
+        "login": "arjun.mehta@larkspur.example",
+        "email": "arjun.mehta@larkspur.example",
+        "firstName": "Arjun",
+        "lastName": "Mehta",
+        "department": "Engineering",
+        "title": "Data Engineer",
+        "employeeNumber": "E1290",
+        "isManager": false,
+        "mobilePhone": "+1-555-0129",
+        "managerId": "E1002",
+        "costCenter": null
+      },
+      "okta_admin_edits": {
+        "mobilePhone": "+1-555-0199"
+      },
+      "assigned_apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "U07",
+      "login": "sam.whitlock@larkspur.example",
+      "event": "update",
+      "profile_source": null,
+      "okta_profile": {
+        "login": "sam.whitlock@larkspur.example",
+        "email": "sam.whitlock@larkspur.example",
+        "firstName": "Sam",
+        "lastName": "Whitlock",
+        "department": "IT",
+        "title": "Consultant",
+        "isManager": false,
+        "managerId": "E1002"
+      },
+      "okta_admin_edits": {
+        "title": "Contract Network Engineer"
+      },
+      "assigned_apps": [
+        "Team Chat"
+      ],
+      "app_profiles": {
+        "Team Chat": {
+          "handle": "sam.whitlock",
+          "email": "sam.whitlock@larkspur.example",
+          "jobTitle": "Consultant",
+          "manager": "E1002"
+        }
+      },
+      "app_edits": {
+        "Team Chat": {
+          "jobTitle": "Network Engineer (contract)"
+        }
+      }
+    },
+    {
+      "id": "U08",
+      "login": "rhea.castillo@larkspur.example",
+      "event": "update",
+      "profile_source": "Legacy Directory",
+      "okta_profile": {
+        "login": "rhea.castillo@larkspur.example",
+        "email": "rhea.castillo@larkspur.example"
+      },
+      "assigned_apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "U09",
+      "login": "mei.chen@larkspur.example",
+      "event": "update",
+      "profile_source": "PeopleHub HR",
+      "hr_record": {
+        "workEmail": "Mei.Lindqvist@larkspur.example",
+        "givenName": "Mei",
+        "familyName": "Lindqvist",
+        "dept": "Legal",
+        "jobTitle": "Senior Counsel",
+        "empId": "E1148",
+        "isPeopleManager": true,
+        "mobile": "+1-555-0114"
+      },
+      "okta_profile": {
+        "login": "mei.chen@larkspur.example",
+        "email": "mei.chen@larkspur.example",
+        "firstName": "Mei",
+        "lastName": "Chen",
+        "department": "Legal",
+        "title": "Senior Counsel",
+        "employeeNumber": "E1148",
+        "isManager": true,
+        "mobilePhone": "+1-555-0114",
+        "managerId": "E1002",
+        "costCenter": "CC-410"
+      },
+      "assigned_apps": [
+        "Expense Portal",
+        "Team Chat"
+      ],
+      "app_profiles": {
+        "Team Chat": {
+          "handle": "mei.chen",
+          "email": "mei.chen@larkspur.example",
+          "jobTitle": "Counsel",
+          "manager": "E1002"
+        }
+      }
+    }
+  ],
+  "lifecycle_requests": [
+    {
+      "id": "L01",
+      "user": "priya.natarajan@larkspur.example",
+      "current": "STAGED",
+      "requested": "PENDING_USER_ACTION",
+      "apps": [
+        "Expense Portal",
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "L02",
+      "user": "nadia.haddad@larkspur.example",
+      "current": "ACTIVE",
+      "requested": "SUSPENDED",
+      "apps": [
+        "Expense Portal",
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "L03",
+      "user": "oscar.lindgren@larkspur.example",
+      "current": "SUSPENDED",
+      "requested": "ACTIVE",
+      "apps": [
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "L04",
+      "user": "marcus.oyelaran@larkspur.example",
+      "current": "ACTIVE",
+      "requested": "DEACTIVATED",
+      "apps": [
+        "Expense Portal",
+        "Team Chat",
+        "Vendor Wiki",
+        "Benefits Link"
+      ]
+    },
+    {
+      "id": "L05",
+      "user": "derek.fontaine@larkspur.example",
+      "current": "DEACTIVATED",
+      "requested": "DELETED",
+      "apps": []
+    },
+    {
+      "id": "L06",
+      "user": "kim.arroyo@larkspur.example",
+      "current": "ACTIVE",
+      "requested": "DELETED",
+      "apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "L07",
+      "user": "ines.valdes@larkspur.example",
+      "current": "SUSPENDED",
+      "requested": "DELETED",
+      "apps": [
+        "Expense Portal",
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "L08",
+      "user": "lucia.ferrante@larkspur.example",
+      "current": "STAGED",
+      "requested": "SUSPENDED",
+      "apps": [
+        "Team Chat"
+      ]
+    },
+    {
+      "id": "L09",
+      "user": "derek.fontaine@larkspur.example",
+      "current": "DEACTIVATED",
+      "requested": "ACTIVE",
+      "apps": []
+    },
+    {
+      "id": "L10",
+      "user": "henrik.solberg@larkspur.example",
+      "current": "LOCKED_OUT",
+      "requested": "ACTIVE",
+      "apps": [
+        "Expense Portal"
+      ]
+    },
+    {
+      "id": "L11",
+      "user": "felix.amari@larkspur.example",
+      "current": "SUSPENDED",
+      "requested": "DEACTIVATED",
+      "apps": [
+        "Legacy CRM",
+        "Expense Portal"
+      ]
+    }
+  ],
+  "offboarding": [
+    {
+      "id": "O01",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Expense Portal"
+    },
+    {
+      "id": "O02",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Team Chat"
+    },
+    {
+      "id": "O03",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Vendor Wiki"
+    },
+    {
+      "id": "O04",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Legacy CRM"
+    },
+    {
+      "id": "O05",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Analytics Hub",
+      "manually_deactivated_in_app": true,
+      "evidence": "Ticket CHG-5512: Analytics Hub owner disabled the account by hand"
+    },
+    {
+      "id": "O06",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Benefits Link"
+    },
+    {
+      "id": "O07",
+      "user": "marcus.oyelaran@larkspur.example",
+      "status": "DEACTIVATED",
+      "app": "Payroll Plus"
+    },
+    {
+      "id": "O08",
+      "user": "ines.valdes@larkspur.example",
+      "status": "SUSPENDED",
+      "app": "Expense Portal"
+    },
+    {
+      "id": "O09",
+      "user": "ines.valdes@larkspur.example",
+      "status": "SUSPENDED",
+      "app": "Team Chat"
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "_description": "Larkspur Freight Co (fictional) runs Okta Identity Engine. Sixteen sign-in attempts from Monday morning are replayed against the org's network zones, global session policies, per-app authentication policies and authenticator enrollment policies (config/policies/lab40.json). HQ egress is 198.51.100.0/24, the warehouses use 203.0.113.64/26, home and mobile users arrive from other addresses.",
+  "org_name": "Larkspur Freight Co",
+  "users": {
+    "maya.okafor@larkspur.example": {"name": "Maya Okafor", "title": "Identity engineer", "groups": ["Okta Admins", "IT"], "enrolled": ["password", "email", "okta_verify", "webauthn"]},
+    "tom.berg@larkspur.example": {"name": "Tom Berg", "title": "Help desk lead", "groups": ["Okta Admins", "IT"], "enrolled": ["password", "email", "okta_verify"]},
+    "omar.farouk@larkspur.example": {"name": "Omar Farouk", "title": "New IT administrator (week 1)", "groups": ["Okta Admins", "IT"], "enrolled": ["password", "email"]},
+    "li.chen@larkspur.example": {"name": "Li Chen", "title": "Accounts payable", "groups": ["Finance"], "enrolled": ["password", "email", "okta_verify"]},
+    "nadia.haddad@larkspur.example": {"name": "Nadia Haddad", "title": "Financial analyst", "groups": ["Finance"], "enrolled": ["password", "okta_verify"]},
+    "sofia.reyes@larkspur.example": {"name": "Sofia Reyes", "title": "Account manager", "groups": ["Sales"], "enrolled": ["password", "email", "okta_verify"]},
+    "ravi.patel@larkspur.example": {"name": "Ravi Patel", "title": "Forklift contractor", "groups": ["Contractors"], "enrolled": ["password", "email", "phone"]},
+    "jae.kim@larkspur.example": {"name": "Jae Kim", "title": "Integration contractor", "groups": ["Contractors"], "enrolled": ["password", "email"]}
+  },
+  "apps": {
+    "okta-admin": {"name": "Okta Admin Console", "authentication_policy": "AP-ADMIN-CONSOLE"},
+    "ledger-erp": {"name": "Ledger ERP", "authentication_policy": "AP-FINANCE"},
+    "crewboard": {"name": "Crewboard chat", "authentication_policy": "AP-STANDARD"},
+    "timesheet": {"name": "Timesheet", "authentication_policy": "AP-STANDARD"}
+  },
+  "attempts": [
+    {"id": "A01", "user": "sofia.reyes@larkspur.example", "app": "crewboard", "ip": "198.51.100.23", "country": "US", "device": {"registered": true, "managed": false, "platform": "macOS"}, "presented": ["okta_verify_fastpass"]},
+    {"id": "A02", "user": "sofia.reyes@larkspur.example", "app": "crewboard", "ip": "203.0.113.200", "country": "US", "presented": ["password", "okta_verify_push"]},
+    {"id": "A03", "user": "sofia.reyes@larkspur.example", "app": "timesheet", "ip": "192.0.2.5", "country": "US", "presented": ["password", "okta_verify_push"]},
+    {"id": "A04", "user": "li.chen@larkspur.example", "app": "crewboard", "ip": "203.0.113.230", "country": "NL", "anonymizer": true, "presented": ["password", "email"]},
+    {"id": "A05", "user": "maya.okafor@larkspur.example", "app": "okta-admin", "ip": "203.0.113.180", "country": "US", "device": {"registered": true, "managed": true, "platform": "Windows"}, "presented": ["password", "webauthn"]},
+    {"id": "A06", "user": "tom.berg@larkspur.example", "app": "okta-admin", "ip": "198.51.100.40", "country": "US", "device": {"registered": true, "managed": true, "platform": "Windows"}, "presented": ["password", "okta_verify_push"]},
+    {"id": "A07", "user": "maya.okafor@larkspur.example", "app": "okta-admin", "ip": "203.0.113.190", "country": "DE", "device": {"registered": true, "managed": true, "platform": "Windows"}, "presented": ["password", "webauthn"]},
+    {"id": "A08", "user": "li.chen@larkspur.example", "app": "ledger-erp", "ip": "203.0.113.150", "country": "US", "device": {"registered": true, "managed": true, "platform": "Windows", "assurance": ["DA-WINDOWS-BASELINE"]}, "presented": ["password", "okta_verify_fastpass_biometric"]},
+    {"id": "A09", "user": "li.chen@larkspur.example", "app": "ledger-erp", "ip": "203.0.113.151", "country": "US", "device": {"registered": true, "managed": false, "platform": "Windows"}, "presented": ["password", "okta_verify_push"]},
+    {"id": "A10", "user": "ravi.patel@larkspur.example", "app": "ledger-erp", "ip": "203.0.113.70", "country": "US", "presented": ["password"]},
+    {"id": "A11", "user": "ravi.patel@larkspur.example", "app": "timesheet", "ip": "203.0.113.210", "country": "US", "presented": ["password", "phone_sms"]},
+    {"id": "A12", "user": "jae.kim@larkspur.example", "app": "timesheet", "ip": "203.0.113.240", "country": "US", "asn": 64512, "presented": ["password", "email"]},
+    {"id": "A13", "user": "omar.farouk@larkspur.example", "app": "okta-admin", "ip": "198.51.100.41", "country": "US", "device": {"registered": true, "managed": true, "platform": "Windows"}, "presented": ["password", "email"]},
+    {"id": "A14", "user": "nadia.haddad@larkspur.example", "app": "crewboard", "ip": "198.51.100.77", "country": "US", "device": {"registered": true, "managed": true, "platform": "macOS"}, "presented": ["okta_verify_fastpass"]},
+    {"id": "A15", "user": "sofia.reyes@larkspur.example", "app": "crewboard", "ip": "198.18.4.9", "country": "US", "presented": ["okta_verify_fastpass_biometric"]},
+    {"id": "A16", "user": "former.temp@larkspur.example", "app": "timesheet", "ip": "198.51.100.90", "country": "US", "presented": ["password"]}
+  ]
+}

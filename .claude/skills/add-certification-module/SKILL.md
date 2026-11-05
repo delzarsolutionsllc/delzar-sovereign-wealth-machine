@@ -48,9 +48,9 @@ Gate: every objective has topics; names are short Title Case without objective n
 
 Targets per objective: **>= 30 single-answer questions**, every topic **>= 5**, answer letters balanced (about 25 % each), correct answer uniquely longest in **<= 25 %**, ~30 % recall / ~70 % scenario, BEST / MOST likely / FIRST qualifiers, 4 options of the same kind, no "all/none of the above", no bare numbers, no lab jargon or the word "lab", explanation says why the answer is right and why the most tempting distractor is wrong.
 
-1. Split by domain (split large domains in two). One subagent per slice, launched in parallel in the background, each with `references/question_writer_brief.md` filled in (file names, ID ranges like `D4-101..199` / `D4-201..299` so slices never collide, current counts per objective).
+1. Split by domain (split large domains in two). One subagent per slice, launched in parallel in the background, each with `references/question_writer_brief_course.md` (a new course: files under `data/courses/<code>/exam_bank/`, PBQs inline, validator `DELZAR_COURSE=<code> python -m utils.exam_bank <file>`; or `references/question_writer_brief.md` for Security+) filled in (file names, ID ranges like `D4-101..199` / `D4-201..299` so slices never collide, current counts per objective).
 2. Each writer creates only two files: `data/exam_bank/domainN-extra*.json` and `data/exam_bank/topics/<slice>.json`, and must pass `python -m utils.exam_bank <file>`.
-3. Independent review: 3 reviewer subagents with `references/question_reviewer_brief.md`, each owning different files; they fix in place and report every change. Then grep all new files for forbidden words (e.g. `\blabs?\b`) because reviewers can reintroduce them.
+3. Independent review: one reviewer subagent per writer slice (tell them which facts the writers flagged as unverified, and which facts you already checked on the vendor's docs; reviewers can be wrong too, so settle conflicts on the vendor page yourself) with `references/question_reviewer_brief.md`, each owning different files; they fix in place and report every change. Then grep all new files for forbidden words (e.g. `\blabs?\b`) because reviewers can reintroduce them.
 4. Run `python -m utils.exam_bank` (all files OK) and the full test suite. Fix topic-count shortfalls by writing a question, not by relaxing tests.
 
 Gate: validator OK, tests green, reviewer reports read and any "unsure" items listed for the owner.
@@ -97,7 +97,8 @@ Run all of these and fix what fails:
 
 ## References
 
-- `references/question_writer_brief.md` - exam-style question writer (Phase 3)
+- `references/question_writer_brief.md` - exam-style question writer, Security+ (Phase 3)
+- `references/question_writer_brief_course.md` - question writer for a new course, e.g. Okta (Phase 3)
 - `references/question_reviewer_brief.md` - independent reviewer (Phase 3)
 - `references/glossary_brief.md` - acronym / vocabulary writer (Phase 6)
 - `references/playlist_index_brief.md` - YouTube playlist indexer (Phase 6)

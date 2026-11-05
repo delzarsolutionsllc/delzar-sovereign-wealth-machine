@@ -47,7 +47,8 @@ const { chromium } = require('playwright');
   const [dl] = await Promise.all([p.waitForEvent('download'), p.click('button:has-text("Export my progress")')]);
   const fp = S + '/exported.json'; await dl.saveAs(fp);
   const data = JSON.parse(require('fs').readFileSync(fp)); console.log('export quizzes', Object.keys(data.progress.quizzes), 'objectives', Object.keys(data.progress.objectives).length);
-  const merged = await p.evaluate(d => { const a = mergeProgress(d, d); return JSON.stringify(a) === JSON.stringify(cleanProgress(d)); }, data);
+  const merged = await p.evaluate(d => { const canon = o => JSON.stringify(o, (k, v) => v && typeof v === 'object' && !Array.isArray(v) ? Object.fromEntries(Object.keys(v).sort().map(x => [x, v[x]])) : v);
+    return canon(mergeProgress(d.progress, d.progress)) === canon(cleanProgress(d.progress)); }, data);   // same content, key order ignored
   console.log('merge idempotent', merged);
   await p.evaluate(() => localStorage.clear()); await p.reload(); await p.waitForSelector('#sync-h');
   await p.setInputFiles('#import-file', fp); await p.waitForTimeout(1800);

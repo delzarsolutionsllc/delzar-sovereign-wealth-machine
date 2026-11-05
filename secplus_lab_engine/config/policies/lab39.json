@@ -1,0 +1,79 @@
+{
+  "okta_mapping_offboarding": {
+    "_comment": "Lab 39 (Okta Certified Professional 3.1/3.2). Status names and effects follow Okta Help 'User account status', 'Suspend and unsuspend users' and 'Deactivate and delete user accounts' and the Okta Users lifecycle API, as read in 2026-11. The expression language is a small subset of Okta Expression Language (direct attribute, String.toLowerCase / String.toUpperCase, + concatenation, 'x != null ? x : \"default\"'). Re-check the reactivation and attribute-level sourcing rules against Okta Help before the exam.",
+    "functions": ["String.toLowerCase", "String.toUpperCase"],
+    "apply_modes": {
+      "create_and_update": "the mapping runs when the user is created and on every later update",
+      "create_only": "the mapping runs once, when the user is created; later changes in the source are not copied"
+    },
+    "types": {"string": "str", "boolean": "bool", "integer": "int"},
+    "finding_severity": ["MAPPING_ERROR", "OVERWRITTEN_BY_SOURCE", "OK"],
+    "statuses": {
+      "STAGED": "Staged",
+      "PENDING_USER_ACTION": "Pending user action (API: PROVISIONED)",
+      "ACTIVE": "Active",
+      "LOCKED_OUT": "Locked out",
+      "SUSPENDED": "Suspended",
+      "DEACTIVATED": "Deactivated (API: DEPROVISIONED)",
+      "DELETED": "Deleted"
+    },
+    "transitions": [
+      {"from": "STAGED", "to": "PENDING_USER_ACTION", "action": "Activate (user gets an activation email and must set up the account)"},
+      {"from": "STAGED", "to": "ACTIVE", "action": "Activate with an admin-set password"},
+      {"from": "STAGED", "to": "DEACTIVATED", "action": "Deactivate"},
+      {"from": "PENDING_USER_ACTION", "to": "ACTIVE", "action": "User completes activation"},
+      {"from": "PENDING_USER_ACTION", "to": "DEACTIVATED", "action": "Deactivate"},
+      {"from": "ACTIVE", "to": "SUSPENDED", "action": "Suspend"},
+      {"from": "ACTIVE", "to": "DEACTIVATED", "action": "Deactivate"},
+      {"from": "SUSPENDED", "to": "ACTIVE", "action": "Unsuspend"},
+      {"from": "SUSPENDED", "to": "DEACTIVATED", "action": "Deactivate"},
+      {"from": "LOCKED_OUT", "to": "ACTIVE", "action": "Unlock"},
+      {"from": "LOCKED_OUT", "to": "DEACTIVATED", "action": "Deactivate"},
+      {"from": "DEACTIVATED", "to": "PENDING_USER_ACTION", "action": "Reactivate (user must activate again)"},
+      {"from": "DEACTIVATED", "to": "DELETED", "action": "Delete (permanent)"}
+    ],
+    "invalid_hints": {
+      "ACTIVE->DELETED": "only a deactivated user can be deleted: deactivate first",
+      "SUSPENDED->DELETED": "only a deactivated user can be deleted: deactivate first",
+      "STAGED->SUSPENDED": "only an Active user can be suspended",
+      "PENDING_USER_ACTION->SUSPENDED": "only an Active user can be suspended",
+      "LOCKED_OUT->SUSPENDED": "only an Active user can be suspended: unlock first",
+      "ACTIVE->LOCKED_OUT": "an admin cannot lock a user: Okta locks the account after too many failed sign-ins",
+      "DEACTIVATED->ACTIVE": "reactivating a deactivated user returns it to Pending user action, not straight to Active",
+      "DEACTIVATED->SUSPENDED": "a deactivated user can only be reactivated or deleted",
+      "DELETED->*": "deletion is permanent: the user cannot be restored"
+    },
+    "status_effects": {
+      "STAGED": {"can_sign_in": false, "sessions_cleared": false, "assignments": "kept"},
+      "PENDING_USER_ACTION": {"can_sign_in": false, "sessions_cleared": false, "assignments": "kept"},
+      "ACTIVE": {"can_sign_in": true, "sessions_cleared": false, "assignments": "kept"},
+      "LOCKED_OUT": {"can_sign_in": false, "sessions_cleared": false, "assignments": "kept"},
+      "SUSPENDED": {"can_sign_in": false, "sessions_cleared": true, "assignments": "kept"},
+      "DEACTIVATED": {"can_sign_in": false, "sessions_cleared": true, "assignments": "removed"},
+      "DELETED": {"can_sign_in": false, "sessions_cleared": true, "assignments": "removed"}
+    },
+    "deprovision_on": ["DEACTIVATED"],
+    "deprovisioned_statuses": ["DEACTIVATED", "DELETED"],
+    "local_credential_sso_types": ["SWA"],
+    "no_account_sso_types": ["BOOKMARK"],
+    "concepts": {
+      "profile source": "An app or directory, often the HR system, that owns a user's Okta profile; its imports win over edits made in Okta.",
+      "attribute mapping": "A Profile Editor rule that copies or transforms one attribute between the Okta user profile and an app user profile.",
+      "Okta Expression Language": "The small expression syntax used in mappings, such as String.toLowerCase(user.email) or a + concatenation.",
+      "apply on create only": "A mapping setting that fills the attribute once, when the account is created, and never updates it afterwards.",
+      "Deactivate Users": "A provisioning feature that deactivates the user's account in the app when Okta deactivates the user or removes the assignment.",
+      "suspend": "A reversible status in which the user cannot sign in but keeps every group membership and app assignment.",
+      "orphaned account": "An app account that is still active although its owner has left or no longer has an Okta assignment.",
+      "Universal Directory": "Okta's user store, which holds the Okta user profile and one app user profile per assigned app."
+    },
+    "outcome_definitions": {
+      "MAPPING_ERROR": "the mapping could not produce a valid value: the source attribute is missing, the expression is invalid or the value has the wrong type",
+      "OVERWRITTEN_BY_SOURCE": "an edit made downstream of the source was replaced by the source value on the next import or push",
+      "OK": "every mapped attribute was produced correctly and no edit was lost",
+      "ALLOWED": "the requested status change is a valid Okta lifecycle transition",
+      "INVALID_TRANSITION": "Okta does not allow this status change from the current status",
+      "ACCESS_REMOVED": "the leaver can no longer reach the app by any route",
+      "STILL_HAS_ACCESS": "the leaver can still reach the app or Okta can restore access, or this cannot be verified"
+    }
+  }
+}

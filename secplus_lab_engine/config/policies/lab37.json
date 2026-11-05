@@ -1,0 +1,130 @@
+{
+  "okta_admin_roles": {
+    "_comment": "Lab 37 (Okta Professional 1.3/1.2). Role capabilities follow the Okta Help Center pages 'Standard administrator roles and permissions', 'Help desk administrators' and 'Role permissions' (custom admin roles), Identity Engine, read 2026-11-05. The 'okta.*' permission names follow Okta's custom-role permission naming; the 'std.*' names are this course's own labels for abilities that only standard roles have (there is no custom-role permission for them). Simplified: real roles carry many more abilities than modelled here. Re-check against the Help Center before relying on a detail.",
+    "max_super_admins": 3,
+    "broad_roles": ["Super Administrator", "Organization Administrator"],
+    "permissions": {
+      "okta.users.read":                     {"resource": "user",  "write": false, "custom": true,  "description": "view users and their details"},
+      "okta.users.create":                   {"resource": "user",  "write": true,  "custom": true,  "description": "create users"},
+      "okta.users.userprofile.manage":       {"resource": "user",  "write": true,  "custom": true,  "description": "edit users' profile attributes"},
+      "okta.users.lifecycle.manage":         {"resource": "user",  "write": true,  "custom": true,  "description": "activate, deactivate, suspend and delete users"},
+      "okta.users.lifecycle.unlock":         {"resource": "user",  "write": true,  "custom": true,  "description": "unlock locked-out users"},
+      "okta.users.lifecycle.clearSessions":  {"resource": "user",  "write": true,  "custom": true,  "description": "clear users' Okta sessions and tokens"},
+      "okta.users.credentials.resetPassword":{"resource": "user",  "write": true,  "custom": true,  "description": "reset users' passwords"},
+      "okta.users.credentials.resetFactors": {"resource": "user",  "write": true,  "custom": true,  "description": "reset users' authenticators (MFA)"},
+      "okta.groups.read":                    {"resource": "group", "write": false, "custom": true,  "description": "view groups and their members"},
+      "okta.groups.create":                  {"resource": "group", "write": true,  "custom": true,  "description": "create groups"},
+      "okta.groups.manage":                  {"resource": "group", "write": true,  "custom": true,  "description": "edit and delete groups"},
+      "okta.groups.members.manage":          {"resource": "group", "write": true,  "custom": true,  "description": "add and remove group members"},
+      "okta.apps.read":                      {"resource": "app",   "write": false, "custom": true,  "description": "view app integrations"},
+      "okta.apps.manage":                    {"resource": "app",   "write": true,  "custom": true,  "description": "add, configure and delete app integrations"},
+      "okta.apps.assignment.manage":         {"resource": "app",   "write": true,  "custom": true,  "description": "assign users and groups to apps"},
+      "std.reports.run":                     {"resource": "org",   "write": false, "custom": false, "description": "view and run reports"},
+      "std.systemlog.read":                  {"resource": "org",   "write": false, "custom": false, "description": "view the System Log"},
+      "std.group_rules.manage":              {"resource": "org",   "write": true,  "custom": false, "description": "create and change group rules"},
+      "std.org.settings.manage":             {"resource": "org",   "write": true,  "custom": false, "description": "edit org-wide Okta settings"},
+      "std.admins.manage":                   {"resource": "org",   "write": true,  "custom": false, "description": "add and remove administrators and assign admin roles"}
+    },
+    "roles": {
+      "Super Administrator": {
+        "api_type": "SUPER_ADMIN", "constrain_to": [], "permissions": ["*"],
+        "manages_other_admins": true, "allowed_on_super_admins": ["*"]
+      },
+      "Organization Administrator": {
+        "api_type": "ORG_ADMIN", "constrain_to": [],
+        "_comment": "Org admins do not manage apps (Help Center comparison table). They can clear sessions of super admins but cannot reset their passwords.",
+        "permissions": ["okta.users.read", "okta.users.create", "okta.users.userprofile.manage", "okta.users.lifecycle.manage",
+                        "okta.users.lifecycle.unlock", "okta.users.lifecycle.clearSessions", "okta.users.credentials.resetPassword",
+                        "okta.users.credentials.resetFactors", "okta.groups.read", "okta.groups.create", "okta.groups.manage",
+                        "okta.groups.members.manage", "std.reports.run", "std.systemlog.read", "std.group_rules.manage",
+                        "std.org.settings.manage"],
+        "manages_other_admins": true, "allowed_on_super_admins": ["okta.users.read", "okta.users.lifecycle.clearSessions"]
+      },
+      "Group Administrator": {
+        "api_type": "USER_ADMIN", "constrain_to": ["groups"],
+        "_comment": "Group admins cannot create groups or manage group rules. 'manages_other_admins: false' is this course's conservative reading; the Help Center table only spells out super-admin targets.",
+        "permissions": ["okta.users.read", "okta.users.create", "okta.users.userprofile.manage", "okta.users.lifecycle.manage",
+                        "okta.users.lifecycle.unlock", "okta.users.lifecycle.clearSessions", "okta.users.credentials.resetPassword",
+                        "okta.users.credentials.resetFactors", "okta.groups.read", "okta.groups.members.manage"],
+        "manages_other_admins": false, "allowed_on_super_admins": ["okta.users.read", "okta.users.lifecycle.clearSessions"]
+      },
+      "Application Administrator": {
+        "api_type": "APP_ADMIN", "constrain_to": ["apps"],
+        "permissions": ["okta.apps.read", "okta.apps.manage", "okta.apps.assignment.manage", "okta.users.read", "okta.groups.read",
+                        "std.systemlog.read"],
+        "manages_other_admins": false, "allowed_on_super_admins": ["okta.users.read"]
+      },
+      "Read-only Administrator": {
+        "api_type": "READ_ONLY_ADMIN", "constrain_to": [],
+        "permissions": ["okta.users.read", "okta.groups.read", "okta.apps.read", "std.reports.run", "std.systemlog.read"],
+        "manages_other_admins": false, "allowed_on_super_admins": ["okta.users.read"]
+      },
+      "Help Desk Administrator": {
+        "api_type": "HELP_DESK_ADMIN", "constrain_to": ["groups"],
+        "_comment": "Fixed set: reset password, reset MFA, unlock, clear sessions, view users in assigned groups. Cannot create, suspend or delete users or assign apps or groups. May clear super admins' sessions but not reset their passwords.",
+        "permissions": ["okta.users.read", "okta.users.credentials.resetPassword", "okta.users.credentials.resetFactors",
+                        "okta.users.lifecycle.unlock", "okta.users.lifecycle.clearSessions", "okta.groups.read"],
+        "manages_other_admins": false, "allowed_on_super_admins": ["okta.users.read", "okta.users.lifecycle.clearSessions"]
+      },
+      "Group Membership Administrator": {
+        "api_type": "GROUP_MEMBERSHIP_ADMIN", "constrain_to": ["groups"],
+        "permissions": ["okta.users.read", "okta.groups.read", "okta.groups.members.manage"],
+        "manages_other_admins": false, "allowed_on_super_admins": ["okta.users.read"]
+      },
+      "Report Administrator": {
+        "api_type": "REPORT_ADMIN", "constrain_to": [],
+        "permissions": ["std.reports.run", "std.systemlog.read"],
+        "manages_other_admins": false, "allowed_on_super_admins": []
+      }
+    },
+    "role_rank": ["Report Administrator", "Read-only Administrator", "Group Membership Administrator", "Help Desk Administrator",
+                  "Application Administrator", "Group Administrator", "Organization Administrator", "Super Administrator"],
+    "tasks": {
+      "reset_passwords":         {"permissions": ["okta.users.read", "okta.users.credentials.resetPassword"], "description": "reset users' passwords"},
+      "unlock_users":            {"permissions": ["okta.users.read", "okta.users.lifecycle.unlock"], "description": "unlock locked-out users"},
+      "reset_authenticators":    {"permissions": ["okta.users.read", "okta.users.credentials.resetFactors"], "description": "reset users' authenticators"},
+      "manage_group_membership": {"permissions": ["okta.users.read", "okta.groups.read", "okta.groups.members.manage"], "description": "add and remove members of groups"},
+      "create_users":            {"permissions": ["okta.users.read", "okta.users.create"], "description": "create users"},
+      "edit_user_profiles":      {"permissions": ["okta.users.read", "okta.users.userprofile.manage"], "description": "edit user profiles"},
+      "deactivate_users":        {"permissions": ["okta.users.read", "okta.users.lifecycle.manage"], "description": "deactivate and suspend users"},
+      "view_directory":          {"permissions": ["okta.users.read", "okta.groups.read"], "description": "view users and groups"},
+      "manage_apps":             {"permissions": ["okta.apps.read", "okta.apps.manage"], "description": "add and configure app integrations"},
+      "assign_apps":             {"permissions": ["okta.apps.read", "okta.apps.assignment.manage"], "description": "assign people to apps"},
+      "view_apps":               {"permissions": ["okta.apps.read"], "description": "view app integrations"},
+      "run_reports":             {"permissions": ["std.reports.run"], "description": "view and run reports"},
+      "view_system_log":         {"permissions": ["std.systemlog.read"], "description": "read the System Log"},
+      "manage_group_rules":      {"permissions": ["std.group_rules.manage"], "description": "create and change group rules"},
+      "edit_org_settings":       {"permissions": ["std.org.settings.manage"], "description": "edit org-wide settings"},
+      "manage_admins":           {"permissions": ["std.admins.manage"], "description": "assign admin roles to people and groups"}
+    },
+    "finding_severity": ["SUPER_ADMIN_EXCESS", "CUSTOM_ROLE_EMPTY_RESOURCE_SET", "UNSCOPED_ROLE", "ROLE_ASSIGNED_TO_INDIVIDUAL"],
+    "plan_definitions": {
+      "STANDARD_ROLE": "assign the least-privileged standard admin role, constrained where the role allows it",
+      "CUSTOM_ROLE": "build a custom admin role with only the listed permissions and bind it to a resource set",
+      "ESCALATE": "make no assignment; send the request to the identity team"
+    },
+    "denial_definitions": {
+      "UNKNOWN_ACTION": "the action is not in the permission catalogue",
+      "NOT_ASSIGNED": "the actor holds no admin role, directly or through a group",
+      "MISSING_PERMISSION": "none of the actor's roles includes the permission",
+      "OUTSIDE_SCOPE": "the target is outside the role's constraint or resource set",
+      "PROTECTED_ADMIN_TARGET": "the target is an administrator, or an admin group, that the role may not change"
+    },
+    "finding_definitions": {
+      "SUPER_ADMIN_EXCESS": "more people hold Super Administrator than policy allows",
+      "CUSTOM_ROLE_EMPTY_RESOURCE_SET": "a custom role is bound to a missing or empty resource set, so it governs nothing",
+      "UNSCOPED_ROLE": "a role that could be constrained applies to the whole org with no recorded reason",
+      "ROLE_ASSIGNED_TO_INDIVIDUAL": "an admin role is assigned to one person instead of to a group",
+      "OK": "no finding"
+    },
+    "concepts": {
+      "standard admin role": "One of Okta's built-in administrator roles, such as Help Desk Administrator, with a fixed set of permissions.",
+      "custom admin role": "A role you build by picking individual permissions, used when no standard role is narrow enough.",
+      "resource set": "The collection of users, groups or apps that a custom role assignment is allowed to act on.",
+      "role constraint": "A limit placed on a standard role so it applies only to chosen groups or apps instead of the whole org.",
+      "admin group": "A group that has an admin role assigned; only super admins can change its membership.",
+      "group rule": "An Okta rule that adds users to a group automatically when their profile attributes match an expression.",
+      "least privilege": "Give each administrator only the permissions and the targets their job needs, and nothing more."
+    }
+  }
+}

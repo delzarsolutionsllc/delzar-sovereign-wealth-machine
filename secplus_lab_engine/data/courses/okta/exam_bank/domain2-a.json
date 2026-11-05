@@ -1,0 +1,1129 @@
+{
+ "domain": "2",
+ "title": "Okta Domain 2 questions (2.1, 2.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
+ "questions": [
+  {
+   "id": "D2-001",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "An admin needs to add a widely used SaaS app that already has prebuilt SAML settings maintained by Okta. Where should the admin start in the Admin Console?",
+   "choices": [
+    "Applications > Applications > Browse App Catalog",
+    "Applications > Applications > Create App Integration",
+    "Directory > Profile Editor > Create Okta Attribute",
+    "Security > Identity Providers > Add Identity Provider"
+   ],
+   "answer": "Applications > Applications > Browse App Catalog",
+   "explanation": "Prebuilt integrations live in the Okta Integration Network, reached through Browse App Catalog. Create App Integration builds a custom integration from scratch, which wastes the vendor's prebuilt settings."
+  },
+  {
+   "id": "D2-002",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "A vendor's app supports SAML 2.0 but is not listed in the Okta Integration Network. What should the admin do to give users SSO to it?",
+   "choices": [
+    "Add a Bookmark app for the vendor and turn on SAML in its General settings",
+    "Add the app as an identity provider under Security",
+    "Create a custom SAML 2.0 app with the App Integration Wizard",
+    "Wait until the vendor publishes an OIN integration"
+   ],
+   "answer": "Create a custom SAML 2.0 app with the App Integration Wizard",
+   "explanation": "The App Integration Wizard creates a custom SAML 2.0 integration for any SAML-capable app. A Bookmark app only links to a URL and never federates sign-in."
+  },
+  {
+   "id": "D2-003",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "In a SAML 2.0 sign-in, what does the service provider rely on to accept the user's identity?",
+   "choices": [
+    "A vaulted password filled in by the Okta Browser Plugin",
+    "A signed assertion issued by Okta",
+    "A SCIM bearer token stored on the Provisioning tab",
+    "An access token from the Client Credentials grant"
+   ],
+   "answer": "A signed assertion issued by Okta",
+   "explanation": "The SP validates Okta's signature on the SAML assertion and trusts the identity in it. Vaulted passwords are SWA, SCIM tokens are for provisioning and Client Credentials has no user."
+  },
+  {
+   "id": "D2-004",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "An OIN listing shows that an app supports SAML, SWA and Bookmark sign-on. Security asks for the option that removes app passwords entirely. Which sign-on method should the admin choose?",
+   "choices": [
+    "Secure Web Authentication",
+    "Bookmark App",
+    "Users share a single SWA login",
+    "SAML 2.0"
+   ],
+   "answer": "SAML 2.0",
+   "explanation": "SAML federates sign-in so the app needs no separate password. SWA still stores a password per user, and a Bookmark does not sign the user in at all."
+  },
+  {
+   "id": "D2-005",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "What does a Bookmark app integration do for end users?",
+   "choices": [
+    "Federates sign-in to the app by sending an OIDC ID token",
+    "Stores the user's app credentials and fills them into the app's sign-in page",
+    "Creates and deactivates accounts in the app through its API",
+    "Adds a dashboard tile that opens a URL with no sign-in performed"
+   ],
+   "answer": "Adds a dashboard tile that opens a URL with no sign-in performed",
+   "explanation": "A Bookmark app is only a link on the End-User Dashboard. Filling in stored credentials is what SWA does."
+  },
+  {
+   "id": "D2-006",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "Some OIN integrations for Microsoft-oriented apps offer an XML-based federation protocol other than SAML. Which protocol is it?",
+   "choices": [
+    "OpenID Connect",
+    "WS-Federation",
+    "SCIM",
+    "Kerberos"
+   ],
+   "answer": "WS-Federation",
+   "explanation": "WS-Federation is the XML-based federation protocol several Microsoft-focused apps use. SCIM is a provisioning protocol, not a sign-in protocol."
+  },
+  {
+   "id": "D2-007",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "Why is an OIN integration usually preferred over a custom App Integration Wizard app when both are possible?",
+   "choices": [
+    "Okta maintains its settings and it often adds provisioning",
+    "It lets users skip the app's authentication policy",
+    "It does not need any users or groups assigned to it before sign-in works",
+    "It keeps app passwords on the user's own device"
+   ],
+   "answer": "Okta maintains its settings and it often adds provisioning",
+   "explanation": "OIN integrations come with tested, Okta-maintained settings and, where listed, provisioning support. Every app still enforces its authentication policy and needs assignments."
+  },
+  {
+   "id": "D2-008",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "A company uses a production and a sandbox tenant of the same OIN app, each with a different subdomain. How should the admin integrate both?",
+   "choices": [
+    "Add the app once and change its subdomain every time",
+    "Add the app once and send both tenants in RelayState",
+    "Add the OIN app twice, each instance with its own label",
+    "Add one OIN instance for production and one Bookmark app for the sandbox"
+   ],
+   "answer": "Add the OIN app twice, each instance with its own label",
+   "explanation": "Each OIN app can be added as several instances, each with its own label and settings such as the subdomain. Switching one instance back and forth would break SSO for one tenant."
+  },
+  {
+   "id": "D2-009",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "In the App Integration Wizard for a custom SAML app, which field takes the service provider's Assertion Consumer Service URL?",
+   "choices": [
+    "Audience URI (SP Entity ID)",
+    "Default RelayState",
+    "Single sign-on URL",
+    "Name ID format"
+   ],
+   "answer": "Single sign-on URL",
+   "explanation": "The Single sign-on URL is where Okta posts the assertion, which is the SP's ACS URL. The Audience URI is the SP's entity identifier, not its endpoint."
+  },
+  {
+   "id": "D2-010",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "A vendor gives the admin a value called the SP Entity ID that must appear in every assertion as its intended recipient. Which field in the SAML settings should hold it?",
+   "choices": [
+    "Audience URI (SP Entity ID)",
+    "Single sign-on URL",
+    "Default RelayState",
+    "Application username"
+   ],
+   "answer": "Audience URI (SP Entity ID)",
+   "explanation": "The Audience URI restricts the assertion to the named service provider. The Single sign-on URL is the address the assertion is sent to."
+  },
+  {
+   "id": "D2-011",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "After adding an OIN app with SAML, the admin must give the vendor Okta's sign-in URL, issuer and signing certificate. Where are these values found?",
+   "choices": [
+    "The Provisioning tab of the app integration, under API credentials",
+    "Security > API > Tokens in the Admin Console",
+    "The app's General tab under App Settings",
+    "The SAML setup instructions on the app's Sign On tab"
+   ],
+   "answer": "The SAML setup instructions on the app's Sign On tab",
+   "explanation": "The Sign On tab links to setup instructions and metadata with Okta's SSO URL, issuer and certificate. The Provisioning tab holds API credentials for user lifecycle, not SAML values."
+  },
+  {
+   "id": "D2-012",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "A service provider requires the user's email address as the SAML subject. Which configuration meets this?",
+   "choices": [
+    "A group attribute statement that sends the user's email domain to the SP",
+    "Name ID format EmailAddress with Email as application username",
+    "A Default RelayState that points to the user's mailbox",
+    "The Sync Password option on the Provisioning tab"
+   ],
+   "answer": "Name ID format EmailAddress with Email as application username",
+   "explanation": "The subject (NameID) is set by the Name ID format and the application username, so both must point at the email. RelayState only controls the landing page after sign-in."
+  },
+  {
+   "id": "D2-013",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "A SaaS app needs each user's department included in the SAML assertion. What should the admin configure?",
+   "choices": [
+    "A group attribute statement filtered by department",
+    "An attribute statement that sends user.department",
+    "The Update User Attributes provisioning feature",
+    "A Name ID format of Unspecified for the department"
+   ],
+   "answer": "An attribute statement that sends user.department",
+   "explanation": "Attribute statements add profile values such as user.department to the assertion. Update User Attributes pushes values through the app's API, not inside the SAML assertion."
+  },
+  {
+   "id": "D2-014",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "The SAML signing certificate for an app is about to expire. What should the admin do to avoid an SSO outage?",
+   "choices": [
+    "Reset the passwords of every user assigned to the app before the expiry date",
+    "Remove and re-add the group assignment for the app",
+    "Clear the sessions of all users assigned to the app",
+    "Generate a new certificate, give it to the SP, then activate it"
+   ],
+   "answer": "Generate a new certificate, give it to the SP, then activate it",
+   "explanation": "The SP must trust the new signing certificate before Okta starts using it, so the admin creates it, shares it, then activates it. Passwords and sessions do not affect certificate trust."
+  },
+  {
+   "id": "D2-015",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "Users of a new custom SAML app reach the app but see an 'invalid audience' error. What is the MOST likely cause?",
+   "choices": [
+    "The users are not enrolled in Okta Verify",
+    "The Sync Password feature is not enabled",
+    "The Audience URI does not match the SP's entity ID",
+    "The app's tile is hidden from the users' End-User Dashboard"
+   ],
+   "answer": "The Audience URI does not match the SP's entity ID",
+   "explanation": "An audience error means the assertion was issued for a different entity ID than the SP expects. Authenticator enrollment and dashboard visibility would not produce an audience error."
+  },
+  {
+   "id": "D2-016",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "An app needs to receive the names of the user's groups that start with \"app-\" in the SAML assertion. What should the admin add?",
+   "choices": [
+    "A group attribute statement with a Starts with \"app-\" filter",
+    "A group rule that adds \"app-\" users to the Everyone group",
+    "A Push Groups entry for every group starting with \"app-\"",
+    "An attribute statement that sends user.login as groups"
+   ],
+   "answer": "A group attribute statement with a Starts with \"app-\" filter",
+   "explanation": "Group attribute statements send group names in the assertion, filtered with conditions such as Starts with. Group Push creates groups in the app through its API, not in the assertion."
+  },
+  {
+   "id": "D2-017",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "A developer team has a server-rendered web app that can keep a client secret on its back end. Which application type should the admin choose when creating the OIDC integration?",
+   "choices": [
+    "Web Application",
+    "Single-Page Application",
+    "Native Application",
+    "API Services"
+   ],
+   "answer": "Web Application",
+   "explanation": "A Web Application runs on a server that can protect a client secret. A Single-Page Application runs in the browser and cannot keep a secret."
+  },
+  {
+   "id": "D2-018",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "A browser-based single-page app cannot store a client secret safely. Which OIDC flow should its integration use?",
+   "choices": [
+    "Client Credentials with a client secret",
+    "Resource Owner Password with the user's password stored in the app",
+    "Authorization Code with PKCE and no client secret",
+    "Implicit flow with a long-lived refresh token"
+   ],
+   "answer": "Authorization Code with PKCE and no client secret",
+   "explanation": "PKCE protects the authorization code exchange without a secret, which is the recommended flow for SPAs. Client Credentials is for machine-to-machine apps with no user."
+  },
+  {
+   "id": "D2-019",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "After signing in through a new OIDC integration, users get an error saying the redirect URI is not allowed. What should the admin fix?",
+   "choices": [
+    "Add the app's callback URL to the IP allowlist of a network zone",
+    "Add the app's exact callback URL to Sign-in redirect URIs",
+    "Switch the app's sign-on method from OIDC to SAML",
+    "Enable Sync Password on the Provisioning tab"
+   ],
+   "answer": "Add the app's exact callback URL to Sign-in redirect URIs",
+   "explanation": "Okta only returns tokens to redirect URIs registered on the integration, and they must match exactly. Network zones control where requests come from, not where tokens are sent."
+  },
+  {
+   "id": "D2-020",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "A developer asks for the values needed to configure an OIDC library for a new web app integration. What should the admin provide?",
+   "choices": [
+    "The SAML signing certificate from the Sign On tab",
+    "A Super Administrator API token created under Security > API",
+    "The IdP metadata URL from the SAML instructions",
+    "The client ID and client secret from the General tab"
+   ],
+   "answer": "The client ID and client secret from the General tab",
+   "explanation": "OIDC clients identify themselves with the client ID and, for web apps, the client secret. An admin API token is for the Okta management API and should never be embedded in an app."
+  },
+  {
+   "id": "D2-021",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "In an OIDC sign-in, which token carries identity claims about the user for the client app?",
+   "choices": [
+    "Refresh token",
+    "SAML assertion",
+    "Session cookie",
+    "ID token"
+   ],
+   "answer": "ID token",
+   "explanation": "The ID token is a signed JWT with claims about who signed in. A refresh token only obtains new tokens and says nothing about the user."
+  },
+  {
+   "id": "D2-022",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "A back-end service must call a protected API with no user present. Which app integration type fits BEST?",
+   "choices": [
+    "Web Application using the Authorization Code grant",
+    "API Services using the Client Credentials grant",
+    "SWA with an administrator-set username and password",
+    "SAML 2.0 with a Default RelayState"
+   ],
+   "answer": "API Services using the Client Credentials grant",
+   "explanation": "API Services integrations use Client Credentials for machine-to-machine access. The Authorization Code grant requires a user to sign in."
+  },
+  {
+   "id": "D2-023",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "An admin wants users to start sign-in to an OIDC app from its tile on the End-User Dashboard. Which settings make this work?",
+   "choices": [
+    "Login initiated by Either Okta or App, plus an Initiate login URI",
+    "Login initiated by App Only, plus a matching Sign-out redirect URI list",
+    "A Default RelayState plus an Audience URI",
+    "A group attribute statement plus the Okta Browser Plugin"
+   ],
+   "answer": "Login initiated by Either Okta or App, plus an Initiate login URI",
+   "explanation": "OIDC apps show a working tile when login can be initiated by Okta and an Initiate login URI is set. App Only means sign-in can start only at the app itself."
+  },
+  {
+   "id": "D2-024",
+   "objective": "2.1",
+   "topic": "OIDC App Setup",
+   "stem": "What is the purpose of the Sign-out redirect URIs setting on an OIDC app integration?",
+   "choices": [
+    "Lists where Okta may send tokens after signing in",
+    "Lists the IP ranges that are allowed to send a sign-out request",
+    "Lists where Okta may send the user after signing out",
+    "Lists the apps whose sessions end with this one"
+   ],
+   "answer": "Lists where Okta may send the user after signing out",
+   "explanation": "Sign-out redirect URIs are the allowed destinations after logout. Destinations after sign-in are the Sign-in redirect URIs."
+  },
+  {
+   "id": "D2-025",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "Users click a new SWA app tile, but their credentials are never filled in on the app's sign-in page. What is required in the browser for SWA to work?",
+   "choices": [
+    "The Okta Verify app",
+    "An Okta FastPass enrollment",
+    "The Okta Browser Plugin",
+    "The Okta Active Directory agent"
+   ],
+   "answer": "The Okta Browser Plugin",
+   "explanation": "SWA relies on the Okta Browser Plugin to fill in and submit vaulted credentials. Okta Verify and FastPass are authenticators, not credential fillers."
+  },
+  {
+   "id": "D2-026",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "A marketing team shares one social media account. Members must sign in from Okta without ever seeing the password. Which SWA credential option fits?",
+   "choices": [
+    "Users share a single username and password set by administrator",
+    "User sets username and password",
+    "Administrator sets username and password",
+    "Administrator sets username, user sets password"
+   ],
+   "answer": "Users share a single username and password set by administrator",
+   "explanation": "The shared option stores one admin-managed credential for every assigned user, and the plugin fills it in. Administrator sets username and password stores a separate credential per user."
+  },
+  {
+   "id": "D2-027",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "Employees already have their own accounts in a legacy web app that has no federation support. Which SWA credential option lets each person keep their existing login?",
+   "choices": [
+    "Users share a single username and password set by administrator",
+    "Administrator sets username, password is the same as user's Okta password",
+    "Administrator sets username and password",
+    "User sets username and password"
+   ],
+   "answer": "User sets username and password",
+   "explanation": "When users already know their own credentials, letting them enter both keeps their existing accounts. The shared option would put everyone on one account."
+  },
+  {
+   "id": "D2-028",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "An admin wants to control the usernames used in an SWA app while each user chooses their own password. Which credential option should be selected?",
+   "choices": [
+    "User sets username and password",
+    "Administrator sets username, user sets password",
+    "Users share a single username and password set by administrator",
+    "Administrator sets username and password"
+   ],
+   "answer": "Administrator sets username, user sets password",
+   "explanation": "This option fixes the username from Okta while the user supplies the password. Administrator sets username and password removes the user's choice of password."
+  },
+  {
+   "id": "D2-029",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "An SWA app accepts the same password users have in Okta, and the admin wants one password to remember. Which credential option fits?",
+   "choices": [
+    "User sets username and password",
+    "Administrator sets username, password is the same as user's Okta password",
+    "Users share a single username and password set by administrator",
+    "Administrator sets username, user sets password"
+   ],
+   "answer": "Administrator sets username, password is the same as user's Okta password",
+   "explanation": "This option reuses the Okta password for the app. User sets username and password would let the two passwords drift apart."
+  },
+  {
+   "id": "D2-030",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "An app offers both SAML and SWA in the OIN. Why do security teams generally prefer SAML?",
+   "choices": [
+    "SAML works without assigning the app to any users or groups at all",
+    "SAML lets users bypass the authentication policy",
+    "SAML needs the browser plugin on fewer browsers",
+    "No app password exists to be stolen, reused or rotated"
+   ],
+   "answer": "No app password exists to be stolen, reused or rotated",
+   "explanation": "Federation replaces the app password with a signed assertion, removing a credential that can be phished. SAML apps still need assignments and still enforce policies."
+  },
+  {
+   "id": "D2-031",
+   "objective": "2.1",
+   "topic": "SWA and Password Vaulting",
+   "stem": "When creating a custom SWA app in the App Integration Wizard, what must the admin provide about the target app?",
+   "choices": [
+    "The app's Assertion Consumer Service URL",
+    "The app's OIDC sign-in redirect URIs",
+    "The URL of the app's sign-in page",
+    "The app's SCIM base URL and token"
+   ],
+   "answer": "The URL of the app's sign-in page",
+   "explanation": "SWA works by filling the app's own sign-in form, so Okta needs the sign-in page URL. ACS and redirect URIs belong to SAML and OIDC."
+  },
+  {
+   "id": "D2-032",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "A user clicks an app tile on the Okta End-User Dashboard and is signed in to a SAML app. What kind of flow is this?",
+   "choices": [
+    "IdP-initiated sign-in",
+    "SP-initiated sign-in",
+    "Device authorization sign-in",
+    "Back-channel logout"
+   ],
+   "answer": "IdP-initiated sign-in",
+   "explanation": "Starting from the Okta dashboard means the identity provider begins the flow. SP-initiated begins at the app, which then redirects to Okta."
+  },
+  {
+   "id": "D2-033",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "A user browses straight to an app's URL, is redirected to Okta to authenticate, and then lands back in the app. What kind of flow is this?",
+   "choices": [
+    "SP-initiated sign-in",
+    "IdP-initiated sign-in",
+    "Client Credentials sign-in",
+    "Password vaulting sign-in"
+   ],
+   "answer": "SP-initiated sign-in",
+   "explanation": "The service provider starts the request and sends the user to Okta, so it is SP-initiated. IdP-initiated starts on the Okta dashboard."
+  },
+  {
+   "id": "D2-034",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "After IdP-initiated sign-in, users of a SAML app should land on a reports page instead of the app's home page. Which setting should the admin use?",
+   "choices": [
+    "Audience URI",
+    "Name ID format",
+    "Default RelayState",
+    "Sign-out redirect URI"
+   ],
+   "answer": "Default RelayState",
+   "explanation": "RelayState tells the SP where to send the user after the assertion is accepted. The Audience URI identifies the SP and does not choose a page."
+  },
+  {
+   "id": "D2-035",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "Okta usernames are full email addresses, but an app expects only the part before the @ sign. What should the admin set on the Sign On tab?",
+   "choices": [
+    "Name ID format of Unspecified",
+    "Application username format of Email prefix",
+    "A Default RelayState of the user's login",
+    "An attribute statement sending user.email"
+   ],
+   "answer": "Application username format of Email prefix",
+   "explanation": "The Email prefix format sends only the local part of the address as the app username. Name ID format describes the identifier type but does not trim the value."
+  },
+  {
+   "id": "D2-036",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "An app requires usernames built from the first initial and last name, such as jsmith. Which application username format allows this?",
+   "choices": [
+    "Okta username prefix",
+    "Email",
+    "Okta username",
+    "Custom, using an Okta Expression Language expression"
+   ],
+   "answer": "Custom, using an Okta Expression Language expression",
+   "explanation": "The Custom format accepts an expression that builds the value from profile attributes. Okta username prefix only trims an existing username."
+  },
+  {
+   "id": "D2-037",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "Users should reach an app only through SP-initiated sign-in, so its tile must not appear on the End-User Dashboard. What should the admin configure?",
+   "choices": [
+    "Remove every user and group assignment from the app until it is needed",
+    "Change the sign-on method to Bookmark App",
+    "Set the app's authentication policy to deny access",
+    "Application visibility: Do not display application icon to users"
+   ],
+   "answer": "Application visibility: Do not display application icon to users",
+   "explanation": "Hiding the icon removes the tile while assigned users can still sign in from the app. Removing assignments or denying access would block sign-in altogether."
+  },
+  {
+   "id": "D2-038",
+   "objective": "2.1",
+   "topic": "Sign-In Flows and App Username",
+   "stem": "In Okta Identity Engine, what decides which authenticators a user must satisfy when opening a specific SAML app?",
+   "choices": [
+    "The authenticator enrollment policy",
+    "The app's authentication policy",
+    "The password policy for the user's group",
+    "The app's Default RelayState"
+   ],
+   "answer": "The app's authentication policy",
+   "explanation": "Each app is governed by an authentication policy (app sign-in policy) that sets the assurance needed. Enrollment policies decide which authenticators users set up, not what each app demands."
+  },
+  {
+   "id": "D2-072",
+   "type": "order",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "An admin is integrating an OIN app with SAML SSO. Put the steps in order.",
+   "items": [
+    "Browse the App Catalog and add the app integration",
+    "Enter the General settings such as the app label and tenant subdomain",
+    "Select SAML 2.0 on the Sign On tab and open the setup instructions",
+    "Configure the vendor with Okta's SSO URL, issuer and certificate",
+    "Assign a test group and sign in as a test user"
+   ],
+   "explanation": "The app is added from the OIN, configured on Okta's side, then the vendor is set to trust Okta's values. A test assignment and sign-in confirm SSO before wider rollout."
+  },
+  {
+   "id": "D2-073",
+   "type": "match",
+   "objective": "2.1",
+   "topic": "OIN Catalog and Integration Types",
+   "stem": "Match each integration type to what it does.",
+   "pairs": [
+    {
+     "item": "SAML 2.0",
+     "match": "Sends a signed XML assertion to the service provider"
+    },
+    {
+     "item": "OpenID Connect",
+     "match": "Issues an ID token to a registered client app"
+    },
+    {
+     "item": "Secure Web Authentication",
+     "match": "Fills vaulted credentials into the app's sign-in form"
+    },
+    {
+     "item": "Bookmark App",
+     "match": "Opens a URL from the dashboard with no sign-in"
+    }
+   ],
+   "targets_extra": [
+    "Creates and updates app accounts through a SCIM API"
+   ],
+   "explanation": "SAML and OIDC federate sign-in with an assertion or token, SWA replays stored credentials and a Bookmark is only a link. SCIM is provisioning, not an SSO type."
+  },
+  {
+   "id": "D2-074",
+   "type": "multi",
+   "objective": "2.1",
+   "topic": "SAML App Setup",
+   "stem": "A vendor is configuring its side of a SAML integration with Okta. Which TWO values does the vendor need from Okta?",
+   "choices": [
+    "Okta's identity provider single sign-on URL",
+    "Okta's X.509 signing certificate",
+    "The OIDC client secret for the app",
+    "A Super Administrator API token",
+    "The app's sign-in redirect URIs"
+   ],
+   "answers": [
+    "Okta's identity provider single sign-on URL",
+    "Okta's X.509 signing certificate"
+   ],
+   "select": 2,
+   "explanation": "The SP needs to know where to send users and how to verify Okta's signature. Client secrets and redirect URIs belong to OIDC, and an admin API token must never be shared."
+  },
+  {
+   "id": "D2-039",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "An admin opens the Provisioning tab of a new OIN app that supports provisioning. What should the admin do FIRST?",
+   "choices": [
+    "Configure API Integration and select Enable API integration",
+    "Turn on Create Users in the To App settings",
+    "Assign the Sales group on the Assignments tab so accounts are created",
+    "Add the groups to push on the Push Groups tab"
+   ],
+   "answer": "Configure API Integration and select Enable API integration",
+   "explanation": "Okta can only provision once the API integration is enabled with valid credentials; the To App options appear after that. Assigning first would not create accounts."
+  },
+  {
+   "id": "D2-040",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "After entering API credentials for an app, how can the admin confirm Okta can reach the app's API before saving?",
+   "choices": [
+    "Open the mapping Preview tab",
+    "Select Push Now on a group",
+    "Select Test API Credentials",
+    "Run Import Now from the app"
+   ],
+   "answer": "Select Test API Credentials",
+   "explanation": "Test API Credentials checks that Okta can authenticate to the app's API. The mapping Preview only shows how attribute values would be transformed."
+  },
+  {
+   "id": "D2-041",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "An org is licensed for Lifecycle Management and other apps show a Provisioning tab, but one OIN app does not. What is the MOST likely reason?",
+   "choices": [
+    "No users or groups have been assigned to the app integration yet",
+    "The app's SAML certificate has expired",
+    "The integration supports only SSO, not provisioning",
+    "The Okta Browser Plugin is not installed"
+   ],
+   "answer": "The integration supports only SSO, not provisioning",
+   "explanation": "The Provisioning tab appears only for integrations that support provisioning. Assignments and certificates do not hide the tab."
+  },
+  {
+   "id": "D2-042",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "Which account is BEST to use for an app's provisioning API credentials?",
+   "choices": [
+    "A dedicated service account with admin rights in the app",
+    "The personal app account of the admin who is doing the integration setup",
+    "A test end user with no rights in the app",
+    "The Okta Super Administrator account"
+   ],
+   "answer": "A dedicated service account with admin rights in the app",
+   "explanation": "A dedicated service account keeps provisioning working when people leave and makes its actions easy to audit. A personal account breaks when that admin is offboarded."
+  },
+  {
+   "id": "D2-043",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "On an app's Provisioning tab, what do the To App settings control?",
+   "choices": [
+    "Which users and attributes Okta imports from the app",
+    "Which groups the app sends back into Okta",
+    "Which authenticators users need to open the app",
+    "Which changes Okta pushes from Okta into the app"
+   ],
+   "answer": "Which changes Okta pushes from Okta into the app",
+   "explanation": "To App covers Okta-to-app actions such as Create Users and Deactivate Users. Imports from the app are configured in To Okta."
+  },
+  {
+   "id": "D2-044",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "Provisioning to an app starts failing with authentication errors after the app's service account password was changed. What should the admin do?",
+   "choices": [
+    "Clear the sessions of every user assigned to the app and ask them to retry",
+    "Update the API credentials on the Provisioning tab and test them",
+    "Generate a new SAML signing certificate for the app",
+    "Re-run the group rule that assigns the app"
+   ],
+   "answer": "Update the API credentials on the Provisioning tab and test them",
+   "explanation": "Okta still uses the old service account password, so the stored API credentials must be updated and tested. SAML certificates and sessions do not affect API calls."
+  },
+  {
+   "id": "D2-045",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "An in-house app exposes a standards-based user management API. Which protocol do Okta's custom provisioning integrations use with such an app?",
+   "choices": [
+    "SAML",
+    "SCIM",
+    "WS-Federation",
+    "LDAP"
+   ],
+   "answer": "SCIM",
+   "explanation": "SCIM is the open standard for creating, updating and deactivating accounts. SAML and WS-Federation handle sign-in only."
+  },
+  {
+   "id": "D2-046",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "Which To App provisioning feature creates an account in the app when a user is assigned to it?",
+   "choices": [
+    "Update User Attributes",
+    "Deactivate Users",
+    "Sync Password",
+    "Create Users"
+   ],
+   "answer": "Create Users",
+   "explanation": "Create Users makes the app account at assignment. Update User Attributes only changes accounts that already exist."
+  },
+  {
+   "id": "D2-047",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "HR changes a user's title in Okta, and the app should show the new title automatically. Which feature must be enabled?",
+   "choices": [
+    "Create Users",
+    "Sync Password",
+    "Update User Attributes",
+    "Deactivate Users"
+   ],
+   "answer": "Update User Attributes",
+   "explanation": "Update User Attributes pushes profile changes for mapped attributes to existing accounts. Create Users only acts once, when the account is first created."
+  },
+  {
+   "id": "D2-048",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "When a user is deactivated in Okta, their account in a provisioned app should be disabled too. Which feature handles this?",
+   "choices": [
+    "Deactivate Users",
+    "Update User Attributes",
+    "Create Users",
+    "Sync Password"
+   ],
+   "answer": "Deactivate Users",
+   "explanation": "Deactivate Users disables or removes the app account when the user is deactivated or unassigned. Without it the app account stays active."
+  },
+  {
+   "id": "D2-049",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "Users should sign in to a provisioned app with the same password they use in Okta. Which feature should the admin enable?",
+   "choices": [
+    "Sync Password",
+    "Create Users",
+    "Update User Attributes",
+    "Deactivate Users"
+   ],
+   "answer": "Sync Password",
+   "explanation": "Sync Password pushes the Okta password, or a random one, to the app account. The other features handle accounts and attributes, not passwords."
+  },
+  {
+   "id": "D2-050",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "Create Users is enabled for an app. A user is removed from the app's assigned group, yet their app account remains active. What is the MOST likely cause?",
+   "choices": [
+    "Sync Password is not enabled",
+    "The app has no attribute mappings",
+    "Deactivate Users is not enabled",
+    "The SAML certificate is expired"
+   ],
+   "answer": "Deactivate Users is not enabled",
+   "explanation": "Unassignment only disables the app account when Deactivate Users is on. Sync Password and mappings do not act on unassignment."
+  },
+  {
+   "id": "D2-051",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "Users sign in to an app only through SAML and should never know its local password. Which Sync Password setting fits BEST?",
+   "choices": [
+    "Sync the user's current Okta password to the app",
+    "Sync a randomly generated password to the app",
+    "Turn off every To App provisioning feature",
+    "Let users set their own app password in SWA"
+   ],
+   "answer": "Sync a randomly generated password to the app",
+   "explanation": "A random password gives the app account a password no one knows, so users must come through Okta SSO. Syncing the Okta password would let users sign in to the app directly."
+  },
+  {
+   "id": "D2-052",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "When does the Create Users feature create a new account in the app?",
+   "choices": [
+    "When a user first signs in to the Okta End-User Dashboard",
+    "When an admin adds the user to any Okta group",
+    "When a user is imported from the app into Okta",
+    "When a user is assigned, directly or through a group"
+   ],
+   "answer": "When a user is assigned, directly or through a group",
+   "explanation": "Create Users is triggered by an app assignment, whether individual or group based. Membership in a group that is not assigned to the app does nothing."
+  },
+  {
+   "id": "D2-053",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "Every member of the Sales group needs access to a new app. What is the BEST way to assign it?",
+   "choices": [
+    "Assign the app to each Sales member individually",
+    "Push the Sales group to the app on Push Groups",
+    "Add the Sales group to the app's SAML group attribute statements",
+    "Assign the app to the Sales group on the Assignments tab"
+   ],
+   "answer": "Assign the app to the Sales group on the Assignments tab",
+   "explanation": "A group assignment gives the app to all current and future members. Group Push only copies the group to the app and does not grant access."
+  },
+  {
+   "id": "D2-054",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "Why are group-based app assignments usually preferred over individual ones?",
+   "choices": [
+    "Group-assigned users skip the app's authentication policy at sign-in",
+    "Joiners get the app and leavers lose it as membership changes",
+    "Group assignments do not need provisioning to be enabled",
+    "Group assignments keep app access after deactivation"
+   ],
+   "answer": "Joiners get the app and leavers lose it as membership changes",
+   "explanation": "Access follows group membership, so onboarding and offboarding happen automatically. Authentication policies apply no matter how the user was assigned."
+  },
+  {
+   "id": "D2-055",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "A user belongs to two groups that are both assigned to the same app with different values for an app attribute. What decides which value the user receives?",
+   "choices": [
+    "The group priority order on the app's Assignments tab",
+    "The group that was created first in the org",
+    "The alphabetical order of the two group names",
+    "The value the user picks on first sign-in"
+   ],
+   "answer": "The group priority order on the app's Assignments tab",
+   "explanation": "When groups give conflicting app attribute values, Okta applies the value from the higher-priority group assignment. Creation date and names have no effect."
+  },
+  {
+   "id": "D2-056",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "A user received an app through the Marketing group, but should lose that app while staying in Marketing. What is the BEST approach?",
+   "choices": [
+    "Remove the user's individual assignment from the app's Assignments tab",
+    "Suspend the user so that only this app is blocked",
+    "Use a separate group for the app and take the user out of it",
+    "Hide the app's tile from that user's dashboard"
+   ],
+   "answer": "Use a separate group for the app and take the user out of it",
+   "explanation": "Group-based assignments follow membership, so access is best controlled with a group dedicated to the app. A group-assigned user has no individual assignment to remove, and suspending blocks everything."
+  },
+  {
+   "id": "D2-057",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "An admin wants to confirm whether a user got an app individually or through a group. Where should the admin look?",
+   "choices": [
+    "The user's attribute values in the Profile Editor",
+    "The app's attribute statements on the Sign On tab",
+    "The assignment type on the app's Assignments tab",
+    "The app's Push Groups tab status column"
+   ],
+   "answer": "The assignment type on the app's Assignments tab",
+   "explanation": "The Assignments tab lists each assignment as individual or group based. The Profile Editor shows attribute definitions, not how access was granted."
+  },
+  {
+   "id": "D2-058",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "Every user whose department is Finance should get a finance app automatically. What should the admin set up?",
+   "choices": [
+    "A group rule that fills a group which is assigned to the app",
+    "An attribute statement that sends the user's department to the app at sign-in",
+    "A Push Groups entry for a new Finance group",
+    "A global session policy rule for Finance users"
+   ],
+   "answer": "A group rule that fills a group which is assigned to the app",
+   "explanation": "A group rule adds users by attribute, and assigning the group to the app grants access. An attribute statement only passes data at sign-in."
+  },
+  {
+   "id": "D2-059",
+   "objective": "2.2",
+   "topic": "Group and User Assignments",
+   "stem": "An internal news app must be available to every user in the org with no maintenance. What is the simplest assignment?",
+   "choices": [
+    "Create a group rule that copies each new user",
+    "Assign each user individually after onboarding",
+    "Push the Everyone group to the app",
+    "Assign the app to the Everyone group"
+   ],
+   "answer": "Assign the app to the Everyone group",
+   "explanation": "Everyone contains every user in the org, so assigning it covers everyone automatically. Pushing a group does not grant app access."
+  },
+  {
+   "id": "D2-060",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "An app needs Okta groups and their members created inside it so it can apply its own permissions. Which feature should the admin use?",
+   "choices": [
+    "Group assignment",
+    "Push Groups",
+    "Group rules",
+    "Group attribute statements"
+   ],
+   "answer": "Push Groups",
+   "explanation": "Push Groups creates or links a group in the app and keeps its membership in sync. A group assignment grants app access but does not create a group in the app."
+  },
+  {
+   "id": "D2-061",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "What is the difference between assigning a group to an app and pushing that group?",
+   "choices": [
+    "Assignment copies the group to the app; push grants access to users",
+    "Assignment grants access to users; push copies the group to the app",
+    "Assignment works only for SAML apps; push only for SWA apps",
+    "Assignment needs an import first; push needs a group rule"
+   ],
+   "answer": "Assignment grants access to users; push copies the group to the app",
+   "explanation": "Assignment controls who gets the app and is provisioned; push mirrors the group object and its membership in the app."
+  },
+  {
+   "id": "D2-062",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "A group has been pushed to an app. An admin later adds three users to that group in Okta. What happens in the app?",
+   "choices": [
+    "Nothing happens until the admin pushes the group again by hand",
+    "The app creates a second group with only the new users",
+    "The three users are removed from every other app group",
+    "Okta updates the pushed group's membership in the app"
+   ],
+   "answer": "Okta updates the pushed group's membership in the app",
+   "explanation": "While a push is active, membership changes in Okta flow to the app group. A one-off manual push is not required for each change."
+  },
+  {
+   "id": "D2-063",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "The app already has a group named Engineering that matches an Okta group. How should the admin push without creating a duplicate?",
+   "choices": [
+    "Create a new group in the app with the same name",
+    "Delete the app group and then push the Okta group",
+    "Link the Okta group to the existing group in the app",
+    "Assign the Okta group to the app instead"
+   ],
+   "answer": "Link the Okta group to the existing group in the app",
+   "explanation": "Push Groups can link an Okta group to an existing app group. Deleting the app group first would lose its existing permissions."
+  },
+  {
+   "id": "D2-064",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "A group was pushed to an app, but some of its members do not appear in the app group. What is the MOST likely cause?",
+   "choices": [
+    "Those members are not assigned to the app",
+    "Those members are in Password expired status",
+    "The group's tile is hidden on the dashboard",
+    "The group has no group rule attached to it"
+   ],
+   "answer": "Those members are not assigned to the app",
+   "explanation": "Group Push only includes members who have accounts in the app through an assignment. Password status and dashboard tiles do not affect push."
+  },
+  {
+   "id": "D2-065",
+   "objective": "2.2",
+   "topic": "Group Push",
+   "stem": "An admin stops pushing a group to an app and wants it to stay in the app for auditing. Which unlink option should be chosen?",
+   "choices": [
+    "Leave the group in the target app",
+    "Delete the group in the target app",
+    "Deactivate the group in Okta",
+    "Remove the group's app assignment"
+   ],
+   "answer": "Leave the group in the target app",
+   "explanation": "When unlinking a pushed group, Okta asks whether to leave or delete the group in the target app. Leaving it keeps it for audit."
+  },
+  {
+   "id": "D2-066",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "An admin assigned a group to a provisioned app and must verify that a specific user's account was created. What is the BEST check?",
+   "choices": [
+    "Open the Okta user profile in the Profile Editor",
+    "Review the global session policy rules that apply to the user's groups",
+    "Check the System Log for the push, then look in the app",
+    "Check whether the user enrolled Okta Verify"
+   ],
+   "answer": "Check the System Log for the push, then look in the app",
+   "explanation": "The System Log records the push to the app, and the app's own console confirms the account exists. The Profile Editor holds attribute definitions, not provisioning results."
+  },
+  {
+   "id": "D2-067",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "Where does an admin see failed provisioning tasks across all apps so they can be fixed and retried?",
+   "choices": [
+    "Directory > Profile Sources",
+    "Dashboard > Tasks",
+    "Security > Networks",
+    "Settings > Account"
+   ],
+   "answer": "Dashboard > Tasks",
+   "explanation": "Failed provisioning appears in Tasks on the Admin Console dashboard, where it can be retried. Profile Sources sets which systems master user profiles."
+  },
+  {
+   "id": "D2-068",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "A provisioning error says a required attribute is missing for a user. What should the admin do?",
+   "choices": [
+    "Delete the user and create a new Okta account",
+    "Turn off Create Users and turn it back on",
+    "Clear the user's sessions and ask them to sign in",
+    "Fill the attribute in Okta or its mapping, then retry the task"
+   ],
+   "answer": "Fill the attribute in Okta or its mapping, then retry the task",
+   "explanation": "The app rejected the request because the value was empty, so the admin supplies it and retries. Toggling Create Users does not populate the missing value."
+  },
+  {
+   "id": "D2-069",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "Before enabling Create Users, an app already holds accounts for many existing staff. What should the admin do to avoid duplicates?",
+   "choices": [
+    "Delete the existing app accounts and let Okta recreate them on assignment",
+    "Assign the app individually with a new username format",
+    "Push the Everyone group to the app before assigning it",
+    "Import from the app so its accounts are matched to Okta users"
+   ],
+   "answer": "Import from the app so its accounts are matched to Okta users",
+   "explanation": "An import with matching rules links existing app accounts to Okta users. Deleting accounts loses the users' data in the app."
+  },
+  {
+   "id": "D2-070",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "An auditor asks who assigned an app to a particular user and when. Where should the admin look?",
+   "choices": [
+    "The Profile Editor",
+    "The System Log",
+    "The app's Sign On tab",
+    "The authenticators page"
+   ],
+   "answer": "The System Log",
+   "explanation": "The System Log records admin actions such as app assignments with actor and time. The Sign On tab only holds SSO settings."
+  },
+  {
+   "id": "D2-071",
+   "objective": "2.2",
+   "topic": "Verifying and Retrying Provisioning",
+   "stem": "A user's app assignment shows a provisioning error. After correcting the app's API credentials, what should the admin do next?",
+   "choices": [
+    "Retry the failed provisioning for that assignment",
+    "Remove the app from the user's group permanently",
+    "Change the app's sign-on method to SWA",
+    "Generate a new SAML signing certificate"
+   ],
+   "answer": "Retry the failed provisioning for that assignment",
+   "explanation": "Once the cause is fixed, retrying the task makes Okta send the request again. Changing sign-on methods does not touch provisioning."
+  },
+  {
+   "id": "D2-075",
+   "type": "order",
+   "objective": "2.2",
+   "topic": "API Integration Setup",
+   "stem": "Put the steps for setting up provisioning to an OIN app in order.",
+   "items": [
+    "Enable API integration and enter the app's service account credentials",
+    "Test the API credentials and save the integration",
+    "Enable Create Users, Update User Attributes and Deactivate Users under To App",
+    "Assign the app to the target group",
+    "Verify the user's account in the app and in the System Log"
+   ],
+   "explanation": "The API connection comes first, then the To App features, then assignments trigger provisioning. Verifying in the app and System Log confirms the account was created."
+  },
+  {
+   "id": "D2-076",
+   "type": "match",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "Match each provisioning feature to its result.",
+   "pairs": [
+    {
+     "item": "Create Users",
+     "match": "Makes an app account when the user is assigned"
+    },
+    {
+     "item": "Update User Attributes",
+     "match": "Sends Okta profile changes to the app account"
+    },
+    {
+     "item": "Deactivate Users",
+     "match": "Disables the app account when access is removed"
+    },
+    {
+     "item": "Sync Password",
+     "match": "Sets the app password from Okta"
+    }
+   ],
+   "targets_extra": [
+    "Creates the Okta group inside the app"
+   ],
+   "explanation": "The four To App features cover create, update, deactivate and password. Creating the group in the app is Group Push, a separate feature."
+  },
+  {
+   "id": "D2-077",
+   "type": "multi",
+   "objective": "2.2",
+   "topic": "Provisioning Features",
+   "stem": "An admin wants users to get an account in an app automatically as soon as their group is assigned. Which TWO settings are required?",
+   "choices": [
+    "Enable API integration on the Provisioning tab",
+    "Enable Create Users under To App",
+    "Add the group under Push Groups",
+    "Enable Sync Password under To App",
+    "Allow the app to source Okta users"
+   ],
+   "answers": [
+    "Enable API integration on the Provisioning tab",
+    "Enable Create Users under To App"
+   ],
+   "select": 2,
+   "explanation": "Okta needs the API connection and the Create Users feature to make accounts at assignment. Group Push and Sync Password are optional, and sourcing goes the other way."
+  }
+ ]
+}
