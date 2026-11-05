@@ -4,7 +4,7 @@ Lab 36 — Okta Universal Directory: Users, Custom Attributes, Groups & Group Ru
 
 Okta Professional objectives
 ----------------------------
-* 1.2  Groups and group rules: Okta-mastered groups versus app (directory)
+* 1.2  Groups and group rules: Okta groups, Active Directory groups and admin
        groups, group rules written in Okta Expression Language, rule status,
        excluded users, manual membership.
 * 1.1  Users, profiles and custom attributes: the Okta user profile, base and
@@ -38,12 +38,15 @@ excluded users:
 
 1. An expression outside the supported subset, or naming an attribute that is
    not in the schema, is UNPARSEABLE: it matches nobody and is flagged.
-2. Only Okta-mastered groups (type OKTA_GROUP) can be rule targets; a target
-   that is an app group (for example imported from Active Directory) or does
-   not exist is skipped and flagged INVALID_TARGET.
+2. A rule can populate Okta groups and Active Directory groups, but not admin
+   groups: a target group that holds an admin role (``admin_roles``), or that
+   does not exist, is skipped and flagged INVALID_TARGET. (Okta also refuses
+   to grant admin privileges to a group that is already a rule target.)
 3. INACTIVE rules do nothing.
 4. Only users in an evaluated status are checked: a deactivated
    (DEPROVISIONED) user, or a user with a missing or unknown status, is not.
+   Deactivation removes app assignments, not group memberships: a deactivated
+   user keeps the memberships they already have until the user is deleted.
 5. A user who matches an active rule and is not on its exclude list is added
    to the rule's valid targets. Manually added members stay in the group
    whatever the rules say: rules never remove them.
@@ -53,7 +56,7 @@ the first that applies: USER_NOT_ACTIVE (unknown or not evaluated user),
 RULE_MATCHED, MANUAL_ASSIGNMENT, USER_EXCLUDED, RULE_INACTIVE (an inactive rule
 would match), ATTRIBUTE_MISMATCH (a readable rule targets the group but the
 user's attributes do not match, often only by letter case), else NO_RULE (no
-readable rule assigns this group, including app groups and unknown groups).
+readable rule assigns this group, including admin groups and unknown groups).
 
 Run it
 ------
@@ -442,10 +445,11 @@ def check_rules(data: dict, cfg: dict, users: dict | None = None) -> list[RuleCh
             if g is None:
                 flags.append("INVALID_TARGET")
                 rc.reasons.append(f"target group {gid} does not exist: skipped")
-            elif g.get("type") not in cfg["rule_assignable_group_types"]:
+            elif g.get("admin_roles"):
                 flags.append("INVALID_TARGET")
-                rc.reasons.append(f"target {g.get('name', gid)} is an app group ({g.get('type')}) mastered by "
-                                  f"{g.get('source', 'an app')}: group rules only assign Okta-mastered groups, skipped")
+                rc.reasons.append(f"target {g.get('name', gid)} is an admin group (holds "
+                                  f"{', '.join(g['admin_roles'])}): group rules can't assign users to admin groups, "
+                                  "skipped")
             else:
                 rc.valid_targets.append(gid)
         if not r.get("assign_to"):
@@ -478,8 +482,10 @@ def memberships(data: dict, cfg: dict, users: dict, rules: list[RuleCheck]) -> d
     """Group id → sorted member logins: manual members plus users placed by active, readable rules."""
     out = {}
     for gid, g in data.get("groups", {}).items():
-        # Simplification: a user who is not evaluated (deactivated, unknown) is shown with no memberships at all.
-        members = {m for m in g.get("manual_members", []) if evaluated(users.get(m), cfg)}
+        # Deactivated users keep existing memberships until deleted; rules simply stop evaluating them.
+        # Simplification: the data records only manual memberships, so memberships a rule added before a user was
+        # deactivated are not modelled (rc.matched holds evaluated users only).
+        members = {m for m in g.get("manual_members", []) if m in users}
         for rc in rules:
             if gid in rc.valid_targets:
                 members.update(rc.matched)
@@ -506,15 +512,18 @@ def diagnose(ticket: dict, data: dict, cfg: dict, users: dict, rules: list[RuleC
         res.cause = "USER_NOT_ACTIVE"
         res.reasons.append(f"{login} has status {u.get('status') or 'missing'}: group rules do not evaluate this "
                            "user, so no rule can add them")
+        if res.is_member:
+            res.reasons.append(f"the user is still a member of {gname}: deactivation removes app assignments, not "
+                               "group memberships, which stay until the user is deleted")
         return res
     if g is None:
         res.reasons.append(f"group {gid} does not exist: no rule can assign it")
         return res
-    if g.get("type") not in cfg["rule_assignable_group_types"]:
-        res.reasons.append(f"{gname} is an app group ({g.get('type')}) mastered by {g.get('source', 'an app')}: group rules "
-                           "cannot assign it; membership comes from that directory")
-        return res
     manual = login in g.get("manual_members", [])
+    if g.get("admin_roles") and not manual:
+        res.reasons.append(f"{gname} is an admin group (holds {', '.join(g['admin_roles'])}): group rules can't "
+                           "assign users to admin groups, so members must be added by an administrator")
+        return res
     src = {r.get("id"): r for r in data.get("group_rules", [])}
     targeting = [rc for rc in rules if gid in rc.valid_targets]
     profile = u.get("profile", {})
@@ -591,8 +600,10 @@ INSIGHT = {
         "the Profile Editor, each with a data type (string, boolean, integer, number, array).",
         "Group rules use Okta Expression Language, for example user.department == \"Sales\" AND "
         "user.countryCode == \"US\"; string comparisons are case-sensitive.",
-        "Rules only assign Okta-mastered groups; groups imported from Active Directory or another app are "
-        "mastered by that source.",
+        "Rules can populate Okta groups and Active Directory groups from user attributes, but never admin groups "
+        "(groups that hold an admin role).",
+        "Deactivating a user removes their app assignments but keeps their group memberships until the user is "
+        "deleted; group rules stop evaluating them.",
         "A rule can exclude named users; manually added members stay until someone removes them by hand.",
         "Assign apps to groups, not to people: fix the group rule and app access follows.",
     ],
@@ -610,7 +621,9 @@ INSIGHT = {
     ],
     "exam_tips": [
         "Directory > Groups > Rules: a rule must be deactivated before it can be edited, then activated again.",
-        "Group rules cannot target app groups such as Active Directory groups.",
+        "Group rules can't assign users to admin groups, and a group that is already a rule target can't be "
+        "granted admin privileges.",
+        "Deactivated users keep their group memberships until deleted; deactivation removes app assignments.",
         "Use String.toLowerCase(user.department) == \"sales\" to make a rule case-insensitive.",
         "\"Why is this user not in the group?\": check user status, the rule's status, its expression and the "
         "exclude list, in that order.",
@@ -705,19 +718,36 @@ def build_challenges(policies: dict, data: dict) -> list:
     for gid, g in groups.items():
         m = members.get(gid, [])
         others = [x for x in everyone if x not in m]
-        if m and len(others) >= 3 and g.get("type") in cfg["rule_assignable_group_types"]:
+        if m and len(others) >= 3:
             qs.append(Question(prompt=f"After the profile changes, which user is a member of {g.get('name', gid)}?",
                                choices=choices_with(m[0], others + [m[0]], key=gid), answer=m[0],
                                explanation=f"members of {g.get('name', gid)}: {', '.join(m)}", objective="1.2"))
             break
-    qs.append(Question(prompt="An administrator writes a group rule that assigns users to a group imported from "
-                              "Active Directory. What happens?",
-                       choices=["the group cannot be a rule target: rules only assign Okta-mastered groups",
-                                "users are added in Okta and written back to Active Directory",
-                                "the rule runs only for users who were imported from Active Directory",
-                                "the rule replaces the Active Directory membership at the next import"],
-                       answer="the group cannot be a rule target: rules only assign Okta-mastered groups",
-                       explanation=cfg["concepts"]["Okta-mastered group"], objective="1.2"))
+    qs.append(Question(prompt="An administrator wants a group rule to add users to a group that holds the Help Desk "
+                              "Administrator role. What happens?",
+                       choices=["the group cannot be a rule target: rules can't assign users to admin groups",
+                                "the rule adds the users and they become help desk administrators",
+                                "the rule adds the users but the admin role is removed from the group",
+                                "the rule works only for users with a Super Administrator approval"],
+                       answer="the group cannot be a rule target: rules can't assign users to admin groups",
+                       explanation=cfg["concepts"]["admin group"], objective="1.2"))
+    qs.append(Question(prompt="Can a group rule populate an Active Directory group?",
+                       choices=["yes: rules can populate Active Directory groups based on user attributes",
+                                "no: rules only ever assign groups created in Okta",
+                                "only if the Active Directory group also holds an admin role",
+                                "only for users whose status is deactivated"],
+                       answer="yes: rules can populate Active Directory groups based on user attributes",
+                       explanation="Okta's group rules page: rules can map Okta groups to AD groups and populate AD "
+                                   "groups based on user attributes", objective="1.2"))
+    qs.append(Question(prompt="A user who was in three groups is deactivated. What happens to their group memberships?",
+                       choices=["they stay until the user is deleted; app assignments are removed and rules stop "
+                                "evaluating the user",
+                                "they are all removed at once",
+                                "only rule-based memberships stay",
+                                "they move to the Everyone group only"],
+                       answer="they stay until the user is deleted; app assignments are removed and rules stop "
+                              "evaluating the user",
+                       explanation="deactivation removes app assignments, not group memberships", objective="5.2"))
     qs.append(Question(prompt="A user was added to a group by hand, and later a rule for that group stops matching "
                               "them. What happens to their membership?",
                        choices=["they stay in the group until an administrator removes them",
@@ -784,7 +814,9 @@ def generate_scenario(rng, policies: dict) -> dict:
         "G-REMOTE": {"name": "Remote-Workers", "type": "OKTA_GROUP", "manual_members": []},
         "G-PMP": {"name": "Project-Managers", "type": "OKTA_GROUP", "manual_members": []},
         "G-AD": {"name": "Finance (AD)", "type": "APP_GROUP", "source": "Active Directory", "manual_members": []},
-        "G-OPS": {"name": "Ops-Team", "type": "OKTA_GROUP", "manual_members": []},
+        "G-OPS": {"name": "Ops-Team", "type": "OKTA_GROUP", "manual_members": [inactive_u]},
+        "G-ADM": {"name": "Help-Desk-Admins", "type": "OKTA_GROUP", "admin_roles": ["Help Desk Administrator"],
+                  "manual_members": []},
     }
     rules = [
         {"name": f"{dept} {country}", "status": "ACTIVE", "assign_to": ["G-DEPT"], "exclude": [excluded],
@@ -799,6 +831,8 @@ def generate_scenario(rng, policies: dict) -> dict:
          "expression": 'Arrays.contains(user.certifications, "PMP")'},
         {"name": "Finance to AD", "status": "ACTIVE", "assign_to": ["G-AD"], "exclude": [],
          "expression": 'user.department == "Finance"'},
+        {"name": "Help desk admins", "status": "ACTIVE", "assign_to": ["G-ADM"], "exclude": [],
+         "expression": 'String.startsWith(user.title, "Support")'},
         {"name": "Ops", "status": "ACTIVE", "assign_to": ["G-OPS"], "exclude": [],
          "expression": rng.choice(['user.department = "Operations"', 'user.Department == "Operations"',
                                    'isMemberOfAnyGroup("00g-ops")'])},
@@ -829,7 +863,7 @@ def generate_scenario(rng, policies: dict) -> dict:
         (inactive_u, "G-EMP", "is missing from the group"), (remote, "G-REMOTE", "is missing from the group"),
         (vp, "G-LEAD", "is in the group"), (not_vp, "G-LEAD", "is missing from the group"),
         (blank, "G-EMP", "is in the group with no employee type"), (contractor, "G-EMP", "is missing"),
-        (pm, "G-PMP", "is in the group after the update"), (match, "G-AD", "needs Finance (AD) access"),
+        (pm, "G-PMP", "is in the group after the update"), (vp, "G-ADM", "needs help desk admin rights"), (inactive_u, "G-OPS", "is deactivated but still listed"),
         (match, "G-OPS", "is missing from the group"),
     ]
     rng.shuffle(tickets)

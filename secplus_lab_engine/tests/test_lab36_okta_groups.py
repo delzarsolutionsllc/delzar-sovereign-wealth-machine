@@ -46,6 +46,9 @@ BASE = {
     "groups": {
         "g-sales": {"name": "Sales-US", "type": "OKTA_GROUP", "manual_members": [f"man@{D}"]},
         "g-ad": {"name": "AD-Sales", "type": "APP_GROUP", "source": "Active Directory"},
+        "g-adm": {"name": "Helpdesk-Admins", "type": "OKTA_GROUP", "admin_roles": ["Help Desk Administrator"],
+                  "manual_members": [f"man@{D}"]},
+        "g-beta": {"name": "Beta", "type": "OKTA_GROUP", "manual_members": [f"old@{D}", f"ghost@{D}"]},
         "g-none": {"name": "Empty", "type": "OKTA_GROUP"},
     },
 }
@@ -149,12 +152,14 @@ def test_rule_flags(cfg):
         {"status": "ACTIVE", "expression": SALES, "assign_to": ["g-sales"]},
         {"status": "INACTIVE", "expression": SALES, "assign_to": ["g-sales"]},
         {"status": "ACTIVE", "expression": 'user.department = "Sales"', "assign_to": ["g-sales"]},
-        {"status": "ACTIVE", "expression": SALES, "assign_to": ["g-ad"]},
+        {"status": "ACTIVE", "expression": SALES, "assign_to": ["g-adm"]},
         {"status": "ACTIVE", "expression": SALES, "assign_to": ["g-missing"]},
         {"expression": SALES, "assign_to": ["g-sales"]},
+        {"status": "ACTIVE", "expression": SALES, "assign_to": ["g-ad"]},
     ]), cfg)
     assert [r.flag for r in rules] == ["OK", "INACTIVE", "UNPARSEABLE", "INVALID_TARGET", "INVALID_TARGET",
-                                       "INACTIVE"]
+                                       "INACTIVE", "OK"]
+    assert rules[3].valid_targets == [] and rules[6].valid_targets == ["g-ad"]   # AD groups can be populated
     assert rules[0].matched == [f"sam@{D}"]            # deactivated and status-less users are not evaluated
 
 
@@ -185,10 +190,27 @@ def test_user_not_active_and_unknown_user(cfg):
 
 
 def test_no_rule_cases(cfg):
-    rules = [{"status": "ACTIVE", "expression": SALES, "assign_to": ["g-ad"]},
+    rules = [{"status": "ACTIVE", "expression": SALES, "assign_to": ["g-adm"]},
              {"status": "ACTIVE", "expression": 'user.department = "IT"', "assign_to": ["g-none"]}]
-    assert causes(cfg, rules, ("sam", "g-ad"), ("man", "g-none"), ("sam", "g-missing"), ("sam", "g-sales")) == \
+    assert causes(cfg, rules, ("sam", "g-adm"), ("man", "g-none"), ("sam", "g-missing"), ("sam", "g-sales")) == \
         ["NO_RULE"] * 4
+    assert causes(cfg, rules, ("man", "g-adm")) == ["MANUAL_ASSIGNMENT"]     # admins add members by hand
+
+
+def test_rules_populate_active_directory_groups(cfg):
+    st = run_all(scenario([{"status": "ACTIVE", "expression": SALES, "assign_to": ["g-ad"]}],
+                          [{"user": f"sam@{D}", "group": "g-ad"}]), cfg)
+    assert st["tickets"][0].cause == "RULE_MATCHED" and st["members"]["g-ad"] == [f"sam@{D}"]
+
+
+def test_deactivated_user_keeps_memberships_but_is_not_evaluated(cfg):
+    rules = [{"status": "ACTIVE", "expression": SALES, "assign_to": ["g-sales"]}]
+    st = run_all(scenario(rules, [{"user": f"old@{D}", "group": "g-beta"}]), cfg)
+    assert st["members"]["g-beta"] == [f"old@{D}"]                 # kept; unknown ghost dropped
+    assert f"old@{D}" not in st["members"]["g-sales"]              # rules do not evaluate them
+    t = st["tickets"][0]
+    assert (t.cause, t.is_member) == ("USER_NOT_ACTIVE", True) and any("until the user is deleted" in r
+                                                                        for r in t.reasons)
     assert causes(cfg, [], ("sam", "g-none")) == ["NO_RULE"]
 
 
@@ -200,16 +222,19 @@ def test_sample_expected_outcomes(policies, quiet_ui, sample):
                               "P05": "REJECTED", "P06": "REJECTED", "P07": "REJECTED", "P08": "ACCEPTED",
                               "P09": "REJECTED", "P10": "ACCEPTED"}
     assert out["rules"] == {"R01": "OK", "R02": "OK", "R03": "OK", "R04": "INACTIVE", "R05": "OK",
-                            "R06": "INVALID_TARGET", "R07": "UNPARSEABLE"}
+                            "R06": "OK", "R07": "UNPARSEABLE", "R08": "INVALID_TARGET"}
     assert out["tickets"] == {"T01": "ATTRIBUTE_MISMATCH", "T02": "USER_EXCLUDED", "T03": "USER_NOT_ACTIVE",
                               "T04": "RULE_INACTIVE", "T05": "MANUAL_ASSIGNMENT", "T06": "RULE_MATCHED",
                               "T07": "ATTRIBUTE_MISMATCH", "T08": "NO_RULE", "T09": "NO_RULE",
-                              "T10": "RULE_MATCHED", "T11": "RULE_MATCHED", "T12": "ATTRIBUTE_MISMATCH"}
+                              "T10": "RULE_MATCHED", "T11": "RULE_MATCHED", "T12": "ATTRIBUTE_MISMATCH",
+                              "T13": "USER_NOT_ACTIVE", "T14": "RULE_MATCHED"}
     assert set(out["updates"].values()) == set(UPDATE_OUTCOMES)
     assert set(out["rules"].values()) == set(RULE_FLAGS)
     assert set(out["tickets"].values()) == set(CAUSES)
     assert "chloe.martin@harrowgate.example" in out["memberships"]["00g-sales-us"]     # manual, from France
-    assert "grace.kim@harrowgate.example" not in out["memberships"]["00g-beta"]        # deactivated
+    assert "grace.kim@harrowgate.example" in out["memberships"]["00g-beta"]            # deactivated, kept
+    assert out["memberships"]["00g-ad-finance"] == ["omar.haddad@harrowgate.example"]  # rule-populated AD group
+    assert out["memberships"]["00g-helpdesk-admins"] == []                             # admin group: no rules
 
 
 def test_briefing_talking_point_matches_demo(policies, quiet_ui, sample, data):
@@ -219,6 +244,7 @@ def test_briefing_talking_point_matches_demo(policies, quiet_ui, sample, data):
     assert f"Validated {m['updates']} HR" in tp and f"({uc['ACCEPTED']} accepted, {uc['REJECTED']} rejected" in tp
     assert f"found {flagged} of {m['rules']} group rules" in tp
     assert f"closed {m['tickets']} group" in tp and f"{m['cause_counts']['ATTRIBUTE_MISMATCH']} of them" in tp
+    assert f"and {m['cause_counts']['USER_NOT_ACTIVE']} by deactivated users" in tp
 
 
 def test_generator_is_deterministic_and_covers_outcomes(policies, quiet_ui):

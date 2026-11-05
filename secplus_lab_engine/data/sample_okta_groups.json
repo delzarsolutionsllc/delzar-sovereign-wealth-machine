@@ -1,5 +1,5 @@
 {
-  "_description": "Harrowgate Instruments (fictional) runs Okta Identity Engine. HR sent ten profile requests, the identity team keeps seven group rules, and the help desk forwarded twelve group membership tickets. Every outcome appears at least once.",
+  "_description": "Harrowgate Instruments (fictional) runs Okta Identity Engine. HR sent ten profile requests, the identity team keeps eight group rules, and the help desk forwarded fourteen group membership tickets. Every outcome appears at least once.",
   "org": "Harrowgate Instruments",
   "custom_attributes": {
     "businessUnit": {
@@ -181,6 +181,20 @@
         "department": "Sales",
         "employeeType": "Employee"
       }
+    },
+    "omar.haddad@harrowgate.example": {
+      "status": "ACTIVE",
+      "profile": {
+        "login": "omar.haddad@harrowgate.example",
+        "email": "omar.haddad@harrowgate.example",
+        "firstName": "Omar",
+        "lastName": "Haddad",
+        "title": "Financial Analyst",
+        "countryCode": "US",
+        "businessUnit": "Corporate",
+        "department": "Finance",
+        "employeeType": "Employee"
+      }
     }
   },
   "groups": {
@@ -228,6 +242,14 @@
       "name": "Finance (AD)",
       "type": "APP_GROUP",
       "source": "Active Directory",
+      "manual_members": []
+    },
+    "00g-helpdesk-admins": {
+      "name": "Help-Desk-Admins",
+      "type": "OKTA_GROUP",
+      "admin_roles": [
+        "Help Desk Administrator"
+      ],
       "manual_members": []
     }
   },
@@ -301,6 +323,16 @@
       "expression": "user.department = \"Support\"",
       "assign_to": [
         "00g-support"
+      ],
+      "exclude": []
+    },
+    {
+      "id": "R08",
+      "name": "Help desk admins",
+      "status": "ACTIVE",
+      "expression": "user.title == \"Support Lead\"",
+      "assign_to": [
+        "00g-helpdesk-admins"
       ],
       "exclude": []
     }
@@ -456,9 +488,9 @@
     },
     {
       "id": "T09",
-      "user": "ana.ruiz@harrowgate.example",
-      "group": "00g-ad-finance",
-      "summary": "Ana needs Finance (AD) for a budget tool; can a rule add her?"
+      "user": "iris.vale@harrowgate.example",
+      "group": "00g-helpdesk-admins",
+      "summary": "Iris leads Support and needs help desk admin rights; why did the Help desk admins rule not add her?"
     },
     {
       "id": "T10",
@@ -477,6 +509,18 @@
       "user": "emma.lind@harrowgate.example",
       "group": "00g-employees",
       "summary": "Emma is not in All-Employees."
+    },
+    {
+      "id": "T13",
+      "user": "grace.kim@harrowgate.example",
+      "group": "00g-beta",
+      "summary": "Grace was deactivated last month but still shows in Beta-Testers. Should she?"
+    },
+    {
+      "id": "T14",
+      "user": "omar.haddad@harrowgate.example",
+      "group": "00g-ad-finance",
+      "summary": "Omar joined Finance and now appears in the Finance (AD) group in Active Directory; was that a rule?"
     }
   ]
 }

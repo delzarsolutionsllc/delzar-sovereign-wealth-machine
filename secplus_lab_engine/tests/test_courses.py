@@ -137,3 +137,48 @@ def test_sc300_cli_and_bundle(tmp_path):
     data = json.loads(b.read_text())
     assert data["catalog"]["course"]["code"] == "sc300" and sorted(data["labs"], key=int) == ["1", "2", *map(str, range(25, 36))]
     assert data["exam_bank"] and data["glossary"] and data["catalog"]["objectives"]["2.2"] == "Microsoft Entra Conditional Access"
+
+
+# --------------------------------------------------------------------------- Okta Certified Professional
+@pytest.fixture(scope="module")
+def okta():
+    return run_in("okta", SC300_CORE.replace('domain="2"', 'domain="4"'))
+
+
+def test_okta_registry_and_engine(okta):
+    assert okta["code"] == "okta" and okta["course"] == "Okta Professional"
+    assert okta["objectives"] == {"1": 3, "2": 2, "3": 2, "4": 4, "5": 2, "6": 2}
+    assert okta["weights"] == {"1": 0.26, "2": 0.10, "3": 0.08, "4": 0.38, "5": 0.12, "6": 0.06} and okta["pass"] == 70
+    assert okta["scaled70"] == 70 and okta["progress"] == "progress-okta.json"
+    assert okta["videos"] == 0 and okta["retires"] is None
+    assert sorted(okta["labs"], key=int) == ["1", *map(str, range(36, 43))]
+    covered = {o for codes in okta["labs"].values() for o in codes}
+    assert covered == set(okta["objectives_all"]), "every Okta objective has a hands-on lab"
+
+
+def test_okta_question_bank(okta):
+    assert okta["problems"] == []
+    assert len(okta["per_obj"]) == 15 and min(okta["per_obj"].values()) >= 30, okta["per_obj"]
+    assert okta["topics_ok"]
+    assert okta["bank"] >= 15 * 34
+    assert okta["exam"] == 50 and okta["exam_domains"] == ["1", "2", "3", "4", "5", "6"]
+    assert okta["domain_test"] == ["4.1", "4.2", "4.3", "4.4"]
+
+
+def test_okta_glossary(okta):
+    assert okta["glossary"] >= 200 and okta["gloss_domains"] == ["1", "2", "3", "4", "5", "6"]
+    assert okta["gloss_quiz_modes"] == ["acr", "def", "voc"]
+
+
+def test_okta_labs_stay_in_okta():
+    from labs import LABS
+    from webapi import course_labs
+    assert course_labs() == list(range(1, 27))
+    assert all(getattr(LABS[n][0], "COURSES", None) == ("okta",) for n in range(36, 43))
+    got = run_in("okta", """
+        import json, webapi
+        from utils.loader import load_policies
+        q = webapi.challenge(load_policies(), 40, seed=1)["questions"]
+        print(json.dumps(sorted({x["objective"] for x in q})))
+    """)
+    assert set(got) <= {"4.3", "4.2", "4.1"} and got

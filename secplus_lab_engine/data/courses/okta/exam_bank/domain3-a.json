@@ -231,7 +231,7 @@
    "id": "D3-017",
    "objective": "3.1",
    "topic": "Mapping Direction and Apply Rules",
-   "stem": "An app's username should be set from Okta when the account is created, but the app team may change it later. Which apply option fits?",
+   "stem": "An app's username should be calculated from Okta when the account is created, and later Okta profile changes must not recalculate it. Which apply option fits?",
    "choices": [
     "Apply mapping on user create only",
     "Apply mapping on user create and update",
@@ -239,7 +239,7 @@
     "Apply the mapping only during group push"
    ],
    "answer": "Apply mapping on user create only",
-   "explanation": "Create only sets the value once, so later changes in the app are not overwritten. Create and update would keep resetting it to Okta's value."
+   "explanation": "Create only calculates the value once, at account creation, so later Okta profile changes do not recalculate it. Create and update would recalculate it every time the source attribute changes."
   },
   {
    "id": "D3-018",
@@ -379,7 +379,7 @@
     "user.department == \"Sales\" ? \"sales_rep\" : \"standard\""
    ],
    "answer": "user.department == \"Sales\" ? \"sales_rep\" : \"standard\"",
-   "explanation": "The conditional (ternary) operator returns the first value when the test is true and the second otherwise. The last option reverses the logic."
+   "explanation": "The conditional (ternary) operator returns the first value when the test is true and the second otherwise. The != option reverses the logic."
   },
   {
    "id": "D3-028",
@@ -399,7 +399,7 @@
    "id": "D3-029",
    "objective": "3.1",
    "topic": "Profile Sourcing",
-   "stem": "An HR system should be the source of truth for user profiles and lifecycle in Okta. What should the admin enable in that app's To Okta settings?",
+   "stem": "An HR system should master user profiles and lifecycle in Okta. What should the admin enable in that app's To Okta settings?",
    "choices": [
     "Enable Create Users for the HR app",
     "Allow the HR app to source Okta users",
@@ -427,7 +427,7 @@
    "id": "D3-031",
    "objective": "3.1",
    "topic": "Profile Sourcing",
-   "stem": "Users can come from both Active Directory and an HR app. Where does the admin set which source wins for a user who exists in both?",
+   "stem": "Users can come from both Active Directory and an HR app. Where does the admin set which system wins for a user who exists in both?",
    "choices": [
     "Directory > Groups, by ranking the groups",
     "Security > Authentication Policies, by ordering the policy rules",
@@ -639,7 +639,7 @@
     "Create the user and expire the password until day one"
    ],
    "answer": "Create the user without activation, then activate on day one",
-   "explanation": "A Staged user exists with no activation email and cannot sign in until the admin activates them. Suspending requires the user to be activated first, which already sends the email."
+   "explanation": "A Staged user exists with no activation email and cannot sign in until the admin activates them. Suspending or deactivating requires activating the account first, which normally sends the activation email."
   },
   {
    "id": "D3-042",
@@ -844,12 +844,12 @@
    "stem": "After deactivating a user, how can an admin confirm the action in the System Log?",
    "choices": [
     "Filter with eventType eq \"user.session.start\"",
-    "Filter with eventType eq \"user.account.lock\"",
+    "Filter with eventType eq \"user.lifecycle.suspend\"",
     "Filter with eventType eq \"user.lifecycle.deactivate\"",
     "Filter with eventType eq \"policy.evaluate_sign_on\""
    ],
    "answer": "Filter with eventType eq \"user.lifecycle.deactivate\"",
-   "explanation": "The user.lifecycle.deactivate event records the deactivation. user.session.start records sign-ins, not lifecycle changes."
+   "explanation": "The user.lifecycle.deactivate event records the deactivation; user.lifecycle.suspend records a suspension instead. user.session.start records sign-ins, not lifecycle changes."
   },
   {
    "id": "D3-057",
@@ -1015,10 +1015,10 @@
     "Review the user's Applications tab for apps without provisioning",
     "Deactivate the user in Okta",
     "Disable the accounts in apps that Okta does not provision",
-    "Confirm the user.lifecycle.deactivate event in the System Log",
-    "Test that the user can no longer sign in"
+    "Attempt a sign-in as the user to Okta and those apps",
+    "Confirm the deactivation and the failed sign-in attempts in the System Log"
    ],
-   "explanation": "Assignments disappear on deactivation, so the app list is reviewed first. Then the user is deactivated, leftover accounts are handled and the result is verified."
+   "explanation": "Assignments disappear on deactivation, so the app list is reviewed first. Then the user is deactivated, leftover accounts are disabled, a test sign-in is attempted and the System Log confirms the results."
   },
   {
    "id": "D3-072",
