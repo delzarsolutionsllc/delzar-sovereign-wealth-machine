@@ -1669,8 +1669,13 @@ $("#maptoggle").addEventListener("click", () => { const r = $("#rail"); r.classL
     $("#skiplink").addEventListener("click", ev => { ev.preventDefault(); const h = view().querySelector("h1") || view(); if (h !== view() && !h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1"); h.focus(); });
     Progress.init();
   } catch (e) {
+    /* A course that fails to load (not published yet, or a mistyped ?course=) must not stick:
+       forget it so the next visit opens the default course, and offer a way back now. */
+    const otherCourse = !LIVE && !window.SECPLUS_BUNDLE && COURSE && COURSE !== "secplus";
+    if (otherCourse) { try { localStorage.removeItem("delzar-course"); } catch { /* fine */ } }
     put(view(), el("section", { class: "panel" }, el("h2", { text: "The course could not load" }),
-      el("p", { class: "notice", text: e.message }),
+      el("p", { class: "notice", text: otherCourse ? `The "${COURSE}" course is not available on this site yet.` : e.message }),
+      otherCourse ? el("p", {}, el("a", { class: "btn primary", href: "./?course=secplus", text: "Open the Security+ course" })) : null,
       el("p", { class: "muted", text: LIVE ? "Check the terminal window running `python main.py web` for errors." : "Reload the page. If it keeps failing, run the course locally with `python main.py web`." })));
   }
 })();
