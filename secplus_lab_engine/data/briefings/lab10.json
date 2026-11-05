@@ -1,0 +1,38 @@
+{
+  "lab": 10,
+  "ticket": "INC-20456",
+  "type": "Incident",
+  "priority": "P2",
+  "requested_by": "Hannah Cole, Messaging Administrator",
+  "title": "Decide what to do with six suspicious emails reported to the help desk",
+  "situation": "Six emails came in this morning and several staff reported them. One claims to be from a Microsoft-like domain asking for a password. Another uses an executive's name from a Gmail address to ask for an urgent wire transfer. Others include an invoice with a disguised program attached and a fake mailbox warning sent from our own domain. Headers can lie, so every sender check must be redone, not trusted.",
+  "your_task": [
+    "Re-check each email's SPF, DKIM and DMARC results yourself instead of trusting the headers.",
+    "Look for warning signs: look-alike domains, mismatched links, pressure language and dangerous attachments.",
+    "Score each message and decide to deliver, quarantine or reject it.",
+    "Label each threat type so the help desk can warn staff."
+  ],
+  "why_it_matters": "Email is the most common way attackers get in. One fake payment request or stolen password can cost the company money or hand an attacker a working account.",
+  "done_when": [
+    "2 emails are delivered, 3 are quarantined and 1 is rejected.",
+    "Each bad email is labeled: credential phishing, business email compromise, malware delivery or domain spoofing.",
+    "The forged 'pass' result in the spoofed message's header is called out.",
+    "Each verdict lists the warning signs that drove its score."
+  ],
+  "glossary": {
+    "Sender Policy Framework (SPF)": "A list a domain publishes of the servers allowed to send its email.",
+    "DomainKeys Identified Mail (DKIM)": "A digital signature that proves an email came from the domain and was not changed.",
+    "DMARC (Domain-based Message Authentication, Reporting and Conformance)": "A domain's rule for what to do with mail that fails SPF and DKIM checks.",
+    "Alignment": "Whether the domain that passed SPF or DKIM matches the domain shown in the From line.",
+    "Business email compromise (BEC)": "A scam where someone pretends to be a boss or vendor to get money sent.",
+    "Typosquatting": "Registering a look-alike domain, such as replacing an 'o' with a zero, to fool people.",
+    "Quarantine": "Holding an email aside so nobody can open it until it is reviewed."
+  },
+  "job_roles": [
+    "SOC Analyst I",
+    "Email Security Analyst",
+    "Messaging Administrator",
+    "Security Awareness Specialist"
+  ],
+  "talking_point": "Recomputed SPF, DKIM and DMARC for 6 reported emails and quarantined or rejected 4 threats (credential phishing, CEO wire-fraud impersonation, a disguised executable and a spoofed company domain), while delivering the 2 legitimate messages."
+}

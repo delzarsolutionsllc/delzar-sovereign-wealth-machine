@@ -1,0 +1,38 @@
+{
+  "lab": 11,
+  "ticket": "AUD-40152",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Felix Navarro, Network Security Engineer",
+  "title": "Audit the edge firewall's 11 rules and propose a clean rule set",
+  "situation": "Auditors flagged the main edge firewall. It has 11 rules built up over the years, including a 'temporary' allow-everything rule that was meant to be removed on a Friday, remote desktop open from the internet for a vendor, and guest Wi-Fi allowed to reach everything. There is also no final rule that blocks anything not allowed.",
+  "your_task": [
+    "Read the rules top to bottom and find duplicates and rules hidden by earlier rules.",
+    "Flag traffic that crosses network zones it should never cross, such as internet to internal or guest to database.",
+    "Flag insecure protocols, overly broad rules, missing logging and rules with no owner or ticket.",
+    "Compare the current rule set with the remediated one and confirm the fixed version has no findings."
+  ],
+  "why_it_matters": "One allow-everything rule cancels out the whole firewall. Remote desktop open to the internet is one of the most common ways ransomware gets in.",
+  "done_when": [
+    "The current rule set scores 0/100 (grade F), with all 15 findings explained and a fix for each.",
+    "The remediated rule set scores 100/100 (grade A) and ends with an explicit, logged deny-all rule.",
+    "The Tor-blocking rule is moved above the website allow rule so it actually works.",
+    "Vendor remote access goes through the multi-factor authentication jump hosts instead of straight from the internet."
+  ],
+  "glossary": {
+    "Firewall rule": "An instruction that allows or blocks certain network traffic.",
+    "First match wins": "The firewall checks rules in order and uses the first one that fits.",
+    "Shadowed rule": "A rule that never takes effect because an earlier rule already matches the same traffic.",
+    "Demilitarized zone (DMZ) / screened subnet": "A separate network area for public-facing servers, kept apart from internal systems.",
+    "Segmentation": "Splitting a network into zones so a problem in one does not spread to the others.",
+    "Default deny": "A final rule that blocks anything not allowed by an earlier rule.",
+    "Remote Desktop Protocol (RDP)": "A way to control a Windows computer remotely over port 3389."
+  },
+  "job_roles": [
+    "Network Security Engineer",
+    "Firewall Administrator",
+    "Security Analyst",
+    "IT Auditor"
+  ],
+  "talking_point": "Audited an 11-rule edge firewall that scored 0/100, documented 15 findings including an any/any rule and internet-exposed RDP, and delivered a segmented 9-rule replacement that scored 100/100."
+}

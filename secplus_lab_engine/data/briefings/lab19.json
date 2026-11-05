@@ -1,0 +1,38 @@
+{
+  "lab": 19,
+  "ticket": "INC-30519",
+  "type": "Incident",
+  "priority": "P1",
+  "requested_by": "Aisha Coleman, SOC Manager",
+  "title": "Overnight SIEM alerts: brute force, password spraying and impossible travel",
+  "situation": "Our security monitoring system collected 52 log events overnight from sign-in, firewall, DNS (domain name system), endpoint and application sources. Several point to attacks on user accounts: repeated failed logins followed by a success, one address trying many accounts, and users signing in from two continents within an hour. We also suspect noisy alerts and a gap where one log source went quiet.",
+  "your_task": [
+    "Correlate the 52 events into alerts using the detection rules.",
+    "Apply the suppression list, but only entries that have an owner and have not expired.",
+    "Write the response for each alert, such as disable the account, revoke sessions or quarantine the host.",
+    "Measure alert quality before and after tuning, and name any attack that no rule caught."
+  ],
+  "why_it_matters": "A successful login right after a burst of failures may mean an attacker is already inside an account. Too many false alarms bury the real ones, and a silent log source is a blind spot.",
+  "done_when": [
+    "All 12 alerts have a disposition, a reason and a response.",
+    "Only the owned, unexpired scanner suppression is applied; the expired and ownerless ones are ignored.",
+    "Account alerts (brute force on jdoe, spraying, impossible travel for bnguyen and asmith, after-hours admin grant by mlee) are handed to the Identity and Access Management (IAM) team for account disable, session revocation, multi-factor authentication (MFA) checks and access review.",
+    "The missed low-and-slow password guessing against pchan is logged as a detection gap."
+  ],
+  "glossary": {
+    "SIEM": "Security information and event management: a system that gathers logs and raises alerts.",
+    "Correlation rule": "Logic that links related events, such as five failed logins in five minutes.",
+    "Brute force": "Trying many passwords against one account.",
+    "Password spraying": "Trying one or two common passwords against many accounts.",
+    "Impossible travel": "Sign-ins from places too far apart to reach in the time between them.",
+    "Suppression": "A rule that silences a known, harmless alert; it should have an owner and an end date.",
+    "Precision / recall": "Precision is the share of alerts that were real; recall is the share of real attacks that raised an alert."
+  },
+  "job_roles": [
+    "SOC Analyst I",
+    "SIEM Engineer",
+    "Detection Engineer",
+    "IAM Analyst"
+  ],
+  "talking_point": "Correlated 52 log events into 12 alerts, suppressed 1 authorized-scanner false positive to raise precision from 83.3% to 90.9%, sent the brute-force, spraying and impossible-travel account alerts to IAM for session revocation and MFA checks, and flagged a missed low-and-slow password attack as a detection gap."
+}

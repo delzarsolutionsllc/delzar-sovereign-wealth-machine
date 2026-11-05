@@ -1,0 +1,36 @@
+{
+  "lab": 14,
+  "ticket": "AUD-30514",
+  "type": "Audit finding",
+  "priority": "P1",
+  "requested_by": "Priya Raman, Business Continuity Manager",
+  "title": "Can five key systems actually recover in time? Prove it before the audit",
+  "situation": "The business has set recovery targets for five systems: how fast each must be back up and how much recent data it may lose. Nobody has checked those targets against what is really in place, like backup schedules, standby sites, disk setup and backup power. The auditors want proof as of 2026-11-03, including the sign-in service that every employee depends on.",
+  "your_task": [
+    "Work out how long each system really takes to recover, and how much data it would lose, if a server fails and if the whole site is lost.",
+    "Compare those numbers with the business targets and mark each system MEETS_TARGETS or GAPS.",
+    "Check disk redundancy (RAID), backup power and when recovery was last tested.",
+    "Recommend the cheapest fix for each gap and note its yearly cost where the policy gives one."
+  ],
+  "why_it_matters": "A plan that has never been tested usually fails during the real disaster. If the sign-in service goes down, nobody can log in to anything, so an outage there becomes an outage everywhere.",
+  "done_when": [
+    "All 5 systems show achieved vs target recovery time and data loss, with a verdict.",
+    "Every gap has a specific fix, such as a hot site, more frequent backups or a generator.",
+    "The auth-service gaps (RAID0 disk with no tolerance for a failure, and 10.2 minutes of backup power against 4 hours required) are logged with the IAM platform owner."
+  ],
+  "glossary": {
+    "RTO (recovery time objective)": "The longest a system is allowed to be down.",
+    "RPO (recovery point objective)": "The most recent data the business can afford to lose, measured in time.",
+    "Hot / warm / cold site": "Backup locations that are fully running, partly ready, or just empty space with power.",
+    "RAID": "A way of combining disks so the system keeps running if a disk fails; RAID0 survives no failures.",
+    "UPS": "Uninterruptible power supply: a battery that covers minutes, not hours, until a generator starts.",
+    "Failover test": "A planned drill that switches to the backup system to prove it works."
+  },
+  "job_roles": [
+    "Business Continuity Analyst",
+    "Disaster Recovery Specialist",
+    "Systems Administrator",
+    "IT Auditor"
+  ],
+  "talking_point": "Assessed recovery for 5 systems against business targets: 2 met, 3 had 13 gaps between them, including a legacy enterprise resource planning (ERP) system with no offsite copy and an untested plan, and a sign-in service on RAID0 with 10 minutes of backup power against a 4-hour requirement."
+}

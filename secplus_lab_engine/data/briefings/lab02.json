@@ -1,0 +1,38 @@
+{
+  "lab": 2,
+  "ticket": "REQ-10318",
+  "type": "Project task",
+  "priority": "P2",
+  "requested_by": "Theo Lindqvist, Identity Platform Lead",
+  "title": "Test the new zero-trust sign-in policy against five real sign-in attempts",
+  "situation": "The identity team is rolling out a zero-trust sign-in policy, where every request is checked on its own merits and being on the company network earns no trust. Five recent sign-in attempts were captured for testing, including one for alice from a Tor address at 3 a.m. and one for bob from an unmanaged phone with no multi-factor authentication. We also need proof that stolen or forged access tokens are refused.",
+  "your_task": [
+    "Score each sign-in request using device health, location, IP reputation, user risk, time and MFA, and record ALLOW, STEP_UP or DENY.",
+    "Issue a short-lived access token for the request that passed.",
+    "Run the step-up MFA challenge for the two borderline requests and record the final answer.",
+    "Fire five attacks at the enforcement point (replayed, wrong-scope, forged, revoked and missing tokens) and confirm each is blocked."
+  ],
+  "why_it_matters": "Stolen passwords and stolen session tokens are how most account takeovers start. A policy that only checks the password once lets an attacker in for as long as the session lasts.",
+  "done_when": [
+    "1 ALLOW, 2 STEP_UP and 2 DENY decisions are recorded, each with the signals that drove it.",
+    "Carol's prod-db request is still denied after passing MFA, because her device health is too low.",
+    "Carol's source-repo request is allowed after step-up, with a 5-minute (300-second) token.",
+    "All 5 token attacks are blocked at the enforcement point."
+  ],
+  "glossary": {
+    "Zero trust": "A security model where no user, device or network is trusted by default, and every request is checked.",
+    "Multi-factor authentication (MFA)": "Proving who you are with two or more things, such as a password plus a phone prompt.",
+    "Step-up authentication": "Asking for an extra proof, such as a fresh MFA prompt, when a request looks a little risky.",
+    "Policy Engine (PE)": "The part that decides whether a request is allowed.",
+    "Policy Administrator (PA)": "The part that issues, and can cancel, the access tokens the Policy Engine approves.",
+    "Policy Enforcement Point (PEP)": "The gate in front of the resource that checks the token on every request.",
+    "Access token": "A short-lived digital pass that lets one user reach one resource."
+  },
+  "job_roles": [
+    "IAM Engineer",
+    "Entra ID Administrator",
+    "Identity and Access Analyst",
+    "Zero Trust Engineer"
+  ],
+  "talking_point": "Tested a zero-trust conditional access policy on 5 sign-ins (1 allowed, 2 stepped up, 2 denied), showed MFA alone could not rescue an unhealthy device, and blocked all 5 token replay, forgery and scope attacks."
+}

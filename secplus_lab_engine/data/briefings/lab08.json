@@ -1,0 +1,37 @@
+{
+  "lab": 8,
+  "ticket": "INC-20441",
+  "type": "Incident",
+  "priority": "P1",
+  "requested_by": "Leah Donovan, IAM Operations Lead",
+  "title": "Act on the AI agent's response proposals: suspend jdoe, revoke sessions, block attacker IPs",
+  "situation": "The detection rules raised seven findings from this morning's attack. The AI security agent proposed one action for each: suspend accounts, block IP addresses, isolate a workstation and change a firewall rule. The identity team must decide on the account suspensions. jdoe's account was clearly taken over. asmith triggered an impossible-travel alert while really traveling. Every agent action must pass the governor and, where needed, a person.",
+  "your_task": [
+    "Send each of the 7 agent proposals through the governor and record ALLOW, REQUIRE_HUMAN_APPROVAL or BLOCK.",
+    "Have the security architect review both account-suspension requests, approving jdoe and rejecting asmith as a false positive.",
+    "Suspend jdoe in the identity governance system and revoke every live session token.",
+    "Bundle the IP blocks into one emergency change request with a rehearsed backout, and isolate WS-0142 only after its live evidence is hashed."
+  ],
+  "why_it_matters": "If a taken-over account keeps its sessions, the attacker stays logged in even after the password changes. If an AI agent can suspend anyone it suspects, a traveling employee gets locked out for nothing.",
+  "done_when": [
+    "4 proposals are allowed, 2 go to a human and 1 is blocked (the agent's attempt to change a locked firewall rule).",
+    "jdoe is suspended and 2 live session tokens are revoked.",
+    "asmith stays active, and the impossible-travel rule is flagged for tuning.",
+    "The emergency firewall change is APPROVE_WITH_CONDITIONS and WS-0142 is isolated with 2 evidence items hashed first."
+  ],
+  "glossary": {
+    "Security orchestration, automation and response (SOAR)": "Tools that automatically run response steps when an alert fires.",
+    "Identity governance and administration (IGA)": "The system that controls who has which accounts and access, and records every change.",
+    "Session token": "The digital pass that keeps a user signed in after they enter their password.",
+    "Governor": "The policy check that every AI agent action must pass before it runs.",
+    "False positive": "An alert that looks like an attack but turns out to be normal activity.",
+    "Emergency change": "An urgent change approved quickly and reviewed in full afterward."
+  },
+  "job_roles": [
+    "IAM Analyst",
+    "SOC Analyst II",
+    "Security Automation Engineer",
+    "Identity Operations Engineer"
+  ],
+  "talking_point": "Ran 7 AI-proposed response actions through governance (4 allowed, 2 human-approved or rejected, 1 blocked), suspended a compromised account and revoked its 2 live sessions, and stopped a false-positive lockout of a traveling employee."
+}

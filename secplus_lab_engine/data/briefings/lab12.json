@@ -1,0 +1,38 @@
+{
+  "lab": 12,
+  "ticket": "AUD-40167",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Imani Torres, Infrastructure Compliance Analyst",
+  "title": "Check four servers against our security baselines and report drift",
+  "situation": "Before the quarterly audit, we need to check four servers against our approved security settings: the domain controller DC01, the web server WEB01 and two Linux servers. Some settings that were fixed at the last scan have slipped back. WEB01's firewall and endpoint protection agent are now off.",
+  "your_task": [
+    "Compare each server's settings to its Windows or Linux baseline and record pass, fail, missing or exception.",
+    "Calculate a compliance percentage and verdict for each server.",
+    "Find drift: checks that passed at the last approved scan but fail now.",
+    "List the fix for each failed check, and confirm any exceptions are approved and not expired."
+  ],
+  "why_it_matters": "Attackers look for the one server with a weak setting, such as Telnet left running or root login allowed. Settings that drift back unnoticed undo work that was already paid for.",
+  "done_when": [
+    "Each server has a score: DC01 75.6%, WEB01 0.0%, lnx-app-01 100.0% and lnx-db-01 30.6%.",
+    "Three servers are marked non-compliant and one compliant.",
+    "Drift is listed for DC01 (W-07), WEB01 (W-05, W-10) and lnx-db-01 (5 checks).",
+    "The approved /tmp exception on lnx-app-01 is recorded with its 2027-03-31 expiry, and the expired automatic-updates exception on lnx-db-01 is flagged as a failure."
+  ],
+  "glossary": {
+    "Security baseline": "The approved list of secure settings every system of a given type must have.",
+    "Hardening": "Turning off what is not needed and tightening settings to make a system harder to attack.",
+    "Configuration drift": "Settings slowly changing away from the approved baseline over time.",
+    "Group Policy Object (GPO)": "A set of Windows settings pushed out to many computers from one place.",
+    "Endpoint detection and response (EDR)": "Software on each computer that watches for and responds to attacks.",
+    "SELinux (Security-Enhanced Linux)": "A Linux feature that strictly limits what each program can do.",
+    "Exception": "Formal, time-limited approval to skip a baseline setting, usually with another safeguard in its place."
+  },
+  "job_roles": [
+    "Systems Administrator",
+    "Security Compliance Analyst",
+    "Infrastructure Security Engineer",
+    "IT Auditor"
+  ],
+  "talking_point": "Checked 4 servers against Windows and Linux security baselines, found 3 non-compliant (one at 0%), and traced 8 settings that had drifted since the last approved scan, including a disabled firewall and endpoint protection agent."
+}
