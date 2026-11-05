@@ -208,9 +208,9 @@
         "They exceeded the failed sign-in limit in the password policy",
         "Their accounts were imported from a CSV file without passwords",
         "An admin selected Reset password for each user overnight",
-        "Their passwords reached the maximum age set in the password policy"
+        "Their passwords passed the policy's maximum password age"
       ],
-      "answer": "Their passwords reached the maximum age set in the password policy",
+      "answer": "Their passwords passed the policy's maximum password age",
       "explanation": "Password expired is triggered when a password passes the policy's maximum age. Too many failed attempts would show Locked out, and an admin reset would show Password reset."
     },
     {
@@ -290,11 +290,11 @@
       "stem": "An auditor wants to know which admin changed a user's manager attribute last Tuesday. Where should the admin look?",
       "choices": [
         "The user's Profile tab, under the attribute history view",
-        "The System Log, filtered to that user's profile update events",
+        "The System Log, filtered to the user's profile updates",
         "The Okta status site, under recent incident history",
         "Profile Editor, under the attribute's change history panel"
       ],
-      "answer": "The System Log, filtered to that user's profile update events",
+      "answer": "The System Log, filtered to the user's profile updates",
       "explanation": "The System Log records profile updates with the actor, target and time. The Profile tab shows current values only, and status.okta.com reports service health, not org changes."
     },
     {
@@ -320,9 +320,9 @@
         "Department was hidden from the first user by an admin role",
         "The first user has not yet enrolled in Okta Verify",
         "The first user is suspended, which locks every profile field",
-        "The first user's profile is sourced from a directory or HR app"
+        "The first user is sourced from a directory or HR app"
       ],
-      "answer": "The first user's profile is sourced from a directory or HR app",
+      "answer": "The first user is sourced from a directory or HR app",
       "explanation": "When a user's profile source is an external system such as Active Directory or an HR app, sourced attributes are read-only in Okta. Suspended users can still have their profiles updated."
     },
     {
@@ -458,11 +458,11 @@
       "stem": "A user imported from Active Directory has the wrong department. The field is read-only in Okta. What should the admin do?",
       "choices": [
         "Remove the user from all groups, then edit the field in Okta",
-        "Correct the department in Active Directory and let the next import update Okta",
+        "Fix it in Active Directory and let the next import update Okta",
         "Change the user's type in Okta so the field becomes editable",
         "Create a custom attribute in Okta and enter the new department there"
       ],
-      "answer": "Correct the department in Active Directory and let the next import update Okta",
+      "answer": "Fix it in Active Directory and let the next import update Okta",
       "explanation": "For an AD-sourced user, the change must be made in Active Directory, and Okta picks it up on the next import. A separate custom attribute would leave the real department wrong in every rule and mapping."
     },
     {
@@ -472,7 +472,7 @@
       "stem": "An organization wants Okta to read users from its on-premises Active Directory. What must be in place for this integration?",
       "choices": [
         "An Okta Verify enrollment on every domain controller",
-        "A SAML app integration for each organizational unit",
+        "A SAML app integration configured separately for each organizational unit",
         "The Okta Active Directory agent on a domain-joined Windows server",
         "A network zone that contains every domain controller"
       ],
@@ -487,7 +487,7 @@
       "choices": [
         "The import needs a custom attribute for every AD field",
         "The AD agent can import groups only, not user accounts",
-        "Imported users appear only after each user signs in once",
+        "Imported users appear in Okta only after each user signs in for the first time",
         "The imported users are waiting for confirmation on the import results"
       ],
       "answer": "The imported users are waiting for confirmation on the import results",
@@ -542,7 +542,7 @@
       "stem": "An admin tries to remove a user from the Everyone group and finds no way to do it. Why?",
       "choices": [
         "Membership in Everyone is controlled by a hidden group rule",
-        "Only a Super Administrator may change the Everyone group's members",
+        "Only a Super Administrator is allowed to change the Everyone group's member list",
         "Everyone is a built-in group that contains every user automatically",
         "The user must be suspended before leaving the Everyone group"
       ],
@@ -555,7 +555,7 @@
       "topic": "Group Types and Sources",
       "stem": "An admin cannot add an Okta user to the group VPN-Users, which was imported from Active Directory. What is the MOST likely reason?",
       "choices": [
-        "The admin must first assign VPN-Users an admin role",
+        "The admin must first assign VPN-Users an admin role before adding any members",
         "The group must be activated before members can be added",
         "Users can join only one AD-sourced group at a time",
         "Membership of an AD-sourced group is managed in Active Directory"
@@ -571,7 +571,7 @@
       "choices": [
         "It is sourced from that app, not managed directly in Okta",
         "It can be edited freely in Okta like any Okta group",
-        "It is controlled only by group rules created in Okta",
+        "It is controlled only by group rules that an admin creates in Okta",
         "It is copied from the Everyone group every night"
       ],
       "answer": "It is sourced from that app, not managed directly in Okta",
@@ -583,7 +583,7 @@
       "topic": "Group Types and Sources",
       "stem": "A manager asks the admin to place the group Sales-East inside the group Sales so its members inherit access. What should the admin know?",
       "choices": [
-        "Nesting is set on the group's Profile tab under Parent group",
+        "Nesting is configured on the child group's Profile tab under the Parent group field",
         "Okta groups do not nest, so a rule or app assignment is needed instead",
         "Nesting works only for groups imported from Active Directory",
         "Nesting is available once both groups are given admin roles"
@@ -628,7 +628,7 @@
         "They can be assigned to apps and used in policies, but membership changes happen in AD",
         "They are hidden from app assignment until an admin converts them to Okta groups",
         "They can be used only for import scoping and never for app assignment",
-        "They become Okta groups after import, so membership is edited only in Okta"
+        "They are converted into Okta groups on import, so membership is then edited only in Okta"
       ],
       "answer": "They can be assigned to apps and used in policies, but membership changes happen in AD",
       "explanation": "AD-sourced groups are fully usable for app assignment and policy targeting while their membership stays owned by Active Directory. They are not converted into Okta groups."
@@ -669,7 +669,7 @@
       "choices": [
         "It deactivates the group rule so that no other members are affected",
         "It blocks the removal because rule members cannot be removed by hand",
-        "It removes the user but the rule adds the user back within minutes",
+        "It removes the user, but the active rule adds the user back again within a few minutes",
         "It adds the user to the rule's Except list so the rule does not re-add them"
       ],
       "answer": "It adds the user to the rule's Except list so the rule does not re-add them",
@@ -780,7 +780,7 @@
       "stem": "An admin activates a rule that adds users with the title Nurse to the group Clinical. Which users does the rule add?",
       "choices": [
         "Only users created after the rule was activated",
-        "Only users who were manually added to Clinical before",
+        "Only users who were already added to Clinical manually before activation",
         "Only users who sign in during the next 24 hours",
         "Existing and future users whose title matches the condition"
       ],
@@ -793,12 +793,12 @@
       "topic": "Creating and Activating Group Rules",
       "stem": "A Group Administrator who manages several groups says the option to create a group rule is missing. What is the MOST likely reason?",
       "choices": [
-        "Only Super Administrators and Organization Administrators can manage group rules",
-        "Group Administrators can create rules only for the Everyone group",
+        "Group rules are managed only by Super and Organization Administrators",
+        "Group Administrators can create rules only for the Everyone group in the org",
         "Group rules are available only after an AD integration exists",
         "Group rules must be created by the Okta Support team"
       ],
-      "answer": "Only Super Administrators and Organization Administrators can manage group rules",
+      "answer": "Group rules are managed only by Super and Organization Administrators",
       "explanation": "Creating and editing group rules is limited to Super and Organization Administrators. A Group Administrator manages users in assigned groups but not rules."
     },
     {
@@ -877,7 +877,7 @@
       "topic": "Group Rule Conditions and Expressions",
       "stem": "Users who belong to any of three AD-sourced groups must also be in one Okta group used for app assignment. What is the BEST approach?",
       "choices": [
-        "Manually copying members every week from the three AD groups",
+        "Manually copying the members from the three AD groups into it every single week",
         "Assigning the three AD groups an admin role and the app",
         "A group rule whose condition checks membership of the three AD groups",
         "Nesting the three AD groups inside the new Okta group"
@@ -891,7 +891,7 @@
       "topic": "Group Rule Conditions and Expressions",
       "stem": "A rule must match users whose department is Sales AND whose country is Canada. Which condition type should the admin use?",
       "choices": [
-        "A basic condition on department, with Canada in Except",
+        "A basic condition on department, with every Canada user typed into the Except field",
         "Two separate rules that each assign the same group",
         "A basic condition, repeated once for each attribute",
         "An Okta Expression Language condition combining both attributes"
@@ -920,11 +920,11 @@
       "stem": "A rule should add everyone in Sales except people whose title contains Intern, and new interns are hired every month. What should the admin do?",
       "choices": [
         "Create a second group rule that removes users with Intern in their title",
-        "Exclude interns in the IF expression, because the Except field lists only individual users",
+        "Exclude interns in the IF expression; Except lists only named users",
         "Manually remove each intern after the rule adds them to Sales",
         "Type the word Intern into the Except field so the rule skips that title"
       ],
-      "answer": "Exclude interns in the IF expression, because the Except field lists only individual users",
+      "answer": "Exclude interns in the IF expression; Except lists only named users",
       "explanation": "The Except field names specific users, so a condition-based exclusion belongs in the expression, which also handles future hires. Rules only add members, and manual removal does not scale."
     },
     {
@@ -949,7 +949,7 @@
       "choices": [
         "Group removals take effect only after the next password change",
         "The user's profile source must approve the group removal first",
-        "The app keeps users until the group rule is deactivated",
+        "The app keeps all former members until the related group rule is deactivated",
         "The user is also assigned to the app individually or through another group"
       ],
       "answer": "The user is also assigned to the app individually or through another group",
@@ -962,7 +962,7 @@
       "stem": "New engineers should get the code repository app automatically when HR sets their department to Engineering. What should the admin configure?",
       "choices": [
         "A group rule on department that fills a group assigned to the app",
-        "An authentication policy rule that grants the app to engineers",
+        "An authentication policy rule that grants the app to engineering users",
         "A resource set that contains the app and the department",
         "A custom attribute that stores the name of the app"
       ],
@@ -992,7 +992,7 @@
         "Add the role as a custom attribute on each analyst's profile",
         "Assign the Service Desk group to the Okta Admin Console app",
         "Assign the Help Desk Administrator role to the Service Desk group",
-        "Create a group rule that grants the role to Service Desk"
+        "Create a group rule that grants the Help Desk Administrator role to Service Desk"
       ],
       "answer": "Assign the Help Desk Administrator role to the Service Desk group",
       "explanation": "Admin roles can be assigned to a group, so every member holds the role. Group rules cannot grant roles or add users to admin groups."
@@ -1074,7 +1074,7 @@
       "stem": "What can a Read-only Administrator do in the Admin Console?",
       "choices": [
         "Edit user profiles but not create or delete any user accounts",
-        "Reset passwords for users while being unable to change settings",
+        "Reset passwords and MFA for users while being unable to change org settings",
         "View most settings, users, groups, apps and logs without making changes",
         "Create apps and assign them but never change any user accounts"
       ],
@@ -1087,7 +1087,7 @@
       "topic": "Standard Administrator Roles",
       "stem": "A Help Desk Administrator tries to change a user's job title and cannot. What explains this?",
       "choices": [
-        "Help Desk Administrators edit profiles only through Profile Editor",
+        "Help Desk Administrators can edit profiles only through the Profile Editor page",
         "Help Desk Administrators can edit profiles only for suspended users",
         "Help Desk Administrators must enroll Okta Verify before editing",
         "Help Desk Administrators can reset passwords and MFA but not edit profiles"
@@ -1230,7 +1230,7 @@
         "Remove every Super Administrator and rely on Okta Support",
         "Keep a few Super Administrators and move others to narrower roles",
         "Give every IT staff member Super Administrator for consistency",
-        "Replace all Super Administrators with a single shared account"
+        "Replace all of the Super Administrators with a single shared admin account"
       ],
       "answer": "Keep a few Super Administrators and move others to narrower roles",
       "explanation": "Limiting Super Administrator to a small number of named accounts while others get roles that match their duties reduces risk. A shared account destroys accountability in the System Log."
@@ -1241,7 +1241,7 @@
       "topic": "Assigning Roles to Users and Groups",
       "stem": "Where does a Super Administrator go to give a user a standard admin role?",
       "choices": [
-        "Directory > People, open the user, then the Groups tab",
+        "Directory > People, open the user, then add the role on the Groups tab",
         "Settings > Account, then the Admin roles section",
         "Security > Administrators, then add an administrator assignment",
         "Directory > Profile Editor, then the admin role attribute"
@@ -1284,11 +1284,11 @@
       "stem": "A Super Administrator tries to assign an admin role to the group IT-Ops, but Okta blocks it. IT-Ops is populated by a group rule. What is the MOST likely reason?",
       "choices": [
         "Only Organization Administrators can assign roles to any group",
-        "A group that is the target of a group rule cannot be granted admin privileges",
+        "A group that a group rule targets cannot be granted admin privileges",
         "The group must hold no members at all before a role can be assigned",
         "Admin roles can be assigned only to groups imported from Active Directory"
       ],
-      "answer": "A group that is the target of a group rule cannot be granted admin privileges",
+      "answer": "A group that a group rule targets cannot be granted admin privileges",
       "explanation": "Okta does not let a rule-populated group hold admin privileges, so admin rights never follow attribute changes. Super Administrators are the ones who assign roles, so permission is not the issue."
     },
     {
@@ -1300,7 +1300,7 @@
         "Field Staff became an AD-sourced group when the role was added",
         "The Group Administrator's assignment expired automatically",
         "Only Super Administrators can manage groups that hold admin roles",
-        "Admin-role groups are read-only until an Okta Support review"
+        "Groups with admin roles stay read-only until Okta Support reviews them"
       ],
       "answer": "Only Super Administrators can manage groups that hold admin roles",
       "explanation": "Once a group carries an admin role, changing it or its members is reserved for Super Administrators to protect admin access. The group's source does not change."
@@ -1369,7 +1369,7 @@
       "choices": [
         "Assign the Help Desk Administrator role with a group constraint",
         "Assign the Read-only Administrator role with profile editing added",
-        "Assign the Group Administrator role and ask them not to reset passwords",
+        "Assign the Group Administrator role and ask them never to reset any passwords",
         "Create a custom role with only the permission to edit profile attributes"
       ],
       "answer": "Create a custom role with only the permission to edit profile attributes",
@@ -1383,7 +1383,7 @@
       "choices": [
         "Group membership permissions do not apply to AD-sourced groups",
         "The delegated admin must also hold Super Administrator",
-        "The group must be converted into a resource set first",
+        "The AD-sourced group must be converted into a resource set first",
         "Custom roles can be scoped only to the Everyone group"
       ],
       "answer": "Group membership permissions do not apply to AD-sourced groups",
@@ -1439,7 +1439,7 @@
       "choices": [
         "Security > Administrators, Resources tab, Create new resource set",
         "Directory > Profile Editor, Resources, Add resource",
-        "Directory > Groups, open a group, Resources tab",
+        "Directory > Groups, open any group, then use its Resources tab to add one",
         "Applications > Applications, Resource sets, Add"
       ],
       "answer": "Security > Administrators, Resources tab, Create new resource set",
@@ -1481,7 +1481,7 @@
       "choices": [
         "Select the Salesforce user type in Profile Editor",
         "Select each current Salesforce instance by name only",
-        "Select all applications in the org and trust the admin",
+        "Select all applications in the org and trust the admin to stay in scope",
         "Select the Salesforce app type rather than individual instances"
       ],
       "answer": "Select the Salesforce app type rather than individual instances",
@@ -1521,7 +1521,7 @@
       "topic": "Resource Sets",
       "stem": "A Super Administrator adds a new group to an existing resource set that is used in two admin assignments. What is the effect?",
       "choices": [
-        "The change waits until each assignment is deleted and recreated",
+        "The change waits until each assignment is deleted and then created again",
         "The new group is added only to the most recently created assignment",
         "Both assignments' admins can now act on that group as their roles allow",
         "Only assignments created after the change include the new group"

@@ -494,7 +494,8 @@ def build_challenges(policies: dict, data: dict) -> list:
                            objective=obj(e)))
     seen_g, seen_a = set(), set()
     for e in evs:
-        ctx = "attempt=" + str({k: v for k, v in raw.get(e.id, {}).items() if k != "id"})
+        ctx = ("attempt=" + str({k: v for k, v in raw.get(e.id, {}).items() if k != "id"})
+               + f"\nuser groups: {', '.join(sorted(user_groups((data.get('users') or {}).get(e.user, {}), cfg)))}")
         if e.gsp_rule and e.gsp_rule not in seen_g:
             seen_g.add(e.gsp_rule)
             qs.append(Question(prompt=f"{e.id}: which global session policy rule matched?",

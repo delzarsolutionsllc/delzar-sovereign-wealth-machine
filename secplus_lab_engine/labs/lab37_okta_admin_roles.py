@@ -244,7 +244,8 @@ def plan_request(req: dict, data: dict, cfg: dict) -> Plan:
         return done("CUSTOM_ROLE", "Custom admin role", constraint, perms, rs)
     note = f", constrained to {scope_txt}" if scope else ""
     reasons.append(f"least-privileged standard role for {', '.join(cfg['tasks'][t]['description'] for t in tasks)} "
-                   f"is {best}{note}" + (f" (also grants {len(extra)} extra permissions)" if extra else ""))
+                   f"is {best}{note}" + (f" (also grants {len(extra)} extra permission"
+                                          f"{'' if len(extra) == 1 else 's'})" if extra else ""))
     if best in cfg["broad_roles"]:
         reasons.append(f"{best} is a broad role: needs approval and a named owner, keep the count low")
     return done("STANDARD_ROLE", best, constraint, perms)

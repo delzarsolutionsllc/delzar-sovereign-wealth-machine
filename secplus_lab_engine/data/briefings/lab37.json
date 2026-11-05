@@ -1,0 +1,33 @@
+{
+  "lab": 37,
+  "ticket": "IAM-53714",
+  "type": "Access request batch and audit",
+  "priority": "P2",
+  "requested_by": "Rosa Lindqvist, Head of IT Operations",
+  "title": "Right-size Okta admin access before the year-end access review",
+  "situation": "Juniper Ridge Outfitters runs Okta Identity Engine for 19 staff. Teams keep asking for admin rights, and in the past the answer was often 'make them a super admin'. There are 13 new admin requests waiting, the security team has pulled 16 admin actions from the System Log (the Okta audit log) that they want explained, and internal audit wants the 12 existing admin role assignments checked before year end.",
+  "your_task": [
+    "For each request, pick the least-privileged standard admin role and limit it to the named groups or apps, or design a custom admin role (a chosen set of permissions plus a resource set) when no standard role is narrow enough.",
+    "Recommend assigning every admin role to a group rather than to one person.",
+    "For each logged admin action, decide whether the admin's roles allow it, and if not, which check stopped it.",
+    "Audit the existing assignments: too many super admins, roles handed to individuals, roles that could be limited but are not, and custom roles with an empty resource set."
+  ],
+  "why_it_matters": "Every unnecessary super admin is an account an attacker can use to take over the whole Okta org, and through it every connected app. Least-privileged, group-assigned admin roles make the damage from one stolen admin account small and make joiners and leavers easy to handle.",
+  "done_when": [
+    "All 13 requests have a STANDARD_ROLE, CUSTOM_ROLE or ESCALATE decision with a reason and an assignee group.",
+    "All 16 admin actions are marked ALLOWED or DENIED with the check that decided it.",
+    "All 12 assignments have a finding, and the super admin count is compared with the policy maximum of 3.",
+    "The fix list (remove the extra super admin, constrain the app admin, fix the empty resource set, move individual assignments to groups) is ready for the change board."
+  ],
+  "glossary": {
+    "Standard admin role": "One of Okta's built-in administrator roles, such as Help Desk Administrator or Report Administrator, with a fixed set of permissions.",
+    "Super Administrator": "The Okta role that can do everything, including assigning admin roles to others.",
+    "Role constraint": "A limit on a standard role so it applies only to chosen groups or apps instead of the whole org.",
+    "Custom admin role": "A role built from individual permissions, such as 'reset users' passwords', when no standard role is narrow enough.",
+    "Resource set": "The users, groups or apps a custom admin role is allowed to act on.",
+    "Admin group": "A group that has an admin role assigned; only super admins can change its membership.",
+    "Least privilege": "Give each administrator only the permissions and targets their job needs."
+  },
+  "job_roles": ["Okta Administrator", "IAM Engineer", "Identity and Access Analyst", "IT Operations Engineer"],
+  "talking_point": "Planned 13 Okta admin requests (8 standard roles such as Help Desk Administrator limited to the Sales group, 2 custom roles with resource sets, 3 escalated), explained 16 logged admin actions (5 allowed, 11 denied, including 3 blocked because the target was an admin or an admin group), and flagged 7 of 12 admin assignments, starting with 4 super admins against a policy maximum of 3."
+}

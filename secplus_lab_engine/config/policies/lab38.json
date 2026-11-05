@@ -14,6 +14,11 @@
       {"name": "no supported sign-on method", "outcome": "NEEDS_REVIEW"}
     ],
     "sso_user_statuses": ["ACTIVE"],
+    "user_status_notes": {
+      "DEPROVISIONED": "Deactivated users lose their app assignments and cannot sign in",
+      "SUSPENDED": "Suspended users keep their app assignments but cannot sign in to Okta until unsuspended",
+      "LOCKED_OUT": "Locked out users keep their app assignments but cannot sign in to Okta until unlocked"
+    },
     "active_app_status": "ACTIVE",
     "name_id_formats": ["Unspecified", "EmailAddress", "Persistent", "Transient", "x509SubjectName"],
     "application_username_formats": {
@@ -22,7 +27,7 @@
       "email": "the primary email attribute",
       "email_prefix": "the part of the email before the @"
     },
-    "saml_check_order": ["APP_INACTIVE", "NOT_ASSIGNED", "ACS_MISMATCH", "CERT_MISMATCH", "AUDIENCE_MISMATCH",
+    "saml_check_order": ["APP_INACTIVE", "USER_NOT_ACTIVE", "NOT_ASSIGNED", "ACS_MISMATCH", "CERT_MISMATCH", "AUDIENCE_MISMATCH",
                          "NAMEID_MISMATCH"],
     "provisioning_events": {
       "assigned": "create_users",

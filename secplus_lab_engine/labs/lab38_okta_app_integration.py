@@ -32,20 +32,23 @@ the End-User Dashboard, or SP-initiated from the app) is checked in this order;
 the first check that fails is the outcome, and every problem is listed:
 
 1. APP_INACTIVE: the app integration is missing, inactive, or its status is unknown.
-2. NOT_ASSIGNED: the user is unknown, not ACTIVE, or not assigned to the app
+2. USER_NOT_ACTIVE: the user's Okta status is anything but ACTIVE (an unknown
+   status fails closed). Deactivated users lose their app assignments;
+   Suspended and Locked out users keep them but cannot sign in to Okta.
+3. NOT_ASSIGNED: the user is unknown, or active but not assigned to the app
    directly or through a group. Unassigned users never get SSO, even when
    every other setting is right.
-3. ACS_MISMATCH: the Single sign-on URL is not the SP's Assertion Consumer
+4. ACS_MISMATCH: the Single sign-on URL is not the SP's Assertion Consumer
    Service (ACS) URL, or (SP-initiated) the request asks for another ACS URL
    that the app is not allowed to request.
-4. CERT_MISMATCH: the SP requires a signed assertion and Okta does not sign it
+5. CERT_MISMATCH: the SP requires a signed assertion and Okta does not sign it
    (a missing setting counts as unsigned), or the SP holds a different Okta
    signing certificate (typical after a certificate rotation).
-5. AUDIENCE_MISMATCH: the Audience URI is not the SP entity ID.
-6. NAMEID_MISMATCH: unknown or wrong Name ID format, unknown Application
+6. AUDIENCE_MISMATCH: the Audience URI is not the SP entity ID.
+7. NAMEID_MISMATCH: unknown or wrong Name ID format, unknown Application
    username setting, or the value sent (for example the Okta username) is not
    an account the SP knows (it stores the email).
-7. Otherwise SSO_SUCCESS.
+8. Otherwise SSO_SUCCESS.
 
 Part 3, provisioning. Each change event gives the expected action (CREATE,
 UPDATE, DEACTIVATE or NONE) and a verification status:
@@ -78,7 +81,7 @@ OBJECTIVES = ("Okta Professional 2.1 SSO app integrations from the OIN (SAML, OI
               "2.2 Provisioning and app assignments")
 COURSES = ("okta",)
 PROTOCOLS = ["SAML", "OIDC", "SWA", "BOOKMARK", "NEEDS_REVIEW"]
-SSO_OUTCOMES = ["SSO_SUCCESS", "NOT_ASSIGNED", "ACS_MISMATCH", "AUDIENCE_MISMATCH", "NAMEID_MISMATCH",
+SSO_OUTCOMES = ["SSO_SUCCESS", "USER_NOT_ACTIVE", "NOT_ASSIGNED", "ACS_MISMATCH", "AUDIENCE_MISMATCH", "NAMEID_MISMATCH",
                 "CERT_MISMATCH", "APP_INACTIVE"]
 ACTIONS = ["CREATE", "UPDATE", "DEACTIVATE", "NONE"]
 VERIFICATIONS = ["VERIFIED", "MANUAL_ACTION", "ACCESS_REMAINS", "NEEDS_REVIEW"]
@@ -167,6 +170,11 @@ def name_id_value(user: dict, setting: str | None) -> str | None:
             "email": email, "email_prefix": email.split("@")[0]}.get(setting or "")
 
 
+def blocked(problems: list[tuple[str, str]]) -> bool:
+    """True when the user cannot get SSO at all, so the SP account lookup is not meaningful."""
+    return any(p in ("USER_NOT_ACTIVE", "NOT_ASSIGNED") for p, _ in problems)
+
+
 def check_sign_in(attempt: dict, data: dict, cfg: dict) -> SignInResult:
     users = {u["login"]: u for u in data.get("users", [])}
     apps = data.get("apps", {})
@@ -187,8 +195,9 @@ def check_sign_in(attempt: dict, data: dict, cfg: dict) -> SignInResult:
     if user is None:
         problems.append(("NOT_ASSIGNED", f"user {login} does not exist in Okta"))
     elif user.get("status") not in cfg["sso_user_statuses"]:
-        problems.append(("NOT_ASSIGNED", f"user status is '{user.get('status')}', not ACTIVE: no SSO "
-                         "(deactivation also removes app assignments)"))
+        st = user.get("status")
+        note = cfg["user_status_notes"].get(st, "an unknown or non-active status cannot sign in (fail closed)")
+        problems.append(("USER_NOT_ACTIVE", f"user status is '{st}', not ACTIVE: {note}"))
     elif not paths:
         where = ("no tile on the End-User Dashboard; Okta shows 'not assigned to this application'"
                  if flow == "idp_initiated" else "Okta rejects the app's request: the user is not assigned")
@@ -227,10 +236,10 @@ def check_sign_in(attempt: dict, data: dict, cfg: dict) -> SignInResult:
                          f"{sp.get('name_id_format')}"))
     elif setting not in cfg["application_username_formats"]:
         problems.append(("NAMEID_MISMATCH", f"Application username '{setting}' is missing or unknown (fail closed)"))
-    elif not any(p == "NOT_ASSIGNED" for p, _ in problems) and value not in sp.get("accounts", []):
+    elif not blocked(problems) and value not in sp.get("accounts", []):
         problems.append(("NAMEID_MISMATCH", f"NameID '{value}' ({cfg['application_username_formats'][setting]}) "
                          "matches no account in the SP"))
-    elif not any(p == "NOT_ASSIGNED" for p, _ in problems):
+    elif not blocked(problems):
         ok.append(f"NameID '{value}' matches an SP account")
     order = cfg["saml_check_order"]
     problems.sort(key=lambda p: order.index(p[0]))
@@ -412,7 +421,7 @@ def build_challenges(policies: dict, data: dict) -> list:
         qs.append(Question(prompt=f"{s.id}: what is the result of this sign-in (first check that fails)?",
                            context=ctx, choices=choices_with(s.outcome, SSO_OUTCOMES, exclude=exclude, key=s.id),
                            answer=s.outcome, explanation="; ".join(s.reasons),
-                           objective="2.2" if s.outcome == "NOT_ASSIGNED" else "2.1"))
+                           objective="2.2" if s.outcome in ("NOT_ASSIGNED", "USER_NOT_ACTIVE") else "2.1"))
     for p in prov:
         app = apps.get(p.app, {})
         ctx = (f"event={ {k: v for k, v in raw_ev[p.id].items() if k != 'id'} }\n"
@@ -480,6 +489,7 @@ def generate_scenario(rng, policies: dict) -> dict:
     gone = person([g2], status="DEPROVISIONED")
     direct, newbie, leaver, gone2 = person(), person([g1]), person(), person(status="DEPROVISIONED")
     newbie_crm = person([g2])
+    paused = person([g1], status=rng.choice(["SUSPENDED", "LOCKED_OUT"]))
     em = {u["login"]: u["email"] for u in users}
     v = rng.sample(_VENDORS, 6)
     hosts = [f"{x.lower()}.example" for x in v]
@@ -511,7 +521,7 @@ def generate_scenario(rng, policies: dict) -> dict:
     sign_ins = [("good", a, None), ("good", direct, None), ("good", c, None), ("crm", gone, None),
                 ("crm", b, None), ("crm", d, None), ("crm", d, f"https://eu.{hosts[1]}/saml/acs"),
                 ("wiki", c, None), ("hr", a, None), ("travel", direct, None), ("analytics", a, None),
-                ("wiki", d, None)]
+                ("wiki", d, None), ("good", paused, None)]
     rng.shuffle(sign_ins)
     si = []
     for n, (app, user, req) in enumerate(sign_ins, 1):
