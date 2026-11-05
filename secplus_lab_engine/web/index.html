@@ -823,14 +823,14 @@ async function viewHome() {
       el("span", { class: "label", text: "Course overview" }),
       el("h1", { text: isSecplus() ? "Practise every SY0-701 domain on working security engines" : `Practise every ${C().exam_code} skill area, one concept at a time` }),
       examCountdown(),
-      el("p", { class: "muted", text: `${CATALOG.labs.length} labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (${C().pass_label || `pass mark ${CATALOG.pass_scaled} on the ${C().scale[0]}–${C().scale[1]} scale`}).` + (isSecplus() ? "" : ` Every lab is mapped to ${C().exam_code} objectives; some are shared with the Security+ course.`) }),
+      el("p", { class: "muted", text: `${CATALOG.labs.length} hands-on labs. Each one has a lesson, a scenario you can run, and a practice quiz built from the engine's own decisions. Finish with a timed exam weighted like the real one (${C().pass_label || `pass mark ${CATALOG.pass_scaled} on the ${C().scale[0]}–${C().scale[1]} scale`}).` + (isSecplus() ? "" : ` Every lab is mapped to ${C().exam_code} objectives; some are shared with the Security+ course.`) }),
       el("div", { class: "btns" },
         weakest ? el("a", { class: "btn primary", href: weakLab ? `#lab-${weakLab.n}` : `#obj-${weakest[0]}`, text: `Work on ${weakest[0]} ${OBJ[weakest[0]] || ""}` + (weakLab ? `: Lab ${weakLab.n}` : "") })
           : isSecplus() ? el("a", { class: "btn primary", href: `#lab-${suggestion.n}`, text: "Start with Lab 1" })
           : el("a", { class: "btn primary", href: `#obj-${firstObjective}`, text: `Start with ${firstObjective} ${OBJ[firstObjective] || ""}` }),
         el("a", { class: "btn", href: "#quizzes", text: "Quiz one objective at a time" }),
         el("a", { class: "btn", href: "#glossary", text: "Glossary & acronym quizzes" }),
-        el("a", { class: "btn", href: "#videos", text: "Watch the video course" }),
+        CATALOG.video_course.videos.length ? el("a", { class: "btn", href: "#videos", text: "Watch the video course" }) : null,
         el("a", { class: "btn", href: "#exam", text: "Take a practice exam" }))),
     todayCard(),
     el("div", { class: "grid5" }, CATALOG.domains.map(d => {
@@ -840,7 +840,7 @@ async function viewHome() {
       return el("a", { class: "dcard", href: firstLab ? `#lab-${firstLab.n}` : `#obj-${firstObj}` },
         el("span", { class: "label", text: `Domain ${d.id}` }), el("b", { text: d.name }),
         el("span", { class: "w", text: `${Math.round(d.weight * 100)}%` }), el("span", { class: "muted", text: "of the exam" }),
-        el("span", { class: "muted", text: (labs.length ? `${labs.length} labs · ` : "quizzes · ") + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
+        el("span", { class: "muted", text: (labs.length ? `${labs.length} lab${labs.length === 1 ? "" : "s"} · ` : "quizzes · ") + (s ? `your score ${pct(s.c, s.a)}% (${s.a} answered)` : "not practised yet") }));
     })),
     el("p", { class: "btns" }, el("span", { class: "muted", text: "Test one domain: " }), CATALOG.domains.map(d => el("a", { class: "btn", href: `#exam-d${d.id}`, text: `Domain ${d.id} test` }))));
 }

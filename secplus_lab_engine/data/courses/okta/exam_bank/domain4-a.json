@@ -23,13 +23,13 @@
       "topic": "Adding and Configuring Authenticators",
       "stem": "A company wants employees to be able to reset a forgotten password with an SMS code, but SMS must never satisfy a sign-in challenge. What should the admin configure on the Phone authenticator?",
       "choices": [
-        "Set it to be used for recovery in password policy rules only",
+        "Set its Used for option to Recovery only",
         "Set it to be used for authentication and recovery",
         "Allow only voice call as the verification method",
         "Mark it as Optional in the default authenticator enrollment policy"
       ],
-      "answer": "Set it to be used for recovery in password policy rules only",
-      "explanation": "The Phone authenticator can be limited to recovery, so users can recover their account with it but cannot authenticate with it. Making it Optional in an enrollment policy still lets enrolled users sign in with it."
+      "answer": "Set its Used for option to Recovery only",
+      "explanation": "The Phone authenticator's Used for setting can be Authentication and recovery or Recovery only, so users can recover their account with it but cannot authenticate with it. Making it Optional in an enrollment policy still lets enrolled users sign in with it."
     },
     {
       "id": "D4-003",
@@ -71,7 +71,7 @@
         "Passkey (FIDO2 WebAuthn)"
       ],
       "answer": "Custom OTP",
-      "explanation": "Custom OTP supports generic HOTP or TOTP tokens from vendors that do not have a dedicated authenticator. YubiKey OTP and Symantec VIP only cover those specific vendors' tokens."
+      "explanation": "Custom OTP supports generic one-time-password tokens, such as time-based codes, from vendors that do not have a dedicated authenticator. YubiKey OTP and Symantec VIP only cover those specific vendors' tokens."
     },
     {
       "id": "D4-006",
@@ -379,7 +379,7 @@
         "AND user is accessing, set to specific applications with the HR portal"
       ],
       "answer": "AND user is accessing, set to specific applications with the HR portal",
-      "explanation": "The user is accessing condition lets a rule target Okta itself, any app that supports enrollment, or specific apps. An IP condition describes the network, not the app being accessed."
+      "explanation": "The user is accessing condition lets a rule target Okta itself, any application that supports MFA enrollment, or specific applications. An IP condition describes the network, not the app being accessed."
     },
     {
       "id": "D4-028",
@@ -477,7 +477,7 @@
         "Phone"
       ],
       "answer": "YubiKey OTP",
-      "explanation": "YubiKey OTP codes come from a physical key, so Okta classifies it as hardware-protected. Google Authenticator is device-bound software, and email or phone only show user presence."
+      "explanation": "Okta lists YubiKey OTP as user presence, device-bound and hardware-protected because its codes come from a physical key. Google Authenticator is device-bound software, and email and phone only have the user presence characteristic."
     },
     {
       "id": "D4-035",
@@ -735,15 +735,15 @@
       "id": "D4-110",
       "objective": "4.2",
       "topic": "Session Rule Conditions",
-      "stem": "An org lets customers sign in with a social login provider. The admin wants a specific global session rule for sessions that come from that provider. Which condition is used?",
+      "stem": "An admin edits a global session policy rule looking for a condition that limits the rule to the Contractors group, but no group condition exists. Where is group targeting configured for global session settings?",
       "choices": [
-        "AND Authenticates via, set to LDAP interface",
-        "AND Identity provider is, set to the specific IdP",
-        "AND Behavior is, set to a new device",
-        "IF user's IP is, set to the provider's zone"
+        "In the Exclude users field of the rule, listing every non-contractor",
+        "In the Assign to groups setting of a global session policy created for Contractors",
+        "In the AND Authenticates via condition of the rule",
+        "In the IF user's IP is condition, using a zone named after the group"
       ],
-      "answer": "AND Identity provider is, set to the specific IdP",
-      "explanation": "The Identity provider is condition can match Okta, any IdP or a specific IdP. Authenticates via distinguishes LDAP interface sign-ins, not social providers."
+      "answer": "In the Assign to groups setting of a global session policy created for Contractors",
+      "explanation": "Global session policies are assigned to groups at the policy level, and a Contractors policy ranked above the Default Policy targets only them. Rules inside a policy offer conditions such as user's IP, Authenticates via, behavior and risk, plus an Exclude users field, but no group condition."
     },
     {
       "id": "D4-111",
@@ -777,7 +777,7 @@
       "id": "D4-113",
       "objective": "4.2",
       "topic": "Session Rule Conditions",
-      "stem": "An admin adds a rule with a Behavior is condition for sign-ins from a new country. Which pairing should the admin avoid?",
+      "stem": "An admin adds a rule with a Behavior is condition for sign-ins from a new location. Which pairing should the admin avoid?",
       "choices": [
         "Prompting for MFA at every sign in",
         "Placing the rule above the catch-all rule",
@@ -1106,10 +1106,10 @@
         "Choose the Okta Verify verification options and number challenge setting",
         "On the Enrollment tab, add a policy assigned to the Sales group",
         "Set Okta Verify to Required in that policy and save it",
-        "Rank the new policy above the default policy",
+        "Check that no higher-priority enrollment policy also covers Sales users",
         "Sign in as a Sales test user and confirm the enrollment prompt"
       ],
-      "explanation": "An authenticator must exist and be configured before an enrollment policy can require it. The group policy must sit above the default policy to take effect, and a test sign-in confirms the result."
+      "explanation": "An authenticator must exist and be configured before an enrollment policy can require it. The first matching policy in priority order applies, so the admin confirms no higher policy also covers Sales before a test sign-in confirms the result."
     },
     {
       "id": "D4-045",

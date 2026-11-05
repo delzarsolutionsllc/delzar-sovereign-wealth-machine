@@ -595,15 +595,15 @@
       "id": "D4-243",
       "objective": "4.3",
       "topic": "Device and Risk Signals",
-      "stem": "An admin wants an app rule to require MFA when Okta notices a user signing in from a country they have not used before. Which approach fits Okta Identity Engine?",
+      "stem": "An admin wants an app rule to require MFA when Okta notices a user signing in from a location they have not used before. Which approach fits Okta Identity Engine?",
       "choices": [
-        "Reference a new-country behavior from Behavior Detection in a custom expression",
-        "Create a dynamic zone listing every country each user has signed in from before",
+        "Reference a New Location behavior in the rule's custom expression",
+        "Create a dynamic zone listing every location each user has signed in from before",
         "Set Device state to Registered for all users",
         "Add the country to the ThreatInsight exempt zones"
       ],
-      "answer": "Reference a new-country behavior from Behavior Detection in a custom expression",
-      "explanation": "Behavior Detection tracks signals such as a new country, and policy rules can reference those behaviors through a custom expression. Per-user country zones are unworkable, and exempt zones reduce protection."
+      "answer": "Reference a New Location behavior in the rule's custom expression",
+      "explanation": "Behavior Detection tracks signals such as New Location, and app sign-in rules reference behaviors through Expression Language, for example security.behaviors.contains('New Location'). Per-user location zones are unworkable, and exempt zones reduce protection."
     },
     {
       "id": "D4-244",
@@ -687,7 +687,7 @@
         "Active Directory, through its own password policy"
       ],
       "answer": "Active Directory, through its own password policy",
-      "explanation": "With delegated authentication Okta checks credentials against AD, so AD's password policy governs complexity and expiry. Okta's own complexity settings apply to Okta-sourced passwords."
+      "explanation": "With delegated authentication Okta checks credentials against AD, so AD's password policy enforces length, complexity and expiry. Okta still runs some checks, such as the common-password check, before sending a new password to AD, but it does not override AD's rules."
     },
     {
       "id": "D4-250",
@@ -947,13 +947,13 @@
       "topic": "Self-Service Recovery Configuration",
       "stem": "In a password policy rule, which authenticators can a user choose to start self-service account recovery?",
       "choices": [
-        "Security question, Google Authenticator and password",
+        "Security question, password and temporary access code",
         "Passkey, smart card and email",
         "Okta Verify push, phone by SMS or voice, and email",
         "Okta FastPass, security question and phone"
       ],
       "answer": "Okta Verify push, phone by SMS or voice, and email",
-      "explanation": "The rule's recovery section lists Okta Verify push, phone and email as ways to initiate recovery. A security question can only serve as additional verification, not as the starting authenticator."
+      "explanation": "The rule's recovery section lists Okta Verify push, phone and email, and also Google Authenticator, as ways to initiate recovery. Knowledge factors such as the password or a security question cannot start recovery; a security question can only serve as additional verification."
     },
     {
       "id": "D4-269",
@@ -1121,7 +1121,7 @@
         "Clear the user's sessions"
       ],
       "answer": "Clear the user's sessions",
-      "explanation": "A password reset does not by itself end sessions that already exist, so clearing sessions signs the attacker out. Expiring again or changing policy leaves the stolen session alive."
+      "explanation": "Clearing the user's sessions signs out any session the attacker already holds, so it should follow a credential compromise rather than relying on the password reset alone. Expiring the password or changing policy does not end an existing session."
     },
     {
       "id": "D4-281",
@@ -1159,8 +1159,7 @@
       "stem": "An admin must require MFA for the expense app only when users are off the corporate network. Put the steps in order.",
       "items": [
         "In Security > Networks, create an IP zone with the office gateway IPs",
-        "In Security > Authentication Policies, create an app sign-in policy",
-        "Add a rule where User's IP is not in the corporate zone that requires two factor types",
+        "In Security > Authentication Policies, create an app sign-in policy with a rule where User's IP is not in the corporate zone that requires two factor types",
         "Add the expense app to the new policy",
         "Sign in from outside the office and confirm that Okta asks for a second factor"
       ],
@@ -1277,7 +1276,7 @@
         "Email",
         "Okta Verify with push",
         "Security question",
-        "Google Authenticator",
+        "Okta FastPass",
         "Password"
       ],
       "answers": [
@@ -1285,7 +1284,7 @@
         "Okta Verify with push"
       ],
       "select": 2,
-      "explanation": "Recovery can be started with Okta Verify push, phone or email. A security question can only be added as additional verification, and Google Authenticator and the password itself do not start recovery."
+      "explanation": "Recovery can be started with Okta Verify push, phone, email or Google Authenticator. A security question can only be added as additional verification, and Okta FastPass and the password itself do not start recovery."
     }
   ]
 }
