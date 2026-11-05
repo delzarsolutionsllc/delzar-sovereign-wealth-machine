@@ -1,0 +1,87 @@
+{
+  "_description": "Outbound data flows at the fictional retailer Larkspur Outfitters (example.com). Records are samples of the data BEFORE the listed protection is applied. All identifiers are test/example values.",
+  "flows": [
+    {
+      "id": "DF-1",
+      "description": "Press release with an order reference to the public website",
+      "records": ["Larkspur Outfitters opens its 40th store. Media contact: press desk. Order ref 1234 5678 9012 3456 for the launch kit."],
+      "declared_classification": "public",
+      "state": "in_transit",
+      "destination": {"type": "public_web", "region": "us", "approved": true},
+      "encrypted_channel": true,
+      "protection": []
+    },
+    {
+      "id": "DF-2",
+      "description": "Support console shows the customer's card on a refund ticket",
+      "records": ["Ticket 8812: refund to card 4111 1111 1111 1111, customer called about a duplicate charge."],
+      "declared_classification": "confidential",
+      "state": "in_use",
+      "destination": {"type": "support_console", "region": "us", "approved": true},
+      "encrypted_channel": true,
+      "protection": []
+    },
+    {
+      "id": "DF-3",
+      "description": "Checkout sends card payments to the payment processor",
+      "records": ["auth amount=59.90 pan=5555555555554444 exp=12/29"],
+      "declared_classification": "restricted",
+      "state": "in_transit",
+      "destination": {"type": "payment_processor", "region": "us", "approved": true},
+      "encrypted_channel": true,
+      "protection": ["tokenization"]
+    },
+    {
+      "id": "DF-4",
+      "description": "Nightly payroll backup replicated to a new overseas data centre",
+      "records": ["emp=E1043 name=R. Ortiz ssn=123-45-6789 salary=72000"],
+      "declared_classification": "confidential",
+      "state": "at_rest",
+      "destination": {"type": "internal_db", "region": "apac", "approved": true},
+      "encrypted_channel": false,
+      "protection": ["encryption"]
+    },
+    {
+      "id": "DF-5",
+      "description": "EU loyalty-member list exported to a US analytics SaaS",
+      "records": ["member=ana.silva@example.eu phone=+351 210-555-0147 tier=gold",
+                  "member=k.berg@example.eu phone=+49 301-555-0190 tier=silver"],
+      "declared_classification": "private",
+      "data_origin": "eu",
+      "state": "in_transit",
+      "destination": {"type": "analytics", "region": "us", "approved": true},
+      "encrypted_channel": true,
+      "protection": []
+    },
+    {
+      "id": "DF-6",
+      "description": "New customer-account service stores passwords with AES",
+      "records": ["user=jdoe@example.com password=Winter2026!"],
+      "declared_classification": "critical",
+      "state": "at_rest",
+      "destination": {"type": "internal_db", "region": "us", "approved": true},
+      "encrypted_channel": false,
+      "protection": ["encryption"]
+    },
+    {
+      "id": "DF-7",
+      "description": "Build log with a cloud key pasted to an external paste site",
+      "records": ["deploy step 4 failed: aws_access_key_id=AKIAIOSFODNN7EXAMPLE region=us-east-1"],
+      "declared_classification": "internal",
+      "state": "in_transit",
+      "destination": {"type": "public_web", "region": "us", "approved": false},
+      "encrypted_channel": true,
+      "protection": []
+    },
+    {
+      "id": "DF-8",
+      "description": "Fabric formula emailed to the EU manufacturing partner over plain SMTP",
+      "records": ["CONFIDENTIAL - TRADE SECRET: StormShell membrane laminate ratios v3"],
+      "declared_classification": "confidential",
+      "state": "in_transit",
+      "destination": {"type": "partner", "region": "eu", "approved": true},
+      "encrypted_channel": false,
+      "protection": []
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "_description": "Lab 21 scenario for the fictional Northwind Example Co.: a CMDB, a network discovery scan and media disposal requests. Days are integer day numbers; 'today' is day 300.",
+  "today": 300,
+  "cmdb": [
+    {"asset_id": "A-001", "hostname": "web-01", "mac": "00:1a:2b:00:00:01", "owner": "web-team", "classification": "confidential", "status": "active", "last_seen": 299},
+    {"asset_id": "A-002", "hostname": "hr-db-01", "mac": "00:1a:2b:00:00:02", "owner": "hr-it", "classification": "restricted", "status": "active", "last_seen": 300},
+    {"asset_id": "A-003", "hostname": "laptop-17", "mac": "00:1a:2b:00:00:03", "owner": "j.doe", "classification": "confidential", "status": "active", "last_seen": 280},
+    {"asset_id": "A-004", "hostname": "laptop-22", "mac": "00:1a:2b:00:00:04", "owner": "a.smith", "classification": "internal", "status": "active", "last_seen": 286},
+    {"asset_id": "A-005", "hostname": "print-02", "mac": "00:1a:2b:00:00:05", "owner": "", "classification": "internal", "status": "active", "last_seen": 300},
+    {"asset_id": "A-006", "hostname": "dev-vm-9", "mac": "00:1a:2b:00:00:06", "owner": "dev-team", "classification": "", "status": "active", "last_seen": 300},
+    {"asset_id": "A-007", "hostname": "old-nas", "mac": "00:1a:2b:00:00:07", "owner": "infra", "classification": "confidential", "status": "retired", "last_seen": 120},
+    {"asset_id": "A-008", "hostname": "cam-lobby", "mac": "00:1a:2b:00:00:08", "owner": "", "classification": "", "status": "active", "last_seen": 300}
+  ],
+  "scan": [
+    {"mac": "00:1A:2B:00:00:01", "hostname": "web-01", "ip": "10.20.1.10"},
+    {"mac": "00:1a:2b:00:00:02", "hostname": "hr-db-01", "ip": "10.20.1.20"},
+    {"mac": "00:1a:2b:00:00:05", "hostname": "print-02", "ip": "10.20.3.15"},
+    {"mac": "00:1a:2b:00:00:06", "hostname": "dev-vm-9", "ip": "10.20.4.9"},
+    {"mac": "00:1a:2b:00:00:08", "hostname": "cam-lobby", "ip": "10.20.6.30"},
+    {"mac": "b8:27:eb:44:55:66", "hostname": "raspberrypi", "ip": "10.20.5.77"},
+    {"mac": "3c:5a:b4:12:34:56", "hostname": "android-4f2a", "ip": "10.20.7.101"},
+    {"mac": "a4:77:33:9a:bc:de", "hostname": "smart-tv-breakroom", "ip": "10.20.7.140"}
+  ],
+  "disposals": [
+    {"id": "D-1", "asset_id": "A-004", "media": "hdd", "classification": "internal", "method": "overwrite", "destination": "reuse_within_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 0},
+    {"id": "D-2", "asset_id": "A-009", "media": "ssd", "classification": "confidential", "method": "crypto_erase", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 250},
+    {"id": "D-3", "asset_id": "A-010", "media": "hdd", "classification": "restricted", "method": "shred", "destination": "leaving_org", "performed_by": "third_party", "certificate_of_destruction": true, "legal_hold": false, "retention_until": 200},
+    {"id": "D-4", "asset_id": "A-011", "media": "ssd", "classification": "confidential", "method": "degauss", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 0},
+    {"id": "D-5", "asset_id": "A-012", "media": "hdd", "classification": "restricted", "method": "overwrite", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 0},
+    {"id": "D-6", "asset_id": "A-013", "media": "tape", "classification": "internal", "method": "incinerate", "destination": "leaving_org", "performed_by": "third_party", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 100},
+    {"id": "D-7", "asset_id": "A-014", "media": "hdd", "classification": "confidential", "method": "shred", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": true, "retention_until": 0},
+    {"id": "D-8", "asset_id": "BOX-3", "media": "paper", "classification": "internal", "method": "shred", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 400},
+    {"id": "D-9", "asset_id": "A-015", "media": "usb", "classification": "internal", "method": "quick_format", "destination": "leaving_org", "performed_by": "internal", "certificate_of_destruction": false, "legal_hold": false, "retention_until": 0}
+  ]
+}

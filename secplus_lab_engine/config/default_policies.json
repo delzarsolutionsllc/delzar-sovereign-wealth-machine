@@ -890,5 +890,838 @@
       "hybrid cloud": "On-premises infrastructure combined with public cloud: consistent policy and identity across both is the challenge.",
       "infrastructure as code (IaC)": "Infrastructure defined in version-controlled templates: repeatable, scannable deployments, but one bad template misconfigures every copy."
     }
+  },
+
+  "compliance": {
+    "_note": "All deadlines and periods are configurable ILLUSTRATIONS for learning, not legal advice. Real obligations depend on the jurisdiction, the facts and counsel.",
+    "regimes": {
+      "gdpr_style": {
+        "label": "GDPR-style regulation (illustrative)",
+        "scope": "regional",
+        "dsr_days": 30,
+        "breach_hours": 72,
+        "regulator_notify_risk": [
+          "medium",
+          "high"
+        ],
+        "subject_notify_risk": [
+          "high"
+        ]
+      },
+      "state_privacy_law": {
+        "label": "Generic state privacy law (fictional, illustrative)",
+        "scope": "local",
+        "dsr_days": 45,
+        "breach_hours": 720,
+        "regulator_notify_risk": [
+          "high"
+        ],
+        "subject_notify_risk": [
+          "medium",
+          "high"
+        ]
+      }
+    },
+    "at_risk_margin": {
+      "dsr_days": 5,
+      "breach_hours": 12,
+      "retention_days": 30,
+      "attestation_days": 30
+    },
+    "dsr_types": [
+      "access",
+      "erasure",
+      "rectification"
+    ],
+    "erasure_exemption_grounds": [
+      "legal_hold",
+      "retention_obligation"
+    ],
+    "dsr_required_fields": [
+      "regime",
+      "request_type",
+      "received_day",
+      "identity_verified",
+      "received_by"
+    ],
+    "breach_required_fields": [
+      "regime",
+      "discovered_hour",
+      "risk"
+    ],
+    "retention_required_fields": [
+      "record_type",
+      "created_day"
+    ],
+    "attestation_required_fields": [
+      "attestation",
+      "subject"
+    ],
+    "retention_schedule": {
+      "payroll_records": {
+        "min_days": 2190,
+        "max_days": 2555
+      },
+      "marketing_leads": {
+        "min_days": 0,
+        "max_days": 730
+      },
+      "cctv_footage": {
+        "min_days": 0,
+        "max_days": 30
+      },
+      "security_audit_logs": {
+        "min_days": 365,
+        "max_days": 1095
+      }
+    },
+    "attestations": {
+      "acceptable_use_ack": {
+        "label": "Annual acceptable-use / security policy acknowledgement",
+        "valid_days": 365,
+        "scope": "internal"
+      },
+      "control_attestation": {
+        "label": "Annual control attestation to a customer / auditor",
+        "valid_days": 365,
+        "scope": "external"
+      }
+    },
+    "consequence_by_code": {
+      "MISSING_FIELDS": "fines",
+      "UNKNOWN_REGIME": "fines",
+      "UNKNOWN_TYPE": "fines",
+      "NOT_FORWARDED": "contractual impacts",
+      "UNVERIFIED_IDENTITY": "fines",
+      "UNDOCUMENTED_EXCEPTION": "fines",
+      "DSR_LATE": "fines",
+      "DSR_DUE_SOON": "fines",
+      "BREACH_LATE": "fines",
+      "BREACH_DUE_SOON": "fines",
+      "SUBJECTS_NOT_NOTIFIED": "reputational damage",
+      "OVER_RETENTION": "fines",
+      "RETENTION_DUE_SOON": "fines",
+      "EARLY_DESTRUCTION": "sanctions",
+      "DESTROYED_UNDER_HOLD": "sanctions",
+      "ATTESTATION_MISSING": "contractual impacts",
+      "ATTESTATION_EXPIRED": "contractual impacts",
+      "ATTESTATION_DUE_SOON": "contractual impacts"
+    },
+    "external_attestation_consequence": "loss of license",
+    "rule_labels": {
+      "MISSING_FIELDS": "a required field is missing (deny by default)",
+      "UNKNOWN_REGIME": "the regime is not in the policy (deny by default)",
+      "UNKNOWN_TYPE": "the request/record/attestation type is not in the policy",
+      "NOT_FORWARDED": "a processor received the request and did not forward it to the controller",
+      "UNVERIFIED_IDENTITY": "the request was fulfilled without verifying the data subject's identity",
+      "UNDOCUMENTED_EXCEPTION": "an exception was claimed but not documented",
+      "DSR_LATE": "the data subject request deadline was missed",
+      "BREACH_LATE": "the regulator was notified after the regime's limit (or not at all)",
+      "SUBJECTS_NOT_NOTIFIED": "affected data subjects were not notified of a high-risk breach",
+      "OVER_RETENTION": "records were kept beyond the retention period with no hold",
+      "EARLY_DESTRUCTION": "records were destroyed before the minimum retention period",
+      "DESTROYED_UNDER_HOLD": "records were destroyed while under legal hold",
+      "ATTESTATION_MISSING": "the attestation/acknowledgement was never signed",
+      "ATTESTATION_EXPIRED": "the attestation/acknowledgement has expired"
+    },
+    "data_roles": {
+      "data subject": "The identifiable living person the personal data is about; holds rights such as access, rectification and erasure.",
+      "data controller": "Decides WHY and HOW personal data is processed and is accountable for compliance and subject requests.",
+      "data processor": "Processes personal data on behalf of, and only on the instructions of, the controller (e.g. a payroll SaaS).",
+      "data owner": "A senior business role accountable for a data set: classifies it and approves who may access it.",
+      "data custodian/steward": "Handles the data day to day: custodian implements storage, backup and security controls; steward manages quality, labelling and metadata."
+    },
+    "consequences": {
+      "fines": "Monetary penalties imposed by a regulator for violating a law or regulation.",
+      "sanctions": "Formal penalties from a court, government or regulator, e.g. restrictions or orders for destroying evidence.",
+      "reputational damage": "Loss of customer and public trust after a publicised failure.",
+      "loss of license": "Revocation of the permission (license, certification, authority) needed to operate or process certain data.",
+      "contractual impacts": "Breach of contract with customers or partners: penalties, termination or lost business."
+    },
+    "diligence_terms": {
+      "due diligence": "Investigating and verifying BEFORE and while acting: research, assessments, audits to understand risk.",
+      "due care": "Acting as a reasonable, prudent organisation would: implementing and maintaining the controls and policies."
+    }
+  },
+
+  "asset_mgmt": {
+    "missing_after_days": 14,
+    "tracked_statuses": [
+      "active"
+    ],
+    "classifications": [
+      "public",
+      "internal",
+      "confidential",
+      "restricted"
+    ],
+    "finding_priority": [
+      "MISSING",
+      "NO_OWNER",
+      "UNCLASSIFIED",
+      "OK"
+    ],
+    "finding_actions": {
+      "UNMANAGED": "shadow IT: onboard it into the CMDB (owner + classification) or quarantine/block it with NAC",
+      "MISSING": "possible loss or theft: locate the asset, check for a lost/stolen report, consider remote wipe",
+      "NO_OWNER": "assign an accountable owner (asset ownership is part of assignment/accounting)",
+      "UNCLASSIFIED": "classify the asset so the right controls and disposal level apply",
+      "OK": "no action"
+    },
+    "sanitization_levels": [
+      "clear",
+      "purge",
+      "destroy"
+    ],
+    "min_level": {
+      "public": {
+        "reuse_within_org": "clear",
+        "leaving_org": "clear"
+      },
+      "internal": {
+        "reuse_within_org": "clear",
+        "leaving_org": "purge"
+      },
+      "confidential": {
+        "reuse_within_org": "purge",
+        "leaving_org": "purge"
+      },
+      "restricted": {
+        "reuse_within_org": "purge",
+        "leaving_org": "destroy"
+      }
+    },
+    "media_types": [
+      "hdd",
+      "ssd",
+      "usb",
+      "mobile",
+      "tape",
+      "optical",
+      "paper"
+    ],
+    "methods": {
+      "clear": {
+        "level": "clear",
+        "media": [
+          "hdd",
+          "usb",
+          "tape",
+          "mobile"
+        ]
+      },
+      "overwrite": {
+        "level": "clear",
+        "media": [
+          "hdd",
+          "usb",
+          "tape"
+        ]
+      },
+      "factory_reset": {
+        "level": "clear",
+        "media": [
+          "mobile"
+        ]
+      },
+      "purge": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd",
+          "tape",
+          "mobile"
+        ]
+      },
+      "crypto_erase": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd",
+          "mobile"
+        ]
+      },
+      "secure_erase": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "ssd"
+        ]
+      },
+      "degauss": {
+        "level": "purge",
+        "media": [
+          "hdd",
+          "tape"
+        ]
+      },
+      "destroy": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      },
+      "shred": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      },
+      "pulverize": {
+        "level": "destroy",
+        "media": [
+          "hdd",
+          "ssd",
+          "usb",
+          "mobile",
+          "optical",
+          "paper"
+        ]
+      },
+      "incinerate": {
+        "level": "destroy",
+        "media": [
+          "usb",
+          "tape",
+          "optical",
+          "paper"
+        ]
+      }
+    },
+    "incompatibility_notes": {
+      "degauss:ssd": "degaussing only affects magnetic media; flash memory in an SSD is untouched",
+      "degauss:usb": "degaussing only affects magnetic media; a USB flash drive is untouched",
+      "degauss:mobile": "degaussing only affects magnetic media; phone flash storage is untouched",
+      "overwrite:ssd": "overwriting is unreliable on SSDs: wear levelling and over-provisioned blocks keep old data; use crypto-erase/secure erase or destroy",
+      "overwrite:mobile": "overwriting is unreliable on flash; use the built-in crypto-erase or destroy",
+      "clear:ssd": "logical clearing is unreliable on SSDs because of wear levelling; purge (crypto-erase) or destroy instead"
+    },
+    "certificate_required": {
+      "performed_by": [
+        "third_party"
+      ],
+      "levels": [
+        "purge",
+        "destroy"
+      ]
+    },
+    "glossary": {
+      "certificate of destruction": "Signed evidence from the disposal provider listing the assets, method and date: proves the media was sanitized/destroyed and transfers accountability.",
+      "data retention": "Keeping records for a defined period required by law, regulation or policy before they may be disposed of.",
+      "legal hold": "A litigation or investigation order that suspends normal deletion and disposal of the relevant data.",
+      "shadow IT": "Devices or services used without IT approval, so they are missing from the inventory and unmanaged.",
+      "enumeration": "Actively discovering every device and service on the network (e.g. a discovery scan) to compare against the inventory.",
+      "asset ownership": "The person or team accountable for an asset, its classification and its lifecycle decisions.",
+      "clear": "Logical sanitization (e.g. overwriting) that defeats simple recovery tools; suitable when media stays in the organisation.",
+      "purge": "Sanitization that defeats laboratory recovery (crypto-erase, secure erase, degaussing) while the media may still be reusable.",
+      "destroy": "Physical destruction (shredding, pulverizing, incinerating) so the media cannot be reused or recovered."
+    }
+  },
+
+  "awareness": {
+    "known_roles": [
+      "finance",
+      "exec",
+      "it_admin",
+      "staff"
+    ],
+    "high_risk_roles": [
+      "finance",
+      "exec",
+      "it_admin"
+    ],
+    "outcome_action": {
+      "standard": {
+        "REPORTED": "NONE",
+        "PASSED": "NONE",
+        "CLICKED": "MICRO_TRAINING",
+        "COMPROMISED": "REMEDIAL_TRAINING",
+        "NO_DATA": "MICRO_TRAINING"
+      },
+      "high_risk": {
+        "REPORTED": "NONE",
+        "PASSED": "NONE",
+        "CLICKED": "REMEDIAL_TRAINING",
+        "COMPROMISED": "REMEDIAL_TRAINING",
+        "NO_DATA": "REMEDIAL_TRAINING"
+      }
+    },
+    "escalate_after_failures": {
+      "standard": 3,
+      "high_risk": 2
+    },
+    "recurring_training_days": 365,
+    "untrained_action": "REMEDIAL_TRAINING",
+    "overdue_action": "MICRO_TRAINING",
+    "department_thresholds": {
+      "max_click_rate": 20,
+      "max_credential_rate": 5,
+      "min_report_rate": 50
+    },
+    "program_targets": {
+      "report_rate_min": 40,
+      "click_rate_max": 15,
+      "credential_rate_max": 5,
+      "median_report_minutes_max": 10,
+      "training_completion_min": 95
+    },
+    "behaviour_required_attributes": [
+      "intentional",
+      "policy_violation",
+      "expected_for_role"
+    ],
+    "behaviour_rules": [
+      {
+        "match": {
+          "intentional": true,
+          "policy_violation": true
+        },
+        "class": "RISKY"
+      },
+      {
+        "match": {
+          "intentional": false
+        },
+        "class": "UNINTENTIONAL"
+      },
+      {
+        "match": {
+          "expected_for_role": false
+        },
+        "class": "UNEXPECTED"
+      },
+      {
+        "match": {
+          "intentional": true,
+          "policy_violation": false,
+          "expected_for_role": true
+        },
+        "class": "NOT_ANOMALOUS"
+      }
+    ],
+    "behaviour_default_class": "RISKY",
+    "behaviour_responses": {
+      "RISKY": "open an investigation and refer to the insider-threat team (HR + legal + security)",
+      "UNEXPECTED": "verify with the user and their manager and tune UEBA monitoring",
+      "UNINTENTIONAL": "coaching and targeted just-in-time training; no disciplinary action",
+      "NOT_ANOMALOUS": "close as expected behaviour and document the baseline"
+    },
+    "technical_controls": {
+      "removable_media": "endpoint policy blocking unapproved USB mass storage",
+      "data_exfiltration": "DLP rule and CASB block on personal cloud storage",
+      "unusual_login": "conditional access with impossible-travel alerting",
+      "endpoint_tamper": "EDR tamper protection and alert on agent stop",
+      "misdirected_email": "DLP warning on external recipients with sensitive labels"
+    },
+    "trusted_domains": [
+      "example.com"
+    ],
+    "lookalike_max_distance": 2,
+    "homoglyphs": {
+      "0": "o",
+      "1": "l",
+      "3": "e",
+      "5": "s",
+      "rn": "m",
+      "vv": "w"
+    },
+    "urgency_keywords": [
+      "urgent",
+      "immediately",
+      "within 24 hours",
+      "expires",
+      "final notice",
+      "today",
+      "suspended",
+      "act now"
+    ],
+    "request_keywords": [
+      "password",
+      "verify your account",
+      "login",
+      "credentials",
+      "mfa code",
+      "wire transfer",
+      "bank details",
+      "gift card",
+      "payment"
+    ],
+    "risky_attachment_extensions": [
+      ".exe",
+      ".js",
+      ".vbs",
+      ".scr",
+      ".iso",
+      ".img",
+      ".html",
+      ".htm",
+      ".docm",
+      ".xlsm",
+      ".zip",
+      ".lnk"
+    ],
+    "indicator_weights": {
+      "missing_sender": 3,
+      "lookalike_sender_domain": 3,
+      "external_sender": 1,
+      "urgency_language": 1,
+      "mismatched_link": 3,
+      "credential_or_payment_request": 2,
+      "unexpected_attachment_type": 3
+    },
+    "report_threshold": 3,
+    "report_procedure": {
+      "do": "Report it with the Report Phishing button and do not interact with it further",
+      "dont": [
+        "Click the link to check whether it is real",
+        "Forward it to colleagues to warn them",
+        "Reply to the sender and ask if it is genuine",
+        "Open the attachment in a sandbox yourself"
+      ]
+    },
+    "training_types": {
+      "initial": "Delivered at onboarding before access is granted: policy/handbook acknowledgement and core topics",
+      "recurring": "Repeated on a fixed cadence (e.g. annually) plus simulations to keep skills current"
+    },
+    "guidance_topics": {
+      "policy_handbooks": "Read and acknowledge the acceptable use policy and the employee security handbook",
+      "situational_awareness": "Notice tailgaters, shoulder surfers and unexpected visitors in secure areas",
+      "insider_threat": "Report colleagues who bypass controls, hoard data or show signs of malicious intent",
+      "password_management": "Use a password manager, unique passphrases and MFA; never share credentials",
+      "removable_media_and_cables": "Never plug in found USB drives or unknown charging cables; use approved encrypted media",
+      "social_engineering": "Verify unusual requests by calling back on a known number, even if they seem to come from an executive",
+      "operational_security": "Do not post badge photos, project names or travel plans on social media",
+      "hybrid_remote_work": "Use the VPN, lock screens at home, and avoid working on sensitive data on public Wi-Fi"
+    }
+  },
+
+  "data_protection": {
+    "classification_rank": {
+      "public": 0,
+      "private": 1,
+      "sensitive": 2,
+      "confidential": 3,
+      "restricted": 4,
+      "critical": 5
+    },
+    "detectors": {
+      "us_ssn": {
+        "pattern": "\\b(?!000|666|9\\d\\d)\\d{3}-(?!00)\\d{2}-(?!0000)\\d{4}\\b",
+        "data_type": "regulated",
+        "classification": "restricted",
+        "label": "US Social Security number (PII)"
+      },
+      "payment_card": {
+        "pattern": "(?<!\\d)(?:\\d[ -]?){12,18}\\d(?!\\d)",
+        "validator": "luhn",
+        "data_type": "financial",
+        "classification": "restricted",
+        "label": "payment card number (PAN, PCI DSS)"
+      },
+      "health_record_id": {
+        "pattern": "\\bMRN[- ]?\\d{6,10}\\b",
+        "data_type": "regulated",
+        "classification": "restricted",
+        "label": "medical record number (PHI)"
+      },
+      "email": {
+        "pattern": "\\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}\\b",
+        "data_type": "regulated",
+        "classification": "private",
+        "label": "email address (personal data)"
+      },
+      "phone": {
+        "pattern": "(?<![\\d-])(?:\\+\\d{1,3}[ .-]?)?\\(?\\d{3}\\)?[ .-]\\d{3}[ .-]\\d{4}(?![\\d-])",
+        "data_type": "regulated",
+        "classification": "private",
+        "label": "phone number (personal data)"
+      },
+      "password": {
+        "pattern": "(?i)\\b(?:password|passwd|pwd)\\s*[=:]\\s*\\S+",
+        "data_type": "credential",
+        "classification": "critical",
+        "label": "password"
+      },
+      "api_key": {
+        "pattern": "\\bAKIA[0-9A-Z]{16}\\b|(?i:\\b(?:api[_-]?key|secret|token)\\s*[=:]\\s*['\"]?[A-Za-z0-9_\\-]{20,})",
+        "data_type": "credential",
+        "classification": "critical",
+        "label": "API key / secret"
+      },
+      "trade_secret": {
+        "pattern": "(?i)\\btrade secret\\b",
+        "data_type": "trade_secret",
+        "classification": "confidential",
+        "label": "trade-secret marking"
+      },
+      "intellectual_property": {
+        "pattern": "(?i)\\b(?:patent pending|proprietary source code)\\b",
+        "data_type": "intellectual_property",
+        "classification": "confidential",
+        "label": "intellectual-property marking"
+      },
+      "legal": {
+        "pattern": "(?i)\\b(?:attorney[- ]client privileged|legal hold)\\b",
+        "data_type": "legal",
+        "classification": "confidential",
+        "label": "privileged legal material"
+      }
+    },
+    "allowed_destinations": {
+      "public": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "payment_processor",
+        "analytics",
+        "public_web",
+        "external_email"
+      ],
+      "private": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "analytics",
+        "external_email"
+      ],
+      "sensitive": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner",
+        "support_console",
+        "analytics"
+      ],
+      "confidential": [
+        "internal_db",
+        "internal_app",
+        "saas",
+        "partner"
+      ],
+      "restricted": [
+        "internal_db",
+        "internal_app",
+        "support_console",
+        "payment_processor"
+      ],
+      "critical": [
+        "internal_db",
+        "secrets_vault"
+      ]
+    },
+    "allowed_regions": {
+      "public": [
+        "*"
+      ],
+      "private": [
+        "us",
+        "eu",
+        "uk"
+      ],
+      "sensitive": [
+        "us",
+        "eu",
+        "uk"
+      ],
+      "confidential": [
+        "us",
+        "eu"
+      ],
+      "restricted": [
+        "us"
+      ],
+      "critical": [
+        "us"
+      ]
+    },
+    "sovereignty": {
+      "_comment": "personal (regulated) data collected from subjects in these regions may only be processed in the listed regions",
+      "eu": [
+        "eu",
+        "uk"
+      ],
+      "uk": [
+        "uk",
+        "eu"
+      ]
+    },
+    "protection_rules": {
+      "financial": {
+        "at_rest": {
+          "accept": [
+            "tokenization",
+            "encryption",
+            "hashing"
+          ],
+          "action": "PROTECT",
+          "method": "tokenize the PAN (or encrypt it at rest); never store it in clear text"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption",
+            "tokenization"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS 1.2+ (or send a token instead of the PAN)"
+        },
+        "in_use": {
+          "accept": [
+            "masking",
+            "tokenization"
+          ],
+          "action": "PROTECT",
+          "method": "mask the PAN to the last 4 digits"
+        }
+      },
+      "regulated": {
+        "at_rest": {
+          "accept": [
+            "encryption",
+            "tokenization",
+            "masking",
+            "hashing"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest (e.g. AES-256)"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "masking",
+            "tokenization",
+            "permission_restrictions"
+          ],
+          "action": "PROTECT",
+          "method": "mask direct identifiers (e.g. SSN to last 4)"
+        }
+      },
+      "credential": {
+        "at_rest": {
+          "accept": [
+            "hashing"
+          ],
+          "action": "BLOCK",
+          "method": "store only a salted, key-stretched hash (bcrypt/PBKDF2/Argon2), never reversible encryption"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "BLOCK",
+          "method": "send credentials only over an encrypted channel (TLS)"
+        },
+        "in_use": {
+          "accept": [
+            "masking"
+          ],
+          "action": "PROTECT",
+          "method": "mask secrets in screens and logs"
+        }
+      },
+      "trade_secret": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions",
+            "segmentation"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to need-to-know"
+        }
+      },
+      "intellectual_property": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions",
+            "segmentation",
+            "obfuscation"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to need-to-know"
+        }
+      },
+      "legal": {
+        "at_rest": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt at rest"
+        },
+        "in_transit": {
+          "accept": [
+            "encryption"
+          ],
+          "action": "PROTECT",
+          "method": "encrypt in transit with TLS"
+        },
+        "in_use": {
+          "accept": [
+            "permission_restrictions"
+          ],
+          "action": "PROTECT",
+          "method": "restrict permissions to the legal team"
+        }
+      }
+    },
+    "protection_methods": {
+      "encryption": "Encryption: reversibly transforms data with a key so only key holders can read it (at rest: AES; in transit: TLS/IPsec).",
+      "hashing": "Hashing: one-way fixed-length digest that cannot be reversed; salt + key stretching for stored passwords.",
+      "masking": "Masking: hides part of a value on display or in copies (e.g. ************1111) while keeping its format.",
+      "tokenization": "Tokenization: replaces the value with a random surrogate token; the real value is mapped in a secure token vault.",
+      "obfuscation": "Obfuscation: makes data or code hard to understand without a key (e.g. code obfuscation, steganography).",
+      "segmentation": "Segmentation: keeps sensitive data in separate networks/systems so a breach of one does not expose all.",
+      "permission_restrictions": "Permission restrictions: access controls (least privilege, ACLs) limit who can read or change the data.",
+      "geographic_restrictions": "Geographic restrictions: allow storage or access only from approved locations (geolocation / geofencing)."
+    }
   }
 }
