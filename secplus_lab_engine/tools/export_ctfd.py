@@ -121,6 +121,7 @@ def build_challenges(variants: int = 0, points: int = 100, hint_cost: int = 25, 
                      mc_plugin: bool = False) -> list[dict]:
     out, seen = [], set()
     for q in collect(variants):
+        if q.get("kind", q.get("type", "single")) != "single": continue   # one flag per challenge: single-answer only
         cid = challenge_id(q)
         assert cid not in seen, f"challenge id collision: {cid}"
         seen.add(cid)

@@ -72,6 +72,8 @@ def test_options_are_shuffled_but_answer_kept(policies):
     b, _, _ = build_exam(policies, 60, seed=2)
     by_stem = {q["stem"]: q for q in BANK}
     for q in a:
+        if q.kind != "single":                                 # other kinds: see tests/test_question_types.py
+            continue
         assert sorted(q.choices) == sorted(by_stem[q.prompt]["choices"]) and q.answer in q.choices
     common = {q.prompt for q in a} & {q.prompt for q in b}
     orders = [(next(x.choices for x in a if x.prompt == s), next(x.choices for x in b if x.prompt == s)) for s in common]

@@ -13,6 +13,7 @@ Usage
     python main.py challenge 4          # predict-the-outcome quiz for a lab (or "challenge all")
     python main.py lab 4 --challenge    # same thing
     python main.py progress             # scores per SY0-701 objective, weakest first
+    python main.py review               # today's spaced-repetition session (due reviews + weakest objectives)
     python main.py challenge 9 --random --seed 42   # fresh generated scenario (labs with a generator)
     python main.py lab 12 --random      # run a lab on a generated scenario
     python main.py exam                 # timed 90-question practice exam weighted by SY0-701 domain
@@ -186,6 +187,62 @@ def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int
     return run_exam(ui, questions, minutes, ask=ask, progress=progress, shortfall=shortfall)
 
 
+def review(ui: UI, count: int = 15, seed: int | None = None, ask=None, progress_path: str | None = None,
+           today=None):
+    """Today's daily review: answer, see the right answer and why at once, then a summary."""
+    from datetime import date
+    from utils import review as srs
+    from utils.challenge import _resolve
+    from utils.exam_bank import load_bank
+    ask = ask or ui.ask
+    day = srs.as_date(today) if today is not None else date.today()
+    progress = Progress(progress_path) if progress_path is not None else Progress()
+    session = srs.build_session(progress.data, load_bank(), day, max(1, min(int(count), 50)), seed)
+    qs = session["questions"]
+    ui.header("DAILY REVIEW", f"{day.isoformat()} · {session['review_count']} due for review · "
+                              f"{session['new_count']} new from your weakest objectives · "
+                              f"streak {session['streak']['current']} day(s)")
+    if not qs:
+        ui.print("Nothing to review and no new questions left. Take a practice exam: python main.py exam", style="yellow")
+        return {"done": 0, "correct": 0, "due_by_day": session["due_by_day"]}
+    done = correct = 0
+    for i, q in enumerate(qs, 1):
+        ui.section(f"Question {i}/{len(qs)}  ·  SY0-701 {q['objective']}  ·  {q['reason']}")
+        ui.print(f"[bold]{q['prompt']}[/bold]")
+        for n, c in enumerate(q["choices"], 1):
+            ui.print(f"  {n}) {c}")
+        try:
+            raw = ask("Your answer:").strip()
+        except (EOFError, KeyboardInterrupt):
+            ui.print("\n  Review stopped early. Your answers so far are saved.", style="yellow")
+            break
+        chosen = _resolve(raw, q["choices"])
+        ok = chosen == q["answer"]
+        done += 1
+        correct += ok
+        if ok:
+            ui.status("Your answer", "PASS", q["answer"])
+        else:
+            ui.status("Your answer", "FAIL", f"you said '{chosen or raw}', the answer is '{q['answer']}'")
+        ui.print(f"  [dim]Why:[/dim] {q['explanation']}")
+        progress.record(q["objective"], ok, q["id"], day, review=True)
+    if done:
+        from datetime import datetime, timezone
+        progress.data["sessions"].append({"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                                          "lab": "daily review", "score": f"{correct}/{done}"})
+        progress.save()
+    ids = {r["id"] for r in load_bank() if srs.is_single(r)}
+    by_day = srs.due_by_day(progress.data["srs"], day, 7, ids)
+    ui.panel("Review summary",
+             f"Done {done} · correct {correct}"
+             + (f" ({100 * correct // done}%)" if done else "")
+             + f" · streak {srs.current_streak(progress.data['streak'], day)} day(s)\n\nNext due:\n"
+             + "\n".join(f"  {d}{' (today, incl. overdue)' if d == day.isoformat() else ''}: {n}"
+                         for d, n in by_day.items()),
+             style="green" if done and correct * 100 >= 85 * done else "yellow")
+    return {"done": done, "correct": correct, "due_by_day": by_day}
+
+
 def list_labs(ui: UI) -> None:
     ui.table("Available labs", ["#", "Lab", "Objectives", "Default data", "Random"],
              [[n, m.TITLE, m.OBJECTIVES, f, "yes" if n in GENERATORS else "-"] for n, (m, f) in LABS.items()])
@@ -202,7 +259,7 @@ def interactive_menu(ui: UI, policies: dict) -> None:
         list_labs(ui)
         ui.print(f"  [bold]1-{len(LABS)}[/bold] run a lab   [bold]C<n>[/bold] challenge (e.g. C3)   "
                  "[bold]R<n>[/bold] challenge on a random scenario   [bold]E[/bold] practice exam   [bold]D<n>[/bold] domain test (D1-D5)   "
-                 "[bold]P[/bold] progress   "
+                 "[bold]RV[/bold] daily review   [bold]P[/bold] progress   "
                  "[bold]V[/bold] videos   [bold]W[/bold] web app   [bold]A[/bold] run all   [bold]T[/bold] run tests   [bold]Q[/bold] quit")
         try:
             choice = ui.ask(">").strip().lower()
@@ -218,6 +275,8 @@ def interactive_menu(ui: UI, policies: dict) -> None:
             run_tests()
         elif choice in {"p", "progress"}:
             show_progress(ui)
+        elif choice in {"rv", "review"}:
+            review(ui)
         elif choice in {"v", "videos"}:
             show_videos(ui)
         elif choice.startswith("c") and choice[1:].strip().isdigit() and int(choice[1:]) in LABS:
@@ -271,6 +330,9 @@ def build_parser() -> argparse.ArgumentParser:
     ex.add_argument("--domain", choices=list("12345"),
                     help="domain test: questions from one domain only (default 30 questions, 1 minute each)")
     sub.add_parser("progress", help="show challenge scores per SY0-701 objective")
+    rv = sub.add_parser("review", help="today's spaced-repetition review: due questions, then your weakest objectives")
+    rv.add_argument("--count", type=int, default=15, help="questions in the session (default 15, max 50)")
+    rv.add_argument("--seed", type=int, help="fix which new questions are picked (default: today's date)")
     vi = sub.add_parser("videos", help="Professor Messer's free SY0-701 video course, mapped to the labs")
     vi.add_argument("--lab", type=int, choices=sorted(LABS), help="only the videos for this lab's objectives")
     vi.add_argument("--objective", metavar="X.Y", help="only the videos for one objective, e.g. 1.4")
@@ -318,6 +380,8 @@ def main(argv: list[str] | None = None) -> int:
             raise SystemExit("challenge target must be a lab number or 'all'")
     elif args.command == "progress":
         show_progress(ui)
+    elif args.command == "review":
+        review(ui, args.count, args.seed)
     elif args.command == "videos":
         return show_videos(ui, args.lab, args.objective, args.mark, args.unmark, args.open_n)
     elif args.command == "case-study":
