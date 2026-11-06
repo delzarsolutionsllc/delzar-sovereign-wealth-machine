@@ -23,7 +23,7 @@
    "topic": "Access Request Basics",
    "stem": "An admin wants users to request a newly built access profile. Which configuration must be done FIRST?",
    "choices": [
-    "Grant every requester the Source Admin user level",
+    "Grant every requester the Source Admin user level on the source",
     "Turn on Allow Access Requests for the access profile",
     "Create a certification campaign for the access profile",
     "Add the access profile to a lifecycle state"
@@ -40,7 +40,7 @@
     "The access is added to both accounts automatically after approval",
     "The request fails until one account is deleted",
     "The requester selects which account should receive the access",
-    "The source owner picks the account after approval"
+    "The source owner picks the account after the request is approved"
    ],
    "answer": "The requester selects which account should receive the access",
    "explanation": "When the identity has multiple accounts on a source, the requester chooses the target account for the access."
@@ -82,7 +82,7 @@
     "A timeout of 30 days for pending approvals",
     "Require End Date with a maximum duration of 30 days",
     "A reminder every 30 days to the access profile owner",
-    "A certification campaign that runs every 30 days"
+    "A certification campaign that runs every 30 days for contractors"
    ],
    "answer": "Require End Date with a maximum duration of 30 days",
    "explanation": "Require End Date with a maximum duration limits how long requested access lasts. Timeout only controls how long a pending request waits for review."
@@ -93,7 +93,7 @@
    "topic": "Access Request Basics",
    "stem": "A user requests a role that would place them in violation of a separation of duties policy. What does the reviewer see?",
    "choices": [
-    "An error, because SoD violations block all requests",
+    "An error, because SoD violations block all requests for the role",
     "A prompt to delete the conflicting role first",
     "A notice that granting the request would cause an SoD violation",
     "Nothing, because SoD policies are checked only during certifications"
@@ -165,7 +165,7 @@
    "choices": [
     "Require an access request form for every requester to complete",
     "Require reauthentication for every requester",
-    "Require a maximum duration for the access profile",
+    "Require a maximum duration for the access profile's assignments",
     "Require Comments when a reviewer denies the request"
    ],
    "answer": "Require Comments when a reviewer denies the request",
@@ -193,7 +193,7 @@
    "choices": [
     "Workflows that run on a daily schedule",
     "Enabled workflows that use the Access Request Submitted trigger",
-    "Any workflow, whether enabled or disabled",
+    "Any workflow in the tenant, whether it is enabled or disabled at the time",
     "Any workflow that uses the Identity Created trigger, enabled or not"
    ],
    "answer": "Enabled workflows that use the Access Request Submitted trigger",
@@ -221,7 +221,7 @@
    "choices": [
     "The request returns to the manager for a final decision",
     "The access is provisioned with a warning",
-    "The governance group can still approve it",
+    "The governance group can still approve it as the final reviewer",
     "The review stops and the access is not provisioned"
    ],
    "answer": "The review stops and the access is not provisioned",
@@ -236,7 +236,7 @@
     "The approval is reassigned to the requester's manager",
     "The request waits until the access profile owner is changed",
     "The request is approved automatically",
-    "The request is denied as a self-approval"
+    "The request is denied as a self-approval and must be resubmitted"
    ],
    "answer": "The approval is reassigned to the requester's manager",
    "explanation": "Self-approval is prevented by default: when the requester or recipient is the reviewer, the individual approval goes to their manager. Auto-approval for this case is only available through API configuration."
@@ -306,7 +306,7 @@
     "The request is denied automatically and the requester is notified",
     "The approval moves to the next approver in the escalation chain",
     "The access profile is disabled",
-    "The request is approved automatically"
+    "The request is approved automatically on behalf of the first reviewer"
    ],
    "answer": "The approval moves to the next approver in the escalation chain",
    "explanation": "Escalations forward unhandled approvals along the escalation chain on the configured schedule, ending with the fallback approver. They do not approve or deny automatically."
@@ -387,7 +387,7 @@
    "topic": "Work Reassignment",
    "stem": "Which work items can a work reassignment configuration redirect to another user?",
    "choices": [
-    "Only aggregation schedules and source errors",
+    "Only aggregation schedules and source errors raised on the virtual appliance",
     "Only password resets and MFA enrollments",
     "Only certifications, and only after their campaign has been completed",
     "Access request reviews, certifications and manual provisioning tasks"
@@ -578,8 +578,8 @@
    "stem": "A campaign preview was generated four days ago but never started. What does SailPoint recommend?",
    "choices": [
     "Delete it and create the campaign again",
-    "Extend the deadline and start it",
-    "Reassign all reviewers, then start it",
+    "Extend the campaign's deadline and then start it",
+    "Reassign all of the reviewers, then start it",
     "Start it, because previews never go stale"
    ],
    "answer": "Delete it and create the campaign again",
@@ -593,8 +593,8 @@
    "choices": [
     "At the end of the calendar quarter",
     "Two weeks after the creation date",
-    "One week after the creation date",
-    "Thirty days after the start date"
+    "One week after the creation date, at midnight",
+    "Thirty days after the start date of the campaign"
    ],
    "answer": "Two weeks after the creation date",
    "explanation": "The default deadline for a certification campaign is two weeks after the creation date."
@@ -608,7 +608,7 @@
     "A preview that lists every identity in the tenant with no access items",
     "An active campaign with no reviewers",
     "No preview, and the campaign appears empty in the Completed tab",
-    "A reviewer certification asking for a filter"
+    "A certification sent to reviewers asking the admin to add a filter"
    ],
    "answer": "No preview, and the campaign appears empty in the Completed tab",
    "explanation": "If a campaign contains no identities or access items, no preview is created and it appears as an empty campaign in the Completed tab."
@@ -619,7 +619,7 @@
    "topic": "Campaign Lifecycle",
    "stem": "An admin returns to a previewed campaign after its due date to start it. What happens?",
    "choices": [
-    "The campaign starts and completes immediately",
+    "The campaign starts and completes immediately with no reviews",
     "The campaign starts but sends no emails",
     "The campaign starts and its deadline is moved forward automatically",
     "The campaign cannot be started once its due date has passed"
@@ -636,7 +636,7 @@
     "When the campaign is activated and every seven days until they sign off",
     "Only after the admin selects Email for each reviewer on the campaign card",
     "Only on the deadline date",
-    "Every day from activation to completion"
+    "Every day from activation until the campaign is completed by an administrator"
    ],
    "answer": "When the campaign is activated and every seven days until they sign off",
    "explanation": "Certification emails go out at activation and then every seven days until the reviewer signs off, the certification expires or the campaign is completed. Admins can also email reviewers manually."
@@ -661,7 +661,7 @@
    "topic": "Campaign Lifecycle",
    "stem": "All reviewers in a campaign signed off before the deadline. What must the admin do to finish the campaign?",
    "choices": [
-    "Run an aggregation on every source in the campaign",
+    "Run an aggregation on every source in the campaign to close it out",
     "Delete the campaign so it stops sending emails",
     "Nothing, because the campaign moves to Completed automatically",
     "Select Complete and choose whether to revoke the undecided items"
@@ -690,7 +690,7 @@
    "stem": "A tightly controlled trading system has few licences, and its owner must review everyone with access to it. Which campaign type fits BEST?",
    "choices": [
     "Source owner campaign for that source",
-    "Manager campaign for the whole tenant",
+    "Manager campaign for the whole tenant's identities",
     "Role composition campaign for all roles",
     "Manager campaign filtered to executives"
    ],
@@ -705,7 +705,7 @@
    "choices": [
     "That source's accounts are all correlated",
     "That source has no source owner assigned",
-    "That source has requestable entitlements",
+    "That source has requestable entitlements only",
     "That source uses a virtual appliance"
    ],
    "answer": "That source has no source owner assigned",
@@ -720,7 +720,7 @@
     "A campaign of uncorrelated accounts",
     "A manager campaign",
     "A role composition campaign",
-    "A source owner campaign"
+    "A source owner campaign for each source"
    ],
    "answer": "A role composition campaign",
    "explanation": "Role composition campaigns review what a role contains rather than who holds it."
@@ -732,7 +732,7 @@
    "stem": "Some identities have no manager, and the admin wants them included in a review with manager as the reviewer. What should the admin do?",
    "choices": [
     "Run a standard manager campaign, which already includes those identities",
-    "Run a role composition campaign for their roles",
+    "Run a role composition campaign for the roles those identities hold",
     "Set each identity as its own manager first",
     "Create the campaign from Search and choose Manager as the reviewer"
    ],
@@ -761,8 +761,8 @@
    "choices": [
     "A governance group",
     "A campaign filter",
-    "A segment",
-    "A lifecycle state"
+    "A segment for finance identities",
+    "A lifecycle state for finance users"
    ],
    "answer": "A campaign filter",
    "explanation": "Campaign filters limit certifications to a subset of entitlements or users. Segments control requestable access visibility."
@@ -955,7 +955,7 @@
    "topic": "Certifiable Access",
    "stem": "A user's entitlements exactly match an access profile they never requested. How is that access shown in a manager certification?",
    "choices": [
-    "Not at all, because it was not requested",
+    "Not at all, because the access profile was never requested",
     "As an uncorrelated account",
     "As individual entitlements, because it was not requested",
     "As the access profile, not as individual entitlements"
@@ -1000,7 +1000,7 @@
     "The virtual appliance health report",
     "The aggregation history of the authoritative source",
     "The Campaign Remediation Status Report",
-    "The Identities Without Managers report"
+    "The Identities Without Managers report for the campaign"
    ],
    "answer": "The Campaign Remediation Status Report",
    "explanation": "The Campaign Remediation Status Report shows revoked items that could not be deprovisioned automatically; regenerate it to confirm removal."
@@ -1028,7 +1028,7 @@
     "Reinstating access after it is revoked is difficult",
     "Revoking undecided items is not technically possible",
     "Maintaining access deletes the campaign history",
-    "Revoking requires a separate SailPoint licence"
+    "Revoking requires a separate SailPoint licence for the tenant"
    ],
    "answer": "Reinstating access after it is revoked is difficult",
    "explanation": "Bulk revocation of undecided items can remove access people still need, and restoring it is hard. That is why maintaining access is the recommended option."

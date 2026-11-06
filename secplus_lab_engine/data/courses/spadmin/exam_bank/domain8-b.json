@@ -12,9 +12,9 @@
     "Authentication decides what the user may do; authorization proves who the user is",
     "Authentication applies only to admins; authorization applies only to end users",
     "Authentication happens in the target app; authorization happens at the network edge",
-    "Authentication proves who the user is; authorization decides what the user may do"
+    "Authentication proves who the user is; authorization decides what they may do"
    ],
-   "answer": "Authentication proves who the user is; authorization decides what the user may do",
+   "answer": "Authentication proves who the user is; authorization decides what they may do",
    "explanation": "Authentication verifies identity, and authorization uses that identity to decide which actions or resources are allowed. The second option reverses the two terms."
   },
   {
@@ -37,12 +37,12 @@
    "topic": "Authentication Versus Authorization",
    "stem": "In a typical access decision, which order do the two processes follow?",
    "choices": [
-    "Authentication first, then authorization",
+    "Authentication first, then authorization for the request",
     "Authorization first, then authentication",
     "Both run at once and either can be skipped",
     "Authorization only, when a token is present"
    ],
-   "answer": "Authentication first, then authorization",
+   "answer": "Authentication first, then authorization for the request",
    "explanation": "A system must know who the user is before it can decide what that user may access. Holding a token means authentication already happened."
   },
   {
@@ -67,7 +67,7 @@
    "choices": [
     "Authorization, by managing which identities hold which access",
     "Authentication, by checking every user's password at each sign-in",
-    "Encryption, by issuing keys to every target system",
+    "Encryption, by issuing keys to every target system it connects",
     "Networking, by routing traffic to each application"
    ],
    "answer": "Authorization, by managing which identities hold which access",
@@ -82,7 +82,7 @@
     "A one-time passcode sent by text to the user's mobile phone",
     "A role that grants read access to a finance file share",
     "A fingerprint scan when the user unlocks a laptop",
-    "A PIN prompt when the user inserts a smart card"
+    "A PIN prompt when the user inserts a smart card into a reader"
    ],
    "answer": "A role that grants read access to a finance file share",
    "explanation": "A role granting read access decides what the user may do, which is authorization. The passcode, fingerprint and PIN all verify identity, which is authentication."
@@ -107,7 +107,7 @@
    "topic": "Authentication Versus Authorization",
    "stem": "An entitlement such as a group membership in a target application is aggregated into the tenant. What does that entitlement represent?",
    "choices": [
-    "How the account proves its identity to that application",
+    "How the account proves its identity to that application at sign-in",
     "What the account is authorized to do in that application",
     "Which identity provider the application trusts for sign-in",
     "Which password policy the application enforces on users"
@@ -163,7 +163,7 @@
    "topic": "Authentication Methods and Factors",
    "stem": "Which authentication method BEST resists phishing sites that relay sign-in prompts?",
    "choices": [
-    "A one-time code sent by text message to the user's phone",
+    "A one-time code sent by text message to the user's registered phone",
     "A push notification that the user approves on a mobile phone app",
     "A FIDO2 security key that is bound to the website's origin",
     "A security question that the user answers during sign-in"
@@ -177,7 +177,7 @@
    "topic": "Authentication Methods and Factors",
    "stem": "Attackers who have a user's password keep sending push approval requests, hoping the user taps Approve. Which control BEST reduces this risk?",
    "choices": [
-    "Longer password expiry intervals, so passwords change less often",
+    "Longer password expiry intervals, so that passwords change less often for users",
     "Disabling account lockout, so that the user is never locked out by mistake",
     "Number matching, where the user enters a code shown on the sign-in screen",
     "Sending a reminder email after each push request is approved"
@@ -222,7 +222,7 @@
     "Assertions signed by a SAML identity provider",
     "Tickets issued by a key distribution center",
     "Access tokens issued by an OAuth server",
-    "Passwords sent in clear text to each server"
+    "Passwords sent in clear text to each member server"
    ],
    "answer": "Tickets issued by a key distribution center",
    "explanation": "Kerberos issues tickets from the KDC on the domain controller so users can reach services without resending passwords. SAML assertions and OAuth tokens belong to web federation."
@@ -248,7 +248,7 @@
    "stem": "What is federation in identity management?",
    "choices": [
     "A trust that lets one domain accept identities verified by another domain",
-    "A process that copies every user account into each partner's directory",
+    "A process that copies every user account into each partner's own directory",
     "A database that stores the passwords of every user across all organizations",
     "A review in which managers approve each user's access every quarter"
    ],
@@ -263,8 +263,8 @@
    "choices": [
     "It hosts the application and decides which data the user can see",
     "It authenticates the user and issues an assertion or token about them",
-    "It stores the application's data and encrypts it at rest for the user",
-    "It provisions entitlements in the application for every new user"
+    "It stores the application's data and encrypts it at rest",
+    "It provisions entitlements in the application for each new user"
    ],
    "answer": "It authenticates the user and issues an assertion or token about them",
    "explanation": "The IdP verifies the user and sends a signed assertion or token to the service provider. The SP hosts the application and makes its own authorization decisions."
@@ -275,7 +275,7 @@
    "topic": "Federation Concepts",
    "stem": "In a federated sign-in, what does the service provider do with the identity provider's assertion?",
    "choices": [
-    "It forwards the assertion to the user's manager for approval",
+    "It forwards the assertion to the user's manager to approve",
     "It stores the assertion as the user's new password hash",
     "It returns the assertion to the IdP to request a password",
     "It validates the assertion and starts a session for the user"
@@ -291,7 +291,7 @@
    "choices": [
     "Federation extends sign-on trust across separate domains or organizations",
     "Federation requires a separate password for every application used",
-    "Federation works only for the applications installed on the local network",
+    "Federation works only for applications on the local network",
     "Federation removes the need for any identity provider at all"
    ],
    "answer": "Federation extends sign-on trust across separate domains or organizations",
@@ -303,10 +303,10 @@
    "topic": "Federation Concepts",
    "stem": "A partner company's staff need access to your supplier portal. You do not want to manage their passwords. What is the BEST approach?",
    "choices": [
-    "Create local portal accounts with a shared team password",
+    "Create local portal accounts that share one team password",
     "Copy the partner's password hashes into your directory",
     "Federate the portal with the partner's identity provider",
-    "Issue each partner user a personal access token"
+    "Issue each partner user a personal access token for the portal"
    ],
    "answer": "Federate the portal with the partner's identity provider",
    "explanation": "Federation lets the partner authenticate its own users while your portal trusts its assertions. Shared or copied passwords are insecure, and PATs are for API access."
@@ -360,9 +360,9 @@
    "stem": "Many SaaS apps are federated with the corporate identity provider. What is a key benefit when an employee leaves?",
    "choices": [
     "Disabling the IdP account blocks sign-in to every federated app",
-    "Each app's local password expires automatically on the same day",
+    "Each app's local password expires on the same day",
     "Each app deletes its own data about the user immediately",
-    "Each app emails the user's manager a list of their files"
+    "Each app emails the user's manager a list of their own files"
    ],
    "answer": "Disabling the IdP account blocks sign-in to every federated app",
    "explanation": "Because the apps rely on the IdP for authentication, disabling one account stops new sign-ins everywhere. Local app accounts and data still need deprovisioning through governance."
@@ -387,10 +387,10 @@
    "topic": "Federation Protocols",
    "stem": "What does OpenID Connect add on top of OAuth 2.0?",
    "choices": [
-    "A refresh token that lets the client renew access",
+    "A refresh token that lets the client renew its access",
     "An XML assertion signed with the IdP's private key",
     "An ID token that tells the client who the user is",
-    "A standard API for creating and deleting accounts"
+    "A standard API for creating and deleting user accounts"
    ],
    "answer": "An ID token that tells the client who the user is",
    "explanation": "OIDC adds an authentication layer with an ID token about the user. Refresh tokens already exist in OAuth 2.0, XML assertions are SAML, and account APIs are SCIM."
@@ -446,9 +446,9 @@
     "Authenticating users to web apps through signed XML assertions",
     "Issuing access tokens so that client apps can call protected APIs",
     "Issuing tickets so that domain users can reach network services",
-    "Provisioning user accounts between systems through a standard API"
+    "Provisioning accounts between systems through a standard API"
    ],
-   "answer": "Provisioning user accounts between systems through a standard API",
+   "answer": "Provisioning accounts between systems through a standard API",
    "explanation": "SCIM standardizes account create, update and delete operations between systems. It does not authenticate users, which is the job of SAML, OIDC or Kerberos."
   },
   {
