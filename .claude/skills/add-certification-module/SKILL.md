@@ -51,7 +51,9 @@ Targets per objective: **>= 30 single-answer questions**, every topic **>= 5**, 
 1. Split by domain (split large domains in two). One subagent per slice, launched in parallel in the background, each with `references/question_writer_brief_course.md` (a new course: files under `data/courses/<code>/exam_bank/`, PBQs inline, validator `DELZAR_COURSE=<code> python -m utils.exam_bank <file>`; or `references/question_writer_brief.md` for Security+) filled in (file names, ID ranges like `D4-101..199` / `D4-201..299` so slices never collide, current counts per objective).
 2. Each writer creates only two files: `data/exam_bank/domainN-extra*.json` and `data/exam_bank/topics/<slice>.json`, and must pass `python -m utils.exam_bank <file>`.
 3. Independent review: one reviewer subagent per writer slice (tell them which facts the writers flagged as unverified, and which facts you already checked on the vendor's docs; reviewers can be wrong too, so settle conflicts on the vendor page yourself) with `references/question_reviewer_brief.md`, each owning different files; they fix in place and report every change. Then grep all new files for forbidden words (e.g. `\blabs?\b`) because reviewers can reintroduce them.
-4. Run `python -m utils.exam_bank` (all files OK) and the full test suite. Fix topic-count shortfalls by writing a question, not by relaxing tests.
+4. Option-length cue: writers who avoid "longest = right" tend to pad one distractor, making "second-longest = right" (seen at 40-68 %). Measure with `references/lenbalance_check.py <files>` (targets: correct answer uniquely longest 18-30 %, second-longest <= 32 %, third/fourth >= 30 %) and fix with parallel agents using `references/length_balance_brief.md`.
+5. Reviewers' tools: Firecrawl (scrape with `formats: ["query"]` + a directQuote prompt is cheap) for vendor docs; when its credits run out, Exa search/fetch works for documentation.sailpoint.com-style sites.
+6. Run `python -m utils.exam_bank` (all files OK) and the full test suite. Fix topic-count shortfalls by writing a question, not by relaxing tests.
 
 Gate: validator OK, tests green, reviewer reports read and any "unsure" items listed for the owner.
 
@@ -62,7 +64,7 @@ Gate: validator OK, tests green, reviewer reports read and any "unsure" items li
 
 ## Phase 5: Hands-on labs (optional but this platform's differentiator)
 
-Each lab is a pure, deny-by-default engine module with `TITLE`, `OBJECTIVES`, `INSIGHT`, `run_demo`, `build_challenges`, sample data in `data/`, a plain-English work ticket (`data/briefings/labNN.json`, ticket prefix REQ/INC/CHG/AUD/PRJ) and tests. Build labs for the objectives that are about doing (configuring, triaging, deciding), not memorising. Labs are built in parallel without file conflicts:
+Each lab is a pure, deny-by-default engine module with `TITLE`, `OBJECTIVES`, `INSIGHT`, `run_demo`, `build_challenges`, sample data in `data/`, a plain-English work ticket (`data/briefings/labNN.json`, ticket prefix REQ/INC/CHG/AUD/PRJ) and tests. Build labs for the objectives that are about doing (configuring, triaging, deciding), not memorising. Labs are built in parallel without file conflicts. A lab can serve several courses (`COURSES = ("spadmin", "speng")`); use the first course's objective codes in its questions and map it per course in each course.json (lab practice keeps a question's code when the course knows it, otherwise uses the lab's first mapped code):
 1. One subagent per lab with `references/lab_builder_brief.md` filled in. Each creates only its module (with `COURSES = ("<code>",)` and `generate_scenario(rng, policies)`), sample data, `config/policies/labNN.json` (merged by `load_policies`), briefing and test file.
 2. You register them centrally: imports and `LABS` in `labs/__init__.py` (generators self-register), the course's `labs` map in `course.json` (lab -> objective codes), `data/career_tracks.json`, and the course test (every objective covered by a lab; course-only labs stay out of other courses).
 3. Read every builder's "unsure" list and pass it to the owner.
@@ -104,5 +106,6 @@ Run all of these and fix what fails:
 - `references/playlist_index_brief.md` - YouTube playlist indexer (Phase 6)
 - `references/lab_pbq_brief.md` - lab-backed PBQ generator (Phase 4)
 - `references/lab_builder_brief.md` - one hands-on lab per subagent (Phase 5)
+- `references/length_balance_brief.md` and `references/lenbalance_check.py` - remove the option-length cue (Phase 3)
 - `references/platform_checklist.md` - generalising the engine for a second course (Phase 1)
 - `references/verification_scripts.md` - Playwright and axe-core checks (Phase 8)

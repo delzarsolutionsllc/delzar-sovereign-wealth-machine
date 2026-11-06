@@ -1,0 +1,1728 @@
+{
+  "domain": "7",
+  "title": "SailPoint Admin Domain 7 questions (7.1, 7.2, 7.3)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+  "questions": [
+    {
+      "id": "D7-001",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "A new administrator asks what a source represents in Identity Security Cloud. Which answer is BEST?",
+      "choices": [
+        "A group of identities that share an identity profile",
+        "A bundle of entitlements that users can request together",
+        "A saved search that returns all identities from a single department or business unit",
+        "The ISC representation of a system that keeps its own accounts or personnel records"
+      ],
+      "answer": "The ISC representation of a system that keeps its own accounts or personnel records",
+      "explanation": "A source represents an application, database or directory with its own accounts, and connectors load those accounts and access into ISC. A bundle of requestable entitlements is an access profile."
+    },
+    {
+      "id": "D7-002",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "An auditor asks why every application must be connected as a source before ISC can govern it. Which reason is MOST accurate?",
+      "choices": [
+        "ISC can only govern accounts and access it has loaded from a source",
+        "Sources replace the application's own sign-in page with single sign-on through ISC",
+        "Sources are required to create lifecycle states",
+        "Sources encrypt the application's database at rest using the tenant's keys"
+      ],
+      "answer": "ISC can only govern accounts and access it has loaded from a source",
+      "explanation": "Governance acts on aggregated accounts and entitlements, so an unconnected system is invisible to campaigns and requests. Sources do not encrypt target data or replace sign-in."
+    },
+    {
+      "id": "D7-003",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "A flat file source has no connector that can make changes. When an access request is approved for it, who is notified to make the change?",
+      "choices": [
+        "The identity's manager, through a certification",
+        "The SoD violation owner, through MySailPoint",
+        "The Helpdesk user level, through a source banner",
+        "The source owner, through a task in their Task Manager"
+      ],
+      "answer": "The source owner, through a task in their Task Manager",
+      "explanation": "For flat file sources, source owners receive Task Manager notifications when accounts must be added, changed or removed. Certifications and banners do not carry provisioning work."
+    },
+    {
+      "id": "D7-004",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "An admin finishes configuring a new source but skips the Source Owner field. Which problem is MOST likely to follow?",
+      "choices": [
+        "Its accounts can no longer be correlated to identities",
+        "Its virtual appliance cluster stops responding",
+        "Source owner certification campaigns for it show an error",
+        "The source cannot be aggregated until an owner is set"
+      ],
+      "answer": "Source owner certification campaigns for it show an error",
+      "explanation": "Without a source owner, source owner campaigns error and approvals that include the source owner escalate to an admin. Aggregation and correlation still work."
+    },
+    {
+      "id": "D7-005",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "An access request's approval scheme includes the source owner, but the source has no owner assigned. What happens to that approval step?",
+      "choices": [
+        "It is escalated to an Admin",
+        "It is skipped and the request is provisioned",
+        "It is sent to the requester's manager instead",
+        "It is cancelled and the requester is notified"
+      ],
+      "answer": "It is escalated to an Admin",
+      "explanation": "Documentation states that when the source owner is in the approval scheme and none is set, approvals escalate to an Admin. That is why assigning owners is part of source setup."
+    },
+    {
+      "id": "D7-006",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "A security lead wants a team to manage one source and its access without receiving full Admin rights. Which source setting supports this?",
+      "choices": [
+        "The Governance Group for Source Management",
+        "The Percentage of Deleted Accounts Allowed",
+        "The Account Correlation configuration",
+        "The delta aggregation setting"
+      ],
+      "answer": "The Governance Group for Source Management",
+      "explanation": "The source's governance group grants source sub-admin oversight of that source and its access. Correlation, deletion thresholds and delta settings control data loading."
+    },
+    {
+      "id": "D7-007",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "Before saving a newly configured direct connect source, an admin wants to confirm ISC can reach the target with the supplied credentials. What should the admin use?",
+      "choices": [
+        "Download Correlation File in Uncorrelated Accounts",
+        "Test Connection in the Review and Test section",
+        "Export on the source's Accounts list",
+        "Download Account Schema in Account Aggregation"
+      ],
+      "answer": "Test Connection in the Review and Test section",
+      "explanation": "Test Connection checks connectivity and credentials before aggregation. The schema and correlation downloads are templates for files, and Export lists existing accounts."
+    },
+    {
+      "id": "D7-008",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "An HR system feeds employee records that should create identities in ISC. How should the admin use this source?",
+      "choices": [
+        "Attach it as List A of an SoD policy so HR access is checked",
+        "Add it to a password sync group",
+        "Make it the authoritative source of an identity profile",
+        "Leave it non-authoritative and correlate its accounts later"
+      ],
+      "answer": "Make it the authoritative source of an identity profile",
+      "explanation": "Identity profiles are built on an authoritative source, and its accounts create identities. Non-authoritative sources only correlate accounts to identities that already exist."
+    },
+    {
+      "id": "D7-009",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "Accounts are aggregated from a non-authoritative application source. What happens to an account that matches no identity?",
+      "choices": [
+        "It is deleted at the end of the aggregation",
+        "It stays uncorrelated rather than creating a new identity",
+        "It creates a new identity in the default identity profile",
+        "It becomes the owner of the source"
+      ],
+      "answer": "It stays uncorrelated rather than creating a new identity",
+      "explanation": "Only authoritative sources create identities. Unmatched accounts on other sources stay uncorrelated until correlation logic or a manual link assigns them."
+    },
+    {
+      "id": "D7-010",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "Contractors exist in a contractor database and employees in HR, and some people appear in both. What controls which source's identity profile an identity uses?",
+      "choices": [
+        "The priority set on the identity profiles",
+        "The source with the most recent aggregation",
+        "The order in which the sources were created",
+        "The alphabetical order of the source names"
+      ],
+      "answer": "The priority set on the identity profiles",
+      "explanation": "When an identity has accounts on several authoritative sources, profile priority decides which profile applies. Creation order and aggregation time do not."
+    },
+    {
+      "id": "D7-011",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "An admin plans to change an authoritative source's configuration. Which identity data depends MOST directly on that source?",
+      "choices": [
+        "Identity attributes mapped from its accounts in the identity profile",
+        "The entitlements aggregated from unrelated directories such as Active Directory",
+        "The passwords stored on other non-authoritative sources in the same sync group",
+        "The SoD policies' risk levels"
+      ],
+      "answer": "Identity attributes mapped from its accounts in the identity profile",
+      "explanation": "Identity profile mappings read attributes from the authoritative source's accounts, so changes ripple into identity attributes. Other sources' data and policy levels are independent."
+    },
+    {
+      "id": "D7-012",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "An identity's only authoritative account disappears from HR, but the identity also has an account on a lower-priority authoritative contractor source. What does ISC do?",
+      "choices": [
+        "Deletes the identity immediately during aggregation",
+        "Marks the identity as an SoD violation",
+        "Moves it to the contractor identity profile and recalculates its attributes",
+        "Keeps the identity in the HR profile but blanks every attribute mapped from HR"
+      ],
+      "answer": "Moves it to the contractor identity profile and recalculates its attributes",
+      "explanation": "When the higher-priority authoritative account is deleted, the identity moves to the next authoritative profile and its attributes are recalculated from that profile's mappings."
+    },
+    {
+      "id": "D7-013",
+      "objective": "7.1",
+      "topic": "Authoritative Sources",
+      "stem": "A team asks whether an Active Directory source should be authoritative. Which statement BEST reflects common practice?",
+      "choices": [
+        "AD is usually non-authoritative, with HR authoritative",
+        "AD must always be the only authoritative source",
+        "Every source in a tenant must be authoritative",
+        "AD can be connected only if it is marked authoritative"
+      ],
+      "answer": "AD is usually non-authoritative, with HR authoritative",
+      "explanation": "Treating HR as the authoritative source and correlating AD accounts to those identities is common practice, not a product rule: ISC lets any source, AD included, be authoritative when an identity profile is built on it. Nothing forces every source, or AD, to be authoritative."
+    },
+    {
+      "id": "D7-014",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "Which statement BEST describes a direct connection to a source?",
+      "choices": [
+        "An admin uploads a .csv file of accounts by hand",
+        "Users sign in to the source through ISC single sign-on",
+        "Approvers receive a ticket for each change",
+        "ISC reads changes from the system itself"
+      ],
+      "answer": "ISC reads changes from the system itself",
+      "explanation": "A direct connection uses connection details so ISC can read accounts, and often provision, without file uploads. A flat file connection relies on an imported file."
+    },
+    {
+      "id": "D7-015",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "A legacy payroll application has no API and cannot be reached from the network. How can ISC still govern its accounts?",
+      "choices": [
+        "Configure a SaaS connector with no credentials",
+        "Enable delta aggregation on its source",
+        "Add the application to a password sync group",
+        "Configure a flat file source and import exported account files"
+      ],
+      "answer": "Configure a flat file source and import exported account files",
+      "explanation": "Flat file sources load accounts from a file such as a .csv, which suits disconnected systems. Sync groups and delta aggregation need a direct connection."
+    },
+    {
+      "id": "D7-016",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "An admin sets up a flat file source for a disconnected app. Which statement about it is accurate?",
+      "choices": [
+        "It requires an IQService host to import files",
+        "It can reset user passwords through Password Manager",
+        "It provisions accounts directly once a VA is attached",
+        "It is read only, so changes are made manually"
+      ],
+      "answer": "It is read only, so changes are made manually",
+      "explanation": "File-based sources are disconnected and read only, so provisioning becomes manual tasks for owners. They cannot reset passwords or provision directly."
+    },
+    {
+      "id": "D7-017",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "An admin needs a template showing the columns a flat file source expects. Where is it obtained?",
+      "choices": [
+        "Export on the Policy Violations page",
+        "Download Correlation File on the Uncorrelated Accounts page",
+        "Generate the Uncorrelated Accounts report for the source",
+        "Download Account Schema on Account Aggregation"
+      ],
+      "answer": "Download Account Schema on Account Aggregation",
+      "explanation": "Download Account Schema gives a template matching the source's attributes. The correlation file lists uncorrelated accounts for manual linking."
+    },
+    {
+      "id": "D7-018",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "A delimited file lists one row per account-entitlement pair. After import, each account shows only one entitlement. What is the MOST likely cause?",
+      "choices": [
+        "Delta aggregation is disabled",
+        "The file is not sorted by account ID",
+        "The source has no source owner assigned",
+        "The file is larger than the recommended size"
+      ],
+      "answer": "The file is not sorted by account ID",
+      "explanation": "Documentation advises sorting a delimited file by account ID so multiple rows for one account merge. Owner and delta settings do not affect row grouping."
+    },
+    {
+      "id": "D7-019",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "An admin has already uploaded this week's accounts file but needs to rerun the same import after fixing correlation. Which option avoids uploading again?",
+      "choices": [
+        "Aggregate Using Latest File",
+        "Start Aggregation",
+        "Test Connection",
+        "Download Account Schema"
+      ],
+      "answer": "Aggregate Using Latest File",
+      "explanation": "Flat file sources offer Aggregate Using Latest File to reuse the previously uploaded list. Start Aggregation and Test Connection apply to direct connections."
+    },
+    {
+      "id": "D7-020",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "In the sources list, an admin filters by Connection type. Which two connection types will the admin see?",
+      "choices": [
+        "Authoritative and non-authoritative",
+        "Preventive and detective",
+        "Direct connection and flat file",
+        "Optimized and unoptimized"
+      ],
+      "answer": "Direct connection and flat file",
+      "explanation": "Connection type describes how ISC gets data: a direct connection or an imported flat file. Authoritative status and optimization are separate settings."
+    },
+    {
+      "id": "D7-021",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "An on-premises Active Directory forest must be connected to ISC. What does the VA-based connector require?",
+      "choices": [
+        "A SAML trust between ISC and the domain controllers",
+        "No local components at all, because all connectors run in the SailPoint cloud",
+        "A virtual appliance cluster on the network that can reach the directory",
+        "A flat file uploaded to the source each night"
+      ],
+      "answer": "A virtual appliance cluster on the network that can reach the directory",
+      "explanation": "VA-based connectors run through an on-premises virtual appliance cluster that communicates with ISC and the target. SAML handles authentication, not connector traffic."
+    },
+    {
+      "id": "D7-022",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "A team wants to connect a cloud SaaS application without deploying any on-premises components. Which connector style fits BEST?",
+      "choices": [
+        "A SaaS connector",
+        "A SAML Just-in-Time provisioning source",
+        "A file-based connector with nightly uploads",
+        "A VA-based connector"
+      ],
+      "answer": "A SaaS connector",
+      "explanation": "SaaS connectors read and provision without an on-premises VA cluster. File-based connectors need manual files, and JIT sources create accounts at first sign-in."
+    },
+    {
+      "id": "D7-023",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "A manager asks what a Quick Compliance connector provides compared with a deep governance connector. Which answer is accurate?",
+      "choices": [
+        "Direct database replication of identity attributes",
+        "Read-only aggregation with minimal setup",
+        "Automatic SoD blocking for the source's entitlements",
+        "Full provisioning and password management on the source"
+      ],
+      "answer": "Read-only aggregation with minimal setup",
+      "explanation": "Quick Compliance connectors support aggregation only, which suits visibility and certification. Deep governance connectors add provisioning, schema configuration and password settings."
+    },
+    {
+      "id": "D7-024",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "A source page shows the banner VA cluster failing. What should the admin check FIRST?",
+      "choices": [
+        "That the SoD policy has items in both lists",
+        "That the identity profile priority is correct for every authoritative source",
+        "That the VA cluster for the source is running, online and visible",
+        "That the source owner has accepted ownership of the source in Task Manager"
+      ],
+      "answer": "That the VA cluster for the source is running, online and visible",
+      "explanation": "This banner means the virtual appliance serving the source is down or having problems. Ownership, priority and SoD settings do not cause it."
+    },
+    {
+      "id": "D7-025",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "An older document refers to VA-based connectors by a different name. Which earlier term did SailPoint use for them?",
+      "choices": [
+        "Multi-host sources",
+        "Flat file sources",
+        "Quick Compliance sources",
+        "Direct sources"
+      ],
+      "answer": "Direct sources",
+      "explanation": "SailPoint documentation notes that VA-based connectors were previously referred to as direct sources. Flat file and Quick Compliance are different connector categories."
+    },
+    {
+      "id": "D7-026",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "An identity provider is configured to create accounts in an app the first time users sign in. Which ISC source type relates to this?",
+      "choices": [
+        "A JDBC source with delta aggregation",
+        "A delimited file source",
+        "A SCIM 2.0 source with no credentials",
+        "A SAML Just-in-Time provisioning source"
+      ],
+      "answer": "A SAML Just-in-Time provisioning source",
+      "explanation": "A SAML JIT provisioning source connects with the identity provider to create an app account at first authentication. The other types aggregate from files or databases."
+    },
+    {
+      "id": "D7-027",
+      "objective": "7.1",
+      "topic": "VA-Based and SaaS Connectors",
+      "stem": "An admin must onboard dozens of similar Microsoft SQL Server instances at once rather than one source at a time. Which ISC feature supports this?",
+      "choices": [
+        "Password sync groups for bulk password changes",
+        "Multi-Host groups for bulk source creation",
+        "Governance groups for source management",
+        "Search subscriptions for scheduled reports"
+      ],
+      "answer": "Multi-Host groups for bulk source creation",
+      "explanation": "Multi-Host groups create sources in bulk for infrastructure components. Sync groups, governance groups and subscriptions solve different problems."
+    },
+    {
+      "id": "D7-028",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "A custom in-house application stores its users and roles in a SQL database. Which generic connector is the BEST fit?",
+      "choices": [
+        "Delimited File",
+        "LDAP",
+        "JDBC",
+        "SCIM 2.0"
+      ],
+      "answer": "JDBC",
+      "explanation": "The JDBC connector reads and writes database tables with SQL. SCIM needs a SCIM API, and LDAP targets directory servers."
+    },
+    {
+      "id": "D7-029",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "A cloud app exposes REST endpoints for users and groups but no standard provisioning protocol. Which generic connector should the admin consider?",
+      "choices": [
+        "JDBC",
+        "Delimited File",
+        "Web Services",
+        "LDAP"
+      ],
+      "answer": "Web Services",
+      "explanation": "The Web Services connector calls an application's REST or SOAP endpoints for accounts and groups. JDBC needs database access and LDAP needs a directory."
+    },
+    {
+      "id": "D7-030",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "A vendor's app supports the standard System for Cross-domain Identity Management protocol. Which connector requires the LEAST custom configuration?",
+      "choices": [
+        "Web Services",
+        "SCIM 2.0",
+        "JDBC",
+        "Delimited File"
+      ],
+      "answer": "SCIM 2.0",
+      "explanation": "The SCIM 2.0 connector uses the standard user and group endpoints, so little mapping is needed. Web Services would require defining each endpoint yourself."
+    },
+    {
+      "id": "D7-031",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "An on-premises directory server that is not Active Directory needs to be governed. Which generic connector fits BEST?",
+      "choices": [
+        "Delimited File",
+        "LDAP",
+        "Web Services",
+        "SCIM 2.0"
+      ],
+      "answer": "LDAP",
+      "explanation": "The LDAP connector reads and provisions standard directory objects. SCIM and Web Services target web APIs, and a delimited file would be read only."
+    },
+    {
+      "id": "D7-032",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "A small business app can only export a .csv list of its users and their groups. Which connector should the admin use?",
+      "choices": [
+        "JDBC",
+        "Delimited File",
+        "SCIM 2.0",
+        "LDAP"
+      ],
+      "answer": "Delimited File",
+      "explanation": "The Delimited File connector imports exported .csv data into a read-only source. The others need live connectivity the app does not offer."
+    },
+    {
+      "id": "D7-033",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "A project manager asks why the team chose a generic connector instead of a dedicated one for an obscure app. Which reason is MOST valid?",
+      "choices": [
+        "Generic connectors make every source authoritative",
+        "No dedicated connector exists, but the app speaks SQL, LDAP or SCIM",
+        "Generic connectors skip the need for a source owner",
+        "Generic connectors never need credentials or a VA"
+      ],
+      "answer": "No dedicated connector exists, but the app speaks SQL, LDAP or SCIM",
+      "explanation": "Generic connectors cover apps that use standard protocols when SailPoint has no app-specific connector. Ownership, authority and credentials still apply."
+    },
+    {
+      "id": "D7-034",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "Which generic connector types typically require a virtual appliance because they reach systems inside the corporate network?",
+      "choices": [
+        "JDBC and LDAP against on-premises servers",
+        "Quick Compliance SaaS connectors",
+        "SAML Just-in-Time sources created at sign-in",
+        "Delimited File imports uploaded through the browser"
+      ],
+      "answer": "JDBC and LDAP against on-premises servers",
+      "explanation": "On-premises databases and directories are reached through a VA cluster. File uploads and SaaS connectors do not need one."
+    },
+    {
+      "id": "D7-035",
+      "type": "match",
+      "objective": "7.1",
+      "topic": "Generic Connector Types",
+      "stem": "Match each generic connector to the system it suits.",
+      "pairs": [
+        {
+          "item": "JDBC",
+          "match": "A custom app storing users in a SQL database"
+        },
+        {
+          "item": "LDAP",
+          "match": "An on-premises directory server"
+        },
+        {
+          "item": "SCIM 2.0",
+          "match": "A SaaS app with standard user and group endpoints"
+        },
+        {
+          "item": "Web Services",
+          "match": "An app with custom REST or SOAP endpoints"
+        },
+        {
+          "item": "Delimited File",
+          "match": "A disconnected app that exports .csv lists"
+        }
+      ],
+      "targets_extra": [
+        "A mainframe reached only by terminal screen scraping"
+      ],
+      "explanation": "Each generic connector matches a standard way of reaching account data: SQL, LDAP, SCIM, custom web APIs or exported files. None of them is a screen-scraping tool."
+    },
+    {
+      "id": "D7-036",
+      "type": "multi",
+      "objective": "7.1",
+      "topic": "Direct and Flat File Connections",
+      "stem": "An admin is choosing a flat file source for a disconnected app. Which TWO statements about it are true?",
+      "choices": [
+        "Account data is loaded by uploading a file such as a .csv",
+        "It requires a virtual appliance cluster to read the file",
+        "Changes are fulfilled manually, with tasks for the source owner",
+        "It can join a password sync group",
+        "It supports delta aggregation of changed accounts"
+      ],
+      "answers": [
+        "Account data is loaded by uploading a file such as a .csv",
+        "Changes are fulfilled manually, with tasks for the source owner"
+      ],
+      "select": 2,
+      "explanation": "Flat file sources are read only and loaded from imported files, so changes become manual tasks. Sync groups and delta aggregation need direct connections, and no VA is needed to upload a file."
+    },
+    {
+      "id": "D7-037",
+      "type": "order",
+      "objective": "7.1",
+      "topic": "Purpose of a Source",
+      "stem": "Put the steps for onboarding a new direct connect source in order.",
+      "items": [
+        "Create the source and enter its connection details",
+        "Select Test Connection to confirm connectivity",
+        "Assign a source owner",
+        "Configure account correlation",
+        "Run the first account aggregation"
+      ],
+      "explanation": "Connection details are tested before use, an owner is set, and correlation is configured before the first aggregation so accounts link to identities on first load."
+    },
+    {
+      "id": "D7-038",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "An admin explains aggregation to a new analyst. Which description is BEST?",
+      "choices": [
+        "Combining several identity profiles into one",
+        "Merging duplicate identities after correlation has finished on each source",
+        "Pushing identity attribute changes out to every connected source",
+        "Loading accounts and their access from a source into ISC"
+      ],
+      "answer": "Loading accounts and their access from a source into ISC",
+      "explanation": "Aggregation reads accounts and access from the source system into ISC. Pushing changes out is provisioning or attribute sync."
+    },
+    {
+      "id": "D7-039",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "Accounts show group names after account aggregation, but the groups have no descriptions or owners in ISC. Which task should the admin run?",
+      "choices": [
+        "A manual correlation file upload",
+        "Another optimized account aggregation",
+        "Entitlement aggregation for the source",
+        "A Test Connection on the source"
+      ],
+      "answer": "Entitlement aggregation for the source",
+      "explanation": "Account aggregation loads accounts and the entitlement values they hold, while entitlement aggregation loads the entitlement objects and their details. Correlation and connection tests do not load groups."
+    },
+    {
+      "id": "D7-040",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "An admin wants to build access profiles from Active Directory groups that nobody currently belongs to. Which aggregation makes those groups available?",
+      "choices": [
+        "Entitlement aggregation",
+        "Delta account aggregation",
+        "Account aggregation with optimization",
+        "Single-account aggregation"
+      ],
+      "answer": "Entitlement aggregation",
+      "explanation": "Entitlement aggregation reads the group catalog itself, including empty groups. Account aggregations only reveal entitlements that accounts hold."
+    },
+    {
+      "id": "D7-041",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "A Helpdesk user needs the current locked status of one user's account without loading the whole source. What should they do?",
+      "choices": [
+        "Reset the source using the API",
+        "Use Aggregate Account on that account",
+        "Start a full source aggregation",
+        "Upload a new correlation file"
+      ],
+      "answer": "Use Aggregate Account on that account",
+      "explanation": "Single-account aggregation refreshes one account's data and status. A full aggregation or reset is heavier and unnecessary for one account."
+    },
+    {
+      "id": "D7-042",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "After aggregating a single account, the admin notices the identity's attributes have not changed. Why?",
+      "choices": [
+        "It only works on flat file sources",
+        "Identity attributes update only after a source reset",
+        "The source owner must approve the new values first",
+        "It updates account data but not identity attributes"
+      ],
+      "answer": "It updates account data but not identity attributes",
+      "explanation": "Aggregating one account updates its account data but does not recalculate identity attributes or trigger provisioning. A later identity refresh handles that."
+    },
+    {
+      "id": "D7-043",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "A data owner asks which account information ISC obtains during account aggregation. Which answer is MOST complete?",
+      "choices": [
+        "Only the passwords, so that the password policies can be checked against them",
+        "Schema attributes for each account, including the entitlements it holds",
+        "Only accounts that already correlate to an identity",
+        "Only the account names, with attributes loaded later by identity refresh"
+      ],
+      "answer": "Schema attributes for each account, including the entitlements it holds",
+      "explanation": "Account aggregation reads attributes defined in the account schema, including multi-valued entitlement attributes. It never collects passwords and also loads uncorrelated accounts."
+    },
+    {
+      "id": "D7-044",
+      "objective": "7.2",
+      "topic": "Account and Entitlement Aggregation",
+      "stem": "An admin aggregates a flat file source of accounts and then uploads a separate file of groups. Why is the second file needed?",
+      "choices": [
+        "Entitlement details come from their own entitlement import",
+        "Accounts cannot be correlated to identities without the group file",
+        "Deletes are only processed from the group file, not from the account file",
+        "The source cannot have an owner without it"
+      ],
+      "answer": "Entitlement details come from their own entitlement import",
+      "explanation": "Flat file sources take accounts and entitlements as separate imports, matching account and entitlement aggregation. Correlation and ownership do not depend on the entitlement file."
+    },
+    {
+      "id": "D7-045",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "Which aggregation type is the default in ISC?",
+      "choices": [
+        "Unoptimized aggregation",
+        "Optimized aggregation",
+        "Delta aggregation",
+        "Single-account aggregation"
+      ],
+      "answer": "Optimized aggregation",
+      "explanation": "Optimized aggregation is the default and skips records that have not changed. Unoptimized and delta aggregations are chosen deliberately."
+    },
+    {
+      "id": "D7-046",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "During an optimized aggregation, an account exists and none of its data changed. How is it processed?",
+      "choices": [
+        "It is re-correlated against every identity attribute",
+        "It is flagged as uncorrelated until reviewed",
+        "It is deleted and recreated to refresh its data",
+        "It is skipped, and correlation is not evaluated again"
+      ],
+      "answer": "It is skipped, and correlation is not evaluated again",
+      "explanation": "Optimized aggregation reads every record but skips unchanged accounts, so correlation and manager correlation are not re-run for them. That is why correlation changes need an unoptimized run."
+    },
+    {
+      "id": "D7-047",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "An admin changed a source's correlation configuration, but previously uncorrelated accounts with unchanged data are still uncorrelated after the nightly aggregation. What should the admin do?",
+      "choices": [
+        "Run another optimized aggregation from the UI",
+        "Run an unoptimized aggregation so unchanged accounts are re-evaluated",
+        "Delete the source and recreate it",
+        "Enable delta aggregation and wait for the next scheduled run to pick them up"
+      ],
+      "answer": "Run an unoptimized aggregation so unchanged accounts are re-evaluated",
+      "explanation": "Optimized runs skip unchanged accounts, so new correlation logic never reaches them. An unoptimized aggregation reprocesses every account and re-evaluates correlation."
+    },
+    {
+      "id": "D7-048",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "How does an admin run an unoptimized aggregation on a direct connect source?",
+      "choices": [
+        "Call the load-accounts API with disableOptimization set to true",
+        "Select Start Aggregation twice in the UI",
+        "Turn on delta aggregation in the source's Aggregation Settings page",
+        "Enable Account Deletion on the source before starting the aggregation"
+      ],
+      "answer": "Call the load-accounts API with disableOptimization set to true",
+      "explanation": "The load-accounts API accepts disableOptimization=true for that one run. Scheduled and manual UI aggregations always run optimized."
+    },
+    {
+      "id": "D7-049",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "An admin set disableOptimization to true on one API aggregation. What happens on the next scheduled aggregation?",
+      "choices": [
+        "It fails until the source is reset",
+        "It stays unoptimized until the flag is reset",
+        "It runs optimized again, because the flag applies only to that call",
+        "It switches to delta aggregation automatically for all later scheduled runs"
+      ],
+      "answer": "It runs optimized again, because the flag applies only to that call",
+      "explanation": "The flag affects only the aggregation it was sent with. Later API runs need it again, and UI or scheduled runs are always optimized."
+    },
+    {
+      "id": "D7-050",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "Which statement BEST describes delta aggregation?",
+      "choices": [
+        "It loads every account on the source and recalculates correlation for each one",
+        "It loads entitlements but never accounts",
+        "It loads only new or changed accounts since the last run, on supported sources",
+        "It compares two identity profiles and merges their identities"
+      ],
+      "answer": "It loads only new or changed accounts since the last run, on supported sources",
+      "explanation": "Delta aggregation reduces load by reading only changes, and only some connectors support it. Rechecking every account describes an unoptimized run."
+    },
+    {
+      "id": "D7-051",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "Active Directory uses delta aggregation, and the team just moved many users to new OUs. What should the admin do?",
+      "choices": [
+        "Reset the source and delete its access profiles",
+        "Disable correlation until the next delta run",
+        "Keep running delta aggregations, because delta handles OU moves natively",
+        "Run a full account aggregation, because delta does not support OU moves"
+      ],
+      "answer": "Run a full account aggregation, because delta does not support OU moves",
+      "explanation": "Documentation warns that delta aggregation does not support OU moves and can create duplicate accounts. A full aggregation avoids that."
+    },
+    {
+      "id": "D7-052",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "Which of these connectors supports delta aggregation in ISC?",
+      "choices": [
+        "Microsoft Active Directory",
+        "Generic Flat File",
+        "Any source with an owner",
+        "Delimited File"
+      ],
+      "answer": "Microsoft Active Directory",
+      "explanation": "Active Directory is on the supported list, along with JDBC, Workday and others. File-based sources load whole files and do not do delta."
+    },
+    {
+      "id": "D7-053",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "An admin wants an HR source aggregated every day at 2 AM. Where is this configured?",
+      "choices": [
+        "On the source's Account Aggregation page, using Enable Schedule",
+        "In the Aggregation Activity list, by rescheduling the last completed run",
+        "On the identity profile page, using the identity refresh schedule",
+        "On the SoD policy's Schedule action"
+      ],
+      "answer": "On the source's Account Aggregation page, using Enable Schedule",
+      "explanation": "Account aggregation schedules are set on the source, with frequency and start time. SoD schedules evaluate policies, and Aggregation Activity only shows history."
+    },
+    {
+      "id": "D7-054",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "A schedule starts at 2 PM and recurs every 8 hours. How many aggregations run each day?",
+      "choices": [
+        "Unlimited, until an admin cancels the schedule",
+        "One, because recurrences need a monthly schedule",
+        "Two, at 2 PM and 10 PM",
+        "Three, at 2 PM, 10 PM and 6 AM"
+      ],
+      "answer": "Two, at 2 PM and 10 PM",
+      "explanation": "Recurring daily schedules start at the chosen time and stop at midnight. A 2 PM start every 8 hours gives runs at 2 PM and 10 PM."
+    },
+    {
+      "id": "D7-055",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "An admin notices scheduled aggregations shift by an hour from local time after daylight saving starts. Why?",
+      "choices": [
+        "Schedules follow the source owner's time zone",
+        "Schedules use the VA cluster's GMT offset and do not shift for daylight saving",
+        "Schedules follow the time zone set in the admin's browser when the schedule was saved",
+        "Schedules drift because delta aggregation is enabled"
+      ],
+      "answer": "Schedules use the VA cluster's GMT offset and do not shift for daylight saving",
+      "explanation": "Aggregation schedule time comes from the connected VA cluster's time zone as a GMT offset, so standard time is always used. Browser and owner time zones do not apply."
+    },
+    {
+      "id": "D7-056",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "An admin wants a monthly aggregation on the 31st. What will the scheduler allow?",
+      "choices": [
+        "Only the last day of the month",
+        "Only the first Monday of the month",
+        "Only dates from the 1st to the 28th",
+        "Any date, skipping months without that day"
+      ],
+      "answer": "Only dates from the 1st to the 28th",
+      "explanation": "Monthly aggregations can be set on any date from 1 to 28, so they run every month."
+    },
+    {
+      "id": "D7-057",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "An aggregation started by mistake against a slow target system. How can the admin stop it?",
+      "choices": [
+        "Cancel it from the aggregation card or the Aggregation History page",
+        "Disable the identity profile that uses this source as its authoritative source",
+        "Delete the source while the aggregation runs, which stops the job at once",
+        "Restart the browser session"
+      ],
+      "answer": "Cancel it from the aggregation card or the Aggregation History page",
+      "explanation": "In-progress aggregations can be cancelled from the source's aggregation card menu or terminated from Aggregation History. A source cannot be deleted while it is in use."
+    },
+    {
+      "id": "D7-058",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "Leadership wants to see all aggregations across sources from the last 90 days. Where should the admin look?",
+      "choices": [
+        "Admin > Password Mgmt > Sync Groups",
+        "Admin > Connections > Aggregation Activity",
+        "Admin > SoD Policies > Policy Violations",
+        "Admin > Global > System Settings"
+      ],
+      "answer": "Admin > Connections > Aggregation Activity",
+      "explanation": "Aggregation Activity shows aggregations from the past 90 days across sources. The other pages concern policies, passwords and settings."
+    },
+    {
+      "id": "D7-059",
+      "objective": "7.2",
+      "topic": "Scheduling and Running Aggregations",
+      "stem": "A team aggregates a non-authoritative source every hour during business hours. Which change BEST follows SailPoint's guidance?",
+      "choices": [
+        "Aggregate daily, outside business hours",
+        "Aggregate only when the source owner asks",
+        "Aggregate every few minutes for fresher data",
+        "Disable optimization on every scheduled run"
+      ],
+      "answer": "Aggregate daily, outside business hours",
+      "explanation": "Best practice is to aggregate as infrequently as the business allows, rarely more than daily for non-authoritative sources, and outside business hours. Unoptimized runs add load."
+    },
+    {
+      "id": "D7-060",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "An admin explains correlation to a reviewer. Which description is BEST?",
+      "choices": [
+        "Creating a new identity for every aggregated account",
+        "Grouping entitlements into access profiles automatically",
+        "Copying identity attributes onto every account on a source",
+        "Matching accounts to identities by attribute values"
+      ],
+      "answer": "Matching accounts to identities by attribute values",
+      "explanation": "Correlation compares account attributes with identity attributes and assigns the account when they match. Creating identities is the job of authoritative sources."
+    },
+    {
+      "id": "D7-061",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "When configuring account correlation, what operation does ISC apply between the identity attribute and the account attribute?",
+      "choices": [
+        "Equals, which cannot be changed",
+        "Contains, or optionally Starts With",
+        "Greater Than, used for dates",
+        "Regex, defined per criteria"
+      ],
+      "answer": "Equals, which cannot be changed",
+      "explanation": "Correlation criteria always use Equals. Partial matching is not available in the UI configuration."
+    },
+    {
+      "id": "D7-062",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "A source has two correlation criteria: employee ID first, then email. What happens if the first criteria finds no match for an account?",
+      "choices": [
+        "ISC creates a new identity for the account",
+        "ISC tries the next criteria in the listed order",
+        "The account is deleted from ISC",
+        "The account is immediately marked uncorrelated"
+      ],
+      "answer": "ISC tries the next criteria in the listed order",
+      "explanation": "ISC correlates one attribute at a time in the configured order, and a match on any criteria assigns the account. Order matters, so the most reliable attribute should come first."
+    },
+    {
+      "id": "D7-063",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "An admin wants to correlate on a custom identity attribute, but it does not appear in the Identity Attribute list. What is the MOST likely reason?",
+      "choices": [
+        "The attribute is not configured as searchable for correlation",
+        "Custom identity attributes can never be used as correlation criteria",
+        "Delta aggregation is turned on for the source being correlated",
+        "The source has no owner"
+      ],
+      "answer": "The attribute is not configured as searchable for correlation",
+      "explanation": "Identity attributes must be searchable to appear in the list, and a limited number of extra ones can be made searchable through the API. Ownership and delta settings are unrelated."
+    },
+    {
+      "id": "D7-064",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "A legacy app has account IDs that differ only by letter case. What does SailPoint documentation state about letter case during correlation?",
+      "choices": [
+        "It is case-sensitive unless a transform converts both values",
+        "It is always case-sensitive, with no way to change it",
+        "It is case-insensitive, and ignoreCase can change this per source",
+        "It is case-sensitive for emails but not for IDs"
+      ],
+      "answer": "It is case-insensitive, and ignoreCase can change this per source",
+      "explanation": "Documentation states that correlation is case insensitive and that the ignoreCase option in the Update Correlation Config API changes this per source. Community reports suggest some tenants default ignoreCase to false, so check the source's correlation config when IDs differ only by case."
+    },
+    {
+      "id": "D7-065",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "No configured correlation criteria matches an account. What default logic does ISC still try?",
+      "choices": [
+        "Matching the account to the source owner",
+        "Matching it to the newest identity in the tenant",
+        "Matching Account Name to the identity's name",
+        "Matching the account's email to the manager's email"
+      ],
+      "answer": "Matching Account Name to the identity's name",
+      "explanation": "If configured criteria fail, ISC falls back to matching the Account Name attribute to the identity name, case-insensitively. This default is not configurable."
+    },
+    {
+      "id": "D7-066",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "When should account correlation ideally be configured for a new source?",
+      "choices": [
+        "After the first certification campaign",
+        "Only after every account is manually correlated",
+        "After the source has been reset twice",
+        "Before the first account aggregation"
+      ],
+      "answer": "Before the first account aggregation",
+      "explanation": "Configuring correlation first means accounts link to identities as they are loaded. Changing it later requires an unoptimized aggregation."
+    },
+    {
+      "id": "D7-067",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "What is an uncorrelated account in Identity Security Cloud?",
+      "choices": [
+        "An account disabled on its source but still present in ISC",
+        "An account on a source that has no source owner assigned yet",
+        "An account with no entitlements",
+        "A source account not linked to an authoritative identity"
+      ],
+      "answer": "A source account not linked to an authoritative identity",
+      "explanation": "Uncorrelated accounts could not be matched to an identity, so they cannot be governed until resolved. Disabled or empty accounts may still be correlated."
+    },
+    {
+      "id": "D7-068",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "After aggregating several sources, an admin wants one list of every uncorrelated account across the tenant. What should the admin generate?",
+      "choices": [
+        "The Aggregation Activity list for the last 90 days",
+        "The account schema template",
+        "The Policy Violations export",
+        "The global Uncorrelated Accounts report"
+      ],
+      "answer": "The global Uncorrelated Accounts report",
+      "explanation": "The global Uncorrelated Accounts report lists uncorrelated accounts and their sources. Aggregation Activity shows jobs, not unmatched accounts."
+    },
+    {
+      "id": "D7-069",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "A few accounts on one source belong to known users but use misspelled IDs. Which manual method uses a file to link them?",
+      "choices": [
+        "Create an SoD policy listing the accounts",
+        "Export the source accounts and reset the source",
+        "Download Correlation File, add userName values and upload the file",
+        "Download Account Schema, add the users and run a delta aggregation"
+      ],
+      "answer": "Download Correlation File, add userName values and upload the file",
+      "explanation": "The correlation file lists uncorrelated accounts, and adding the identity's account name in userName links them. The schema template is for importing accounts."
+    },
+    {
+      "id": "D7-070",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "An account was manually correlated, then its source data changed so it now matches another identity. What happens on the next aggregation?",
+      "choices": [
+        "It moves to the newly matching identity on that aggregation",
+        "It becomes uncorrelated again",
+        "It is deleted from ISC",
+        "It stays with the identity it was manually linked to"
+      ],
+      "answer": "It stays with the identity it was manually linked to",
+      "explanation": "Manual correlation creates a permanent link with manuallyCorrelated set to true, and even unoptimized aggregation does not remove it. The account must be removed or the flag changed."
+    },
+    {
+      "id": "D7-071",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "An admin wants to correct one wrongly correlated account from the Accounts list. Which action should they use?",
+      "choices": [
+        "Aggregate Account",
+        "Update Correlation on the account",
+        "Disable Account",
+        "Unlock Account"
+      ],
+      "answer": "Update Correlation on the account",
+      "explanation": "Update Correlation lets the admin pick the correct identity for the account. Disable, unlock and aggregate change status or data, not ownership."
+    },
+    {
+      "id": "D7-072",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "Many accounts on a source are uncorrelated because they belong to former employees. What is the BEST resolution?",
+      "choices": [
+        "Create a new identity profile for former employees so they correlate",
+        "Remove the old accounts from the source system and aggregate again",
+        "Manually correlate them to the source owner so someone is accountable",
+        "Disable correlation on the source"
+      ],
+      "answer": "Remove the old accounts from the source system and aggregate again",
+      "explanation": "Accounts of people who left should be removed on the source, then a new aggregation clears them from ISC. Linking them to the owner would hide orphaned access."
+    },
+    {
+      "id": "D7-073",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "Hundreds of accounts on a newly onboarded source are uncorrelated. What should the admin review FIRST?",
+      "choices": [
+        "The VA cluster time zone",
+        "The SoD policy risk levels",
+        "The source's account correlation configuration",
+        "Each account's password policy"
+      ],
+      "answer": "The source's account correlation configuration",
+      "explanation": "A large number of uncorrelated accounts points to correlation criteria that do not fit the data. Manual correlation suits only a small number."
+    },
+    {
+      "id": "D7-074",
+      "type": "match",
+      "objective": "7.2",
+      "topic": "Optimized Unoptimized and Delta Aggregation",
+      "stem": "Match each aggregation type to how it behaves.",
+      "pairs": [
+        {
+          "item": "Optimized aggregation",
+          "match": "Reads all records but skips unchanged accounts"
+        },
+        {
+          "item": "Unoptimized aggregation",
+          "match": "Reprocesses every account and re-evaluates correlation"
+        },
+        {
+          "item": "Delta aggregation",
+          "match": "Loads only changes since the last run on supported sources"
+        },
+        {
+          "item": "Entitlement aggregation",
+          "match": "Loads the entitlement objects and their details"
+        }
+      ],
+      "targets_extra": [
+        "Pushes identity attribute changes out to the source"
+      ],
+      "explanation": "Optimized is the default, unoptimized forces a full recheck, delta reads only changes, and entitlement aggregation loads the catalog. Pushing changes out is attribute sync, not aggregation."
+    },
+    {
+      "id": "D7-075",
+      "type": "order",
+      "objective": "7.2",
+      "topic": "Resolving Uncorrelated Accounts",
+      "stem": "Put the steps for manually correlating accounts with a file in order.",
+      "items": [
+        "Open the source's Uncorrelated Accounts page",
+        "Select Download Correlation File",
+        "Add each identity's account name in the userName column",
+        "Upload the edited .csv file",
+        "Check the Latest Manual Correlation status"
+      ],
+      "explanation": "The file comes from the source, gets the identity names, and goes back through upload. The Latest Manual Correlation card shows whether the import had issues."
+    },
+    {
+      "id": "D7-076",
+      "type": "multi",
+      "objective": "7.2",
+      "topic": "Correlation Configuration",
+      "stem": "A team updated correlation criteria on a source that was already aggregated. Which TWO actions should the admin take to check the new criteria and apply them to accounts whose data has not changed?",
+      "choices": [
+        "Enable account deletion with a low threshold",
+        "Add the accounts to an SoD policy list",
+        "Run another optimized aggregation from the UI",
+        "Run an aggregation with disableOptimization set to true",
+        "Use the correlation Test option to estimate the match rate first"
+      ],
+      "answers": [
+        "Run an aggregation with disableOptimization set to true",
+        "Use the correlation Test option to estimate the match rate first"
+      ],
+      "select": 2,
+      "explanation": "Testing shows whether the new criteria will match, and an unoptimized aggregation applies them to unchanged accounts. An optimized run skips those accounts."
+    },
+    {
+      "id": "D7-077",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "An account was deleted from a target system last week, but it still appears in ISC after aggregations. Which source setting is MOST likely turned off?",
+      "choices": [
+        "Delta Aggregation",
+        "Enable Account Deletion",
+        "Governance Group for Source Management",
+        "Enable Schedule"
+      ],
+      "answer": "Enable Account Deletion",
+      "explanation": "Accounts missing from an aggregation are deleted from ISC only when Enable Account Deletion is selected on the source. Scheduling and delta settings control when and what is read."
+    },
+    {
+      "id": "D7-078",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "With account deletion enabled, how does a full aggregation decide that an account should be deleted from ISC?",
+      "choices": [
+        "The account has no entitlements left",
+        "The account has been disabled on the source for more than 30 consecutive days",
+        "The account is no longer returned by the source during the aggregation",
+        "The account's identity has moved to a new lifecycle state such as inactive"
+      ],
+      "answer": "The account is no longer returned by the source during the aggregation",
+      "explanation": "Deletion during aggregation is driven by absence: an account not detected in the aggregation is removed from ISC. Disabled or empty accounts still exist on the source."
+    },
+    {
+      "id": "D7-079",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "A Helpdesk user runs Aggregate Account on one account that was deleted on the source. What happens to the account in ISC?",
+      "choices": [
+        "It is recreated on the source",
+        "It is deleted immediately from ISC",
+        "It stays unchanged, because only full aggregations process deletions",
+        "It is converted into an uncorrelated account until the next full aggregation"
+      ],
+      "answer": "It stays unchanged, because only full aggregations process deletions",
+      "explanation": "If the account is not found during single-account aggregation, it stays as it is. Only full source aggregations process deletions."
+    },
+    {
+      "id": "D7-080",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "Do the account deletion settings on a source apply to manual aggregations as well as scheduled ones?",
+      "choices": [
+        "Only when delta aggregation is turned off",
+        "Yes, the same settings apply to both",
+        "No, only scheduled aggregations delete accounts",
+        "No, only manual aggregations delete accounts"
+      ],
+      "answer": "Yes, the same settings apply to both",
+      "explanation": "Documentation notes that the deletion settings apply during both manual and scheduled aggregations. Delta settings are separate."
+    },
+    {
+      "id": "D7-081",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "A flat file source's latest upload accidentally contained only half of the users. Which setting protects the remaining accounts from being deleted in ISC?",
+      "choices": [
+        "The source's correlation criteria order",
+        "The source owner assignment",
+        "The deletion percentage threshold",
+        "The identity profile priority"
+      ],
+      "answer": "The deletion percentage threshold",
+      "explanation": "The deletion threshold cancels an aggregation that would delete more accounts than allowed. Correlation order and profile priority do not stop deletions."
+    },
+    {
+      "id": "D7-082",
+      "objective": "7.3",
+      "topic": "Account Deletion During Aggregation",
+      "stem": "An admin removes an account in ISC with Remove Account, but the account still exists on the source. What happens at the next full aggregation?",
+      "choices": [
+        "It is added again and treated as a new account",
+        "It is deleted from the source system",
+        "It stays removed permanently",
+        "It is blocked by the deletion threshold"
+      ],
+      "answer": "It is added again and treated as a new account",
+      "explanation": "Remove Account clears the account from ISC only. Because it still exists on the source, the next full aggregation loads it again and correlation runs fresh."
+    },
+    {
+      "id": "D7-083",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "An aggregation would delete more accounts than the source's Percentage of Deleted Accounts Allowed. What does ISC do?",
+      "choices": [
+        "Deletes all accounts and emails the owner afterwards",
+        "Deletes only up to the allowed percentage",
+        "Cancels the aggregation and generates a warning",
+        "Pauses the aggregation until the owner approves"
+      ],
+      "answer": "Cancels the aggregation and generates a warning",
+      "explanation": "Exceeding the threshold cancels the aggregation with a warning, so no partial deletion occurs. This guards against bad files or connector errors."
+    },
+    {
+      "id": "D7-084",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "A source has only 10 accounts, and the deletion percentage is set very low so that it rounds to zero accounts. What is the risk?",
+      "choices": [
+        "The aggregation is cancelled only if 100 % of accounts would be deleted",
+        "The threshold is ignored and replaced with 50 %",
+        "Every aggregation is cancelled, even when no accounts at all would be deleted",
+        "Accounts are never deleted, even individually"
+      ],
+      "answer": "The aggregation is cancelled only if 100 % of accounts would be deleted",
+      "explanation": "If the percentage does not round to at least one account, only a 100 % deletion cancels the run. Admins should set a value that represents at least one account."
+    },
+    {
+      "id": "D7-085",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "For a source with 10 accounts, which threshold setting does documentation suggest so that losing even one account cancels the aggregation?",
+      "choices": [
+        "100 %, which blocks every deletion",
+        "Exactly 1 %, which rounds to one account",
+        "At least 5 %, which rounds to one account",
+        "0 %, which disables deletions"
+      ],
+      "answer": "At least 5 %, which rounds to one account",
+      "explanation": "On small sources the percentage rounds to whole accounts. Setting at least 5 % on 10 accounts rounds to 10 %, or one account."
+    },
+    {
+      "id": "D7-086",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "A source owner asks why the deletion threshold matters for an HR authoritative source in particular. Which answer is BEST?",
+      "choices": [
+        "Authoritative sources cannot be aggregated at all unless a threshold is configured",
+        "A bad feed could delete many authoritative accounts and their identities",
+        "The threshold decides which identity profile applies to the HR source's accounts",
+        "The threshold controls how often HR is aggregated"
+      ],
+      "answer": "A bad feed could delete many authoritative accounts and their identities",
+      "explanation": "Losing authoritative accounts can move or delete identities, so a threshold prevents a truncated feed from causing mass identity loss. It does not control scheduling or priority."
+    },
+    {
+      "id": "D7-087",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "An aggregation was cancelled by the deletion threshold. Where can the admin see more detail about it?",
+      "choices": [
+        "The identity profile mapping preview",
+        "The password policy settings",
+        "The SoD Policy Violations page, filtered by the policy's risk level",
+        "The Info icon on the run's status in Aggregation History"
+      ],
+      "answer": "The Info icon on the run's status in Aggregation History",
+      "explanation": "Aggregation History shows status per run, and the Info icon gives details on warnings, errors and terminations. The other pages do not track aggregation outcomes."
+    },
+    {
+      "id": "D7-088",
+      "objective": "7.3",
+      "topic": "Account Delete Threshold",
+      "stem": "After a threshold cancellation, the admin confirms that a large reorganisation really did remove many accounts. Which approach is MOST reasonable?",
+      "choices": [
+        "Disable account deletion permanently",
+        "Raise the threshold for one run, then restore it",
+        "Delete the source and onboard it again",
+        "Reset the source and recreate its access profiles"
+      ],
+      "answer": "Raise the threshold for one run, then restore it",
+      "explanation": "The Percentage of Deleted Accounts Allowed is an editable source setting that cancels any aggregation exceeding it, and the documentation offers no one-off override. Once the deletions are confirmed as genuine, a sensible judgement is to raise it for a single run and then restore it so the protection returns. Disabling deletion permanently, resets and re-onboarding are far more disruptive."
+    },
+    {
+      "id": "D7-089",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "An employee's record is removed from HR, the authoritative source, and account deletion is enabled. The identity has no other authoritative account. What does ISC try to do?",
+      "choices": [
+        "Move the identity into the default identity profile",
+        "Keep the identity active with its last attributes",
+        "Delete the identity's accounts on every source immediately",
+        "Delete the identity during the nightly job"
+      ],
+      "answer": "Delete the identity during the nightly job",
+      "explanation": "Once the authoritative account is gone and no other authoritative source covers the identity, the system attempts deletion during the nightly job. It does not delete accounts on other systems."
+    },
+    {
+      "id": "D7-090",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "Which condition blocks deletion of an identity whose authoritative account was removed?",
+      "choices": [
+        "The identity owns a role, access profile, application or source",
+        "The identity's account was disabled on the HR source before it was removed",
+        "The identity has never signed in to ISC",
+        "The identity's lifecycle state is still active in the identity profile"
+      ],
+      "answer": "The identity owns a role, access profile, application or source",
+      "explanation": "Ownership of access objects is one of the blocking conditions, along with correlated accounts, open work items, being a manager and elevated user levels."
+    },
+    {
+      "id": "D7-091",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "An identity could not be deleted because it still has correlated accounts on other sources. How does ISC keep it?",
+      "choices": [
+        "As a hidden identity",
+        "As a new authoritative identity",
+        "As a governance group",
+        "As a protected admin identity"
+      ],
+      "answer": "As a hidden identity",
+      "explanation": "Blocked identities remain as hidden identities. They lose their identity profile and do not appear on the Identities page."
+    },
+    {
+      "id": "D7-092",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "What happens to accounts that stay attached to a hidden identity?",
+      "choices": [
+        "They are treated as uncorrelated accounts",
+        "They are moved to the identity's manager",
+        "They are locked until a certification completes",
+        "They are deleted from their sources"
+      ],
+      "answer": "They are treated as uncorrelated accounts",
+      "explanation": "Accounts on a hidden identity are treated as uncorrelated, and in an uncorrelated accounts certification they are grouped under a shared uncorrelated identity."
+    },
+    {
+      "id": "D7-093",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "Why might an admin who leaves the company remain in ISC as a hidden identity after HR removes them?",
+      "choices": [
+        "Elevated user levels such as Org Admin block identity deletion",
+        "Admins cannot be removed from HR feeds",
+        "Hidden identities are created automatically for every admin each night",
+        "Admin identities never have authoritative accounts"
+      ],
+      "answer": "Elevated user levels such as Org Admin block identity deletion",
+      "explanation": "Elevated user levels such as role admin, org admin or helpdesk are a blocking condition. Removing those levels and other links lets deletion proceed."
+    },
+    {
+      "id": "D7-094",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "Which statement about manager relationships and identity deletion is accurate?",
+      "choices": [
+        "Manager relationships are ignored during deletion",
+        "Managers are deleted first, and their direct reports are deleted with them",
+        "Deleting a manager automatically deletes the reports",
+        "An identity designated as another identity's manager cannot be deleted"
+      ],
+      "answer": "An identity designated as another identity's manager cannot be deleted",
+      "explanation": "Being someone's manager is one of the documented blocking conditions. The manager link must be updated before deletion can happen."
+    },
+    {
+      "id": "D7-095",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "A misspelled email caused an account to correlate to the wrong person. The fix has been made on the source. Which action lets the account correlate correctly on the next aggregation?",
+      "choices": [
+        "Delete Account",
+        "Disable Account",
+        "Unlock Account",
+        "Remove Account in ISC"
+      ],
+      "answer": "Remove Account in ISC",
+      "explanation": "Remove Account takes the account out of ISC only, and the next aggregation treats it as new. Delete Account removes it from the source system."
+    },
+    {
+      "id": "D7-096",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "What is the key difference between Remove Account and Delete Account in ISC?",
+      "choices": [
+        "Remove affects the source system, while Delete affects only ISC",
+        "Remove affects only ISC, while Delete removes the account from the source system",
+        "Both delete the account on the source system, but Remove skips any approval step",
+        "Both affect only ISC, but Delete also clears entitlements"
+      ],
+      "answer": "Remove affects only ISC, while Delete removes the account from the source system",
+      "explanation": "Remove Account clears ISC's copy, which returns on the next full aggregation. Delete Account sends a deletion to the source and may require approval."
+    },
+    {
+      "id": "D7-097",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "An admin deletes an account, but it is recreated after the next identity refresh. What is the MOST likely cause?",
+      "choices": [
+        "The deletion threshold was set too low",
+        "The account was never correlated",
+        "A role still assigned to the identity includes entitlements on that source",
+        "The source has delta aggregation enabled, so the deletion was never recorded"
+      ],
+      "answer": "A role still assigned to the identity includes entitlements on that source",
+      "explanation": "SailPoint recommends removing roles before deleting accounts, because an active role assignment provisions the account again on refresh."
+    },
+    {
+      "id": "D7-098",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "Which sources allow an admin to use Delete Account?",
+      "choices": [
+        "Any source that has a source owner",
+        "Only authoritative sources",
+        "Every flat file source",
+        "Direct connect sources that support account deletion"
+      ],
+      "answer": "Direct connect sources that support account deletion",
+      "explanation": "Account deletion is available only on direct connect sources whose connectors support it. Flat file sources are read only."
+    },
+    {
+      "id": "D7-099",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "A Delete Account request targets a Service Desk Integration source. What happens?",
+      "choices": [
+        "A ticket is created to track the deletion",
+        "The request is rejected because SDIM sources are read only",
+        "The account is deleted directly by the connector",
+        "The account is removed from ISC only"
+      ],
+      "answer": "A ticket is created to track the deletion",
+      "explanation": "For Service Desk Integration sources, a ticket tracks the deletion request in the service desk tool."
+    },
+    {
+      "id": "D7-100",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "An admin changed a source's schema and wants to reload all its data without losing the source configuration. What should the admin do?",
+      "choices": [
+        "Remove each account one at a time from the source's account list",
+        "Reset the source with the API, then run a full aggregation",
+        "Delete the source and create it again with the same configuration",
+        "Lower the deletion threshold"
+      ],
+      "answer": "Reset the source with the API, then run a full aggregation",
+      "explanation": "A reset removes accounts and entitlements while keeping the configuration, and a full aggregation reloads them. Deleting the source loses its configuration."
+    },
+    {
+      "id": "D7-101",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "Before resetting a source's entitlements, which side effect should the admin plan for?",
+      "choices": [
+        "The source owner is cleared",
+        "Identity profiles that use the source are deleted",
+        "Its access profiles are deleted",
+        "Aggregation schedules are removed"
+      ],
+      "answer": "Its access profiles are deleted",
+      "explanation": "Removing entitlements also removes the source's access profiles. Aggregation schedules are retained after a reset."
+    },
+    {
+      "id": "D7-102",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "An admin tries to delete a source and sees a list of items connected to it. What must happen before deletion succeeds?",
+      "choices": [
+        "Reset its data and remove its references from profiles, apps and transforms",
+        "Set the deletion threshold to 100 %",
+        "Assign a new source owner",
+        "Disable the source's virtual appliance cluster so nothing can reach the source"
+      ],
+      "answer": "Reset its data and remove its references from profiles, apps and transforms",
+      "explanation": "A source in use cannot be deleted. Its data must be reset and references removed from identity profiles, access applications and transforms."
+    },
+    {
+      "id": "D7-103",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "An admin wants to review all recent activity performed by or on one source. What is the QUICKEST place to start in Search?",
+      "choices": [
+        "The identity profile mapping preview",
+        "The Policy Violations page filtered by level",
+        "The Identities list filtered by lifecycle state",
+        "The Source Activity suggested search"
+      ],
+      "answer": "The Source Activity suggested search",
+      "explanation": "Search offers a Source Activity suggested search that can be narrowed to one source name. The other pages do not show source events."
+    },
+    {
+      "id": "D7-104",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "Which search query BEST finds events where a source named HR Feed is the actor, target or source of an event?",
+      "choices": [
+        "NOT _exists_:\"HR Feed\"",
+        "actor.name:\"HR Feed\" OR target.name:\"HR Feed\" OR attributes.sourceName:\"HR Feed\"",
+        "@accounts(source.name:\"HR Feed\")",
+        "source:\"HR Feed\" AND status:ACTIVE"
+      ],
+      "answer": "actor.name:\"HR Feed\" OR target.name:\"HR Feed\" OR attributes.sourceName:\"HR Feed\"",
+      "explanation": "Documented guidance combines actor, target and attributes.sourceName to cover all events for one source. The @accounts query returns identities with accounts there, not events."
+    },
+    {
+      "id": "D7-105",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "An admin wants to find account requests that failed and will not be retried. Which query fits?",
+      "choices": [
+        "@accounts(disabled:true)",
+        "status:ERROR",
+        "NOT _exists_:manager",
+        "@accountRequests(result.status:failed)"
+      ],
+      "answer": "@accountRequests(result.status:failed)",
+      "explanation": "Account activity searches use nested accountRequests results, and a failed status means the action will not be retried. status:ERROR finds identities in error."
+    },
+    {
+      "id": "D7-106",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "In Search, an admin wants identities that are in an error state, for example because of correlation problems. Which query should they use?",
+      "choices": [
+        "@accountRequests(result.status:failed)",
+        "type:error AND source:*",
+        "attributes.sourceName:ERROR",
+        "status:ERROR"
+      ],
+      "answer": "status:ERROR",
+      "explanation": "Identities in error can be found with status:ERROR. Failed account requests are a different record type."
+    },
+    {
+      "id": "D7-107",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "A provisioning audit shows a Create Account Failed event. In which Search category do such audit events appear?",
+      "choices": [
+        "Events",
+        "Roles",
+        "Entitlements",
+        "Identities"
+      ],
+      "answer": "Events",
+      "explanation": "Audit events such as failed account creations appear on the Events tab with normalized names. Identities, roles and entitlements are object categories."
+    },
+    {
+      "id": "D7-108",
+      "objective": "7.3",
+      "topic": "Searching for Source Errors",
+      "stem": "An admin wants a weekly email of failed source events without logging in. What should they set up?",
+      "choices": [
+        "An SoD policy schedule with subscribers",
+        "A subscription to a saved search",
+        "A password sync group",
+        "A source deletion threshold"
+      ],
+      "answer": "A subscription to a saved search",
+      "explanation": "Saved searches can be subscribed to so results arrive by email on a schedule. SoD schedules report policy violations, not source events."
+    },
+    {
+      "id": "D7-109",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "Where are notices about source errors displayed in ISC?",
+      "choices": [
+        "Only in the source owner's Task Manager, as a separate work item for each error",
+        "Only in an SoD violation email",
+        "In System Components Status, the sources list and on the source itself",
+        "Only in the identity's Access tab"
+      ],
+      "answer": "In System Components Status, the sources list and on the source itself",
+      "explanation": "Source errors appear in the System Components Status, the sources list and on the source page, and the home page summarizes errors and warnings over the last 7 days."
+    },
+    {
+      "id": "D7-110",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "A source page shows Target system failing, and the VA cluster is healthy. What is the MOST likely cause?",
+      "choices": [
+        "The flat file used the wrong template",
+        "The VA cluster serving the source is offline or still configuring after an update",
+        "Expired service credentials or a network path that cannot reach the source",
+        "The source has no owner assigned"
+      ],
+      "answer": "Expired service credentials or a network path that cannot reach the source",
+      "explanation": "Target system failing means the VA works but the source may be unreachable, often because of credentials, hostnames or network routing. A failing VA shows a different banner."
+    },
+    {
+      "id": "D7-111",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "A flat file source shows the banner Account file import failed. What should the admin do?",
+      "choices": [
+        "Disable account deletion on the source",
+        "Restart the VA cluster that serves the source and then retry the upload",
+        "Verify the file uses the source's template and upload it again",
+        "Run an unoptimized aggregation using the API with disableOptimization set"
+      ],
+      "answer": "Verify the file uses the source's template and upload it again",
+      "explanation": "This banner means an uploaded file did not import correctly, so the template and file must be checked before retrying. Flat file imports do not use a VA."
+    },
+    {
+      "id": "D7-112",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "A new source shows Source config is incomplete, please add accounts. How should the admin interpret this?",
+      "choices": [
+        "As a sign that correlation is misconfigured",
+        "As a critical VA failure that needs a case opened with SailPoint support",
+        "As an SoD conflict on the source",
+        "As an informational banner, solved by aggregating or uploading accounts"
+      ],
+      "answer": "As an informational banner, solved by aggregating or uploading accounts",
+      "explanation": "This banner is not an error state; no accounts have been loaded yet. Running an aggregation or uploading a file clears it."
+    },
+    {
+      "id": "D7-113",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "The team wants an email whenever a source enters an error state. What should the admin configure?",
+      "choices": [
+        "The source's correlation criteria",
+        "System notifications for source health",
+        "A password policy on the source",
+        "A schedule on an SoD policy"
+      ],
+      "answer": "System notifications for source health",
+      "explanation": "System health notifications can email admins when a source goes into error. Password, SoD and correlation settings do not send health alerts."
+    },
+    {
+      "id": "D7-114",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "A source is Unhealthy, and Active Directory provisioning and password resets are failing. Which cause does documentation highlight?",
+      "choices": [
+        "Lost connectivity between the source and IQService",
+        "The source's deletion threshold is too high",
+        "The Uncorrelated Accounts report has not been run",
+        "The identity profile has too many mappings"
+      ],
+      "answer": "Lost connectivity between the source and IQService",
+      "explanation": "Losing IQService connectivity affects provisioning and password resets for sources that rely on it. Reports and thresholds do not affect connectivity."
+    },
+    {
+      "id": "D7-115",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "Aggregations fail intermittently with Connection Reset errors on a supported source. Which configuration can make ISC retry them automatically?",
+      "choices": [
+        "Enable delta aggregation on the source",
+        "Patch the retry connector attributes",
+        "Assign a governance group for source management",
+        "Increase the Percentage of Deleted Accounts Allowed"
+      ],
+      "answer": "Patch the retry connector attributes",
+      "explanation": "Supported sources treat some errors as retryable, and admins can add errors and tune wait time and retry count by patching connector attributes. Deletion thresholds and delta do not retry."
+    },
+    {
+      "id": "D7-116",
+      "type": "match",
+      "objective": "7.3",
+      "topic": "Source Status and Health",
+      "stem": "Match each source status banner to its MOST likely cause.",
+      "pairs": [
+        {
+          "item": "VA cluster failing",
+          "match": "The virtual appliance serving the source is down"
+        },
+        {
+          "item": "Target system failing",
+          "match": "The VA works, but credentials or network to the target fail"
+        },
+        {
+          "item": "Account file import failed",
+          "match": "An uploaded file did not match the source template"
+        },
+        {
+          "item": "Source config is incomplete, please add accounts",
+          "match": "No accounts have been loaded yet"
+        }
+      ],
+      "targets_extra": [
+        "An SoD policy has items in only one list"
+      ],
+      "explanation": "Each banner narrows the fault to the VA, the target, the file or missing data. SoD policy definitions do not produce source banners."
+    },
+    {
+      "id": "D7-117",
+      "type": "order",
+      "objective": "7.3",
+      "topic": "Remove Delete and Reset Actions",
+      "stem": "Put the steps for deleting a source that is still in use in order.",
+      "items": [
+        "Select Connections on the source to review what depends on it",
+        "Reset the source and remove its identity profile, access app and transform references",
+        "Wait until no identity data is being processed in the tenant",
+        "Delete the source from the sources list or its configuration page"
+      ],
+      "explanation": "Connections shows what depends on the source. Its data is reset and every reference removed, and because a source cannot be deleted while identity data is processing, the admin waits for processing to finish before deleting it."
+    },
+    {
+      "id": "D7-118",
+      "type": "multi",
+      "objective": "7.3",
+      "topic": "Authoritative Account and Identity Deletion",
+      "stem": "An identity's only authoritative account was deleted, but the identity remains as a hidden identity. Which TWO conditions could have blocked its deletion?",
+      "choices": [
+        "Its account was disabled before deletion",
+        "It owns an access profile",
+        "It was last aggregated more than a week ago",
+        "Its email address is blank",
+        "It has an active access request approval work item"
+      ],
+      "answers": [
+        "It owns an access profile",
+        "It has an active access request approval work item"
+      ],
+      "select": 2,
+      "explanation": "Owning access objects and having active work items both block identity deletion. Aggregation age, a blank email or a disabled account do not."
+    }
+  ]
+}

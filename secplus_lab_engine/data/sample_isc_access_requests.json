@@ -1,0 +1,81 @@
+{
+  "_description": "Kestrel Example Co (fictional) in SailPoint Identity Security Cloud: 15 identities, 9 access profiles on 5 sources, 6 roles (criteria, identity list, disabled) and the week's 16 access requests, one for every outcome and the tricky cases (out-of-office chains, a reassignment loop, self-review prevention, escalation, a timeout, an SoD conflict, unknown items and reviewer types).",
+  "identities": [
+    {"id": "E1001", "name": "Ava Lindqvist", "department": "Finance", "location": "US", "title": "AP Specialist", "cloudLifecycleState": "active", "manager": "E1005"},
+    {"id": "E1002", "name": "Ben Okoro", "department": "Finance", "location": "UK", "title": "AP Specialist", "cloudLifecycleState": "active", "manager": "E1005"},
+    {"id": "E1003", "name": "Chloe Marsh", "department": "Sales", "location": "us", "title": "Account Executive", "cloudLifecycleState": "active", "manager": "E1006"},
+    {"id": "E1004", "name": "Dev Patel", "department": "IT", "location": "US", "title": "Systems Engineer", "cloudLifecycleState": "active", "manager": "E1007"},
+    {"id": "E1005", "name": "Elena Ruiz", "department": "Finance", "location": "US", "title": "Finance Manager", "cloudLifecycleState": "active", "manager": "E1008"},
+    {"id": "E1006", "name": "Farid Haddad", "department": "Sales", "location": "US", "title": "Sales Manager", "cloudLifecycleState": "active", "manager": "E1008", "work_reassignment": {"active": true, "delegate": "E1013"}},
+    {"id": "E1007", "name": "Grace Kim", "department": "IT", "location": "US", "title": "IT Manager", "cloudLifecycleState": "active", "manager": "E1008", "work_reassignment": {"active": true, "delegate": "E1010"}},
+    {"id": "E1008", "name": "Hugo Brandt", "department": "Executive", "location": "US", "title": "Chief Financial Officer", "cloudLifecycleState": "active", "manager": null},
+    {"id": "E1009", "name": "Ines Moreau", "department": "Finance", "location": "US", "title": "Financial Controller", "cloudLifecycleState": "active", "manager": "E1005"},
+    {"id": "E1010", "name": "Jonah Price", "department": "IT", "location": "US", "title": "Directory Administrator", "cloudLifecycleState": "active", "manager": "E1007", "work_reassignment": {"active": true, "delegate": "E1007"}},
+    {"id": "E1011", "name": "Kai Novak", "department": "Finance", "location": "US", "title": "AP Specialist", "cloudLifecycleState": "inactive", "manager": "E1005"},
+    {"id": "E1012", "name": "Lena Shah", "department": "Finance", "title": "Payroll Analyst", "cloudLifecycleState": "active", "manager": "E1005"},
+    {"id": "E1013", "name": "Mo Fischer", "department": "Marketing", "location": "US", "title": "Account Manager", "cloudLifecycleState": "active", "manager": "E1006"},
+    {"id": "E1015", "name": "Nadia Silva", "department": "Security", "location": "US", "title": "Security Lead", "cloudLifecycleState": "active", "manager": "E1008"},
+    {"id": "E1099", "name": "Access Governance Desk", "department": "IT", "location": "US", "title": "Governance Analyst", "cloudLifecycleState": "active", "manager": "E1015"}
+  ],
+  "access_profiles": [
+    {"id": "AP-ERP-INVOICE", "name": "ERP Invoice Entry", "source": "ERP", "owner": "E1009", "enabled": true, "requestable": true, "entitlements": ["ERP:AP_INVOICE_ENTER", "ERP:VENDOR_VIEW"], "approval_schemes": ["manager", "owner"]},
+    {"id": "AP-ERP-PAYMENT", "name": "ERP Payment Release", "source": "ERP", "owner": "E1009", "enabled": true, "requestable": true, "entitlements": ["ERP:AP_PAYMENT_RELEASE"], "approval_schemes": ["manager", "owner", "governance_group:Finance Controls"]},
+    {"id": "AP-ERP-VENDOR", "name": "ERP Supplier Maintenance", "source": "ERP", "owner": "E1008", "enabled": true, "requestable": true, "entitlements": ["ERP:VENDOR_CREATE"], "approval_schemes": ["manager", "owner"]},
+    {"id": "AP-CRM-SALES", "name": "CRM Sales User", "source": "CRM", "owner": "E1006", "enabled": true, "requestable": true, "entitlements": ["CRM:OPPORTUNITY_EDIT"], "approval_schemes": ["manager"]},
+    {"id": "AP-CRM-EXPORT", "name": "CRM Bulk Data Export", "source": "CRM", "owner": "E1006", "enabled": true, "requestable": false, "entitlements": ["CRM:REPORT_EXPORT"], "approval_schemes": ["manager", "owner"]},
+    {"id": "AP-AD-VPN", "name": "Remote Access VPN", "source": "Active Directory", "owner": "E1007", "enabled": true, "requestable": true, "entitlements": ["AD:VPN_USERS"], "approval_schemes": []},
+    {"id": "AP-AD-SERVERADMIN", "name": "Server Administrators", "source": "Active Directory", "owner": "E1015", "enabled": true, "requestable": true, "entitlements": ["AD:SERVER_ADMINS"], "approval_schemes": ["manager", "owner"]},
+    {"id": "AP-FTP-LEGACY", "name": "Legacy FTP Upload", "source": "FTP", "owner": "E1007", "enabled": false, "requestable": true, "entitlements": ["FTP:UPLOAD"], "approval_schemes": ["manager"]},
+    {"id": "AP-WD-COMP", "name": "Workday Compensation View", "source": "Workday", "owner": "E1005", "enabled": true, "requestable": true, "entitlements": ["WD:COMP_VIEW"], "approval_schemes": ["manager", "hr_business_partner"]}
+  ],
+  "roles": [
+    {"id": "R-FIN-US", "name": "Finance Staff (US)", "owner": "E1005", "enabled": true, "requestable": false,
+     "access_profiles": ["AP-ERP-INVOICE", "AP-AD-VPN"], "entitlements": [],
+     "membership": {"type": "STANDARD", "criteria": {"operation": "AND", "children": [
+       {"attribute": "department", "operation": "EQUALS", "value": "Finance"},
+       {"attribute": "location", "operation": "EQUALS", "value": "US"},
+       {"attribute": "cloudLifecycleState", "operation": "EQUALS", "value": "active"}]}}},
+    {"id": "R-SALES", "name": "Sales Team", "owner": "E1006", "enabled": true, "requestable": true,
+     "access_profiles": ["AP-CRM-SALES"], "entitlements": [], "approval_schemes": ["manager", "owner"],
+     "membership": {"type": "STANDARD", "criteria": {"operation": "OR", "children": [
+       {"attribute": "department", "operation": "EQUALS", "value": "Sales"},
+       {"attribute": "title", "operation": "STARTS_WITH", "value": "Account"}]}}},
+    {"id": "R-IT-OPS", "name": "IT Operations", "owner": "E1007", "enabled": true, "requestable": false,
+     "access_profiles": ["AP-AD-VPN"], "entitlements": ["AD:HELPDESK_TOOLS"],
+     "membership": {"type": "STANDARD", "criteria": {"operation": "AND", "children": [
+       {"attribute": "department", "operation": "EQUALS", "value": "IT"},
+       {"operation": "OR", "children": [
+         {"attribute": "title", "operation": "CONTAINS", "value": "Engineer"},
+         {"attribute": "title", "operation": "ENDS_WITH", "value": "Administrator"}]}]}}},
+    {"id": "R-FIN-APPROVER", "name": "Payment Approvers", "owner": "E1008", "enabled": true, "requestable": false,
+     "access_profiles": ["AP-ERP-PAYMENT"], "entitlements": [],
+     "membership": {"type": "IDENTITY_LIST", "identities": ["E1005", "E1009"]}},
+    {"id": "R-TREASURY", "name": "Treasury Operations", "owner": "E1008", "enabled": true, "requestable": true,
+     "access_profiles": ["AP-ERP-PAYMENT"], "entitlements": [], "approval_schemes": ["manager", "governance_group:Finance Controls"],
+     "membership": {"type": "STANDARD", "criteria": {"attribute": "department", "operation": "EQUALS", "value": "Treasury"}}},
+    {"id": "R-FIN-LEGACY", "name": "Finance (old model)", "owner": "E1005", "enabled": false, "requestable": false,
+     "access_profiles": ["AP-FTP-LEGACY"], "entitlements": [],
+     "membership": {"type": "STANDARD", "criteria": {"attribute": "department", "operation": "EQUALS", "value": "Finance"}}}
+  ],
+  "governance_groups": {
+    "Finance Controls": ["E1009", "E1008"]
+  },
+  "requests": [
+    {"id": "REQ-01", "requester": "E1001", "beneficiary": "E1001", "item": "AP-ERP-VENDOR", "decisions": {"manager": "approve", "owner": "approve"}, "days_pending": 0},
+    {"id": "REQ-02", "requester": "E1009", "beneficiary": "E1009", "item": "AP-ERP-VENDOR", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-03", "requester": "E1005", "beneficiary": "E1002", "item": "AP-ERP-INVOICE", "decisions": {"manager": "approve", "owner": "approve"}, "days_pending": 0},
+    {"id": "REQ-04", "requester": "E1003", "beneficiary": "E1003", "item": "AP-AD-SERVERADMIN", "decisions": {}, "days_pending": 1},
+    {"id": "REQ-05", "requester": "E1004", "beneficiary": "E1004", "item": "AP-AD-SERVERADMIN", "decisions": {"manager": "approve"}, "days_pending": 4},
+    {"id": "REQ-06", "requester": "E1002", "beneficiary": "E1002", "item": "AP-ERP-PAYMENT", "decisions": {"manager": "deny"}, "days_pending": 0},
+    {"id": "REQ-07", "requester": "E1001", "beneficiary": "E1001", "item": "AP-ERP-SUPERUSER", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-08", "requester": "E1003", "beneficiary": "E1003", "item": "AP-CRM-EXPORT", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-09", "requester": "E1012", "beneficiary": "E1012", "item": "AP-FTP-LEGACY", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-10", "requester": "E1006", "beneficiary": "E1003", "item": "AP-CRM-SALES", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-11", "requester": "E1002", "beneficiary": "E1002", "item": "R-TREASURY", "decisions": {"manager": "approve"}, "days_pending": 2},
+    {"id": "REQ-12", "requester": "E1011", "beneficiary": "E1011", "item": "AP-AD-VPN", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-13", "requester": "E1012", "beneficiary": "E1012", "item": "AP-AD-VPN", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-14", "requester": "E1001", "beneficiary": "E1001", "item": "AP-WD-COMP", "decisions": {"manager": "approve"}, "days_pending": 0},
+    {"id": "REQ-15", "requester": "E1003", "beneficiary": "E1004", "item": "AP-AD-VPN", "decisions": {}, "days_pending": 0},
+    {"id": "REQ-16", "requester": "E1012", "beneficiary": "E1012", "item": "AP-ERP-PAYMENT", "decisions": {}, "days_pending": 95}
+  ]
+}

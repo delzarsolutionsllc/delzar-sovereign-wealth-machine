@@ -1,0 +1,102 @@
+{
+  "_description": "Q4 access review and Separation of Duties check at Ironwood Example Freight (fictional) in SailPoint Identity Security Cloud: nine business requirements to turn into campaigns, one manager campaign at its deadline, and the finance SoD policies with five identities and five pending access requests. Simplified ISC object shapes.",
+  "company": "Ironwood Example Freight",
+  "identities": [
+    {"id": "IW0900", "name": "Tom Becker", "title": "Chief Financial Officer", "manager": null},
+    {"id": "IW1000", "name": "Elena Ruiz", "title": "Finance Director", "manager": "IW0900"},
+    {"id": "IW1001", "name": "Priya Nair", "title": "Accounts Payable Lead", "manager": "IW1000"},
+    {"id": "IW1002", "name": "Marco Silva", "title": "Financial Analyst", "manager": "IW1000"},
+    {"id": "IW1003", "name": "Jun Park", "title": "Contract Accountant", "manager": "IW7777"},
+    {"id": "IW1004", "name": "Ana Costa", "title": "General Ledger Accountant", "manager": "IW1100"},
+    {"id": "IW1100", "name": "Kofi Mensah", "title": "Controller", "manager": "IW1000"},
+    {"id": "IW2000", "name": "Gwen Okafor", "title": "Certification Administrator", "manager": "IW0900"}
+  ],
+  "sources": {
+    "NetSuite ERP": {"owner": "IW1100", "connection": "direct"},
+    "Active Directory": {"owner": "IW2000", "connection": "direct"},
+    "Legacy Payroll": {"owner": "IW1000", "connection": "flat_file"}
+  },
+  "requirements": [
+    {"id": "R1", "text": "Every quarter, managers review all access of their direct reports."},
+    {"id": "R2", "text": "The owner of the NetSuite ERP source reviews every account and entitlement on the source.", "source": "NetSuite ERP"},
+    {"id": "R3", "text": "Review the identities in the Treasury department whose lifecycle state is active.", "query": "attributes.department:Treasury AND attributes.cloudLifecycleState:active", "reviewer": "governance group: Finance Controls"},
+    {"id": "R4", "text": "Confirm what the Finance Analyst role contains before the audit.", "role": "Finance Analyst"},
+    {"id": "R5", "text": "Review all access held by one identity, Jun Park, before the contract is renewed.", "query": "id:IW1003", "reviewer": "individual: IW1000"},
+    {"id": "R6", "text": "Quarterly manager review that must also cover contractors without a manager."},
+    {"id": "R7", "text": "Review the uncorrelated accounts found on Legacy Payroll.", "source": "Legacy Payroll"},
+    {"id": "R8", "text": "Make sure finance access is fine."},
+    {"id": "R9", "text": "Review everyone who has the NetSuite Vendor Master Maintain entitlement.", "reviewer": "access owner"}
+  ],
+  "campaign": {
+    "name": "Q4 Finance Manager Certification",
+    "type": "MANAGER",
+    "status": "STAGED",
+    "owner": "IW2000",
+    "deadline_passed": true,
+    "undecided_action": "REVOKE",
+    "signed_off": ["IW1000", "IW0900", "IW1100"],
+    "items": [
+      {"id": "C01", "identity": "IW1001", "account": "pnair", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "AP Clerk", "assignment": "requested", "decision": "approve"},
+      {"id": "C02", "identity": "IW1001", "account": "pnair", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "Vendor Master Maintain", "assignment": "requested", "decision": "revoke", "comment": "Vendor setup moved to the procurement team in September."},
+      {"id": "C03", "identity": "IW1002", "account": "msilva", "source": "Legacy Payroll", "access_type": "ENTITLEMENT", "access": "Payroll Export", "assignment": "requested", "decision": "revoke", "comment": "No longer prepares payroll journals."},
+      {"id": "C04", "identity": "IW1002", "account": "msilva", "source": "NetSuite ERP", "access_type": "ROLE", "access": "Finance Analyst", "assignment": "criteria", "decision": "revoke", "comment": "Should not have analyst access."},
+      {"id": "C05", "identity": "IW1004", "account": "acosta", "source": "Active Directory", "access_type": "ENTITLEMENT", "access": "VPN Users", "assignment": "requested", "decision": null},
+      {"id": "C06", "identity": "IW1004", "account": "acosta", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "Journal Entry Post", "assignment": "requested", "decision": "approve"},
+      {"id": "C07", "identity": "IW0900", "account": "tbecker", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "Journal Entry Approve", "assignment": "requested", "decision": null},
+      {"id": "C08", "identity": "IW1003", "account": "jpark", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "AP Clerk", "assignment": "requested", "decision": null},
+      {"id": "C09", "identity": null, "account": "svc_tmp_ap", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "AP Payment Release", "assignment": "requested", "decision": null},
+      {"id": "C10", "identity": "IW1001", "account": "PNAIR", "source": "Active Directory", "access_type": "ENTITLEMENT", "access": "Finance Share Write", "assignment": "requested", "decision": "approve", "reassigned_to": "IW1001", "reassign_reason": "Priya knows best what she uses."},
+      {"id": "C11", "identity": "IW1002", "account": "msilva", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "Purchasing Approver", "assignment": "requested", "decision": "revoke", "comment": "", "reassigned_to": "IW1100", "reassign_reason": "Kofi owns purchasing approvals."},
+      {"id": "C12", "identity": "IW1000", "account": "eruiz", "source": "NetSuite ERP", "access_type": "ENTITLEMENT", "access": "Journal Entry Approve", "assignment": "requested", "decision": "approve"}
+    ]
+  },
+  "sod": {
+    "catalog": {
+      "entitlements": {
+        "ns.vendor_maintain": {"name": "Vendor Master Maintain", "source": "NetSuite ERP"},
+        "ns.ap_payment": {"name": "AP Payment Release", "source": "NetSuite ERP"},
+        "ns.ap_clerk": {"name": "AP Clerk", "source": "NetSuite ERP"},
+        "ns.je_post": {"name": "Journal Entry Post", "source": "NetSuite ERP"},
+        "ns.je_approve": {"name": "Journal Entry Approve", "source": "NetSuite ERP"},
+        "ad.vpn": {"name": "VPN Users", "source": "Active Directory"},
+        "pay.admin": {"name": "Payroll Administrator", "source": "Legacy Payroll"},
+        "pay.worker_edit": {"name": "Worker Data Edit", "source": "Legacy Payroll"}
+      },
+      "access_profiles": {
+        "NetSuite Payment Release": {"entitlements": ["ns.ap_payment"]},
+        "NetSuite GL Posting": {"entitlements": ["ns.je_post"]}
+      },
+      "roles": {
+        "Finance Analyst": {"access_profiles": ["NetSuite GL Posting"], "entitlements": ["ad.vpn"]},
+        "Controller": {"access_profiles": [], "entitlements": ["ns.je_approve"]}
+      }
+    },
+    "policies": [
+      {"id": "SOD-01", "name": "Vendor maintenance vs payment release", "enabled": true, "level": "High", "violation_owner": "IW1100", "access_requests": "BLOCK",
+       "list_a": {"name": "Vendor maintenance", "items": [{"type": "ENTITLEMENT", "id": "ns.vendor_maintain"}]},
+       "list_b": {"name": "Payment release", "items": [{"type": "ACCESS_PROFILE", "id": "NetSuite Payment Release"}]}},
+      {"id": "SOD-02", "name": "Post vs approve journal entries", "enabled": true, "level": "Critical", "violation_owner": "IW1000", "access_requests": "ALLOW",
+       "list_a": {"name": "Journal posting", "items": [{"type": "ACCESS_PROFILE", "id": "NetSuite GL Posting"}]},
+       "list_b": {"name": "Journal approval", "items": [{"type": "ROLE", "id": "Controller"}]}},
+      {"id": "SOD-03", "name": "Payroll administration vs worker data edit", "enabled": false, "level": "Medium", "violation_owner": "IW1000", "access_requests": "BLOCK",
+       "list_a": {"name": "Payroll admin", "items": [{"type": "ENTITLEMENT", "id": "pay.admin"}]},
+       "list_b": {"name": "Worker data", "items": [{"type": "ENTITLEMENT", "id": "pay.worker_edit"}]}}
+    ],
+    "identities": [
+      {"id": "IW1001", "access": [{"type": "ENTITLEMENT", "id": "ns.vendor_maintain"}, {"type": "ACCESS_PROFILE", "id": "NetSuite Payment Release"}]},
+      {"id": "IW1002", "access": [{"type": "ROLE", "id": "Finance Analyst"}]},
+      {"id": "IW1004", "access": [{"type": "ROLE", "id": "Finance Analyst"}, {"type": "ENTITLEMENT", "id": "ns.je_approve"}]},
+      {"id": "IW1003", "access": [{"type": "ENTITLEMENT", "id": "pay.admin"}, {"type": "ENTITLEMENT", "id": "pay.worker_edit"}]},
+      {"id": "IW1000", "access": [{"type": "ENTITLEMENT", "id": "ns.je_approve"}, {"type": "ACCESS_PROFILE", "id": "NetSuite Treasury"}]},
+      {"id": "IW0900", "access": [{"type": "ENTITLEMENT", "id": "ns.vendor_maintain"}]},
+      {"id": "IW1100", "access": [{"type": "ENTITLEMENT", "id": "ad.vpn"}]}
+    ],
+    "requests": [
+      {"id": "AR-301", "identity": "IW1002", "items": [{"type": "ROLE", "id": "Controller"}]},
+      {"id": "AR-302", "identity": "IW1100", "items": [{"type": "ENTITLEMENT", "id": "ns.je_post"}]},
+      {"id": "AR-303", "identity": "IW1003", "items": [{"type": "ENTITLEMENT", "id": "ns.vendor_maintain"}, {"type": "ACCESS_PROFILE", "id": "NetSuite Payment Release"}]},
+      {"id": "AR-304", "identity": "IW1001", "items": [{"type": "ACCESS_PROFILE", "id": "NetSuite Treasury"}]},
+      {"id": "AR-305", "identity": "IW0900", "items": [{"type": "ENTITLEMENT", "id": "ns.ap_payment"}]}
+    ]
+  }
+}

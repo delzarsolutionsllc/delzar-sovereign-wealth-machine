@@ -1,0 +1,35 @@
+{
+  "isc_lifecycle_states": {
+    "_comment": "Lab 44: SailPoint Identity Security Cloud lifecycle states. The cloudLifecycleState calculation below is a simplified, policy-driven stand-in for the transform (dateCompare + conditional) or identity attribute rule a real tenant uses.",
+    "status_map": {
+      "active": "active",
+      "hired": "active",
+      "leave": "leave",
+      "terminated": "terminated"
+    },
+    "deny_by_default_state": "inactive",
+    "post_termination_days": 30,
+    "leaver_states": ["terminated", "inactive"],
+    "prehire_states": ["prehire"],
+    "prehire_allowed_access_profiles": ["Birthright - Onboarding Portal"],
+    "prehire_allowed_enable_sources": [],
+    "flag_severity": ["UNKNOWN_STATE", "LEAVER_KEEPS_ACCESS", "PREHIRE_ACCESS_TOO_EARLY"],
+    "outcome_definitions": {
+      "UNKNOWN_STATE": "The calculated cloudLifecycleState matches no lifecycle state technical name on the identity profile, so no lifecycle actions run.",
+      "LEAVER_KEEPS_ACCESS": "The identity entered a leaver state whose configuration does not remove its access or disable all of its accounts.",
+      "PREHIRE_ACCESS_TOO_EARLY": "The pre-hire state grants access profiles or enables accounts beyond the small onboarding set allowed before the start date.",
+      "TRANSITIONED": "The lifecycle state changed to a configured state and its actions ran with no finding.",
+      "NO_CHANGE": "The calculated lifecycle state equals the current one, so nothing is provisioned."
+    },
+    "concepts": {
+      "identity profile": "The configuration that builds identities from one authoritative source and decides how their attributes, including the lifecycle state, are calculated.",
+      "lifecycle state": "A named employment stage defined on an identity profile, with access and account actions that run when an identity enters it.",
+      "cloudLifecycleState": "The identity attribute whose calculated value selects which lifecycle state an identity is in.",
+      "technical name": "The exact value a lifecycle state is known by, which cloudLifecycleState must equal for the state to apply.",
+      "transform": "A reusable piece of logic, such as a date comparison or a conditional, that turns source data into an identity attribute value.",
+      "identity refresh": "The recalculation of identity attributes after source data changes, which is when a new lifecycle state is detected and its actions start.",
+      "authoritative source": "The system of record, usually HR, whose records create identities and decide their status.",
+      "joiner-mover-leaver": "The three kinds of identity event: starting work, changing job or status, and leaving the organisation."
+    }
+  }
+}

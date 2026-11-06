@@ -30,7 +30,9 @@ def test_objectives_in_playlist_order():
 
 
 def test_every_lab_has_videos():
-    for n, (mod, _) in LABS.items():
+    from webapi import course_labs           # the video course is Security+, so only its labs
+    for n in course_labs():
+        mod = LABS[n][0]
         objs = videos.lab_objectives(mod)
         assert objs, f"lab {n} lists no objectives"
         vs = videos.for_lab(mod)

@@ -63,11 +63,11 @@ print(json.dumps({
   "labs": {str(l["n"]): l["objective_codes"] for l in cat["labs"]}, "course": cat["course"]["exam_code"],
   "videos": len(cat["video_course"]["videos"]), "retires": cat["exam_target"]["retires"],
   "problems": exam_bank.validate(list(exam_bank.load_bank())),
-  "bank": len(exam_bank.load_bank()), "exam": len(ex["questions"]), "exam_domains": sorted({q["objective"][0] for q in ex["questions"]}),
+  "bank": len(exam_bank.load_bank()), "exam": len(ex["questions"]), "exam_domains": sorted({q["objective"].split(".")[0] for q in ex["questions"]}, key=int),
   "domain_test": sorted({q["objective"] for q in dt["questions"]}),
   "per_obj": {o: c["count"] for o, c in quizzes.catalog().items()},
   "topics_ok": all(len(c["topics"]) >= 3 and all(t["count"] >= 5 for t in c["topics"]) for c in quizzes.catalog().values()),
-  "glossary": len(glossary.entries()), "gloss_domains": sorted({e["domain"] for e in glossary.entries()}),
+  "glossary": len(glossary.entries()), "gloss_domains": sorted({e["domain"] for e in glossary.entries()}, key=int),
   "gloss_quiz_modes": sorted({q["mode"] for d in glossary.catalog()["domains"].values() for q in d["quizzes"]}),
 }))
 """
@@ -199,3 +199,30 @@ def test_domains_beyond_five_work_everywhere():
     import re
     assert re.match(mcp_server.OBJ["pattern"], "10.3") and re.match(mcp_server.QUIZ["pattern"], "10.2-t1")
     assert re.match(mcp_server.QUIZ["pattern"], "g10-acr-1")
+
+
+# --------------------------------------------------------------------------- SailPoint Identity Security Cloud
+@pytest.fixture(scope="module", params=["spadmin", "speng"])
+def sailpoint(request):
+    return request.param, run_in(request.param, SC300_CORE.replace('domain="2"', 'domain="1"'))
+
+
+def test_sailpoint_courses(sailpoint):
+    code, c = sailpoint
+    n_obj = {"spadmin": 20, "speng": 24}[code]
+    n_dom = {"spadmin": 8, "speng": 10}[code]
+    assert c["code"] == code and c["pass"] == 70 and c["progress"] == f"progress-{code}.json"
+    assert sum(c["objectives"].values()) == n_obj and len(c["weights"]) == n_dom
+    assert c["problems"] == [] and len(c["per_obj"]) == n_obj and min(c["per_obj"].values()) >= 30, c["per_obj"]
+    assert c["topics_ok"] and c["bank"] >= n_obj * 34
+    assert c["exam_domains"] == list(map(str, range(1, n_dom + 1)))
+    assert c["glossary"] >= 240 and c["gloss_domains"] == list(map(str, range(1, n_dom + 1)))
+    assert {"43", "44", "45", "46", "47", "48", "49", "50"} <= set(c["labs"])
+    assert c["videos"] == 0 and c["retires"] is None
+
+
+def test_sailpoint_labs_stay_in_sailpoint():
+    from labs import LABS
+    from webapi import course_labs
+    assert course_labs() == list(range(1, 27))
+    assert all(getattr(LABS[n][0], "COURSES", None) == ("spadmin", "speng") for n in range(43, 51))

@@ -1,0 +1,715 @@
+{
+  "part": "Acronyms",
+  "entries": [
+    {
+      "term": "ABAC",
+      "kind": "acronym",
+      "expansion": "attribute-based access control",
+      "definition": "Authorization model that decides on properties of the user, resource and context; in ISC, rules keyed on identity attributes such as department or location drive role membership criteria and dynamic assignment.",
+      "domain": "8",
+      "objectives": [
+        "8.2",
+        "5.2"
+      ]
+    },
+    {
+      "term": "AD",
+      "kind": "acronym",
+      "expansion": "Active Directory",
+      "definition": "Microsoft's on-premises Windows directory of users, groups and organizational units; ISC reaches it through a virtual appliance and the IQService to aggregate accounts and groups and to create, modify and disable accounts.",
+      "domain": "7",
+      "objectives": [
+        "7.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "AES",
+      "kind": "acronym",
+      "expansion": "Advanced Encryption Standard",
+      "definition": "Symmetric block cipher, typically used with 256-bit keys, that protects tenant data and stored credentials at rest; being symmetric distinguishes it from the public and private key pairs used to protect source credentials on appliances.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "AMI",
+      "kind": "acronym",
+      "expansion": "Amazon Machine Image",
+      "definition": "Prebuilt server image for launching an instance in Amazon's cloud; SailPoint shares one so engineers can run a virtual appliance as an EC2 instance instead of on VMware or Hyper-V.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "API",
+      "kind": "acronym",
+      "expansion": "application programming interface",
+      "definition": "Programmatic contract that lets scripts and external systems read and change tenant objects; ISC exposes versioned endpoints for identities, sources, roles, workflows and more so admins can automate work done by hand in the console.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "AWS",
+      "kind": "acronym",
+      "expansion": "Amazon Web Services",
+      "definition": "Public cloud provider on which the ISC multi-tenant platform runs; it is also a common governed source, where a connector manages cloud accounts, groups and permission sets.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "CCG",
+      "kind": "acronym",
+      "expansion": "Cloud Connector Gateway",
+      "definition": "Service on each virtual appliance that hosts connectors and relays aggregation and provisioning traffic between on-premises sources and the tenant; its log file is the first place to look when connector operations fail.",
+      "domain": "2",
+      "objectives": [
+        "2.1",
+        "2.2"
+      ]
+    },
+    {
+      "term": "CIDR",
+      "kind": "acronym",
+      "expansion": "Classless Inter-Domain Routing",
+      "definition": "Notation such as 10.0.0.0/16 that describes an address range by prefix length; engineers use it when planning appliance subnets and firewall rules and to avoid ranges that clash with the appliance's internal container networks.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CLI",
+      "kind": "acronym",
+      "expansion": "command-line interface",
+      "definition": "Text tool driven by typed commands; SailPoint's open-source one lets engineers call APIs, test transforms, run searches, and manage workflows and connectors from a terminal or a pipeline.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "CPU",
+      "kind": "acronym",
+      "expansion": "central processing unit",
+      "definition": "Processor resource of a server; appliance sizing specifies a minimum number of virtual cores, and sustained high usage in health checks points to an undersized appliance or heavy aggregation load.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "CSV",
+      "kind": "acronym",
+      "expansion": "comma-separated values",
+      "definition": "Plain-text table format with one record per line; ISC uses it for delimited file sources, bulk uploads of accounts, entitlements or roles, and exports of search results and reports.",
+      "domain": "7",
+      "objectives": [
+        "7.1",
+        "1.1"
+      ]
+    },
+    {
+      "term": "DN",
+      "kind": "acronym",
+      "expansion": "distinguished name",
+      "definition": "Full directory path that uniquely locates an object, such as CN=Ann,OU=Sales,DC=corp; ISC uses it as the account ID on directory sources and builds it with a provisioning policy or transform for new accounts.",
+      "domain": "7",
+      "objectives": [
+        "7.1",
+        "4.1"
+      ]
+    },
+    {
+      "term": "DNS",
+      "kind": "acronym",
+      "expansion": "Domain Name System",
+      "definition": "Service that turns host names into addresses; an appliance depends on it to reach the tenant and source servers, so wrong resolver settings are a frequent cause of failed connectivity tests.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "DR",
+      "kind": "acronym",
+      "expansion": "disaster recovery",
+      "definition": "Plans and redundancy that restore service after a major outage; for ISC this means placing appliances of a cluster in more than one site so source connectivity survives losing a data center, while SailPoint covers the cloud side.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "ERP",
+      "kind": "acronym",
+      "expansion": "enterprise resource planning",
+      "definition": "Business suite such as SAP or Oracle that runs finance, purchasing and payroll; its roles and transaction codes are high-risk entitlements and frequent subjects of conflict policies and focused reviews.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "GDPR",
+      "kind": "acronym",
+      "expansion": "General Data Protection Regulation",
+      "definition": "European Union privacy law governing personal data; ISC supports it through least-privilege access, periodic reviews, audit trails and prompt removal of access when people leave.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "GUID",
+      "kind": "acronym",
+      "expansion": "globally unique identifier",
+      "definition": "128-bit value generated so that it never repeats; Active Directory's objectGUID serves as a stable native key for accounts across renames, and ISC object IDs are similar 32-character hex strings.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "HA",
+      "kind": "acronym",
+      "expansion": "high availability",
+      "definition": "Design goal of keeping a service running through component failure; an engineer deploys at least two virtual appliances in each cluster so one keeps processing if the other goes down.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "HIPAA",
+      "kind": "acronym",
+      "expansion": "Health Insurance Portability and Accountability Act",
+      "definition": "US law protecting patient health information; healthcare tenants use access reviews, conflict policies and audit reports in ISC to show who can reach clinical systems and why.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "HR",
+      "kind": "acronym",
+      "expansion": "human resources",
+      "definition": "Business function that hires, moves and terminates workers; its system of record is usually the authoritative source that creates identities and drives joiner, mover and leaver events in ISC.",
+      "domain": "3",
+      "objectives": [
+        "3.1",
+        "3.3"
+      ]
+    },
+    {
+      "term": "HRIS",
+      "kind": "acronym",
+      "expansion": "human resources information system",
+      "definition": "Application such as Workday or SAP SuccessFactors that holds employee records; ISC typically connects it as the authoritative source whose attributes feed identity profiles and lifecycle states.",
+      "domain": "7",
+      "objectives": [
+        "7.1",
+        "3.1"
+      ]
+    },
+    {
+      "term": "HTTPS",
+      "kind": "acronym",
+      "expansion": "Hypertext Transfer Protocol Secure",
+      "definition": "Encrypted web protocol on port 443 that carries console sessions, API calls and appliance-to-tenant traffic; appliances need only outbound connections of this kind, so no inbound firewall ports are opened.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "IAM",
+      "kind": "acronym",
+      "expansion": "identity and access management",
+      "definition": "Overall discipline and tooling for creating digital identities, authenticating them and controlling what they can reach; governance platforms like ISC sit on top of it to add oversight, reviews and compliance evidence.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "IDN",
+      "kind": "acronym",
+      "expansion": "IdentityNow",
+      "definition": "Former name of SailPoint's cloud governance platform before its rebranding; it still appears in older documentation, API and tenant host names, and rule and connector names.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "IdP",
+      "kind": "acronym",
+      "expansion": "identity provider",
+      "definition": "Service that authenticates users and issues assertions to applications; ISC can trust an external one, such as Okta or Entra ID, for sign-in to the tenant, or play that role for other apps.",
+      "domain": "8",
+      "objectives": [
+        "8.2",
+        "1.2"
+      ]
+    },
+    {
+      "term": "IGA",
+      "kind": "acronym",
+      "expansion": "identity governance and administration",
+      "definition": "Discipline of controlling who has access to what, proving it is appropriate and removing it when no longer needed, through lifecycle automation, requests, reviews and policies; it is the core purpose of ISC.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "IIQ",
+      "kind": "acronym",
+      "expansion": "IdentityIQ",
+      "definition": "SailPoint's self-hosted governance product; it differs from ISC in that customers run its servers and database, and its free-form BeanShell rules contrast with ISC's restricted, SailPoint-reviewed rules.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "IP",
+      "kind": "acronym",
+      "expansion": "Internet Protocol",
+      "definition": "Addressing scheme for hosts on a network; appliances need a static or reserved address, and some sources and firewalls allow-list the addresses that appliance or tenant traffic comes from.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "ISC",
+      "kind": "acronym",
+      "expansion": "Identity Security Cloud",
+      "definition": "SailPoint's multi-tenant SaaS platform for identity governance, covering sources, identity profiles, roles, access requests, certifications, workflows and APIs, administered from a browser console.",
+      "domain": "1",
+      "objectives": [
+        "1.1",
+        "1.2"
+      ]
+    },
+    {
+      "term": "ITSM",
+      "kind": "acronym",
+      "expansion": "IT service management",
+      "definition": "Practice and tools, such as ServiceNow, for handling tickets and service requests; ISC integrates with them so changes on sources lacking a direct connector become tickets fulfilled by a person.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "JDBC",
+      "kind": "acronym",
+      "expansion": "Java Database Connectivity",
+      "definition": "Java standard for reaching relational databases through a driver; ISC's generic database connector uses it, with a connection URL, a driver JAR uploaded to the source and SQL queries for aggregation.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "JML",
+      "kind": "acronym",
+      "expansion": "joiner, mover, leaver",
+      "definition": "Shorthand for the three identity lifecycle events of someone starting, changing role or department, and departing; ISC automates each with lifecycle states, role assignment and event-triggered workflows.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "JSON",
+      "kind": "acronym",
+      "expansion": "JavaScript Object Notation",
+      "definition": "Text format of key-value objects and arrays used in every ISC API request and response, and to define transforms, workflows, source configurations and exported tenant configuration.",
+      "domain": "1",
+      "objectives": [
+        "1.2",
+        "1.3"
+      ]
+    },
+    {
+      "term": "JWT",
+      "kind": "acronym",
+      "expansion": "JSON Web Token",
+      "definition": "Signed, base64-encoded credential carrying claims about the caller; ISC's OAuth endpoint returns one as the bearer access token that scripts send on every API call until it expires.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "LCS",
+      "kind": "acronym",
+      "expansion": "lifecycle state",
+      "definition": "Identity attribute, stored as cloudLifecycleState, that says where a person is in employment, such as active or inactive; each value on an identity profile can enable or disable accounts and grant or remove access profiles.",
+      "domain": "3",
+      "objectives": [
+        "3.3"
+      ]
+    },
+    {
+      "term": "LDAP",
+      "kind": "acronym",
+      "expansion": "Lightweight Directory Access Protocol",
+      "definition": "Standard protocol for querying and updating directory servers on port 389, or 636 when encrypted; generic directory connectors in ISC use it to aggregate and provision accounts and groups.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "MFA",
+      "kind": "acronym",
+      "expansion": "multi-factor authentication",
+      "definition": "Requiring two or more kinds of proof, such as a password plus a phone prompt, at sign-in; ISC admins choose these methods per identity profile, and they are commonly demanded before sensitive admin actions.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "NIST",
+      "kind": "acronym",
+      "expansion": "National Institute of Standards and Technology",
+      "definition": "US agency whose frameworks, such as the SP 800-53 control catalog, many organizations map to; governance programs cite it when designing reviews, least privilege and account management.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "NTP",
+      "kind": "acronym",
+      "expansion": "Network Time Protocol",
+      "definition": "Protocol that keeps server clocks synchronized; an appliance whose clock drifts can fail authentication and certificate checks with the tenant, so time sync is part of appliance troubleshooting.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "OU",
+      "kind": "acronym",
+      "expansion": "organizational unit",
+      "definition": "Container inside a directory domain that groups users, groups or computers for delegation and policy; directory sources in ISC are often scoped to chosen ones and move new or disabled accounts into a specific one.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "OVA",
+      "kind": "acronym",
+      "expansion": "Open Virtual Appliance",
+      "definition": "Single-file package of a preconfigured virtual machine; SailPoint distributes its appliance image this way for VMware, so engineers import it into vSphere rather than building the operating system themselves.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "PAM",
+      "kind": "acronym",
+      "expansion": "privileged access management",
+      "definition": "Tools that vault, broker and record use of high-risk admin accounts; ISC complements them by governing who may hold privileged entitlements and flagging those entitlements for tighter review.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "PAT",
+      "kind": "acronym",
+      "expansion": "personal access token",
+      "definition": "Client ID and secret pair that a user generates under their own identity in ISC; scripts exchange it for an API bearer token, and it acts with that user's level and chosen scopes.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "PCI DSS",
+      "kind": "acronym",
+      "expansion": "Payment Card Industry Data Security Standard",
+      "definition": "Rules set by the major card brands requiring restricted, reviewed and logged access to cardholder environments; ISC certifications and access history provide evidence for its access-control requirements.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "PII",
+      "kind": "acronym",
+      "expansion": "personally identifiable information",
+      "definition": "Data that can single out a person, such as name, home address or national ID; engineers limit which such attributes are aggregated into the tenant and keep them out of searches and exports where possible.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "PKI",
+      "kind": "acronym",
+      "expansion": "public key infrastructure",
+      "definition": "System of certificate authorities, certificates and key pairs that establishes trust; it underpins encrypted links to sources and the tenant, and appliances may need an internal root certificate added to trust local servers.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "RBAC",
+      "kind": "acronym",
+      "expansion": "role-based access control",
+      "definition": "Granting access by job function rather than one person at a time; in ISC, roles bundle access profiles and can be assigned automatically by membership criteria on identity attributes.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "REST",
+      "kind": "acronym",
+      "expansion": "Representational State Transfer",
+      "definition": "Architectural style for web APIs that applies HTTP verbs such as GET, POST, PATCH and DELETE to resource URLs; all ISC public APIs follow it and exchange JSON bodies.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "SaaS",
+      "kind": "acronym",
+      "expansion": "software as a service",
+      "definition": "Delivery model where the vendor hosts, patches and scales an application used through a browser; ISC is delivered this way, unlike self-hosted IdentityIQ, and many governed sources are such applications too.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "SAML",
+      "kind": "acronym",
+      "expansion": "Security Assertion Markup Language",
+      "definition": "XML-based federation standard in which an identity provider sends a signed assertion to a service provider; ISC uses it for single sign-on into the tenant and can sit on either side of the exchange.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "SCIM",
+      "kind": "acronym",
+      "expansion": "System for Cross-domain Identity Management",
+      "definition": "REST and JSON standard for creating, updating and removing users and groups across systems; ISC offers a connector for SaaS applications that expose such an endpoint, avoiding a custom integration.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "SDIM",
+      "kind": "acronym",
+      "expansion": "Service Desk Integration Module",
+      "definition": "ISC component that turns provisioning for sources without direct connectors into tickets in a help-desk platform such as ServiceNow, then polls ticket status to confirm the change was made.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "SDK",
+      "kind": "acronym",
+      "expansion": "software development kit",
+      "definition": "Libraries and tools for building against a platform; SailPoint publishes them for languages such as TypeScript, Python, Go and PowerShell, plus one for writing custom SaaS connectors.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "SIEM",
+      "kind": "acronym",
+      "expansion": "security information and event management",
+      "definition": "Platform that collects and correlates logs for threat detection and audit; ISC audit events can be forwarded to one such as Splunk so security teams can watch identity activity alongside other logs.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "SLA",
+      "kind": "acronym",
+      "expansion": "service level agreement",
+      "definition": "Contract terms for availability, response and support; also used internally for how quickly approvals or tickets must close, which ISC reminders and escalations help meet.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "SMTP",
+      "kind": "acronym",
+      "expansion": "Simple Mail Transfer Protocol",
+      "definition": "Protocol servers use to send email; ISC notifications for approvals, reminders and certifications travel over it, and engineers verify sender domains and templates when configuring tenant email.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "SoD",
+      "kind": "acronym",
+      "expansion": "separation of duties",
+      "definition": "Principle that one person should not hold conflicting access, such as creating and approving payments; ISC policies of this type flag violating combinations during requests and certifications.",
+      "domain": "6",
+      "objectives": [
+        "6.3"
+      ]
+    },
+    {
+      "term": "SOX",
+      "kind": "acronym",
+      "expansion": "Sarbanes-Oxley Act",
+      "definition": "US law requiring public companies to prove controls over financial reporting; it is a major driver of periodic access certifications and conflict policies for finance applications governed in ISC.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "SP",
+      "kind": "acronym",
+      "expansion": "service provider",
+      "definition": "In federation, the application that relies on an external authority's assertion instead of checking passwords itself; ISC plays this role when an organization's own login service handles tenant sign-in.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "SQL",
+      "kind": "acronym",
+      "expansion": "Structured Query Language",
+      "definition": "Language for reading and changing relational databases; JDBC sources in ISC run SELECT statements to aggregate accounts and groups and can run statements or stored procedures to provision.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "SSH",
+      "kind": "acronym",
+      "expansion": "Secure Shell",
+      "definition": "Encrypted remote login protocol; engineers connect to a virtual appliance this way as the sailpoint user to run diagnostic commands, read logs and test connectivity to sources and the tenant.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "SSO",
+      "kind": "acronym",
+      "expansion": "single sign-on",
+      "definition": "Authenticating once to reach many applications without new prompts; ISC can provide it to apps or accept it from an external identity provider for access to the tenant console.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "TLS",
+      "kind": "acronym",
+      "expansion": "Transport Layer Security",
+      "definition": "Protocol that encrypts data in transit using certificates; it protects connections from appliances to the tenant and, when enabled, from connectors to sources such as directories on port 636.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "UI",
+      "kind": "acronym",
+      "expansion": "user interface",
+      "definition": "The browser console where admins and users work; tasks done there, such as editing sources or reviewing access, can also be scripted through the APIs the console itself calls.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "UPN",
+      "kind": "acronym",
+      "expansion": "user principal name",
+      "definition": "Sign-in name of the form ann@corp.com on an Active Directory account; it is a common correlation attribute and is often built by a transform when provisioning new accounts.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "URL",
+      "kind": "acronym",
+      "expansion": "Uniform Resource Locator",
+      "definition": "Web address such as https://acme.identitynow.com; engineers must know the tenant's console address and its separate API gateway address, and appliances must reach a published list of them through the firewall.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "VA",
+      "kind": "acronym",
+      "expansion": "virtual appliance",
+      "definition": "SailPoint-supplied virtual machine in the customer network that hosts connectors and securely relays traffic between on-premises sources and the tenant, opening every connection outbound.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "VM",
+      "kind": "acronym",
+      "expansion": "virtual machine",
+      "definition": "Software-defined computer running on a hypervisor such as VMware ESXi, Hyper-V or a cloud instance; each SailPoint appliance is deployed as one with set processor, memory and disk minimums.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "VPC",
+      "kind": "acronym",
+      "expansion": "virtual private cloud",
+      "definition": "Isolated network inside a public cloud account; engineers deploying appliances in the cloud place them in one with outbound routes to the tenant and private routes to the sources.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "XML",
+      "kind": "acronym",
+      "expansion": "Extensible Markup Language",
+      "definition": "Tagged text format used in SAML metadata and assertions and by some older web-service connectors; admins exchange such files between parties when setting up federated sign-in.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    }
+  ]
+}

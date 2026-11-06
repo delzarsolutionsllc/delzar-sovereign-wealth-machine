@@ -1,0 +1,41 @@
+{
+  "lab": 47,
+  "ticket": "REQ-44731",
+  "type": "Service request",
+  "priority": "P3",
+  "requested_by": "Elena Ruiz, Finance Manager",
+  "title": "Explain this week's role assignments and stuck access requests in Identity Security Cloud",
+  "situation": "Kestrel Example Co (a fictional company) uses SailPoint Identity Security Cloud (ISC) to give people access. Roles are assigned automatically from HR attributes such as department and location, and people ask for extra access through the Request Center. Finance says one new analyst is missing her usual access, several requests have sat for days, two managers are out of office, and audit wants to know why a controller was able to ask for supplier maintenance when she can already release payments.",
+  "your_task": [
+    "Work out which of the 6 roles each of the 15 identities receives from the membership criteria, and explain any surprise, such as a missing attribute or a disabled role.",
+    "Show how roles grant access profiles and how access profiles grant entitlements, so you can answer 'why does this person have this access?'.",
+    "For each of the 16 access requests, decide the outcome: APPROVED, PENDING (and with whom), DENIED, NOT_REQUESTABLE, ALREADY_HAS_ACCESS or SOD_VIOLATION.",
+    "Trace each reviewer level: self-approval prevention, out-of-office work reassignment, the missing-reviewer fallback, reminders, escalation and the 90-day timeout.",
+    "Flag every request that would break a separation of duties rule and name the policy."
+  ],
+  "why_it_matters": "Automatic roles only work when HR data is complete, and approvals only protect anything when the right person, not the requester, makes the decision. A request stuck with an absent manager slows the business, and one approved without noticing a separation of duties conflict lets one person both create a supplier and pay it.",
+  "done_when": [
+    "Every role shows its assigned identities, and each missed assignment has a written reason.",
+    "Every request has one outcome and the reasons that led to it; pending requests name the current approver, reminders sent and escalations.",
+    "The separation of duties conflict is reported with the policy name and violation owner.",
+    "Finance has a short list of data fixes (the blank location, the reassignment loop) and requests that need a chaser."
+  ],
+  "glossary": {
+    "Identity Security Cloud (ISC)": "SailPoint's software-as-a-service identity governance platform (formerly called IdentityNow).",
+    "Entitlement": "One permission on one connected system (a source), such as one group or one transaction.",
+    "Access profile": "A bundle of entitlements from a single source that can be requested or granted together.",
+    "Role": "A bundle of access profiles for a job, assigned automatically by membership criteria or requested.",
+    "Membership criteria": "Rules on identity attributes, joined with AND and OR, that decide who gets a role automatically.",
+    "Governance group": "A named group of people who act as one reviewer; any one member's decision counts.",
+    "Work reassignment": "A setting that sends an absent person's new approvals to a delegate.",
+    "Fallback approver": "The person who receives an approval when escalation runs out or no reviewer can be found.",
+    "Separation of duties (SoD)": "A rule that one person must not hold two powers that together allow fraud, such as creating a supplier and releasing payments."
+  },
+  "job_roles": [
+    "IAM Analyst",
+    "SailPoint ISC Administrator",
+    "Identity Governance (IGA) Engineer",
+    "Access Request Coordinator"
+  ],
+  "talking_point": "Evaluated 6 roles for 15 identities in SailPoint Identity Security Cloud (10 automatic role assignments, including one analyst kept out of her birthright role by a blank location) and routed 16 access requests: 3 approved, 3 pending, 6 denied, 2 not requestable, 1 already held and 1 separation of duties violation (supplier maintenance for a controller who can release payments), with 6 reminders sent and 1 escalation to the CFO after a reviewer missed the 3-day deadline."
+}

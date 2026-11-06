@@ -1,0 +1,142 @@
+{
+  "isc_virtual_appliances": {
+    "_note": "Lab 50 policy. Thresholds for disk, memory, certificate expiry, minimum VA count, VM sizing, required URLs and ports follow SailPoint's 'System and Network Requirements' and 'Managing Virtual Appliances' pages (documentation.sailpoint.com, checked 2026-11). The heartbeat and time-skew limits, release labels and some log paths are simplified training values: the real tenant decides 'connected' itself and SailPoint does not publish these exact numbers.",
+    "min_vas_per_cluster": 2,
+    "heartbeat_stale_minutes": 10,
+    "max_time_skew_seconds": 60,
+    "disk_warning_pct": 80,
+    "disk_error_pct": 90,
+    "memory_warning_pct": 80,
+    "memory_error_pct": 90,
+    "ccg_restart_limit_30min": 10,
+    "cert_expiry_warning_days": 30,
+    "current_release": "2026.10",
+    "minimum_vm_size": {"vcpu": 4, "memory_gb": 16, "storage_gb": 128},
+    "required_endpoints": {
+      "tenant": "*.identitynow.com, *.api.identitynow.com, *.sailpoint.com",
+      "sqs": "sqs.us-east-1.amazonaws.com and sqs.<region>.amazonaws.com",
+      "s3": "*.s3.us-east-1.amazonaws.com and *.s3.<region>.amazonaws.com",
+      "dynamodb": "dynamodb.us-east-1.amazonaws.com and dynamodb.<region>.amazonaws.com",
+      "ecr": "874540850173.dkr.ecr.<region>.amazonaws.com",
+      "flatcar": "*.flatcar-linux.net, *.flatcar-linux.org"
+    },
+    "ports": {
+      "22": "SSH, inbound, internal only (recommended)",
+      "53": "DNS, outbound",
+      "123": "NTP, outbound (can be closed once every VA uses a local NTP server)",
+      "443": "HTTPS, outbound to the required SailPoint and AWS URLs"
+    },
+    "health_checks_unhealthy": ["heartbeat", "charon", "ccg", "proxy", "dns", "outbound_443", "ntp", "disk_error",
+                                "memory_error", "keys"],
+    "health_checks_degraded": ["disk_warning", "memory_warning", "ccg_restarts", "certificate", "release",
+                               "reboot_pending"],
+    "symptoms": {
+      "test_connection_fails": "Source Test Connection fails",
+      "va_disconnected": "VA shows as disconnected / inactive",
+      "aggregation_timeout": "Aggregation times out",
+      "after_network_change": "Problems started after a network or firewall change"
+    },
+    "diagnosis_order": ["PROXY_MISCONFIGURED", "DNS_FAILURE", "OUTBOUND_443_BLOCKED", "NTP_TIME_SKEW",
+                        "CCG_SERVICE_DOWN", "RESOURCE_EXHAUSTION", "CERTIFICATE_TRUST", "SOURCE_CONNECTIVITY"],
+    "certificate_error_keywords": ["pkix", "certificate", "ssl handshake", "unable to find valid certification path"],
+    "source_side_symptoms": ["test_connection_fails", "aggregation_timeout"],
+    "causes": {
+      "PROXY_MISCONFIGURED": {
+        "next_step": "Make /home/sailpoint/proxy.yaml match the network (https_proxy and http_proxy when a proxy is required, no file when it is not), reboot the VA, then retest outbound HTTPS 443.",
+        "command": "reboot", "log": "charon"},
+      "DNS_FAILURE": {
+        "next_step": "Check that the VA's configured DNS servers resolve the tenant and AWS endpoint names; fix the DNS settings or the internal DNS server, then retest.",
+        "command": "dns_lookup", "log": "stunt"},
+      "OUTBOUND_443_BLOCKED": {
+        "next_step": "Ask the network team to allow outbound HTTPS 443 from the VA to the required SailPoint and AWS URLs by domain name (allowing IP addresses is not supported), then retest.",
+        "command": "test_https", "log": "stunt"},
+      "NTP_TIME_SKEW": {
+        "next_step": "Check the clock with timedatectl status; point the VA at a reachable NTP server in /etc/systemd/timesyncd.conf and restart systemd-timesyncd.",
+        "command": "time_status", "log": "journal"},
+      "CCG_SERVICE_DOWN": {
+        "next_step": "Read /home/sailpoint/log/ccg.log for the error, then restart the service with sudo systemctl restart ccg; restart the cluster from the UI if it keeps failing.",
+        "command": "restart_ccg", "log": "ccg"},
+      "RESOURCE_EXHAUSTION": {
+        "next_step": "Turn off Enable Debugging on the cluster, clear or split large logs, and size the VM at the hypervisor to at least 4 vCPU, 16 GB memory and 128 GB storage.",
+        "command": "disk_usage", "log": "ccg"},
+      "CERTIFICATE_TRUST": {
+        "next_step": "Copy the source's CA certificate into /home/sailpoint/ca-certificates/ and run sudo systemctl restart ccg so the connector trusts it.",
+        "command": "restart_ccg", "log": "ccg"},
+      "SOURCE_CONNECTIVITY": {
+        "next_step": "The VA itself is healthy: check the source host and port from the VA's network (target firewall, connector settings, service account) and read ccg.log for the connector error.",
+        "command": "port_test", "log": "ccg"},
+      "NEEDS_EVIDENCE": {
+        "next_step": "Not enough evidence to name a cause: run the STUNT support script, collect ccg.log and the charon journal, and open a SailPoint Support case with the output.",
+        "command": "stunt", "log": "stunt"}
+    },
+    "do_not": "Do not install extra software, packages or agents on the VA to troubleshoot it; use the built-in commands, logs and the STUNT script.",
+    "va_knowledge": {
+      "_note": "ccg.log, ca-certificates, proxy.yaml, hosts.yaml, timesyncd.conf and the systemctl commands are in SailPoint documentation. The charon journal command, the STUNT output file name and the port test are generic: check the current VA Troubleshooting Guide on SailPoint Compass for exact names.",
+      "logs": {
+        "ccg": {"path": "/home/sailpoint/log/ccg.log", "use": "Connector gateway (CCG) log: source test connection, aggregation and provisioning errors."},
+        "charon": {"path": "sudo journalctl -u charon", "use": "VA management service: pairing, heartbeat to the tenant and updates (generic command)."},
+        "journal": {"path": "sudo journalctl -u systemd-timesyncd", "use": "System journal for one service, such as time synchronisation (generic command)."},
+        "stunt": {"path": "STUNT output file in /home/sailpoint (name varies by version)", "use": "Support Team Unified Network Test results: DNS, NTP, proxy and endpoint reachability."}
+      },
+      "commands": {
+        "restart_ccg": "sudo systemctl restart ccg",
+        "restart_charon": "sudo systemctl restart charon",
+        "service_status": "sudo systemctl status ccg",
+        "time_status": "timedatectl status",
+        "restart_timesync": "sudo systemctl restart systemd-timesyncd",
+        "test_https": "curl -v https://<tenant>.api.identitynow.com (generic reachability test)",
+        "dns_lookup": "nslookup <tenant>.api.identitynow.com (generic name lookup)",
+        "port_test": "a TCP test to the source host and port from the VA (generic)",
+        "disk_usage": "df -h (generic disk usage check)",
+        "os_update_status": "sudo update_engine_client -status",
+        "reboot": "sudo reboot",
+        "stunt": "run the STUNT support script from SailPoint Compass (generic)"
+      }
+    },
+    "placement": {
+      "one_va_per_host": true,
+      "production_min_datacenters": 2,
+      "dmz_allowed": false,
+      "require_sandbox_cluster": true
+    },
+    "supported_changes": {
+      "configure_proxy": "Supported: create /home/sailpoint/proxy.yaml with https_proxy and http_proxy, then reboot the VA.",
+      "local_ntp": "Supported: set NTP= in /etc/systemd/timesyncd.conf, restart systemd-timesyncd and check timedatectl status.",
+      "add_ca_certificate": "Supported: copy the CA certificate to /home/sailpoint/ca-certificates/ and restart ccg.",
+      "hosts_yaml": "Supported: add a source host entry to /home/sailpoint/hosts.yaml and restart charon.",
+      "restart_ccg": "Supported: sudo systemctl restart ccg is the documented service restart.",
+      "restart_cluster": "Supported: Admin > Connections > Virtual Appliances > cluster Menu > Restart.",
+      "add_va_to_cluster": "Supported: deploy a new VA from the SailPoint image on its own host, pair it with va-bootstrap and use the same keyPassphrase as the rest of the cluster.",
+      "increase_vm_resources": "Supported: raise CPU, memory or disk at the hypervisor to meet or exceed 4 vCPU, 16 GB and 128 GB.",
+      "change_va_password": "Supported: run passwd as the sailpoint user, then sudo reboot; keep the new password safe.",
+      "enable_debug_logging": "Supported: Edit cluster > Enable Debugging, and turn it off afterwards to protect disk space.",
+      "replace_va": "Supported: create a new VA, confirm it connects, then delete the old one in the UI and shut its VM down."
+    },
+    "unsupported_changes": {
+      "install_antivirus": "Not supported: the VA is a SailPoint-managed appliance; do not install antivirus or endpoint agents on it. Protect it with network controls and the hypervisor instead.",
+      "install_packages": "Not supported: do not install extra packages or tools on the VA OS; SailPoint manages its image and updates.",
+      "install_monitoring_agent": "Not supported: third-party monitoring agents on the VA are not supported; use SailPoint's VA observability export instead.",
+      "migrate_va": "Not supported: SailPoint strongly advises against moving or migrating VAs. Create new VAs, confirm they connect, then delete the old ones.",
+      "skip_or_delay_update": "Not supported: VA updates cannot be skipped or delayed; keep 2 or more VAs per cluster so rolling updates keep it available.",
+      "disable_os_updates": "Not supported: SailPoint applies OS and service updates to the VA; disabling them leaves it unsupported and unpatched.",
+      "deploy_in_dmz": "Not supported: deploying VAs in the DMZ is not recommended; place them on the internal network close to the sources."
+    },
+    "concepts": {
+      "virtual appliance (VA)": "A SailPoint-supplied virtual machine on your network that connects your on-premises sources to the Identity Security Cloud tenant using outbound HTTPS only.",
+      "VA cluster": "A group of VAs that share the same sources and keyPassphrase, so work continues on one VA while another is down or updating.",
+      "CCG": "The cloud connector gateway service on the VA that runs connectors for test connection, aggregation and provisioning; its log is ccg.log.",
+      "charon": "The VA's management service that pairs the VA with the tenant, reports its health and applies SailPoint updates.",
+      "keyPassphrase": "The secret set in config.yaml during VA setup that protects source credentials; it must be identical on every VA in a cluster.",
+      "STUNT": "Support Team Unified Network Test, SailPoint's support script that checks a VA's DNS, time, proxy and endpoint reachability.",
+      "rolling update": "SailPoint updates and reboots the VAs in a cluster one at a time, which only keeps the cluster available when it has at least two connected VAs."
+    },
+    "outcome_definitions": {
+      "HEALTHY": "Every health check passes: connected, reachable, in sync and within limits.",
+      "DEGRADED": "The VA still works but has a warning to fix, such as disk or memory over 80%, an expiring certificate or a missed update.",
+      "UNHEALTHY": "The VA cannot do its job: no heartbeat, a stopped service, a network, DNS, time or key problem, or disk or memory over 90%.",
+      "REDUNDANT": "At least two working VAs on different hosts, so one failure or update does not stop the cluster.",
+      "SINGLE_POINT_OF_FAILURE": "Only one working VA, or all working VAs on the same host: one failure stops every source on the cluster.",
+      "DOWN": "No working VA in the cluster: test connection, aggregation and provisioning for its sources all fail."
+    }
+  }
+}

@@ -1,0 +1,732 @@
+{
+  "_description": "Harborview Example Logistics runs five SailPoint Identity Security Cloud VA clusters (Amsterdam, Chicago, Singapore, London production and an Amsterdam sandbox) with 14 VAs. A firewall change, a new proxy, a DNS outage and several service and capacity problems have produced 10 service-desk tickets and 11 change requests. Fictional company, hosts and people.",
+  "tenant": {
+    "name": "Harborview Example Logistics",
+    "tenant": "harborview-example"
+  },
+  "clusters": [
+    {
+      "id": "CL-AMS-PROD",
+      "name": "Amsterdam Production",
+      "environment": "production",
+      "site": "Amsterdam",
+      "dmz": false,
+      "key_passphrase_fingerprint": "kp-ams-143"
+    },
+    {
+      "id": "CL-CHI-PROD",
+      "name": "Chicago Production",
+      "environment": "production",
+      "site": "Chicago",
+      "dmz": false,
+      "key_passphrase_fingerprint": "kp-chi-978"
+    },
+    {
+      "id": "CL-SGP-PROD",
+      "name": "Singapore Production",
+      "environment": "production",
+      "site": "Singapore",
+      "dmz": false,
+      "key_passphrase_fingerprint": "kp-sgp-875"
+    },
+    {
+      "id": "CL-LON-PROD",
+      "name": "London Production",
+      "environment": "production",
+      "site": "London",
+      "dmz": false,
+      "key_passphrase_fingerprint": "kp-lon-361"
+    },
+    {
+      "id": "CL-AMS-SBX",
+      "name": "Amsterdam Sandbox",
+      "environment": "sandbox",
+      "site": "Amsterdam",
+      "dmz": false,
+      "key_passphrase_fingerprint": "kp-ams-135"
+    }
+  ],
+  "vas": [
+    {
+      "id": "VA-01",
+      "cluster": "CL-AMS-PROD",
+      "host": "esx-ams-01",
+      "datacenter": "AMS-DC1",
+      "last_heartbeat_minutes_ago": 2,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 1.1
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 31,
+      "memory_used_pct": 67,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 0,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-ams-143"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-02",
+      "cluster": "CL-AMS-PROD",
+      "host": "esx-ams-11",
+      "datacenter": "AMS-DC2",
+      "last_heartbeat_minutes_ago": 4,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.6
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 89,
+      "memory_used_pct": 65,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 1,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-ams-143"
+      },
+      "cert_min_days_left": 323,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-03",
+      "cluster": "CL-AMS-PROD",
+      "host": "esx-ams-02",
+      "datacenter": "AMS-DC1",
+      "last_heartbeat_minutes_ago": 33,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": false,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 1.2
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 47,
+      "memory_used_pct": 56,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 1,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-ams-143"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-04",
+      "cluster": "CL-CHI-PROD",
+      "host": "esx-chi-01",
+      "datacenter": "CHI-DC1",
+      "last_heartbeat_minutes_ago": 4,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.9
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 29,
+      "memory_used_pct": 55,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 2,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-chi-978"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-05",
+      "cluster": "CL-CHI-PROD",
+      "host": "esx-chi-01",
+      "datacenter": "CHI-DC1",
+      "last_heartbeat_minutes_ago": 0,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 1.1
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 29,
+      "memory_used_pct": 67,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 0,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-chi-978"
+      },
+      "cert_min_days_left": 277,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-06",
+      "cluster": "CL-CHI-PROD",
+      "host": "esx-chi-02",
+      "datacenter": "CHI-DC1",
+      "last_heartbeat_minutes_ago": 141,
+      "outbound_443": {
+        "tenant": false,
+        "sqs": false,
+        "s3": false,
+        "dynamodb": false,
+        "ecr": false,
+        "flatcar": false
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 1.2
+      },
+      "proxy": {
+        "required": true,
+        "configured": false
+      },
+      "disk_used_pct": 66,
+      "memory_used_pct": 60,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 1,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-chi-978"
+      },
+      "cert_min_days_left": 89,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-07",
+      "cluster": "CL-SGP-PROD",
+      "host": "esx-sgp-01",
+      "datacenter": "SGP-DC1",
+      "last_heartbeat_minutes_ago": 132,
+      "outbound_443": {
+        "tenant": false,
+        "sqs": false,
+        "s3": false,
+        "dynamodb": false,
+        "ecr": false,
+        "flatcar": false
+      },
+      "dns": "failing",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.1
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 51,
+      "memory_used_pct": 54,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 2,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-sgp-875"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-08",
+      "cluster": "CL-SGP-PROD",
+      "host": "esx-sgp-02",
+      "datacenter": "SGP-DC2",
+      "last_heartbeat_minutes_ago": 1,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": false,
+        "skew_seconds": 609
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 61,
+      "memory_used_pct": 52,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 0,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-sgp-875"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-09",
+      "cluster": "CL-SGP-PROD",
+      "host": "esx-sgp-03",
+      "datacenter": "SGP-DC2",
+      "last_heartbeat_minutes_ago": 0,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.5
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 36,
+      "memory_used_pct": 70,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 0,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-other-000"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-10",
+      "cluster": "CL-LON-PROD",
+      "host": "esx-lon-01",
+      "datacenter": "LON-DC1",
+      "last_heartbeat_minutes_ago": 2,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.4
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 65,
+      "memory_used_pct": 66,
+      "services": {
+        "ccg": "stopped",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 2,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-lon-361"
+      },
+      "cert_min_days_left": 336,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-11",
+      "cluster": "CL-LON-PROD",
+      "host": "esx-lon-02",
+      "datacenter": "LON-DC1",
+      "last_heartbeat_minutes_ago": 2,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.7
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 56,
+      "memory_used_pct": 59,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 1,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-lon-361"
+      },
+      "cert_min_days_left": 14,
+      "release": "2026.08",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-12",
+      "cluster": "CL-LON-PROD",
+      "host": "esx-lon-03",
+      "datacenter": "LON-DC1",
+      "last_heartbeat_minutes_ago": null,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.7
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 32,
+      "memory_used_pct": 46,
+      "services": {
+        "ccg": "running",
+        "charon": "unknown"
+      },
+      "ccg_restarts_30min": 1,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-lon-361"
+      },
+      "cert_min_days_left": null,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-13",
+      "cluster": "CL-LON-PROD",
+      "host": "esx-lon-04",
+      "datacenter": "LON-DC1",
+      "last_heartbeat_minutes_ago": 0,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 0.4
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 64,
+      "memory_used_pct": 84,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 20,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-lon-361"
+      },
+      "cert_min_days_left": 116,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    },
+    {
+      "id": "VA-14",
+      "cluster": "CL-AMS-SBX",
+      "host": "esx-ams-21",
+      "datacenter": "AMS-DC1",
+      "last_heartbeat_minutes_ago": 4,
+      "outbound_443": {
+        "tenant": true,
+        "sqs": true,
+        "s3": true,
+        "dynamodb": true,
+        "ecr": true,
+        "flatcar": true
+      },
+      "dns": "ok",
+      "ntp": {
+        "synced": true,
+        "skew_seconds": 1.6
+      },
+      "proxy": {
+        "required": false,
+        "configured": false
+      },
+      "disk_used_pct": 28,
+      "memory_used_pct": 63,
+      "services": {
+        "ccg": "running",
+        "charon": "running"
+      },
+      "ccg_restarts_30min": 0,
+      "keys": {
+        "config_yaml": true,
+        "key_passphrase_fingerprint": "kp-ams-135"
+      },
+      "cert_min_days_left": 76,
+      "release": "2026.10",
+      "os_reboot_pending": false
+    }
+  ],
+  "tickets": [
+    {
+      "id": "T1",
+      "symptom": "test_connection_fails",
+      "cluster": "CL-CHI-PROD",
+      "source": "Active Directory",
+      "reported_by": "Ines Moreau"
+    },
+    {
+      "id": "T2",
+      "symptom": "va_disconnected",
+      "va": "VA-07",
+      "reported_by": "Kofi Brandt"
+    },
+    {
+      "id": "T3",
+      "symptom": "aggregation_timeout",
+      "va": "VA-08",
+      "source": "Workday",
+      "reported_by": "Yuki Park"
+    },
+    {
+      "id": "T4",
+      "symptom": "after_network_change",
+      "cluster": "CL-AMS-PROD",
+      "reported_by": "Marta Silva"
+    },
+    {
+      "id": "T5",
+      "symptom": "test_connection_fails",
+      "va": "VA-10",
+      "source": "SAP",
+      "reported_by": "Omar Haddad"
+    },
+    {
+      "id": "T6",
+      "symptom": "aggregation_timeout",
+      "va": "VA-13",
+      "source": "Oracle EBS",
+      "reported_by": "Ines Moreau"
+    },
+    {
+      "id": "T7",
+      "symptom": "test_connection_fails",
+      "va": "VA-01",
+      "source": "LDAP",
+      "error": "PKIX path building failed: unable to find valid certification path to requested target",
+      "reported_by": "Kofi Brandt"
+    },
+    {
+      "id": "T8",
+      "symptom": "test_connection_fails",
+      "va": "VA-04",
+      "source": "HR database",
+      "error": "Connection timed out: hr-db01:1521",
+      "reported_by": "Yuki Park"
+    },
+    {
+      "id": "T9",
+      "symptom": "va_disconnected",
+      "va": "VA-12",
+      "reported_by": "Marta Silva"
+    },
+    {
+      "id": "T10",
+      "symptom": "aggregation_timeout",
+      "cluster": "CL-OLD-01",
+      "reported_by": "Omar Haddad"
+    }
+  ],
+  "change_requests": [
+    {
+      "id": "C1",
+      "va": "VA-01",
+      "action": "install_antivirus",
+      "description": "Install the corporate antivirus agent",
+      "requested_by": "Yuki Park"
+    },
+    {
+      "id": "C2",
+      "va": "VA-06",
+      "action": "configure_proxy",
+      "description": "Create proxy.yaml for the new proxy",
+      "requested_by": "Marta Silva"
+    },
+    {
+      "id": "C3",
+      "va": "VA-08",
+      "action": "local_ntp",
+      "description": "Use the internal NTP servers",
+      "requested_by": "Omar Haddad"
+    },
+    {
+      "id": "C4",
+      "va": "VA-01",
+      "action": "add_ca_certificate",
+      "description": "Trust the LDAP server's CA",
+      "requested_by": "Ines Moreau"
+    },
+    {
+      "id": "C5",
+      "va": "VA-04",
+      "action": "install_packages",
+      "description": "Install tcpdump and htop",
+      "requested_by": "Kofi Brandt"
+    },
+    {
+      "id": "C6",
+      "va": "VA-14",
+      "action": "migrate_va",
+      "description": "vMotion the VA to a new host",
+      "requested_by": "Yuki Park"
+    },
+    {
+      "id": "C7",
+      "cluster": "CL-AMS-SBX",
+      "action": "add_va_to_cluster",
+      "description": "Add a second sandbox VA",
+      "requested_by": "Marta Silva"
+    },
+    {
+      "id": "C8",
+      "cluster": "CL-LON-PROD",
+      "action": "skip_or_delay_update",
+      "description": "Delay next VA update",
+      "requested_by": "Omar Haddad"
+    },
+    {
+      "id": "C9",
+      "va": "VA-11",
+      "action": "tune_kernel_params",
+      "description": "Change kernel network settings",
+      "requested_by": "Ines Moreau"
+    },
+    {
+      "id": "C10",
+      "va": "VA-13",
+      "action": "increase_vm_resources",
+      "description": "Raise memory to 32 GB",
+      "requested_by": "Kofi Brandt"
+    },
+    {
+      "id": "C11",
+      "va": "VA-99",
+      "action": "restart_ccg",
+      "description": "Restart ccg on an old VA",
+      "requested_by": "Yuki Park"
+    }
+  ]
+}

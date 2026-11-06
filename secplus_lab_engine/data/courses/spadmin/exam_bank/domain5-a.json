@@ -1,0 +1,1147 @@
+{
+ "domain": "5",
+ "title": "SailPoint Admin Domain 5 questions (5.1, 5.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D5-001",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "A service desk team must unlock accounts, help users reset passwords and reset multifactor authentication, but must not configure sources or roles. Which user level BEST fits this team?",
+   "choices": [
+    "Helpdesk",
+    "Cert Admin",
+    "Report Admin",
+    "Source Admin"
+   ],
+   "answer": "Helpdesk",
+   "explanation": "Helpdesk covers account unlock and enable/disable, password help and MFA resets for identities. Source Admin would add source and access profile configuration the team should not have."
+  },
+  {
+   "id": "D5-002",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "An internal auditor needs to view system activity on the Admin Dashboard and save, subscribe to and download reports, but must not create certification campaigns. Which user level is the BEST fit?",
+   "choices": [
+    "Role Admin",
+    "Report Admin",
+    "Cert Admin",
+    "Source Admin"
+   ],
+   "answer": "Report Admin",
+   "explanation": "Report Admin gives reports, Search and read access to Admin Dashboard activity. Cert Admin also has reports and Search but adds full control of certification campaigns, which the auditor must not have."
+  },
+  {
+   "id": "D5-003",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "A compliance analyst must create, monitor and complete certification campaigns but should not be able to edit sources or roles. Which user level should the analyst receive?",
+   "choices": [
+    "Report Admin",
+    "Role Admin",
+    "Cert Admin",
+    "Source Admin"
+   ],
+   "answer": "Cert Admin",
+   "explanation": "Cert Admin can perform all actions in Certifications plus Search and reports. Report Admin can view campaign activity but cannot create or manage campaigns."
+  },
+  {
+   "id": "D5-004",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "An engineer with only the Source Admin user level can create access profiles but cannot find any way to create a role that bundles access from three sources. What is the MOST likely reason?",
+   "choices": [
+    "The engineer must first own all three sources",
+    "Roles must be enabled by SailPoint support first",
+    "Roles can only be built through the REST API",
+    "Creating roles needs Role Admin, Role Sub-Admin or Admin"
+   ],
+   "answer": "Creating roles needs Role Admin, Role Sub-Admin or Admin",
+   "explanation": "Source Admin covers sources, accounts and access profiles, not roles. Creating roles needs Role Admin, Role Sub-Admin (for authorized sources) or Admin; owning the sources does not add role rights."
+  },
+  {
+   "id": "D5-005",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "A Role Sub-Admin cannot see or edit a role that contains access profiles from the HR system, although other roles are visible. What is the MOST likely cause?",
+   "choices": [
+    "The HR source is not tied to one of the sub-admin's governance groups",
+    "The sub-admin also needs the Helpdesk user level",
+    "Role Sub-Admins can only view roles with no access items",
+    "The role has more than one owner assigned to it"
+   ],
+   "answer": "The HR source is not tied to one of the sub-admin's governance groups",
+   "explanation": "Role Sub-Admins work only with roles whose access comes from sources associated with governance groups they are members of. Roles without access items are visible to them, so the visible roles are not a contradiction."
+  },
+  {
+   "id": "D5-006",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "An identity holds Source Admin, Role Admin and Cert Admin. They now need to change an identity profile's attribute mappings. What do they need?",
+   "choices": [
+    "The Helpdesk user level added to their current set of user levels",
+    "The Admin user level, since identity profiles are Admin-only",
+    "Ownership of the identity profile's authoritative source system",
+    "The Report Admin user level added to their current set of levels"
+   ],
+   "answer": "The Admin user level, since identity profiles are Admin-only",
+   "explanation": "Identity profile configuration is available only to the Admin (org admin) user level. Owning the authoritative source or adding Helpdesk does not expose identity profiles."
+  },
+  {
+   "id": "D5-007",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "A new employee has no administrative user level in the tenant. Which action can they still perform?",
+   "choices": [
+    "View aggregation activity on the Admin Dashboard",
+    "Edit the owners of access profiles they hold",
+    "Request access and act on approvals or certifications assigned to them",
+    "Run Search queries across all identities"
+   ],
+   "answer": "Request access and act on approvals or certifications assigned to them",
+   "explanation": "End users can use the Request Center, Approvals, Certifications assigned to them and Task Manager. Search and the Admin Dashboard require an administrative user level such as Report Admin."
+  },
+  {
+   "id": "D5-008",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "In a tenant with default settings, which identities can grant or remove user levels for other users?",
+   "choices": [
+    "Any owner of the identity's authoritative source",
+    "Any manager, for their direct reports",
+    "Identities that hold the Helpdesk user level",
+    "Identities that hold the Admin user level"
+   ],
+   "answer": "Identities that hold the Admin user level",
+   "explanation": "By default only Admins grant or remove user levels; Role Admins and Source Admins can do so only if the tenant is configured to let non-org admins manage user level entitlements. Helpdesk and managers cannot."
+  },
+  {
+   "id": "D5-009",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "A team lead must manage sources and also create roles, but should not get full Admin rights. What should the Admin do?",
+   "choices": [
+    "Assign both the Source Admin and Role Admin user levels",
+    "Assign Admin, because only one user level is allowed",
+    "Assign Role Sub-Admin, which includes source management",
+    "Assign Source Admin and make the lead a role owner"
+   ],
+   "answer": "Assign both the Source Admin and Role Admin user levels",
+   "explanation": "An identity can hold several user levels and gets the combined permissions of all of them. Owning a role does not grant the right to create roles."
+  },
+  {
+   "id": "D5-010",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "Where does an Admin set the user level permissions of a specific person?",
+   "choices": [
+    "In the provisioning policy of the tenant's governance source",
+    "On that person's identity in Admin > Identity Management > Identities",
+    "In Admin > Global > Security Settings > Password Policies",
+    "In the identity profile mappings for the person"
+   ],
+   "answer": "On that person's identity in Admin > Identity Management > Identities",
+   "explanation": "User levels are set on the identity record: Admin > Identity Management > Identities, then Actions > Set User Levels. Identity profile mappings and password policies do not control administrative permissions."
+  },
+  {
+   "id": "D5-011",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "An auditor asks how the company periodically confirms that each administrative user level in the tenant is still justified. What is the BEST approach in Identity Security Cloud?",
+   "choices": [
+    "Ask SailPoint support to send a quarterly list of the tenant's administrators",
+    "Export the browser sessions of every admin user each quarter",
+    "Certify them, because user levels appear in certifications as entitlements",
+    "Rely only on the tenant audit log, since user levels can never be certified"
+   ],
+   "answer": "Certify them, because user levels appear in certifications as entitlements",
+   "explanation": "A granted user level appears in certifications as an entitlement that the reviewer can approve or revoke. That gives a recorded periodic review instead of an informal list."
+  },
+  {
+   "id": "D5-012",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "A helpdesk analyst asks for the Admin user level so they can reset multifactor authentication for locked-out users. Following least privilege, what should the Admin do?",
+   "choices": [
+    "Grant Admin for a week, then remove it again",
+    "Grant Source Admin so the analyst can manage the MFA source settings",
+    "Grant Report Admin so the analyst can see MFA reset reports for users",
+    "Grant the Helpdesk user level, which includes resetting MFA"
+   ],
+   "answer": "Grant the Helpdesk user level, which includes resetting MFA",
+   "explanation": "Helpdesk already includes resetting MFA, unlocking accounts and password help. Temporary full Admin gives far more access than the task needs."
+  },
+  {
+   "id": "D5-013",
+   "objective": "5.1",
+   "topic": "Granting User Levels",
+   "stem": "The finance team lead must manage only the ERP source and its access profiles, and no other sources. What should the Admin configure?",
+   "choices": [
+    "Source Sub-Admin, in a governance group associated with the ERP source",
+    "Source owner on the ERP source with no user level at all",
+    "Role Sub-Admin, plus ownership of each ERP access profile",
+    "Source Admin, plus a segment that hides other sources"
+   ],
+   "answer": "Source Sub-Admin, in a governance group associated with the ERP source",
+   "explanation": "Source Sub-Admins manage sources and access profiles only for sources associated with governance groups they belong to. Source Admin covers all sources, and segments control requestable access visibility, not admin scope."
+  },
+  {
+   "id": "D5-014",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "Which access type represents a single access right, such as one group or permission, that an account holds on a source?",
+   "choices": [
+    "Application",
+    "Entitlement",
+    "Access profile",
+    "Role"
+   ],
+   "answer": "Entitlement",
+   "explanation": "An entitlement is the access right an account has on a source and is the smallest unit of access. Access profiles and roles are bundles built from entitlements."
+  },
+  {
+   "id": "D5-015",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "Which access type bundles related entitlements from a single source to represent a level of access, such as user or admin access to one system?",
+   "choices": [
+    "Role",
+    "Entitlement",
+    "Access profile",
+    "Governance group"
+   ],
+   "answer": "Access profile",
+   "explanation": "An access profile is a set of entitlements from one source. A role can group access across several sources, and a governance group is a set of people, not access."
+  },
+  {
+   "id": "D5-016",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "New sales hires must automatically receive CRM access, an email distribution group and VPN access, which come from three different sources. What should the admin build?",
+   "choices": [
+    "An application that contains the three sources' accounts",
+    "A requestable entitlement on each source for managers to request",
+    "One access profile with entitlements from all three sources",
+    "A role containing the access, with membership criteria for sales hires"
+   ],
+   "answer": "A role containing the access, with membership criteria for sales hires",
+   "explanation": "Roles can group access from multiple sources and be assigned automatically by criteria. An access profile cannot mix entitlements from different sources, and requests are not automatic."
+  },
+  {
+   "id": "D5-017",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "Which statement correctly describes how the access types in Identity Security Cloud relate to each other?",
+   "choices": [
+    "Roles hold access profiles and entitlements; access profiles hold entitlements",
+    "Applications contain roles; roles contain only other roles",
+    "Access profiles contain roles; roles contain entitlements from only one source each",
+    "Entitlements contain access profiles; roles contain applications and their sources"
+   ],
+   "answer": "Roles hold access profiles and entitlements; access profiles hold entitlements",
+   "explanation": "Entitlements are the base unit, access profiles group entitlements from one source and roles can include both access profiles and entitlements. The other statements invert this hierarchy."
+  },
+  {
+   "id": "D5-018",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "Users need to request one specific Active Directory group, and the admin does not want to build an access profile just for it. What is the BEST option?",
+   "choices": [
+    "Create an access application containing only that one group",
+    "Configure the entitlement itself for access requests",
+    "Add the group to every user's lifecycle state",
+    "Create a role with an identity list of all users in the domain"
+   ],
+   "answer": "Configure the entitlement itself for access requests",
+   "explanation": "Entitlements can be configured for direct access requests with their own review settings. A lifecycle state or an all-user role would grant it to everyone instead of on request."
+  },
+  {
+   "id": "D5-019",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "Which access types can be configured so that users request them in the Request Center?",
+   "choices": [
+    "Only access profiles and applications",
+    "Only entitlements marked as privileged",
+    "Entitlements, access profiles and roles",
+    "Only roles, because they are the business-facing type"
+   ],
+   "answer": "Entitlements, access profiles and roles",
+   "explanation": "Roles, access profiles and entitlements can each be configured as requestable with their own approval settings. Requestability does not depend on privilege level."
+  },
+  {
+   "id": "D5-020",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "An admin tries to create one access profile containing an Active Directory group and a ServiceNow role, but cannot add both. Why?",
+   "choices": [
+    "Active Directory groups can only be placed in roles, not access profiles",
+    "Access profiles can hold only one entitlement each",
+    "ServiceNow entitlements must be added to access profiles through a workflow",
+    "An access profile can contain entitlements from only one source"
+   ],
+   "answer": "An access profile can contain entitlements from only one source",
+   "explanation": "Each access profile belongs to a single source and contains entitlements from that source. To bundle access across sources, put the access profiles or entitlements into a role."
+  },
+  {
+   "id": "D5-021",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "Besides the Admin user level, which user level can create and edit access profiles?",
+   "choices": [
+    "Source Admin",
+    "Role Admin",
+    "Cert Admin",
+    "Report Admin"
+   ],
+   "answer": "Source Admin",
+   "explanation": "Source Admins (and Source Sub-Admins for their authorized sources) manage access profiles along with sources and accounts. Role Admins manage roles, which can include existing access profiles."
+  },
+  {
+   "id": "D5-022",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "When creating an access profile, which detail must be supplied along with its name and source?",
+   "choices": [
+    "A lifecycle state that grants it",
+    "A primary owner identity",
+    "An approval workflow for requests",
+    "A segment that limits who can see it"
+   ],
+   "answer": "A primary owner identity",
+   "explanation": "An access profile needs a name, a source and a primary owner; the primary owner can be configured as a reviewer. Additional owners, segments, lifecycle states and approval settings are optional."
+  },
+  {
+   "id": "D5-023",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "An access profile requires manager approval for requests, yet several identities received it with no approval at all. What is the MOST likely explanation?",
+   "choices": [
+    "The source owner bypassed approval during aggregation",
+    "The manager approval expired and was skipped",
+    "They received it through an auto-assigned role or a lifecycle state",
+    "The owner approved the requests for the manager"
+   ],
+   "answer": "They received it through an auto-assigned role or a lifecycle state",
+   "explanation": "An access profile's approval process applies only to requests for that access profile. Access granted through auto-assigned roles or lifecycle states involves no approval."
+  },
+  {
+   "id": "D5-024",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "A user already holds the 'VPN Users' access profile on one account and now needs the same access on a second account on that source. The request is not possible. What should the admin suggest?",
+   "choices": [
+    "Re-create the access profile under a new name",
+    "Run an account aggregation to split the two accounts",
+    "Ask the access profile owner to approve it twice",
+    "Request the individual entitlements or bundle the access in a role"
+   ],
+   "answer": "Request the individual entitlements or bundle the access in a role",
+   "explanation": "An access profile can be associated with an identity only once, so it cannot be requested again for another account. Individual entitlements or a role can deliver the same access to the second account."
+  },
+  {
+   "id": "D5-025",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "Where does an admin enable users to request an existing access profile in the Request Center?",
+   "choices": [
+    "Admin > Access Model > Access Profiles, then Edit > Access Requests",
+    "Admin > Identity Management > Identity Profiles, then Attribute Mappings",
+    "Admin > Global > Reports, then Access Request Activity for the profile",
+    "Admin > Connections > Sources, then Account Schema"
+   ],
+   "answer": "Admin > Access Model > Access Profiles, then Edit > Access Requests",
+   "explanation": "The Access Requests section of the access profile holds the Allow Access Requests toggle and its review settings. The account schema and identity profile mappings do not control requestability."
+  },
+  {
+   "id": "D5-026",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "Every identity entering the active lifecycle state must receive a basic email access profile with no request. What is the BEST way to deliver it?",
+   "choices": [
+    "Create a certification campaign that grants it to each new hire automatically",
+    "Add the access profile to the active lifecycle state's access profiles",
+    "Mark the access profile requestable and email all new hires to ask for it",
+    "Add the access profile to an application for new hires"
+   ],
+   "answer": "Add the access profile to the active lifecycle state's access profiles",
+   "explanation": "Lifecycle states can grant access profiles automatically when identities enter that state. Requests and applications rely on someone asking, and certifications review access instead of granting it."
+  },
+  {
+   "id": "D5-027",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "Besides the Admin user level, which user level can create, manage and edit all roles in the tenant?",
+   "choices": [
+    "Source Admin",
+    "Report Admin",
+    "Role Admin",
+    "Helpdesk"
+   ],
+   "answer": "Role Admin",
+   "explanation": "Role Admins manage all roles, and Role Sub-Admins only the roles they are authorized for. Source Admin covers sources and access profiles, not roles."
+  },
+  {
+   "id": "D5-028",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "A role designer wants to add one entitlement to a role without wrapping it in an access profile first. Is this possible?",
+   "choices": [
+    "No, entitlements must first be added to an application",
+    "Yes, but only when the entitlement is marked privileged by an administrator",
+    "No, roles can contain only access profiles",
+    "Yes, roles can contain entitlements directly as well as access profiles"
+   ],
+   "answer": "Yes, roles can contain entitlements directly as well as access profiles",
+   "explanation": "Roles can contain access profiles and entitlements, from one or many sources. Privilege level does not control whether an entitlement can join a role."
+  },
+  {
+   "id": "D5-029",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "An admin disables a role that was assigned to 200 identities. What happens to the entitlements those identities received through it?",
+   "choices": [
+    "They keep the entitlements, which are no longer associated with the role",
+    "A certification campaign is created automatically for them",
+    "The entitlements are removed at the next aggregation",
+    "The source accounts that hold them are deleted"
+   ],
+   "answer": "They keep the entitlements, which are no longer associated with the role",
+   "explanation": "Disabling or deleting a role removes it from identities and the Request Center and stops future assignment, but does not deprovision access already granted. Removing that access needs another action such as a certification."
+  },
+  {
+   "id": "D5-030",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "A project role must go to twelve named consultants who share no common identity attribute. Which assignment option is BEST?",
+   "choices": [
+    "Standard criteria on department equals Consulting",
+    "Identity List assignment on the role",
+    "A lifecycle state used only by the consultants",
+    "A segment that contains the twelve consultants"
+   ],
+   "answer": "Identity List assignment on the role",
+   "explanation": "An identity list assigns the role to specific named identities when no attribute expresses the group. Criteria need a shared attribute, and segments control visibility, not assignment."
+  },
+  {
+   "id": "D5-031",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "An admin opens a user's role assignment to revoke it, but no Revoke Assignment option is offered. What is the MOST likely reason?",
+   "choices": [
+    "The admin needs the Cert Admin user level to revoke role assignments",
+    "The role contains entitlements from more than one source system",
+    "The role was assigned automatically by membership criteria",
+    "The role is requestable and therefore locked"
+   ],
+   "answer": "The role was assigned automatically by membership criteria",
+   "explanation": "Only role assignments obtained through access requests can be revoked manually; auto-assigned roles follow their criteria. Change the criteria or the identity data to remove an auto-assigned role."
+  },
+  {
+   "id": "D5-032",
+   "objective": "5.1",
+   "topic": "Roles",
+   "stem": "Which role field identifies the person who can be configured as a reviewer for requests for that role and in certifications?",
+   "choices": [
+    "Metadata attribute",
+    "Description",
+    "Role dimension",
+    "Primary owner"
+   ],
+   "answer": "Primary owner",
+   "explanation": "The role's primary owner can be configured as a reviewer for access requests and certifications, and additional owners can also be reviewers. Descriptions and metadata give context but assign no reviewer."
+  },
+  {
+   "id": "D5-033",
+   "objective": "5.1",
+   "topic": "Applications",
+   "stem": "Users want one place in the Request Center where they find all requestable access for the Payroll Portal. What should the admin configure?",
+   "choices": [
+    "An access application for Payroll Portal with its access profiles added",
+    "A role containing the Payroll Portal entitlements",
+    "A segment named Payroll Portal for all employees",
+    "A search subscription that emails the access list"
+   ],
+   "answer": "An access application for Payroll Portal with its access profiles added",
+   "explanation": "Access profiles associated with an access application can be requested from the Applications section of the Request Center as well as from Access Items. Segments and subscriptions do not group requestable access."
+  },
+  {
+   "id": "D5-034",
+   "objective": "5.1",
+   "topic": "Applications",
+   "stem": "A Source Admin needs to create a new access application but does not see the Applications page. What is the reason?",
+   "choices": [
+    "The source must be disabled before an app is added",
+    "The Applications page is available only to the Admin user level",
+    "The Source Admin also needs the Report Admin user level to see the page",
+    "Applications can only be created by the owner of the underlying source"
+   ],
+   "answer": "The Applications page is available only to the Admin user level",
+   "explanation": "The Applications admin page requires the Admin user level; Source Admin covers sources and access profiles. Adding Report Admin would not expose it."
+  },
+  {
+   "id": "D5-035",
+   "objective": "5.1",
+   "topic": "Applications",
+   "stem": "An access application is associated with several access profiles, but one user cannot see some of them when browsing the app. What should the admin check FIRST?",
+   "choices": [
+    "Whether the user's latest certification is signed off",
+    "Whether the source's virtual appliance is offline",
+    "Whether segmentation hides those access profiles from that user",
+    "Whether the user has the Helpdesk user level"
+   ],
+   "answer": "Whether segmentation hides those access profiles from that user",
+   "explanation": "Segments make access items visible only to the identities in them, so a user outside a segment will not see those access profiles. VA health affects aggregation and provisioning, not catalog visibility."
+  },
+  {
+   "id": "D5-036",
+   "objective": "5.1",
+   "topic": "Applications",
+   "stem": "Which statement BEST describes the difference between an application and a source in Identity Security Cloud?",
+   "choices": [
+    "An application aggregates accounts; a source is only shown on the user dashboard",
+    "An application stores entitlements; a source stores only identity attributes",
+    "An application replaces the source once onboarding is complete",
+    "An application is what users see and request through; a source is the connection used to aggregate and provision"
+   ],
+   "answer": "An application is what users see and request through; a source is the connection used to aggregate and provision",
+   "explanation": "Sources connect to systems for aggregation and provisioning, while applications present access to end users. The application does not replace the source or aggregate data."
+  },
+  {
+   "id": "D5-037",
+   "objective": "5.1",
+   "topic": "Applications",
+   "stem": "An access application appears in the Request Center, but users find nothing in it to request. What should the admin check FIRST?",
+   "choices": [
+    "Whether any requestable access profiles are added to the application",
+    "Whether every user has the Report Admin user level to browse applications",
+    "Whether a certification campaign has been started",
+    "Whether the application has its own virtual appliance cluster assigned"
+   ],
+   "answer": "Whether any requestable access profiles are added to the application",
+   "explanation": "Users request through an application by requesting the access profiles associated with it, so an app with none offers nothing. Applications do not have their own VAs."
+  },
+  {
+   "id": "D5-038",
+   "type": "match",
+   "objective": "5.1",
+   "topic": "User Level Capabilities",
+   "stem": "Match each user level to a capability it provides.",
+   "pairs": [
+    {
+     "item": "Helpdesk",
+     "match": "Unlock accounts and reset an identity's MFA"
+    },
+    {
+     "item": "Cert Admin",
+     "match": "Create and manage certification campaigns"
+    },
+    {
+     "item": "Report Admin",
+     "match": "Download reports and view Admin Dashboard activity"
+    },
+    {
+     "item": "Source Admin",
+     "match": "Configure sources and create access profiles"
+    },
+    {
+     "item": "Role Admin",
+     "match": "Create and edit all roles"
+    }
+   ],
+   "targets_extra": [
+    "Edit identity profile attribute mappings"
+   ],
+   "explanation": "Each delegated level covers one area of administration. Identity profile configuration remains Admin-only, so it matches none of the listed levels."
+  },
+  {
+   "id": "D5-039",
+   "type": "order",
+   "objective": "5.1",
+   "topic": "Access Profiles",
+   "stem": "Put the steps in order to give users a new requestable access profile.",
+   "items": [
+    "Create the access profile and choose its source and owner",
+    "Add the entitlements from that source",
+    "Open Access Requests and turn on Allow Access Requests",
+    "Add the reviewers and comment requirements, then save",
+    "Users request the access profile in the Request Center"
+   ],
+   "explanation": "The access profile is defined on a single source with an owner and entitlements, then configured for requests and review. Only then can users find and request it."
+  },
+  {
+   "id": "D5-040",
+   "type": "multi",
+   "objective": "5.1",
+   "topic": "Access Item Types",
+   "stem": "An admin is choosing between an access profile and a role. Which TWO statements about roles are correct?",
+   "choices": [
+    "A role can group access from several sources",
+    "A role can be assigned automatically by membership criteria",
+    "A role must contain entitlements from exactly one source",
+    "A role can only be granted through an access request",
+    "A role is the smallest unit of access on a source"
+   ],
+   "answers": [
+    "A role can group access from several sources",
+    "A role can be assigned automatically by membership criteria"
+   ],
+   "select": 2,
+   "explanation": "Roles bundle access across sources and can be assigned by criteria, an identity list or requests. The single-source rule applies to access profiles, and the smallest unit is the entitlement."
+  },
+  {
+   "id": "D5-041",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "Which statement BEST defines an entitlement in Identity Security Cloud?",
+   "choices": [
+    "A rule that maps source data to identity attributes",
+    "An access right that an account has on a source",
+    "A bundle of access granted to identities by job function",
+    "A set of people who approve the access requests for a source"
+   ],
+   "answer": "An access right that an account has on a source",
+   "explanation": "Entitlements are the access rights, such as groups or permissions, that accounts hold on sources. A job-function bundle is a role and a set of approvers is a governance group."
+  },
+  {
+   "id": "D5-042",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "New Active Directory groups were created yesterday, but they do not yet appear in the Entitlements list with their descriptions. What should the admin run?",
+   "choices": [
+    "An identity refresh for every identity in the tenant",
+    "A certification campaign for the Active Directory source's groups",
+    "An entitlement aggregation for the Active Directory source",
+    "A configuration hub backup and restore of the Active Directory source"
+   ],
+   "answer": "An entitlement aggregation for the Active Directory source",
+   "explanation": "Entitlement aggregation reads groups and their display names and descriptions from the source. Identity processing and certifications do not collect new entitlements."
+  },
+  {
+   "id": "D5-043",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "An admin wants to remove an obsolete entitlement from Identity Security Cloud. What is the correct approach?",
+   "choices": [
+    "Remove it from the source's account schema",
+    "Run an account aggregation with the account deletion threshold turned off",
+    "Select Delete for it on the Entitlements page in Admin > Access Model",
+    "Delete it on the source system, then run an entitlement aggregation"
+   ],
+   "answer": "Delete it on the source system, then run an entitlement aggregation",
+   "explanation": "Entitlements cannot be deleted directly in the tenant; they are removed by deleting them from the source and running entitlement aggregation. Editing the schema changes what data is stored, which is not the same as deleting one entitlement."
+  },
+  {
+   "id": "D5-044",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "A group was deleted from the source and an account aggregation ran, but the entitlement is still listed in the tenant. Why?",
+   "choices": [
+    "Account aggregations never delete entitlements from the tenant",
+    "Entitlements are only removed after a configuration restore",
+    "Deleted entitlements stay in the tenant until a certification revokes them",
+    "The account deletion threshold blocked the change"
+   ],
+   "answer": "Account aggregations never delete entitlements from the tenant",
+   "explanation": "Account aggregation does not delete entitlements, because an entitlement can exist even when no account holds it. An entitlement aggregation is needed to remove it."
+  },
+  {
+   "id": "D5-045",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "An admin improved an entitlement's description in the tenant. Later entitlement aggregations bring a different description from the source. What happens?",
+   "choices": [
+    "The source description replaces it at every aggregation",
+    "The manual description is kept and is not overwritten",
+    "The aggregation fails until the description matches the source",
+    "Both descriptions are merged into one long value on the entitlement"
+   ],
+   "answer": "The manual description is kept and is not overwritten",
+   "explanation": "Aggregation replaces only blank or never-edited values, so manual edits made in the UI, the API or a CSV upload are preserved."
+  },
+  {
+   "id": "D5-046",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "Where can an admin view and manage entitlements from all sources in one list?",
+   "choices": [
+    "Admin > Global > Email Templates",
+    "Admin > Connections > Virtual Appliances",
+    "Admin > Access Model > Entitlements",
+    "Admin > Identity Management > Identity Profiles"
+   ],
+   "answer": "Admin > Access Model > Entitlements",
+   "explanation": "The Entitlements page under Access Model lists entitlements across sources with owner, requestable status and privilege level. Entitlements can also be managed per source under Entitlement Management."
+  },
+  {
+   "id": "D5-047",
+   "objective": "5.2",
+   "topic": "Entitlement Basics",
+   "stem": "An admin changes an entitlement's display name in the tenant to make it clearer for reviewers. What effect does this have on the source system?",
+   "choices": [
+    "The entitlement is re-created on the source with the new display name",
+    "The group is renamed on the source at the next provisioning",
+    "The change is queued as a manual task for the source owner",
+    "None, because those display changes are not sent to the source"
+   ],
+   "answer": "None, because those display changes are not sent to the source",
+   "explanation": "Display names and descriptions are governance metadata kept in the tenant to help requesters and reviewers. They are not provisioned to the source."
+  },
+  {
+   "id": "D5-048",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "Security wants reviewers to see clearly which entitlements are high risk. What should the admin set on those entitlements?",
+   "choices": [
+    "A direct privilege level of high",
+    "A requestable status of off",
+    "A lifecycle state of inactive for holders",
+    "A segment that hides them"
+   ],
+   "answer": "A direct privilege level of high",
+   "explanation": "The direct privilege level (high, medium or low) marks privileged entitlements, set manually or by privilege classification. Turning off requestability or hiding entitlements does not flag the risk to reviewers."
+  },
+  {
+   "id": "D5-049",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "An entitlement needs extra approvers beyond its primary owner. What can the admin add as additional owners?",
+   "choices": [
+    "Any number of governance groups",
+    "Up to ten identities or one governance group",
+    "Only the source owner and the requester's manager",
+    "Only one additional identity"
+   ],
+   "answer": "Up to ten identities or one governance group",
+   "explanation": "Entitlements, like roles, accept up to ten identities or one governance group as additional owners, who can be configured as request reviewers."
+  },
+  {
+   "id": "D5-050",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "An admin must change the primary owner and make 300 entitlements requestable at once. What is the MOST efficient method in the UI?",
+   "choices": [
+    "Create an access profile that contains all 300 entitlements and edit it",
+    "Edit each entitlement one by one from the source's Entitlements tab",
+    "Select them on the Entitlements page and use the bulk Actions menu",
+    "Run an entitlement aggregation with a new owner value"
+   ],
+   "answer": "Select them on the Entitlements page and use the bulk Actions menu",
+   "explanation": "The Entitlements page supports bulk updates of owner, requestable status, privilege override and metadata. Aggregation does not set governance owners."
+  },
+  {
+   "id": "D5-051",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "Many entitlement display names and descriptions on one source are blank or unclear. Which method updates them in bulk from the source page?",
+   "choices": [
+    "Edit the account create profile and reaggregate",
+    "Change the identity profile mappings and process identities",
+    "Delete the source and onboard it again with better names",
+    "Download the entitlements CSV, edit it and upload it again"
+   ],
+   "answer": "Download the entitlements CSV, edit it and upload it again",
+   "explanation": "Under Entitlement Management > Entitlements, the CSV download and upload edits display names and descriptions in bulk. Later aggregations do not overwrite those manual values."
+  },
+  {
+   "id": "D5-052",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "An admin updates an entitlement's description, and the Entitlements page shows the change, but Search still shows the old value an hour later. What is the MOST likely explanation?",
+   "choices": [
+    "Updates that do not affect access can take up to 24 hours to reach Search",
+    "Search only shows entitlements from flat file sources",
+    "The entitlement must be certified in a campaign before Search shows updates",
+    "The description was rejected because it is too long"
+   ],
+   "answer": "Updates that do not affect access can take up to 24 hours to reach Search",
+   "explanation": "Entitlement changes that do not affect identities' access are added to Search by a nightly synchronization. The Entitlements page itself updates almost immediately."
+  },
+  {
+   "id": "D5-053",
+   "objective": "5.2",
+   "topic": "Entitlement Management",
+   "stem": "An entitlement's primary owner is set. How can that owner take part in governance of the entitlement?",
+   "choices": [
+    "As the approver of changes to the source's account schema and attributes",
+    "As a configured reviewer for its access requests and certifications",
+    "As the only person who can aggregate the source",
+    "As the person who receives every provisioning error raised by its source"
+   ],
+   "answer": "As a configured reviewer for its access requests and certifications",
+   "explanation": "Entitlement owners can be set as reviewers for requests and used in certifications. Aggregation and schema changes are source administration tasks, not owner duties."
+  },
+  {
+   "id": "D5-054",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "A role must be assigned automatically to anyone who already holds the 'Finance-Readers' Active Directory group. Which criterion type should the admin use?",
+   "choices": [
+    "Identity attribute, selecting the department attribute",
+    "Identity list, adding each group member by name",
+    "Entitlement, selecting the group from the Active Directory source",
+    "Account attribute, selecting the account name attribute on Active Directory"
+   ],
+   "answer": "Entitlement, selecting the group from the Active Directory source",
+   "explanation": "An entitlement criterion matches identities that hold a specific entitlement on the chosen source. An identity list would need manual upkeep, and the account name attribute cannot be used in role criteria."
+  },
+  {
+   "id": "D5-055",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "In the standard criteria builder, an admin sets the Within Groups operator to AND and creates two groups. How are the groups combined?",
+   "choices": [
+    "With NOT, so identities matching the second group are excluded from it",
+    "With XOR, so exactly one group must match and the other must not",
+    "With AND, so every criterion in both groups must match",
+    "With OR, so meeting all criteria in either group qualifies"
+   ],
+   "answer": "With OR, so meeting all criteria in either group qualifies",
+   "explanation": "When the Within Groups operator is AND, the operator between groups is automatically OR. Identities qualify if they meet every criterion of at least one group."
+  },
+  {
+   "id": "D5-056",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "An admin sets the Within Groups operator to OR and builds two groups of criteria. Which identities receive the role?",
+   "choices": [
+    "Those matching at least one criterion in each group",
+    "Those matching no criterion in the second group at all",
+    "Those matching every criterion in every group",
+    "Those matching any single criterion in either of the groups"
+   ],
+   "answer": "Those matching at least one criterion in each group",
+   "explanation": "With OR inside groups, the between-groups operator becomes AND. Identities must match one criterion from the first group and one from the second."
+  },
+  {
+   "id": "D5-057",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "A role should be assigned only to identities in the active lifecycle state, but the criterion with value 'Active Employee' never matches. What is the MOST likely fix?",
+   "choices": [
+    "Change the operator from Equals to Greater Than",
+    "Enter the lifecycle state's technical name as the value",
+    "Use an HR account attribute instead",
+    "Add the identities to the role by identity list"
+   ],
+   "answer": "Enter the lifecycle state's technical name as the value",
+   "explanation": "To filter on the Lifecycle State identity attribute, the criterion must use the state's technical name, not its display name. Changing the operator does not fix a mismatched value."
+  },
+  {
+   "id": "D5-058",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "A criterion uses the department attribute with Equals and the values Sales, Marketing and Support. How is it evaluated?",
+   "choices": [
+    "Only the first value is used and the others are ignored at evaluation",
+    "The values are combined into one string to compare",
+    "An identity matches if its department equals any one of the values",
+    "An identity must have all three values present in its department attribute"
+   ],
+   "answer": "An identity matches if its department equals any one of the values",
+   "explanation": "With Equals, multiple values are compared as OR operations. Up to 25 values can be entered for an attribute criterion."
+  },
+  {
+   "id": "D5-059",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "A role's criterion is department Equals 'sales', but the HR source sends 'Sales'. Will those identities match?",
+   "choices": [
+    "Only if the identity is in the active lifecycle state",
+    "No, because values must match the exact case",
+    "Only after a transform converts the value to lowercase",
+    "Yes, because criterion values are case insensitive"
+   ],
+   "answer": "Yes, because criterion values are case insensitive",
+   "explanation": "The Value field in role criteria is case insensitive, so 'sales' and 'Sales' match. No transform is needed for case alone."
+  },
+  {
+   "id": "D5-060",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "A role must be assigned only to identities whose department is Finance and whose location is London. What is the simplest criteria design?",
+   "choices": [
+    "One group with both criteria, with Within Groups set to AND",
+    "One group with both criteria, with Within Groups set to OR",
+    "Two groups with one criterion each and AND inside the groups",
+    "An identity list refreshed by hand each week"
+   ],
+   "answer": "One group with both criteria, with Within Groups set to AND",
+   "explanation": "AND within one group requires both conditions. OR within the group would grant the role to anyone in Finance or anyone in London."
+  },
+  {
+   "id": "D5-061",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "An admin updates the criteria of five roles. When are the new assignments applied to all identities?",
+   "choices": [
+    "Only after the next certification campaign",
+    "At the next identity processing, or at once by selecting Apply Changes",
+    "Only after the authoritative source is deleted and re-added to the tenant",
+    "Immediately when each role is saved"
+   ],
+   "answer": "At the next identity processing, or at once by selecting Apply Changes",
+   "explanation": "Role configuration changes are applied through identity processing; Apply Changes on the roles page starts it for all identities. SailPoint recommends selecting it once after a set of changes."
+  },
+  {
+   "id": "D5-062",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "A role has correct criteria and identity processing has run, but nobody received it. What should the admin check FIRST?",
+   "choices": [
+    "Whether the role owner is a Cert Admin",
+    "Whether the role has a description",
+    "Whether the role is enabled",
+    "Whether the role is marked as Common Access"
+   ],
+   "answer": "Whether the role is enabled",
+   "explanation": "Roles must be enabled to be assigned automatically; disabled roles are not assigned. Descriptions and the Common Access flag do not affect assignment."
+  },
+  {
+   "id": "D5-063",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "An identity stops meeting a role's criteria after a transfer. What happens to the access the role granted?",
+   "choices": [
+    "It stays until a certification revokes it",
+    "The source account is deleted along with all of its entitlements",
+    "It moves to the identity's new manager",
+    "It is deprovisioned unless another role also grants it"
+   ],
+   "answer": "It is deprovisioned unless another role also grants it",
+   "explanation": "When an identity no longer matches, the role and its access are removed, except access that another assigned role still grants."
+  },
+  {
+   "id": "D5-064",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "A role created an account on a source when it was assigned. Later the role is removed from the identity. What happens to that account?",
+   "choices": [
+    "The account remains, though the role's entitlements are removed",
+    "The account is disabled and then deleted automatically after 30 days",
+    "The account is moved to another identity",
+    "The account is deleted automatically"
+   ],
+   "answer": "The account remains, though the role's entitlements are removed",
+   "explanation": "Revoking roles and entitlements does not remove source accounts, even ones created by role provisioning. Account removal needs a separate process such as a lifecycle state or manual action."
+  },
+  {
+   "id": "D5-065",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "An admin removes an access profile from an enabled role, but identities keep the entitlements. What setting explains this?",
+   "choices": [
+    "The source is configured for delta aggregation",
+    "Role access removal propagation is off",
+    "The role uses an identity list instead of criteria",
+    "The access profile is not marked requestable"
+   ],
+   "answer": "Role access removal propagation is off",
+   "explanation": "Without role change propagation, removing access from a role definition does not deprovision it. With it enabled, identity processing removes it from holders of enabled roles."
+  },
+  {
+   "id": "D5-066",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "HR aggregation changes Maria's department from Sales to Finance. How does her role membership update?",
+   "choices": [
+    "Her manager must request the Finance role for her through the Request Center",
+    "A certification campaign must revoke her Sales role before anything changes",
+    "Identity processing re-evaluates role criteria and adds or removes roles",
+    "Nothing changes until an admin edits her identity"
+   ],
+   "answer": "Identity processing re-evaluates role criteria and adds or removes roles",
+   "explanation": "When identity attributes change, identity processing recalculates criteria-based roles and provisions or removes access. No request or certification is needed for criteria-based roles."
+  },
+  {
+   "id": "D5-067",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "Provisioning for an automatically assigned role fails with a retryable connection error. What does Identity Security Cloud do?",
+   "choices": [
+    "Sends the role to the next certification",
+    "Disables the role until an admin reviews and re-enables it",
+    "Cancels the role assignment immediately",
+    "Retries it about once an hour, up to three times"
+   ],
+   "answer": "Retries it about once an hour, up to three times",
+   "explanation": "Automated role provisioning that fails with a retryable error is retried hourly up to three times. Persistent failures then need the admin to fix the cause."
+  },
+  {
+   "id": "D5-068",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "A role was created and enabled this morning with correct criteria, but no matching identity has it yet and no identity processing has run since. What should the admin do?",
+   "choices": [
+    "Select Apply Changes to process identities against the new role",
+    "Create a manager certification for the user",
+    "Mark the role requestable so each matching user can ask for it instead",
+    "Run an entitlement aggregation on every source"
+   ],
+   "answer": "Select Apply Changes to process identities against the new role",
+   "explanation": "New role configurations take effect only after identity processing. Apply Changes starts processing for all identities so the role is assigned."
+  },
+  {
+   "id": "D5-069",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "Users cannot find an access profile in the Request Center although it exists and is enabled. What should the admin check FIRST?",
+   "choices": [
+    "Whether the source's last account aggregation succeeded",
+    "Whether the access profile is set to allow access requests",
+    "Whether the access profile has more than one entitlement in it",
+    "Whether the users have the Report Admin user level for the source"
+   ],
+   "answer": "Whether the access profile is set to allow access requests",
+   "explanation": "Only access items configured for access requests appear in the Request Center; segments can also hide them. Aggregation status and number of entitlements do not control visibility."
+  },
+  {
+   "id": "D5-070",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "An access request was approved, but the entitlement never appeared on the user's account. Where should the admin look FIRST for the cause?",
+   "choices": [
+    "The user level matrix for the requester",
+    "The certification campaign history for the source",
+    "The identity's provisioning activity under Identity Management > Activities",
+    "The identity profile mapping for the user's email address and display name"
+   ],
+   "answer": "The identity's provisioning activity under Identity Management > Activities",
+   "explanation": "Activities show provisioning actions with their results and errors. Mappings and user levels do not explain a failed provisioning step."
+  },
+  {
+   "id": "D5-071",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "A role uses the criterion costCenter Equals 4410, but a user in that cost center did not get it. The role is enabled and processing has run. What should the admin check next?",
+   "choices": [
+    "Whether the user has submitted a request for the role and it was approved",
+    "Whether the role owner is the user's manager",
+    "Whether the role's description mentions the 4410 cost center in its text",
+    "The user's costCenter attribute value and its identity profile mapping"
+   ],
+   "answer": "The user's costCenter attribute value and its identity profile mapping",
+   "explanation": "Criteria evaluate identity attributes, so a missing or differently mapped costCenter value prevents a match. Owner and description play no part in assignment."
+  },
+  {
+   "id": "D5-072",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "An admin removed a user's role assignment by hand, but the role is back on the identity after the next identity refresh. What is the MOST likely cause?",
+   "choices": [
+    "The role is assigned by criteria the user still meets",
+    "The removal was never approved by the role's primary owner",
+    "The source reaggregated the old entitlement value",
+    "The user re-requested it with automatic approval"
+   ],
+   "answer": "The role is assigned by criteria the user still meets",
+   "explanation": "Criteria-based roles are re-evaluated by identity processing, so the user is added back while matching. Change the criteria or the identity's data to remove it."
+  },
+  {
+   "id": "D5-073",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "An admin building a role cannot find a new ServiceNow entitlement to add to it. What is the MOST likely reason?",
+   "choices": [
+    "The entitlement must first be added to an application",
+    "The entitlement has not yet been aggregated into the tenant",
+    "The admin needs the Cert Admin user level",
+    "Roles cannot contain ServiceNow entitlements"
+   ],
+   "answer": "The entitlement has not yet been aggregated into the tenant",
+   "explanation": "Only aggregated entitlements are available to add to roles and access profiles. Run an entitlement aggregation for the source first."
+  },
+  {
+   "id": "D5-074",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "A role assignment needs a new account on a source, and provisioning fails because a required attribute has no value. What should the admin review?",
+   "choices": [
+    "The certification campaign filters for the source",
+    "The role's description and owner",
+    "The source's create account provisioning policy",
+    "The tenant's password policy"
+   ],
+   "answer": "The source's create account provisioning policy",
+   "explanation": "The create account policy builds attribute values for new accounts, so a missing required value usually points to it. Role details and campaign filters do not supply account attributes."
+  },
+  {
+   "id": "D5-075",
+   "objective": "5.2",
+   "topic": "Access Troubleshooting",
+   "stem": "A help desk ticket asks why access was removed from a user overnight. What is the BEST first step to find out?",
+   "choices": [
+    "Ask the user to submit a new access request",
+    "Delete and re-aggregate the user's account",
+    "Disable the role that originally granted the access",
+    "Review the identity's activity records for the removal and its cause"
+   ],
+   "answer": "Review the identity's activity records for the removal and its cause",
+   "explanation": "The identity's activities and history show what removed the access, such as a role change, lifecycle state or certification. Acting before finding the cause risks repeating the problem."
+  },
+  {
+   "id": "D5-076",
+   "type": "order",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "Put the steps in order to roll out a new automatically assigned role.",
+   "items": [
+    "Create the role with a name and primary owner",
+    "Add access profiles or entitlements on Manage Access",
+    "Define standard criteria on Define Assignment",
+    "Enable the role",
+    "Select Apply Changes to process identities"
+   ],
+   "explanation": "A role is defined, given access and assignment criteria, then enabled. Changes reach identities only through identity processing, which Apply Changes starts for everyone."
+  },
+  {
+   "id": "D5-077",
+   "type": "match",
+   "objective": "5.2",
+   "topic": "Role Membership Criteria",
+   "stem": "Match each role criteria type to the requirement it fits.",
+   "pairs": [
+    {
+     "item": "Identity attribute",
+     "match": "Everyone whose department is Finance"
+    },
+    {
+     "item": "Account attribute",
+     "match": "Users whose HR account type is Contractor"
+    },
+    {
+     "item": "Entitlement",
+     "match": "Holders of a specific Active Directory group"
+    },
+    {
+     "item": "Identity list",
+     "match": "Twelve named people with nothing in common"
+    }
+   ],
+   "targets_extra": [
+    "Users who requested the role last week"
+   ],
+   "explanation": "Criteria can use identity attributes, account attributes or entitlements, and an identity list names people directly. Requested roles come from access requests, not from criteria."
+  },
+  {
+   "id": "D5-078",
+   "type": "multi",
+   "objective": "5.2",
+   "topic": "Automated Assignment Processing",
+   "stem": "An identity no longer matches a criteria-based role after processing. Which TWO results are expected?",
+   "choices": [
+    "The role is removed from the identity",
+    "The role's access is removed unless another role grants it",
+    "The identity's source accounts are deleted",
+    "The manager receives an approval request first",
+    "A certification campaign is started automatically"
+   ],
+   "answers": [
+    "The role is removed from the identity",
+    "The role's access is removed unless another role grants it"
+   ],
+   "select": 2,
+   "explanation": "Identity processing removes the role and deprovisions its access except where another role still grants it. Accounts are not deleted and no approval or campaign is involved."
+  }
+ ]
+}

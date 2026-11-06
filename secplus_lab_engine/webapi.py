@@ -198,7 +198,7 @@ def challenge(policies: dict, lab: int, randomize: bool = False, seed=None, data
     if _course.code() != _course.DEFAULT:            # score lab practice under this course's objective for the lab
         codes = _lab_codes(lab, module)
         if codes:
-            qs = [{**q, "objective": codes[0]} for q in qs]
+            qs = [q if q.get("objective") in codes else {**q, "objective": codes[0]} for q in qs]   # keep a code the course knows
     random.Random(seed).shuffle(qs)
     return {"lab": lab, "random": randomize, "seed": seed, "questions": qs}
 

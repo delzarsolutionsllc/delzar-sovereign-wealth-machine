@@ -1,0 +1,562 @@
+{
+ "domain": "9",
+ "title": "SailPoint Engineer Domain 9 questions (9.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D9-201",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "A network team asks which firewall rules a virtual appliance needs to talk to Identity Security Cloud. What is the BEST answer?",
+   "choices": [
+    "Outbound HTTPS on port 443 to the cloud, with no inbound internet rules",
+    "Inbound HTTPS on port 443 from the tenant to the VA's public IP",
+    "Inbound SSH on port 22 so the tenant can push jobs to the VA",
+    "Two-way LDAP on port 389 between the tenant and the VA"
+   ],
+   "answer": "Outbound HTTPS on port 443 to the cloud, with no inbound internet rules",
+   "explanation": "The VA starts every connection outbound over HTTPS, so no inbound internet rule is needed. LDAP and similar ports are only needed from the VA to on-premises sources."
+  },
+  {
+   "id": "D9-202",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "How does an on-premises virtual appliance receive an aggregation job started in the tenant?",
+   "choices": [
+    "The VA polls cloud message queues and picks up the job",
+    "The tenant opens a connection into the data center and pushes the job",
+    "The tenant emails the job to a mailbox the VA reads every hour",
+    "A source owner downloads the job and copies it onto the VA"
+   ],
+   "answer": "The VA polls cloud message queues and picks up the job",
+   "explanation": "Work is placed on queues that the VA polls, which is why only outbound access is needed. The cloud never connects into the customer network."
+  },
+  {
+   "id": "D9-203",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "An engineer types an Active Directory service account password into a VA-based source. How is that credential protected?",
+   "choices": [
+    "It is stored in plain text in the tenant and masked in the user interface",
+    "It is encrypted with the VA cluster's public key",
+    "It is encrypted with the engineer's personal access token secret",
+    "It is copied to every tenant in the region for redundancy"
+   ],
+   "answer": "It is encrypted with the VA cluster's public key",
+   "explanation": "Source credentials for VA connectors are encrypted with the cluster key pair, and the private key stays on the VAs. SailPoint's cloud cannot read the password."
+  },
+  {
+   "id": "D9-204",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "Corporate policy forces all outbound web traffic through an HTTP proxy. What must the engineer do so the VA can reach the cloud?",
+   "choices": [
+    "Open an inbound port on the firewall so the tenant can reach the VA directly",
+    "Install a second VA outside the proxy and route the first through it",
+    "Configure the VA's proxy settings for its outbound connections",
+    "Change every source to a direct connector so no VA is used"
+   ],
+   "answer": "Configure the VA's proxy settings for its outbound connections",
+   "explanation": "VAs support a proxy configuration for their outbound traffic. Opening inbound ports does not help, because the VA always starts the connection."
+  },
+  {
+   "id": "D9-205",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "A VA cannot connect to the cloud after the security team turned on TLS inspection for all outbound traffic. What is the MOST likely fix?",
+   "choices": [
+    "Exclude the VA's traffic to SailPoint endpoints from TLS inspection",
+    "Replace the VA's certificate with the inspection appliance's certificate",
+    "Move the VA to the same subnet as the inspection appliance's interface",
+    "Turn off encryption on the VA's connection to the cloud"
+   ],
+   "answer": "Exclude the VA's traffic to SailPoint endpoints from TLS inspection",
+   "explanation": "Intercepting and re-signing the VA's TLS sessions breaks its secure channel, so SailPoint traffic must bypass inspection. Turning off encryption is not possible or acceptable."
+  },
+  {
+   "id": "D9-206",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "A cluster has three VAs and one is offline for patching. What happens to new jobs for that cluster's sources?",
+   "choices": [
+    "The remaining healthy VAs pick up the queued jobs",
+    "The jobs wait until all three VAs are back online",
+    "The jobs are sent to another customer's cluster in the region",
+    "The tenant runs the jobs in the cloud without any VA"
+   ],
+   "answer": "The remaining healthy VAs pick up the queued jobs",
+   "explanation": "VAs in a cluster share the same queues, so any healthy member takes the work. Jobs never move to clusters of other tenants."
+  },
+  {
+   "id": "D9-207",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "A company adds a SaaS application whose connector runs entirely in SailPoint's cloud. What does this mean for the integration's network path?",
+   "choices": [
+    "The VA must relay every call from the cloud to the SaaS provider's API",
+    "The SaaS application must open an inbound port to the VA",
+    "The SaaS application must poll the tenant's message queues for work",
+    "The cloud calls the SaaS API directly, with no VA in the path"
+   ],
+   "answer": "The cloud calls the SaaS API directly, with no VA in the path",
+   "explanation": "Direct (cloud) connectors call the SaaS service from SailPoint's cloud. VAs are needed for sources that are only reachable inside the customer network."
+  },
+  {
+   "id": "D9-208",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "An engineer must choose between trigger types for an integration. Which statement describes a fire-and-forget trigger?",
+   "choices": [
+    "The platform pauses the process until the subscriber returns a decision",
+    "The subscriber must answer within a set time or the process fails",
+    "The event is sent and the platform does not wait for a reply",
+    "The event is held until an Admin releases it from the dashboard"
+   ],
+   "answer": "The event is sent and the platform does not wait for a reply",
+   "explanation": "Fire-and-forget triggers notify subscribers and carry on. Request-response triggers wait for the subscriber's answer before continuing."
+  },
+  {
+   "id": "D9-209",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "An external risk engine must decide whether an access request may proceed before approvers see it. Which trigger type fits?",
+   "choices": [
+    "A fire-and-forget trigger such as identity created, with a filter",
+    "A request-response trigger such as access request pre-approval",
+    "A scheduled workflow that runs each night",
+    "A search subscription that emails the risk team each new request"
+   ],
+   "answer": "A request-response trigger such as access request pre-approval",
+   "explanation": "Request-response triggers pause until the subscriber replies with a decision, which suits pre-approval. Fire-and-forget events cannot influence the outcome."
+  },
+  {
+   "id": "D9-210",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "The security team wants identity events delivered into its AWS account for processing. Which subscription type should the engineer use?",
+   "choices": [
+    "An HTTP subscription to the VA",
+    "An Amazon EventBridge subscription",
+    "A search subscription",
+    "An email template"
+   ],
+   "answer": "An Amazon EventBridge subscription",
+   "explanation": "Event triggers support EventBridge subscriptions that deliver events to a partner event source in the customer's AWS account. An HTTP subscription would need a reachable web endpoint."
+  },
+  {
+   "id": "D9-211",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "An HTTP subscription endpoint must reject calls that do not come from Identity Security Cloud. What should the engineer configure?",
+   "choices": [
+    "A personal access token stored on the endpoint's own web server",
+    "Basic or bearer token authentication on the HTTP subscription",
+    "A trigger filter that checks the caller's IP address on each event",
+    "The VA proxy settings for the endpoint host"
+   ],
+   "answer": "Basic or bearer token authentication on the HTTP subscription",
+   "explanation": "HTTP subscriptions can send basic or bearer credentials that the receiver checks. Filters choose which events are sent; they do not authenticate the caller."
+  },
+  {
+   "id": "D9-212",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "A subscriber needs several minutes to reach a decision on a request-response trigger. Which response approach is BEST?",
+   "choices": [
+    "Use a synchronous response and keep the connection open for the whole time",
+    "Use an asynchronous response sent later to the callback in the event",
+    "Switch the trigger to fire-and-forget and decide afterwards",
+    "Return an empty reply at once and email the decision"
+   ],
+   "answer": "Use an asynchronous response sent later to the callback in the event",
+   "explanation": "Async mode lets the subscriber acknowledge at once and send the decision to the callback before the deadline. A long synchronous call risks timing out."
+  },
+  {
+   "id": "D9-213",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "An HTTP subscription points at an internal web server with no internet access, and no events arrive. Why?",
+   "choices": [
+    "Events are only sent through the VA, which lacks the right proxy settings",
+    "HTTP subscriptions accept only endpoints hosted in AWS",
+    "Internal servers need the Admin user level to receive events",
+    "Events come from SailPoint's cloud, so the endpoint must be reachable"
+   ],
+   "answer": "Events come from SailPoint's cloud, so the endpoint must be reachable",
+   "explanation": "Event trigger delivery comes from SailPoint's cloud, so an internal-only server cannot receive it. A reachable HTTPS endpoint or EventBridge is needed."
+  },
+  {
+   "id": "D9-214",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "An engineer wants to check an HTTP subscription's endpoint handling before real events flow. What is the BEST step?",
+   "choices": [
+    "Wait for the next production event and read the endpoint logs",
+    "Create a temporary identity in production to cause an event",
+    "Run an unoptimized aggregation on every source",
+    "Send a test invocation with the trigger's sample payload"
+   ],
+   "answer": "Send a test invocation with the trigger's sample payload",
+   "explanation": "Test invocations send a sample payload to the subscription so the receiver can be checked safely. Creating fake production data is disruptive."
+  },
+  {
+   "id": "D9-215",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "A script must request an access token for the tenant acme. Which URL is valid for the token request?",
+   "choices": [
+    "https://acme.identitynow.com/oauth/token",
+    "https://api.identitynow.com/acme/oauth/token",
+    "https://acme.api.identitynow.com/oauth/token",
+    "http://acme.api.identitynow.com/oauth/token"
+   ],
+   "answer": "https://acme.api.identitynow.com/oauth/token",
+   "explanation": "The token endpoint lives on the tenant's API gateway host over HTTPS. Posting to the UI host is a common mistake, and plain HTTP is not accepted."
+  },
+  {
+   "id": "D9-216",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "A web app uses the authorization code flow for tenant acme. Which URL should it send users to for sign-in?",
+   "choices": [
+    "https://acme.api.identitynow.com/oauth/authorize",
+    "https://login.sailpoint.com/acme/authorize",
+    "https://acme.identitynow.com/api/authorize",
+    "https://acme.login.sailpoint.com/oauth/authorize"
+   ],
+   "answer": "https://acme.login.sailpoint.com/oauth/authorize",
+   "explanation": "The authorize endpoint is on the tenant's login.sailpoint.com host, while the token exchange uses api.identitynow.com. The tenant name is a subdomain, not a path."
+  },
+  {
+   "id": "D9-217",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "Users of tenant acme sign in to the user interface through the default SailPoint domain. Which address do they open?",
+   "choices": [
+    "https://acme.api.identitynow.com",
+    "https://identitynow.com/acme",
+    "https://acme.identitynow.com",
+    "https://acme.sailpoint.com/ui"
+   ],
+   "answer": "https://acme.identitynow.com",
+   "explanation": "The tenant UI is served at tenant.identitynow.com. The api host is for REST calls, and tenant names are subdomains rather than paths."
+  },
+  {
+   "id": "D9-218",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "A tenant uses the vanity URL iga.acme.com for its user interface. A developer is unsure which token endpoint to use. What should the developer do?",
+   "choices": [
+    "Send token requests to https://iga.acme.com/oauth/token directly",
+    "Ask the DNS team to point the vanity domain at the API gateway instead",
+    "Read the tenant's OAuth details from oauth/info on its API host",
+    "Use the vanity domain as the authorize and token host"
+   ],
+   "answer": "Read the tenant's OAuth details from oauth/info on its API host",
+   "explanation": "A vanity URL changes the UI address but the token endpoint stays on tenant.api.identitynow.com; oauth/info lists the exact endpoints. Pointing DNS elsewhere would break the UI."
+  },
+  {
+   "id": "D9-219",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "A team has a production tenant named acme and a sandbox named acme-sb. A script works in production. What must change to run it against the sandbox?",
+   "choices": [
+    "Keep the production URL and add a sandbox header to each API call made",
+    "Use the sandbox's own hosts and an API client created in the sandbox",
+    "Keep the production client and change only the URL path",
+    "Use the production token, which also works in the sandbox"
+   ],
+   "answer": "Use the sandbox's own hosts and an API client created in the sandbox",
+   "explanation": "Each tenant has its own hostnames and its own OAuth clients, so both the URL and the credentials change. Tokens are tied to the tenant that issued them."
+  },
+  {
+   "id": "D9-220",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "An admin needs the exact tenant name to build API URLs but only knows the vanity address. Where in the UI can it be found?",
+   "choices": [
+    "The Org Details section of the Admin Dashboard overview",
+    "The From address section in product branding",
+    "The source configuration of the authoritative source",
+    "The cluster page of the virtual appliance"
+   ],
+   "answer": "The Org Details section of the Admin Dashboard overview",
+   "explanation": "The dashboard overview shows the org name used in tenant.api.identitynow.com. Branding and source pages do not list it."
+  },
+  {
+   "id": "D9-221",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "Which address correctly sends a REST API call for tenant acme through the API gateway?",
+   "choices": [
+    "A path on https://acme.login.sailpoint.com",
+    "A path on https://acme.api.identitynow.com",
+    "A path on https://api.acme.identitynow.com",
+    "A path on https://acme.identitynow.com/api"
+   ],
+   "answer": "A path on https://acme.api.identitynow.com",
+   "explanation": "API calls go to the tenant's api.identitynow.com host. The login host is for sign-in, and swapping the order of tenant and api in the host name gives an address that does not exist."
+  },
+  {
+   "id": "D9-222",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "Identity Security Cloud runs shared microservices for many customers. How does a service know which tenant an API request belongs to?",
+   "choices": [
+    "The tenant is taken from the claims in the request's access token",
+    "Each tenant has its own copy of every microservice on its own server",
+    "The caller adds the tenant name as a query parameter on every call",
+    "The VA tags each request with the tenant before it reaches the cloud"
+   ],
+   "answer": "The tenant is taken from the claims in the request's access token",
+   "explanation": "Tokens carry tenant claims, and the shared services process each request in that tenant's context. VAs are not in the path of API calls."
+  },
+  {
+   "id": "D9-223",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "A developer tries to use an access token issued by the sandbox tenant against the production tenant. What happens?",
+   "choices": [
+    "It is refused, since tokens only work on the tenant that issued them",
+    "The call succeeds, because both tenants belong to the same company account",
+    "The call succeeds with read access only on production data",
+    "The call is forwarded to the sandbox and runs there"
+   ],
+   "answer": "It is refused, since tokens only work on the tenant that issued them",
+   "explanation": "Tokens are bound to their tenant, which keeps tenant data separate. Ownership by the same company does not merge tenants."
+  },
+  {
+   "id": "D9-224",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "An architect asks why the API enforces rate limits even for a paying customer's busy integration. What is the BEST explanation?",
+   "choices": [
+    "The limits are only applied when the tenant's VA is offline",
+    "Shared services need limits so one client cannot overload others",
+    "The limits stop customers from reading their own data too often",
+    "The limits apply only to tokens issued to Helpdesk users"
+   ],
+   "answer": "Shared services need limits so one client cannot overload others",
+   "explanation": "In a multi-tenant platform, per-client limits keep one integration from degrading service for others. They apply regardless of VA state or user level."
+  },
+  {
+   "id": "D9-225",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "An engineer aggregates a source and immediately searches for a new account, but it appears only a short time later. What explains this?",
+   "choices": [
+    "The search index is rebuilt only once each night",
+    "Search results come from the VA cache, which syncs hourly",
+    "Processing is asynchronous, so search updates shortly after indexing",
+    "New accounts are hidden from search until a certification is completed"
+   ],
+   "answer": "Processing is asynchronous, so search updates shortly after indexing",
+   "explanation": "Jobs and indexing run asynchronously, so search is updated shortly after processing rather than instantly. It is not a nightly rebuild."
+  },
+  {
+   "id": "D9-226",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "Why must cloud-executed rules be submitted to SailPoint for review, when connector rules that run on the VA follow a different process?",
+   "choices": [
+    "Cloud rules are written in a language SailPoint must translate",
+    "Cloud rules run on the customer's VA and need network approval",
+    "Cloud rules are visible to other tenants until SailPoint has reviewed them",
+    "They run inside the shared platform, so review protects all tenants"
+   ],
+   "answer": "They run inside the shared platform, so review protects all tenants",
+   "explanation": "Code that runs in the shared cloud could affect other customers, so SailPoint reviews it before deployment. Connector rules run on the customer's own VA."
+  },
+  {
+   "id": "D9-227",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "A company asks to delay a platform update until after its quarter-end. What should the engineer explain?",
+   "choices": [
+    "The update can be skipped by turning off the tenant's VA cluster",
+    "Each tenant can pin its own platform version in the Admin UI",
+    "SailPoint updates every tenant continuously on its own schedule",
+    "The update applies only to sandbox tenants until the customer approves"
+   ],
+   "answer": "SailPoint updates every tenant continuously on its own schedule",
+   "explanation": "As a multi-tenant SaaS service, the platform is updated by SailPoint for everyone. Testing new behaviour in the sandbox is the customer's control."
+  },
+  {
+   "id": "D9-228",
+   "objective": "9.2",
+   "topic": "Multi-Tenant Processing",
+   "stem": "A team wants one VA cluster to serve both its sandbox and production tenants to save servers. What is the correct design?",
+   "choices": [
+    "Register the same VAs to both tenants with two key pairs",
+    "Deploy separate VAs for each tenant, as a VA serves one tenant",
+    "Use the production VAs and point sandbox sources at them",
+    "Let the sandbox use production's cluster during business hours"
+   ],
+   "answer": "Deploy separate VAs for each tenant, as a VA serves one tenant",
+   "explanation": "Each VA is paired with one tenant's cluster and keys, so sandbox and production need their own. Sharing would also mix test and production traffic."
+  },
+  {
+   "id": "D9-229",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "An application has no API, and its admins work from ServiceNow tickets. How should access changes reach them?",
+   "choices": [
+    "Use a service desk integration so provisioning creates tickets",
+    "Use a Web Services connector against the app's database",
+    "Use an HTTP subscription that posts each change to the app's login page",
+    "Use a search subscription emailed to the app's admins"
+   ],
+   "answer": "Use a service desk integration so provisioning creates tickets",
+   "explanation": "Service desk integration turns provisioning requests into tickets and tracks them. A Web Services connector needs an API the app does not have."
+  },
+  {
+   "id": "D9-230",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "A workflow must call a partner's REST API to register each new hire. Which workflow step should the engineer use?",
+   "choices": [
+    "The Send Email action addressed to the partner's support mailbox",
+    "The Compare Strings operator applied to the partner's API URL",
+    "The HTTP Request action with the partner's authentication",
+    "A Loop operator over the partner's API pages"
+   ],
+   "answer": "The HTTP Request action with the partner's authentication",
+   "explanation": "The HTTP Request action calls outside APIs with configurable method, headers and authentication. Operators only branch or repeat steps."
+  },
+  {
+   "id": "D9-231",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "A company's HR database runs in its own data center with no internet exposure. How should Identity Security Cloud read it?",
+   "choices": [
+    "A direct cloud connector that queries the database over the internet",
+    "An HTTP subscription that the database server calls each night",
+    "An external workflow trigger called by the database",
+    "A JDBC source that runs through a virtual appliance on site"
+   ],
+   "answer": "A JDBC source that runs through a virtual appliance on site",
+   "explanation": "Sources that are only reachable inside the network use VA-based connectors such as JDBC. A direct connector cannot reach a private database."
+  },
+  {
+   "id": "D9-232",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "A SaaS application has a documented REST API but no dedicated SailPoint connector. Which option is BEST for account and entitlement management?",
+   "choices": [
+    "A Web Services connector configured with the application's endpoints",
+    "A flat file source updated by hand each week",
+    "A service desk integration that opens a ticket per change",
+    "An EventBridge subscription that writes to the application"
+   ],
+   "answer": "A Web Services connector configured with the application's endpoints",
+   "explanation": "The Web Services connector can call a REST API for aggregation and provisioning. Flat files and tickets add delay and manual work."
+  },
+  {
+   "id": "D9-233",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "A data warehouse team needs a nightly copy of identity data for analytics. Which design is BEST?",
+   "choices": [
+    "Giving the warehouse team the Admin level to export by hand",
+    "A request-response trigger that waits for the warehouse",
+    "Copying identity data from the VA's local storage",
+    "A scheduled job calling the APIs with a read-only API client"
+   ],
+   "answer": "A scheduled job calling the APIs with a read-only API client",
+   "explanation": "A least-privilege API client can pull data on a schedule. VAs do not hold the identity store, and Admin rights for analysts break least privilege."
+  },
+  {
+   "id": "D9-234",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "An application supports the SCIM 2.0 standard for users and groups. Which approach should the engineer consider FIRST?",
+   "choices": [
+    "Onboard it with a JDBC connector",
+    "Onboard it as a delimited file source",
+    "Onboard it through email notifications",
+    "Onboard it with the SCIM 2.0 connector"
+   ],
+   "answer": "Onboard it with the SCIM 2.0 connector",
+   "explanation": "SCIM is a standard provisioning API, so the SCIM connector can manage it directly. JDBC and files suit databases and exports."
+  },
+  {
+   "id": "D9-235",
+   "objective": "9.2",
+   "topic": "External Integration Options",
+   "stem": "A security team wants its SIEM to receive provisioning results as they happen. What is the BEST integration?",
+   "choices": [
+    "A weekly search subscription emailed to the SIEM team",
+    "A role whose criteria match identities with recent changes",
+    "An event trigger subscription that sends events to the SIEM",
+    "A certification campaign that ends with a report"
+   ],
+   "answer": "An event trigger subscription that sends events to the SIEM",
+   "explanation": "Event trigger subscriptions push events in near real time to a receiving endpoint. Weekly emails are too slow for monitoring."
+  },
+  {
+   "id": "D9-236",
+   "type": "match",
+   "objective": "9.2",
+   "topic": "Tenant and API URLs",
+   "stem": "Match each purpose to the valid host for tenant acme.",
+   "pairs": [
+    {
+     "item": "Admin UI and end-user portal",
+     "match": "acme.identitynow.com"
+    },
+    {
+     "item": "REST API calls through the gateway",
+     "match": "acme.api.identitynow.com"
+    },
+    {
+     "item": "OAuth token requests",
+     "match": "acme.api.identitynow.com/oauth/token"
+    },
+    {
+     "item": "Authorization code sign-in",
+     "match": "acme.login.sailpoint.com/oauth/authorize"
+    }
+   ],
+   "targets_extra": [
+    "api.identitynow.com/acme"
+   ],
+   "explanation": "The UI, API gateway, token and authorize endpoints each use a tenant subdomain. Putting the tenant name in the path is not a valid format."
+  },
+  {
+   "id": "D9-237",
+   "type": "multi",
+   "objective": "9.2",
+   "topic": "VA to Cloud Communication",
+   "stem": "A network architect is reviewing VA communication. Which TWO statements are correct?",
+   "choices": [
+    "The VA starts all connections to the cloud over outbound HTTPS",
+    "Source credentials are encrypted with the VA cluster's key pair",
+    "The tenant pushes jobs into the VA through an inbound port",
+    "The VA stores the tenant's full identity database locally",
+    "A single VA can serve several tenants at once"
+   ],
+   "answers": [
+    "The VA starts all connections to the cloud over outbound HTTPS",
+    "Source credentials are encrypted with the VA cluster's key pair"
+   ],
+   "explanation": "VAs poll outbound and decrypt credentials with their cluster key. They do not accept inbound jobs, hold the identity store or serve several tenants.",
+   "select": 2
+  },
+  {
+   "id": "D9-238",
+   "type": "order",
+   "objective": "9.2",
+   "topic": "Event Trigger Communication",
+   "stem": "Put the steps in order to send events to an external system with an HTTP subscription.",
+   "items": [
+    "Pick the event trigger that matches the business event",
+    "Create an HTTP subscription with the receiver's HTTPS URL",
+    "Set basic or bearer authentication for the receiver",
+    "Add a filter so only relevant events are sent",
+    "Send a test invocation and confirm the receiver handles it",
+    "Enable the subscription"
+   ],
+   "explanation": "The trigger and target come first, then authentication and filtering, then a test before the subscription goes live."
+  }
+ ]
+}

@@ -1,0 +1,39 @@
+{
+  "lab": 50,
+  "ticket": "INC-50317",
+  "type": "Incident",
+  "priority": "P2",
+  "requested_by": "Ines Moreau, Identity Platform Manager",
+  "title": "Check the health of 14 virtual appliances, explain 10 tickets and review 11 change requests before the next VA update",
+  "situation": "Harborview Example Logistics connects its on-premises sources to SailPoint Identity Security Cloud (ISC) through 14 virtual appliances (VAs) in five clusters: Amsterdam, Chicago, Singapore and London production, and an Amsterdam sandbox. Since last week's firewall change and a new web proxy in Chicago, the service desk has 10 open tickets: source test connections failing, VAs showing as disconnected and aggregations timing out. The Singapore sources have stopped working completely. At the same time, 11 change requests for the VAs are waiting, including one from the security team to install antivirus on every VA.",
+  "your_task": [
+    "Rate every VA HEALTHY, DEGRADED or UNHEALTHY from its heartbeat, services (ccg and charon), proxy, Domain Name System (DNS), outbound HTTPS (Hypertext Transfer Protocol Secure) port 443, Network Time Protocol (NTP), disk, memory, keys, certificates and release.",
+    "Rate every cluster REDUNDANT, SINGLE_POINT_OF_FAILURE or DOWN, counting only working VAs on different hosts.",
+    "For each ticket, name the most likely cause in order (proxy, DNS, outbound 443, NTP, ccg, resources, certificate trust, source side) and give the next step, the command and the log to read.",
+    "Check that every cluster has at least two VAs, one VA per host, production VAs in two datacenters, no DMZ (demilitarized zone) placement, and that a sandbox cluster exists.",
+    "Mark each change request VALID or NOT_SUPPORTED; nothing extra may be installed on a VA."
+  ],
+  "why_it_matters": "Every source connection, aggregation and provisioning request runs through a VA. A cluster with one working VA goes down at the next SailPoint update, and a cluster with no working VA stops joiners, movers and leavers for every source on it. Guessing at the cause, or installing tools on the appliance, makes outages longer and can leave the VA unsupported.",
+  "done_when": [
+    "Every VA has a health rating with its reasons, and every cluster has a status.",
+    "Every ticket has a cause with a next step, command and log, or is marked NEEDS_EVIDENCE with STUNT (Support Team Unified Network Test) output and a support case.",
+    "Every cluster is COMPLIANT or NON_COMPLIANT with its gaps listed, and every change request is VALID or NOT_SUPPORTED with the reason."
+  ],
+  "glossary": {
+    "Virtual appliance (VA)": "A SailPoint-supplied virtual machine on your network that runs the connectors between your sources and the ISC tenant.",
+    "VA cluster": "Two or more VAs that serve the same sources and share one keyPassphrase, so one can fail or update while the other works.",
+    "CCG": "The cloud connector gateway service on the VA that runs source connectors; its log is /home/sailpoint/log/ccg.log.",
+    "charon": "The VA management service that pairs the VA with the tenant, reports its health and applies updates.",
+    "Outbound HTTPS 443": "The only internet connection a VA needs: it calls out to SailPoint and Amazon Web Services (AWS) addresses; nothing calls in.",
+    "NTP time skew": "How far the VA's clock is from the correct time; a large skew breaks secure connections and message signing.",
+    "keyPassphrase": "The secret set in config.yaml during VA setup that protects source credentials; it must be the same on every VA in a cluster.",
+    "HA/DR": "High availability and disaster recovery: placing VAs on different hosts and datacenters so one failure does not stop the service."
+  },
+  "job_roles": [
+    "SailPoint Identity Security Administrator",
+    "SailPoint Identity Security Engineer",
+    "IAM Infrastructure Engineer",
+    "Identity Operations Analyst"
+  ],
+  "talking_point": "Assessed 14 SailPoint ISC virtual appliances (4 healthy, 3 degraded, 7 unhealthy) across 5 clusters (2 redundant, 2 single points of failure including two VAs on one host, 1 down), traced 8 of 10 tickets to a cause with the next step and command (proxy, DNS, a blocked AWS endpoint on 443, NTP skew, ccg stopped, memory pressure, certificate trust, a source-side timeout) and sent 2 for STUNT evidence, found 3 clusters that miss the HA/DR guidance, and approved 5 of 11 VA changes while rejecting 6, including antivirus, extra packages and a VA migration."
+}

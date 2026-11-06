@@ -1,0 +1,40 @@
+{
+  "lab": 45,
+  "ticket": "INC-45017",
+  "type": "Incident",
+  "priority": "P2",
+  "requested_by": "Tomasz Brandt, Identity Operations Manager",
+  "title": "Review last night's aggregations on eight sources before any account is deleted",
+  "situation": "Halden Example Co (a fictional company) runs SailPoint Identity Security Cloud (ISC). Last night ISC aggregated, that is read the accounts from, eight connected sources: Active Directory, an LDAP (Lightweight Directory Access Protocol) directory and a contractor portal on the head-office virtual appliance (VA) cluster, a finance database through a JDBC (Java Database Connectivity) connector on a branch-office cluster, two SaaS (software as a service) applications, and two sources fed by CSV (comma-separated values) file uploads. Someone uploaded the badge system's CSV this morning, the LDAP export looks short, the video meetings source's API (application programming interface) token expired and the branch-office VA has been offline since a network change. Before anyone trusts the results, the operations manager wants each source checked: what changed, what was correlated to whom, and whether anything would be wrongly deleted.",
+  "your_task": [
+    "Check each source's connector type and connection: a VA-based connector needs a healthy source cluster, a SaaS connector needs valid credentials, and a file source needs a valid file.",
+    "For every source that could be read, compare the new accounts with the ones ISC already holds and sort them into new, changed, unchanged and removed.",
+    "Apply the account delete threshold: if a run would remove more than the allowed percentage of accounts, or returned no accounts at all, it must be cancelled with nothing deleted.",
+    "Correlate the new and changed accounts to identities using each source's attribute pairs in order, keep manual correlations, and flag accounts that match no identity or more than one.",
+    "List the entitlements that were newly discovered or are gone from each source, and for every failed source say where to look: the Virtual Appliances page, Test Connection and source health, the source's Import Data history, or Search for the aggregation events."
+  ],
+  "why_it_matters": "Aggregation is how ISC knows who has access. A half-written export or an empty CSV that is trusted as 'everyone left' can delete hundreds of accounts and their access history in one run, and a bad correlation gives one person's access to another. The delete threshold and a careful review are what stop a data problem from becoming an outage or an audit finding.",
+  "done_when": [
+    "Every source has an outcome: COMPLETED, ABORTED_DELETE_THRESHOLD or AGGREGATION_FAILED, with the reason.",
+    "No account was deleted by a failed connection, an empty file or a run above its delete threshold.",
+    "Every processed account is CORRELATED, UNCORRELATED or AMBIGUOUS, and every uncorrelated or ambiguous account is on the review list for manual correlation.",
+    "Every failed source has a named next place to look and an owner to fix it."
+  ],
+  "glossary": {
+    "Identity Security Cloud (ISC)": "SailPoint's cloud identity governance platform, formerly called IdentityNow.",
+    "Source": "A connected system, such as Active Directory or a SaaS app, that ISC reads accounts and entitlements from.",
+    "Aggregation": "Reading the accounts (or the entitlements) from a source into ISC.",
+    "Correlation": "Linking an account to the identity that owns it by matching an account attribute, such as employeeID, with an identity attribute, such as employeeId.",
+    "Optimized aggregation": "An aggregation that only processes accounts that changed since the last run; turn optimization off after changing correlation so every account is processed.",
+    "Account delete threshold": "The percentage of a source's accounts that one aggregation may remove; above it ISC cancels the aggregation and deletes nothing.",
+    "Virtual appliance (VA)": "A SailPoint virtual machine inside your own network that runs connectors for systems the cloud cannot reach directly; VAs are grouped into source clusters.",
+    "Entitlement": "A permission on a source, such as an Active Directory group or an application role."
+  },
+  "job_roles": [
+    "SailPoint ISC Administrator",
+    "Identity Governance and Administration (IGA) Analyst",
+    "Identity Security Engineer",
+    "IAM Operations Analyst"
+  ],
+  "talking_point": "Reviewed eight overnight ISC aggregations: 3 completed (4 new, 5 changed and 14 unchanged accounts, 4 of them skipped by optimized aggregation, and 1 leaver deleted exactly at Active Directory's 10 % threshold), 2 cancelled by the delete safety rules (an empty badge CSV and an LDAP export missing 37.5 % of accounts against a 20 % threshold), preventing 9 wrong deletions, and 3 failed (a VA cluster offline, an expired API token, a connection timeout) with the place to look for each; correlated 15 accounts, sent 3 uncorrelated and 1 ambiguous rehire match to manual review, and found 2 new entitlements and 1 removed one."
+}

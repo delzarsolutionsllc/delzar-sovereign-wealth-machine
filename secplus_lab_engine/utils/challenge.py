@@ -254,8 +254,12 @@ def run_challenge(
             ui.print("\n  Challenge stopped early. Scoring the questions answered so far.", style="yellow")
             result.total = i - 1
             break
-        chosen = _resolve(raw, q.choices)
-        ok = chosen == q.answer
+        if q.kind == "single":
+            chosen = _resolve(raw, q.choices)
+            ok = chosen == q.answer
+        else:                                   # multi / order / match typed at a terminal
+            chosen = raw
+            ok = raw.strip() == q.answer or check(q, _parse_list(raw, q))
         if ok:
             result.correct += 1
             ui.status("Your answer", "PASS", q.answer)
@@ -292,6 +296,17 @@ def option_index(token: str, choices: list[str]) -> int | None:
         k = ord(t.lower()) - ord("a")
         return k if 0 <= k < len(choices) else None
     return None
+
+
+def _parse_list(raw: str, q: Question):
+    """Options typed as numbers or letters separated by commas/spaces (``2,4`` or ``B D``), for multi and order."""
+    picks = []
+    for tok in raw.replace(",", " ").split():
+        k = option_index(tok, q.choices)
+        if k is None:
+            return None
+        picks.append(q.choices[k])
+    return picks or None
 
 
 def _resolve(raw: str, choices: list[str]) -> str | None:

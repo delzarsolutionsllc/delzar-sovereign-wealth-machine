@@ -1,0 +1,663 @@
+{
+ "domain": "8",
+ "title": "SailPoint Admin Domain 8 questions (8.2 authentication, authorization and federation)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D8-201",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "Which statement BEST distinguishes authentication from authorization?",
+   "choices": [
+    "Authentication decides what the user may do; authorization proves who the user is",
+    "Authentication applies only to admins; authorization applies only to end users",
+    "Authentication happens in the target app; authorization happens at the network edge",
+    "Authentication proves who the user is; authorization decides what they may do"
+   ],
+   "answer": "Authentication proves who the user is; authorization decides what they may do",
+   "explanation": "Authentication verifies identity, and authorization uses that identity to decide which actions or resources are allowed. The second option reverses the two terms."
+  },
+  {
+   "id": "D8-202",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "An analyst signs in to the finance portal without problems but receives an access denied message when opening the payroll report. Which process denied the request?",
+   "choices": [
+    "Authorization",
+    "Authentication",
+    "Federation",
+    "Aggregation"
+   ],
+   "answer": "Authorization",
+   "explanation": "The analyst's identity was already verified, so the denial came from the authorization check on the report. Federation and aggregation do not decide individual access to a report."
+  },
+  {
+   "id": "D8-203",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "In a typical access decision, which order do the two processes follow?",
+   "choices": [
+    "Authentication first, then authorization for the request",
+    "Authorization first, then authentication",
+    "Both run at once and either can be skipped",
+    "Authorization only, when a token is present"
+   ],
+   "answer": "Authentication first, then authorization for the request",
+   "explanation": "A system must know who the user is before it can decide what that user may access. Holding a token means authentication already happened."
+  },
+  {
+   "id": "D8-204",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "A user types the wrong password three times and is not allowed into an application. Which process failed?",
+   "choices": [
+    "Authorization",
+    "Authentication",
+    "Provisioning",
+    "Certification"
+   ],
+   "answer": "Authentication",
+   "explanation": "The user could not prove their identity, so authentication failed before any authorization decision. Provisioning and certification manage access, not sign-in."
+  },
+  {
+   "id": "D8-205",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "An identity governance platform such as Identity Security Cloud mainly governs which part of access?",
+   "choices": [
+    "Authorization, by managing which identities hold which access",
+    "Authentication, by checking every user's password at each sign-in",
+    "Encryption, by issuing keys to every target system it connects",
+    "Networking, by routing traffic to each application"
+   ],
+   "answer": "Authorization, by managing which identities hold which access",
+   "explanation": "Identity governance controls who has which roles, access profiles and entitlements, and reviews that access. Sign-in authentication is normally handled by directories and identity providers."
+  },
+  {
+   "id": "D8-206",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "Which of these is an authorization control?",
+   "choices": [
+    "A one-time passcode sent by text to the user's mobile phone",
+    "A role that grants read access to a finance file share",
+    "A fingerprint scan when the user unlocks a laptop",
+    "A PIN prompt when the user inserts a smart card into a reader"
+   ],
+   "answer": "A role that grants read access to a finance file share",
+   "explanation": "A role granting read access decides what the user may do, which is authorization. The passcode, fingerprint and PIN all verify identity, which is authentication."
+  },
+  {
+   "id": "D8-207",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "The principle of least privilege is applied mainly through which process?",
+   "choices": [
+    "Authentication, by requiring the longest possible passwords",
+    "Federation, by trusting only one identity provider at a time",
+    "Authorization, by granting only the access a job requires",
+    "Aggregation, by reading accounts from fewer sources each day"
+   ],
+   "answer": "Authorization, by granting only the access a job requires",
+   "explanation": "Least privilege limits what an authenticated user is allowed to do, which is an authorization decision. Strong passwords improve authentication but do not limit access."
+  },
+  {
+   "id": "D8-208",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "An entitlement such as a group membership in a target application is aggregated into the tenant. What does that entitlement represent?",
+   "choices": [
+    "How the account proves its identity to that application at sign-in",
+    "What the account is authorized to do in that application",
+    "Which identity provider the application trusts for sign-in",
+    "Which password policy the application enforces on users"
+   ],
+   "answer": "What the account is authorized to do in that application",
+   "explanation": "Entitlements are permissions inside an application, so they describe authorization. Sign-in methods and trusted IdPs are authentication settings."
+  },
+  {
+   "id": "D8-209",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "Which combination is true multifactor authentication?",
+   "choices": [
+    "A password plus the answer to a security question",
+    "A password plus a code from an authenticator app",
+    "A PIN plus a password typed on the same page",
+    "Two different passwords entered one after another"
+   ],
+   "answer": "A password plus a code from an authenticator app",
+   "explanation": "MFA needs factors from different categories; a password is something you know and the app code proves something you have. A password and a security question are both knowledge factors."
+  },
+  {
+   "id": "D8-210",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "A user unlocks a laptop with a fingerprint reader. Which authentication factor category is used?",
+   "choices": [
+    "Something you know",
+    "Something you have",
+    "Somewhere you are",
+    "Something you are"
+   ],
+   "answer": "Something you are",
+   "explanation": "Biometrics such as fingerprints are inherence factors, something you are. A password is something you know and a token is something you have."
+  },
+  {
+   "id": "D8-211",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "An employee must insert a smart card to sign in to a workstation. Which factor category does the card itself represent?",
+   "choices": [
+    "Something you have",
+    "Something you know",
+    "Something you are",
+    "Something you do"
+   ],
+   "answer": "Something you have",
+   "explanation": "A smart card is a possession factor. The PIN that often goes with it is a separate knowledge factor, which together make MFA."
+  },
+  {
+   "id": "D8-212",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "Which authentication method BEST resists phishing sites that relay sign-in prompts?",
+   "choices": [
+    "A one-time code sent by text message to the user's registered phone",
+    "A push notification that the user approves on a mobile phone app",
+    "A FIDO2 security key that is bound to the website's origin",
+    "A security question that the user answers during sign-in"
+   ],
+   "answer": "A FIDO2 security key that is bound to the website's origin",
+   "explanation": "FIDO2 or WebAuthn keys sign a challenge tied to the real site's origin, so a look-alike site cannot reuse the response. Codes and push approvals can be relayed or approved by mistake."
+  },
+  {
+   "id": "D8-213",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "Attackers who have a user's password keep sending push approval requests, hoping the user taps Approve. Which control BEST reduces this risk?",
+   "choices": [
+    "Longer password expiry intervals, so that passwords change less often for users",
+    "Disabling account lockout, so that the user is never locked out by mistake",
+    "Number matching, where the user enters a code shown on the sign-in screen",
+    "Sending a reminder email after each push request is approved"
+   ],
+   "answer": "Number matching, where the user enters a code shown on the sign-in screen",
+   "explanation": "Number matching ties the approval to the sign-in screen the real user is looking at, which defeats push fatigue. Password expiry and lockout changes do not stop repeated pushes."
+  },
+  {
+   "id": "D8-214",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "What does risk-based, or adaptive, authentication do?",
+   "choices": [
+    "Asks for the same factors at every sign-in for every user",
+    "Asks for more verification when the sign-in context looks risky",
+    "Removes the password prompt once a user signs in from a new device",
+    "Grants extra access when a user signs in from the office"
+   ],
+   "answer": "Asks for more verification when the sign-in context looks risky",
+   "explanation": "Adaptive authentication evaluates signals such as location, device and behaviour, and steps up verification when risk is high. It authenticates; it does not grant extra access."
+  },
+  {
+   "id": "D8-215",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "Certificate-based authentication relies on which elements?",
+   "choices": [
+    "A private key held by the user and a certificate the verifier trusts",
+    "A shared password that both the user and the verifier store and compare",
+    "A security question and answer kept in the user's profile",
+    "A session cookie issued by the application after sign-in"
+   ],
+   "answer": "A private key held by the user and a certificate the verifier trusts",
+   "explanation": "The user proves possession of a private key matching a certificate issued by a trusted authority. No shared secret is sent, unlike password authentication."
+  },
+  {
+   "id": "D8-216",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "In an Active Directory domain, Kerberos authenticates users by using what?",
+   "choices": [
+    "Assertions signed by a SAML identity provider",
+    "Tickets issued by a key distribution center",
+    "Access tokens issued by an OAuth server",
+    "Passwords sent in clear text to each member server"
+   ],
+   "answer": "Tickets issued by a key distribution center",
+   "explanation": "Kerberos issues tickets from the KDC on the domain controller so users can reach services without resending passwords. SAML assertions and OAuth tokens belong to web federation."
+  },
+  {
+   "id": "D8-217",
+   "objective": "8.2",
+   "topic": "Authentication Methods and Factors",
+   "stem": "Why are one-time codes sent by text message considered weaker than authenticator apps?",
+   "choices": [
+    "They can be intercepted through SIM swapping or phone number takeover",
+    "They can be used only once, so users must ask for a new code each time",
+    "They expire after a short time, so users cannot use them while travelling",
+    "They require a smartphone, so users with basic phones cannot receive them"
+   ],
+   "answer": "They can be intercepted through SIM swapping or phone number takeover",
+   "explanation": "Attackers can take over a phone number and receive the codes. Single use and expiry are security features, not weaknesses."
+  },
+  {
+   "id": "D8-218",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "What is federation in identity management?",
+   "choices": [
+    "A trust that lets one domain accept identities verified by another domain",
+    "A process that copies every user account into each partner's own directory",
+    "A database that stores the passwords of every user across all organizations",
+    "A review in which managers approve each user's access every quarter"
+   ],
+   "answer": "A trust that lets one domain accept identities verified by another domain",
+   "explanation": "Federation lets a service provider rely on an identity provider's authentication through an established trust. It avoids copying accounts or sharing passwords between organizations."
+  },
+  {
+   "id": "D8-219",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "In a federated sign-in, what is the role of the identity provider?",
+   "choices": [
+    "It hosts the application and decides which data the user can see",
+    "It authenticates the user and issues an assertion or token about them",
+    "It stores the application's data and encrypts it at rest",
+    "It provisions entitlements in the application for each new user"
+   ],
+   "answer": "It authenticates the user and issues an assertion or token about them",
+   "explanation": "The IdP verifies the user and sends a signed assertion or token to the service provider. The SP hosts the application and makes its own authorization decisions."
+  },
+  {
+   "id": "D8-220",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "In a federated sign-in, what does the service provider do with the identity provider's assertion?",
+   "choices": [
+    "It forwards the assertion to the user's manager to approve",
+    "It stores the assertion as the user's new password hash",
+    "It returns the assertion to the IdP to request a password",
+    "It validates the assertion and starts a session for the user"
+   ],
+   "answer": "It validates the assertion and starts a session for the user",
+   "explanation": "The SP checks the assertion's signature and contents, then creates a session based on the trusted IdP's statement. The user's password is never shared with the SP."
+  },
+  {
+   "id": "D8-221",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "How does federation differ from single sign-on inside one organization?",
+   "choices": [
+    "Federation extends sign-on trust across separate domains or organizations",
+    "Federation requires a separate password for every application used",
+    "Federation works only for applications on the local network",
+    "Federation removes the need for any identity provider at all"
+   ],
+   "answer": "Federation extends sign-on trust across separate domains or organizations",
+   "explanation": "SSO gives one sign-in for many apps; federation is the trust model that lets that work across security domains, such as with a partner. It still relies on an identity provider."
+  },
+  {
+   "id": "D8-222",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "A partner company's staff need access to your supplier portal. You do not want to manage their passwords. What is the BEST approach?",
+   "choices": [
+    "Create local portal accounts that share one team password",
+    "Copy the partner's password hashes into your directory",
+    "Federate the portal with the partner's identity provider",
+    "Issue each partner user a personal access token for the portal"
+   ],
+   "answer": "Federate the portal with the partner's identity provider",
+   "explanation": "Federation lets the partner authenticate its own users while your portal trusts its assertions. Shared or copied passwords are insecure, and PATs are for API access."
+  },
+  {
+   "id": "D8-223",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "A user opens an application's URL, is redirected to the identity provider to sign in and then returned to the application. What is this flow called?",
+   "choices": [
+    "Identity provider initiated sign-in",
+    "Pass-through authentication",
+    "Service provider initiated sign-in",
+    "Delegated administration"
+   ],
+   "answer": "Service provider initiated sign-in",
+   "explanation": "Starting at the application, which redirects to the IdP, is SP-initiated. IdP-initiated sign-in starts at the IdP's portal and sends an unsolicited assertion to the app."
+  },
+  {
+   "id": "D8-224",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "What is just-in-time provisioning in a federated setup?",
+   "choices": [
+    "Granting temporary admin rights for a short period after a manager approves an access request",
+    "Running an aggregation of the identity provider each time a user signs in to an app",
+    "Rotating the identity provider's signing certificate just before it expires",
+    "Creating the user's account at the service provider from assertion data at first sign-in"
+   ],
+   "answer": "Creating the user's account at the service provider from assertion data at first sign-in",
+   "explanation": "JIT provisioning uses the attributes in the assertion to create the account when the user first arrives. Temporary elevated access is a privileged access feature, not JIT provisioning in federation."
+  },
+  {
+   "id": "D8-225",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "Two organizations set up a SAML federation. What establishes the technical trust between them?",
+   "choices": [
+    "Sharing a list of every user's password between the two directories",
+    "Opening the firewall so each side can read the other's user database",
+    "Exchanging metadata that includes the IdP's signing certificate",
+    "Agreeing on the same password policy for both organizations' users"
+   ],
+   "answer": "Exchanging metadata that includes the IdP's signing certificate",
+   "explanation": "The SP trusts assertions signed with the IdP's certificate, which is exchanged in metadata along with endpoints. No passwords or databases are shared."
+  },
+  {
+   "id": "D8-226",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "Many SaaS apps are federated with the corporate identity provider. What is a key benefit when an employee leaves?",
+   "choices": [
+    "Disabling the IdP account blocks sign-in to every federated app",
+    "Each app's local password expires on the same day",
+    "Each app deletes its own data about the user immediately",
+    "Each app emails the user's manager a list of their own files"
+   ],
+   "answer": "Disabling the IdP account blocks sign-in to every federated app",
+   "explanation": "Because the apps rely on the IdP for authentication, disabling one account stops new sign-ins everywhere. Local app accounts and data still need deprovisioning through governance."
+  },
+  {
+   "id": "D8-227",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "Which federation protocol exchanges XML assertions between an identity provider and a service provider?",
+   "choices": [
+    "OpenID Connect",
+    "OAuth 2.0",
+    "SCIM 2.0",
+    "SAML 2.0"
+   ],
+   "answer": "SAML 2.0",
+   "explanation": "SAML 2.0 uses signed XML assertions. OpenID Connect uses JSON Web Tokens, OAuth 2.0 issues access tokens and SCIM is for provisioning."
+  },
+  {
+   "id": "D8-228",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "What does OpenID Connect add on top of OAuth 2.0?",
+   "choices": [
+    "A refresh token that lets the client renew its access",
+    "An XML assertion signed with the IdP's private key",
+    "An ID token that tells the client who the user is",
+    "A standard API for creating and deleting user accounts"
+   ],
+   "answer": "An ID token that tells the client who the user is",
+   "explanation": "OIDC adds an authentication layer with an ID token about the user. Refresh tokens already exist in OAuth 2.0, XML assertions are SAML, and account APIs are SCIM."
+  },
+  {
+   "id": "D8-229",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "An architect is explaining OAuth 2.0 to the team. What does OAuth 2.0 primarily provide?",
+   "choices": [
+    "User authentication through XML assertions",
+    "Account provisioning through a REST schema",
+    "Directory lookups through an LDAP bind",
+    "Delegated authorization through access tokens"
+   ],
+   "answer": "Delegated authorization through access tokens",
+   "explanation": "OAuth 2.0 lets a client get an access token to call an API on behalf of a user or itself. Using it alone for sign-in is why OpenID Connect was created."
+  },
+  {
+   "id": "D8-230",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "In what format is an OpenID Connect ID token issued?",
+   "choices": [
+    "A signed JSON Web Token",
+    "A signed XML document",
+    "A Kerberos service ticket",
+    "A plain-text session cookie"
+   ],
+   "answer": "A signed JSON Web Token",
+   "explanation": "OIDC ID tokens are JWTs signed by the provider, which the client validates. Signed XML documents are SAML assertions."
+  },
+  {
+   "id": "D8-231",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "A team is building a new mobile app and wants users to sign in through the corporate identity provider with a modern, JSON-based protocol. Which protocol fits BEST?",
+   "choices": [
+    "SAML 2.0",
+    "OpenID Connect",
+    "LDAP",
+    "SCIM"
+   ],
+   "answer": "OpenID Connect",
+   "explanation": "OpenID Connect is designed for web and mobile apps and uses JSON tokens. SAML works in browsers but is XML-based and awkward for native mobile apps."
+  },
+  {
+   "id": "D8-232",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "A SaaS vendor says its app supports SCIM. What is the purpose of SCIM?",
+   "choices": [
+    "Authenticating users to web apps through signed XML assertions",
+    "Issuing access tokens so that client apps can call protected APIs",
+    "Issuing tickets so that domain users can reach network services",
+    "Provisioning accounts between systems through a standard API"
+   ],
+   "answer": "Provisioning accounts between systems through a standard API",
+   "explanation": "SCIM standardizes account create, update and delete operations between systems. It does not authenticate users, which is the job of SAML, OIDC or Kerberos."
+  },
+  {
+   "id": "D8-233",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "A nightly job must call an API with no user present. Which OAuth 2.0 grant type is designed for this?",
+   "choices": [
+    "Authorization code",
+    "Implicit",
+    "Client credentials",
+    "Device code"
+   ],
+   "answer": "Client credentials",
+   "explanation": "The client credentials grant lets an application authenticate as itself to get a token. Authorization code and device code involve a user signing in."
+  },
+  {
+   "id": "D8-234",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "Why is a SAML assertion digitally signed by the identity provider?",
+   "choices": [
+    "So the service provider can verify it came unaltered from the trusted IdP",
+    "So the user can read the assertion's contents in the browser's address bar",
+    "So the service provider can decrypt the user's stored password",
+    "So the assertion can be reused by any application without checks"
+   ],
+   "answer": "So the service provider can verify it came unaltered from the trusted IdP",
+   "explanation": "The signature proves the assertion's origin and integrity. Hiding the contents from the user needs encryption, which is separate from signing."
+  },
+  {
+   "id": "D8-235",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "A company wants employees to sign in to Identity Security Cloud through its existing corporate identity provider. Which configuration fits BEST?",
+   "choices": [
+    "Set up the tenant as the identity provider for the corporate IdP instead",
+    "Create an identity profile on the IdP's sign-in audit log source",
+    "Set up SAML single sign-on with the tenant as the service provider",
+    "Give every employee a personal access token for the web UI"
+   ],
+   "answer": "Set up SAML single sign-on with the tenant as the service provider",
+   "explanation": "The tenant can act as a SAML service provider that trusts the corporate IdP for authentication. PATs are for API access, not interactive sign-in."
+  },
+  {
+   "id": "D8-236",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "A developer wants a script to call the Identity Security Cloud API with the developer's own permissions. What should the developer create?",
+   "choices": [
+    "A new identity profile",
+    "A personal access token",
+    "A source service account",
+    "A SAML signing certificate"
+   ],
+   "answer": "A personal access token",
+   "explanation": "A personal access token gives a client ID and secret tied to the user, used to get an OAuth access token. Identity profiles and SAML certificates do not grant API access."
+  },
+  {
+   "id": "D8-237",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "A web application must let users sign in and then call the Identity Security Cloud API on their behalf. Which OAuth grant is the BEST fit?",
+   "choices": [
+    "Client credentials",
+    "Authorization code",
+    "Password",
+    "Implicit"
+   ],
+   "answer": "Authorization code",
+   "explanation": "The authorization code grant lets a user sign in and approve the app, which then acts for that user. Client credentials has no user, and implicit and password grants are discouraged."
+  },
+  {
+   "id": "D8-238",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "A user in a profile that uses Directory Connection signs in to the tenant. Which statement about the sign-in is accurate?",
+   "choices": [
+    "The user's AD password is copied into the tenant and checked there on future sign-ins",
+    "An external IdP sends the tenant a signed assertion to start the session",
+    "The tenant checks the password against the chosen source instead of an external IdP",
+    "The user's manager receives an approval request before the sign-in completes"
+   ],
+   "answer": "The tenant checks the password against the chosen source instead of an external IdP",
+   "explanation": "Pass-through authentication verifies the password against the source, such as AD through the VA. With SSO, an external IdP authenticates the user and sends an assertion instead."
+  },
+  {
+   "id": "D8-239",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "An administrator can sign in to the tenant but cannot open the source configuration pages. Which part of access is causing the problem?",
+   "choices": [
+    "Authentication, because the admin's password must be reset first",
+    "Federation, because the corporate IdP rejected the admin's SAML assertion",
+    "Aggregation, because the admin's account was not yet aggregated",
+    "Authorization, because the admin lacks a user level such as Source Admin"
+   ],
+   "answer": "Authorization, because the admin lacks a user level such as Source Admin",
+   "explanation": "The admin already authenticated, so the missing ability comes from user levels, which authorize admin features. Federation and aggregation do not control page access after sign-in."
+  },
+  {
+   "id": "D8-240",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "The tenant uses SAML single sign-on with an external identity provider. Which party verifies the user's password?",
+   "choices": [
+    "The tenant's own password store",
+    "The authoritative HR source",
+    "The virtual appliance cluster",
+    "The external identity provider"
+   ],
+   "answer": "The external identity provider",
+   "explanation": "With SSO the IdP performs authentication and sends an assertion; the tenant as service provider only validates it. Checking a source password is pass-through authentication."
+  },
+  {
+   "id": "D8-241",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "Which users in Identity Security Cloud are always required to use multifactor authentication?",
+   "choices": [
+    "Users who sign in from inside the corporate network",
+    "Admins, even when their identity profile has MFA turned off",
+    "Users whose lifecycle state is set to pre-hire",
+    "Users who belong to a profile with Directory Connection"
+   ],
+   "answer": "Admins, even when their identity profile has MFA turned off",
+   "explanation": "Admins must use MFA regardless of the identity profile setting. Other users follow their profile's settings, and network location does not trigger it."
+  },
+  {
+   "id": "D8-242",
+   "objective": "8.2",
+   "topic": "Authentication in Identity Security Cloud",
+   "stem": "Which practice BEST protects a personal access token used by an automation script?",
+   "choices": [
+    "Embed its client secret in the script so the token never expires",
+    "Share the token with the team so everyone uses the same identity",
+    "Email the client secret to the help desk as a backup copy",
+    "Keep its secret in a secrets vault and revoke it when unused"
+   ],
+   "answer": "Keep its secret in a secrets vault and revoke it when unused",
+   "explanation": "A PAT carries the owner's permissions, so its secret must be protected and the token deleted when unused. Shared or embedded secrets break accountability and are easily leaked."
+  },
+  {
+   "id": "D8-243",
+   "type": "order",
+   "objective": "8.2",
+   "topic": "Federation Concepts",
+   "stem": "Put the steps of a service provider initiated SAML sign-in in order.",
+   "items": [
+    "The user opens the application's URL",
+    "The application redirects the user to the identity provider with a request",
+    "The identity provider authenticates the user",
+    "The identity provider returns a signed assertion through the browser",
+    "The application validates the assertion and starts a session"
+   ],
+   "explanation": "In SP-initiated SAML the app sends the user to the IdP, which authenticates and returns a signed assertion. The SP validates the signature before creating a session."
+  },
+  {
+   "id": "D8-244",
+   "type": "match",
+   "objective": "8.2",
+   "topic": "Federation Protocols",
+   "stem": "Match each standard to its main purpose.",
+   "pairs": [
+    {
+     "item": "SAML 2.0",
+     "match": "Federated browser sign-in with signed XML assertions"
+    },
+    {
+     "item": "OpenID Connect",
+     "match": "Sign-in with an ID token built on OAuth 2.0"
+    },
+    {
+     "item": "OAuth 2.0",
+     "match": "Delegated authorization with access tokens"
+    },
+    {
+     "item": "SCIM",
+     "match": "Account provisioning through a standard API"
+    },
+    {
+     "item": "Kerberos",
+     "match": "Ticket-based authentication inside a domain"
+    }
+   ],
+   "targets_extra": [
+    "Encrypting data at rest on the virtual appliance"
+   ],
+   "explanation": "SAML and OIDC federate sign-in, OAuth authorizes API access, SCIM provisions accounts and Kerberos authenticates domain users with tickets. None of them is a storage encryption standard."
+  },
+  {
+   "id": "D8-245",
+   "type": "multi",
+   "objective": "8.2",
+   "topic": "Authentication Versus Authorization",
+   "stem": "A security team is labelling controls. Which TWO are authorization controls rather than authentication controls?",
+   "choices": [
+    "A role that grants approval rights in the expense system",
+    "An entitlement that allows writing to a shared database",
+    "A push notification approved on the user's phone",
+    "A fingerprint scan at the laptop sign-in screen",
+    "A password typed on the identity provider's page"
+   ],
+   "answers": [
+    "A role that grants approval rights in the expense system",
+    "An entitlement that allows writing to a shared database"
+   ],
+   "select": 2,
+   "explanation": "Roles and entitlements decide what an identity may do, which is authorization. Push approvals, fingerprints and passwords verify who the user is."
+  }
+ ]
+}

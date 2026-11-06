@@ -1,0 +1,40 @@
+{
+  "lab": 49,
+  "ticket": "CHG-44917",
+  "type": "Change request",
+  "priority": "P2",
+  "requested_by": "Farid Haddad, IAM Lead",
+  "title": "Check the search reports, workflows and event subscriptions before the November automation go-live",
+  "situation": "Kestrel Ridge Logistics is about to switch on its joiner, mover and leaver automation in SailPoint Identity Security Cloud (ISC). A colleague built 12 search queries, 5 scheduled search reports, 8 workflows and 10 event trigger subscriptions in a hurry before going on leave. Some queries were typed with lowercase operators or a missing bracket, one report goes to a person who has left, several workflows were never tested, and nobody is sure which subscriptions will actually receive which events.",
+  "your_task": [
+    "Run every search query against the 10 identities and record which identities it returns, or why ISC Search would reject it.",
+    "Decide for each scheduled search report whether the next run sends an email, skips an empty result, or cannot be sent.",
+    "Validate every workflow from its scrambled list of steps: one trigger first, both branches of every choice operator connected, every path ending in an end step, and every variable coming from an earlier step.",
+    "Work out which subscriptions fire for each of the 7 sample events, and explain every subscription that is disabled, filtered out or has a broken filter.",
+    "Write down the step order of each valid, single-path workflow for the run book."
+  ],
+  "why_it_matters": "A search typed with a lowercase 'and' quietly returns far more people than intended, and a report that nobody receives hides leavers who still have access. A workflow with a dead end or a missing branch fails halfway through a leaver process, and a subscription filter with a typo means the ticketing system never hears about a termination. These mistakes are cheap to catch before go-live and expensive after.",
+  "done_when": [
+    "All 12 queries are marked MATCHES (with the identities), NO_MATCH or INVALID_QUERY with the reason.",
+    "All 5 scheduled reports are marked SEND_REPORT, SKIP_EMPTY or NOT_SENT with the reason.",
+    "All 8 workflows are marked VALID or with their first error, and the run order of the valid single-path workflows is written down.",
+    "Every event lists the subscriptions that fire, and every non-firing subscription has a reason."
+  ],
+  "glossary": {
+    "Identity Security Cloud (ISC)": "SailPoint's software-as-a-service identity governance platform, formerly called IdentityNow.",
+    "Search query": "A text query such as attributes.department:Finance AND attributes.location:London that ISC Search runs against identities and other indexed data.",
+    "Nested query": "A query inside @accounts(...) or @access(...) whose conditions must all be true of the same account or access item.",
+    "Scheduled search": "A saved search that runs on a schedule and emails its results to chosen recipients.",
+    "Event trigger": "A platform event such as Identity Created or Provisioning Completed that ISC publishes to subscribed services and workflows.",
+    "JavaScript Object Notation Path (JSONPath)": "A small language for selecting parts of a JSON (JavaScript Object Notation) document; ISC uses it for event trigger subscription filters.",
+    "Workflow": "A no-code automation in ISC that starts from one trigger and runs actions and operators until an end step.",
+    "Choice operator": "A workflow step such as Compare Strings that sends the run down a true path or a false path."
+  },
+  "job_roles": [
+    "IAM Analyst",
+    "SailPoint ISC Administrator",
+    "Identity Engineer",
+    "IGA Automation Engineer"
+  ],
+  "talking_point": "Reviewed Kestrel Ridge's ISC automation before go-live: of 12 search queries, 8 matched, 1 matched nobody and 3 were rejected (a lowercase 'and', an unknown attribute and a missing bracket), and one forgotten operator silently widened a query to 4 people; 2 of 5 scheduled reports will send, 1 skips its empty result and 2 cannot be sent (one because its only recipient has left, one because of a lowercase 'and'); 3 of 8 workflows were valid while 5 had a missing branch, a dead end, two triggers or variables used before they exist; and the 7 sample events produced 8 subscription deliveries, with one subscription never firing because its filter used '=' instead of '=='."
+}

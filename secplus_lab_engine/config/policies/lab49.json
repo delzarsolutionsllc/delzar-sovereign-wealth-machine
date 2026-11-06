@@ -1,0 +1,103 @@
+{
+  "isc_search_workflows": {
+    "_comment": "Lab 49 policy: SailPoint Identity Security Cloud (ISC) search syntax subset, scheduled search report rules, workflow step catalog and event trigger catalog. The engine reads only this section.",
+    "search": {
+      "fields": {
+        "id": "keyword",
+        "name": "text",
+        "displayName": "text",
+        "firstName": "text",
+        "lastName": "text",
+        "email": "keyword",
+        "status": "keyword",
+        "inactive": "boolean",
+        "protected": "boolean",
+        "created": "date",
+        "modified": "date",
+        "manager.name": "text",
+        "identityProfile.name": "text",
+        "source.name": "text",
+        "accountCount": "number",
+        "accessCount": "number",
+        "entitlementCount": "number",
+        "roleCount": "number"
+      },
+      "identity_attributes": {
+        "department": "text",
+        "location": "text",
+        "jobTitle": "text",
+        "employeeType": "text",
+        "cloudLifecycleState": "text",
+        "endDate": "date"
+      },
+      "nested": {
+        "accounts": {
+          "source.name": "text",
+          "name": "text",
+          "disabled": "boolean",
+          "locked": "boolean",
+          "privileged": "boolean",
+          "created": "date"
+        },
+        "access": {
+          "type": "keyword",
+          "name": "text",
+          "displayName": "text",
+          "privileged": "boolean",
+          "source.name": "text"
+        }
+      },
+      "lowercase_operators": "invalid",
+      "relative_date_units_days": {"d": 1, "w": 7, "M": 30, "y": 365}
+    },
+    "scheduled_search": {
+      "require_schedule": true,
+      "recipient_must_be_active_identity_with_email": true
+    },
+    "workflow": {
+      "step_types": {
+        "Event Trigger": "trigger",
+        "Scheduled Trigger": "trigger",
+        "External Trigger": "trigger",
+        "Get Identity": "action",
+        "Get Access": "action",
+        "Get Accounts": "action",
+        "Send Email": "action",
+        "Manage Access": "action",
+        "Manage Accounts": "action",
+        "HTTP Request": "action",
+        "Create Certification Campaign": "action",
+        "Wait": "operator",
+        "Define Variable": "operator",
+        "Compare Strings": "choice",
+        "Compare Numbers": "choice",
+        "Compare Boolean": "choice",
+        "Compare Timestamps": "choice",
+        "Verify Data Type": "choice",
+        "End Step - Success": "end",
+        "End Step - Failure": "end"
+      },
+      "max_paths": 200
+    },
+    "event_triggers": {
+      "Identity Created": {"id": "idn:identity-created", "type": "FIRE_AND_FORGET"},
+      "Identity Attributes Changed": {"id": "idn:identity-attributes-changed", "type": "FIRE_AND_FORGET"},
+      "Identity Deleted": {"id": "idn:identity-deleted", "type": "FIRE_AND_FORGET"},
+      "Access Request Submitted": {"id": "idn:access-request-pre-approval", "type": "REQUEST_RESPONSE"},
+      "Access Request Decision": {"id": "idn:access-request-post-approval", "type": "FIRE_AND_FORGET"},
+      "Account Aggregation Completed": {"id": "idn:account-aggregation-completed", "type": "FIRE_AND_FORGET"},
+      "Provisioning Completed": {"id": "idn:post-provisioning", "type": "FIRE_AND_FORGET"},
+      "Scheduled Search": {"id": "idn:saved-search-complete", "type": "FIRE_AND_FORGET"}
+    },
+    "concepts": {
+      "search query": "A Lucene-style query string (field:term joined by AND, OR, NOT) that ISC Search runs against indexed identities, access, accounts and events.",
+      "nested query": "A query wrapped in @accounts(...) or @access(...) so that every condition inside must be true of the same account or access item.",
+      "scheduled search": "A saved search that runs on a schedule and emails its results to chosen recipients, optionally skipping the email when nothing matches.",
+      "event trigger": "A platform event, such as Identity Created, that ISC publishes so subscribed services or workflows can react to it.",
+      "subscription filter": "A Jayway JSONPath expression on a trigger subscription; the subscriber is called only when the expression selects something from the event.",
+      "workflow": "A no-code automation that starts from one trigger and runs actions and operators, with every branch finishing in an end step.",
+      "choice operator": "A workflow step such as Compare Strings that sends the run down a true path or a false path, so both paths must be connected.",
+      "configuration backup": "A snapshot of tenant configuration objects (sources, transforms, workflows and more) taken in Configuration Hub so a bad change can be compared and restored."
+    }
+  }
+}

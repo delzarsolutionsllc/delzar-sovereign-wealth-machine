@@ -1,0 +1,575 @@
+{
+  "domain": "6",
+  "title": "SailPoint Admin Domain 6 questions (6.3)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+  "questions": [
+    {
+      "id": "D6-201",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "A compliance lead asks what separation of duties means as a control in Identity Security Cloud. Which description is BEST?",
+      "choices": [
+        "Only source owners may approve requests for their sources",
+        "Every identity must certify its own access at least once a year",
+        "No one person should be able to complete a sensitive process alone",
+        "Accounts on a source must all share the same password policy"
+      ],
+      "answer": "No one person should be able to complete a sensitive process alone",
+      "explanation": "SoD means conflicting duties, such as recording and paying invoices, are split between people. Certifications and password policies are separate governance features."
+    },
+    {
+      "id": "D6-202",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "An administrator is reviewing the two kinds of SoD policy that the ISC policy API supports. Which pair names them correctly?",
+      "choices": [
+        "Conflicting access based policies and general policies",
+        "Role policies and entitlement policies with separate limits",
+        "Source policies and identity profile policies",
+        "Preventive policies and detective policies"
+      ],
+      "answer": "Conflicting access based policies and general policies",
+      "explanation": "The API types a policy as conflicting access based (two access lists) or general (defined by a search query). Preventive and detective describe how a policy is enforced, not separate policy objects."
+    },
+    {
+      "id": "D6-203",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "An auditor wants a policy that flags identities matching a custom condition expressed as an ISC search query rather than two lists of access. Which policy type fits BEST?",
+      "choices": [
+        "A role with membership criteria that matches the condition",
+        "A general policy defined by a search query",
+        "A password policy attached to a sync group",
+        "A conflicting access based policy with an empty List B"
+      ],
+      "answer": "A general policy defined by a search query",
+      "explanation": "General policies are query based, while conflicting access policies compare List A with List B. A list left empty causes errors, and a role grants access instead of flagging it."
+    },
+    {
+      "id": "D6-204",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "A security admin plans to create many SoD policies for a large ERP rollout. What limit on policies in a single tenant should the admin plan around?",
+      "choices": [
+        "A maximum of 50 policies per source",
+        "A maximum of 500 policies in total, of either type",
+        "A maximum of 100 enabled policies",
+        "No limit, as long as each policy has an owner"
+      ],
+      "answer": "A maximum of 500 policies in total, of either type",
+      "explanation": "The documented tenant limit is 500 policies combined across both types. The figure of 50 applies to access items per list in an access-based policy, not to the number of policies."
+    },
+    {
+      "id": "D6-205",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "A new team member assumes SoD policies in ISC evaluate service accounts and other machine accounts as well as people. How are SoD policies applied?",
+      "choices": [
+        "They evaluate only accounts on authoritative sources",
+        "They evaluate the access held by human identities",
+        "They evaluate every account, including machine accounts, equally",
+        "They evaluate only uncorrelated accounts on each source"
+      ],
+      "answer": "They evaluate the access held by human identities",
+      "explanation": "The SoD service is described as limiting each human user's involvement in sensitive processes and flagging human identities holding access from both lists. It is not an uncorrelated-account or authoritative-source check."
+    },
+    {
+      "id": "D6-206",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "Which user level, besides a full Admin, is intended for creating and editing SoD policies in Identity Security Cloud?",
+      "choices": [
+        "Helpdesk",
+        "SoD Policy Admin",
+        "Source Admin",
+        "Report Admin"
+      ],
+      "answer": "SoD Policy Admin",
+      "explanation": "Admins and SoD Policy Admins create, edit, enable and schedule SoD policies. Source Admin manages sources and Helpdesk handles identity support tasks."
+    },
+    {
+      "id": "D6-207",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "An admin builds a policy so that people who create vendors cannot also approve vendor payments. How does a conflicting access based policy detect this?",
+      "choices": [
+        "It flags an identity whose manager also holds List B access",
+        "It flags an identity holding any access from List A only",
+        "It flags an identity whose List A access was granted most recently",
+        "It flags an identity holding access from both List A and List B"
+      ],
+      "answer": "It flags an identity holding access from both List A and List B",
+      "explanation": "A conflicting access policy has two named lists, and a violation is raised only when one identity has items from both. Holding items from one list alone is not a conflict."
+    },
+    {
+      "id": "D6-208",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "While adding items to List A of an SoD policy, an admin looks for the kinds of access that can be selected. Which access item types are available?",
+      "choices": [
+        "Entitlements only, because roles are evaluated separately",
+        "Applications and governance groups only",
+        "Entitlements, access profiles and roles",
+        "Sources, identity profiles and lifecycle states"
+      ],
+      "answer": "Entitlements, access profiles and roles",
+      "explanation": "The Add Access Items dialog has tabs for Entitlements, Access Profiles and Roles. Sources, identity profiles and governance groups are not access items for a policy list."
+    },
+    {
+      "id": "D6-209",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "A policy author wants to put 80 finance entitlements on one side of a single SoD policy. What should the author expect?",
+      "choices": [
+        "Each list allows at most 50 access items, so the policy must be split",
+        "The list accepts them once a governance group owns the policy",
+        "The list accepts them, but only the first ten are evaluated",
+        "The list accepts them, because only roles and access profiles count toward a limit"
+      ],
+      "answer": "Each list allows at most 50 access items, so the policy must be split",
+      "explanation": "Access-based SoD policies allow a maximum of 50 access items per side. Splitting the conflict across policies, or grouping access into access profiles or roles, keeps each list under the limit."
+    },
+    {
+      "id": "D6-210",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "An admin saves a draft SoD policy with items in List A but leaves List B empty, planning to fill it later. What is the MOST likely result?",
+      "choices": [
+        "The policy automatically copies List A into List B",
+        "The policy runs but finds nothing until List B is filled",
+        "The policy flags everyone holding any List A item",
+        "The policy will error until each list has an access item"
+      ],
+      "answer": "The policy will error until each list has an access item",
+      "explanation": "Documentation states that each access list needs at least one item to prevent errors. With nothing to compare against, the policy cannot evaluate conflicts."
+    },
+    {
+      "id": "D6-211",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "After creating an SoD policy, an auditor wants to read exactly how the rule is defined in plain terms. Where should the auditor look?",
+      "choices": [
+        "The policy's Policy Definition page",
+        "The Task Manager of the policy owner",
+        "The identity profile mapping page",
+        "The Aggregation History page of each source"
+      ],
+      "answer": "The policy's Policy Definition page",
+      "explanation": "The Policy Definition page states the rule, such as identities with List A items cannot also have List B items, and lists every access item. Aggregation history and mappings are unrelated."
+    },
+    {
+      "id": "D6-212",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "A controls analyst designs a purchasing policy. Which pair of access items is the BEST example of an SoD conflict to place on opposite lists?",
+      "choices": [
+        "Read Vendor List and Read Purchase Order",
+        "Read Purchase Order and Print Purchase Order",
+        "Create Purchase Order and Read Purchase Order",
+        "Create Purchase Order and Approve Purchase Order"
+      ],
+      "answer": "Create Purchase Order and Approve Purchase Order",
+      "explanation": "An SoD conflict pairs duties that let one person initiate and authorize the same transaction. Read or print rights combined with each other do not create that risk."
+    },
+    {
+      "id": "D6-213",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "A policy owner wants ISC to automatically cancel any access request that would give a user conflicting access under one specific policy. Which policy setting achieves this?",
+      "choices": [
+        "Disable the policy and schedule a weekly run",
+        "Set the policy's access request option to Allow submission",
+        "Set the policy risk level to Critical",
+        "Set the policy's access request option to Block submission"
+      ],
+      "answer": "Set the policy's access request option to Block submission",
+      "explanation": "Block submission cancels requests that conflict with that policy. Allow submission still lets the request go to approvers, and risk level only classifies violations."
+    },
+    {
+      "id": "D6-214",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "An admin chooses Allow submission on an SoD policy. A user then requests access that conflicts with the policy. What happens?",
+      "choices": [
+        "The request is routed to the configured approvers",
+        "The request waits for the next scheduled policy run",
+        "The request is converted into a certification campaign",
+        "The request is cancelled before any approver sees it"
+      ],
+      "answer": "The request is routed to the configured approvers",
+      "explanation": "With Allow submission, conflicting requests are routed to approvers so a person can decide with the conflict in view. Automatic cancellation is the Block submission behaviour."
+    },
+    {
+      "id": "D6-215",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "Leadership wants every ISC access request with any SoD conflict blocked, regardless of individual policy settings. Where should the admin configure this?",
+      "choices": [
+        "Admin > Connections > Sources > Account Management > Account Correlation",
+        "Admin > Identity Management > Identity Profiles > Mappings",
+        "Admin > Password Mgmt > Sync Groups",
+        "Admin > Global > System Settings > Feature Settings > Access Requests"
+      ],
+      "answer": "Admin > Global > System Settings > Feature Settings > Access Requests",
+      "explanation": "The global SoD Conflicts toggles live in the Access Requests feature settings and apply regardless of each policy's own option. The other pages configure sources, mappings and passwords."
+    },
+    {
+      "id": "D6-216",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "An identity governance manager explains the difference between preventive and detective SoD. Which statement describes the preventive side?",
+      "choices": [
+        "Running a policy on a schedule to list existing violations",
+        "Certifying violations in a later campaign",
+        "Checking requests against policies before granting access",
+        "Exporting the violations table for auditors"
+      ],
+      "answer": "Checking requests against policies before granting access",
+      "explanation": "Preventive enforcement evaluates an access request before provisioning and can block or flag it. Scheduled runs, certifications and exports find or review violations that already exist."
+    },
+    {
+      "id": "D6-217",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "An SoD policy is set to Block submission, but a user already held both conflicting entitlements before the policy was created. What should the admin expect?",
+      "choices": [
+        "The conflict appears as a violation when the policy runs",
+        "The policy cannot be enabled until the conflict is removed",
+        "The conflict is ignored because it predates the policy",
+        "The policy removes one of the entitlements automatically"
+      ],
+      "answer": "The conflict appears as a violation when the policy runs",
+      "explanation": "Blocking applies to new access requests. Access already held is found by running or scheduling the policy, which lists violations for owners to remediate or mitigate."
+    },
+    {
+      "id": "D6-218",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "A company also uses SAP access request management alongside ISC. The global SoD settings offer a separate toggle for those requests. What does that toggle do?",
+      "choices": [
+        "It sends SAP conflicts to the Helpdesk queue",
+        "It disables all SAP sources until conflicts are mitigated",
+        "It converts SAP entitlements into access profiles",
+        "It blocks SAP ARM access requests that have SoD conflicts"
+      ],
+      "answer": "It blocks SAP ARM access requests that have SoD conflicts",
+      "explanation": "The Access Requests feature settings include one toggle for ISC requests and another for SAP ARM requests with SoD conflicts. Neither disables sources or changes access objects."
+    },
+    {
+      "id": "D6-219",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "An auditor needs an immediate list of current violations for a newly enabled SoD policy. What should the SoD Policy Admin do FIRST?",
+      "choices": [
+        "Run an unoptimized aggregation of every source",
+        "Select Actions > Run Policy on the policy",
+        "Wait for the nightly identity refresh to evaluate it",
+        "Create a new identity profile for the auditors"
+      ],
+      "answer": "Select Actions > Run Policy on the policy",
+      "explanation": "Run Policy evaluates the policy at the next available time and lists violations on the Policy Violations page. Aggregation and identity profiles do not run SoD policies."
+    },
+    {
+      "id": "D6-220",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "A compliance officer wants an SoD policy to run every Monday and email the results to two managers. Which action is designed for this?",
+      "choices": [
+        "A search subscription on the Policy Definition page",
+        "Actions > Export, then forward the file each Monday",
+        "Actions > Schedule, with a frequency and subscribers",
+        "A source aggregation schedule on the finance source"
+      ],
+      "answer": "Actions > Schedule, with a frequency and subscribers",
+      "explanation": "Scheduling a policy sets frequency, times, end date and notification subscribers. Export is a one-time download, and aggregation schedules do not evaluate SoD."
+    },
+    {
+      "id": "D6-221",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "Subscribers to a scheduled SoD policy complain about emails when nothing was found. What can the admin change in the schedule?",
+      "choices": [
+        "Turn off the email-when-no-violations toggle",
+        "Remove the policy owner so no emails are sent",
+        "Switch the policy to Allow submission",
+        "Lower the policy risk level to Low"
+      ],
+      "answer": "Turn off the email-when-no-violations toggle",
+      "explanation": "The schedule includes a toggle for emailing when there are no violations. Owner, risk level and the access request option do not control empty-result emails."
+    },
+    {
+      "id": "D6-222",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "Where can Admins, SoD Violations Admins and SoD Compliance Officers view and filter the list of SoD violations?",
+      "choices": [
+        "Admin > Identity Management > Identity Profiles",
+        "Admin > SoD Policies > Policy Violations",
+        "Admin > Global > Reports > Uncorrelated Accounts",
+        "Admin > Connections > Aggregation Activity"
+      ],
+      "answer": "Admin > SoD Policies > Policy Violations",
+      "explanation": "The Policy Violations page lists violations and filters by policy, identity, violation owner or level, with All, Open and Mitigated quick filters. The other pages concern aggregation, correlation and profiles."
+    },
+    {
+      "id": "D6-223",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "An IAM engineer wants a ticket opened in the ITSM tool whenever a new SoD violation is detected. Which ISC feature is designed for this?",
+      "choices": [
+        "Configuring a password sync group",
+        "Subscribing to the SoD Violation Opened event trigger",
+        "Setting the policy to Block submission",
+        "Adding the ITSM service account as a policy co-owner"
+      ],
+      "answer": "Subscribing to the SoD Violation Opened event trigger",
+      "explanation": "SoD event triggers fire on violation lifecycle events, and SoD Violation Opened supports custom notifications or integrations. Ownership and blocking settings do not call external systems."
+    },
+    {
+      "id": "D6-224",
+      "objective": "6.3",
+      "topic": "Policy Runs and Violations",
+      "stem": "A policy owner wants reviewers to confirm or revoke the conflicting access found by one SoD policy. Which option on the policy details page supports this directly?",
+      "choices": [
+        "Actions > Delete",
+        "Actions > Schedule with no subscribers",
+        "Actions > Create Certification",
+        "Actions > Disable Policy"
+      ],
+      "answer": "Actions > Create Certification",
+      "explanation": "The policy's Actions menu includes Create Certification so reviewers can act on violators' access. Disabling or deleting the policy hides the problem and can harm compliance evidence."
+    },
+    {
+      "id": "D6-225",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "An SoD policy's Violation Owner is set to None, and no one holds the Violation Admin level. Who is assigned to address violations?",
+      "choices": [
+        "The source owner of List A",
+        "The identity's manager",
+        "The policy co-owners in turn",
+        "An Org Admin"
+      ],
+      "answer": "An Org Admin",
+      "explanation": "With no violation owner and no Violation Admin, ownership falls to an Org Admin. Manager can be chosen explicitly, but it is not the fallback."
+    },
+    {
+      "id": "D6-226",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "A finance clerk must temporarily hold conflicting access during a system migration, and the risk has been accepted. What is the BEST way to record this in ISC?",
+      "choices": [
+        "Lower the policy risk level so it stops reporting",
+        "Delete the SoD policy until the migration ends",
+        "Apply a mitigating control to the violation",
+        "Remove the clerk from the identity profile for now"
+      ],
+      "answer": "Apply a mitigating control to the violation",
+      "explanation": "Mitigating a violation applies a control that documents the accepted risk and can expire. Deleting or weakening the policy removes evidence and protection for everyone else."
+    },
+    {
+      "id": "D6-227",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "An admin is creating a mitigating control for SoD exceptions. Which setting ensures accepted exceptions are reviewed again rather than lasting forever?",
+      "choices": [
+        "The policy's tags",
+        "Days until the control expires",
+        "The policy's List B name",
+        "The policy's External Reference URL"
+      ],
+      "answer": "Days until the control expires",
+      "explanation": "Controls include an expiration in days, so mitigations lapse and are reconsidered. Reference URLs, tags and list names are descriptive only."
+    },
+    {
+      "id": "D6-228",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "A violation is raised on a policy whose level is High. What risk level does the violation itself carry?",
+      "choices": [
+        "No level, because only policies carry levels",
+        "Low, until an owner reviews it",
+        "Critical, because all violations start at the top level",
+        "High, because violations inherit the policy's level"
+      ],
+      "answer": "High, because violations inherit the policy's level",
+      "explanation": "Violations inherit the risk level of the policy they violate. That lets owners filter and prioritise violations by level."
+    },
+    {
+      "id": "D6-229",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "Which user level can create and edit SoD controls, other than a full Admin?",
+      "choices": [
+        "SoD Controls Admin",
+        "SoD Compliance Officer",
+        "Access Profile Admin",
+        "Cert Admin"
+      ],
+      "answer": "SoD Controls Admin",
+      "explanation": "Admins and SoD Controls Admins manage mitigating controls. SoD Compliance Officers can view violations, and Cert Admins run certifications."
+    },
+    {
+      "id": "D6-230",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "When defining a policy, an admin fills in Mitigation Advice and Remediation Advice. What purpose do these fields serve?",
+      "choices": [
+        "They set how many days a violation stays open",
+        "They decide which approvers receive conflicting requests",
+        "They guide owners on how to handle violations of the policy",
+        "They choose which sources the policy evaluates"
+      ],
+      "answer": "They guide owners on how to handle violations of the policy",
+      "explanation": "Advice fields give violation handlers guidance on mitigating or remediating conflicts. Approval routing and expiry come from other settings."
+    },
+    {
+      "id": "D6-231",
+      "objective": "6.3",
+      "topic": "Violation Ownership and Mitigation",
+      "stem": "A violation owner wants a quick way to reach the open violations assigned to them. What does ISC provide?",
+      "choices": [
+        "A line in the Aggregation History of each source",
+        "A tile on MySailPoint that opens their open violations",
+        "A banner on each source configuration page",
+        "A weekly CSV attached to the source owner email"
+      ],
+      "answer": "A tile on MySailPoint that opens their open violations",
+      "explanation": "Violation owners can use a MySailPoint tile to reach violations they own. Source banners and aggregation history report source health, not SoD work."
+    },
+    {
+      "id": "D6-232",
+      "objective": "6.3",
+      "topic": "Password Policies and Sync Groups",
+      "stem": "A help desk manager wants the same password applied across Active Directory and two other direct connect sources whenever a user changes it. Which ISC feature does this?",
+      "choices": [
+        "An identity profile with three authoritative sources",
+        "A delta aggregation schedule on each source",
+        "A password sync group",
+        "An SoD policy with the three sources in List A"
+      ],
+      "answer": "A password sync group",
+      "explanation": "Sync groups combine direct connect sources so a password change applies across them. SoD policies and identity profiles do not change passwords."
+    },
+    {
+      "id": "D6-233",
+      "objective": "6.3",
+      "topic": "Password Policies and Sync Groups",
+      "stem": "An admin is creating a password sync group. Which prerequisite is required?",
+      "choices": [
+        "At least two direct connect sources set up for password management and a password policy",
+        "A governance group that owns every source in the group",
+        "At least one flat file source and one SoD policy",
+        "One authoritative source with delta aggregation enabled and a governance group as its owner"
+      ],
+      "answer": "At least two direct connect sources set up for password management and a password policy",
+      "explanation": "Sync groups need at least two direct connect sources set up for password management, an access application on each authentication source, and a password policy. Flat file sources cannot have passwords set."
+    },
+    {
+      "id": "D6-234",
+      "objective": "6.3",
+      "topic": "Password Policies and Sync Groups",
+      "stem": "An admin wants to stop users choosing common words as passwords. Where is a password dictionary enabled?",
+      "choices": [
+        "In the SoD policy's Policy Definition page",
+        "In the source's Account Correlation settings",
+        "In a password policy's requirements",
+        "In the identity profile's lifecycle states"
+      ],
+      "answer": "In a password policy's requirements",
+      "explanation": "The password dictionary is a password policy option. SoD rules, correlation and lifecycle states do not govern password content."
+    },
+    {
+      "id": "D6-235",
+      "objective": "6.3",
+      "topic": "Password Policies and Sync Groups",
+      "stem": "An admin deletes a password sync group that used a strict policy. What happens to the password policy for the sources that were in the group?",
+      "choices": [
+        "The sources are disabled until a new group is created",
+        "The sources revert to having no password policy at all",
+        "The policy is deleted along with the group",
+        "The policy becomes assigned directly to those sources"
+      ],
+      "answer": "The policy becomes assigned directly to those sources",
+      "explanation": "After a sync group is deleted, its policy is assigned directly to the associated sources and their passwords become independent. The policy is not deleted."
+    },
+    {
+      "id": "D6-236",
+      "objective": "6.3",
+      "topic": "Password Policies and Sync Groups",
+      "stem": "Before adding several sources to one sync group, what should the admin verify about the chosen password policy?",
+      "choices": [
+        "That every member source accepts its rules",
+        "That it was created by a source owner",
+        "That it is the most recently created policy",
+        "That it matches the identity profile priority order"
+      ],
+      "answer": "That every member source accepts its rules",
+      "explanation": "SailPoint advises verifying that the sync group's policy enforces requirements every member source accepts; otherwise users see errors changing passwords in the group. Who created the policy, its age and profile priority do not matter."
+    },
+    {
+      "id": "D6-237",
+      "type": "match",
+      "objective": "6.3",
+      "topic": "SoD Policy Types",
+      "stem": "Match each Identity Security Cloud policy feature to what it does.",
+      "pairs": [
+        {
+          "item": "Conflicting access based policy",
+          "match": "Flags identities holding items from both List A and List B"
+        },
+        {
+          "item": "General policy",
+          "match": "Flags identities matched by a search query"
+        },
+        {
+          "item": "Password policy",
+          "match": "Sets complexity rules for passwords on sources"
+        },
+        {
+          "item": "Mitigating control",
+          "match": "Records an accepted, expiring exception to a violation"
+        }
+      ],
+      "targets_extra": [
+        "Assigns access automatically when membership criteria match"
+      ],
+      "explanation": "Access-based and query-based policies detect SoD conflicts, password policies govern password strength and controls document accepted risk. Automatic assignment by criteria describes roles, not policies."
+    },
+    {
+      "id": "D6-238",
+      "type": "order",
+      "objective": "6.3",
+      "topic": "Conflicting Access Lists",
+      "stem": "Put the steps for creating a conflicting access SoD policy in order.",
+      "items": [
+        "Go to Admin > SoD Policies and select Create New",
+        "Enter policy details, owners, violation owner and access request option",
+        "Name List A and add its access items",
+        "Name List B and add its access items",
+        "Review the policy, finish and enable it"
+      ],
+      "explanation": "Details and ownership come first, then the two conflicting lists, then review. The policy must be enabled before it is applied."
+    },
+    {
+      "id": "D6-239",
+      "type": "multi",
+      "objective": "6.3",
+      "topic": "Preventive SoD Enforcement",
+      "stem": "An admin wants conflicting access requests stopped before approval. Which TWO configurations do this?",
+      "choices": [
+        "Turn on the global toggle to block ISC access requests with SoD conflicts",
+        "Assign a mitigating control with a short expiration",
+        "Set the individual policy's access request option to Block submission",
+        "Schedule the policy to run daily with subscribers",
+        "Set the individual policy's access request option to Allow submission"
+      ],
+      "answers": [
+        "Set the individual policy's access request option to Block submission",
+        "Turn on the global toggle to block ISC access requests with SoD conflicts"
+      ],
+      "select": 2,
+      "explanation": "Per-policy Block submission and the global blocking toggle both cancel conflicting requests. Allow submission routes them to approvers, and schedules or controls act after access exists."
+    }
+  ]
+}

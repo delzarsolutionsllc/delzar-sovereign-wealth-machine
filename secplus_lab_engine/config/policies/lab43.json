@@ -1,0 +1,58 @@
+{
+  "isc_identity_profiles": {
+    "_note": "Simplified model of SailPoint Identity Security Cloud (ISC) identity profiles, identity attribute mappings and transforms. Transform names and attributes follow the transform JSON documented on developer.sailpoint.com; only a subset is simulated and any other type is refused (deny by default).",
+    "supported_transforms": [
+      "accountAttribute", "identityAttribute", "static", "firstValid", "lower", "upper", "trim", "concat",
+      "substring", "replace", "lookup", "conditional", "dateFormat", "e164phone"
+    ],
+    "known_unsimulated_transforms": [
+      "base64Decode", "base64Encode", "dateCompare", "dateMath", "decomposeDiacriticalMarks", "displayName",
+      "getEndOfString", "getReferenceIdentityAttribute", "indexOf", "iso3166", "lastIndexOf", "leftPad",
+      "normalizeNames", "randomAlphaNumeric", "randomNumeric", "reference", "replaceAll", "rfc5646", "rightPad",
+      "rule", "split", "usernameGenerator", "uuid"
+    ],
+    "identity_attribute_policy": "computed_earlier_only",
+    "required_attributes": {
+      "uid": "required by ISC on every identity profile",
+      "email": "required by ISC; not validated as an email address",
+      "lastname": "required by ISC",
+      "firstname": "required by company policy, not by ISC itself",
+      "cloudLifecycleState": "required by company policy so lifecycle state actions run"
+    },
+    "unique_attributes": ["uid"],
+    "unique_case_insensitive": true,
+    "sign_in_methods": {
+      "USERNAME_PASSWORD": "users sign in with the user name and password they set when they registered",
+      "DIRECTORY_CONNECTION": "users sign in with the password of the source chosen as the authentication source (pass-through authentication)",
+      "MFA": "users sign in with a mobile authenticator app"
+    },
+    "outcome_precedence": ["NO_PROFILE", "TRANSFORM_ERROR", "MAPPING_ERROR", "DUPLICATE_UID", "OK"],
+    "outcome_definitions": {
+      "OK": "Every mapping produced a value, every required attribute is set and the uid is unique: the identity is created.",
+      "MAPPING_ERROR": "A required attribute has no mapping or is empty, or the lifecycle state is not one the profile defines.",
+      "TRANSFORM_ERROR": "A transform failed or is unknown, so no value was stored for that attribute.",
+      "DUPLICATE_UID": "The uid is already used by another identity from any identity profile.",
+      "NO_PROFILE": "None of the person's accounts is on a source that an identity profile uses as authoritative."
+    },
+    "date_named_formats": {
+      "ISO8601": "ISO8601",
+      "PEOPLE_SOFT": "MM/dd/yyyy",
+      "EPOCH_TIME_JAVA": "EPOCH_TIME_JAVA"
+    },
+    "phone_regions": {
+      "US": {"country_code": "1", "national_length": 10, "trunk_prefix": "1"},
+      "CA": {"country_code": "1", "national_length": 10, "trunk_prefix": "1"},
+      "GB": {"country_code": "44", "national_length": 10, "trunk_prefix": "0"},
+      "NL": {"country_code": "31", "national_length": 9, "trunk_prefix": "0"}
+    },
+    "concepts": {
+      "identity profile": "The configuration that turns the accounts of one authoritative source into identities and sets their attribute mappings and sign-in settings.",
+      "authoritative source": "A trusted source, usually HR, whose accounts create identities instead of only being linked to them.",
+      "transform": "A JSON rule that changes a source value on its way into an identity attribute, such as lower-casing it or looking it up in a table.",
+      "implicit input": "The source attribute chosen in the mapping, which a transform uses when it has no explicit input of its own.",
+      "pass-through authentication": "Signing in to the identity platform with the password of another source, such as the corporate directory.",
+      "cloudLifecycleState": "The identity attribute whose calculated value selects one of the profile's lifecycle states, such as active or inactive.",
+      "profile priority": "The number that decides which profile wins for a person on two authoritative sources; the lower number wins."
+    }
+  }
+}

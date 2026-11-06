@@ -1,0 +1,40 @@
+{
+  "lab": 46,
+  "ticket": "REQ-46014",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Priya Raman, Identity Operations Lead",
+  "title": "Predict and triage today's provisioning before Juniper Ridge's Monday start date",
+  "situation": "Juniper Ridge Example Co runs SailPoint Identity Security Cloud (ISC) with four sources: Active Directory through a direct connector, a Finance ERP (enterprise resource planning system) through a Web Services connector, a Badge System whose changes go to ServiceNow through a service desk integration, and a read-only Legacy Payroll flat file. Today's identity refresh and approved access requests produced 14 changes: a new hire, a mover, a leaver, a promotion, people going on leave, and a few requests that look wrong. A new hire's ERP account has already failed once and an access request has stalled.",
+  "your_task": [
+    "For every change, work out the provisioning plan per source: create an account, add or remove an entitlement, modify an attribute, disable an account, or no change.",
+    "Build each new account's attributes from the source's create account provisioning policy, including a unique username.",
+    "Keep any entitlement that another role, access profile or request still grants, and flag identities with more than one account on a source.",
+    "Pick the channel for each change: direct connector, service desk ticket, or manual task for the source owner.",
+    "For every failed transaction, say where to look: account activities, events, the create policy or connector logging."
+  ],
+  "why_it_matters": "Provisioning is where a governance decision becomes real access. A missing attribute in a create policy blocks every new hire on that source, a removal that ignores overlapping access breaks a person's job, and an unknown request that slips through gives access nobody approved.",
+  "done_when": [
+    "All 14 changes have a plan with a reason on every line.",
+    "Every line that is sent has a channel and a status: completed, pending a ticket or task, or failed.",
+    "Each failed transaction has troubleshooting steps the support team can follow.",
+    "Unknown sources, actions and non-requestable roles are rejected, not provisioned."
+  ],
+  "glossary": {
+    "Identity Security Cloud (ISC)": "SailPoint's software-as-a-service identity governance platform, formerly called IdentityNow.",
+    "Provisioning plan": "The list of account and entitlement changes ISC works out for an identity before it sends them to a source.",
+    "Create account provisioning policy": "The per-source form that sets each attribute of a new account from an identity attribute, a fixed value or a generator.",
+    "Access profile": "A bundle of entitlements from one source that can be requested or put into a role.",
+    "Attribute sync": "Pushing a changed identity attribute, such as job title, to the matching account attribute on a source.",
+    "Service desk integration (SDI)": "A link to a ticketing tool such as ServiceNow, so a change becomes a ticket a person completes.",
+    "Manual task": "A work item for the source owner when a connector cannot change the source.",
+    "Account activity": "The searchable record of one provisioning transaction, with its status and any error."
+  },
+  "job_roles": [
+    "IAM Analyst",
+    "SailPoint ISC Administrator",
+    "Identity Engineer",
+    "IAM Operations / Support Engineer"
+  ],
+  "talking_point": "Planned 14 ISC changes into 23 provisioning lines: 3 accounts created (one with a generated username maria.lopez2), 2 entitlements added, 2 removed while 1 was kept because another access profile still granted it, 1 attribute synced and 4 accounts disabled; 7 lines went direct, 3 to ServiceNow tickets and 2 to manual tasks, and 6 failed transactions were triaged: a create policy missing a cost center, a 403 connector error, a two-account request with no account chosen, and 3 rejected requests."
+}

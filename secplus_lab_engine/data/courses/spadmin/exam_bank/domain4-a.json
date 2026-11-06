@@ -1,0 +1,1133 @@
+{
+ "domain": "4",
+ "title": "SailPoint Admin Domain 4 questions (4.1, 4.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D4-001",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "A manager revokes an entitlement during a manager certification. When is the removal sent for provisioning?",
+   "choices": [
+    "When the campaign's end date passes and the campaign closes",
+    "At the next scheduled account aggregation of the source",
+    "When the reviewer signs off the certification",
+    "As soon as the reviewer clicks Revoke on the item"
+   ],
+   "answer": "When the reviewer signs off the certification",
+   "explanation": "Revocation decisions are acted on after the reviewer signs off, which creates the provisioning request. Aggregation only reads the source and never removes access by itself."
+  },
+  {
+   "id": "D4-002",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "An employee transfers to Finance, and the Finance role uses membership criteria on department. What causes the role's access to be provisioned?",
+   "choices": [
+    "Identity processing re-evaluates role membership after the department changes",
+    "An administrator must run a Create Account task on each source the Finance role covers",
+    "The role owner must approve the new member",
+    "The employee must submit an access request for the role, and the manager must approve it"
+   ],
+   "answer": "Identity processing re-evaluates role membership after the department changes",
+   "explanation": "Roles with membership criteria are assigned automatically when identity processing sees that the identity now matches, and their access profiles are then provisioned. No request or approval is needed."
+  },
+  {
+   "id": "D4-003",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "HR marks a worker as terminated and the identity's lifecycle state becomes inactive. Which provisioning can this trigger?",
+   "choices": [
+    "Deleting the identity and every one of its source accounts from the tenant at once",
+    "Removing access profiles and disabling accounts set for that lifecycle state",
+    "Starting a certification campaign so the worker's manager reviews all of the access first",
+    "Resetting the identity profile's priority"
+   ],
+   "answer": "Removing access profiles and disabling accounts set for that lifecycle state",
+   "explanation": "A lifecycle state can remove access profiles, enable or disable accounts and send emails when an identity enters it. It does not delete the identity or start campaigns."
+  },
+  {
+   "id": "D4-004",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "A user requests an access profile that needs manager and source owner approval. When does provisioning to the target begin?",
+   "choices": [
+    "As soon as the user submits the request in the portal",
+    "At the next nightly identity refresh",
+    "After the manager approves, while the source owner reviews",
+    "After the final required approval is given"
+   ],
+   "answer": "After the final required approval is given",
+   "explanation": "An access request is provisioned only once every approval step in its scheme is complete. Partial approval leaves the request pending."
+  },
+  {
+   "id": "D4-005",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "Which of these is an automated provisioning trigger rather than one started by a person?",
+   "choices": [
+    "A lifecycle state change calculated from HR data",
+    "A revocation made in a certification",
+    "An access request submitted by a user",
+    "A request a manager submits for a direct report"
+   ],
+   "answer": "A lifecycle state change calculated from HR data",
+   "explanation": "Lifecycle states and role membership criteria drive automated provisioning from identity data. Access requests and certification decisions are user-initiated."
+  },
+  {
+   "id": "D4-006",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "An administrator needs an Active Directory account disabled immediately while HR finishes paperwork. What can trigger this directly?",
+   "choices": [
+    "Editing the source's account schema",
+    "Running an entitlement aggregation",
+    "Disabling the account from the identity's Accounts tab",
+    "Changing the account deletion threshold on the source"
+   ],
+   "answer": "Disabling the account from the identity's Accounts tab",
+   "explanation": "Admins can act on an identity's accounts, for example disable or enable them, which sends a provisioning request to the source. Aggregations and schema edits do not change target accounts."
+  },
+  {
+   "id": "D4-007",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "A workflow runs when an identity's manager changes and revokes a sensitive access profile. What does the workflow's access action produce?",
+   "choices": [
+    "A search subscription email with the matching results for the owner",
+    "A new certification campaign for the old manager to confirm the removal",
+    "A change to the identity profile mappings",
+    "A provisioning request that removes the access on the source"
+   ],
+   "answer": "A provisioning request that removes the access on the source",
+   "explanation": "Workflow actions that manage access submit requests that go through normal provisioning. They do not edit identity profiles or launch campaigns."
+  },
+  {
+   "id": "D4-008",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "When does Identity Security Cloud use a source's Create Account policy?",
+   "choices": [
+    "During every account aggregation",
+    "When an identity is granted access on a source where it has no account",
+    "When an existing account on the source is disabled by a lifecycle state change",
+    "Whenever an account attribute changes on the source and is aggregated again"
+   ],
+   "answer": "When an identity is granted access on a source where it has no account",
+   "explanation": "The Create Account definition supplies attribute values for a brand-new account. Access added to an existing account is a modify operation."
+  },
+  {
+   "id": "D4-009",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "New hires receive an Active Directory birthright role, but account creation fails because a required naming attribute is missing. What should the administrator fix?",
+   "choices": [
+    "Add the attribute to the access profile's description",
+    "Add the attribute to the identity profile's priority list",
+    "Raise the source's account deletion threshold",
+    "Add the required attribute to the source's Create Account policy"
+   ],
+   "answer": "Add the required attribute to the source's Create Account policy",
+   "explanation": "The target requires the attribute when the account is created, so the Create Account policy must supply a value for it. Access profile descriptions and thresholds are not sent to the target."
+  },
+  {
+   "id": "D4-010",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "Two employees named Ana Silva join on the same day. What should the Create Account policy use so their new usernames do not collide?",
+   "choices": [
+    "A generator that creates a unique account ID from a pattern",
+    "The manager's username with a suffix that the source owner types in by hand",
+    "A static value shared by both accounts",
+    "The identity's display name copied as is into the account ID field"
+   ],
+   "answer": "A generator that creates a unique account ID from a pattern",
+   "explanation": "A unique account ID generator checks for existing values and adds a counter or other variation. Static or copied values would create duplicates."
+  },
+  {
+   "id": "D4-011",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "A Create Account policy maps the account's department to the identity's department attribute. A new account is created with an empty department. What is the MOST likely cause?",
+   "choices": [
+    "The source's VA cluster was in the Busy state while the account was being created",
+    "The identity's department attribute was empty when the account was created",
+    "Create Account policies cannot take values from identity attributes, only static ones",
+    "The account was created by an access request"
+   ],
+   "answer": "The identity's department attribute was empty when the account was created",
+   "explanation": "Mapped values are taken from the identity when the account is provisioned, so a blank identity attribute produces a blank account value. Fixing the identity data or mapping fixes future accounts."
+  },
+  {
+   "id": "D4-012",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "A user who already has an account on a source is granted an access profile on that source. Is the Create Account policy used?",
+   "choices": [
+    "No, the access is held until the next aggregation",
+    "Yes, a second account is always created",
+    "No, the entitlements are added to the existing account",
+    "Yes, the existing account is recreated with new values"
+   ],
+   "answer": "No, the entitlements are added to the existing account",
+   "explanation": "Create Account applies only when there is no account to modify. Sources that allow several accounts per identity use access profile account options instead."
+  },
+  {
+   "id": "D4-013",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "Where does an administrator define the attributes and values that new accounts on a source receive?",
+   "choices": [
+    "In the identity profile's Mappings tab",
+    "In the access profile's approval settings",
+    "In the VA cluster's Edit page",
+    "In the source's Create Account configuration"
+   ],
+   "answer": "In the source's Create Account configuration",
+   "explanation": "Each source has its own Create Account definition used when accounts are provisioned. Identity profile mappings build identity attributes, not account attributes."
+  },
+  {
+   "id": "D4-014",
+   "objective": "4.1",
+   "topic": "Create Account Policy",
+   "stem": "A new source supports provisioning, but no one has reviewed its Create Account policy yet. What is the BEST practice before turning on birthright roles?",
+   "choices": [
+    "Review and test the Create Account policy in the sandbox tenant",
+    "Delete the policy so the connector picks its own defaults for each attribute",
+    "Turn on the roles in production and fix each account creation failure as it appears",
+    "Assign the roles to every identity at once"
+   ],
+   "answer": "Review and test the Create Account policy in the sandbox tenant",
+   "explanation": "SailPoint recommends reviewing Create Account for each source and testing provisioning in sandbox first. Testing in production risks bad accounts for real users."
+  },
+  {
+   "id": "D4-015",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "What does attribute sync do in Identity Security Cloud?",
+   "choices": [
+    "Synchronizes passwords across all sources",
+    "Schedules aggregations to run at the same time",
+    "Pushes changes in identity attributes to the mapped account attributes on sources",
+    "Copies account attributes from every source into the matching identity attributes"
+   ],
+   "answer": "Pushes changes in identity attributes to the mapped account attributes on sources",
+   "explanation": "Attribute sync keeps account data on target sources aligned with identity data in the tenant. Pulling source data into identity attributes is the identity profile's job."
+  },
+  {
+   "id": "D4-016",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "An employee's last name changes in the HR source, but the surname in Active Directory stays the same. What should the administrator configure?",
+   "choices": [
+    "A new Create Account policy on the HR source",
+    "Attribute sync for the surname on the Active Directory source",
+    "A certification of Active Directory accounts that have a changed surname",
+    "A higher priority for Active Directory in the identity profile"
+   ],
+   "answer": "Attribute sync for the surname on the Active Directory source",
+   "explanation": "Create Account values are only used when an account is created; attribute sync updates existing accounts when the identity attribute changes. Changing priorities would not write to AD."
+  },
+  {
+   "id": "D4-017",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "What starts an attribute sync update to a target account?",
+   "choices": [
+    "An entitlement aggregation that finds new groups on the target source",
+    "A change to the mapped identity attribute found during identity processing",
+    "A reviewer approving an access request",
+    "A VA restart"
+   ],
+   "answer": "A change to the mapped identity attribute found during identity processing",
+   "explanation": "Attribute sync reacts when a mapped identity attribute changes, for example after an authoritative source aggregation. Entitlement aggregations, approvals and VA restarts do not start it."
+  },
+  {
+   "id": "D4-018",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "An administrator wants attribute sync on a delimited file source. Why will this not update the target system automatically?",
+   "choices": [
+    "Attribute sync works only on authoritative sources such as an HR system",
+    "Delimited file sources cannot be mapped to identity attributes in an identity profile",
+    "The source is not direct-connect and has no automated provisioning",
+    "Attribute sync requires a SaaS connector"
+   ],
+   "answer": "The source is not direct-connect and has no automated provisioning",
+   "explanation": "Attribute sync writes through the connector, so automatic updates need a provisioning-capable direct connection. On a flat file source each change becomes a manual task, which can create many work items."
+  },
+  {
+   "id": "D4-019",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "How do Create Account and attribute sync differ for a source?",
+   "choices": [
+    "Create Account sets initial values; attribute sync keeps them updated afterwards",
+    "Both are configured on the identity profile",
+    "Both run only during account aggregation",
+    "Attribute sync creates the accounts; Create Account updates their values afterwards"
+   ],
+   "answer": "Create Account sets initial values; attribute sync keeps them updated afterwards",
+   "explanation": "Create Account fills in a new account's attributes once, and attribute sync later pushes identity changes. Both are configured per source."
+  },
+  {
+   "id": "D4-020",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "After enabling attribute sync for title on a source, an administrator wants to confirm an update reached the target. Where should the administrator look?",
+   "choices": [
+    "The VA cluster's Cluster Components page",
+    "The identity profile's preview",
+    "The access profile's approval history",
+    "The identity's account activity in Search"
+   ],
+   "answer": "The identity's account activity in Search",
+   "explanation": "Attribute updates are recorded as account activity with status, stage and any errors. The identity profile preview shows identity calculations, not provisioning results."
+  },
+  {
+   "id": "D4-021",
+   "objective": "4.1",
+   "topic": "Attribute Sync",
+   "stem": "Attribute sync for email is on for a source, yet the account was never updated after the identity's email changed. What should the administrator check FIRST?",
+   "choices": [
+    "Whether the VA cluster's time zone matches",
+    "Whether the source has a scheduled entitlement aggregation",
+    "Whether the identity has a pending certification",
+    "Whether provisioning is enabled on the source"
+   ],
+   "answer": "Whether provisioning is enabled on the source",
+   "explanation": "Attribute sync is provisioning, so a source left read-only cannot receive the update. Schedules and time zones do not block writes."
+  },
+  {
+   "id": "D4-022",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "An administrator wants a direct-connect source to stop writing to its target and send manual work items instead. What should the administrator change?",
+   "choices": [
+    "Disconnect the source from its VA cluster so changes cannot reach the target",
+    "Remove PROVISIONING from the source's features with the Update Source API",
+    "Delete the source's Create Account policy so that no new accounts are written",
+    "Remove the source owner"
+   ],
+   "answer": "Remove PROVISIONING from the source's features with the Update Source API",
+   "explanation": "SailPoint documents removing the PROVISIONING feature with the Update Source API; the source then generates manual work items instead of writing to the target. Deleting the policy or the VA link would break other functions."
+  },
+  {
+   "id": "D4-023",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "Using the API, how can an administrator check whether a source has provisioning turned on?",
+   "choices": [
+    "Get the source and look for PROVISIONING in its features list",
+    "Get the source's account schema and look for a write flag",
+    "Search account activity for the source's name",
+    "List the VA clusters and look for the source name"
+   ],
+   "answer": "Get the source and look for PROVISIONING in its features list",
+   "explanation": "The Get Source response lists the PROVISIONING feature when provisioning is enabled. The schema and cluster lists do not show this setting."
+  },
+  {
+   "id": "D4-024",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "Which object do roles and lifecycle states use to grant a bundle of entitlements from one source?",
+   "choices": [
+    "An identity profile",
+    "A transform",
+    "An access profile",
+    "A search subscription"
+   ],
+   "answer": "An access profile",
+   "explanation": "Access profiles bundle entitlements from a single source and are granted by roles, lifecycle states and requests. Identity profiles and transforms build identity data."
+  },
+  {
+   "id": "D4-025",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "Some identities have two accounts on the same source. How can an administrator control which account receives access from an access profile during automated provisioning?",
+   "choices": [
+    "Edit the identity profile so the source becomes its authoritative source",
+    "Configure the access profile's multiple account options",
+    "Lower the source's deletion threshold so the extra account is removed",
+    "Rename one of the accounts"
+   ],
+   "answer": "Configure the access profile's multiple account options",
+   "explanation": "Access profiles have options that decide which account gets the access when an identity has more than one. The identity profile does not choose target accounts."
+  },
+  {
+   "id": "D4-026",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "Aggregations from a database source work, but every provisioning attempt fails with a permission error. What is the MOST likely cause?",
+   "choices": [
+    "The VA cluster has two VAs",
+    "The identity profile that uses the source has the wrong priority set",
+    "The source's service account can read but not change the target",
+    "The source has no account correlation configured for its accounts"
+   ],
+   "answer": "The source's service account can read but not change the target",
+   "explanation": "Aggregation needs only read rights, while provisioning needs write rights on the target. Correlation and identity profile settings do not cause permission errors."
+  },
+  {
+   "id": "D4-027",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "Which of these is NOT needed for a role to provision an entitlement automatically to an Active Directory source?",
+   "choices": [
+    "The entitlement aggregated from the source",
+    "A source with provisioning enabled",
+    "A role that grants the entitlement, directly or through an access profile",
+    "A certification campaign that includes the role"
+   ],
+   "answer": "A certification campaign that includes the role",
+   "explanation": "Automated provisioning needs a provisioning-enabled source, an aggregated entitlement and a role that grants it. Certifications review access but are not part of granting it."
+  },
+  {
+   "id": "D4-028",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "A source's connector supports provisioning. What else determines whether a lifecycle state's provisioning is done automatically or as a manual task?",
+   "choices": [
+    "Whether the source has a direct connection with provisioning enabled",
+    "Whether the lifecycle state is set to send an email notification to the manager",
+    "Whether the source is authoritative for the identity profile it feeds",
+    "Whether the identity has a manager"
+   ],
+   "answer": "Whether the source has a direct connection with provisioning enabled",
+   "explanation": "Direct-connect sources with provisioning enabled are changed automatically, while flat file or read-only sources get manual tasks. Emails and managers do not change the channel."
+  },
+  {
+   "id": "D4-029",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "Which list names the main provisioning channels in Identity Security Cloud?",
+   "choices": [
+    "Roles, access profiles and entitlements",
+    "Search, reports and subscriptions",
+    "Direct connector, service desk integration and manual tasks",
+    "Account aggregation, account correlation and identity attribute transforms"
+   ],
+   "answer": "Direct connector, service desk integration and manual tasks",
+   "explanation": "Changes reach targets through a connector, a service desk ticket or a manual task for a person. The other lists are data loading, access modeling and reporting features."
+  },
+  {
+   "id": "D4-030",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "A delimited file source is assigned an access profile through a role. Who receives the manual provisioning task for an entitlement change?",
+   "choices": [
+    "The entitlement owner, with the source owner as fallback",
+    "The tenant administrator who created the role that granted the access profile",
+    "The identity that receives the access",
+    "The identity's manager"
+   ],
+   "answer": "The entitlement owner, with the source owner as fallback",
+   "explanation": "Manual tasks for entitlements go to the entitlement owner and fall back to the source owner. Managers approve requests but do not do manual provisioning."
+  },
+  {
+   "id": "D4-031",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "A company runs ServiceNow and wants changes to a disconnected application handled as tickets by its IT team. Which channel fits BEST?",
+   "choices": [
+    "A scheduled search report",
+    "A service desk integration",
+    "A direct connector on a VA",
+    "A manual task in the Task Manager"
+   ],
+   "answer": "A service desk integration",
+   "explanation": "Service desk integration turns provisioning actions into tickets in the ITSM tool so existing teams fulfil them. Manual tasks are worked in ISC instead."
+  },
+  {
+   "id": "D4-032",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "Which provisioning channel gives near real-time automated changes with no human involvement?",
+   "choices": [
+    "A manual task assigned to the source owner in the Task Manager",
+    "A certification campaign",
+    "A service desk integration that opens ServiceNow tickets",
+    "A direct connector, either VA-based or SaaS"
+   ],
+   "answer": "A direct connector, either VA-based or SaaS",
+   "explanation": "Direct connectors write to the target as soon as the request is processed. Tickets and manual tasks depend on people completing them."
+  },
+  {
+   "id": "D4-033",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "A small legacy app has no API, only 15 users and no ticketing process. Which channel is MOST practical?",
+   "choices": [
+    "A service desk integration with a new ticket queue",
+    "A custom direct connector built for the app",
+    "Attribute sync on the source from the identity profile",
+    "Manual tasks assigned to the source owner"
+   ],
+   "answer": "Manual tasks assigned to the source owner",
+   "explanation": "With no API and no ITSM tool, manual tasks let a person make the change and mark it complete. Building a connector is not worth it for 15 users."
+  },
+  {
+   "id": "D4-034",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "A governance group owns a disconnected source. How does this affect manual provisioning tasks for it?",
+   "choices": [
+    "Tasks are sent to SailPoint Support instead of a person in the group",
+    "The task can show multiple owners from the group",
+    "Tasks are created only after aggregation",
+    "The source becomes direct-connect"
+   ],
+   "answer": "The task can show multiple owners from the group",
+   "explanation": "When a governance group is associated with a disconnected source, the task lists multiple owners who can work it. It does not change the source type."
+  },
+  {
+   "id": "D4-035",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "After a service desk ticket is closed in ServiceNow, how does Identity Security Cloud learn that the change is done?",
+   "choices": [
+    "ServiceNow writes the completed change directly to the identity profile",
+    "The change is assumed done as soon as the ticket is created in ServiceNow",
+    "It checks the ticket's status through the service desk integration",
+    "The source owner must aggregate the source manually"
+   ],
+   "answer": "It checks the ticket's status through the service desk integration",
+   "explanation": "The integration periodically checks ticket status and updates the account activity when the ticket closes. A ticket's creation does not mean the change is complete."
+  },
+  {
+   "id": "D4-072",
+   "type": "match",
+   "objective": "4.1",
+   "topic": "Provisioning Channels",
+   "stem": "Match each situation to the provisioning channel that fits it BEST.",
+   "pairs": [
+    {
+     "item": "On-premises Active Directory reached through a VA",
+     "match": "Direct connector through a VA cluster"
+    },
+    {
+     "item": "Disconnected app whose changes the IT team handles as ServiceNow tickets",
+     "match": "Service desk integration"
+    },
+    {
+     "item": "Legacy app with no API and a handful of users",
+     "match": "Manual task for the owner"
+    },
+    {
+     "item": "Cloud app with a SaaS connector",
+     "match": "SaaS connector running in SailPoint's cloud"
+    }
+   ],
+   "targets_extra": [
+    "Scheduled search report"
+   ],
+   "explanation": "Connected systems are changed by connectors, ITSM-driven teams by tickets and small disconnected apps by manual tasks. A search report only shows data."
+  },
+  {
+   "id": "D4-073",
+   "type": "order",
+   "objective": "4.1",
+   "topic": "Provisioning Triggers",
+   "stem": "A new hire's HR record is aggregated and a birthright role grants Active Directory access. Put the events in order.",
+   "items": [
+    "The HR source aggregation creates the identity",
+    "Identity processing calculates attributes and the lifecycle state",
+    "The role's membership criteria match and the role is assigned",
+    "The Create Account policy builds the new account's attributes",
+    "The VA's connector creates the account in Active Directory"
+   ],
+   "explanation": "Identity data comes first, then role assignment, then the account is built from Create Account and written by the connector. Without the identity and role there is nothing to provision."
+  },
+  {
+   "id": "D4-074",
+   "type": "multi",
+   "objective": "4.1",
+   "topic": "Source Provisioning Components",
+   "stem": "A role must grant an Active Directory group automatically. Which TWO items must be in place on the source side?",
+   "choices": [
+    "Provisioning enabled on the source",
+    "The group aggregated as an entitlement from the source",
+    "A certification campaign on the source",
+    "A search subscription on the group",
+    "Enable Debugging on the cluster"
+   ],
+   "answers": [
+    "Provisioning enabled on the source",
+    "The group aggregated as an entitlement from the source"
+   ],
+   "select": 2,
+   "explanation": "The source must allow provisioning and the group must exist in ISC as an aggregated entitlement before a role can grant it. Certifications and subscriptions are governance and reporting features."
+  },
+  {
+   "id": "D4-036",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "Which connector log level is the MOST verbose?",
+   "choices": [
+    "TRACE",
+    "WARN",
+    "DEBUG",
+    "INFO"
+   ],
+   "answer": "TRACE",
+   "explanation": "From least to most detail the levels are ERROR, WARN, INFO, DEBUG and TRACE. TRACE is finer than DEBUG."
+  },
+  {
+   "id": "D4-037",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "Which log level records only errors that may still let the connector continue?",
+   "choices": [
+    "TRACE",
+    "ERROR",
+    "INFO",
+    "DEBUG"
+   ],
+   "answer": "ERROR",
+   "explanation": "ERROR is the least verbose level and shows error events. INFO adds coarse progress messages."
+  },
+  {
+   "id": "D4-038",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "An administrator needs detailed logs for Active Directory provisioning only. Which logging class should be raised?",
+   "choices": [
+    "sailpoint.connector.JDBCConnector",
+    "sailpoint.connector.webservices",
+    "sailpoint.connector.ADLDAPConnector",
+    "sailpoint.connector.DelimitedFileConnector"
+   ],
+   "answer": "sailpoint.connector.ADLDAPConnector",
+   "explanation": "The AD connector's main class is sailpoint.connector.ADLDAPConnector. The others belong to JDBC, Web Services and delimited file connectors."
+  },
+  {
+   "id": "D4-039",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "In a cluster log configuration, what is the difference between rootLevel and logLevels?",
+   "choices": [
+    "rootLevel is the default for all logs; logLevels sets levels for named classes",
+    "rootLevel applies to Windows-based sources; logLevels applies to Linux-based sources",
+    "rootLevel sets duration; logLevels sets file size",
+    "rootLevel controls the VA OS; logLevels controls the tenant"
+   ],
+   "answer": "rootLevel is the default for all logs; logLevels sets levels for named classes",
+   "explanation": "rootLevel is the default level for everything, and logLevels maps logging classes to their own levels. Duration is a separate field."
+  },
+  {
+   "id": "D4-040",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "A JDBC provisioning issue needs detail, but the team wants to avoid huge logs from other connectors. What is the BEST setting?",
+   "choices": [
+    "Set rootLevel to TRACE for the whole cluster",
+    "Enable Debugging on every VA cluster in the tenant for the next 24 hours",
+    "Set rootLevel to ERROR and logLevels to empty",
+    "Keep rootLevel at INFO and set sailpoint.connector.JDBCConnector to DEBUG"
+   ],
+   "answer": "Keep rootLevel at INFO and set sailpoint.connector.JDBCConnector to DEBUG",
+   "explanation": "Raising only the JDBC class gives detail for the problem connector and keeps other logs small. A TRACE root level would flood the disk."
+  },
+  {
+   "id": "D4-041",
+   "objective": "4.2",
+   "topic": "Connector Logging Levels",
+   "stem": "A Web Services source fails during provisioning. Which logging class should be set to DEBUG to capture its detail?",
+   "choices": [
+    "sailpoint.connector.LDAPConnector",
+    "sailpoint.connector.webservices",
+    "sailpoint.connector.Office365Connector",
+    "sailpoint.connector.ADLDAPConnector"
+   ],
+   "answer": "sailpoint.connector.webservices",
+   "explanation": "The Web Services connector logs under sailpoint.connector.webservices. The AD and LDAP classes would not capture its calls."
+  },
+  {
+   "id": "D4-042",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "An administrator will set connector log levels through the API. What must be found FIRST?",
+   "choices": [
+    "The ID of the source owner",
+    "The ID of the identity profile that uses the source",
+    "The ID of the VA cluster, from the managed clusters list",
+    "The ID of the access profile"
+   ],
+   "answer": "The ID of the VA cluster, from the managed clusters list",
+   "explanation": "Log configuration is set per VA cluster, so the cluster ID comes first from the list of managed clusters. Identity and access profile IDs are not involved."
+  },
+  {
+   "id": "D4-043",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "A GET of a cluster's log configuration returns 204 No Content. What does this mean?",
+   "choices": [
+    "The caller lacks permission to read the cluster's settings",
+    "The cluster ID in the request path is wrong or belongs to a different tenant",
+    "The cluster has no VAs",
+    "No log configuration is set, so a new one can be created"
+   ],
+   "answer": "No log configuration is set, so a new one can be created",
+   "explanation": "A 204 means the cluster has no logging configuration yet; the admin can PUT a new one. A wrong ID or missing rights would return an error instead."
+  },
+  {
+   "id": "D4-044",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "Which fields does the body of a cluster log configuration update contain?",
+   "choices": [
+    "durationMinutes, rootLevel and logLevels",
+    "clusterName, timeZone and description",
+    "sourceId, accountId and password",
+    "cron, enabled and notifyEmail"
+   ],
+   "answer": "durationMinutes, rootLevel and logLevels",
+   "explanation": "The update sets how long logging stays raised, the default level and per-class levels. Cluster name and time zone are edited elsewhere."
+  },
+  {
+   "id": "D4-045",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "An administrator raised a connector's log level through the API a minute ago and sees no new detail. What is the MOST likely explanation?",
+   "choices": [
+    "The setting applies only to SaaS connectors",
+    "The VA must be paired again first",
+    "The new levels take effect after about five minutes",
+    "Log levels only change after a reboot"
+   ],
+   "answer": "The new levels take effect after about five minutes",
+   "explanation": "SailPoint notes that the cluster starts writing the new log detail about five minutes after the update. No re-pairing or reboot is needed."
+  },
+  {
+   "id": "D4-046",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "After raising AD connector logging on a VA cluster, where does the administrator read the new log lines?",
+   "choices": [
+    "In the identity profile's audit history for the affected user",
+    "In the Provisioning Activity report",
+    "In the source's Accounts tab",
+    "In ccg.log under /home/sailpoint/log on the VAs"
+   ],
+   "answer": "In ccg.log under /home/sailpoint/log on the VAs",
+   "explanation": "Connector logs on VA-based sources are written to ccg.log on each VA. Reports and the UI show results, not connector debug detail."
+  },
+  {
+   "id": "D4-047",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "Why does a cluster log configuration include a duration?",
+   "choices": [
+    "So raised log levels turn off automatically and do not fill the disk",
+    "So the VA reboots when logging ends",
+    "So the logs already written are deleted after that many minutes pass",
+    "So SailPoint can bill for logging time"
+   ],
+   "answer": "So raised log levels turn off automatically and do not fill the disk",
+   "explanation": "Raised logging ends after durationMinutes, protecting disk space and performance. Logs already written are kept."
+  },
+  {
+   "id": "D4-048",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "Where does an administrator turn on debug logging for one source with an automatic expiry?",
+   "choices": [
+    "The VA cluster's Cluster Components page",
+    "The source's Additional Settings > Administrator Settings",
+    "The Admin Dashboard's Tasks list",
+    "The identity profile's Provisioning tab for identities on the source"
+   ],
+   "answer": "The source's Additional Settings > Administrator Settings",
+   "explanation": "Administrator Settings on the source offer a Debug Logging toggle with an expiry time. The VA cluster page has its own cluster-wide debugging option."
+  },
+  {
+   "id": "D4-049",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "Why does source debug logging have an Expiry Time setting?",
+   "choices": [
+    "So SailPoint receives the collected debug logs only after the expiry time passes",
+    "So debug logging turns off by itself when troubleshooting is done",
+    "So the source is disabled at the expiry",
+    "So the collected debug logs are deleted from the VAs when the expiry time is reached"
+   ],
+   "answer": "So debug logging turns off by itself when troubleshooting is done",
+   "explanation": "The expiry automatically disables debug logging, preventing verbose logs from running forever. It does not delete logs or disable the source."
+  },
+  {
+   "id": "D4-050",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "A provisioning error occurred on a SaaS connector source this morning. How can the administrator get the connector's logs?",
+   "choices": [
+    "Export the identity's access history",
+    "Sign in to a VA and open ccg.log",
+    "Run an entitlement aggregation with the connector's log level set to TRACE",
+    "Generate connector logs for a time range on the source and download them"
+   ],
+   "answer": "Generate connector logs for a time range on the source and download them",
+   "explanation": "SaaS sources run in SailPoint's cloud, so logs are generated from the source's Administrator Settings for a chosen range. There is no VA log for them."
+  },
+  {
+   "id": "D4-051",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "When generating connector logs with a custom range, which limit applies?",
+   "choices": [
+    "A range of 24 hours or less from the last 90 days",
+    "A range of up to 7 days from the last 30 days",
+    "Only the last hour",
+    "Any range up to one year"
+   ],
+   "answer": "A range of 24 hours or less from the last 90 days",
+   "explanation": "Custom ranges can cover up to 24 hours within the last 90 days, and presets cover the last 24, 6 or 1 hours. Longer windows must be pulled in pieces."
+  },
+  {
+   "id": "D4-052",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "After downloading generated connector logs, what does the administrator receive?",
+   "choices": [
+    "A PDF report that is emailed to the source owner and the requester",
+    "A link to a live log stream in Search for the source",
+    "A zip file to extract and open in a text editor",
+    "A CSV of identity attributes"
+   ],
+   "answer": "A zip file to extract and open in a text editor",
+   "explanation": "The download is a zip of log files that can be read in any text or code editor. It is not a report or a search result."
+  },
+  {
+   "id": "D4-053",
+   "objective": "4.2",
+   "topic": "Source Debug Logging and Connector Logs",
+   "stem": "A provisioning failure shows a short generic error in the UI. Which part of the connector log is MOST useful to search support articles with?",
+   "choices": [
+    "The tenant name and the connector version at the top of the log file",
+    "The first INFO line of the day",
+    "Keywords from the inner error message near the failure time",
+    "The generic UI error text"
+   ],
+   "answer": "Keywords from the inner error message near the failure time",
+   "explanation": "The inner message carries the target's actual error, such as an HTTP or LDAP code. The generic UI text matches too many unrelated problems."
+  },
+  {
+   "id": "D4-054",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An access request was approved but the user still lacks the access. Which object should the administrator search FIRST?",
+   "choices": [
+    "The account activity for that request",
+    "The VA cluster's time zone",
+    "The identity profile",
+    "The access profile's description and its owner"
+   ],
+   "answer": "The account activity for that request",
+   "explanation": "Account activity records each action on source accounts, with status, stage and errors for each account request. It shows exactly where provisioning stopped."
+  },
+  {
+   "id": "D4-055",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An account activity shows the status Incomplete. What does this mean?",
+   "choices": [
+    "All actions completed",
+    "Every action failed",
+    "Nothing has been attempted yet, but it is scheduled",
+    "Some requested actions succeeded and some failed"
+   ],
+   "answer": "Some requested actions succeeded and some failed",
+   "explanation": "Incomplete is a partial result. Pending means not yet attempted, Failure means all failed, and Complete means approved actions finished."
+  },
+  {
+   "id": "D4-056",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "Which query finds account activities where every action failed?",
+   "choices": [
+    "stage:completed",
+    "status:failure",
+    "status:pending",
+    "status:complete"
+   ],
+   "answer": "status:failure",
+   "explanation": "The overall status Failure is searched with status:failure. Stage values describe progress, not success."
+  },
+  {
+   "id": "D4-057",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An account request inside an activity shows the result status Unverifiable. What is the MOST likely cause?",
+   "choices": [
+    "The source owner rejected the change in a manual task on the source",
+    "The request is waiting for approval",
+    "The VA cluster is offline",
+    "The source's account schema lacks the attribute being provisioned"
+   ],
+   "answer": "The source's account schema lacks the attribute being provisioned",
+   "explanation": "Unverifiable means the request was sent, but ISC cannot confirm it because the attribute is not in the account schema. Adding it to the schema lets results be verified."
+  },
+  {
+   "id": "D4-058",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An account activity's stage is Terminated. What does this mean?",
+   "choices": [
+    "The action was cancelled and will not be retried",
+    "The action is waiting for its next retry after a failure",
+    "The action was confirmed on the source",
+    "The action is in progress"
+   ],
+   "answer": "The action was cancelled and will not be retried",
+   "explanation": "Terminated is a final stage for cancelled actions. Executing means in progress and Completed means confirmed on the source."
+  },
+  {
+   "id": "D4-059",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An account request result shows Retry. What does Identity Security Cloud do next?",
+   "choices": [
+    "It waits for an administrator to approve a retry from the account activity page",
+    "It tries the action again later because the failure was retryable",
+    "It creates a manual task for the identity",
+    "It deletes the account from the source"
+   ],
+   "answer": "It tries the action again later because the failure was retryable",
+   "explanation": "Retry means the action failed with a retryable error and will be attempted again. Failed would mean no further retries."
+  },
+  {
+   "id": "D4-060",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "An account request result shows Manual Task Created. What does this tell the administrator?",
+   "choices": [
+    "The change was applied automatically to the target system by the source's connector",
+    "The request was rejected by the approver",
+    "The source is not direct-connect, so a person must complete the change",
+    "The connector failed, so SailPoint opened a support case for the tenant administrator"
+   ],
+   "answer": "The source is not direct-connect, so a person must complete the change",
+   "explanation": "Manual Task Created means a task was assigned to the source or entitlement owner. It is the expected result for disconnected sources."
+  },
+  {
+   "id": "D4-061",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "An auditor wants a downloadable list of recent provisioning events with full details. Where should the administrator go?",
+   "choices": [
+    "Admin > Connections > Virtual Appliances",
+    "Search > Reports > Provisioning Activity",
+    "Admin > Access Model > Roles",
+    "Admin > Identity Management > Identity Profiles"
+   ],
+   "answer": "Search > Reports > Provisioning Activity",
+   "explanation": "The Provisioning Activity report lists provisioning events, opens details for each and can be downloaded. The other pages configure the tenant."
+  },
+  {
+   "id": "D4-062",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "Which Search area shows audit events such as access requests, password changes and lifecycle state changes?",
+   "choices": [
+    "Roles",
+    "Access Profiles",
+    "Entitlements",
+    "Events"
+   ],
+   "answer": "Events",
+   "explanation": "Events cover audit activity, including categories such as access requests, account attribute updates and lifecycle state changes. The other areas search access objects."
+  },
+  {
+   "id": "D4-063",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "For how long does the Account Activity tab show account activities?",
+   "choices": [
+    "The past 7 days",
+    "The past 24 hours",
+    "The past 60 days",
+    "The past five years"
+   ],
+   "answer": "The past 60 days",
+   "explanation": "The Account Activity view covers 60 days of activity, newest first by Last Modified. Older data needs other reports or exports."
+  },
+  {
+   "id": "D4-064",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "In the Provisioning Activity report, how can the administrator see more fields in the grid before downloading?",
+   "choices": [
+    "Use the Column Chooser to add columns",
+    "Edit the source's account schema",
+    "Change the identity profile mappings",
+    "Raise the connector's log level"
+   ],
+   "answer": "Use the Column Chooser to add columns",
+   "explanation": "The Column Chooser in the report table adds columns to the grid. Schema and logging changes do not affect the report layout."
+  },
+  {
+   "id": "D4-065",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "A user reports that an account lock happened unexpectedly yesterday. Which Search event category is MOST relevant?",
+   "choices": [
+    "Identity Refresh",
+    "Workflow History",
+    "Account State Update",
+    "Certification"
+   ],
+   "answer": "Account State Update",
+   "explanation": "Account State Update events record locking or unlocking accounts on sources. Identity Refresh covers identity recalculations."
+  },
+  {
+   "id": "D4-066",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "Provisioning to a VA-based source fails with ConnectException. How does Identity Security Cloud handle it?",
+   "choices": [
+    "It deletes the request immediately",
+    "It retries once per hour, up to three times",
+    "It retries every minute until it succeeds",
+    "It converts the request into a service desk ticket"
+   ],
+   "answer": "It retries once per hour, up to three times",
+   "explanation": "ConnectException and NoRouteToHostException are retryable, so ISC retries hourly up to three times. Retries may be delayed by other work in the tenant queue."
+  },
+  {
+   "id": "D4-067",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "Where can an administrator see manual provisioning tasks for everyone in the organization?",
+   "choices": [
+    "Admin > Dashboard > Tasks",
+    "The source's Create Account page",
+    "Admin > Connections > Virtual Appliances",
+    "Search > Roles"
+   ],
+   "answer": "Admin > Dashboard > Tasks",
+   "explanation": "The Tasks page lists manual tasks assigned to the admin and other users, filtered by To Do or Completed. The other pages do not track tasks."
+  },
+  {
+   "id": "D4-068",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "A source owner is on leave and cannot complete a manual provisioning task. What should the administrator do?",
+   "choices": [
+    "Mark the task complete without making the change",
+    "Change the source to direct-connect",
+    "Delete the task and wait for a new one",
+    "Use Actions > Reassign on the task"
+   ],
+   "answer": "Use Actions > Reassign on the task",
+   "explanation": "Admins can reassign a task so someone else completes it. Marking it complete without the change would leave the record wrong."
+  },
+  {
+   "id": "D4-069",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "A source owner has made a manual change in the target but forgot to close the task. How can an administrator close it?",
+   "choices": [
+    "Run an account aggregation on the source",
+    "Use Actions > Mark as Complete on the task",
+    "Delete the account activity",
+    "Restart the VA cluster"
+   ],
+   "answer": "Use Actions > Mark as Complete on the task",
+   "explanation": "Mark as Complete moves the task to the Completed list. Aggregation updates account data but does not close tasks."
+  },
+  {
+   "id": "D4-070",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "Provisioning keeps failing with NoRouteToHostException after all retries. What should the administrator investigate?",
+   "choices": [
+    "The identity profile's authoritative source and its attribute mappings",
+    "The certification campaign schedule for the source's entitlements",
+    "Network routing between the VA and the target system",
+    "The access profile's approval scheme"
+   ],
+   "answer": "Network routing between the VA and the target system",
+   "explanation": "This exception means the VA could not reach the target host. It is a network problem, not an approval or identity setting."
+  },
+  {
+   "id": "D4-071",
+   "objective": "4.2",
+   "topic": "Manual Tasks and Retries",
+   "stem": "A retryable provisioning failure was scheduled to retry in 60 minutes, but it ran later than that. What is the MOST likely reason?",
+   "choices": [
+    "Other work items in the tenant's queue delayed it",
+    "The retry needs an administrator's approval before it runs again",
+    "Retries run only during the nightly refresh",
+    "The VA's time zone was changed"
+   ],
+   "answer": "Other work items in the tenant's queue delayed it",
+   "explanation": "The retry is scheduled for an hour later but may wait behind other queued work. No approval or nightly window is involved."
+  },
+  {
+   "id": "D4-075",
+   "type": "order",
+   "objective": "4.2",
+   "topic": "Enabling Logging on VA Clusters",
+   "stem": "Put the steps in order to raise Active Directory connector logging on a VA cluster with the API.",
+   "items": [
+    "List the managed clusters and note the cluster ID",
+    "Get the cluster's current log configuration",
+    "Put a configuration with durationMinutes, rootLevel and the AD class in logLevels",
+    "Wait about five minutes and reproduce the problem",
+    "Read the new detail in ccg.log on the VAs"
+   ],
+   "explanation": "The cluster is identified, its current settings read, then updated; after about five minutes the detail appears in ccg.log. Reproducing the problem afterwards captures the right lines."
+  },
+  {
+   "id": "D4-076",
+   "type": "match",
+   "objective": "4.2",
+   "topic": "Account Activity Search",
+   "stem": "Match each account request result status to its meaning.",
+   "pairs": [
+    {
+     "item": "Committed",
+     "match": "The request was sent to the connector"
+    },
+    {
+     "item": "Unverifiable",
+     "match": "The attribute is missing from the account schema"
+    },
+    {
+     "item": "Retry",
+     "match": "It failed but will be attempted again"
+    },
+    {
+     "item": "Failed",
+     "match": "It failed and will not be retried"
+    },
+    {
+     "item": "Manual Task Created",
+     "match": "A person must make the change"
+    }
+   ],
+   "targets_extra": [
+    "The request is waiting for manager approval"
+   ],
+   "explanation": "Account request results track each source's part of an action. Approval waits belong to the access request, not to account request results."
+  },
+  {
+   "id": "D4-077",
+   "type": "multi",
+   "objective": "4.2",
+   "topic": "Provisioning Reports and Events",
+   "stem": "An administrator is troubleshooting a failed provisioning action. Which TWO places in Search are MOST useful?",
+   "choices": [
+    "Account Activity",
+    "The Provisioning Activity report",
+    "The Roles tab",
+    "The Access Profiles tab",
+    "The Entitlements tab"
+   ],
+   "answers": [
+    "Account Activity",
+    "The Provisioning Activity report"
+   ],
+   "select": 2,
+   "explanation": "Account Activity shows the status, stage and errors of each action, and the Provisioning Activity report lists provisioning events with details. Roles, access profiles and entitlements describe access, not what happened."
+  }
+ ]
+}

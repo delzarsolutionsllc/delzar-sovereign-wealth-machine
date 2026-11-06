@@ -52,6 +52,14 @@ from . import (
     lab40_okta_policy_evaluator,
     lab41_okta_password_recovery,
     lab42_okta_system_log,
+    lab43_isc_identity_profiles,
+    lab44_isc_lifecycle_states,
+    lab45_isc_aggregation,
+    lab46_isc_provisioning,
+    lab47_isc_access_requests,
+    lab48_isc_certifications_sod,
+    lab49_isc_search_workflows,
+    lab50_isc_virtual_appliances,
 )
 
 # lab number -> (module, default data file)
@@ -100,6 +108,15 @@ LABS = {
     40: (lab40_okta_policy_evaluator, "sample_okta_policy_evaluator.json"),
     41: (lab41_okta_password_recovery, "sample_okta_password_recovery.json"),
     42: (lab42_okta_system_log, "sample_okta_system_log.json"),
+    # SailPoint Identity Security Cloud labs (COURSES = ("spadmin", "speng"))
+    43: (lab43_isc_identity_profiles, "sample_isc_identity_profiles.json"),
+    44: (lab44_isc_lifecycle_states, "sample_isc_lifecycle_states.json"),
+    45: (lab45_isc_aggregation, "sample_isc_aggregation.json"),
+    46: (lab46_isc_provisioning, "sample_isc_provisioning.json"),
+    47: (lab47_isc_access_requests, "sample_isc_access_requests.json"),
+    48: (lab48_isc_certifications_sod, "sample_isc_certifications_sod.json"),
+    49: (lab49_isc_search_workflows, "sample_isc_search_workflows.json"),
+    50: (lab50_isc_virtual_appliances, "sample_isc_virtual_appliances.json"),
 }
 
 

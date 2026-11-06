@@ -1,0 +1,62 @@
+{
+  "isc_aggregation": {
+    "_note": "Simplified model of SailPoint Identity Security Cloud (ISC) source aggregation, account correlation, the account delete threshold and source errors. Connector names are examples: check the ISC connector documentation for whether a given connector runs through a virtual appliance (VA) or as a SaaS connector.",
+    "connector_types": {
+      "active_directory": {"label": "Active Directory", "kind": "va"},
+      "jdbc": {"label": "JDBC (relational database)", "kind": "va"},
+      "ldap": {"label": "LDAP directory", "kind": "va"},
+      "web_services": {"label": "Web Services", "kind": "va"},
+      "saas": {"label": "SaaS connector", "kind": "saas"},
+      "delimited_file": {"label": "Delimited file (flat file, CSV upload)", "kind": "file"}
+    },
+    "connector_kinds": {
+      "va": "VA-based: the connector runs on a virtual appliance (VA) in a source cluster inside your network, so the VA cluster must be healthy before ISC can reach the system.",
+      "saas": "SaaS (direct): the connector runs in SailPoint's cloud and calls the application's API directly, with no virtual appliance.",
+      "file": "Flat file: there is no live connection; accounts arrive as a CSV file uploaded on the source's Import Data page (or through the API)."
+    },
+    "healthy_cluster_statuses": ["HEALTHY"],
+    "aggregation_modes": ["full", "optimized"],
+    "mode_aliases": {"delta": "optimized"},
+    "default_delete_threshold_percent": 10,
+    "error_types": {
+      "va_unreachable": {
+        "label": "virtual appliance unreachable",
+        "where": "Admin > Connections > Virtual Appliances: the source cluster and VA health (is the VA online and connected?); then the source's Import Data > Account Aggregation history"
+      },
+      "connection_failure": {
+        "label": "connection failure",
+        "where": "the source's Test Connection and its health status on the Sources list; the Import Data > Account Aggregation history for the error; Search for the source's aggregation events"
+      },
+      "auth_failure": {
+        "label": "authentication failure",
+        "where": "the source's connection settings: update the service account password or API token, then Test Connection; the Import Data history shows the failed run"
+      },
+      "file_invalid": {
+        "label": "invalid file",
+        "where": "the source's Import Data > Account Aggregation: fix the CSV (header row, account ID column) and upload it again"
+      },
+      "unknown_error": {
+        "label": "unknown error",
+        "where": "the source's Import Data > Account Aggregation history and health status, and Search for the source's aggregation events"
+      }
+    },
+    "concepts": {
+      "aggregation": "Reading the accounts (or entitlements) from a source into Identity Security Cloud so its account list matches the system.",
+      "correlation": "Linking an aggregated account to the identity that owns it by comparing an account attribute with an identity attribute.",
+      "uncorrelated account": "An account that no correlation rule could link to exactly one identity; it stays unowned until someone correlates it manually.",
+      "manual correlation": "An administrator linking an account to an identity by hand; later aggregations keep that link.",
+      "optimized aggregation": "An aggregation that only processes accounts that changed since the last run, so unchanged accounts are skipped.",
+      "account delete threshold": "The percentage of a source's existing accounts that one aggregation may remove; above it the aggregation is cancelled and nothing is deleted.",
+      "entitlement aggregation": "Reading the source's groups, roles and permissions into the entitlement catalog, separately from accounts.",
+      "virtual appliance": "A SailPoint-supplied VM in your own network that runs connectors for systems the cloud cannot reach directly."
+    },
+    "outcome_definitions": {
+      "COMPLETED": "The aggregation ran and its new, changed and removed accounts were applied.",
+      "ABORTED_DELETE_THRESHOLD": "The aggregation would have removed more accounts than the delete threshold allows (or returned no accounts at all), so it was cancelled and nothing was deleted.",
+      "AGGREGATION_FAILED": "The aggregation could not read the source; no account was added, changed or deleted.",
+      "CORRELATED": "The account is linked to exactly one identity.",
+      "UNCORRELATED": "No correlation rule matched an identity.",
+      "AMBIGUOUS": "A correlation rule matched more than one identity, so the account is left uncorrelated and flagged for review."
+    }
+  }
+}

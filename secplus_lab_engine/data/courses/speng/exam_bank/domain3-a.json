@@ -1,0 +1,523 @@
+{
+ "domain": "3",
+ "title": "SailPoint Engineer Domain 3 questions (3.1)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D3-001",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "A team is about to change approval schemes and segments for hundreds of access profiles. Where should the engineer test the changes FIRST?",
+   "choices": [
+    "In a sandbox tenant, then promote the tested configuration to production",
+    "In production during a quiet weekend, with a note to roll back if users complain",
+    "In production, but only on access profiles that nobody has requested so far",
+    "In a spreadsheet model of the approval paths and segments"
+   ],
+   "answer": "In a sandbox tenant, then promote the tested configuration to production",
+   "explanation": "A sandbox tenant lets the team test with realistic data without affecting users, and the tested configuration can then be moved with configuration management tools. Testing directly in production risks wrong approvals or visibility."
+  },
+  {
+   "id": "D3-002",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "An engineer tests a new segment by signing in with an org admin account and finds every access item visible. What should the engineer change in the test?",
+   "choices": [
+    "Disable the segment and enable it again",
+    "Add the admin account to the segment's identity criteria and sign in again",
+    "Remove the access items from all other segments",
+    "Sign in as non-admin test identities inside and outside the segment"
+   ],
+   "answer": "Sign in as non-admin test identities inside and outside the segment",
+   "explanation": "Org administrators see all access items regardless of segments, so a valid test uses ordinary identities that should and should not see each item. Toggling or changing criteria does not fix a test run under the wrong user."
+  },
+  {
+   "id": "D3-003",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "An engineer shortens the reminder schedule in Approval Settings and checks a request submitted last week, which still follows the old schedule. What is the BEST next step for the test?",
+   "choices": [
+    "Cancel the old request and wait for reminders to restart on the next daily cycle",
+    "Restart the virtual appliance so that the new reminder schedule loads into the tenant",
+    "Submit a new request, since changes apply only to requests created afterwards",
+    "Reassign the old request so that it picks up the new reminder settings"
+   ],
+   "answer": "Submit a new request, since changes apply only to requests created afterwards",
+   "explanation": "Reminder, escalation and timeout changes only affect requests created after the change; pending requests keep their original configuration. Reassigning only restarts the existing timing."
+  },
+  {
+   "id": "D3-004",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "A test plan for a new access profile covers manager approval for requests. Which additional test case is MOST important to include?",
+   "choices": [
+    "A second request from the same user with the same justification and the same approver",
+    "A removal request and the end-to-end provisioning result on the target source",
+    "A repeat request submitted from a different web browser on a second workstation",
+    "A request made outside working hours"
+   ],
+   "answer": "A removal request and the end-to-end provisioning result on the target source",
+   "explanation": "A good access test covers grant and removal paths and confirms that provisioning actually changed the account on the target. Repeating identical requests adds little coverage."
+  },
+  {
+   "id": "D3-005",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "Which evidence BEST confirms that an access request test passed end to end?",
+   "choices": [
+    "The requester got the submitted email and the approver's decision email",
+    "The approver clicked Approve in the approval email within the reminder window",
+    "The request is complete and the target account holds the entitlement",
+    "The access profile appears in the Request Center"
+   ],
+   "answer": "The request is complete and the target account holds the entitlement",
+   "explanation": "End-to-end success means the request finished and the target system reflects the change. Emails and approvals are steps along the way, not proof of provisioning."
+  },
+  {
+   "id": "D3-006",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "A new governance group approval scheme is ready. Which test approach follows best practice?",
+   "choices": [
+    "Test every approver path, including escalation and fallback, with test identities",
+    "Test only the main approver, because escalation is automatic",
+    "Ask the governance group to approve all pending production requests as the final test",
+    "Test the scheme by assigning access directly as an admin"
+   ],
+   "answer": "Test every approver path, including escalation and fallback, with test identities",
+   "explanation": "Every path a request can take, including escalation and fallback, should be exercised before rollout. Direct admin assignment bypasses the approval scheme being tested."
+  },
+  {
+   "id": "D3-007",
+   "objective": "3.1",
+   "topic": "Access Management Test Planning",
+   "stem": "A test case for a new segment checks that sales staff can see the Sales CRM access profile. Which negative test case should accompany it?",
+   "choices": [
+    "A sales identity can see every other access profile",
+    "A non-sales identity cannot see the Sales CRM access profile",
+    "An org admin cannot see the Sales CRM access profile",
+    "A sales identity cannot request access for others"
+   ],
+   "answer": "A non-sales identity cannot see the Sales CRM access profile",
+   "explanation": "Negative tests prove that the restriction works for users outside the segment. Org admins always see every item, and segments do not limit requesting on behalf of others."
+  },
+  {
+   "id": "D3-008",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "Where does an engineer configure tenant-wide reminders for pending approval requests?",
+   "choices": [
+    "Admin > Access Model > Segments, on each segment",
+    "Admin > Identity Management > Identity Profiles, on each profile's settings page",
+    "Admin > Connections > Sources, on the approval tab of each source's settings page",
+    "Admin > Global > System Settings, under Feature Settings > Approval Settings"
+   ],
+   "answer": "Admin > Global > System Settings, under Feature Settings > Approval Settings",
+   "explanation": "Global reminders, escalations and timeouts are set on the Approval Settings page under system settings. Individual access items can then override them."
+  },
+  {
+   "id": "D3-009",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "Approvers should get the first reminder three days after a request and then one reminder a week, with no more than four reminders. Which settings achieve this?",
+   "choices": [
+    "A three-day timeout, a weekly escalation frequency and four escalation steps",
+    "Start reminders after three days, frequency weekly, number of reminders four",
+    "A weekly escalation, a three-day timeout and four fallback approvers",
+    "Number of reminders set to three and a four-day reminder frequency"
+   ],
+   "answer": "Start reminders after three days, frequency weekly, number of reminders four",
+   "explanation": "Reminders are configured by number of reminders, days after the request to start, frequency (daily, weekly or monthly) and time. Timeout and escalations solve other problems."
+  },
+  {
+   "id": "D3-010",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "By default, what happens to an access request that no approver acts on?",
+   "choices": [
+    "It times out after 90 days, and no reminders or escalations happen after that",
+    "It stays pending indefinitely until an admin cancels it from the Access Requests page",
+    "It is approved automatically after 30 days",
+    "It is escalated back to the requester after 90 days so the requester can cancel it"
+   ],
+   "answer": "It times out after 90 days, and no reminders or escalations happen after that",
+   "explanation": "Requests time out after 90 days without action by default, and 90 days is also the maximum timeout. ISC never approves a request just because no one acted."
+  },
+  {
+   "id": "D3-011",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "Global reminders are enabled, but approvers of one critical access profile receive no reminders. The access profile's own reminder toggle was turned off earlier. What is the cause?",
+   "choices": [
+    "Reminders are only ever sent for roles and entitlements, never for access profiles",
+    "The global setting applies only to entitlement requests",
+    "The item's own off setting overrides the global setting, so none are sent",
+    "Reminders need a governance group as approver to work"
+   ],
+   "answer": "The item's own off setting overrides the global setting, so none are sent",
+   "explanation": "Settings on an individual access item override the global ones, and an explicit off means no reminders even when they are configured globally. The fix is to clear or reconfigure the item's setting."
+  },
+  {
+   "id": "D3-012",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "An approver reassigns an access request to a colleague two days after the first reminder. What happens to the reminder and escalation timing?",
+   "choices": [
+    "The timing continues from the original request date",
+    "Reminders stop and only escalations continue",
+    "The request is sent straight to the fallback approver",
+    "The timing restarts from the reassignment"
+   ],
+   "answer": "The timing restarts from the reassignment",
+   "explanation": "Reassigning a request restarts the reminder and escalation clock for the new reviewer. This gives the new reviewer the full schedule."
+  },
+  {
+   "id": "D3-013",
+   "objective": "3.1",
+   "topic": "Approval Reminders and Timeouts",
+   "stem": "Reminders are configured for 9:00, but approvers in Singapore receive them overnight. Which setting should the engineer check?",
+   "choices": [
+    "The time zone attribute on each approver's identity",
+    "The virtual appliance's operating system clock",
+    "The time zone of the HR source's aggregation schedule",
+    "The time zone set at the bottom of the Approval Settings page"
+   ],
+   "answer": "The time zone set at the bottom of the Approval Settings page",
+   "explanation": "One time zone setting on the Approval Settings page applies to all reminders and escalations. Approver identity attributes and VA clocks do not drive the schedule."
+  },
+  {
+   "id": "D3-014",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "Escalations are enabled, but no custom escalation chain has been configured. Where do the escalations go?",
+   "choices": [
+    "All escalations go to the item's source owner first, then to the org admins",
+    "First two to the current reviewer's manager, then the fallback approver",
+    "The first goes to the requester, then to any org admin",
+    "All escalations go to the fallback approver right away"
+   ],
+   "answer": "First two to the current reviewer's manager, then the fallback approver",
+   "explanation": "The default pattern escalates to the manager of the assigned reviewer twice and then to the fallback approver. Source owners and requesters are not default escalation targets."
+  },
+  {
+   "id": "D3-015",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "Which reviewer categories can an engineer add to the escalation chain in Approval Settings?",
+   "choices": [
+    "Manager, Identity, Governance Group and Owners",
+    "Requester, Helpdesk, Source and Segment",
+    "Identity Profile, Lifecycle State and Role",
+    "Certifier, Auditor and Report Admin"
+   ],
+   "answer": "Manager, Identity, Governance Group and Owners",
+   "explanation": "The escalation chain accepts Manager, a specific Identity, a Governance Group or Owners, and a fallback approver is chosen separately. The other options are not reviewer categories."
+  },
+  {
+   "id": "D3-016",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "When is an approval request sent to the fallback approver?",
+   "choices": [
+    "When the first reminder is sent to the approver after the initial waiting period",
+    "When the requester cancels and resubmits the request after the timeout",
+    "When the escalation chain is used up, or no approver is found",
+    "When the approver approves the request partially"
+   ],
+   "answer": "When the escalation chain is used up, or no approver is found",
+   "explanation": "The fallback approver is the last step after the escalation chain is exhausted, and it also receives requests when no approver can be found. Reminders do not change the assignee."
+  },
+  {
+   "id": "D3-017",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "The identity named as fallback approver was deleted from the tenant. What happens when a request reaches the fallback step?",
+   "choices": [
+    "It is approved automatically",
+    "It is denied automatically",
+    "It stays with the last valid approver",
+    "It is assigned to all org admins"
+   ],
+   "answer": "It stays with the last valid approver",
+   "explanation": "If the fallback approver no longer exists, the request remains with the last valid approver. The engineer should keep the fallback approver up to date, ideally as a governance group."
+  },
+  {
+   "id": "D3-018",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "A governance group approves requests, and the escalation chain uses the manager of each reviewer. One member has no manager. What happens at the first escalation?",
+   "choices": [
+    "The whole request goes to the fallback approver for every member",
+    "The request is denied because a manager is missing",
+    "The member's assignment goes to the requester",
+    "That member keeps the assignment, while the others go to their managers"
+   ],
+   "answer": "That member keeps the assignment, while the others go to their managers",
+   "explanation": "Each governance group member escalates to their own manager; a member without a manager keeps the assignment. Only when no member has a manager does the request go to the fallback approver."
+  },
+  {
+   "id": "D3-019",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "An escalation assigns a request to an identity that has been disabled. How can an admin move the request to someone who can act on it?",
+   "choices": [
+    "Re-enable and then disable the identity",
+    "Forward it with the forward access request API",
+    "Turn escalations off and back on for the item",
+    "Change the requester's lifecycle state"
+   ],
+   "answer": "Forward it with the forward access request API",
+   "explanation": "Requests are assigned to the configured identity even when it is disabled or incomplete, and an admin can reassign it with the forward access request endpoint. Toggling settings does not move pending requests."
+  },
+  {
+   "id": "D3-020",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "Security wants escalations to begin five days after a request, run every day at 8:00 and go first to the reviewer's manager and then to the IAM governance group. Which settings meet this?",
+   "choices": [
+    "Escalation starts at five days, runs daily at 8:00, chain Manager then the group",
+    "A five-day timeout, daily reminders at 8:00 and the governance group set as requester",
+    "Five reminders a day starting at 8:00 with the manager as fallback approver",
+    "A daily timeout, a five-step chain and the governance group as owner"
+   ],
+   "answer": "Escalation starts at five days, runs daily at 8:00, chain Manager then the group",
+   "explanation": "Escalations are set by days after the request to start, frequency, time and an ordered chain of reviewers. Timeouts and reminders handle expiry and nudges, not reassignment."
+  },
+  {
+   "id": "D3-021",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "A company wants only employees in Germany to see the German payroll access profile in the Request Center. Which feature fits this requirement?",
+   "choices": [
+    "A separation of duties policy on the access profile that blocks non-German requesters",
+    "A data segment that limits which admins can view and edit the access profile",
+    "An access request segment with country criteria holding the access profile",
+    "A lifecycle state that grants the access profile"
+   ],
+   "answer": "An access request segment with country criteria holding the access profile",
+   "explanation": "Access request segments limit which users can see and request specific access items. Data segmentation controls admin record access, and SoD policies address toxic combinations."
+  },
+  {
+   "id": "D3-022",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "An access profile is in no segment, while other items are restricted to segments. Who can see the unsegmented access profile in the Request Center?",
+   "choices": [
+    "Only org admins and the access profile owner",
+    "Only users who belong to at least one segment",
+    "No one, until it is added to a segment",
+    "Every user who can make access requests"
+   ],
+   "answer": "Every user who can make access requests",
+   "explanation": "Items that are not in any segment are requestable by anyone. To restrict an item, it must be added to a segment."
+  },
+  {
+   "id": "D3-023",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "A manager in the Sales segment can see the Sales CRM access profile. Can the manager request it for a team member who is not in the Sales segment?",
+   "choices": [
+    "Yes, if the manager is allowed to request on behalf of that person",
+    "No, because the recipient must also be in the segment",
+    "No, because segments block requests for others",
+    "Yes, but only after the team member is added to the Sales segment"
+   ],
+   "answer": "Yes, if the manager is allowed to request on behalf of that person",
+   "explanation": "Segments apply to the requester's view; if the requester can see an item, they can request it for anyone they are authorized to request for. Segments are not a provisioning control."
+  },
+  {
+   "id": "D3-024",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "Which requirement is a valid use case for access request segments?",
+   "choices": [
+    "Blocking toxic combinations of finance entitlements",
+    "Showing contractors a smaller catalog of requestable access than employees",
+    "Granting access automatically to all staff in a department when they are hired",
+    "Limiting which admins can view identity records"
+   ],
+   "answer": "Showing contractors a smaller catalog of requestable access than employees",
+   "explanation": "Segments tailor what each group sees in the Request Center. SoD policies, role criteria and data segmentation solve the other requirements."
+  },
+  {
+   "id": "D3-025",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "Auditors ask whether segments stop a role from being assigned to users outside the segment through role membership criteria. What is the correct answer?",
+   "choices": [
+    "Yes, segments remove access from users outside the segment",
+    "No, segments only control which items requesters see in the Request Center",
+    "Yes, segments stop role membership criteria from matching users outside them",
+    "No, but segments do block provisioning by lifecycle states"
+   ],
+   "answer": "No, segments only control which items requesters see in the Request Center",
+   "explanation": "Segments affect request visibility, not automatic assignment, provisioning or certifications. Controls such as SoD policies and certifications address assignments made by other means."
+  },
+  {
+   "id": "D3-026",
+   "objective": "3.1",
+   "topic": "Segment Use Cases",
+   "stem": "Access must be visible to users in the US or Canada. Segment criteria allow one value per identity attribute. What is the BEST design?",
+   "choices": [
+    "Create one segment with both country equals US and country equals Canada",
+    "Create one segment and leave the country criteria empty",
+    "Create one segment for the US and one for Canada, each with the access items",
+    "Create a role for both countries and put the role in a segment"
+   ],
+   "answer": "Create one segment for the US and one for Canada, each with the access items",
+   "explanation": "Segment criteria are combined with AND and allow one value per attribute, so an OR between values needs separate segments. Empty criteria would not limit visibility to those countries."
+  },
+  {
+   "id": "D3-027",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "Where does an engineer create an access request segment?",
+   "choices": [
+    "Admin > Global > System Settings > Segments",
+    "Admin > Identity Management > Identity Profiles",
+    "Admin > Connections > Sources > Segments",
+    "Admin > Access Model > Segments"
+   ],
+   "answer": "Admin > Access Model > Segments",
+   "explanation": "Access request segments are created under Access Model. Identity profiles provide the attributes used in segment criteria but do not hold segments."
+  },
+  {
+   "id": "D3-028",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "Which access items can be added to an access request segment?",
+   "choices": [
+    "Access profiles, entitlements and roles",
+    "Identity profiles, lifecycle states and sources",
+    "Workflows, forms and email templates",
+    "Governance groups, certifications and reports"
+   ],
+   "answer": "Access profiles, entitlements and roles",
+   "explanation": "Segments hold the requestable access items users see in the Request Center: access profiles, entitlements and roles. The other options are not requestable items."
+  },
+  {
+   "id": "D3-029",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "A segment should be based on an HR field that is not yet an identity attribute. What should the engineer do?",
+   "choices": [
+    "Reference the HR account attribute directly in the segment's identity criteria",
+    "Put the HR field's values in the segment description",
+    "Create one segment per HR account with that value",
+    "Map the field to an identity attribute, then use it in the segment criteria"
+   ],
+   "answer": "Map the field to an identity attribute, then use it in the segment criteria",
+   "explanation": "Segment criteria use identity attributes, so other data must first be mapped into an identity attribute. Account attributes cannot be referenced directly."
+  },
+  {
+   "id": "D3-030",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "An engineer saves a new segment, but its access items remain visible to everyone. A full day has passed. What should the engineer check FIRST?",
+   "choices": [
+    "Whether the segment's name is unique",
+    "Whether the access items have owners",
+    "Whether the segment is enabled",
+    "Whether the identities have a manager"
+   ],
+   "answer": "Whether the segment is enabled",
+   "explanation": "A segment must be enabled before it is used with access requests, and changes can take about 20 minutes to apply. Names and owners do not change visibility."
+  },
+  {
+   "id": "D3-031",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "An engineer needs to add 120 roles to one segment. How should the engineer proceed?",
+   "choices": [
+    "Split them across three segments with 40 roles each",
+    "Add and save them in batches of no more than 50 items",
+    "Add them all at once and save the segment",
+    "Ask SailPoint Support to raise the segment item limit"
+   ],
+   "answer": "Add and save them in batches of no more than 50 items",
+   "explanation": "A segment can hold many items, but only up to 50 can be added at a time, so larger sets are added in batches. Splitting into separate segments is unnecessary."
+  },
+  {
+   "id": "D3-032",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "An engineer disables a segment that holds the Treasury access profile, which is in no other segment. What happens in the Request Center?",
+   "choices": [
+    "The Treasury access profile becomes visible to all requesters",
+    "The Treasury access profile is hidden from everyone",
+    "The Treasury access profile is removed from its holders",
+    "The Treasury access profile becomes non-requestable"
+   ],
+   "answer": "The Treasury access profile becomes visible to all requesters",
+   "explanation": "Once a segment is disabled, its items are visible to all requesters unless another enabled segment includes them. Disabling a segment never removes assigned access."
+  },
+  {
+   "id": "D3-033",
+   "type": "order",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "An engineer is setting up a new access request segment. Put the steps in order.",
+   "items": [
+    "Create the segment with a name and description",
+    "Define the segment identities with identity attribute criteria",
+    "Add the access profiles, entitlements and roles to the segment",
+    "Review the segment and enable it",
+    "Test with non-admin identities inside and outside the segment"
+   ],
+   "explanation": "The segment is named, given identity criteria and access, then reviewed and enabled; testing with ordinary identities follows because admins see everything."
+  },
+  {
+   "id": "D3-034",
+   "type": "match",
+   "objective": "3.1",
+   "topic": "Escalation Patterns",
+   "stem": "Match each approval setting to what it controls.",
+   "pairs": [
+    {
+     "item": "Timeout",
+     "match": "Days before an untouched request expires"
+    },
+    {
+     "item": "Number of Reminders",
+     "match": "Maximum reminder emails sent to the approver"
+    },
+    {
+     "item": "Escalation chain",
+     "match": "Ordered reviewers who receive the request when time runs out"
+    },
+    {
+     "item": "Fallback approver",
+     "match": "Final reviewer after the chain is used up"
+    },
+    {
+     "item": "Time zone",
+     "match": "Clock used for every reminder and escalation"
+    }
+   ],
+   "targets_extra": [
+    "Identities who can see the item in the Request Center"
+   ],
+   "explanation": "Approval Settings combine a timeout, reminders, an escalation chain, a fallback approver and a time zone. Visibility in the Request Center is set by segments."
+  },
+  {
+   "id": "D3-035",
+   "type": "multi",
+   "objective": "3.1",
+   "topic": "Segment Configuration",
+   "stem": "An engineer is explaining segment behaviour to the access governance team. Which TWO statements are correct?",
+   "choices": [
+    "Access items that are in no segment are visible to every requester",
+    "Org admins see all access items in the Request Center regardless of segments",
+    "Segments remove access from identities that no longer match the criteria",
+    "One segment can match two values of the same attribute with an OR",
+    "Segments stop role membership criteria from assigning access"
+   ],
+   "answers": [
+    "Access items that are in no segment are visible to every requester",
+    "Org admins see all access items in the Request Center regardless of segments"
+   ],
+   "select": 2,
+   "explanation": "Unsegmented items are requestable by anyone and org admins always see everything. Segments never remove access or affect role assignment, and an OR between values needs separate segments."
+  }
+ ]
+}

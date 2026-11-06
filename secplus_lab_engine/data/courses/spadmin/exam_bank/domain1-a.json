@@ -1,0 +1,1705 @@
+{
+ "domain": "1",
+ "title": "SailPoint Admin Domain 1 questions (1.1-1.3)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D1-001",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "An auditor asks for every identity in the Finance department whose cloudLifecycleState is active. Which search query returns exactly that set?",
+   "choices": [
+    "attributes.department:Finance OR attributes.cloudLifecycleState:active",
+    "attributes.department:Finance NOT attributes.cloudLifecycleState:active",
+    "attributes.department:Finance AND attributes.cloudLifecycleState:active",
+    "department=Finance && cloudLifecycleState=active"
+   ],
+   "answer": "attributes.department:Finance AND attributes.cloudLifecycleState:active",
+   "explanation": "Both conditions must be true, so the field:value terms are joined with AND. OR would also return Finance identities in any state and active identities in any department."
+  },
+  {
+   "id": "D1-002",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "A data-quality review needs identities that have no value at all in the custom identity attribute costCenter. Which query BEST finds them?",
+   "choices": [
+    "attributes.costCenter:null",
+    "NOT _exists_:attributes.costCenter",
+    "attributes.costCenter:*",
+    "attributes.costCenter:\"\""
+   ],
+   "answer": "NOT _exists_:attributes.costCenter",
+   "explanation": "The _exists_ keyword matches items that have any non-null value in a field, and NOT inverts it. attributes.costCenter:* does the opposite and matches identities that do have a value, and null or \"\" are searched as literal terms."
+  },
+  {
+   "id": "D1-003",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "An admin wants identities whose name starts with Jon, such as Jon, Jonas and Jonathan. Which query should the admin use?",
+   "choices": [
+    "name:\"Jon\"",
+    "name:Jon*",
+    "name:Jon?",
+    "name:%Jon%"
+   ],
+   "answer": "name:Jon*",
+   "explanation": "The * wildcard matches any number of characters after the prefix. name:\"Jon\" matches only the exact name Jon, ? matches exactly one character, and % is not a search wildcard."
+  },
+  {
+   "id": "D1-004",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "A search for attributes.department:Human Resources returns many identities from other departments. What is the MOST likely fix?",
+   "choices": [
+    "Put the value in quotes: attributes.department:\"Human Resources\"",
+    "Replace the colon with an equals sign",
+    "Write the department value in lowercase letters only",
+    "Add a trailing asterisk after the word Resources"
+   ],
+   "answer": "Put the value in quotes: attributes.department:\"Human Resources\"",
+   "explanation": "If a term contains spaces it must be in double quotes; otherwise the words are treated as if OR sat between them, so Resources is matched anywhere. Quoting makes it a phrase bound to the field."
+  },
+  {
+   "id": "D1-005",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "Security wants a list of identities created in the last seven days. Which query BEST meets the request?",
+   "choices": [
+    "created:[now-7y TO now]",
+    "created:[now-7d TO now]",
+    "created:last7days",
+    "created:now-7d TO now"
+   ],
+   "answer": "created:[now-7d TO now]",
+   "explanation": "Relative dates use range brackets with the earlier bound first, and d is the unit for days, so [now-7d TO now] covers the last week. now-7y would mean seven years, and the other forms are not valid range syntax."
+  },
+  {
+   "id": "D1-006",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "How must boolean operators be written in an Identity Security Cloud search query?",
+   "choices": [
+    "In lowercase, such as and, or and not",
+    "As symbols only, such as + and -",
+    "In uppercase, such as AND, OR and NOT",
+    "As SQL keywords inside a WHERE clause"
+   ],
+   "answer": "In uppercase, such as AND, OR and NOT",
+   "explanation": "Search operators must be written in capital letters (AND, OR, NOT), or as their symbols &&, || and !. Lowercase and, or and not are treated as ordinary search terms."
+  },
+  {
+   "id": "D1-007",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "An admin needs every identity that has at least one account on the source named Workday. Which query should the admin run in the Identities search?",
+   "choices": [
+    "source:Workday",
+    "accounts.source==Workday",
+    "@accounts(source.name:\"Workday\")",
+    "@access(type:ACCOUNT Workday)"
+   ],
+   "answer": "@accounts(source.name:\"Workday\")",
+   "explanation": "The @accounts(...) syntax searches inside each identity's nested account records, here by source name. A bare source field is not how identity documents store account sources."
+  },
+  {
+   "id": "D1-008",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "A reviewer needs identities in either the Sales or the Marketing department, but not contractors. Which query is correct?",
+   "choices": [
+    "(attributes.department:Sales OR attributes.department:Marketing) AND NOT attributes.type:contractor",
+    "attributes.department:Sales OR attributes.department:Marketing OR NOT attributes.type:contractor",
+    "attributes.department:(Sales AND Marketing) NOT attributes.type:contractor",
+    "attributes.department:Sales AND attributes.department:Marketing AND attributes.type:contractor"
+   ],
+   "answer": "(attributes.department:Sales OR attributes.department:Marketing) AND NOT attributes.type:contractor",
+   "explanation": "Parentheses group the two departments so the exclusion applies to the whole set. The ungrouped OR version would also return every non-contractor in any department."
+  },
+  {
+   "id": "D1-009",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "A compliance analyst wants a list of every entitlement that comes from the SAP source. Which search category should the analyst choose?",
+   "choices": [
+    "Entitlements",
+    "Identities",
+    "Account Activities",
+    "Events"
+   ],
+   "answer": "Entitlements",
+   "explanation": "Entitlement documents can be filtered by their source. The Identities category returns people, not the entitlement records themselves."
+  },
+  {
+   "id": "D1-010",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "Which kinds of data can an admin query with Identity Security Cloud search?",
+   "choices": [
+    "Only identities and the accounts they own",
+    "Only audit events from the last day",
+    "Virtual appliance logs and connector traces",
+    "Identities, access items, events and account activities"
+   ],
+   "answer": "Identities, access items, events and account activities",
+   "explanation": "Search indexes identities, roles, access profiles, entitlements, events and account activities. VA logs are collected separately and are not search documents."
+  },
+  {
+   "id": "D1-011",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "A manager asks for the search results in a spreadsheet for an offline review. What should the admin do?",
+   "choices": [
+    "Take screenshots of each results page",
+    "Request a database extract from Support",
+    "Download the search results as a CSV file",
+    "Copy values from each identity's page"
+   ],
+   "answer": "Download the search results as a CSV file",
+   "explanation": "Search results can be downloaded as a CSV report that opens in a spreadsheet. Support extracts and manual copying are slow and error-prone."
+  },
+  {
+   "id": "D1-012",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "An admin's identity search shows names and emails, but the reviewer also needs each identity's lifecycle state in the results. What is the BEST approach?",
+   "choices": [
+    "Run one search per lifecycle state value and merge the results",
+    "Edit the identity profile to rename the lifecycle state attribute",
+    "Open each identity to read the lifecycle state",
+    "Add the lifecycle state attribute as a column in the results"
+   ],
+   "answer": "Add the lifecycle state attribute as a column in the results",
+   "explanation": "Result columns can be chosen so the needed attributes appear in the table and in the download. Separate searches per value work but waste time."
+  },
+  {
+   "id": "D1-013",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "A helpdesk agent types only the word smith into the search box with no field name. What does Identity Security Cloud do?",
+   "choices": [
+    "It searches every category for any attribute containing the term",
+    "It rejects the query until a field name is added",
+    "It searches only the identity's email attribute",
+    "It treats the word as the name of a saved search"
+   ],
+   "answer": "It searches every category for any attribute containing the term",
+   "explanation": "A term with no field searches within all search categories and returns items with any attribute containing the word, such as identities, roles or entitlements. A field name is optional, not required."
+  },
+  {
+   "id": "D1-014",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "An account aggregation finished a minute ago, but a new account does not yet appear in search results. What is the MOST likely explanation?",
+   "choices": [
+    "Search only refreshes once every night, after the scheduled maintenance window",
+    "New accounts are indexed only when the next certification campaign generates",
+    "Aggregated accounts are excluded from search by design",
+    "The search index updates shortly after changes, so results can lag briefly"
+   ],
+   "answer": "The search index updates shortly after changes, so results can lag briefly",
+   "explanation": "Data is copied into the search index after it changes, which usually takes seconds to a few minutes and can be longer under load. Waiting briefly and rerunning the search is the right first step."
+  },
+  {
+   "id": "D1-015",
+   "objective": "1.1",
+   "topic": "Search Categories and Results",
+   "stem": "An access review team needs to see which identities hold a role named Payroll Approver. Which approach BEST returns those identities?",
+   "choices": [
+    "Search events for the word Payroll",
+    "Search account activities from the date the role was created",
+    "Search entitlements for the role's owner and the entitlements that owner holds",
+    "Search identities for those whose access includes that role"
+   ],
+   "answer": "Search identities for those whose access includes that role",
+   "explanation": "Identity documents carry their access, so an identity search filtered on the role returns the holders. Events and activities record changes, not current holdings."
+  },
+  {
+   "id": "D1-016",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "An admin runs the same complex identity query every week and is tired of retyping it. What should the admin do?",
+   "choices": [
+    "Bookmark the results page URL",
+    "Save the query as a saved search",
+    "Create a role with the same criteria",
+    "Store the query text in the identity profile"
+   ],
+   "answer": "Save the query as a saved search",
+   "explanation": "Saved searches store a query for reuse from the search toolbar. A role with the same criteria would grant access, which is not the goal."
+  },
+  {
+   "id": "D1-017",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "What must exist before an admin can set up a scheduled email of search results?",
+   "choices": [
+    "A saved search to subscribe to",
+    "A certification campaign for the same users",
+    "An event trigger subscription for search",
+    "A transform on the identity profile"
+   ],
+   "answer": "A saved search to subscribe to",
+   "explanation": "Subscriptions are created on saved searches. Event triggers and transforms are separate features."
+  },
+  {
+   "id": "D1-018",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "An admin realises the query in an existing saved search is wrong. How should the admin correct it in the Search interface?",
+   "choices": [
+    "Edit the query text on the saved search details page",
+    "Change the query in the subscription settings",
+    "Ask another admin to edit it on the admin's behalf",
+    "Save the corrected query as a new saved search"
+   ],
+   "answer": "Save the corrected query as a new saved search",
+   "explanation": "In Search, only the name and description of a saved search can be edited, not its query. A new saved search, with any subscriptions recreated, is required."
+  },
+  {
+   "id": "D1-019",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "An admin saved a useful query and a colleague who is also an admin cannot see it in the saved search list. Why?",
+   "choices": [
+    "The colleague lacks the Helpdesk user level",
+    "Saved searches appear only after a nightly refresh",
+    "Saved searches are visible only to their creator",
+    "A second admin must approve it before it is shared"
+   ],
+   "answer": "Saved searches are visible only to their creator",
+   "explanation": "Saved searches belong to their creator. To share results with others, the creator can add them as subscribers to a subscription."
+  },
+  {
+   "id": "D1-020",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "A saved search was created a month ago. When the admin runs it today, which data does it return?",
+   "choices": [
+    "The results captured on the day it was saved",
+    "Current results from the search index",
+    "Only items changed since it was saved",
+    "Results from the most recent nightly backup"
+   ],
+   "answer": "Current results from the search index",
+   "explanation": "A saved search stores the query, not a snapshot, so it runs against current data each time. That is why the same saved search can return different results over time."
+  },
+  {
+   "id": "D1-021",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "Besides the query itself, what does a saved search keep that affects how its results look when it is run again?",
+   "choices": [
+    "The identity profile and transforms behind each attribute value",
+    "The source that was aggregated most recently before the search was saved",
+    "The result columns that were displayed when it was saved",
+    "The approval scheme of each result"
+   ],
+   "answer": "The result columns that were displayed when it was saved",
+   "explanation": "Running a saved search shows the columns displayed when it was saved. Identity profiles and approval schemes are unrelated to search display."
+  },
+  {
+   "id": "D1-022",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "A script needs to list and create saved searches programmatically. Which interface should the developer use?",
+   "choices": [
+    "The virtual appliance command line",
+    "The saved searches endpoints of the REST API",
+    "A connector rule on a source",
+    "The email template editor"
+   ],
+   "answer": "The saved searches endpoints of the REST API",
+   "explanation": "Saved searches have API endpoints for listing, creating and deleting them. Connector rules and the VA command line do not manage search."
+  },
+  {
+   "id": "D1-023",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "An auditor wants the results of a saved search emailed on the first day of every month. What should the admin configure?",
+   "choices": [
+    "A certification campaign that runs monthly and emails its reviewers",
+    "An access request for the auditor with a monthly sunset date",
+    "A subscription on the saved search with a monthly schedule",
+    "A monthly account aggregation on the source"
+   ],
+   "answer": "A subscription on the saved search with a monthly schedule",
+   "explanation": "Subscriptions email saved search results on a daily, weekly or monthly schedule. A certification campaign asks reviewers for decisions, not a report."
+  },
+  {
+   "id": "D1-024",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "A team lead wants a report every Monday and Thursday at 8 AM local time. Which subscription settings meet this?",
+   "choices": [
+    "Choose the team's time zone, a weekly schedule, both days and 8 AM",
+    "Choose a daily schedule at 8 AM and have the lead ignore the extra emails",
+    "Choose a monthly schedule with day 1 and day 4 of each month at 8 AM",
+    "Create a separate saved search for each of the two days"
+   ],
+   "answer": "Choose the team's time zone, a weekly schedule, both days and 8 AM",
+   "explanation": "A weekly schedule lets you pick several weekdays and times, in the time zone you select. A daily schedule would send unwanted emails."
+  },
+  {
+   "id": "D1-025",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "A security manager only wants the subscription email when the query actually finds something. How should the subscription be set?",
+   "choices": [
+    "Set a monthly schedule so the emails arrive less often",
+    "Add a second subscriber to filter results",
+    "Disable the subscription until results appear, then turn it back on",
+    "Leave the send-when-no-items-match option unchecked"
+   ],
+   "answer": "Leave the send-when-no-items-match option unchecked",
+   "explanation": "The subscription has an option to send the report even when nothing matches; leaving it off suppresses empty emails. Disabling the subscription stops all emails."
+  },
+  {
+   "id": "D1-026",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "An admin creates a subscription and wants the compliance lead to receive it as well. What should the admin do?",
+   "choices": [
+    "Share the saved search with the compliance lead",
+    "Forward each email manually",
+    "Give the compliance lead the Admin user level",
+    "Add the compliance lead as another subscriber"
+   ],
+   "answer": "Add the compliance lead as another subscriber",
+   "explanation": "The creator is subscribed automatically and can add other subscribers. Saved searches themselves are not shared, and granting Admin is excessive."
+  },
+  {
+   "id": "D1-027",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "A subscription option adds a detailed summary of identity and access data into the email body. Why should an admin think carefully before enabling it?",
+   "choices": [
+    "Sensitive access details in email can be a security risk",
+    "It disables the scheduled delivery",
+    "It removes the link to the report",
+    "It turns the subscription into a certification"
+   ],
+   "answer": "Sensitive access details in email can be a security risk",
+   "explanation": "Detailed data in an email body can leak if mail is forwarded or intercepted. Leaving it off keeps recipients going to the report link instead."
+  },
+  {
+   "id": "D1-028",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "A recipient of a weekly search subscription leaves the company. What should the admin do?",
+   "choices": [
+    "Delete the saved search and rebuild it without them",
+    "Disable the departed identity's accounts on every source",
+    "Edit the subscription and remove the recipient",
+    "Change the schedule to monthly"
+   ],
+   "answer": "Edit the subscription and remove the recipient",
+   "explanation": "Subscriptions can be edited at any time, including their subscribers. Deleting the saved search throws away working configuration."
+  },
+  {
+   "id": "D1-029",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "A team must pause a weekly report during a freeze but keep its settings for later. What is the BEST option?",
+   "choices": [
+    "Delete the subscription and recreate it after the freeze",
+    "Disable the subscription and enable it again later",
+    "Remove all subscribers except the creator until the freeze ends",
+    "Change the saved search name"
+   ],
+   "answer": "Disable the subscription and enable it again later",
+   "explanation": "A disabled subscription sends no emails and can be re-enabled with its settings intact. Deleting it loses the configuration."
+  },
+  {
+   "id": "D1-030",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "An admin needs to find out who changed a source's configuration yesterday. Which search category is BEST?",
+   "choices": [
+    "Entitlements",
+    "Events",
+    "Access Profiles",
+    "Roles"
+   ],
+   "answer": "Events",
+   "explanation": "Events record actions such as configuration changes, with the actor and time. Entitlement and role documents show current state, not who changed a source."
+  },
+  {
+   "id": "D1-031",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "A user says the Active Directory account requested for them last week was never created. Where should the admin look FIRST?",
+   "choices": [
+    "The identity profile's attribute mappings and their transforms",
+    "The account activity for that request and its result",
+    "The source's correlation configuration for account matching",
+    "The role membership criteria"
+   ],
+   "answer": "The account activity for that request and its result",
+   "explanation": "Account activities track each requested change and the per-account provisioning outcome, including errors. Mappings and correlation are not where a failed create is recorded."
+  },
+  {
+   "id": "D1-032",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "What does an account activity record in Identity Security Cloud?",
+   "choices": [
+    "A requested change and the provisioning results for the affected accounts",
+    "Only successful sign-ins to the tenant and the IP address of each sign-in",
+    "Only the schedule of each aggregation",
+    "The full configuration of a source"
+   ],
+   "answer": "A requested change and the provisioning results for the affected accounts",
+   "explanation": "An account activity groups an action such as an access request or lifecycle change with the account changes it caused and their status. Sign-ins and source configuration are elsewhere."
+  },
+  {
+   "id": "D1-033",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "Security wants to review failed sign-in attempts to the tenant over the past week. Which search approach fits BEST?",
+   "choices": [
+    "Search entitlements for the authentication source and its sign-in groups",
+    "Search roles assigned in the past week",
+    "Search events filtered to authentication actions and the date range",
+    "Search account activities for password changes made during that week"
+   ],
+   "answer": "Search events filtered to authentication actions and the date range",
+   "explanation": "Authentication actions are recorded as audit events (type:AUTH), which can be filtered by action, status and date. Entitlements and roles describe access, and account activities track changes made on sources."
+  },
+  {
+   "id": "D1-034",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "An admin wants a weekly list of provisioning actions that failed. Which approach is BEST?",
+   "choices": [
+    "Save a search of failed account activities and subscribe weekly",
+    "Export all identities to CSV weekly and compare the files by hand",
+    "Run a certification of all accounts each week and review the failures",
+    "Enable delta aggregation on every source"
+   ],
+   "answer": "Save a search of failed account activities and subscribe weekly",
+   "explanation": "A saved search on failed account activities with a weekly subscription delivers the list automatically. Manual comparisons and certifications do not report failures."
+  },
+  {
+   "id": "D1-035",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "What is the main difference between searching events and searching account activities?",
+   "choices": [
+    "Events show only errors; account activities show only successes",
+    "Events are kept forever; account activities are kept a day",
+    "Events cover sources only; account activities cover identities only",
+    "Events audit actions tenant-wide; account activities track account changes"
+   ],
+   "answer": "Events audit actions tenant-wide; account activities track account changes",
+   "explanation": "Events are an audit log of actions, while account activities follow a change request through to each account. Neither is limited to only errors or only successes."
+  },
+  {
+   "id": "D1-036",
+   "objective": "1.1",
+   "topic": "Event and Account Activity Searches",
+   "stem": "A helpdesk lead needs the status of an access request submitted for a user this morning. What should the lead check?",
+   "choices": [
+    "The identity profile preview for that user's attributes",
+    "The transforms applied to the user's identity attributes",
+    "The virtual appliance health page",
+    "The account activity created for that access request"
+   ],
+   "answer": "The account activity created for that access request",
+   "explanation": "An access request creates an account activity that shows approval and provisioning progress. Profile previews and transforms show attribute calculations."
+  },
+  {
+   "id": "D1-037",
+   "type": "order",
+   "objective": "1.1",
+   "topic": "Search Subscriptions and Schedules",
+   "stem": "An admin must deliver a weekly email of identities with no manager to the HR lead. Put the steps in order.",
+   "items": [
+    "Write and run the query in Search",
+    "Choose the result columns the HR lead needs",
+    "Save the search with a clear name",
+    "Create a subscription with a weekly schedule and time zone",
+    "Add the HR lead as a subscriber and save the subscription"
+   ],
+   "explanation": "A subscription is built on a saved search, so the query is written, shaped and saved first. The schedule and subscribers are set last when the subscription is created."
+  },
+  {
+   "id": "D1-038",
+   "type": "match",
+   "objective": "1.1",
+   "topic": "Search Query Syntax",
+   "stem": "Match each search query to what it returns.",
+   "pairs": [
+    {
+     "item": "NOT _exists_:attributes.manager",
+     "match": "Identities with no manager value"
+    },
+    {
+     "item": "name:Ann*",
+     "match": "Identities whose name starts with Ann"
+    },
+    {
+     "item": "created:[now-30d TO now]",
+     "match": "Items created in the last 30 days"
+    },
+    {
+     "item": "@accounts(source.name:\"Okta\")",
+     "match": "Identities with an account on the Okta source"
+    }
+   ],
+   "targets_extra": [
+    "Identities whose account on Okta is disabled"
+   ],
+   "explanation": "_exists_ tests for a value, * is a wildcard, square brackets give a range and @accounts searches nested accounts. None of these queries checks an account's disabled flag."
+  },
+  {
+   "id": "D1-039",
+   "type": "multi",
+   "objective": "1.1",
+   "topic": "Saved Searches",
+   "stem": "An admin is planning saved searches and subscriptions. Which TWO statements are true?",
+   "choices": [
+    "Saved searches are visible only to the user who created them",
+    "A saved search can have several subscriptions",
+    "The query can be edited on the saved search details page",
+    "Subscriptions can only run once a month",
+    "Subscriptions always send email even with no results"
+   ],
+   "answers": [
+    "Saved searches are visible only to the user who created them",
+    "A saved search can have several subscriptions"
+   ],
+   "select": 2,
+   "explanation": "Saved searches are private to their creator and each can carry up to 10 subscriptions. The query cannot be edited in the saved search details (only name and description), schedules can be daily, weekly or monthly, and sending empty reports is optional."
+  },
+  {
+   "id": "D1-040",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "How does a client present its access token when calling the Identity Security Cloud REST API?",
+   "choices": [
+    "As a password query parameter in each request URL",
+    "In the Authorization header as a Bearer token",
+    "In a cookie set by the Admin UI",
+    "In the request body of every API call as a JSON field"
+   ],
+   "answer": "In the Authorization header as a Bearer token",
+   "explanation": "API calls carry the OAuth access token in the Authorization header with the Bearer scheme. Passing secrets in query strings exposes them in logs."
+  },
+  {
+   "id": "D1-041",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "A nightly integration runs with no person present and must call the REST API. Which OAuth grant type fits BEST?",
+   "choices": [
+    "Client credentials",
+    "Authorization code",
+    "Implicit",
+    "Device code"
+   ],
+   "answer": "Client credentials",
+   "explanation": "Client credentials is the grant for machine-to-machine calls with no interactive user. Authorization code needs a person to sign in and approve."
+  },
+  {
+   "id": "D1-042",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "A developer has a client ID and secret for tenant acme. Where should the developer request an access token?",
+   "choices": [
+    "https://acme.identitynow.com/ui/login",
+    "https://acme.api.identitynow.com/v3/identities",
+    "https://acme.api.identitynow.com/oauth/token",
+    "https://api.sailpoint.com/acme/token"
+   ],
+   "answer": "https://acme.api.identitynow.com/oauth/token",
+   "explanation": "Tokens are issued by the tenant's API host at the /oauth/token path. The /v3/identities path is a resource endpoint that needs a token already."
+  },
+  {
+   "id": "D1-043",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "A custom web app lets employees sign in and then calls the API with their own permissions. Which OAuth grant type should it use?",
+   "choices": [
+    "Client credentials",
+    "Password grant with a shared admin account",
+    "A static key embedded in the browser code",
+    "Authorization code"
+   ],
+   "answer": "Authorization code",
+   "explanation": "Authorization code lets an interactive user sign in so the app acts on that user's behalf. Client credentials has no user sign-in step."
+  },
+  {
+   "id": "D1-044",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "A script's API call returns 401 Unauthorized after it ran fine this morning. What is the MOST likely cause?",
+   "choices": [
+    "The source is missing a recent aggregation",
+    "The access token has expired",
+    "The tenant's search index is rebuilding",
+    "The identity profile has an unsaved change"
+   ],
+   "answer": "The access token has expired",
+   "explanation": "Access tokens are short-lived, so a 401 after hours of success usually means the token expired. The script should request a fresh token."
+  },
+  {
+   "id": "D1-045",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "An API call with a fresh, valid token returns 403 Forbidden. What does this MOST likely mean?",
+   "choices": [
+    "The token was requested from the login page instead of the API host",
+    "The token is valid but lacks the rights or scopes for that endpoint",
+    "The client secret has been rotated",
+    "The endpoint does not exist in this API version"
+   ],
+   "answer": "The token is valid but lacks the rights or scopes for that endpoint",
+   "explanation": "403 means the caller was authenticated but is not allowed to do the operation. An unknown endpoint returns 404 instead."
+  },
+  {
+   "id": "D1-046",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "Where does a user create a personal access token in Identity Security Cloud?",
+   "choices": [
+    "In Admin > Connections > Sources",
+    "In their own Preferences, under Personal Access Tokens",
+    "In the identity profile's mappings tab",
+    "On the virtual appliance console"
+   ],
+   "answer": "In their own Preferences, under Personal Access Tokens",
+   "explanation": "Personal access tokens are created by the user from Preferences. Sources and identity profiles hold no API credentials for users."
+  },
+  {
+   "id": "D1-047",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "Which permissions does an API call made with a personal access token have?",
+   "choices": [
+    "Full Admin rights, whatever user level the owner has",
+    "Only read access to public data",
+    "The rights of whoever last used the token to call the API",
+    "The owner's rights, limited to the token's scopes"
+   ],
+   "answer": "The owner's rights, limited to the token's scopes",
+   "explanation": "A personal access token acts as its owner, so calls get that user's rights within the scopes chosen. It never grants more than the owner has."
+  },
+  {
+   "id": "D1-048",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "A developer creates a personal access token and closes the window before copying the secret. What should the developer do?",
+   "choices": [
+    "Create a new token, because the secret is shown only once",
+    "Ask an Admin to display the secret",
+    "Reopen Preferences and select the token to reveal its secret",
+    "Request the secret from SailPoint Support with the token's ID"
+   ],
+   "answer": "Create a new token, because the secret is shown only once",
+   "explanation": "The secret is displayed once at creation and cannot be retrieved later. A new token is created and the unused one deleted."
+  },
+  {
+   "id": "D1-049",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "A personal access token's secret was accidentally committed to a public repository. What should be done FIRST?",
+   "choices": [
+    "Delete the token so it can no longer be used",
+    "Make the repository private",
+    "Change the owner's sign-in password and enable MFA",
+    "Wait for the current access token to time out"
+   ],
+   "answer": "Delete the token so it can no longer be used",
+   "explanation": "Deleting the token revokes it at once, so the leaked secret becomes useless. Hiding the repository does not remove copies already taken."
+  },
+  {
+   "id": "D1-050",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "How does a script use a personal access token to call the REST API?",
+   "choices": [
+    "It sends the token secret directly as the Bearer value on each call",
+    "It signs in to the Admin UI with the token name and secret as credentials",
+    "It uploads the token to the virtual appliance",
+    "It exchanges the token's client ID and secret for an access token"
+   ],
+   "answer": "It exchanges the token's client ID and secret for an access token",
+   "explanation": "A personal access token is a client ID and secret used with the client credentials grant to get an access token. The access token, not the secret, is sent on API calls."
+  },
+  {
+   "id": "D1-051",
+   "objective": "1.2",
+   "topic": "Personal Access Tokens",
+   "stem": "A developer needs a personal access token for a script that only reads identities. What is the BEST practice?",
+   "choices": [
+    "Grant sp:scopes:all so the script never fails later",
+    "Share one token across every script the whole team runs",
+    "Use an Admin colleague's token",
+    "Limit the token's scopes to what the script needs"
+   ],
+   "answer": "Limit the token's scopes to what the script needs",
+   "explanation": "Least privilege applies to tokens too: a PAT can be limited to specific scopes, and narrow scopes limit damage if it leaks. sp:scopes:all grants every right of the owner's user level, and shared or borrowed tokens break accountability."
+  },
+  {
+   "id": "D1-052",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "A service desk team must unlock accounts, help users reset passwords and reset MFA, without changing configuration. Which user level fits BEST?",
+   "choices": [
+    "Helpdesk",
+    "Admin",
+    "Source Admin",
+    "Report Admin"
+   ],
+   "answer": "Helpdesk",
+   "explanation": "Helpdesk covers account unlock and enable or disable, password help and MFA reset. Admin would grant far more than needed."
+  },
+  {
+   "id": "D1-053",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "An audit team must run certification campaigns but should not configure sources or roles. Which user level should they receive?",
+   "choices": [
+    "Cert Admin",
+    "Role Admin",
+    "Source Admin",
+    "Helpdesk"
+   ],
+   "answer": "Cert Admin",
+   "explanation": "Cert Admin performs all certification actions and can search and report. It does not manage sources or roles."
+  },
+  {
+   "id": "D1-054",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "An application team should manage only the sources tied to their governance group. Which user level fits BEST?",
+   "choices": [
+    "Source Admin",
+    "Admin",
+    "Source Sub-Admin",
+    "Cert Admin"
+   ],
+   "answer": "Source Sub-Admin",
+   "explanation": "Source Sub-Admins work only on sources associated with governance groups they belong to. Source Admin covers every source."
+  },
+  {
+   "id": "D1-055",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "Who can normally grant user levels to other users in Identity Security Cloud?",
+   "choices": [
+    "Users with the Admin user level",
+    "Any user with the Helpdesk level",
+    "Every identity's manager",
+    "The owner of each source"
+   ],
+   "answer": "Users with the Admin user level",
+   "explanation": "Generally only Admins grant or remove user levels, unless the tenant is set to also let Role Admins and Source Admins do so. Managers and source owners cannot."
+  },
+  {
+   "id": "D1-056",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "A risk team only needs to save, subscribe to and download reports and view the admin dashboard. Which user level is the least-privilege choice?",
+   "choices": [
+    "Admin",
+    "Source Admin",
+    "Cert Admin",
+    "Report Admin"
+   ],
+   "answer": "Report Admin",
+   "explanation": "Report Admin gives reporting, search and dashboard viewing. Source Admin and Admin add configuration rights the team does not need."
+  },
+  {
+   "id": "D1-057",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "An engineer with the Source Admin level is asked to build an event trigger subscription and cannot find the Event Triggers page. Why?",
+   "choices": [
+    "Source Admins must first run an aggregation",
+    "Event triggers are available only on the virtual appliance",
+    "The engineer needs the Helpdesk level as well as Source Admin",
+    "Event triggers and workflows require the Admin user level"
+   ],
+   "answer": "Event triggers and workflows require the Admin user level",
+   "explanation": "Among the built-in user levels, the Event Triggers and Workflows pages are available only to Admins. Adding Helpdesk would not grant them."
+  },
+  {
+   "id": "D1-058",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "A company wants employees to sign in to Identity Security Cloud with their existing corporate identity provider. What should the admin configure?",
+   "choices": [
+    "SAML single sign-on with the tenant as the service provider",
+    "A new delimited file source that stores each employee's password",
+    "Pass-through authentication to a flat file of user passwords",
+    "A personal access token for each user"
+   ],
+   "answer": "SAML single sign-on with the tenant as the service provider",
+   "explanation": "With SAML SSO the corporate IdP authenticates users and the tenant trusts its assertions as the service provider. Personal access tokens are for API use."
+  },
+  {
+   "id": "D1-059",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "In a SAML single sign-on setup with a corporate IdP, what role does Identity Security Cloud play?",
+   "choices": [
+    "Identity provider",
+    "Certificate authority",
+    "Service provider",
+    "Directory server"
+   ],
+   "answer": "Service provider",
+   "explanation": "The tenant relies on the corporate IdP's assertion, which makes it the service provider. The IdP is the system that authenticates the user."
+  },
+  {
+   "id": "D1-060",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "While setting up SAML SSO, which details does the tenant need from the corporate identity provider?",
+   "choices": [
+    "The IdP's entity ID, sign-in URL and signing certificate",
+    "The IdP's database administrator password",
+    "A list of every user's password hash",
+    "The IdP's virtual appliance keys"
+   ],
+   "answer": "The IdP's entity ID, sign-in URL and signing certificate",
+   "explanation": "The service provider needs to know where to send users and how to verify signed assertions. Password hashes and database credentials are never shared."
+  },
+  {
+   "id": "D1-061",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "A user visits the tenant URL and is redirected to the corporate IdP to sign in, then sent back. What kind of SSO flow is this?",
+   "choices": [
+    "Service provider initiated",
+    "Identity provider initiated",
+    "Pass-through authentication",
+    "Client credentials"
+   ],
+   "answer": "Service provider initiated",
+   "explanation": "The flow starts at the service provider, which redirects to the IdP. IdP-initiated sign-in starts from the IdP's portal."
+  },
+  {
+   "id": "D1-062",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "Users are authenticated by the corporate IdP, but the tenant says it cannot find a matching identity. What is the MOST likely cause?",
+   "choices": [
+    "The lifecycle state grants no access profiles when the user signs in",
+    "The source's account deletion threshold was reached",
+    "The assertion's subject does not match the identity attribute looked up",
+    "The search index has not been refreshed"
+   ],
+   "answer": "The assertion's subject does not match the identity attribute looked up",
+   "explanation": "The tenant matches the value sent in the assertion to an identity attribute such as the username. A mismatch means authentication succeeds at the IdP but no identity is found."
+  },
+  {
+   "id": "D1-063",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "The corporate IdP is down and an Admin must still reach the tenant to make an urgent change. What should the organisation have planned?",
+   "choices": [
+    "A shared admin password emailed to the team so anyone can sign in",
+    "Turning off all authentication on the tenant during IdP outages",
+    "An emergency admin sign-in that bypasses the IdP, with MFA",
+    "A personal access token used in the browser"
+   ],
+   "answer": "An emergency admin sign-in that bypasses the IdP, with MFA",
+   "explanation": "A break-glass path that bypasses the IdP (the tenant sign-in page opened with ?prompt=true) lets admins work during an outage, and elevated users must still pass their registered authenticator (TOTP). Shared passwords and disabled authentication are unsafe."
+  },
+  {
+   "id": "D1-064",
+   "objective": "1.2",
+   "topic": "Pass-Through Authentication",
+   "stem": "A company has no federation service but wants users to sign in to the tenant with their Active Directory password. Which option fits BEST?",
+   "choices": [
+    "SAML SSO with the tenant as the IdP",
+    "A flat file source of user passwords",
+    "Personal access tokens used to sign in through the browser",
+    "Pass-through authentication to the Active Directory source"
+   ],
+   "answer": "Pass-through authentication to the Active Directory source",
+   "explanation": "Pass-through sends the sign-in check to the directory, so users use their existing AD password. Storing passwords in a flat file is unsafe."
+  },
+  {
+   "id": "D1-065",
+   "objective": "1.2",
+   "topic": "Pass-Through Authentication",
+   "stem": "How is a pass-through sign-in checked against an on-premises directory?",
+   "choices": [
+    "The tenant checks a hashed password copy synchronised to the cloud nightly",
+    "The virtual appliance validates the credentials against the directory",
+    "The user's browser connects directly to the domain controller over LDAP",
+    "SailPoint Support approves each sign-in"
+   ],
+   "answer": "The virtual appliance validates the credentials against the directory",
+   "explanation": "The VA connects to the directory to validate the credentials, so the password is not checked against a cloud copy. The browser never talks to the directory directly."
+  },
+  {
+   "id": "D1-066",
+   "objective": "1.2",
+   "topic": "Pass-Through Authentication",
+   "stem": "Users who sign in with pass-through authentication suddenly cannot sign in, while SSO users are fine. What should the admin check FIRST?",
+   "choices": [
+    "The search subscription schedules",
+    "The health of the VAs serving the directory source",
+    "The role membership criteria",
+    "The certification campaign deadlines and reminders"
+   ],
+   "answer": "The health of the VAs serving the directory source",
+   "explanation": "Pass-through depends on the VA reaching the directory, so a VA or connectivity problem blocks those sign-ins. Searches and campaigns do not affect authentication."
+  },
+  {
+   "id": "D1-067",
+   "objective": "1.2",
+   "topic": "Pass-Through Authentication",
+   "stem": "With pass-through authentication to Active Directory, which password rules apply when the user signs in?",
+   "choices": [
+    "Rules applied to a password copy kept in the tenant",
+    "No rules, because pass-through skips checks",
+    "The directory's own password rules",
+    "The rules of the identity provider metadata"
+   ],
+   "answer": "The directory's own password rules",
+   "explanation": "With pass-through the directory validates the password, so its password rules apply and the tenant can enforce the source's expiration policy. The tenant keeps no password copy for this check, and its lockout settings should be aligned with the source."
+  },
+  {
+   "id": "D1-068",
+   "objective": "1.2",
+   "topic": "Pass-Through Authentication",
+   "stem": "An architect wants pass-through sign-ins to keep working if one virtual appliance fails. What is the BEST design?",
+   "choices": [
+    "Move the directory source to a flat file",
+    "Send search subscription reports more often",
+    "Run more than one virtual appliance in the cluster",
+    "Give every user the Helpdesk level"
+   ],
+   "answer": "Run more than one virtual appliance in the cluster",
+   "explanation": "Multiple VAs in a cluster provide redundancy for connections to the directory. A flat file source cannot validate passwords."
+  },
+  {
+   "id": "D1-069",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "Which users does Identity Security Cloud require to use MFA by default?",
+   "choices": [
+    "Only users who sign in after business hours or from new locations",
+    "Only identities in the inactive lifecycle state on new devices",
+    "Only users created by flat file sources",
+    "Users with elevated user levels that give Admin menu access"
+   ],
+   "answer": "Users with elevated user levels that give Admin menu access",
+   "explanation": "Elevated users, meaning any user level with access to the Admin menu, require MFA by default and must register a TOTP authenticator. Lifecycle state and source type do not decide this."
+  },
+  {
+   "id": "D1-070",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "A new elevated user signs in for the first time. What MFA setup will the user MOST likely be asked to complete?",
+   "choices": [
+    "Upload a photo ID to SailPoint Support for identity verification",
+    "Register an authenticator app that generates time-based codes",
+    "Answer a call placed by the virtual appliance to their desk phone",
+    "Create a personal access token"
+   ],
+   "answer": "Register an authenticator app that generates time-based codes",
+   "explanation": "Elevated users register a TOTP authenticator for MFA. Personal access tokens are for API use, not sign-in verification."
+  },
+  {
+   "id": "D1-071",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "An elevated user lost the phone that holds their authenticator app. Which user level can reset the user's MFA so they can register a new device?",
+   "choices": [
+    "Report Admin",
+    "Helpdesk",
+    "Cert Admin",
+    "Source Sub-Admin"
+   ],
+   "answer": "Helpdesk",
+   "explanation": "Helpdesk can reset MFA for identities, as well as unlock accounts and help with passwords. Report and Cert Admins focus on reporting and campaigns."
+  },
+  {
+   "id": "D1-072",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "Elevated users sign in through the corporate IdP. When would they MOST likely be prompted for their tenant authenticator code?",
+   "choices": [
+    "On every single page they open",
+    "When they bypass the IdP, such as with an emergency admin sign-in",
+    "Only when an aggregation fails",
+    "Only when they download a search report"
+   ],
+   "answer": "When they bypass the IdP, such as with an emergency admin sign-in",
+   "explanation": "Elevated users register a TOTP device, but once it is registered they are not prompted for it on sign-ins through the IdP. They are prompted only when they bypass the IdP, such as with an emergency admin account."
+  },
+  {
+   "id": "D1-073",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "Why does requiring MFA for admins matter so much in an identity governance tenant?",
+   "choices": [
+    "It makes aggregation faster",
+    "It removes the need for certifications",
+    "A stolen password alone cannot unlock tenant-wide access controls",
+    "It lets admins share one account safely with a second code"
+   ],
+   "answer": "A stolen password alone cannot unlock tenant-wide access controls",
+   "explanation": "Admins can change access across many systems, so a second factor protects the highest-risk accounts. MFA does not replace reviews or make sharing accounts acceptable."
+  },
+  {
+   "id": "D1-074",
+   "objective": "1.2",
+   "topic": "Multi-Factor Authentication",
+   "stem": "Leadership wants regular end users, not only admins, to verify with an authenticator app. Where is this requirement set?",
+   "choices": [
+    "In each source's correlation settings",
+    "In the search subscription options",
+    "In the identity profile settings for those users",
+    "In the virtual appliance network settings"
+   ],
+   "answer": "In the identity profile settings for those users",
+   "explanation": "MFA for regular users is enabled per identity profile, by choosing Multifactor Authentication as the sign-in method. Correlation and VA networking are unrelated."
+  },
+  {
+   "id": "D1-075",
+   "type": "order",
+   "objective": "1.2",
+   "topic": "REST API Authentication",
+   "stem": "Put the steps in order for a script that calls the REST API with a personal access token.",
+   "items": [
+    "Create the personal access token and copy its client ID and secret",
+    "Store the secret in a secure vault for the script",
+    "Request an access token from the tenant's token endpoint with the client credentials grant",
+    "Call the API with the access token as a Bearer token",
+    "Request a new access token when the current one expires"
+   ],
+   "explanation": "The token's ID and secret are created once and stored safely, then exchanged for a short-lived access token that is sent on calls. When it expires the script requests another."
+  },
+  {
+   "id": "D1-076",
+   "type": "match",
+   "objective": "1.2",
+   "topic": "User Levels",
+   "stem": "Match each user level to the team it suits.",
+   "pairs": [
+    {
+     "item": "Helpdesk",
+     "match": "Service desk staff who unlock accounts and reset MFA"
+    },
+    {
+     "item": "Cert Admin",
+     "match": "Auditors who run certification campaigns"
+    },
+    {
+     "item": "Report Admin",
+     "match": "Analysts who only need reports and the dashboard"
+    },
+    {
+     "item": "Source Sub-Admin",
+     "match": "App owners who manage only their governance group's sources"
+    },
+    {
+     "item": "Admin",
+     "match": "Platform owners who configure workflows and security settings"
+    }
+   ],
+   "targets_extra": [
+    "Managers who approve access requests for their direct reports"
+   ],
+   "explanation": "Each level is matched to its least-privilege duties. Managers approve requests without any user level, so that target has no match."
+  },
+  {
+   "id": "D1-077",
+   "type": "multi",
+   "objective": "1.2",
+   "topic": "Tenant Single Sign-On",
+   "stem": "An admin is configuring SAML single sign-on from a corporate IdP to the tenant. Which TWO statements are correct?",
+   "choices": [
+    "The tenant acts as the service provider",
+    "The IdP's signing certificate is used to verify assertions",
+    "Users' passwords are copied into the tenant",
+    "Pass-through requires the IdP's metadata",
+    "SSO lets elevated users skip registering an authenticator"
+   ],
+   "answers": [
+    "The tenant acts as the service provider",
+    "The IdP's signing certificate is used to verify assertions"
+   ],
+   "select": 2,
+   "explanation": "The tenant trusts signed assertions as the SP, verified with the IdP's certificate. No passwords are copied, pass-through is a separate method, and elevated users still register an authenticator."
+  },
+  {
+   "id": "D1-078",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "An access request was approved yesterday, but the user still has no account on the target system. What should the admin review FIRST?",
+   "choices": [
+    "The account activity and its provisioning status",
+    "The identity profile's priority setting",
+    "The certification history for the user",
+    "The source's entitlement aggregation schedule and last run"
+   ],
+   "answer": "The account activity and its provisioning status",
+   "explanation": "The account activity shows whether provisioning succeeded, failed or is still pending, with any error. Priority and certification history do not explain a missing account."
+  },
+  {
+   "id": "D1-079",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "A source with no connector uses manual provisioning. Where will pending account changes for that source appear?",
+   "choices": [
+    "As manual work items assigned to the source owner",
+    "As failed events that retry every hour",
+    "As entries in the next search subscription email to Admins",
+    "As new uncorrelated accounts on the source"
+   ],
+   "answer": "As manual work items assigned to the source owner",
+   "explanation": "When no connector can act, provisioning creates manual tasks for a person to complete. The work stays pending until the owner marks it done."
+  },
+  {
+   "id": "D1-080",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "The operations team wants a chat alert whenever a provisioning action to a source finishes with a failure. What is the BEST approach?",
+   "choices": [
+    "Run a daily certification of all accounts",
+    "Schedule an hourly full aggregation",
+    "Subscribe to the Provisioning Completed trigger and filter for failures",
+    "Give the operations team the Admin user level so they can watch each source"
+   ],
+   "answer": "Subscribe to the Provisioning Completed trigger and filter for failures",
+   "explanation": "The Provisioning Completed trigger fires after a provisioning action completes on a source, and its payload includes each account request's provisioning result and any errors, so a subscription filter can pass on only failures. Aggregations and certifications do not alert on failures."
+  },
+  {
+   "id": "D1-081",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "A helpdesk agent needs the history of access changes for one user over the past month. Where should the agent look?",
+   "choices": [
+    "The source's connection settings",
+    "The identity profile's mappings",
+    "The user's identity details and activity history",
+    "The virtual appliance's connector log"
+   ],
+   "answer": "The user's identity details and activity history",
+   "explanation": "An identity's details show its accounts, access and activity history, which lists changes over time. Source and VA settings are configuration, not history."
+  },
+  {
+   "id": "D1-082",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "After an identity moves to a terminated lifecycle state, how can the admin confirm its accounts were actually disabled?",
+   "choices": [
+    "Assume success, since a lifecycle state change always disables accounts",
+    "Wait for the next quarterly certification",
+    "Read the identity profile's transforms",
+    "Check the account activities created by the lifecycle state change"
+   ],
+   "answer": "Check the account activities created by the lifecycle state change",
+   "explanation": "The lifecycle change creates account activities whose results show each disable action. Assuming success or waiting months leaves a leaver's access unverified."
+  },
+  {
+   "id": "D1-083",
+   "objective": "1.3",
+   "topic": "Monitoring Provisioning Activity",
+   "stem": "When does the Provisioning Completed event trigger fire?",
+   "choices": [
+    "Only when a newly created source passes its first connection test",
+    "Only after a successful aggregation",
+    "After provisioning finishes, whether it succeeded or failed",
+    "Before any approval is collected"
+   ],
+   "answer": "After provisioning finishes, whether it succeeded or failed",
+   "explanation": "It fires after a provisioning action completes on a source, and the payload includes the provisioning result for each account request and any errors. That is why subscribers can filter on failures."
+  },
+  {
+   "id": "D1-084",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "The facilities system must be told whenever a new identity appears in the tenant so it can print a badge. Which trigger fits BEST?",
+   "choices": [
+    "Identity Attributes Changed",
+    "Account Aggregation Completed",
+    "Source Created",
+    "Identity Created"
+   ],
+   "answer": "Identity Created",
+   "explanation": "Identity Created fires when a new identity is created, which is exactly the badge event. Attribute changes fire for existing identities."
+  },
+  {
+   "id": "D1-085",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "A downstream payroll app must be notified when an existing identity's department changes. Which trigger should the admin use?",
+   "choices": [
+    "Identity Attributes Changed",
+    "Identity Created",
+    "Provisioning Completed",
+    "Identity Deleted"
+   ],
+   "answer": "Identity Attributes Changed",
+   "explanation": "Identity Attributes Changed fires when attributes of an existing identity change and lists what changed. Identity Created only fires once at creation."
+  },
+  {
+   "id": "D1-086",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "An external risk engine must approve or deny access requests before the normal approval process starts. Which kind of trigger supports this?",
+   "choices": [
+    "A fire-and-forget trigger such as Account Aggregation Completed",
+    "A search subscription on access requests",
+    "A request-response trigger such as Access Request Submitted",
+    "A scheduled certification campaign"
+   ],
+   "answer": "A request-response trigger such as Access Request Submitted",
+   "explanation": "Request-response (response required) triggers wait for the subscriber's answer. Access Request Submitted (technical ID idn:access-request-pre-approval, formerly called Access Request Pre-Approval) expects an approval decision before normal approval begins. Fire-and-forget triggers cannot change the outcome."
+  },
+  {
+   "id": "D1-087",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "After every account aggregation from the HR source, a data-quality script must check the results. Which trigger fits BEST?",
+   "choices": [
+    "Identity Created",
+    "Provisioning Completed",
+    "Account Aggregation Completed",
+    "Access Request Submitted"
+   ],
+   "answer": "Account Aggregation Completed",
+   "explanation": "Account Aggregation Completed fires when an aggregation finishes and reports its statistics. Provisioning Completed relates to writes to sources, not reads."
+  },
+  {
+   "id": "D1-088",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "What is the difference between a fire-and-forget trigger and a request-response trigger?",
+   "choices": [
+    "Only fire-and-forget triggers can post their payloads to an HTTP endpoint",
+    "Only request-response can be filtered",
+    "Fire-and-forget triggers run only once a day",
+    "Only request-response waits for the subscriber's reply to continue"
+   ],
+   "answer": "Only request-response waits for the subscriber's reply to continue",
+   "explanation": "Fire-and-forget sends the event and moves on, while request-response expects an answer that affects processing. Both can use filters and HTTP subscriptions."
+  },
+  {
+   "id": "D1-089",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "The infrastructure team wants an alert when a virtual appliance cluster becomes unhealthy. Which approach is BEST?",
+   "choices": [
+    "Search identities for the cluster's name",
+    "Subscribe to the VA Cluster Status Change trigger",
+    "Run a certification on the VA's source",
+    "Watch the Identity Created trigger for appliance identities"
+   ],
+   "answer": "Subscribe to the VA Cluster Status Change trigger",
+   "explanation": "The VA Cluster Status Change trigger fires after the status of a VA cluster changes, so the team is alerted when health changes. Identity searches and certifications do not track VA health."
+  },
+  {
+   "id": "D1-090",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "An admin wants event payloads delivered to the company's own web service endpoint. Which subscription type should the admin choose?",
+   "choices": [
+    "Workflow",
+    "Search subscription",
+    "HTTP",
+    "Email template"
+   ],
+   "answer": "HTTP",
+   "explanation": "An HTTP subscription posts the event payload to the integration URL you provide; the other subscription type is Amazon EventBridge. A workflow uses the trigger as its start inside the tenant instead."
+  },
+  {
+   "id": "D1-091",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "A subscription to Identity Attributes Changed should only fire for identities in the Sales department. What should the admin configure?",
+   "choices": [
+    "A separate tenant for the Sales team with its own copy of the trigger",
+    "A role for Sales with membership criteria",
+    "A daily schedule on the trigger",
+    "A filter on the subscription that matches the department value"
+   ],
+   "answer": "A filter on the subscription that matches the department value",
+   "explanation": "Subscription filters, written as JSONPath expressions, pass only events whose payload matches. Roles and schedules do not filter trigger delivery."
+  },
+  {
+   "id": "D1-092",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "Before going live, an admin wants to confirm that an endpoint receives and parses a trigger payload. What should the admin do?",
+   "choices": [
+    "Wait for a real event in production",
+    "Use Test Subscription to send a mock payload",
+    "Delete and recreate the trigger",
+    "Run a full aggregation to generate real events"
+   ],
+   "answer": "Use Test Subscription to send a mock payload",
+   "explanation": "Test Subscription sends the trigger with mock data to the subscriber without waiting for a real event. Waiting for production events risks bad data."
+  },
+  {
+   "id": "D1-093",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "The receiving web service requires a credential with every call. How should the HTTP subscription be set up?",
+   "choices": [
+    "Include the password in the trigger filter",
+    "Disable authentication on the web service",
+    "Put the password in an identity attribute in the payload",
+    "Configure the subscription's basic or bearer token authentication"
+   ],
+   "answer": "Configure the subscription's basic or bearer token authentication",
+   "explanation": "HTTP subscriptions have an Authentication Type of None, Basic Auth or Bearer Token, so calls carry credentials. Turning off the service's authentication exposes it."
+  },
+  {
+   "id": "D1-094",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "An admin wants to react to an event with low-code logic inside the tenant rather than building an external service. What is the BEST choice?",
+   "choices": [
+    "An HTTP subscription to a new custom web server",
+    "A workflow that starts from the event trigger",
+    "A search subscription on events",
+    "A connector rule on the source"
+   ],
+   "answer": "A workflow that starts from the event trigger",
+   "explanation": "Workflows can use an event trigger as their start and run actions inside the tenant. An HTTP subscription needs an external service."
+  },
+  {
+   "id": "D1-095",
+   "objective": "1.3",
+   "topic": "Event Trigger Subscriptions",
+   "stem": "The endpoint behind a subscription is down for maintenance this weekend. What should the admin do with the subscription?",
+   "choices": [
+    "Delete the trigger permanently",
+    "Disable it until the endpoint is back",
+    "Change it to a request-response trigger",
+    "Remove its filter so more events are sent"
+   ],
+   "answer": "Disable it until the endpoint is back",
+   "explanation": "Disabling stops delivery while keeping the configuration for later. Removing the filter would send even more events to a down endpoint."
+  },
+  {
+   "id": "D1-096",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "What does every Identity Security Cloud workflow start with?",
+   "choices": [
+    "A trigger",
+    "An end step",
+    "A loop operator",
+    "A Send Email action"
+   ],
+   "answer": "A trigger",
+   "explanation": "A workflow begins with a trigger, such as an event, a schedule or an external call. End steps finish a path rather than start it."
+  },
+  {
+   "id": "D1-097",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "Which component marks the point where a workflow path finishes, either successfully or with a failure?",
+   "choices": [
+    "Trigger",
+    "Compare Strings operator",
+    "Get Identity action",
+    "End step"
+   ],
+   "answer": "End step",
+   "explanation": "An end step closes a path and records success or failure. Compare Strings branches the flow but does not end it."
+  },
+  {
+   "id": "D1-098",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "A workflow should email the manager only if the new department is Finance. Which component handles that decision?",
+   "choices": [
+    "An action such as Send Email",
+    "An operator such as Compare Strings",
+    "A trigger such as Identity Created",
+    "An end step"
+   ],
+   "answer": "An operator such as Compare Strings",
+   "explanation": "Operators evaluate conditions and branch the flow. The Send Email action does the sending once the branch is chosen."
+  },
+  {
+   "id": "D1-099",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "In a workflow, which component does work such as sending an email, getting an identity or managing accounts?",
+   "choices": [
+    "An action",
+    "An operator",
+    "A trigger",
+    "A filter"
+   ],
+   "answer": "An action",
+   "explanation": "Actions perform tasks. Operators make decisions or control flow, and triggers start the workflow."
+  },
+  {
+   "id": "D1-100",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "An action needs the ID of the identity from the event that started the workflow. How is this value referenced?",
+   "choices": [
+    "By typing the identity's name into each step of the workflow",
+    "With a JSONPath variable such as $.trigger.identity.id",
+    "With a SQL query against the tenant",
+    "By reading it from the virtual appliance log"
+   ],
+   "answer": "With a JSONPath variable such as $.trigger.identity.id",
+   "explanation": "Workflow steps read data from the trigger input and earlier steps with JSONPath expressions starting at $.trigger or the step name; the exact path follows the trigger's input schema. Hard-coded names would only work for one person."
+  },
+  {
+   "id": "D1-101",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "A leaver workflow must pause for three days before disabling remaining accounts. Which component provides the pause?",
+   "choices": [
+    "The Compare Numbers operator",
+    "The Send Email action",
+    "The Wait operator",
+    "The end step"
+   ],
+   "answer": "The Wait operator",
+   "explanation": "The Wait operator delays the workflow for a time period or until a date. Compare Numbers only evaluates a condition."
+  },
+  {
+   "id": "D1-102",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "An admin saved a new workflow, but it never runs when the event occurs. What is the MOST likely cause?",
+   "choices": [
+    "The trigger has no end step after it",
+    "The admin lacks the Helpdesk level",
+    "The workflow has not been enabled",
+    "Workflows only run after a backup"
+   ],
+   "answer": "The workflow has not been enabled",
+   "explanation": "A workflow must be enabled before its trigger starts executions. Saved but disabled workflows do nothing."
+  },
+  {
+   "id": "D1-103",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "A workflow execution failed overnight. Where should the admin look to see which step failed and why?",
+   "choices": [
+    "The source's correlation configuration",
+    "The identity's access profiles",
+    "The search subscription email",
+    "The workflow's execution history"
+   ],
+   "answer": "The workflow's execution history",
+   "explanation": "Execution history shows each step's input, output and errors. Correlation and access profiles are unrelated to workflow runs."
+  },
+  {
+   "id": "D1-104",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "An admin wants to try a new workflow without waiting for a real identity to change. What should the admin do?",
+   "choices": [
+    "Change a real executive's department in HR and wait",
+    "Test the workflow with sample trigger input",
+    "Turn off all other workflows",
+    "Clone the tenant first"
+   ],
+   "answer": "Test the workflow with sample trigger input",
+   "explanation": "Testing with sample input runs the workflow on demand so logic can be checked safely. Changing real data to test is risky."
+  },
+  {
+   "id": "D1-105",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "A ticketing system must start a workflow by calling it. Which trigger type and setup does this require?",
+   "choices": [
+    "An external trigger with an OAuth client for the caller",
+    "An Identity Created event trigger that the ticketing system watches",
+    "A scheduled trigger at midnight",
+    "A search subscription on tickets"
+   ],
+   "answer": "An external trigger with an OAuth client for the caller",
+   "explanation": "External triggers are invoked through an API call that is authenticated with a client created for the workflow. Event and scheduled triggers cannot be called by another system."
+  },
+  {
+   "id": "D1-106",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "A workflow gets a list of identities and must send each one an email. Which operator should process the list?",
+   "choices": [
+    "Loop",
+    "Wait",
+    "Compare Boolean",
+    "End step"
+   ],
+   "answer": "Loop",
+   "explanation": "The Loop operator runs its steps once for each item in a list. Wait only pauses."
+  },
+  {
+   "id": "D1-107",
+   "objective": "1.3",
+   "topic": "Workflow Testing and Execution",
+   "stem": "A workflow must post data to an external system's REST API in the middle of its logic. Which action should be used?",
+   "choices": [
+    "HTTP Request",
+    "Send Email",
+    "Get Identity",
+    "Manage Accounts"
+   ],
+   "answer": "HTTP Request",
+   "explanation": "The HTTP Request action calls an outside API from within the workflow. Manage Accounts acts on accounts in sources, not arbitrary endpoints."
+  },
+  {
+   "id": "D1-108",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "What is Configuration Hub mainly used for?",
+   "choices": [
+    "Monitoring virtual appliance health",
+    "Backing up, restoring and migrating configuration",
+    "Approving access requests in bulk",
+    "Writing transforms in a code editor"
+   ],
+   "answer": "Backing up, restoring and migrating configuration",
+   "explanation": "Configuration Hub manages configuration through backups, drafts and deploys, including moves between tenants. VA health and approvals live elsewhere."
+  },
+  {
+   "id": "D1-109",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "An admin is about to change several identity profiles and transforms. What should the admin do FIRST to make rollback possible?",
+   "choices": [
+    "Download a search CSV of all identities and their attributes",
+    "Disable every source",
+    "Create a Configuration Hub backup of those object types",
+    "Run a certification of all admins"
+   ],
+   "answer": "Create a Configuration Hub backup of those object types",
+   "explanation": "A manual backup captures the configuration as it is now, so it can be restored if the change goes wrong. A CSV of identities is data, not configuration."
+  },
+  {
+   "id": "D1-110",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "A bad change was deployed and the admin wants configuration back as it was in last week's backup. Which sequence is correct?",
+   "choices": [
+    "Delete the live objects and wait for the next weekly backup",
+    "Upload the backup to a virtual appliance",
+    "Restore the backup directly with no draft",
+    "Create a draft from the backup, review it, then deploy it"
+   ],
+   "answer": "Create a draft from the backup, review it, then deploy it",
+   "explanation": "Restoring means creating a draft that compares the backup with the live tenant, optionally editing it, then deploying it. Deleting live objects first causes an outage."
+  },
+  {
+   "id": "D1-111",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "After restoring sources from a Configuration Hub backup, a source fails to connect. What is the MOST likely reason?",
+   "choices": [
+    "Backups only keep the source's name",
+    "Restores always disable the source",
+    "The backup's encryption key has expired",
+    "Secrets and credentials are not backed up"
+   ],
+   "answer": "Secrets and credentials are not backed up",
+   "explanation": "Configuration Hub does not back up secrets or credentials, so source passwords must be entered again. The rest of the source configuration is restored."
+  },
+  {
+   "id": "D1-112",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "Configuration tested in a sandbox tenant must be moved to production, where some values differ. Which feature helps replace those values during the move?",
+   "choices": [
+    "Object mapping in Configuration Hub",
+    "Search subscriptions",
+    "Identity Attributes Changed triggers",
+    "Account correlation"
+   ],
+   "answer": "Object mapping in Configuration Hub",
+   "explanation": "Object mappings substitute tenant-specific values when a draft is created for the target tenant. Correlation links accounts to identities and has nothing to do with migration."
+  },
+  {
+   "id": "D1-113",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "Besides manual backups, how else is a production tenant's configuration backed up?",
+   "choices": [
+    "Only through daily email of search results",
+    "SailPoint takes automated weekly backups that it manages",
+    "By the virtual appliance every hour",
+    "It is not backed up, so manual backups are the only copy"
+   ],
+   "answer": "SailPoint takes automated weekly backups that it manages",
+   "explanation": "SailPoint backs up production configuration weekly, keeping up to five automated backups listed as created by SYSTEM, with retention managed by SailPoint. Admins can also schedule their own recurring backups."
+  },
+  {
+   "id": "D1-114",
+   "type": "order",
+   "objective": "1.3",
+   "topic": "Workflow Components",
+   "stem": "Put the steps in order to build a workflow that emails a manager when an identity changes department.",
+   "items": [
+    "Choose the Identity Attributes Changed trigger",
+    "Add a Compare Strings operator that checks whether the changed attribute is department",
+    "Inside the department branch, add a Get Identity action to fetch the manager",
+    "Add a Send Email action to the manager",
+    "Add an end step, test with sample input and enable the workflow"
+   ],
+   "explanation": "A workflow starts with a trigger, branches with an operator, and only in the matching branch gathers the manager with an action and sends the email. Each branch finishes with an end step, and testing and enabling come last."
+  },
+  {
+   "id": "D1-115",
+   "type": "match",
+   "objective": "1.3",
+   "topic": "Event Trigger Use Cases",
+   "stem": "Match each event trigger to the use case it BEST fits.",
+   "pairs": [
+    {
+     "item": "Identity Created",
+     "match": "Order a badge for every new identity"
+    },
+    {
+     "item": "Identity Attributes Changed",
+     "match": "Tell payroll when a department changes"
+    },
+    {
+     "item": "Account Aggregation Completed",
+     "match": "Check data quality after each HR load"
+    },
+    {
+     "item": "Provisioning Completed",
+     "match": "Alert when an account change to a source fails"
+    },
+    {
+     "item": "Access Request Submitted (pre-approval)",
+     "match": "Let a risk engine approve or deny a request early"
+    }
+   ],
+   "targets_extra": [
+    "Email a weekly list of identities without managers"
+   ],
+   "explanation": "Each trigger matches the event it reports. Access Request Submitted (technical ID idn:access-request-pre-approval) is request-response and expects an approval decision. A weekly emailed list is a search subscription, not an event trigger."
+  },
+  {
+   "id": "D1-116",
+   "type": "multi",
+   "objective": "1.3",
+   "topic": "Configuration Backup and Restore",
+   "stem": "An admin is planning to use Configuration Hub. Which TWO statements are true?",
+   "choices": [
+    "Secrets and credentials are not included in backups",
+    "Restoring is done by creating and deploying a draft",
+    "Backups also copy all identity and account data",
+    "Only one manual backup can exist at a time",
+    "Deploys skip any comparison with the live tenant"
+   ],
+   "answers": [
+    "Secrets and credentials are not included in backups",
+    "Restoring is done by creating and deploying a draft"
+   ],
+   "select": 2,
+   "explanation": "Credentials must be re-entered and restores go through a draft that is compared with the live tenant and deployed. Backups hold configuration objects, not identity data, and several manual backups can be kept."
+  }
+ ]
+}

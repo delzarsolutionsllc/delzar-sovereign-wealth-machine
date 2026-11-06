@@ -1,0 +1,40 @@
+{
+  "lab": 48,
+  "ticket": "AUD-48107",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Gwen Okafor, Certification Administrator",
+  "title": "Plan the Q4 access reviews, close the finance manager campaign and check the finance Separation of Duties policies",
+  "situation": "Ironwood Example Freight's auditors want proof that finance access is reviewed and that nobody can both set up a vendor and release payments to it. In SailPoint Identity Security Cloud (ISC) you have nine review requests from the business, written in plain words, to turn into campaigns. The Q4 manager certification campaign has passed its deadline with 12 review items: one manager has not signed off, two identities have no usable manager and one account is not linked to anyone. Finance also has three Separation of Duties (SoD) policies, seven identities to check and five access requests waiting for approval.",
+  "your_task": [
+    "Turn each business requirement into the right campaign type: manager, source owner, search (identities, access items or uncorrelated accounts) or role composition, and send back any requirement that is too vague.",
+    "Activate the staged campaign, apply every decision and reassignment, and refuse a reassignment that would let someone review their own access.",
+    "Flag the data issues: identities without a manager, a manager who no longer exists and an uncorrelated account.",
+    "Complete the campaign after the deadline, decide what happens to undecided items and list every remediation task (automatic provisioning or manual work item).",
+    "Check every identity against the SoD policies, name the conflicting pair of entitlements, and run the SoD check on each pending access request."
+  ],
+  "why_it_matters": "A campaign of the wrong type reviews the wrong people or silently skips some, and a revocation that is never remediated leaves the access in place while the report says it is gone. SoD violations, such as one person creating vendors and releasing payments, are exactly what auditors and fraudsters look for; catching them at request time is cheaper than cleaning them up later.",
+  "done_when": [
+    "Every requirement has a campaign type and reviewer, or is marked NEEDS_CLARIFICATION.",
+    "Every review item is APPROVED, REVOKED, ACKNOWLEDGED, UNDECIDED, REVIEWER_MISSING or NOT_CERTIFIABLE, and every revoked item has a remediation task.",
+    "Every identity is VIOLATION (with the pair), OK or CANNOT_EVALUATE, and every access request is WOULD_VIOLATE (blocked or routed to approvers), OK or CANNOT_EVALUATE."
+  ],
+  "glossary": {
+    "Certification campaign": "A planned access review in which reviewers approve or revoke each identity's access by a deadline.",
+    "Manager campaign": "A campaign in which each manager reviews the access of their direct reports; identities without a manager are left out.",
+    "Source owner campaign": "A campaign in which the owner of a source (a connected application or system) reviews the accounts and access on it.",
+    "Search campaign": "A campaign built from a search query: chosen identities, everyone with chosen access items, or uncorrelated accounts.",
+    "Role composition campaign": "A campaign in which the role owner confirms what a role contains, instead of reviewing people.",
+    "Sign-off": "The reviewer's final submission of all decisions; it is only possible when every item has a decision.",
+    "Remediation": "Removing revoked access: a provisioning task on a direct-connected source or a manual work item on a flat-file source.",
+    "Uncorrelated account": "An account on a source that is not linked to any identity.",
+    "Separation of Duties (SoD) policy": "A rule with two lists of access (List A and List B); one person holding access from both is a violation."
+  },
+  "job_roles": [
+    "SailPoint ISC Administrator",
+    "Identity Governance Analyst",
+    "IAM Engineer",
+    "IT Audit and Compliance Analyst"
+  ],
+  "talking_point": "Turned 9 business review requests into ISC campaigns (1 manager, 1 source owner, 5 search, 1 role composition and 1 sent back for clarification), then closed a 12-item manager campaign after its deadline: 4 approved, 2 revoked, 1 criteria-assigned role acknowledged, 2 undecided items auto-revoked, 2 identities flagged with no usable manager and 1 uncorrelated account flagged, with 1 self-review reassignment refused and 4 remediation tasks raised (3 provisioning, 1 manual). Checked 7 identities against 3 SoD policies and found 2 violations and 1 that could not be cleared, and stopped 3 of 5 access requests that would create a violation (2 blocked, 1 sent to approvers with the warning)."
+}

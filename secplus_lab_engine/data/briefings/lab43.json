@@ -1,0 +1,39 @@
+{
+  "lab": 43,
+  "ticket": "CHG-43017",
+  "type": "Change request",
+  "priority": "P2",
+  "requested_by": "Helena Brook, IAM Program Manager",
+  "title": "Check three identity profiles, their mappings and seven transforms before the HR sources go live",
+  "situation": "Cobalt Ridge Example Ltd is moving its people into SailPoint Identity Security Cloud (ISC). Employees come from a Workday-style HR system, contractors from a CSV (comma-separated values) file and interns from a tracker spreadsheet; an old payroll database is also connected but is not authoritative. Three identity profiles are drafted: Employees, Contractors and Interns. Before the first identity refresh, the team wants to know who will become an identity, under which profile, with which attribute values, and who will fail. There are 16 accounts and 7 transforms waiting to be tested.",
+  "your_task": [
+    "Review each identity profile: does its authoritative source exist, is its priority unique, does its sign-in method work (user name and password, directory connection or multi-factor authentication (MFA)), and are all required attributes mapped?",
+    "Join each person's HR accounts by work email and decide which identity profile they belong to; when someone is on two authoritative sources, the profile with the lower priority number wins.",
+    "Calculate every identity attribute through its mapping and transform, and mark each person OK, MAPPING_ERROR, TRANSFORM_ERROR, DUPLICATE_UID or NO_PROFILE.",
+    "Test the seven stand-alone transforms and write down the exact value each one produces, or that it fails.",
+    "List the fixes the team must make before go-live."
+  ],
+  "why_it_matters": "Identity attributes drive everything after them: lifecycle states, roles, access profiles and provisioning. A lookup with no default, a case-sensitive comparison or a colliding user name turns into wrong access or no access for real people on day one, and fixing it after the first refresh means cleaning up thousands of identities.",
+  "done_when": [
+    "Every profile is marked READY or MISCONFIGURED with the reason.",
+    "Every person has an identity profile (or NO_PROFILE) and an outcome with the attribute or rule that caused it.",
+    "Every transform test has its exact output, and no failed transform was given a guessed value."
+  ],
+  "glossary": {
+    "Identity Security Cloud (ISC)": "SailPoint's software-as-a-service identity governance platform, formerly called IdentityNow.",
+    "Identity profile": "The settings that turn the accounts of one authoritative source into identities: priority, sign-in options, lifecycle states and attribute mappings.",
+    "Authoritative source": "A trusted source, usually HR, whose accounts create identities.",
+    "Identity attribute": "A field on the identity, such as uid, email or department, filled by a mapping.",
+    "Transform": "A rule written in JSON (JavaScript Object Notation) that changes a source value before it is stored, for example lower-casing it or looking it up in a table.",
+    "Pass-through authentication": "Signing in with the password of another source such as Active Directory; ISC calls this sign-in method Directory Connection.",
+    "cloudLifecycleState": "The identity attribute whose value selects the identity's lifecycle state, such as active or inactive.",
+    "E.164": "The international phone number format, a plus sign then the country code and number, for example +13125550142."
+  },
+  "job_roles": [
+    "SailPoint ISC Administrator",
+    "IAM Engineer",
+    "Identity Governance Analyst",
+    "IGA Implementation Consultant"
+  ],
+  "talking_point": "Dry-ran an ISC identity refresh over 16 HR accounts: correlated them into 15 people (1 converted contractor on two authoritative sources went to the higher-priority Employees profile), built 7 identities cleanly and stopped 8 before they went live: 3 transform errors (a lookup with no default, a null conditional operand, an unknown transform type), 3 mapping errors (two empty last names and a lifecycle state the profile does not define), 1 duplicate uid and 1 account on a non-authoritative source; also found 2 of 3 identity profiles misconfigured and caught 2 of 7 transform tests that would have failed."
+}
