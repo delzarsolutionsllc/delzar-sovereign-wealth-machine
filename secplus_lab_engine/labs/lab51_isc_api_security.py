@@ -264,7 +264,7 @@ def choose_api_method(req: dict, data: dict, cfg: dict) -> ApiResult:
                 return res
             res.method, res.acts_as = "PERSONAL_ACCESS_TOKEN", pid
             res.reasons.append(f"a personal access token acting as {pid}: {lv.reasons[-1]}")
-            res.reasons.append(f"the script exchanges the PAT's client ID and secret at {res.token_url}")
+            res.reasons.append(f"the caller exchanges the PAT's client ID and secret at {res.token_url}")
     # Flags on approved requests.
     asked = list(req.get("scopes") or [])
     narrow = task["scope"]
@@ -308,8 +308,8 @@ def review_profile(profile: dict, data: dict, cfg: dict) -> SignInResult:
     method = profile.get("sign_in_method")
     if method not in cfg["sign_in_methods"]:
         res.outcome = "SIGNIN_METHOD_UNKNOWN"
-        res.reasons.append(f"sign-in method '{method}' is missing or unknown: nobody on this profile can sign in "
-                           f"safely (deny by default)")
+        res.reasons.append(f"sign-in method {repr(method) if method else '(missing)'} is not a known method: nobody "
+                           f"on this profile can sign in safely (deny by default)")
         return res
     if method == "PASS_THROUGH":
         src = {s.get("id"): s for s in data.get("sources", [])}.get(profile.get("auth_source"))
@@ -352,10 +352,11 @@ def review_sso(sso: dict, data: dict, cfg: dict) -> SignInResult:
           if people.get(p, {}).get("status") in ACTIVE and "ORG_ADMIN" in (people[p].get("user_levels") or [])
           and people[p].get("totp_registered") is True]
     need = cfg["min_emergency_admins"]
+    bypass = cfg["bypass_url"].format(tenant=data.get("tenant", {}).get("tenant") or "{tenant}")
     if len(ok) < need or not sso.get("bypass_documented"):
         res.outcome = "SSO_WITHOUT_BYPASS_PLAN"
         if len(ok) < need:
-            res.reasons.append(f"only {len(ok)} active Admin(s) with TOTP can use the {cfg['bypass_url']} bypass; "
+            res.reasons.append(f"only {len(ok)} active Admin(s) with TOTP can use the {bypass} bypass; "
                                f"{need} are needed if the identity provider is down")
         if not sso.get("bypass_documented"):
             res.reasons.append("the ?prompt=true bypass procedure is not documented")
