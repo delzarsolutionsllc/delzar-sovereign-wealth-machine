@@ -1,0 +1,1889 @@
+{
+ "domain": "3",
+ "title": "SailPoint Admin Domain 3 questions (3.1 identity profiles, 3.2 attribute mappings, 3.3 lifecycle states)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D3-001",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An administrator creates an identity profile and selects the Workday source in it. What does this do to the Workday source?",
+   "choices": [
+    "It becomes a target source that receives identity attributes through attribute sync",
+    "It is moved from its virtual appliance connection to a direct cloud connection",
+    "It is scheduled for a nightly delta aggregation in place of full aggregations",
+    "It becomes an authoritative source, and an identity is created for each of its accounts"
+   ],
+   "answer": "It becomes an authoritative source, and an identity is created for each of its accounts",
+   "explanation": "Linking a source to an identity profile makes it authoritative, so its accounts become identities. Attribute sync to targets is a separate provisioning feature and is not what an identity profile turns on."
+  },
+  {
+   "id": "D3-002",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "A new administrator asks which group of settings is configured on an identity profile rather than on a source. Which answer is BEST?",
+   "choices": [
+    "Connection credentials, aggregation schedules and account correlation settings",
+    "Access request approvers, certification reviewers and campaign reminder emails",
+    "Virtual appliance clusters, network proxy settings and connector log levels",
+    "Sign-in and security settings, identity attribute mappings and lifecycle states"
+   ],
+   "answer": "Sign-in and security settings, identity attribute mappings and lifecycle states",
+   "explanation": "An identity profile holds the security (authentication) settings, the identity attribute mappings and the lifecycle states for its identities. Credentials, schedules and correlation are configured on the source itself."
+  },
+  {
+   "id": "D3-003",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "A company connects its HR system as a source and aggregates it, but no identity profile has been created yet. What is the result of the aggregation?",
+   "choices": [
+    "Accounts are aggregated, but no identities are created from them",
+    "An identity is created for every account using the default mappings",
+    "The aggregation fails until an identity profile is linked to the source",
+    "Each account becomes an identity in a disabled lifecycle state"
+   ],
+   "answer": "Accounts are aggregated, but no identities are created from them",
+   "explanation": "Identities are created only from authoritative sources, and a source becomes authoritative through an identity profile. Aggregation itself still works, so it does not fail."
+  },
+  {
+   "id": "D3-004",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An administrator deletes an identity profile that is no longer needed. What happens to the source that the profile was built on?",
+   "choices": [
+    "The source and all of its aggregated accounts are deleted",
+    "The source's accounts are deprovisioned on the target system",
+    "The source remains but is no longer authoritative",
+    "The source is converted into a delimited file source"
+   ],
+   "answer": "The source remains but is no longer authoritative",
+   "explanation": "Deleting an identity profile does not delete its source or deprovision accounts; it only makes the source non-authoritative. The profile's identities are deleted unless they can move to another profile."
+  },
+  {
+   "id": "D3-005",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "Before deleting an identity profile, what must an administrator confirm about the identities in it?",
+   "choices": [
+    "That all of them are currently in an active lifecycle state",
+    "That each one has completed a recent manager certification",
+    "That none of them are source owners or application owners",
+    "That their accounts have been exported to a CSV report first"
+   ],
+   "answer": "That none of them are source owners or application owners",
+   "explanation": "An identity profile cannot be deleted while its identities still own sources or apps, so those ownerships must be moved first. Lifecycle state and certification status do not block the deletion."
+  },
+  {
+   "id": "D3-006",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An identity profile is deleted, and its identities cannot be reassigned to any other identity profile. What happens to those identities' source accounts?",
+   "choices": [
+    "They become uncorrelated accounts",
+    "They are disabled on every connected source",
+    "They move to a default catch-all identity profile",
+    "They are deleted from the tenant and the target systems"
+   ],
+   "answer": "They become uncorrelated accounts",
+   "explanation": "When identities are deleted with their profile, their source accounts remain but become uncorrelated. Deleting a profile never deprovisions or disables target accounts."
+  },
+  {
+   "id": "D3-007",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An administrator tries to create a new identity profile, but the tenant will not allow it at that moment. Which condition is the MOST likely cause?",
+   "choices": [
+    "The source has no entitlements aggregated yet",
+    "Another profile already uses the same description",
+    "An account aggregation is currently running",
+    "The tenant has no custom identity attributes defined"
+   ],
+   "answer": "An account aggregation is currently running",
+   "explanation": "Identity profiles cannot be created or deleted while an account aggregation is running. Entitlements, descriptions and custom attributes are not prerequisites for creating a profile."
+  },
+  {
+   "id": "D3-008",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "Which statement about identity profiles and identities is accurate?",
+   "choices": [
+    "An identity merges the mappings of every profile whose source it matches",
+    "An identity profile can point to several authoritative sources at once",
+    "Each identity is associated with only one identity profile at a time",
+    "Identity profiles apply only to identities that hold an admin user level"
+   ],
+   "answer": "Each identity is associated with only one identity profile at a time",
+   "explanation": "An identity can belong to only one identity profile, and each profile is built on one authoritative source. That is why priority matters when a person exists on several authoritative sources."
+  },
+  {
+   "id": "D3-009",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "Employees come from an HR system and contractors from a separate vendor-management system. The two groups need different mappings and lifecycle rules. What is the BEST design?",
+   "choices": [
+    "Create a single identity profile and add both sources to it as authoritative",
+    "Create two identity profiles on the HR source and filter contractors into one",
+    "Create one identity profile for each authoritative source and set their priority",
+    "Mark the contractor source as authoritative on the source's own settings page"
+   ],
+   "answer": "Create one identity profile for each authoritative source and set their priority",
+   "explanation": "Each identity profile is built on one authoritative source, so two populations from two systems get two profiles, ordered by priority. A source is made authoritative by an identity profile, not by a source setting."
+  },
+  {
+   "id": "D3-010",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "Three identity profiles were created in this order: Employees, Contractors, Partners. No one has changed their priority. Which profile has the highest priority?",
+   "choices": [
+    "Partners, because the most recently created profile gets the highest priority",
+    "Contractors, because priority is assigned by alphabetical order of the names",
+    "None of them, because all profiles share equal priority until it is changed",
+    "Employees, because the earliest profile created gets the highest priority"
+   ],
+   "answer": "Employees, because the earliest profile created gets the highest priority",
+   "explanation": "By default identity profiles are prioritized by creation order, so the first one created is highest. Priority is not alphabetical and is never left equal."
+  },
+  {
+   "id": "D3-011",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "By default, which priority value does the first identity profile created in a tenant receive?",
+   "choices": [
+    "A value of 10, which is the highest priority",
+    "A value of 1, which is the lowest priority",
+    "A value of 100, which is the highest priority",
+    "A value of 20, which is the lowest priority"
+   ],
+   "answer": "A value of 10, which is the highest priority",
+   "explanation": "The first identity profile gets priority 10 and is the highest; the next gets 20, and so on. A lower number therefore means a higher priority."
+  },
+  {
+   "id": "D3-012",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "Identities that exist in both the HR and contractor sources should be governed by the Contractors profile, which was created second. How can the administrator change the order?",
+   "choices": [
+    "Rename the Contractors profile so that it sorts first in the list",
+    "Update the profiles' priority values with the Update Identity Profile API",
+    "Raise the contractor source's account deletion threshold above HR's",
+    "Schedule the contractor source to aggregate before the HR source"
+   ],
+   "answer": "Update the profiles' priority values with the Update Identity Profile API",
+   "explanation": "Identity profile priority is changed by updating each profile's priority attribute through the API. Names, deletion thresholds and aggregation timing do not affect which profile wins."
+  },
+  {
+   "id": "D3-013",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "Why does the priority of identity profiles matter in a tenant with several authoritative sources?",
+   "choices": [
+    "It sets the order in which the authoritative sources' scheduled aggregations are started",
+    "It controls which profile's lifecycle states are reviewed first in certification campaigns",
+    "It decides which profile's administrators can approve access requests for its identities",
+    "It decides which profile an identity joins when it has accounts on several authoritative sources"
+   ],
+   "answer": "It decides which profile an identity joins when it has accounts on several authoritative sources",
+   "explanation": "An identity is associated with the highest-priority profile where it has an authoritative account. Priority does not order aggregations, certifications or approvals."
+  },
+  {
+   "id": "D3-014",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "A person's account is removed from the HR source, which backs the highest-priority profile. They still have an account on the contractor source, which backs another profile. What is MOST likely to happen to the identity?",
+   "choices": [
+    "It can be associated with the contractor profile, where it still has an authoritative account",
+    "It is deleted at once, because its first authoritative account is gone",
+    "It stays in the HR profile with its last known attribute values forever",
+    "It becomes an uncorrelated account on the contractor source"
+   ],
+   "answer": "It can be associated with the contractor profile, where it still has an authoritative account",
+   "explanation": "Identities are associated with the highest-priority profile where they still have an authoritative account, so the identity can move to the contractor profile. It is only deleted when no authoritative account remains."
+  },
+  {
+   "id": "D3-015",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "An organization is choosing which of its systems to make authoritative. Which source is the BEST choice?",
+   "choices": [
+    "The ticketing system, which holds requests from some users",
+    "The HR system, which holds a complete record of every worker",
+    "A file share group list, which holds members of one project",
+    "The visitor badge system, which holds only on-site guests"
+   ],
+   "answer": "The HR system, which holds a complete record of every worker",
+   "explanation": "An authoritative source should provide a complete list of the people to be governed, which is usually HR or a directory. Partial lists would create incomplete or missing identities."
+  },
+  {
+   "id": "D3-016",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "After an acquisition, an administrator creates a third identity profile for the acquired company's HR feed. Some acquired staff also appear in the main HR feed. Without changes, which profile will those staff be associated with?",
+   "choices": [
+    "The new acquisition profile, because newer profiles take precedence",
+    "Whichever profile's source was aggregated most recently for them",
+    "The main HR profile, because it was created earlier and has higher priority",
+    "Both profiles, with attributes merged from the two HR feeds"
+   ],
+   "answer": "The main HR profile, because it was created earlier and has higher priority",
+   "explanation": "Older profiles have higher priority by default, so people on both feeds join the main HR profile. An identity never belongs to two profiles at once."
+  },
+  {
+   "id": "D3-017",
+   "objective": "3.1",
+   "topic": "Authoritative Sources and Priority",
+   "stem": "Where does an administrator view each identity profile's priority, status and identity exceptions?",
+   "choices": [
+    "Admin > Connections > Sources > Account Schema",
+    "Admin > Global > Security Settings > Password",
+    "Admin > Identity Management > Identity Profiles",
+    "Admin > Search > Saved Searches > Subscriptions"
+   ],
+   "answer": "Admin > Identity Management > Identity Profiles",
+   "explanation": "The Identity Profiles list shows each profile's priority, status and any identity exceptions. The other pages hold source schemas, global security and search features."
+  },
+  {
+   "id": "D3-018",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "Which identity profile sign-in method lets users authenticate with the password of their account on a selected source?",
+   "choices": [
+    "Directory Connection",
+    "Site User Name and Password",
+    "Multifactor Authentication",
+    "Untrusted Geography"
+   ],
+   "answer": "Directory Connection",
+   "explanation": "Directory Connection checks the user's password against the chosen authentication source, which is pass-through authentication. The site user name and password option uses a password created at registration."
+  },
+  {
+   "id": "D3-019",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "A profile uses the tenant's own User Name and Password sign-in method. What do users in that profile sign in with?",
+   "choices": [
+    "The user name and password they created when they registered",
+    "Their Active Directory password checked through a virtual appliance",
+    "A one-time code that is emailed to their manager at each sign-in",
+    "A client ID and secret generated from a personal access token"
+   ],
+   "answer": "The user name and password they created when they registered",
+   "explanation": "With the site user name and password method, users sign in with the credentials they set up during registration. Checking an AD password through a VA is the Directory Connection method."
+  },
+  {
+   "id": "D3-020",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "Security wants every user in the Contractors identity profile to sign in using a mobile authenticator app such as Duo Mobile. Which identity profile setting meets this?",
+   "choices": [
+    "Enable Two-Factor Authentication in the password reset settings",
+    "Select Mask Phone Numbers in the password reset settings",
+    "Select Multifactor Authentication in the Sign-in Method settings",
+    "Select Untrusted Geography under the Block Access From settings"
+   ],
+   "answer": "Select Multifactor Authentication in the Sign-in Method settings",
+   "explanation": "The Multifactor Authentication sign-in option requires a mobile authenticator to sign in. Two-Factor Authentication in the reset settings only applies to password resets and unlocks."
+  },
+  {
+   "id": "D3-021",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "An administrator turns off the Multifactor Authentication option on an identity profile that contains several org admins. How does this affect the admins' sign-in?",
+   "choices": [
+    "The admins sign in with a password only, like other users",
+    "The admins are still required to use MFA to sign in",
+    "The admins lose access until the option is turned back on",
+    "The admins must switch to pass-through authentication"
+   ],
+   "answer": "The admins are still required to use MFA to sign in",
+   "explanation": "Admins are always required to use MFA even if the checkbox is disabled on their identity profile. Disabling it changes sign-in only for non-admin users in that profile."
+  },
+  {
+   "id": "D3-022",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "Which section of an identity profile holds the choice between the site user name and password, Directory Connection and Multifactor Authentication?",
+   "choices": [
+    "Sign-in Method",
+    "Password Reset and User Unlock Methods",
+    "Block Access From",
+    "Invitation Options"
+   ],
+   "answer": "Sign-in Method",
+   "explanation": "Sign-in Method is where the authentication options are chosen. Password reset methods control how users reset or unlock, and Block Access From restricts where they can sign in from."
+  },
+  {
+   "id": "D3-023",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "A help desk lead asks why some users in the tenant sign in with their AD password while others use a password they created at registration. What is the MOST likely explanation?",
+   "choices": [
+    "The users belong to identity profiles that use different sign-in methods",
+    "The users have been assigned different user levels in the tenant",
+    "The users were aggregated through different virtual appliance clusters",
+    "The users have lifecycle states with different technical names"
+   ],
+   "answer": "The users belong to identity profiles that use different sign-in methods",
+   "explanation": "The sign-in method is set per identity profile, so users in different profiles can authenticate differently. User levels control admin rights, not the sign-in method."
+  },
+  {
+   "id": "D3-024",
+   "objective": "3.1",
+   "topic": "Sign-In Methods",
+   "stem": "Which situation is the BEST reason to choose the site user name and password sign-in method for an identity profile?",
+   "choices": [
+    "The profile's users all need to sign in with their existing AD passwords",
+    "The profile's users have no directory account that pass-through could check",
+    "The tenant must avoid sending any registration invitations to these users",
+    "The profile's authoritative source is connected through a virtual appliance"
+   ],
+   "answer": "The profile's users have no directory account that pass-through could check",
+   "explanation": "Users without a directory account cannot use pass-through authentication, so a tenant password set at registration fits them. Users who sign in with AD passwords need Directory Connection instead."
+  },
+  {
+   "id": "D3-025",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "What is pass-through authentication in Identity Security Cloud?",
+   "choices": [
+    "Accepting a signed SAML assertion that an external IdP has issued",
+    "Forwarding a user's access request to the source owner for approval",
+    "Copying each source password into the tenant's own credential store",
+    "Signing in with a network password that is verified against a source"
+   ],
+   "answer": "Signing in with a network password that is verified against a source",
+   "explanation": "Pass-through authentication lets users sign in with the password of their account on a source such as Active Directory. Accepting an IdP's SAML assertion is single sign-on, a different option."
+  },
+  {
+   "id": "D3-026",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "An administrator wants users in one identity profile to sign in with their Active Directory passwords. Where is this configured?",
+   "choices": [
+    "Global security settings, in the service provider configuration",
+    "Sign-in Method on the identity profile, set to Directory Connection",
+    "The AD source's create account provisioning policy",
+    "The access profile that grants the AD entitlements"
+   ],
+   "answer": "Sign-in Method on the identity profile, set to Directory Connection",
+   "explanation": "Pass-through authentication is chosen per identity profile by selecting Directory Connection and an authentication source. Service provider settings are for SAML single sign-on."
+  },
+  {
+   "id": "D3-027",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "Several identities show the status Authentication Source Mismatch. Their identity profile uses Directory Connection with Active Directory as the authentication source. What is the cause?",
+   "choices": [
+    "Their AD passwords have expired since the last aggregation",
+    "Those identities have no correlated account on the AD source",
+    "Their lifecycle state values do not match the technical name case",
+    "Their AD accounts are correlated to more than one identity each"
+   ],
+   "answer": "Those identities have no correlated account on the AD source",
+   "explanation": "Authentication Source Mismatch means the identity has no account on the source used for pass-through, so it cannot authenticate. Expired passwords would cause a sign-in failure, not this identity status."
+  },
+  {
+   "id": "D3-028",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "An identity shows Authentication Source Mismatch, and the person really does have an AD account. Which action resolves the status?",
+   "choices": [
+    "Run a delta aggregation of the authoritative source",
+    "Reset the identity's password in the tenant",
+    "Assign the identity the Helpdesk user level",
+    "Correlate the person's AD account to the identity"
+   ],
+   "answer": "Correlate the person's AD account to the identity",
+   "explanation": "The fix is to correlate an account on the authentication source to the identity, or to change the profile's sign-in method. Aggregating the authoritative source or resetting a tenant password does not link the AD account."
+  },
+  {
+   "id": "D3-029",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "Pass-through authentication against an on-premises Active Directory depends on which component to reach the directory?",
+   "choices": [
+    "The virtual appliance that connects the AD source",
+    "A personal access token issued to each user",
+    "A SAML trust between AD and the tenant",
+    "An event trigger subscribed to sign-in events"
+   ],
+   "answer": "The virtual appliance that connects the AD source",
+   "explanation": "On-premises sources such as AD are reached through the virtual appliance, which also carries pass-through authentication requests. A SAML trust is used for SSO with an IdP, not for checking AD passwords."
+  },
+  {
+   "id": "D3-030",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "What is the main benefit of pass-through authentication for end users?",
+   "choices": [
+    "They never need any password, because the source vouches for them silently",
+    "They are exempt from multifactor prompts for every administrative action",
+    "They receive access to every source account as soon as they sign in",
+    "They reuse their existing network password instead of a separate tenant password"
+   ],
+   "answer": "They reuse their existing network password instead of a separate tenant password",
+   "explanation": "Pass-through authentication means users sign in with the network password they already know. It does not remove passwords, skip admin MFA or grant access."
+  },
+  {
+   "id": "D3-031",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "Which pair of settings must be chosen together on an identity profile to set up pass-through authentication?",
+   "choices": [
+    "Multifactor Authentication and Mask Phone Numbers",
+    "Invitation Options and Off Network blocking",
+    "Directory Connection and an Authentication Source",
+    "Two-Factor Authentication and an email template"
+   ],
+   "answer": "Directory Connection and an Authentication Source",
+   "explanation": "Pass-through needs the Directory Connection sign-in method plus the source whose password is checked. The other pairs control MFA, phone masking, invitations and network blocking."
+  },
+  {
+   "id": "D3-032",
+   "objective": "3.1",
+   "topic": "Pass-Through Authentication",
+   "stem": "A profile is switching to Directory Connection with AD as the authentication source, but some of its contractors have no AD account. What is the BEST way to keep the contractors able to sign in?",
+   "choices": [
+    "Give the contractors the Helpdesk user level so they can bypass the directory",
+    "Keep the contractors in a separate profile that uses the site user name and password",
+    "Enable Mask Phone Numbers on the profile so contractors can reset by text",
+    "Map the contractors' Last Name attribute from AD so they correlate to it"
+   ],
+   "answer": "Keep the contractors in a separate profile that uses the site user name and password",
+   "explanation": "Identities without an account on the authentication source cannot use pass-through and would show Authentication Source Mismatch. A separate profile with a tenant password suits users with no directory account."
+  },
+  {
+   "id": "D3-033",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "An administrator selects Block Access From Off Network on an identity profile but has not defined any network block. What happens?",
+   "choices": [
+    "The setting has no effect until a network block is defined",
+    "All users in that profile are blocked from signing in",
+    "Only users outside the organization's home country are blocked",
+    "Only admins in that profile are blocked from signing in"
+   ],
+   "answer": "All users in that profile are blocked from signing in",
+   "explanation": "If Off Network is selected with no network definition, every user in the profile is blocked. Admins must define the allowed network block before enabling the option."
+  },
+  {
+   "id": "D3-034",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "Compliance requires that users in one identity profile cannot sign in from countries on the organization's untrusted list. Which setting applies?",
+   "choices": [
+    "Block Access From Off Network",
+    "Password reset Mask Phone Numbers",
+    "Enable Two-Factor Authentication",
+    "Block Access From Untrusted Geography"
+   ],
+   "answer": "Block Access From Untrusted Geography",
+   "explanation": "Untrusted Geography blocks sign-in from countries on the configured block list, or outside the trusted list. Off Network blocks by IP address range instead of by country."
+  },
+  {
+   "id": "D3-035",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "Security wants users to pass two verification methods before they can reset their tenant password or unlock their account. Which identity profile setting does this?",
+   "choices": [
+    "Choose Multifactor Authentication as the profile's sign-in method",
+    "Enable Two-Factor Authentication in the password reset and unlock settings",
+    "Select Untrusted Geography in the Block Access From settings",
+    "Require manager approval in the profile's access request settings"
+   ],
+   "answer": "Enable Two-Factor Authentication in the password reset and unlock settings",
+   "explanation": "Two-Factor Authentication in the reset settings requires two of the enabled reset and unlock methods. The Multifactor Authentication sign-in method affects normal sign-in, not resets."
+  },
+  {
+   "id": "D3-036",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "Which identity profile option hides most of a user's phone number while they reset their password?",
+   "choices": [
+    "Mask Phone Numbers",
+    "Enable Two-Factor Authentication",
+    "Block Access From Off Network",
+    "Directory Connection"
+   ],
+   "answer": "Mask Phone Numbers",
+   "explanation": "Mask Phone Numbers turns on phone number masking during password resets. Two-Factor Authentication changes how many methods are needed, not what is shown."
+  },
+  {
+   "id": "D3-037",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "New hires are created in a pre-hire lifecycle state two weeks before they start. HR wants them invited to the tenant only on their first day. What should the administrator configure?",
+   "choices": [
+    "Manual invitations sent from the HR source's list of accounts each week",
+    "A certification campaign that reviews identities in the pre-hire state",
+    "An access profile in the pre-hire state that contains an invitation",
+    "Automatic invitations for identities that enter the active lifecycle state"
+   ],
+   "answer": "Automatic invitations for identities that enter the active lifecycle state",
+   "explanation": "With provisioning enabled, an identity profile can send invitations automatically when identities enter a chosen lifecycle state. Pre-hire to active on the start date is the typical example."
+  },
+  {
+   "id": "D3-038",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "What does the Password Reset and User Unlock Methods section of an identity profile control?",
+   "choices": [
+    "Which source account passwords are changed when a user resets the tenant password",
+    "How often users in the profile must change their tenant password to stay active",
+    "Which verification options users can use to reset their password or unlock their account",
+    "Which administrators may unlock users in the profile from the Identities page"
+   ],
+   "answer": "Which verification options users can use to reset their password or unlock their account",
+   "explanation": "This section lists the verification methods available for resetting the tenant password or unlocking the account. Password expiry and source password sync are separate password settings."
+  },
+  {
+   "id": "D3-039",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "Users in a profile that uses the site user name and password have never signed in. Neither pass-through authentication nor SSO is configured. What must happen before they can sign in?",
+   "choices": [
+    "They must be assigned an active lifecycle state",
+    "They must be invited and complete registration",
+    "Their manager must certify their current access",
+    "Their HR account must be aggregated a second time"
+   ],
+   "answer": "They must be invited and complete registration",
+   "explanation": "Without an external option such as pass-through or SSO, only invited users can sign in, and registration is where they set their password. A lifecycle state alone does not create sign-in credentials."
+  },
+  {
+   "id": "D3-040",
+   "type": "order",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An administrator is making a new HR source authoritative. Put the steps in order.",
+   "items": [
+    "Go to Admin > Identity Management > Identity Profiles and select Create New",
+    "Enter a name and description and choose the HR source",
+    "Configure the sign-in method, password reset options and access blocks",
+    "Save the profile and open its Mappings page to map identity attributes",
+    "Preview a few identities, then select Apply Changes"
+   ],
+   "explanation": "The profile is created on the source, its security settings are set and saved, then mappings are defined. Preview checks the values before Apply Changes processes the identities."
+  },
+  {
+   "id": "D3-041",
+   "type": "match",
+   "objective": "3.1",
+   "topic": "Profile Security and Invitations",
+   "stem": "Match each identity profile setting to its effect.",
+   "pairs": [
+    {
+     "item": "Directory Connection",
+     "match": "Checks the user's password against a chosen source"
+    },
+    {
+     "item": "Multifactor Authentication",
+     "match": "Requires a mobile authenticator app at sign-in"
+    },
+    {
+     "item": "Two-Factor Authentication",
+     "match": "Requires two methods to reset a password or unlock"
+    },
+    {
+     "item": "Off Network",
+     "match": "Blocks sign-in from outside the defined IP ranges"
+    },
+    {
+     "item": "Untrusted Geography",
+     "match": "Blocks sign-in from countries on the block list"
+    }
+   ],
+   "targets_extra": [
+    "Requires manager approval for each sign-in"
+   ],
+   "explanation": "Sign-in method options decide how users authenticate, Two-Factor Authentication applies to resets and unlocks, and the Block Access From options restrict where sign-in is allowed. There is no manager approval of sign-ins."
+  },
+  {
+   "id": "D3-042",
+   "type": "multi",
+   "objective": "3.1",
+   "topic": "Identity Profile Purpose",
+   "stem": "An architect is documenting what an identity profile determines for its identities. Which TWO items belong on the list?",
+   "choices": [
+    "The identity attribute mappings that populate identity data",
+    "The access granted or removed as lifecycle states change",
+    "The schedule for aggregating entitlements from the source",
+    "The virtual appliance cluster used by the source",
+    "The approval scheme for requesting the source's roles"
+   ],
+   "answers": [
+    "The identity attribute mappings that populate identity data",
+    "The access granted or removed as lifecycle states change"
+   ],
+   "select": 2,
+   "explanation": "An identity profile sets authentication settings, attribute mappings and lifecycle-state access. Aggregation schedules and VA clusters belong to the source, and approval schemes belong to access items."
+  },
+  {
+   "id": "D3-043",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "Which identity attributes must be mapped in every identity profile and cannot be null for any identity?",
+   "choices": [
+    "First Name, Department and Manager",
+    "Display Name, Title and Location",
+    "User Name, Work Email and Last Name",
+    "Lifecycle State, Start Date and End Date"
+   ],
+   "answer": "User Name, Work Email and Last Name",
+   "explanation": "User Name (uid), Work Email (email) and Last Name (lastname) are the required identity attributes. Missing values generate identity exceptions; the others are optional."
+  },
+  {
+   "id": "D3-044",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "Two identities from different identity profiles resolve to the same User Name value. How does the tenant respond?",
+   "choices": [
+    "It merges the two identities into a single identity record",
+    "It appends a sequence number to the second identity's User Name",
+    "It keeps both, because uniqueness applies only within a profile",
+    "It generates an identity exception for the duplicate User Name"
+   ],
+   "answer": "It generates an identity exception for the duplicate User Name",
+   "explanation": "User Name must be unique across all identities from every identity profile, and a duplicate raises an identity exception. The tenant does not merge identities or rename them."
+  },
+  {
+   "id": "D3-045",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "An HR record has a malformed work email value with no at sign. The Work Email mapping copies the value unchanged. What happens?",
+   "choices": [
+    "An identity exception is raised, because the email is not a valid address",
+    "The value is accepted, because Work Email is required but not validated as an address",
+    "The identity is created with an empty Work Email and flagged as incomplete",
+    "The mapping falls back to the identity's personal email address instead"
+   ],
+   "answer": "The value is accepted, because Work Email is required but not validated as an address",
+   "explanation": "Work Email cannot be null, but it is not validated as an email address. The admin should fix the data in HR rather than expect the tenant to reject it."
+  },
+  {
+   "id": "D3-046",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "Identity exceptions appear on the HR identity profile after aggregation. What is the recommended way to resolve them?",
+   "choices": [
+    "Delete the affected identities and create them again by hand on the Identities page",
+    "Change the profile's sign-in method so the missing values are no longer required",
+    "Download the exception report, fix the missing values in the source and aggregate again",
+    "Raise the source's account deletion threshold so that the exceptions are ignored"
+   ],
+   "answer": "Download the exception report, fix the missing values in the source and aggregate again",
+   "explanation": "Identity exceptions mean accounts are missing required attributes or have a duplicate User Name. The report shows which values are missing so they can be corrected at the source and re-aggregated."
+  },
+  {
+   "id": "D3-047",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "Access requests and certifications in the tenant need to route work to each identity's manager. What must the administrator set up?",
+   "choices": [
+    "Add each manager as a source owner of the authoritative source",
+    "Create a custom identity attribute named manager and leave it unmapped",
+    "Map the Manager Name attribute and define manager correlation on the source",
+    "Map the Manager Name attribute with the E.164 Phone Format transform"
+   ],
+   "answer": "Map the Manager Name attribute and define manager correlation on the source",
+   "explanation": "Manager features need the Manager Name attribute mapped and manager correlation logic defined for the source. Source ownership is unrelated to who an identity's manager is."
+  },
+  {
+   "id": "D3-048",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "An identity appears as Incomplete on the Identities page. What is the MOST likely cause?",
+   "choices": [
+    "It is missing a value for a required identity attribute",
+    "It has no access profiles or roles assigned yet",
+    "It has not signed in to the tenant since it was created",
+    "It has accounts on more than one connected source"
+   ],
+   "answer": "It is missing a value for a required identity attribute",
+   "explanation": "Identities missing required attributes are shown as Incomplete and also produce identity exceptions. Having no access or not signing in does not make an identity incomplete."
+  },
+  {
+   "id": "D3-049",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "Before using lifecycle states to drive provisioning for an identity profile, which identity attribute must be mapped?",
+   "choices": [
+    "Identification Number (identificationNumber)",
+    "Lifecycle State (cloudLifecycleState)",
+    "License Status (licenseStatus)",
+    "Next Processing (nextProcessing)"
+   ],
+   "answer": "Lifecycle State (cloudLifecycleState)",
+   "explanation": "Lifecycle-state provisioning only works when the Lifecycle State attribute is mapped for the profile. The other default attributes do not assign lifecycle states."
+  },
+  {
+   "id": "D3-050",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "The Employees identity profile is built on the HR source, but the work email address exists only in Active Directory. How should Work Email be mapped?",
+   "choices": [
+    "Make AD the profile's authoritative source instead of HR",
+    "Add AD to the profile as a second authoritative source",
+    "Copy the email into HR by hand before mapping the attribute",
+    "Map Work Email from the mail attribute on the AD source"
+   ],
+   "answer": "Map Work Email from the mail attribute on the AD source",
+   "explanation": "Identity attributes can be mapped from account attributes on any source, not only the authoritative one. A profile has a single authoritative source, so adding AD as a second one is not possible."
+  },
+  {
+   "id": "D3-051",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "Which statement about where identity attribute values can come from is accurate?",
+   "choices": [
+    "They can be mapped only from the profile's authoritative source",
+    "They can be mapped from account attributes on any source",
+    "They can be mapped only from sources on the same virtual appliance",
+    "They can be mapped only from flat file sources loaded by an admin"
+   ],
+   "answer": "They can be mapped from account attributes on any source",
+   "explanation": "Mappings may use any source's account attributes, so a profile can combine HR data with AD email, for example. The source connection type does not restrict mappings."
+  },
+  {
+   "id": "D3-052",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "An administrator no longer wants the Title attribute populated for one identity profile. How is the mapping removed?",
+   "choices": [
+    "Set the Source dropdown for Title to None",
+    "Delete the Title attribute from all profiles",
+    "Set the Transform dropdown for Title to ToLower",
+    "Remove the title column from the source schema"
+   ],
+   "answer": "Set the Source dropdown for Title to None",
+   "explanation": "Choosing None in the Source dropdown unmaps the attribute for that profile. Title is a default attribute that should not be deleted, and changing the schema could break other mappings."
+  },
+  {
+   "id": "D3-053",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "Employees' department should come from HR, while contractors' department should come from AD. Each group has its own identity profile. How is this handled?",
+   "choices": [
+    "Map the department attribute differently in each identity profile",
+    "Create two department attributes, one for each of the sources",
+    "Use a role to copy department values between the two groups",
+    "Make the AD source authoritative for the department attribute"
+   ],
+   "answer": "Map the department attribute differently in each identity profile",
+   "explanation": "The list of identity attributes is shared, but each identity profile has its own mappings. That lets the same attribute come from different sources for different populations."
+  },
+  {
+   "id": "D3-054",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "When an administrator maps an identity attribute directly to an account attribute, which two dropdowns are selected on the Mappings page?",
+   "choices": [
+    "Transform and Rule",
+    "Profile and Priority",
+    "Source and Attribute",
+    "Schema and Connector"
+   ],
+   "answer": "Source and Attribute",
+   "explanation": "A direct mapping is a source plus one of its account attributes. A transform or rule is only added when the value must be changed or calculated."
+  },
+  {
+   "id": "D3-055",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "The source attribute mapped to User Name contains values such as j.smith(contractor). What risk does this create?",
+   "choices": [
+    "Users may be unable to sign in because the value contains disallowed characters",
+    "Identity processing converts those characters to underscores automatically",
+    "The tenant rejects every aggregation of that source until the data is fixed",
+    "Attribute sync stops updating the source accounts for those identities"
+   ],
+   "answer": "Users may be unable to sign in because the value contains disallowed characters",
+   "explanation": "Characters such as asterisk, parentheses, ampersand, exclamation mark and period must not be in the source attribute mapped to a sign-in attribute. Users with such values may not be able to sign in."
+  },
+  {
+   "id": "D3-056",
+   "objective": "3.2",
+   "topic": "Mapping Source Attributes",
+   "stem": "Which part of identity data can differ between two identity profiles in the same tenant?",
+   "choices": [
+    "The list of identity attribute names available",
+    "The technical names of the custom attributes",
+    "The set of attributes that are always required",
+    "The mappings that populate each identity attribute"
+   ],
+   "answer": "The mappings that populate each identity attribute",
+   "explanation": "Attribute names, technical names and the required set are shared by every profile, but each profile maps them its own way. A custom attribute added in one profile appears in all of them."
+  },
+  {
+   "id": "D3-057",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "International users need their work phone numbers in a standard format so text message resets work. Which transform should be applied to the Work Phone mapping?",
+   "choices": [
+    "ISO3166 Country Format",
+    "ToUpper",
+    "E.164 Phone Format",
+    "Remove Diacritical Marks"
+   ],
+   "answer": "E.164 Phone Format",
+   "explanation": "The E.164 Phone Format transform must be applied to Work Phone for international numbers. ISO3166 converts country names, not phone numbers."
+  },
+  {
+   "id": "D3-058",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "Country values arrive from HR as full names such as United States, but a downstream system needs two-letter codes. Which built-in transform fits?",
+   "choices": [
+    "E.164 Phone Format",
+    "RFC5646",
+    "User Preferred Name",
+    "ISO3166 Country Format"
+   ],
+   "answer": "ISO3166 Country Format",
+   "explanation": "ISO3166 Country Format converts a country name to its two-character code. RFC5646 produces language tags, which look similar but serve a different purpose."
+  },
+  {
+   "id": "D3-059",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "Last names arrive with accented characters that an older target system cannot store. Which built-in transform helps?",
+   "choices": [
+    "ToLower",
+    "ISO3166 Country Format",
+    "E.164 Phone Format",
+    "Remove Diacritical Marks"
+   ],
+   "answer": "Remove Diacritical Marks",
+   "explanation": "Remove Diacritical Marks converts accented letters to their base characters. ToLower changes case only and leaves the accents in place."
+  },
+  {
+   "id": "D3-060",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "What must happen before a custom rule can be used to calculate an identity attribute?",
+   "choices": [
+    "The rule must be uploaded to every virtual appliance in the cluster",
+    "The rule must be saved as a static transform in the Admin UI first",
+    "The rule must be approved by the source owner of the mapped source",
+    "SailPoint must review the rule before it is deployed to the tenant"
+   ],
+   "answer": "SailPoint must review the rule before it is deployed to the tenant",
+   "explanation": "Unlike transforms, rules must be reviewed by SailPoint before they can be implemented. Transforms can be created and uploaded by the tenant's own administrators."
+  },
+  {
+   "id": "D3-061",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "How does an administrator select an approved rule for an identity attribute mapping?",
+   "choices": [
+    "Choose Complex Data Source as the source, then choose the rule",
+    "Choose the authoritative source, then type the rule name as the attribute",
+    "Choose None as the source, then upload the rule file to the mapping",
+    "Choose any source, then select the rule in the Attribute dropdown"
+   ],
+   "answer": "Choose Complex Data Source as the source, then choose the rule",
+   "explanation": "Rules are picked by setting Source to Complex Data Source and selecting the rule in the Transform dropdown. Choosing None unmaps the attribute."
+  },
+  {
+   "id": "D3-062",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "A team wants to change how one identity attribute is calculated without waiting for an external review. Which approach is BEST?",
+   "choices": [
+    "Use a rule, because rules are deployed instantly by tenant admins",
+    "Use a role, because roles can rewrite identity attribute values",
+    "Use a workflow, because workflows replace identity mappings",
+    "Use a transform, because transforms do not need a SailPoint review"
+   ],
+   "answer": "Use a transform, because transforms do not need a SailPoint review",
+   "explanation": "Transforms are configuration the tenant can create and apply, while rules need SailPoint review. Roles and workflows do not calculate identity attribute mappings."
+  },
+  {
+   "id": "D3-063",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "An identity's lifecycle state should be worked out from its start date and end date. Which mapping approach does SailPoint describe for this?",
+   "choices": [
+    "A simple ToUpper transform applied to the start date attribute",
+    "A custom attribute for each date, with the Source set to None",
+    "The User Preferred Name transform applied to the end date",
+    "A complex transform that combines several operations on the attribute"
+   ],
+   "answer": "A complex transform that combines several operations on the attribute",
+   "explanation": "Simple transforms can be combined into complex transforms, for example to calculate a lifecycle state from a start date. A single case-changing transform cannot compare dates."
+  },
+  {
+   "id": "D3-064",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "A source attribute holds several values, and an administrator applies a mapping transform to it. What will the identity attribute contain?",
+   "choices": [
+    "All values joined into one comma-separated string",
+    "Only the first value, as a single value",
+    "All values kept as a multi-valued identity attribute",
+    "No value, because transforms reject multi-valued data"
+   ],
+   "answer": "Only the first value, as a single value",
+   "explanation": "A mapping transform on a multi-value attribute takes only the first value and returns a single value. Admins should not expect the other values to be kept."
+  },
+  {
+   "id": "D3-065",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "An administrator adds a custom identity attribute while editing the Employees identity profile. Where does the new attribute appear?",
+   "choices": [
+    "Only in the Employees profile, until it is copied to the others",
+    "In every identity profile, although it need not be mapped in each one",
+    "Only in profiles whose source schema has a matching column",
+    "In every profile, and it must be mapped in all of them"
+   ],
+   "answer": "In every identity profile, although it need not be mapped in each one",
+   "explanation": "Any attribute added under one identity profile appears in all profiles, but each profile can leave it unmapped. Only the required attributes must be mapped everywhere."
+  },
+  {
+   "id": "D3-066",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "An administrator enters Hire Date as the name of a new identity attribute. Which technical name is generated automatically?",
+   "choices": [
+    "hireDate",
+    "HireDate",
+    "hire_date",
+    "HIREDATE"
+   ],
+   "answer": "hireDate",
+   "explanation": "The technical name is a camel case version of the name, so Hire Date becomes hireDate. The name field accepts only letters, numbers and spaces."
+  },
+  {
+   "id": "D3-067",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "Which characters does the Name field accept when an administrator adds a new identity attribute?",
+   "choices": [
+    "Letters, numbers and underscores",
+    "Letters, periods and hyphens",
+    "Any printable characters",
+    "Letters, numbers and spaces"
+   ],
+   "answer": "Letters, numbers and spaces",
+   "explanation": "The Name field accepts only letters, numbers and spaces, and the camel case technical name is generated from it. Underscores and punctuation are not accepted."
+  },
+  {
+   "id": "D3-068",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "An administrator deletes a custom identity attribute while editing the Contractors identity profile. What is the scope of the deletion?",
+   "choices": [
+    "The attribute is deleted from all identity profiles",
+    "The attribute is deleted only from the Contractors profile",
+    "The attribute is hidden but keeps its values on identities",
+    "The attribute is deleted only where it was never mapped"
+   ],
+   "answer": "The attribute is deleted from all identity profiles",
+   "explanation": "Deleting a custom attribute in one profile deletes it from every profile. Admins should check every place it is used before saving the deletion."
+  },
+  {
+   "id": "D3-069",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "An administrator plans to delete a custom identity attribute. Which dependency is MOST important to check first?",
+   "choices": [
+    "Roles whose membership criteria use the attribute",
+    "The connector log level on the virtual appliance",
+    "The account aggregation schedule of the source",
+    "The branding colors used in email templates"
+   ],
+   "answer": "Roles whose membership criteria use the attribute",
+   "explanation": "Deleting an attribute can break role membership criteria, sign-in user name settings, SAML maps, rules, transforms and lifecycle calculations that use it. Log levels and branding are unaffected."
+  },
+  {
+   "id": "D3-070",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "A custom identity attribute has just been deleted. Which follow-up processing does SailPoint require?",
+   "choices": [
+    "Run a full account aggregation on every source connected to the tenant",
+    "Run identity processing on each identity profile, including those that never mapped it",
+    "Run a certification campaign on every identity that held the attribute",
+    "Restart every virtual appliance so the old attribute leaves its cache"
+   ],
+   "answer": "Run identity processing on each identity profile, including those that never mapped it",
+   "explanation": "Identity processing must be run on each identity profile after deleting a custom attribute, even where it was not mapped. Aggregations, campaigns and VA restarts do not clear it."
+  },
+  {
+   "id": "D3-071",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "On the Mappings page, an administrator selects Remove on a custom attribute and then selects Cancel at the warning message. What happens?",
+   "choices": [
+    "The attribute is deleted anyway, but other unsaved changes are kept",
+    "The attribute is restored, and all other unsaved changes are reverted too",
+    "The attribute is restored, and other unsaved changes are kept",
+    "The attribute is hidden until the administrator saves the page"
+   ],
+   "answer": "The attribute is restored, and all other unsaved changes are reverted too",
+   "explanation": "Cancel at the warning restores the attribute to the list but also reverts every other unsaved change. Admins should save other work before removing attributes."
+  },
+  {
+   "id": "D3-072",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "The administrator team wants to delete the default costCenter identity attribute because it is unused. What is the recommended action?",
+   "choices": [
+    "Delete it with Remove and Save on the Mappings page of any profile",
+    "Delete it only after unmapping it in every identity profile first",
+    "Leave it in place, because default attributes should not be deleted",
+    "Rename it as a custom attribute and then delete the custom copy"
+   ],
+   "answer": "Leave it in place, because default attributes should not be deleted",
+   "explanation": "Default identity attributes should not be deleted; SailPoint Support should be contacted if needed. An unused default attribute can simply be left unmapped."
+  },
+  {
+   "id": "D3-073",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "After an administrator saves new mappings, the identity profile shows the status Needs Processing. What should the administrator do to update its identities?",
+   "choices": [
+    "Select Apply Changes for that identity profile",
+    "Run a delta aggregation of an unrelated source",
+    "Delete the profile and create it again",
+    "Wait for the next certification campaign"
+   ],
+   "answer": "Select Apply Changes for that identity profile",
+   "explanation": "Saved mapping changes are applied to identities when the admin selects Apply Changes, which starts identity processing. Re-creating the profile would delete its identities."
+  },
+  {
+   "id": "D3-074",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "What is the purpose of the Preview feature on an identity profile's Mappings page?",
+   "choices": [
+    "To show which accounts will be deleted during the next account aggregation",
+    "To check how the mappings populate a chosen identity's attributes before applying",
+    "To send a sample lifecycle state change email to the profile's administrators",
+    "To compare the profile's mappings with those in a configuration hub backup"
+   ],
+   "answer": "To check how the mappings populate a chosen identity's attributes before applying",
+   "explanation": "Preview lets the admin select an identity and see the attribute values the mappings produce. It is a verification step before Apply Changes."
+  },
+  {
+   "id": "D3-075",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "A new Department mapping has been saved but not applied. What is true about existing identities in the profile?",
+   "choices": [
+    "Their attributes were recalculated the moment the mapping was saved",
+    "Their attributes have not yet been recalculated with the new mapping",
+    "Their attributes were cleared and stay empty until Apply Changes",
+    "Their attributes are locked and cannot change from aggregation"
+   ],
+   "answer": "Their attributes have not yet been recalculated with the new mapping",
+   "explanation": "Saving changes marks the profile as Needs Processing; identities are updated when changes are applied or processing runs. Existing values are not cleared in the meantime."
+  },
+  {
+   "id": "D3-076",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "Which two statuses can an identity profile show on the Identity Profiles list?",
+   "choices": [
+    "Enabled or Disabled",
+    "Draft or Published",
+    "Active or Needs Processing",
+    "Healthy or Unhealthy"
+   ],
+   "answer": "Active or Needs Processing",
+   "explanation": "Identity profiles are Active or Needs Processing, the latter after changes that have not been applied. Healthy and Unhealthy are used for things such as virtual appliances and sources."
+  },
+  {
+   "id": "D3-077",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "HR changes a person's department, and the HR source is aggregated as scheduled. What updates the identity's department attribute without any administrator action?",
+   "choices": [
+    "A certification campaign that the aggregation launches for the identity",
+    "An access request that the aggregation raises on the identity's behalf",
+    "Identity processing that runs automatically for data changed in aggregation",
+    "A configuration hub restore that the aggregation schedules overnight"
+   ],
+   "answer": "Identity processing that runs automatically for data changed in aggregation",
+   "explanation": "Identity data changed by aggregation is processed automatically, which recalculates the mapped attributes. Certifications and requests do not update identity attributes."
+  },
+  {
+   "id": "D3-078",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "An identity profile is marked as having scheduled processing. What is the reason?",
+   "choices": [
+    "A mapping uses a transform or rule that is tagged to need a periodic refresh",
+    "The profile's authoritative source has a delta aggregation scheduled daily",
+    "The profile's lifecycle states send a notification email every morning",
+    "The profile was created during an account aggregation of its source"
+   ],
+   "answer": "A mapping uses a transform or rule that is tagged to need a periodic refresh",
+   "explanation": "Scheduled processing is shown when a mapped rule or transform is tagged for periodic refresh, such as date-based calculations that change without new source data. Aggregation schedules are a source setting."
+  },
+  {
+   "id": "D3-079",
+   "objective": "3.2",
+   "topic": "Preview and Apply Changes",
+   "stem": "An administrator is changing the Department mapping for a profile with 20,000 identities and wants to limit risk. What should be done FIRST after saving the change?",
+   "choices": [
+    "Apply the changes at once so all identities are updated together",
+    "Delete the old Department attribute so the new one can be added",
+    "Preview several identities to confirm the new values are correct",
+    "Disable the profile's lifecycle states until the change is done"
+   ],
+   "answer": "Preview several identities to confirm the new values are correct",
+   "explanation": "Preview verifies the mapping on real data before Apply Changes processes every identity. Applying first risks pushing wrong values to thousands of identities and any roles or syncs that use them."
+  },
+  {
+   "id": "D3-080",
+   "type": "order",
+   "objective": "3.2",
+   "topic": "Custom Identity Attributes",
+   "stem": "An administrator is adding a new Hire Date identity attribute fed from HR. Put the steps in order.",
+   "items": [
+    "Select Add New Attribute on the Mappings page and enter the name",
+    "Select the HR source and its hire date account attribute",
+    "Choose a transform if the date needs to be reformatted",
+    "Save the mappings",
+    "Preview an identity to verify the value",
+    "Select Apply Changes"
+   ],
+   "explanation": "The attribute is added and mapped, with an optional transform, then saved. Preview checks the result before Apply Changes processes the identities."
+  },
+  {
+   "id": "D3-081",
+   "type": "match",
+   "objective": "3.2",
+   "topic": "Transforms and Rules in Mappings",
+   "stem": "Match each built-in mapping transform to what it does.",
+   "pairs": [
+    {
+     "item": "E.164 Phone Format",
+     "match": "Converts a phone number into the international standard format"
+    },
+    {
+     "item": "ISO3166 Country Format",
+     "match": "Converts a country name into a two-character code"
+    },
+    {
+     "item": "Remove Diacritical Marks",
+     "match": "Converts accented letters to their base characters"
+    },
+    {
+     "item": "ToLower",
+     "match": "Converts the value to lowercase letters"
+    },
+    {
+     "item": "User Preferred Name",
+     "match": "Builds the display name from the preferred name when it exists"
+    }
+   ],
+   "targets_extra": [
+    "Converts a date into the tenant's time zone"
+   ],
+   "explanation": "These are built-in simple transforms selectable on the Mappings page. Date conversion is done with a dateFormat transform, which is not one of these options."
+  },
+  {
+   "id": "D3-082",
+   "type": "multi",
+   "objective": "3.2",
+   "topic": "Required and Special Attributes",
+   "stem": "An administrator is building a new identity profile. Which TWO identity attributes must be mapped before identities are created without exceptions?",
+   "choices": [
+    "User Name (uid)",
+    "Work Email (email)",
+    "Department (department)",
+    "Manager Name (manager)",
+    "Start Date (startDate)"
+   ],
+   "answers": [
+    "User Name (uid)",
+    "Work Email (email)"
+   ],
+   "select": 2,
+   "explanation": "User Name, Work Email and Last Name are required for every identity. Department, manager and start date are useful but optional."
+  },
+  {
+   "id": "D3-083",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "Which lifecycle states are included automatically when an administrator creates a new identity profile?",
+   "choices": [
+    "Joiner, mover and leaver, plus a disabled state",
+    "Enabled, disabled and deleted, plus a pending state",
+    "Requested, approved and provisioned, plus a failed state",
+    "Pre-hire, active, leave of absence, terminated and archived"
+   ],
+   "answer": "Pre-hire, active, leave of absence, terminated and archived",
+   "explanation": "New identity profiles include pre-hire, active, leave of absence, terminated and archived states. Joiner, mover and leaver are the business events these states support, not state names."
+  },
+  {
+   "id": "D3-084",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "An administrator created a Retired lifecycle state and mapped retirees' HR status to its technical name, but no identities are assigned to it. What is the MOST likely cause?",
+   "choices": [
+    "The lifecycle state has no email notification list",
+    "The lifecycle state has not been enabled",
+    "The lifecycle state has no access profiles to grant",
+    "The lifecycle state has no description entered"
+   ],
+   "answer": "The lifecycle state has not been enabled",
+   "explanation": "Lifecycle states are disabled by default and must be enabled before identities are assigned to them. Notifications and access profiles are optional."
+  },
+  {
+   "id": "D3-085",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "Where are lifecycle states defined in Identity Security Cloud?",
+   "choices": [
+    "Once for the tenant, under the global settings",
+    "In each source, under the account schema",
+    "In each identity profile, under Lifecycle Management",
+    "In each role, under the membership criteria"
+   ],
+   "answer": "In each identity profile, under Lifecycle Management",
+   "explanation": "Lifecycle states are configured per identity profile, so employees and contractors can have different states and access. They are not global, per source or per role."
+  },
+  {
+   "id": "D3-086",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "New hires should automatically receive email, VPN and intranet access on their first day. Which configuration BEST fits?",
+   "choices": [
+    "A certification campaign that reviews each new hire's access",
+    "An access request that each new hire submits on the first day",
+    "An active lifecycle state that grants the needed access profiles",
+    "A search subscription that emails the help desk about new hires"
+   ],
+   "answer": "An active lifecycle state that grants the needed access profiles",
+   "explanation": "Lifecycle states drive joiner access automatically by granting access profiles when the identity enters the state. Requests and campaigns need people to act and are not automatic birthright access."
+  },
+  {
+   "id": "D3-087",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "When a worker leaves, all of their source accounts should be disabled automatically. Which feature handles this?",
+   "choices": [
+    "An identity profile priority change for leavers",
+    "A source account deletion threshold set to zero",
+    "A terminated lifecycle state configured to disable accounts",
+    "A manager certification launched on the end date"
+   ],
+   "answer": "A terminated lifecycle state configured to disable accounts",
+   "explanation": "A lifecycle state can enable, disable or delete source accounts when an identity enters it, which automates leaver processing. The deletion threshold only protects against mass deletions during aggregation."
+  },
+  {
+   "id": "D3-088",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "Staff on extended leave should keep their accounts but lose VPN access until they return. The active state grants VPN through an access profile. What is the BEST configuration?",
+   "choices": [
+    "A leave of absence state that deletes the VPN account on all sources",
+    "A terminated state that is assigned to staff while they are on leave",
+    "An archived state that removes all access for staff while on leave",
+    "A leave of absence state that does not grant the VPN access profile"
+   ],
+   "answer": "A leave of absence state that does not grant the VPN access profile",
+   "explanation": "Access profiles granted by one state are revoked when the identity moves to a state that does not grant them, so the VPN access is removed while other accounts remain. Terminated and archived would remove far more access."
+  },
+  {
+   "id": "D3-089",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "How many lifecycle states can one identity be assigned at the same time?",
+   "choices": [
+    "Exactly one lifecycle state at a time",
+    "One lifecycle state for each source account",
+    "One lifecycle state for each assigned role",
+    "Up to two while a mover change is pending"
+   ],
+   "answer": "Exactly one lifecycle state at a time",
+   "explanation": "An identity has one lifecycle state at a time, set by its cloudLifecycleState value or manually. States are not per account or per role."
+  },
+  {
+   "id": "D3-090",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "An administrator wants the lifecycle states of an identity profile to appear in a specific order in the Lifecycle Management panel. How is the display order changed?",
+   "choices": [
+    "Rename the states so that they sort in alphabetical order",
+    "Change the identity profile's priority value in the list",
+    "Disable and re-enable the states in the wanted order",
+    "Update each lifecycle state's priority value through the API"
+   ],
+   "answer": "Update each lifecycle state's priority value through the API",
+   "explanation": "The display order of lifecycle states is set by their priority attribute, updated through the lifecycle state API. Identity profile priority is a different setting that decides profile membership."
+  },
+  {
+   "id": "D3-091",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "An identity moves from the active state to leave of absence. What happens to the access profiles that the active state granted?",
+   "choices": [
+    "They stay assigned until the next certification campaign removes them",
+    "They stay assigned, because lifecycle access is granted only once",
+    "They are revoked unless the leave of absence state also grants them",
+    "They are moved into a pending access request for the manager"
+   ],
+   "answer": "They are revoked unless the leave of absence state also grants them",
+   "explanation": "Access profiles granted by a lifecycle state are revoked when the identity leaves the state, unless the new state also grants them. No certification or request is involved."
+  },
+  {
+   "id": "D3-092",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "An administrator removes an access profile from an identity that is still in the lifecycle state that grants it. What happens next?",
+   "choices": [
+    "The access is provisioned again, because the state enforces it",
+    "The access stays removed until the identity changes state",
+    "The access is removed and the lifecycle state is disabled",
+    "The access stays removed and an exception is logged"
+   ],
+   "answer": "The access is provisioned again, because the state enforces it",
+   "explanation": "Access profiles assigned through a lifecycle state are enforced while the identity remains in that state, so removed access is provisioned again. To remove it for good, change the state's configuration."
+  },
+  {
+   "id": "D3-093",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "The terminated state has Remove all access enabled, but security wants terminated users to keep one mailbox entitlement for 30 days. What is the BEST approach?",
+   "choices": [
+    "Turn off Remove all access and remove the other access by hand instead",
+    "Grant an access profile with the mailbox entitlement in the terminated state",
+    "Add the mailbox source to the terminated state's Delete Accounts list",
+    "Mark the mailbox entitlement as requestable so it is skipped by removal"
+   ],
+   "answer": "Grant an access profile with the mailbox entitlement in the terminated state",
+   "explanation": "Access profiles listed in a state's Access Profiles tab are excluded from Remove all access. Wrapping the entitlement in an access profile keeps it while everything else is removed."
+  },
+  {
+   "id": "D3-094",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "An identity has two accounts on one source, and its lifecycle state grants an access profile on that source. Which account receives the access?",
+   "choices": [
+    "The account chosen by the access profile's multiple account settings",
+    "The account that was created most recently on the source",
+    "The account that was correlated first to the identity",
+    "Both accounts, because lifecycle access is per account"
+   ],
+   "answer": "The account chosen by the access profile's multiple account settings",
+   "explanation": "When an identity has several accounts on a source, the access profile's multiple account options decide which account gets the access. Creation or correlation order is not used."
+  },
+  {
+   "id": "D3-095",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "Which tab of a lifecycle state is used to grant birthright access to the identities in that state?",
+   "choices": [
+    "Settings for Previous Accounts",
+    "Email Notification List",
+    "Identity State",
+    "Access Profiles"
+   ],
+   "answer": "Access Profiles",
+   "explanation": "The Access Profiles tab lists the access profiles granted to identities in the state. Settings for Previous Accounts enables, disables or deletes accounts instead."
+  },
+  {
+   "id": "D3-096",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "The terminated state disables accounts on all sources but also grants an access profile on the mailbox source. What happens to a terminated user's mailbox account?",
+   "choices": [
+    "It is disabled first and then the access profile is granted to it again",
+    "It is not disabled, because the state grants an access profile on that source",
+    "It is deleted, because a granted access profile overrides the disable setting",
+    "It is disabled, and the access profile is removed at the same time"
+   ],
+   "answer": "It is not disabled, because the state grants an access profile on that source",
+   "explanation": "Source accounts are not disabled or deleted when the source has an access profile listed in the state's Access Profiles tab. This keeps the granted access usable."
+  },
+  {
+   "id": "D3-097",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "When are identities' lifecycle states and the matching provisioning actions recalculated?",
+   "choices": [
+    "Only when an admin runs a certification campaign",
+    "Only when the virtual appliance is restarted",
+    "Only when a user signs in to the tenant",
+    "During event-driven and scheduled identity processing"
+   ],
+   "answer": "During event-driven and scheduled identity processing",
+   "explanation": "Lifecycle state changes and their provisioning are worked out during identity processing, which runs after aggregation and on a schedule. Sign-in and campaigns do not trigger it."
+  },
+  {
+   "id": "D3-098",
+   "objective": "3.3",
+   "topic": "Access Profiles by Lifecycle State",
+   "stem": "Which type of access item can a lifecycle state grant directly to identities?",
+   "choices": [
+    "Roles",
+    "Applications",
+    "Access profiles",
+    "Individual entitlements"
+   ],
+   "answer": "Access profiles",
+   "explanation": "Lifecycle states grant access profiles; a single entitlement is granted by putting it in an access profile. Roles are assigned through their own membership criteria, which can use the cloudLifecycleState attribute."
+  },
+  {
+   "id": "D3-099",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "The terminated state has Remove all access turned on. Which access does a terminated identity keep?",
+   "choices": [
+    "Access from birthright roles and access profiles granted by the current state",
+    "Access that was requested within the last 30 days and approved by a manager",
+    "Access on sources whose accounts are set to be disabled rather than deleted",
+    "Access that was certified as approved in the most recent campaign"
+   ],
+   "answer": "Access from birthright roles and access profiles granted by the current state",
+   "explanation": "Remove all access keeps items provisioned from birthright roles and the access profiles granted by the current state. Recent requests and certification decisions are removed."
+  },
+  {
+   "id": "D3-100",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "Removing an entitlement normally needs approval. What happens when the Remove all access setting of a lifecycle state removes it?",
+   "choices": [
+    "The removal waits for the source owner",
+    "The removal waits for the manager",
+    "The removal is skipped for that item",
+    "The removal approval is bypassed"
+   ],
+   "answer": "The removal approval is bypassed",
+   "explanation": "When Remove all access removes an access item that needs removal approval, the approval is automatically bypassed. Leaver access is removed without waiting for approvers."
+  },
+  {
+   "id": "D3-101",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "An administrator cannot configure the Delete Accounts option on a lifecycle state even with Specific sources chosen. What is the MOST likely reason?",
+   "choices": [
+    "The state does not have Remove all access turned on yet",
+    "The state does not send email to all SailPoint admins",
+    "The state is still marked as the profile's default state",
+    "The state's identity state is not set to Inactive (long-term)"
+   ],
+   "answer": "The state's identity state is not set to Inactive (long-term)",
+   "explanation": "Delete operations can only be configured when the lifecycle state's identity state is Inactive (long-term). Delete is also unavailable when All sources is selected."
+  },
+  {
+   "id": "D3-102",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "A lifecycle state disables accounts on All sources. A new source is connected to the tenant next month. Is it included?",
+   "choices": [
+    "No, the state must be edited to add the new source",
+    "Yes, newly created sources are included automatically",
+    "No, All sources covers only sources that existed at save",
+    "Yes, but only after the source's first certification"
+   ],
+   "answer": "Yes, newly created sources are included automatically",
+   "explanation": "When All sources is selected, newly created sources are included automatically. Sources can be left out with the Excluded Sources list."
+  },
+  {
+   "id": "D3-103",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "Accounts on every source except HR should be disabled when an identity enters the terminated state. What is the BEST configuration?",
+   "choices": [
+    "Choose No sources for Disable Accounts and turn on Remove all access",
+    "Choose All sources for Delete Accounts and add HR to Excluded Sources",
+    "Choose All sources for Disable Accounts and add HR to Excluded Sources",
+    "Choose Specific sources and add HR to the Disable Accounts list"
+   ],
+   "answer": "Choose All sources for Disable Accounts and add HR to Excluded Sources",
+   "explanation": "All sources with an exclusion disables everything except HR and also covers future sources. Adding HR to Specific sources would do the opposite, and Delete is not available with All sources."
+  },
+  {
+   "id": "D3-104",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "An administrator wants the terminated state to both disable and delete Active Directory accounts. What will the tenant allow?",
+   "choices": [
+    "Both operations, run in the order disable first and then delete",
+    "Both operations, but only when All sources is selected for each",
+    "Only one of the operations for AD, because a source can have one per state",
+    "Neither operation, because AD accounts cannot be disabled by states"
+   ],
+   "answer": "Only one of the operations for AD, because a source can have one per state",
+   "explanation": "A source cannot be configured for multiple operations in the same lifecycle state. The admin chooses either disable or delete for AD in that state."
+  },
+  {
+   "id": "D3-105",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "Accounts deleted by the archived lifecycle state are recreated on the next identity refresh. What is the MOST likely cause?",
+   "choices": [
+    "The identity still has a role with entitlements on that source",
+    "The archived state still sends email to the identity's manager",
+    "The identity profile priority is lower than another profile's",
+    "The source's account deletion threshold blocked the deletion"
+   ],
+   "answer": "The identity still has a role with entitlements on that source",
+   "explanation": "If an assigned role includes entitlements on the source, the account is recreated because the role is still in force. SailPoint recommends removing such roles before deleting accounts."
+  },
+  {
+   "id": "D3-106",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "Which out-of-the-box lifecycle states have Remove all access turned on by default?",
+   "choices": [
+    "Pre-hire and active",
+    "Terminated and archived",
+    "Active and leave of absence",
+    "Leave of absence and terminated"
+   ],
+   "answer": "Terminated and archived",
+   "explanation": "Remove all access is enabled by default for the out-of-the-box terminated and archived states. Leave of absence keeps access unless an admin changes it."
+  },
+  {
+   "id": "D3-107",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "A lifecycle state's disable action fails with a retryable error from the target system. How does the tenant handle it?",
+   "choices": [
+    "It retries the request once per hour, up to three times",
+    "It retries the request every minute until it succeeds",
+    "It never retries and closes the request as failed",
+    "It retries once a day until the next certification"
+   ],
+   "answer": "It retries the request once per hour, up to three times",
+   "explanation": "Lifecycle state provisioning that fails with a retryable error is retried once per hour, up to three times. Persistent failures then need admin attention."
+  },
+  {
+   "id": "D3-108",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "After an identity entered the terminated state and its accounts were disabled, someone re-enabled one account directly on the target. Will the lifecycle state disable it again automatically?",
+   "choices": [
+    "Yes, the next identity refresh disables the account again every time",
+    "Yes, but only when the source owner approves the repeated action",
+    "No, because the re-enabled account is deleted from the tenant",
+    "No, lifecycle account actions run once and do not keep enforcing the state"
+   ],
+   "answer": "No, lifecycle account actions run once and do not keep enforcing the state",
+   "explanation": "Enable and disable actions of a lifecycle state execute a single time and are not a persistent retry or enforcement mechanism. Unlike lifecycle-granted access profiles, account status is not re-enforced."
+  },
+  {
+   "id": "D3-109",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "What determines which lifecycle state an identity is assigned to automatically?",
+   "choices": [
+    "The value of its Lifecycle State (cloudLifecycleState) identity attribute",
+    "The value of the lifecycle state's priority attribute in the API",
+    "The order in which the identity's source accounts were aggregated",
+    "The user level that is assigned to the identity in the tenant"
+   ],
+   "answer": "The value of its Lifecycle State (cloudLifecycleState) identity attribute",
+   "explanation": "Each identity's cloudLifecycleState attribute value selects the lifecycle state with the matching technical name. The state priority only sets display order."
+  },
+  {
+   "id": "D3-110",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "HR sends the value Active, but the lifecycle state's technical name is active. What happens to the identity?",
+   "choices": [
+    "It is not assigned the state and shows a technical name case mismatch",
+    "It is assigned the active state, because the match ignores letter case",
+    "It is assigned the first enabled lifecycle state in the identity profile",
+    "It is moved to another identity profile that has an Active state"
+   ],
+   "answer": "It is not assigned the state and shows a technical name case mismatch",
+   "explanation": "The match between the attribute value and the technical name is case-sensitive, so Active does not assign active. The identity shows Lifecycle State Does Not Match Technical Name Case."
+  },
+  {
+   "id": "D3-111",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "HR's status field holds single-letter codes such as A, L and T, while the lifecycle states are active, leaveOfAbsence and terminated. What is the BEST way to assign the states?",
+   "choices": [
+    "Apply a transform to the cloudLifecycleState mapping that turns each code into a technical name",
+    "Rename the lifecycle states so that their display names are A, L and T on the profile",
+    "Set each identity's lifecycle state by hand after every aggregation of the HR source",
+    "Map the attribute from HR without changes and let the tenant guess the closest name"
+   ],
+   "answer": "Apply a transform to the cloudLifecycleState mapping that turns each code into a technical name",
+   "explanation": "A transform can normalize source values into the exact technical names that cloudLifecycleState needs. Manual assignment is reset when the source value changes and does not scale."
+  },
+  {
+   "id": "D3-112",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "An identity shows the status Lifecycle State Not Set. What does this mean?",
+   "choices": [
+    "The value does not match any lifecycle state defined for the identity's profile",
+    "The attribute is not mapped for the profile or its value is null for the identity",
+    "The value matches a lifecycle state, but that state has not yet been enabled",
+    "The value matches a lifecycle state, but with different upper and lower case"
+   ],
+   "answer": "The attribute is not mapped for the profile or its value is null for the identity",
+   "explanation": "Not Set means the Lifecycle State attribute is unmapped or null. A value that matches no state is Not Valid, and a case difference has its own status."
+  },
+  {
+   "id": "D3-113",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "An identity shows the status Lifecycle State Not Valid. What is the cause?",
+   "choices": [
+    "The attribute is not mapped in the identity profile, so the value is always empty",
+    "The identity was set to a lifecycle state manually by an administrator",
+    "The attribute value matches none of the lifecycle states defined for the identity's profile",
+    "The attribute value is correct, but provisioning to a source failed"
+   ],
+   "answer": "The attribute value matches none of the lifecycle states defined for the identity's profile",
+   "explanation": "Not Valid means a value exists but does not correspond to any lifecycle state in that identity profile. Each profile has its own set of states."
+  },
+  {
+   "id": "D3-114",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "An administrator manually sets an identity's lifecycle state to inactive. Later, HR changes the person's status value on the source. What happens to the lifecycle state?",
+   "choices": [
+    "It stays inactive until an administrator changes it again",
+    "It stays inactive, and the new HR value raises an exception",
+    "It resets to the state calculated from the new source value",
+    "It switches to the profile's first enabled lifecycle state"
+   ],
+   "answer": "It resets to the state calculated from the new source value",
+   "explanation": "A manual setting holds only while the underlying source value is unchanged; when the value changes, the state is recalculated automatically. The UI then shows the state as Automatic."
+  },
+  {
+   "id": "D3-115",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "On an identity's details page, how can an administrator tell that its lifecycle state was set by hand rather than calculated?",
+   "choices": [
+    "The state name is shown in red on the identity page",
+    "The state name is followed by Manual in parentheses",
+    "The identity is flagged with an identity exception",
+    "The identity's profile shows Needs Processing"
+   ],
+   "answer": "The state name is followed by Manual in parentheses",
+   "explanation": "Lifecycle states changed through a manual action display (Manual), while calculated ones show (Automatic). No exception or profile status is raised."
+  },
+  {
+   "id": "D3-116",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "Where does an administrator confirm the exact technical name that the cloudLifecycleState value must match?",
+   "choices": [
+    "In parentheses next to the state name at the top of the lifecycle state page",
+    "In the source's account schema, beside the HR status column",
+    "In the email template used for lifecycle state change messages",
+    "In the identity profile's priority column on the profiles list"
+   ],
+   "answer": "In parentheses next to the state name at the top of the lifecycle state page",
+   "explanation": "The technical name appears in parentheses next to the lifecycle state name on its page. The cloudLifecycleState value must match it exactly, including case."
+  },
+  {
+   "id": "D3-117",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "The lifecycle state calculation needs logic too complex for transforms. What does SailPoint recommend?",
+   "choices": [
+    "A second identity profile that holds the complex logic",
+    "A manual lifecycle state change for every identity daily",
+    "A certification that sets the state for each reviewer",
+    "A custom rule built with SailPoint Professional Services or a partner"
+   ],
+   "answer": "A custom rule built with SailPoint Professional Services or a partner",
+   "explanation": "For logic beyond transforms, SailPoint suggests a custom rule built by Professional Services or an implementation partner. Rules go through SailPoint review."
+  },
+  {
+   "id": "D3-118",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "A role should be assigned automatically only to identities whose lifecycle state is active. What is the BEST way to configure the role?",
+   "choices": [
+    "Add the role to the active state's Access Profiles tab",
+    "Request the role for each active identity by hand",
+    "Use membership criteria where the cloudLifecycleState attribute equals active",
+    "Set the role's owner to the identity profile's owner"
+   ],
+   "answer": "Use membership criteria where the cloudLifecycleState attribute equals active",
+   "explanation": "Role membership criteria can use identity attributes, including cloudLifecycleState. Lifecycle states grant access profiles, not roles, in their Access Profiles tab."
+  },
+  {
+   "id": "D3-119",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "Which identity state must an identity have to be selected in the Request Center?",
+   "choices": [
+    "Inactive (short-term)",
+    "Inactive (long-term)",
+    "Active",
+    "Any identity state"
+   ],
+   "answer": "Active",
+   "explanation": "Only Active identities can be selected in the Request Center or the My Team list. Inactive identities are limited in which services they appear in."
+  },
+  {
+   "id": "D3-120",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "Separated workers should drop out of most services, with one final attribute sync when they change state. Which identity state should their lifecycle state use?",
+   "choices": [
+    "Inactive (short-term)",
+    "Inactive (long-term)",
+    "Active",
+    "No identity state"
+   ],
+   "answer": "Inactive (long-term)",
+   "explanation": "Inactive (long-term) is for identities who have left; a final attribute sync runs on entry and they no longer appear in most services. Short-term is for leave or separation in progress."
+  },
+  {
+   "id": "D3-121",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "Workers on parental leave should stay in scheduled identity processing for role and access profile changes but are not fully active. Which identity state fits BEST?",
+   "choices": [
+    "Inactive (long-term)",
+    "Active",
+    "Archived",
+    "Inactive (short-term)"
+   ],
+   "answer": "Inactive (short-term)",
+   "explanation": "Inactive (short-term) suits people on leave or separating; scheduled and manual processing still applies. Archived is a lifecycle state, not an identity state."
+  },
+  {
+   "id": "D3-122",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "A lifecycle state has no identity state configured. Which identity state do identities in that lifecycle state receive?",
+   "choices": [
+    "Inactive (short-term)",
+    "Active",
+    "Inactive (long-term)",
+    "Null, so they are skipped"
+   ],
+   "answer": "Active",
+   "explanation": "If the assigned lifecycle state has no configured identity state, or the identity has no lifecycle state, the identity state is set to Active automatically."
+  },
+  {
+   "id": "D3-123",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "HR wants the person's manager and a shared HR mailbox told whenever someone enters the terminated state. Which lifecycle state setting is used?",
+   "choices": [
+    "Settings for Previous Accounts, with All sources selected",
+    "Email Notification List, with Manager and Specific Users selected",
+    "Access Profiles, with an email distribution access profile",
+    "Identity State, with Inactive (long-term) selected"
+   ],
+   "answer": "Email Notification List, with Manager and Specific Users selected",
+   "explanation": "The Email Notification List can notify the manager, all SailPoint admins or specific email addresses. The other tabs control accounts, access and identity state."
+  },
+  {
+   "id": "D3-124",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "An administrator wants to change the wording of the email sent when an identity changes lifecycle state. What should be edited?",
+   "choices": [
+    "The identity profile's description field",
+    "The Lifecycle State Change email template",
+    "The lifecycle state's technical name",
+    "The source's provisioning policy"
+   ],
+   "answer": "The Lifecycle State Change email template",
+   "explanation": "Lifecycle state notifications use the Lifecycle State Change email template, which can be customized. The technical name must stay matched to cloudLifecycleState values."
+  },
+  {
+   "id": "D3-125",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "An identity in an Inactive (long-term) state needs one more attribute sync after a correction. How can an administrator do this?",
+   "choices": [
+    "Move the identity to another identity profile and back again",
+    "Turn on Remove all access for the identity's lifecycle state",
+    "Raise the source's account deletion threshold for one day",
+    "Select the Synchronize Attributes action for the identity in the Identity List"
+   ],
+   "answer": "Select the Synchronize Attributes action for the identity in the Identity List",
+   "explanation": "Admins can manually start attribute sync for an Inactive (long-term) identity with Synchronize Attributes, or through the single-identity attribute sync API."
+  },
+  {
+   "id": "D3-126",
+   "objective": "3.3",
+   "topic": "Identity States and Notifications",
+   "stem": "A lifecycle state's notification list includes All SailPoint Admins. Who receives the email?",
+   "choices": [
+    "Users with org admin access",
+    "Every source owner in the tenant",
+    "Every identity in the profile",
+    "Only the identity's own manager"
+   ],
+   "answer": "Users with org admin access",
+   "explanation": "All SailPoint Admins notifies users who have org admin access. Manager and Specific Users are separate choices on the notification list."
+  },
+  {
+   "id": "D3-127",
+   "type": "order",
+   "objective": "3.3",
+   "topic": "Lifecycle State Use Cases",
+   "stem": "An administrator is setting up a new Contractor Ended lifecycle state. Put the steps in order.",
+   "items": [
+    "Select Create Lifecycle State in the identity profile and enter the name",
+    "Configure the account settings and access profiles for the state",
+    "Choose the identity state that identities in the state will have",
+    "Select Enable Lifecycle",
+    "Select Save",
+    "Select Apply Changes to process identities"
+   ],
+   "explanation": "The state is created and configured, then enabled and saved. Apply Changes starts identity processing so identities move into the state and its provisioning runs."
+  },
+  {
+   "id": "D3-128",
+   "type": "match",
+   "objective": "3.3",
+   "topic": "Cloud Lifecycle State Attribute",
+   "stem": "Match each lifecycle state status to its cause.",
+   "pairs": [
+    {
+     "item": "Lifecycle State Not Set",
+     "match": "The attribute is unmapped or the value is null"
+    },
+    {
+     "item": "Lifecycle State Not Valid",
+     "match": "The value matches no state in the identity's profile"
+    },
+    {
+     "item": "Does Not Match Technical Name Case",
+     "match": "The value differs from a technical name only in letter case"
+    },
+    {
+     "item": "Manual",
+     "match": "An administrator set the state by hand"
+    }
+   ],
+   "targets_extra": [
+    "The state's provisioning retries ran out"
+   ],
+   "explanation": "The three statuses describe a missing, unknown or wrongly cased cloudLifecycleState value, and Manual marks a state set by an admin. Failed retries are reported in provisioning activity, not as a lifecycle status."
+  },
+  {
+   "id": "D3-129",
+   "type": "multi",
+   "objective": "3.3",
+   "topic": "Account Actions and Remove All Access",
+   "stem": "An administrator is configuring a lifecycle state for leavers. Which TWO actions can the lifecycle state itself perform?",
+   "choices": [
+    "Disable the identity's accounts on selected sources",
+    "Remove the identity's access with Remove all access",
+    "Launch a certification campaign for the identity's manager",
+    "Change the identity profile's priority value",
+    "Delete the identity's authoritative HR record"
+   ],
+   "answers": [
+    "Disable the identity's accounts on selected sources",
+    "Remove the identity's access with Remove all access"
+   ],
+   "select": 2,
+   "explanation": "Lifecycle states can enable, disable or delete source accounts, remove access and grant access profiles. They do not start campaigns, change profile priority or edit the HR system."
+  }
+ ]
+}
