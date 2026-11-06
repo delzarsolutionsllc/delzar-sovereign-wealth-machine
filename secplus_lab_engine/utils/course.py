@@ -67,7 +67,7 @@ def objectives_per_domain(c: dict | None = None) -> dict[str, int]:
     out: dict[str, int] = {}
     for o in objectives(c):
         out[o.split(".")[0]] = out.get(o.split(".")[0], 0) + 1
-    return dict(sorted(out.items()))
+    return dict(sorted(out.items(), key=lambda kv: int(kv[0])))
 
 
 def data_dir(kind: str, c: dict | None = None) -> Path:
