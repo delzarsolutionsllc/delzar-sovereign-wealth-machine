@@ -116,12 +116,12 @@
       "question": "What does the Authentication methods policy control in Microsoft Entra ID, and what is an authentication strength?",
       "listen_for": [
         "Central policy that enables methods per group: Authenticator, passkeys/FIDO2, certificate-based, SMS, voice, TAP",
-        "Replaced the legacy per-user MFA and SSPR method settings (migration completed in 2025)",
+        "Replaced method settings in the legacy MFA and SSPR policies (managing methods there ended September 30, 2025)",
         "Authentication strength = a Conditional Access grant control naming which method combinations count",
         "Built-in strengths: MFA, passwordless MFA, phishing-resistant MFA",
         "Temporary Access Pass for onboarding and recovery"
       ],
-      "model_answer": "The Authentication methods policy is where I decide which sign-in methods are allowed and for whom. Each method, such as Microsoft Authenticator, passkeys and FIDO2 security keys, certificate-based authentication, Temporary Access Pass, SMS or voice, can be enabled for all users or specific groups, with extra settings like number matching. It replaced the older separate MFA and self-service password reset (SSPR) method lists, which Microsoft retired in 2025. An authentication strength is different: it is a Conditional Access grant control that says which combinations of methods satisfy a policy. There are built-in strengths for MFA, passwordless MFA and phishing-resistant MFA, and you can create custom ones. So the methods policy decides what people can register and use, and the authentication strength decides what a specific app or admin role demands.",
+      "model_answer": "The Authentication methods policy is where I decide which sign-in methods are allowed and for whom. Each method, such as Microsoft Authenticator, passkeys and FIDO2 security keys, certificate-based authentication, Temporary Access Pass, SMS or voice, can be enabled for all users or specific groups, with extra settings like number matching. It replaced the older separate MFA and self-service password reset (SSPR) method lists, which Microsoft stopped using for method management on September 30, 2025. An authentication strength is different: it is a Conditional Access grant control that says which combinations of methods satisfy a policy. There are built-in strengths for MFA, passwordless MFA and phishing-resistant MFA, and you can create custom ones. So the methods policy decides what people can register and use, and the authentication strength decides what a specific app or admin role demands.",
       "follow_ups": [
         "How would you use Temporary Access Pass?",
         "Why would you require phishing-resistant MFA for admins?"
@@ -227,9 +227,9 @@
         "Duplicate attribute errors: proxyAddresses or UPN conflict between objects",
         "Use the Connect Health / sync errors report to find the conflicting object",
         "Fix the data in the source (on-prem AD), not in the cloud",
-        "Soft matching to accounts holding admin roles is blocked by default for security"
+        "By default, Entra ID will not match on-premises users to cloud accounts that hold admin roles"
       ],
-      "model_answer": "When an on-premises user syncs, Microsoft Entra tries to join it to an existing cloud account. A hard match uses the source anchor, the ImmutableId that maps to ms-DS-ConsistencyGuid in Active Directory. If there is no hard match, it tries a soft match on the userPrincipalName or primary email address. If neither matches, because the UPN or email is different, you get a second account. If two objects claim the same proxyAddress or UPN, sync throws a duplicate attribute error. I look in the Microsoft Entra Connect Health sync errors report, find the conflicting object, decide which account is the real one, correct the attributes in Active Directory, and re-run a delta sync so the accounts merge. I also check whether the cloud account holds an admin role, because soft matching to privileged accounts is blocked by default to stop account takeover.",
+      "model_answer": "When an on-premises user syncs, Microsoft Entra tries to join it to an existing cloud account. A hard match uses the source anchor, the ImmutableId that maps to ms-DS-ConsistencyGuid in Active Directory. If there is no hard match, it tries a soft match on the userPrincipalName or primary email address. If neither matches, because the UPN or email is different, you get a second account. If two objects claim the same proxyAddress or UPN, sync throws a duplicate attribute error. I look in the Microsoft Entra Connect Health sync errors report, find the conflicting object, decide which account is the real one, correct the attributes in Active Directory, and re-run a delta sync so the accounts merge. I also check whether the cloud account holds an admin role, because by default Microsoft Entra ID will not match an on-premises user to a cloud account that holds an admin role, to stop account takeover.",
       "follow_ups": [
         "What tool would you run before a first sync to clean the directory?",
         "How would you set the ImmutableId to force a hard match?"
@@ -332,10 +332,10 @@
         "Sign-in risk: chance that this sign-in is not the owner (unfamiliar properties, anonymous IP, token anomalies)",
         "User risk: chance the account is compromised (leaked credentials, attacker activity)",
         "Configure risk-based policies in Conditional Access; the legacy ID Protection policies retired in October 2026",
-        "Sign-in risk: require MFA; user risk: require secure password change or risk remediation",
+        "Sign-in risk: require MFA; user risk: require secure password change or the 'Require risk remediation' control",
         "Investigate in risky users/sign-ins, confirm compromise or dismiss; needs P2"
       ],
-      "model_answer": "Sign-in risk is the probability that a particular sign-in is not really the account owner, based on detections like an anonymous IP address, impossible travel, unfamiliar sign-in properties or anomalous token use. User risk is the probability that the account itself is compromised, for example when Microsoft finds the user's credentials in a leak. I respond to them through Conditional Access, because the old risk policies inside ID Protection were retired in October 2026. For medium or high sign-in risk I require MFA, ideally a strong method. For high user risk I require a secure password change or Microsoft's risk remediation option, which also suits passwordless users. In the risky users and risky sign-ins reports I investigate, confirm compromise when it is real so the model learns, or dismiss false positives. These features need Microsoft Entra ID P2.",
+      "model_answer": "Sign-in risk is the probability that a particular sign-in is not really the account owner, based on detections like an anonymous IP address, impossible travel, unfamiliar sign-in properties or anomalous token use. User risk is the probability that the account itself is compromised, for example when Microsoft finds the user's credentials in a leak. I respond to them through Conditional Access, because the old risk policies inside ID Protection were retired in October 2026. For medium or high sign-in risk I require MFA, ideally a strong method. For high user risk I require a secure password change or the Require risk remediation grant control, which also suits passwordless users. In the risky users and risky sign-ins reports I investigate, confirm compromise when it is real so the model learns, or dismiss false positives. These features need Microsoft Entra ID P2.",
       "follow_ups": [
         "Why is password hash sync relevant to leaked credential detection?",
         "What would you do if a user is high risk but is a privileged admin?"
@@ -840,11 +840,11 @@
       "listen_for": [
         "Few Super Admins; least-privilege custom roles, assigned through groups",
         "Phishing-resistant MFA and managed devices for the Admin Console app",
-        "Admin session protections (e.g. binding admin sessions to network/ASN), short sessions",
+        "Admin session protections (e.g. IP binding for the Admin Console), short sessions",
         "Monitor System Log and stream to SIEM: policy changes, new admins, authenticator resets",
         "Change control, break-glass admin, review of API tokens and integrations"
       ],
-      "model_answer": "The Okta tenant is a Tier 0 system, so I protect it like domain controllers. Very few people hold Super Administrator, and everyone else uses custom roles with resource sets, assigned through groups that are reviewed regularly. Admins must use a phishing-resistant authenticator, such as FastPass or a security key, on managed devices, enforced through the Admin Console authentication policy with short re-authentication. I keep Okta's admin session protections on, so an admin session copied to another network is ended. I stream the System Log to our security information and event management (SIEM) system and alert on high-value events: new admin assignments, policy or zone changes, authenticator resets for admins and new API tokens. I also review API tokens and integrations, since they act with an admin's rights, keep a tested break-glass admin, and put policy changes through change control.",
+      "model_answer": "The Okta tenant is a Tier 0 system, so I protect it like domain controllers. Very few people hold Super Administrator, and everyone else uses custom roles with resource sets, assigned through groups that are reviewed regularly. Admins must use a phishing-resistant authenticator, such as FastPass or a security key, on managed devices, enforced through the Admin Console authentication policy with short re-authentication. I turn on IP binding for the Admin Console, so if an admin session's IP address changes, Okta signs the admin out. I stream the System Log to our security information and event management (SIEM) system and alert on high-value events: new admin assignments, policy or zone changes, authenticator resets for admins and new API tokens. I also review API tokens and integrations, since they act with an admin's rights, keep a tested break-glass admin, and put policy changes through change control.",
       "follow_ups": [
         "What would you do in the first hour if you saw an unexpected Super Admin assignment?",
         "How do you review API tokens?"
