@@ -1,0 +1,77 @@
+{
+  "_description": "Larkspur Example Manufacturing is tightening the security of its SailPoint Identity Security Cloud tenant before an audit: 12 API access requests from scripts, services and a web portal, 15 attempted admin actions to check against user levels, and a review of identity profile sign-in, elevated users' MFA, SAML SSO and session settings. Fictional company, systems and people.",
+  "tenant": {
+    "name": "Larkspur Example Manufacturing",
+    "tenant": "larkspur-example",
+    "data_segmentation": true,
+    "non_org_admins_manage_levels": false
+  },
+  "people": [
+    {"id": "P01", "name": "Amara Osei", "title": "IAM Lead", "user_levels": ["ORG_ADMIN"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P02", "name": "Bram Kowalski", "title": "Identity Engineer", "user_levels": ["ORG_ADMIN"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P03", "name": "Chen Liu", "title": "Source Owner, IT", "user_levels": ["SOURCE_ADMIN"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": false},
+    {"id": "P04", "name": "Dana Ruiz", "title": "HR Applications Analyst", "user_levels": ["SOURCE_SUBADMIN"], "governance_groups": ["GG-HR-APPS"], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P05", "name": "Eli Novak", "title": "Finance Role Owner", "user_levels": ["ROLE_SUBADMIN"], "governance_groups": ["GG-FINANCE"], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P06", "name": "Farah Haddad", "title": "Service Desk Team Lead", "user_levels": ["HELPDESK"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P07", "name": "Gus Moreno", "title": "Compliance Analyst", "user_levels": ["CERT_ADMIN", "REPORT_ADMIN"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P08", "name": "Hana Sato", "title": "Audit Reporting Contractor", "user_levels": ["REPORT_ADMIN"], "governance_groups": [], "status": "leaving", "leave_in_days": 14, "totp_registered": true},
+    {"id": "P09", "name": "Ivo Petrov", "title": "Access Model Architect", "user_levels": ["ROLE_ADMIN", "SOURCE_SUBADMIN"], "governance_groups": ["GG-IT"], "status": "active", "leave_in_days": null, "totp_registered": true},
+    {"id": "P10", "name": "Jo Whitfield", "title": "Migration Consultant", "user_levels": ["SUPER_USER"], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": null},
+    {"id": "P11", "name": "Kai Brennan", "title": "Plant Supervisor", "user_levels": [], "governance_groups": [], "status": "active", "leave_in_days": null, "totp_registered": false},
+    {"id": "P12", "name": "Lena Fischer", "title": "Former IAM Manager", "user_levels": ["ORG_ADMIN"], "governance_groups": [], "status": "inactive", "leave_in_days": null, "totp_registered": true}
+  ],
+  "sources": [
+    {"id": "SRC-AD", "name": "Corporate Active Directory", "type": "Active Directory", "governance_group": "GG-IT", "healthy": true, "aggregated": true},
+    {"id": "SRC-LDAP", "name": "Plant OpenLDAP", "type": "OpenLDAP", "governance_group": "GG-IT", "healthy": false, "aggregated": true},
+    {"id": "SRC-WD", "name": "Workday HR", "type": "Workday", "governance_group": "GG-HR-APPS", "healthy": true, "aggregated": true},
+    {"id": "SRC-SAP", "name": "SAP Finance", "type": "SAP", "governance_group": "GG-FINANCE", "healthy": true, "aggregated": true},
+    {"id": "SRC-SNOW", "name": "ServiceNow", "type": "ServiceNow", "governance_group": "GG-HR-APPS", "healthy": true, "aggregated": true}
+  ],
+  "roles": [
+    {"id": "ROLE-FIN-AP", "name": "Accounts Payable Clerk", "sources": ["SRC-SAP"]},
+    {"id": "ROLE-FIN-HR", "name": "Payroll Controller", "sources": ["SRC-SAP", "SRC-WD"]}
+  ],
+  "api_requests": [
+    {"id": "R1", "description": "Amara wants a weekly script that exports identities for the audit pack.", "integration_type": "script", "requester": "P01", "task": "read_identities", "scopes": ["sp:scopes:all"], "expiry_days": 90, "secret_storage": "vault"},
+    {"id": "R2", "description": "The nightly scheduler service must start the Workday aggregation after the HR import.", "integration_type": "service", "requester": "P02", "task": "trigger_aggregation", "scopes": ["idn:sources:manage"], "secret_storage": "secrets_manager"},
+    {"id": "R3", "description": "The security information and event management (SIEM) collector must read identities; Data Segmentation is on.", "integration_type": "service", "requester": "P02", "acts_as": "P06", "task": "read_identities", "scopes": ["idn:identity:read"], "expiry_days": 90, "secret_storage": "plaintext_repo"},
+    {"id": "R4", "description": "The intranet portal lets managers request access as themselves.", "integration_type": "web_app", "requester": "P02", "task": "submit_access_request", "redirect_url": "https://portal.larkspur.example/isc/callback", "scopes": ["idn:access-request:manage"], "secret_storage": "vault"},
+    {"id": "R5", "description": "Hana wants a script that downloads the monthly access report.", "integration_type": "script", "requester": "P08", "task": "download_reports", "scopes": ["sp:scopes:all"], "expiry_days": null, "secret_storage": "vault"},
+    {"id": "R6", "description": "Kai wants a script to list the plant's identities.", "integration_type": "script", "requester": "P11", "task": "read_identities", "scopes": ["idn:identity:read"], "expiry_days": 30, "secret_storage": "vault"},
+    {"id": "R7", "description": "A vendor asks for a token to export every user's password.", "integration_type": "script", "requester": "P01", "task": "export_passwords", "secret_storage": "vault"},
+    {"id": "R8", "description": "Dana wants a script to change the SAP Finance source settings.", "integration_type": "script", "requester": "P04", "task": "edit_source", "source": "SRC-SAP", "scopes": ["idn:sources:manage"], "expiry_days": 30, "secret_storage": "vault"},
+    {"id": "R9", "description": "Dana wants a script to update the Workday source's connection timeout.", "integration_type": "script", "requester": "P04", "task": "edit_source", "source": "SRC-WD", "scopes": ["idn:sources:manage"], "expiry_days": 30, "secret_storage": "vault"},
+    {"id": "R10", "description": "A second portal page for access requests, registered without a callback address.", "integration_type": "web_app", "requester": "P02", "task": "submit_access_request", "scopes": ["idn:access-request:manage"], "secret_storage": "vault"},
+    {"id": "R11", "description": "The monitoring service checks each source's health every hour.", "integration_type": "service", "requester": "P02", "task": "read_sources", "scopes": ["idn:sources:manage"], "secret_storage": "vault"},
+    {"id": "R12", "description": "A mobile app team wants direct API access.", "integration_type": "mobile", "requester": "P01", "task": "read_sources", "secret_storage": "vault"}
+  ],
+  "admin_actions": [
+    {"id": "A1", "person": "P04", "action": "edit_source", "source": "SRC-WD"},
+    {"id": "A2", "person": "P04", "action": "edit_source", "source": "SRC-SAP"},
+    {"id": "A3", "person": "P05", "action": "edit_role", "role": "ROLE-FIN-AP"},
+    {"id": "A4", "person": "P05", "action": "edit_role", "role": "ROLE-FIN-HR"},
+    {"id": "A5", "person": "P05", "action": "role_discovery"},
+    {"id": "A6", "person": "P06", "action": "reset_mfa"},
+    {"id": "A7", "person": "P06", "action": "set_lifecycle_state"},
+    {"id": "A8", "person": "P07", "action": "manage_campaigns"},
+    {"id": "A9", "person": "P08", "action": "search"},
+    {"id": "A10", "person": "P09", "action": "edit_role", "role": "ROLE-FIN-AP"},
+    {"id": "A11", "person": "P10", "action": "security_settings"},
+    {"id": "A12", "person": "P03", "action": "grant_user_levels"},
+    {"id": "A13", "person": "P04", "action": "search"},
+    {"id": "A14", "person": "P02", "action": "manage_virtual_appliances"},
+    {"id": "A15", "person": "P01", "action": "delete_tenant"}
+  ],
+  "signin": {
+    "identity_profiles": [
+      {"id": "IP-EMP", "name": "Employees", "sign_in_method": "PASS_THROUGH", "auth_source": "SRC-AD"},
+      {"id": "IP-PLANT", "name": "Plant workers", "sign_in_method": "PASS_THROUGH", "auth_source": "SRC-LDAP"},
+      {"id": "IP-CONTRACT", "name": "Contractors", "sign_in_method": "PASS_THROUGH", "auth_source": "SRC-WD"},
+      {"id": "IP-EXEC", "name": "Executives", "sign_in_method": "MFA"},
+      {"id": "IP-NE", "name": "Non-employees", "sign_in_method": null},
+      {"id": "IP-SVC", "name": "Service desk agents", "sign_in_method": "USERNAME_PASSWORD"}
+    ],
+    "sso": {"enabled": true, "identity_provider": "Larkspur corporate IdP (SAML)", "emergency_admins": ["P01", "P12"], "bypass_documented": true},
+    "session": {"max_session_hours": 24, "idle_minutes": 60}
+  }
+}
