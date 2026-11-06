@@ -1,0 +1,1189 @@
+{
+ "domain": "10",
+ "title": "SailPoint Engineer Domain 10 questions (10.1, 10.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D10-001",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "HR sends email addresses in mixed case, such as Jane.DOE@Example.com, and the business wants every identity's email stored in lower case. Which transform BEST meets this need?",
+   "choices": [
+    "lower",
+    "upper",
+    "normalizeNames",
+    "trim"
+   ],
+   "answer": "lower",
+   "explanation": "The lower transform converts the whole input string to lower case. normalizeNames capitalizes name parts, which is the opposite of what is needed."
+  },
+  {
+   "id": "D10-002",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "An account create profile must build a username from the first letter of the first name plus the full last name, all in lower case, such as jsmith. Which combination of transforms BEST fits?",
+   "choices": [
+    "substring for the first letter, concat to join it with the last name, and lower around the result",
+    "leftPad the first name, concat it with the last name, and trim around the result",
+    "lookup the first letter, firstValid to add the last name, and lower around the result",
+    "split on the first letter, replace to join it with the last name, and upper around the result"
+   ],
+   "answer": "substring for the first letter, concat to join it with the last name, and lower around the result",
+   "explanation": "substring takes the first character, concat joins the parts and lower normalizes case. lookup and firstValid do not extract or join characters."
+  },
+  {
+   "id": "D10-003",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "A phone attribute holds values such as (555) 123-4567. An engineer applies {\"type\": \"replace\", \"attributes\": {\"regex\": \"[^0-9]\", \"replacement\": \"\"}}. What is the output?",
+   "choices": [
+    "5551234567",
+    "(555)1234567",
+    "555 123 4567",
+    "(555) 123-4567"
+   ],
+   "answer": "5551234567",
+   "explanation": "replace substitutes every match of the regex, and [^0-9] matches every character that is not a digit, so only the digits remain. The other outputs keep characters the regex removes."
+  },
+  {
+   "id": "D10-004",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "A target system needs employee numbers as exactly eight characters with leading zeros, so 4512 becomes 00004512. Which transform BEST does this?",
+   "choices": [
+    "rightPad with a length of 8 and a padding of 0",
+    "leftPad with a length of 8 and a padding of 0",
+    "substring with a begin of 0 and an end of 8",
+    "concat with the static value 0000 in front"
+   ],
+   "answer": "leftPad with a length of 8 and a padding of 0",
+   "explanation": "leftPad adds the padding character on the left until the value reaches the set length. A static prefix of four zeros only works for four-digit numbers."
+  },
+  {
+   "id": "D10-005",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "An engineer splits Smith, John on the comma and takes index 1 to get the first name, but the result has a leading space. What is the BEST fix?",
+   "choices": [
+    "Change the split index from 1 to 0",
+    "Wrap the split transform in a trim transform",
+    "Add a leftPad transform with a length of 4",
+    "Replace the split transform with a lower transform"
+   ],
+   "answer": "Wrap the split transform in a trim transform",
+   "explanation": "trim removes leading and trailing whitespace from the split result. Index 0 would return the last name instead."
+  },
+  {
+   "id": "D10-006",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "Usernames must not contain accents, so the first name José should be used as Jose. Which transform BEST meets this need?",
+   "choices": [
+    "e164phone",
+    "decomposeDiacriticalMarks",
+    "base64Encode",
+    "normalizeNames"
+   ],
+   "answer": "decomposeDiacriticalMarks",
+   "explanation": "decomposeDiacriticalMarks replaces accented characters with their plain equivalents. normalizeNames fixes capitalization but keeps the accents."
+  },
+  {
+   "id": "D10-007",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "A department value must have several different substitutions in one step: & to and, / to a hyphen, and runs of spaces to one space. Which transform BEST fits?",
+   "choices": [
+    "conditional with one expression for each substitution",
+    "replaceAll with a table of regex patterns and their replacements",
+    "lookup with a table of every possible department name",
+    "replace with a single regex that matches all three cases"
+   ],
+   "answer": "replaceAll with a table of regex patterns and their replacements",
+   "explanation": "replaceAll applies a table of pattern and replacement pairs in a single transform. A single replace can only apply one replacement value to every match."
+  },
+  {
+   "id": "D10-008",
+   "objective": "10.1",
+   "topic": "String Manipulation Transforms",
+   "stem": "An engineer applies {\"type\": \"substring\", \"attributes\": {\"begin\": 0, \"end\": 3}} to the department value Marketing. What is the output?",
+   "choices": [
+    "Mark",
+    "ark",
+    "Mar",
+    "Marketing"
+   ],
+   "answer": "Mar",
+   "explanation": "begin is a zero-based start index and end is exclusive, so characters at positions 0, 1 and 2 are returned. Mark would need an end of 4."
+  },
+  {
+   "id": "D10-009",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "Office location codes such as NYC1 and LON2 must become region names, and any code not in the list must become Unassigned. Which transform BEST fits?",
+   "choices": [
+    "replace with a regex that matches each office code",
+    "conditional with one expression for each office code",
+    "firstValid with a list of region names and a static fallback",
+    "lookup with a table of codes and a default entry of Unassigned"
+   ],
+   "answer": "lookup with a table of codes and a default entry of Unassigned",
+   "explanation": "lookup maps input values through a table, and its default entry covers values that have no match. firstValid only picks the first non-null value from a list."
+  },
+  {
+   "id": "D10-010",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "A lookup transform maps country codes to names but has no default entry. An identity arrives with a code that is not in the table. What happens?",
+   "choices": [
+    "The transform returns an error for that identity",
+    "The first value in the table is returned",
+    "An empty string is returned with no error",
+    "The original code is passed through unchanged"
+   ],
+   "answer": "The transform returns an error for that identity",
+   "explanation": "Without a default entry, an input that matches no key causes the lookup to error. Adding a default key is the safe design."
+  },
+  {
+   "id": "D10-011",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "An engineer wants a conditional transform to output Senior when an identity's salary band is greater than 7. Why will a conditional transform not express this directly?",
+   "choices": [
+    "The conditional transform must always output a number",
+    "The conditional transform only works on date values",
+    "The conditional transform cannot read account attributes",
+    "The conditional transform only supports the eq comparison"
+   ],
+   "answer": "The conditional transform only supports the eq comparison",
+   "explanation": "The conditional expression compares two values with eq only, so greater-than logic needs another approach such as a static transform with a Velocity template. Its inputs can be any string."
+  },
+  {
+   "id": "D10-012",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "A transform is {\"type\": \"conditional\", \"attributes\": {\"expression\": \"$dept eq Sales\", \"positiveCondition\": \"SLS\", \"negativeCondition\": \"GEN\", \"dept\": <accountAttribute for department>}}. An identity's department is Finance. What is the output?",
+   "choices": [
+    "GEN",
+    "SLS",
+    "Sales",
+    "Finance"
+   ],
+   "answer": "GEN",
+   "explanation": "Finance does not equal Sales, so the expression is false and the negativeCondition value is returned. SLS is only returned when the department is Sales."
+  },
+  {
+   "id": "D10-013",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "An identity's email should come from the HR source's workEmail if present, otherwise from Active Directory's mail, otherwise a placeholder. Which transform BEST fits?",
+   "choices": [
+    "conditional comparing HR workEmail with AD mail using eq",
+    "lookup with HR workEmail as the key and AD mail as the default",
+    "firstValid with HR workEmail, then AD mail, then a static placeholder",
+    "concat with HR workEmail, AD mail and the placeholder joined together"
+   ],
+   "answer": "firstValid with HR workEmail, then AD mail, then a static placeholder",
+   "explanation": "firstValid returns the first value in its list that is not null, in the order given. concat would join all three values into one string."
+  },
+  {
+   "id": "D10-014",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "An employee type must map to three different outputs, with extra logic when the type is empty, and the engineer wants one readable transform. Which approach BEST fits?",
+   "choices": [
+    "A substring transform with three begin and end values",
+    "A dateCompare transform with three positiveCondition values",
+    "A reference transform pointing at three saved transforms",
+    "A static transform whose value is a Velocity template with #if and #elseif branches"
+   ],
+   "answer": "A static transform whose value is a Velocity template with #if and #elseif branches",
+   "explanation": "A static transform evaluates a Velocity template, which supports multi-branch #if logic over variables defined as nested transforms. dateCompare only compares dates."
+  },
+  {
+   "id": "D10-015",
+   "objective": "10.1",
+   "topic": "Conditional and Lookup Transforms",
+   "stem": "A firstValid transform lists three nested transforms. For some identities the first nested transform throws an error because its input is missing. What setting lets firstValid move on to the next value?",
+   "choices": [
+    "Set the default entry to true on the firstValid transform",
+    "Set accountSortDescending to true on the nested transform",
+    "Set ignoreErrors to true on the firstValid transform",
+    "Set requiresPeriodicRefresh to true on the firstValid transform"
+   ],
+   "answer": "Set ignoreErrors to true on the firstValid transform",
+   "explanation": "ignoreErrors tells firstValid to skip a value whose transform errors and try the next one. requiresPeriodicRefresh only controls nightly reevaluation."
+  },
+  {
+   "id": "D10-016",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "HR sends hire dates as 03/15/2024 and the identity attribute must be stored in ISO8601. Which transform configuration BEST fits?",
+   "choices": [
+    "dateCompare with a firstDate of the hire date and a secondDate of now",
+    "dateMath with an expression of now and rounding to the day",
+    "dateFormat with an inputFormat of ISO8601 and an outputFormat of MM/dd/yyyy",
+    "dateFormat with an inputFormat of MM/dd/yyyy and an outputFormat of ISO8601"
+   ],
+   "answer": "dateFormat with an inputFormat of MM/dd/yyyy and an outputFormat of ISO8601",
+   "explanation": "dateFormat converts a date from its inputFormat into its outputFormat. The reversed formats would fail to parse the HR value."
+  },
+  {
+   "id": "D10-017",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "A lifecycle state should be inactive once an identity's end date is earlier than today and active otherwise. Which transform BEST evaluates this?",
+   "choices": [
+    "dateFormat with the end date as input and an outputFormat of now",
+    "dateCompare with the end date as firstDate, now as secondDate and the LT operator",
+    "conditional with an expression of $endDate eq now",
+    "dateMath with the end date as input and an expression of now"
+   ],
+   "answer": "dateCompare with the end date as firstDate, now as secondDate and the LT operator",
+   "explanation": "dateCompare compares two dates with an operator and returns positiveCondition or negativeCondition; now can be the second date. conditional only checks equality and would not compare dates."
+  },
+  {
+   "id": "D10-018",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "A lifecycle transform uses dateCompare against now. Identities whose end date passed last week still show active because nothing changed on the HR record. What is the MOST likely fix?",
+   "choices": [
+    "Set ignoreErrors to true on the dateCompare transform",
+    "Run an entitlement aggregation on the HR source every night",
+    "Change the operator from LT to GTE on the dateCompare transform",
+    "Set requiresPeriodicRefresh to true so the transform is reevaluated nightly"
+   ],
+   "answer": "Set requiresPeriodicRefresh to true so the transform is reevaluated nightly",
+   "explanation": "Transforms that depend on the current date need requiresPeriodicRefresh so they are reevaluated during the nightly identity refresh. Changing the operator would invert the logic."
+  },
+  {
+   "id": "D10-019",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "A provisioning policy must set an account's expiration to 30 days after the identity's start date. Which transform BEST computes the new date?",
+   "choices": [
+    "dateMath with the start date as input and an expression of +30d",
+    "dateCompare with the start date and an operator of GT",
+    "dateFormat with an outputFormat that adds thirty days",
+    "leftPad with the start date and a length of 30"
+   ],
+   "answer": "dateMath with the start date as input and an expression of +30d",
+   "explanation": "dateMath adds or subtracts time from a date using expressions such as +30d. dateFormat only changes how a date is written."
+  },
+  {
+   "id": "D10-020",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "Which comparison operators does the dateCompare transform support?",
+   "choices": [
+    "before, after and equals",
+    "LT and GT only",
+    "LT, LTE, GT and GTE",
+    "eq and ne only"
+   ],
+   "answer": "LT, LTE, GT and GTE",
+   "explanation": "dateCompare uses LT, LTE, GT and GTE to compare its two dates. eq is the comparison used by the conditional transform."
+  },
+  {
+   "id": "D10-021",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "A dateFormat transform with an outputFormat of yyyy-mm-dd produces values like 2024-00-15 and 2024-37-15. What is the MOST likely cause?",
+   "choices": [
+    "Lower-case dd means day of the week, so it should be DD",
+    "ISO8601 input dates cannot be written in a custom format",
+    "Lower-case mm means minutes, so the month pattern should be MM",
+    "The year pattern yyyy needs to be written as YYYY"
+   ],
+   "answer": "Lower-case mm means minutes, so the month pattern should be MM",
+   "explanation": "Date patterns follow Java formatting, where MM is the month and mm is minutes. DD would be the day of the year, which is also wrong."
+  },
+  {
+   "id": "D10-022",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "An identity attribute needs the Active Directory accountExpires value, which AD stores as a Windows file-time number, shown as a readable ISO8601 date. Which approach BEST fits?",
+   "choices": [
+    "A substring transform that keeps the first eight digits",
+    "A lookup transform with a table of known expiry values",
+    "A dateFormat transform using its built-in Windows epoch input format",
+    "A dateMath transform that subtracts the Windows epoch"
+   ],
+   "answer": "A dateFormat transform using its built-in Windows epoch input format",
+   "explanation": "dateFormat has named input formats for common epoch styles, including the Windows file-time format, and can output ISO8601. substring cannot convert a time count into a date."
+  },
+  {
+   "id": "D10-023",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "An identity profile mapping uses {\"type\": \"accountAttribute\", \"attributes\": {\"sourceName\": \"Workday\", \"attributeName\": \"LOCATION\"}}. What does this transform return?",
+   "choices": [
+    "The LOCATION value from the identity's account on the Workday source",
+    "The LOCATION value from every source the identity has accounts on",
+    "The name of the Workday source joined with the LOCATION value",
+    "The LOCATION identity attribute already calculated for the identity"
+   ],
+   "answer": "The LOCATION value from the identity's account on the Workday source",
+   "explanation": "accountAttribute reads the named attribute from the identity's account on the named source. Reading an identity attribute is the job of identityAttribute."
+  },
+  {
+   "id": "D10-024",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "Some identities have two accounts on the same source, and accountAttribute keeps returning a value from the older account. How can the engineer make it use the newest account?",
+   "choices": [
+    "Set accountReturnFirstLink to false so no account is chosen",
+    "Set accountSortDescending to true so accounts are sorted newest first",
+    "Set requiresPeriodicRefresh to true so the newest account is read",
+    "Set ignoreErrors to true so the older account is skipped"
+   ],
+   "answer": "Set accountSortDescending to true so accounts are sorted newest first",
+   "explanation": "By default accounts are sorted by created date ascending, so the oldest is used; accountSortDescending reverses this. ignoreErrors belongs to firstValid."
+  },
+  {
+   "id": "D10-025",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "Why should an engineer avoid the identityAttribute transform inside another identity attribute's mapping on an identity profile?",
+   "choices": [
+    "identityAttribute can only read attributes from authoritative sources",
+    "identityAttribute only works inside SoD policy definitions",
+    "identityAttribute always returns the value in upper case",
+    "Identity attributes are calculated in parallel, so the referenced value may not be current or present"
+   ],
+   "answer": "Identity attributes are calculated in parallel, so the referenced value may not be current or present",
+   "explanation": "Identity attribute calculation is multi-threaded, so referencing one identity attribute from another can read stale or missing data and cause exceptions. It is intended for account create and disable profiles."
+  },
+  {
+   "id": "D10-026",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "An account create profile must set a new account's manager email field to the email address of the identity's manager. Which transform BEST fits?",
+   "choices": [
+    "lookup with a table that maps each manager to an email address",
+    "getReferenceIdentityAttribute with uid set to manager and attributeName set to email",
+    "accountAttribute with sourceName set to manager and attributeName set to email",
+    "identityAttribute with name set to manager and a lower transform around it"
+   ],
+   "answer": "getReferenceIdentityAttribute with uid set to manager and attributeName set to email",
+   "explanation": "getReferenceIdentityAttribute reads an attribute from another identity, and the special uid value manager points at the identity's manager. accountAttribute reads accounts on a source, not another identity."
+  },
+  {
+   "id": "D10-027",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "Several identity profiles must use the same complex email-building transform, and the engineer wants one definition to maintain. Which transform type lets other transforms reuse it?",
+   "choices": [
+    "firstValid, with the saved transform as its only value",
+    "static, with its value set to the saved transform's name",
+    "concat, with the saved transform as its first value",
+    "reference, with its id set to the saved transform's name"
+   ],
+   "answer": "reference, with its id set to the saved transform's name",
+   "explanation": "The reference transform calls an existing saved transform by its id, which is the transform's name. static would only output that name as text."
+  },
+  {
+   "id": "D10-028",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "A lower transform has no input attribute and is selected on an identity profile mapping for the HR source's email field. What value does it lower-case?",
+   "choices": [
+    "Nothing, because input is required on every transform",
+    "The identity's current email identity attribute",
+    "The first attribute of the first account on any source",
+    "The source attribute chosen for that mapping in the identity profile"
+   ],
+   "answer": "The source attribute chosen for that mapping in the identity profile",
+   "explanation": "When input is not given, the transform uses the source and attribute combination configured in the UI mapping. The input attribute is optional."
+  },
+  {
+   "id": "D10-029",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "A transform is {\"type\": \"lower\", \"attributes\": {\"input\": {\"type\": \"concat\", \"attributes\": {\"values\": [\"Jane\", \".\", \"DOE\"]}}}}. What is the output?",
+   "choices": [
+    "jane doe",
+    "JANE.DOE",
+    "jane.doe",
+    "Jane.DOE"
+   ],
+   "answer": "jane.doe",
+   "explanation": "The nested concat runs first and builds Jane.DOE, then lower converts the whole result to lower case. Nested transforms are evaluated from the inside out."
+  },
+  {
+   "id": "D10-030",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "During identity processing, the cost center must be fetched live from a finance REST API that the tenant does not aggregate. What is the BEST design?",
+   "choices": [
+    "Onboard the finance data as a source and read it with an accountAttribute transform",
+    "Write an Identity Attribute cloud rule that calls the REST API",
+    "Use a static transform with a Velocity template that calls the API",
+    "Write a transform that calls the finance REST API directly"
+   ],
+   "answer": "Onboard the finance data as a source and read it with an accountAttribute transform",
+   "explanation": "Transforms and cloud rules cannot call external systems, so the data must be aggregated into the tenant and read from the account. Cloud rules have no external connectivity."
+  },
+  {
+   "id": "D10-031",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "An account create profile must generate a unique sAMAccountName, trying jsmith, then jsmith1, jsmith2 and so on. Which transform is built for this?",
+   "choices": [
+    "lookup",
+    "usernameGenerator",
+    "randomAlphaNumeric",
+    "firstValid"
+   ],
+   "answer": "usernameGenerator",
+   "explanation": "usernameGenerator tries a list of patterns with a unique counter and checks uniqueness, and it is used in account create profiles. randomAlphaNumeric makes random strings with no naming pattern."
+  },
+  {
+   "id": "D10-032",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "An engineer changed a transform used on an identity profile and wants to see its effect on a sample identity before applying it to everyone. What should the engineer use?",
+   "choices": [
+    "A test certification campaign for the identity",
+    "The Campaign Composition report",
+    "A delta aggregation on the authoritative source",
+    "The identity profile's preview for a selected identity"
+   ],
+   "answer": "The identity profile's preview for a selected identity",
+   "explanation": "The identity profile preview shows the calculated attribute values for a chosen identity before changes are applied. Aggregations and campaigns do not preview transform output."
+  },
+  {
+   "id": "D10-033",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "An engineer created a transform through the API, but no identity attributes changed. What is the MOST likely missing step?",
+   "choices": [
+    "Upload the transform to the virtual appliance",
+    "Select the transform in an identity profile mapping and save the profile so identities are processed",
+    "Restart the virtual appliance cluster",
+    "Submit the transform to SailPoint for a rule review"
+   ],
+   "answer": "Select the transform in an identity profile mapping and save the profile so identities are processed",
+   "explanation": "A saved transform does nothing until it is used in a mapping or policy, and saving the identity profile processes identities. Transforms are not reviewed by SailPoint like cloud rules."
+  },
+  {
+   "id": "D10-034",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "Which requirement is MOST likely to need a rule instead of the built-in transforms?",
+   "choices": [
+    "Changing a department value to lower case",
+    "Mapping location codes to region names with a default",
+    "Looping through each value of a multi-valued attribute and applying custom logic to each",
+    "Converting a hire date from MM/dd/yyyy to ISO8601"
+   ],
+   "answer": "Looping through each value of a multi-valued attribute and applying custom logic to each",
+   "explanation": "Transforms work on single values with fixed operations, so per-item iteration with custom logic needs code. The other three are each a single built-in transform."
+  },
+  {
+   "id": "D10-035",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "A target system needs phone numbers in E.164 format, such as +15551234567, from values entered in many local styles. What is the simplest approach?",
+   "choices": [
+    "A leftPad transform that adds a plus sign",
+    "A cloud rule that parses every phone format",
+    "The e164phone transform with a default region",
+    "A lookup transform with a table of known phone numbers"
+   ],
+   "answer": "The e164phone transform with a default region",
+   "explanation": "e164phone formats phone numbers to E.164, using a default region when no country code is present. A rule would add review effort for something a built-in transform does."
+  },
+  {
+   "id": "D10-036",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "Where in the Admin UI can an engineer view and manage the tenant's transforms?",
+   "choices": [
+    "Admin > Identity Management > Transforms",
+    "Admin > SoD Policies > Controls",
+    "Admin > Certifications > Campaigns",
+    "Admin > Connections > Virtual Appliances"
+   ],
+   "answer": "Admin > Identity Management > Transforms",
+   "explanation": "Transforms are managed under Identity Management, where they can be selected in identity profile mappings. The other pages manage appliances, campaigns and SoD."
+  },
+  {
+   "id": "D10-037",
+   "type": "match",
+   "objective": "10.1",
+   "topic": "Transform Feasibility and Testing",
+   "stem": "Match each data requirement to the transform that BEST fits it.",
+   "pairs": [
+    {
+     "item": "Use HR email if present, otherwise AD mail",
+     "match": "firstValid"
+    },
+    {
+     "item": "Map office codes to region names with a fallback",
+     "match": "lookup"
+    },
+    {
+     "item": "Convert MM/dd/yyyy dates to ISO8601",
+     "match": "dateFormat"
+    },
+    {
+     "item": "Remove accents from first names",
+     "match": "decomposeDiacriticalMarks"
+    },
+    {
+     "item": "Read the manager's email for a create profile",
+     "match": "getReferenceIdentityAttribute"
+    }
+   ],
+   "targets_extra": [
+    "dateCompare"
+   ],
+   "explanation": "Each requirement is a single built-in operation. dateCompare compares two dates and is not needed for any of these requirements."
+  },
+  {
+   "id": "D10-038",
+   "type": "order",
+   "objective": "10.1",
+   "topic": "Date Transforms",
+   "stem": "Put the steps for building and rolling out a date-based lifecycle state transform in order.",
+   "items": [
+    "Read the end date with an accountAttribute transform",
+    "Convert the end date to ISO8601 with a dateFormat transform",
+    "Compare it with now using a dateCompare transform",
+    "Set requiresPeriodicRefresh so it is reevaluated nightly",
+    "Preview the result on a sample identity in the identity profile"
+   ],
+   "explanation": "The value is read, normalized, then compared; the nightly refresh flag keeps the result current, and a preview confirms the output before rollout."
+  },
+  {
+   "id": "D10-039",
+   "type": "multi",
+   "objective": "10.1",
+   "topic": "Attribute Retrieval and Nesting",
+   "stem": "An engineer is reviewing an identity profile that uses transforms. Which TWO statements are correct?",
+   "choices": [
+    "Without an input attribute, a transform uses the mapping's source attribute",
+    "accountSortDescending makes accountAttribute choose the newest account",
+    "identityAttribute is the preferred way to chain identity attributes on a profile",
+    "The conditional transform supports greater-than comparisons",
+    "A lookup with no default returns its input when no key matches"
+   ],
+   "answers": [
+    "Without an input attribute, a transform uses the mapping's source attribute",
+    "accountSortDescending makes accountAttribute choose the newest account"
+   ],
+   "select": 2,
+   "explanation": "Implicit input and account sorting behave as stated. identityAttribute is not for identity profile chaining, conditional supports eq only and a lookup with no match and no default errors."
+  },
+  {
+   "id": "D10-040",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "Where do connector rules, such as a JDBC Provision rule, run?",
+   "choices": [
+    "In the multi-tenant cloud",
+    "Inside the IdentityIQ server",
+    "On the virtual appliance",
+    "On each reviewer's browser"
+   ],
+   "answer": "On the virtual appliance",
+   "explanation": "Connector rules run on the virtual appliance as extensions of the connector. Cloud rules are the ones that run in the multi-tenant cloud."
+  },
+  {
+   "id": "D10-041",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "An engineer wants an Identity Attribute rule to call an external HR API to fetch a value during identity processing. Why will this fail review?",
+   "choices": [
+    "Identity Attribute rules run on the virtual appliance, which has no network",
+    "Identity Attribute rules can only be written in PowerShell",
+    "External calls are allowed but must use System.out for logging",
+    "Cloud rules run in the multi-tenant cloud and may not make external connections"
+   ],
+   "answer": "Cloud rules run in the multi-tenant cloud and may not make external connections",
+   "explanation": "Cloud rules have a restricted context with no external connectivity. Identity Attribute rules are BeanShell cloud rules, not PowerShell or appliance rules."
+  },
+  {
+   "id": "D10-042",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "A Web Services After Operation rule needs to look up an identity's attributes in the tenant's data model. Why is this not possible?",
+   "choices": [
+    "Connector rules cannot query the tenant's data model and rely on the context they are sent",
+    "Connector rules must be approved by each identity's manager first",
+    "Connector rules can only read data from delimited files",
+    "Connector rules can only run during certification campaigns"
+   ],
+   "answer": "Connector rules cannot query the tenant's data model and rely on the context they are sent",
+   "explanation": "Connector rules run on the appliance without access to the platform data model and use the context sent to them. They may use the managed connection provided, but not extra call-outs."
+  },
+  {
+   "id": "D10-043",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "Which of these rules is a cloud rule?",
+   "choices": [
+    "Web Services Before Operation rule",
+    "JDBC Provision rule",
+    "Before Provisioning rule",
+    "Before Creation rule for Active Directory"
+   ],
+   "answer": "Before Provisioning rule",
+   "explanation": "Before Provisioning runs in the cloud before a plan is sent to a source. The others are connector rules that run on the appliance or IQService."
+  },
+  {
+   "id": "D10-044",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "An AD team needs a PowerShell script to create a home directory after each new account is created. Which kind of rule fits?",
+   "choices": [
+    "An After Creation connector rule that runs through IQService",
+    "An Identity Attribute cloud rule on the HR identity profile",
+    "A Correlation cloud rule on the Active Directory source",
+    "A Before Provisioning cloud rule that runs in the tenant"
+   ],
+   "answer": "An After Creation connector rule that runs through IQService",
+   "explanation": "After Creation rules run PowerShell on the IQService component after an AD account is created. Cloud rules cannot run commands on the customer's servers."
+  },
+  {
+   "id": "D10-045",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "How does an engineer deploy a new Web Services Before Operation rule to the tenant?",
+   "choices": [
+    "Copy it to the virtual appliance file system and restart the appliance",
+    "Email it to SailPoint support for a rule review and wait for deployment",
+    "Paste it into a transform as the value of a static transform",
+    "Upload it with the connector rule REST APIs, which validate the code without a SailPoint review"
+   ],
+   "answer": "Upload it with the connector rule REST APIs, which validate the code without a SailPoint review",
+   "explanation": "Connector rules have no rule review process and are managed directly through the connector rule APIs, which check for harmful code. Cloud rules are the ones submitted for review."
+  },
+  {
+   "id": "D10-046",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "A cloud rule's author wants it to save a change to an identity object while it runs. Why is this not allowed?",
+   "choices": [
+    "Cloud rules may save objects only when written in PowerShell",
+    "Cloud rules may only save objects on the virtual appliance",
+    "Cloud rules may read the data model but cannot commit transactions or save objects",
+    "Cloud rules may only save objects during certification campaigns"
+   ],
+   "answer": "Cloud rules may read the data model but cannot commit transactions or save objects",
+   "explanation": "Cloud rules can query the data model in a read-only way but cannot commit transactions or save objects. Where they run does not change that."
+  },
+  {
+   "id": "D10-047",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "Account names on a legacy app look like a-jsmith, while the matching identities have a uid of jsmith. Standard correlation cannot strip the prefix. Which rule BEST fits?",
+   "choices": [
+    "A JDBC BuildMap rule that deletes the prefix in the database",
+    "A Before Provisioning rule that renames each account on the app",
+    "A Correlation rule that removes the prefix and returns the identity attribute and value to match",
+    "A Manager Correlation rule that links each account to a manager"
+   ],
+   "answer": "A Correlation rule that removes the prefix and returns the identity attribute and value to match",
+   "explanation": "A Correlation rule applies custom logic to link accounts to identities. Renaming accounts on the target changes data rather than correlating it."
+  },
+  {
+   "id": "D10-048",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "HR stores each worker's manager as Last, First instead of an ID, so attribute-based manager correlation fails. Which rule BEST fits?",
+   "choices": [
+    "JDBC Provision rule",
+    "Identity Attribute rule",
+    "Correlation rule",
+    "Manager Correlation rule"
+   ],
+   "answer": "Manager Correlation rule",
+   "explanation": "A Manager Correlation rule calculates the manager relationship with custom logic. A Correlation rule links accounts to identities, not identities to managers."
+  },
+  {
+   "id": "D10-049",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "Whenever an AD account is disabled, the engineer must also add a description change to the provisioning plan before it is sent. Which rule is designed for this?",
+   "choices": [
+    "Before Provisioning rule",
+    "Manager Correlation rule",
+    "Identity Attribute rule",
+    "BuildMap rule"
+   ],
+   "answer": "Before Provisioning rule",
+   "explanation": "Before Provisioning rules modify the provisioning plan before it reaches the source. Identity Attribute rules only calculate identity attributes."
+  },
+  {
+   "id": "D10-050",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "A unique account ID must follow rules more complex than any username pattern, checking several values before choosing one. Which rule type fits an account create profile field?",
+   "choices": [
+    "Account Profile Attribute Generator rule",
+    "Correlation rule",
+    "Before Creation rule",
+    "Web Services After Operation rule"
+   ],
+   "answer": "Account Profile Attribute Generator rule",
+   "explanation": "Attribute Generator rules generate complex account attribute values during provisioning, such as account creation. Correlation rules match accounts to identities."
+  },
+  {
+   "id": "D10-051",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "A database source must provision accounts by calling several stored procedures in a specific order. Which rule fits?",
+   "choices": [
+    "Before Provisioning rule",
+    "JDBC Provision rule",
+    "JDBC BuildMap rule",
+    "Identity Attribute rule"
+   ],
+   "answer": "JDBC Provision rule",
+   "explanation": "A JDBC Provision rule runs database statements to provision accounts and access. JDBC BuildMap shapes data during aggregation, not provisioning."
+  },
+  {
+   "id": "D10-052",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "A REST API returns account data in a deeply nested structure that the Web Services connector's response mapping cannot parse. Which rule BEST fits?",
+   "choices": [
+    "Manager Correlation rule",
+    "Before Provisioning rule",
+    "Web Services Before Operation rule",
+    "Web Services After Operation rule"
+   ],
+   "answer": "Web Services After Operation rule",
+   "explanation": "After Operation rules run after an HTTP operation and are often used to parse complex responses. Before Operation rules prepare the request."
+  },
+  {
+   "id": "D10-053",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "A JDBC source's query returns rows that must be reshaped, with an extra database call for each account, during aggregation. Which rule fits?",
+   "choices": [
+    "JDBC BuildMap rule",
+    "JDBC Provision rule",
+    "Correlation rule",
+    "Account Profile Attribute Generator rule"
+   ],
+   "answer": "JDBC BuildMap rule",
+   "explanation": "JDBC BuildMap calculates and transforms query results during aggregation and can call back to the database. JDBC Provision is for provisioning."
+  },
+  {
+   "id": "D10-054",
+   "objective": "10.2",
+   "topic": "Rule Types and Use Cases",
+   "stem": "An engineer finds an old design that relies on a Certification Exclusion rule. What should replace it in Identity Security Cloud?",
+   "choices": [
+    "A Before Provisioning rule on each source",
+    "A JDBC BuildMap rule that drops excluded rows",
+    "An Identity Attribute rule that flags excluded items",
+    "Configurable certification campaign filters"
+   ],
+   "answer": "Configurable certification campaign filters",
+   "explanation": "Certification Exclusion rules are deprecated and replaced by campaign filters. Dropping rows during aggregation would hide the access from the tenant altogether."
+  },
+  {
+   "id": "D10-055",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "An engineer is ready to submit a new Identity Attribute rule. What should the submission include?",
+   "choices": [
+    "The rule file and the virtual appliance's keypair",
+    "The rule file and a screenshot of the identity profile",
+    "The rule file, the rule validator output, the tenant name and approval to use Expert Services",
+    "The rule file and the org admin's personal access token"
+   ],
+   "answer": "The rule file, the rule validator output, the tenant name and approval to use Expert Services",
+   "explanation": "SailPoint asks for the rule, validator output, tenant name and approval for Expert Services through a support request. Credentials and keys must never be sent."
+  },
+  {
+   "id": "D10-056",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "What does SailPoint check when it reviews a submitted cloud rule?",
+   "choices": [
+    "That the rule passes the customer's own user acceptance tests",
+    "That the rule has been approved by each affected identity's manager",
+    "That the rule produces the business outcome the customer expects",
+    "That the rule meets security, performance and coding guidelines for its stated purpose"
+   ],
+   "answer": "That the rule meets security, performance and coding guidelines for its stated purpose",
+   "explanation": "The review is an integrity check against guidelines and intended use; SailPoint does not verify that the rule works as expected. Testing the outcome remains the implementer's job."
+  },
+  {
+   "id": "D10-057",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "A go-live needs a cloud rule deployed during a specific window on a Thursday. What should the implementer do?",
+   "choices": [
+    "Upload the rule to the virtual appliance before the window",
+    "Tell SailPoint at least 48 hours in advance so a reviewer and deployer can be reserved",
+    "Deploy the rule personally through the connector rule APIs",
+    "Submit the rule on Thursday morning and ask for it to be expedited"
+   ],
+   "answer": "Tell SailPoint at least 48 hours in advance so a reviewer and deployer can be reserved",
+   "explanation": "Rule reviews have an SLA of about 24 hours, and SailPoint asks for 48 hours notice when a specific window is needed. Cloud rules cannot be self-deployed through the connector rule APIs."
+  },
+  {
+   "id": "D10-058",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "A Correlation rule was approved and deployed in the sandbox tenant. How can the same rule reach production?",
+   "choices": [
+    "Recreate the rule by hand in the production Admin UI",
+    "Paste the rule code into a transform in the production tenant",
+    "Export and import it with the configuration import and export (sp-config) API, because its signature is already approved",
+    "Copy the rule file onto the production virtual appliance"
+   ],
+   "answer": "Export and import it with the configuration import and export (sp-config) API, because its signature is already approved",
+   "explanation": "Approved rules, including cloud rules, can be promoted from sandbox to production through sp-config because their signature was verified in review. Rebuilding the rule by hand would need another review."
+  },
+  {
+   "id": "D10-059",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "An approved cloud rule needs changed logic, and the business wants full control over when the change goes live. What does SailPoint recommend?",
+   "choices": [
+    "Submit a copy named with a TEMP suffix, apply and validate it in the window, then update the original",
+    "Edit the rule code directly in the tenant during the window",
+    "Disable the rule, wait a day, then submit the new logic",
+    "Submit a new rule with a version number in its name each time"
+   ],
+   "answer": "Submit a copy named with a TEMP suffix, apply and validate it in the window, then update the original",
+   "explanation": "The TEMP rule approach gives control over timing while keeping one rule per use case in the end. Keeping many versioned rules is not supported."
+  },
+  {
+   "id": "D10-060",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "An implementer keeps a separate rule for every change, such as AD Rule v1, v2 and v3. Why is this a poor practice?",
+   "choices": [
+    "Each tenant may hold only three rules of any one type",
+    "SailPoint expects one rule per use case, updated in place, so changes can be tracked",
+    "Rules with numbers in their names fail the rule validator",
+    "Older versions of a rule are deleted when a new one is added"
+   ],
+   "answer": "SailPoint expects one rule per use case, updated in place, so changes can be tracked",
+   "explanation": "The guidance is to keep a single rule for a given use case and update it, which keeps reviews and support clear. Version numbers in names are not what fails validation."
+  },
+  {
+   "id": "D10-061",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "Which file name follows SailPoint's naming convention for an IdentityAttribute rule called Calculate Lifecycle?",
+   "choices": [
+    "Rule - IdentityAttribute - Calculate Lifecycle.xml",
+    "Calculate Lifecycle - Rule - IdentityAttribute.xml",
+    "IdentityAttribute_CalculateLifecycle.bsh",
+    "Rule-CalculateLifecycle-v1.json"
+   ],
+   "answer": "Rule - IdentityAttribute - Calculate Lifecycle.xml",
+   "explanation": "The convention is Rule - {type} - {name}.xml, matching the rule's type and name attributes. Cloud rules are XML documents, not JSON or bare BeanShell files."
+  },
+  {
+   "id": "D10-062",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "A rule deployed last year starts producing wrong values after a business change. Who is responsible for fixing the rule's logic?",
+   "choices": [
+    "The virtual appliance vendor, because rules run on the appliance",
+    "The customer or implementer, because rules are treated as configuration",
+    "SailPoint support, because every deployed rule is a supported product feature",
+    "The rule review team, because they approved the rule"
+   ],
+   "answer": "The customer or implementer, because rules are treated as configuration",
+   "explanation": "SailPoint supports the platform, not rule configurations, so rule behaviour is the customer's or implementer's responsibility. Review approval is not a guarantee of correct logic."
+  },
+  {
+   "id": "D10-063",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "In which language are Identity Security Cloud rules written?",
+   "choices": [
+    "Python",
+    "JavaScript",
+    "Java BeanShell",
+    "Apache Velocity"
+   ],
+   "answer": "Java BeanShell",
+   "explanation": "Rules use Java BeanShell, a lightweight scripting language with Java-like syntax. Velocity is used in static transforms, not rules."
+  },
+  {
+   "id": "D10-064",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A rule contains if (dept == \"Sales\") where dept was read from an identity attribute, and the check never matches. What is the BEST fix?",
+   "choices": [
+    "Use \"Sales\".equals(dept), which compares values and is safe when dept is null",
+    "Use dept = \"Sales\", which compares and assigns at the same time",
+    "Use dept.equals(\"Sales\") without a null check, which is always safe",
+    "Use dept === \"Sales\", which forces a strict type comparison"
+   ],
+   "answer": "Use \"Sales\".equals(dept), which compares values and is safe when dept is null",
+   "explanation": "== compares object references for strings, so .equals is needed, and calling it on the literal avoids a null pointer error. === is not BeanShell syntax and = is assignment."
+  },
+  {
+   "id": "D10-065",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "An Identity Attribute rule calls identity.getAttribute(\"department\").toUpperCase() and fails for some identities. What is the MOST likely cause?",
+   "choices": [
+    "Identity attributes can only be read inside connector rules",
+    "toUpperCase is not available in BeanShell",
+    "Some identities have no department, so the call is made on a null value",
+    "getAttribute only works on attributes in upper case"
+   ],
+   "answer": "Some identities have no department, so the call is made on a null value",
+   "explanation": "Calling a method on a null value throws a null pointer error, which is why guidelines require null checks. BeanShell supports standard Java string methods."
+  },
+  {
+   "id": "D10-066",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A rule author wants to record debugging output from a cloud rule. Which approach follows SailPoint's guidelines?",
+   "choices": [
+    "Call .toXml() on each object and log the full output",
+    "Create a new Log4j logger at the top of the rule",
+    "Use System.out.println() so the output reaches the console",
+    "Use log.debug() for debug details and log.error() only for real failures"
+   ],
+   "answer": "Use log.debug() for debug details and log.error() only for real failures",
+   "explanation": "Rules should use the provided log object with the right level; System.out, custom loggers and full object serialization are prohibited. Console output is not collected by the log aggregators."
+  },
+  {
+   "id": "D10-067",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "What should a Correlation rule return to link an account to an identity?",
+   "choices": [
+    "The full identity object loaded from the tenant",
+    "The account's native identity as a plain string",
+    "A map naming the identity attribute and the value to match",
+    "A Boolean that says whether a match was found"
+   ],
+   "answer": "A map naming the identity attribute and the value to match",
+   "explanation": "A Correlation rule returns a map with the identity attribute name and value used for matching. Returning a Boolean gives the platform nothing to match on."
+  },
+  {
+   "id": "D10-068",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "Why is a cloud rule's BeanShell code usually placed inside a CDATA section in the rule XML?",
+   "choices": [
+    "So the rule runs on the virtual appliance instead of the cloud",
+    "So characters such as < and & in the code do not need XML escaping",
+    "So the code is encrypted before it is stored in the tenant",
+    "So the rule can import classes that are otherwise blocked"
+   ],
+   "answer": "So characters such as < and & in the code do not need XML escaping",
+   "explanation": "CDATA lets code with operators like < and && sit in the XML without escaping. It does not change where the rule runs or what it may import."
+  },
+  {
+   "id": "D10-069",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A submitted rule uses context.getObjectByName() to load an identity. The reviewer returns it. What should the author use instead?",
+   "choices": [
+    "A REST call from the rule to the tenant's own API",
+    "A direct JDBC connection to the tenant's database",
+    "The helper methods of the SailPoint rule utility, available as idn",
+    "A Thread that loads the identity in the background"
+   ],
+   "answer": "The helper methods of the SailPoint rule utility, available as idn",
+   "explanation": "Direct context calls are restricted, and new rules must use the rule utility helper methods instead. Direct connections, threads and call-outs are all prohibited."
+  },
+  {
+   "id": "D10-070",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A rule author wants to make sure an optional BeanShell variable was actually passed into the rule before using it. Which check is specific to BeanShell?",
+   "choices": [
+    "Wrap the variable in Optional.of() before reading it",
+    "Call isEmpty() on the variable before any other check",
+    "Compare the variable with undefined, as in JavaScript",
+    "Compare the variable with void, which means it was never defined"
+   ],
+   "answer": "Compare the variable with void, which means it was never defined",
+   "explanation": "In BeanShell an undefined variable has the special value void, so checking for void avoids errors. undefined is JavaScript, and Optional.of fails on null."
+  },
+  {
+   "id": "D10-071",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A Before Provisioning rule loops through every account in the tenant to check a value for each plan. Why will this likely be rejected?",
+   "choices": [
+    "Before Provisioning rules may only read one attribute per run",
+    "Before Provisioning rules may not contain any loops at all",
+    "Before Provisioning rules may only run once per day",
+    "Iterating over large lists of accounts or identities is prohibited for performance reasons"
+   ],
+   "answer": "Iterating over large lists of accounts or identities is prohibited for performance reasons",
+   "explanation": "Guidelines forbid iterating over lists of accounts or identities because it bloats caches; a targeted query should be used. Simple loops over small data are allowed."
+  },
+  {
+   "id": "D10-072",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "What is SailPoint's general guidance on choosing between rules and other product features?",
+   "choices": [
+    "Use rules for every identity attribute so logic is in one place",
+    "Treat rules as a last resort and use product features such as transforms whenever possible",
+    "Use rules first because they are faster than product features",
+    "Use rules only on sources that have no virtual appliance"
+   ],
+   "answer": "Treat rules as a last resort and use product features such as transforms whenever possible",
+   "explanation": "SailPoint recommends treating rules as a last resort because of review, support and performance implications. Transforms are configurable without a review."
+  },
+  {
+   "id": "D10-073",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "A requirement is to store every identity's last name in upper case. An implementer proposes an Identity Attribute rule. What is the BEST response?",
+   "choices": [
+    "Approve the rule, because rules are the standard for attributes",
+    "Use an upper transform, which needs no rule review",
+    "Use a Before Provisioning rule so the value is set at provisioning",
+    "Use a Correlation rule so the value is set when accounts link"
+   ],
+   "answer": "Use an upper transform, which needs no rule review",
+   "explanation": "A built-in upper transform meets the need without the cost and delay of a rule review. A Correlation rule is unrelated to attribute formatting."
+  },
+  {
+   "id": "D10-074",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "A transform needs logic that no built-in transform offers, so the engineer has a reviewed cloud rule. How does a transform call that rule?",
+   "choices": [
+    "With {\"type\": \"rule\", \"attributes\": {\"name\": \"<rule name>\"}}",
+    "With {\"type\": \"lookup\", \"attributes\": {\"table\": \"<rule name>\"}}",
+    "With {\"type\": \"reference\", \"attributes\": {\"id\": \"<rule name>\"}}",
+    "With {\"type\": \"static\", \"attributes\": {\"value\": \"<rule name>\"}}"
+   ],
+   "answer": "With {\"type\": \"rule\", \"attributes\": {\"name\": \"<rule name>\"}}",
+   "explanation": "The rule transform runs a cloud rule by name from inside a transform. reference calls another saved transform, not a rule."
+  },
+  {
+   "id": "D10-075",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "An old design used an Identity Selector rule to decide who receives a role. What should be used instead?",
+   "choices": [
+    "A lookup transform on the role's description",
+    "The role's standard membership criteria",
+    "A Correlation rule on the authoritative source",
+    "A Before Provisioning rule on each source in the role"
+   ],
+   "answer": "The role's standard membership criteria",
+   "explanation": "Identity Selector rules are deprecated in favour of role standard assignment criteria. Before Provisioning rules change plans, not who gets a role."
+  },
+  {
+   "id": "D10-076",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "A legacy integration used an Integration rule to modify provisioning requests. What is its replacement?",
+   "choices": [
+    "A JDBC BuildMap rule",
+    "A Before Provisioning rule",
+    "A Manager Correlation rule",
+    "A dateMath transform"
+   ],
+   "answer": "A Before Provisioning rule",
+   "explanation": "Integration rules are deprecated and replaced by Before Provisioning rules. BuildMap rules act during aggregation, not provisioning."
+  },
+  {
+   "id": "D10-077",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "A region-to-office mapping changes almost every month. One implementer proposes a rule and another a lookup transform. Why is the transform the BETTER choice?",
+   "choices": [
+    "Lookup transforms are reviewed by SailPoint, so they are safer",
+    "The tenant team can update the transform at any time without waiting for a rule review",
+    "Rules cannot contain more than ten mapping values",
+    "Lookup transforms run on the virtual appliance, so they are faster"
+   ],
+   "answer": "The tenant team can update the transform at any time without waiting for a rule review",
+   "explanation": "Transforms are maintained by the customer through the API or UI with no review cycle, so frequent changes are easy. Every change to a cloud rule needs another review."
+  },
+  {
+   "id": "D10-078",
+   "objective": "10.2",
+   "topic": "Rules Versus Transforms Best Practices",
+   "stem": "Account usernames must be unique across AD and a second directory, using naming logic beyond any pattern list, and no built-in transform can express it. What is the BEST option?",
+   "choices": [
+    "An Account Profile Attribute Generator rule reviewed by SailPoint",
+    "A JDBC Provision rule on the Active Directory source",
+    "A Manager Correlation rule on the HR source",
+    "A usernameGenerator transform with patterns for both directories"
+   ],
+   "answer": "An Account Profile Attribute Generator rule reviewed by SailPoint",
+   "explanation": "When the logic goes beyond what transforms can express, an Attribute Generator rule is the right tool, after review. JDBC Provision rules only apply to JDBC sources."
+  },
+  {
+   "id": "D10-079",
+   "type": "match",
+   "objective": "10.2",
+   "topic": "Cloud Rules and Connector Rules",
+   "stem": "Match each rule to where it runs.",
+   "pairs": [
+    {
+     "item": "Before Provisioning rule",
+     "match": "In the multi-tenant cloud before the plan is sent"
+    },
+    {
+     "item": "JDBC Provision rule",
+     "match": "On the virtual appliance with the JDBC connector"
+    },
+    {
+     "item": "After Creation rule for Active Directory",
+     "match": "On IQService as a PowerShell script"
+    },
+    {
+     "item": "Identity Attribute rule",
+     "match": "In the multi-tenant cloud during identity processing"
+    }
+   ],
+   "targets_extra": [
+    "In the reviewer's browser during certification"
+   ],
+   "explanation": "Cloud rules run in the tenant's cloud, connector rules on the appliance, and AD native rules on IQService. No rule runs in a reviewer's browser."
+  },
+  {
+   "id": "D10-080",
+   "type": "order",
+   "objective": "10.2",
+   "topic": "Rule Review and Deployment",
+   "stem": "Put the steps for delivering a new cloud rule in order.",
+   "items": [
+    "Confirm that no transform or product feature meets the need",
+    "Write the rule and test its logic against sandbox data",
+    "Run the rule validator and fix any findings",
+    "Submit the rule, validator output and tenant name to SailPoint",
+    "Attach the approved rule and promote it to production with sp-config"
+   ],
+   "explanation": "Rules are a last resort, so alternatives come first, then testing, validation, review and finally promotion of the approved rule."
+  },
+  {
+   "id": "D10-081",
+   "type": "multi",
+   "objective": "10.2",
+   "topic": "BeanShell Syntax and Semantics",
+   "stem": "A reviewer is checking a submitted cloud rule against SailPoint's guidelines. Which TWO items would cause it to be returned?",
+   "choices": [
+    "Calling Thread.sleep() to wait for data",
+    "Logging an identity's password at debug level",
+    "Checking a variable for null before using it",
+    "Using log.warn() for a non-critical issue",
+    "Using \"Sales\".equals(dept) to compare strings"
+   ],
+   "answers": [
+    "Calling Thread.sleep() to wait for data",
+    "Logging an identity's password at debug level"
+   ],
+   "select": 2,
+   "explanation": "Sleeps and threads are prohibited, and logging sensitive data causes rejection. Null checks, correct log levels and .equals comparisons are good practice."
+  }
+ ]
+}

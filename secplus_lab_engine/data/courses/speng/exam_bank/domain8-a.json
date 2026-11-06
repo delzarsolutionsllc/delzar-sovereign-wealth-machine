@@ -1,0 +1,1144 @@
+{
+ "domain": "8",
+ "title": "SailPoint Engineer Domain 8 questions (8.1, 8.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D8-001",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "An engineer is preparing next week's quarterly manager campaign. Reviewers must see each person's access as it is today, not as it was last month. What should the engineer do FIRST?",
+   "choices": [
+    "Raise the priority of every identity profile in the tenant",
+    "Run fresh account and entitlement aggregations on the in-scope sources",
+    "Turn off access requests until the campaign has been completed",
+    "Delete last quarter's completed campaigns so their data is not reused"
+   ],
+   "answer": "Run fresh account and entitlement aggregations on the in-scope sources",
+   "explanation": "Campaigns are built from the access data already in the tenant, so current aggregations are the key preparation step. Deleting old campaigns does not refresh any account or entitlement data."
+  },
+  {
+   "id": "D8-002",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "In last year's campaign, reviewers complained that Active Directory groups appeared only as long technical names they could not interpret. What is the BEST preparation before the next campaign?",
+   "choices": [
+    "Convert every Active Directory group into its own role before generating it",
+    "Require reviewers to reauthenticate before they can approve any item",
+    "Switch the campaign to a source owner campaign so only IT staff review it",
+    "Populate clear display names and descriptions on the entitlements before generating it"
+   ],
+   "answer": "Populate clear display names and descriptions on the entitlements before generating it",
+   "explanation": "Reviewers make better decisions when entitlements carry business-friendly names and descriptions. Changing the campaign type only moves the confusing names to different reviewers."
+  },
+  {
+   "id": "D8-003",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "A company is running its first certification campaign across 40,000 identities. The governance lead worries about mistakes reaching every manager at once. What is the BEST approach?",
+   "choices": [
+    "Launch the full campaign and fix problems as reviewers report them",
+    "Skip the preview so the campaign reflects the very latest data",
+    "Run a pilot campaign for one department first and check its preview carefully",
+    "Set a one-day deadline so mistakes are exposed to managers quickly"
+   ],
+   "answer": "Run a pilot campaign for one department first and check its preview carefully",
+   "explanation": "A small pilot scoped by filter or search exposes data and reviewer problems before they reach the whole workforce. Launching everything at once makes every error visible to every manager."
+  },
+  {
+   "id": "D8-004",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "Before launching a manager campaign, an engineer wants a list of the identities that would be left out because no manager is defined. Which report should the engineer download?",
+   "choices": [
+    "The Campaign Remediation Status report",
+    "The Access Request Activity report",
+    "The Identities Without Managers report",
+    "The Certification Sign Off report"
+   ],
+   "answer": "The Identities Without Managers report",
+   "explanation": "Identities without a manager are excluded from manager campaigns, and the Identities Without Managers report lists them. The remediation status report covers revocations after a campaign runs."
+  },
+  {
+   "id": "D8-005",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "An engineer plans a source owner campaign covering six sources. Two of the sources were onboarded recently by a contractor. What should the engineer verify before creating the campaign?",
+   "choices": [
+    "That each of the six sources has an account deletion threshold set",
+    "That each of the six sources has delta aggregation enabled",
+    "That each of the six sources has the correct source owner assigned",
+    "That each of the six sources is linked to an identity profile"
+   ],
+   "answer": "That each of the six sources has the correct source owner assigned",
+   "explanation": "Source owner campaigns route reviews to source owners and only generate for sources that have owners assigned. Delta aggregation and deletion thresholds do not decide who reviews."
+  },
+  {
+   "id": "D8-006",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "Managers say past campaigns had hundreds of low-risk birthright items each and they approved everything without reading. What is the BEST change for the next campaign?",
+   "choices": [
+    "Add a second reviewer so every item is approved by two managers",
+    "Send daily reminders until every manager has signed off",
+    "Extend the deadline so managers have more time to approve each item",
+    "Use campaign filters to focus reviews on higher-risk access and leave out birthright items"
+   ],
+   "answer": "Use campaign filters to focus reviews on higher-risk access and leave out birthright items",
+   "explanation": "Campaign filters cut review volume so reviewers can focus on access that matters, which reduces rubber-stamping. A longer deadline or a second reviewer leaves the same volume of low-value items in place."
+  },
+  {
+   "id": "D8-007",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "A ticketing application source has 300 accounts that never correlated to identities. A manager campaign starts next week. What should the engineer do so the right managers review this access?",
+   "choices": [
+    "Delete the uncorrelated accounts from the source so the campaign stays clean",
+    "Fix the correlation so these accounts link to their identities before generating the campaign",
+    "Add the uncorrelated accounts to a governance group for the campaign",
+    "Make the ticketing application authoritative in a new identity profile"
+   ],
+   "answer": "Fix the correlation so these accounts link to their identities before generating the campaign",
+   "explanation": "Manager campaigns review access held by identities, so accounts must correlate before they can be routed to a manager. Making a ticketing app authoritative would create bogus identities."
+  },
+  {
+   "id": "D8-008",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Line managers must confirm that each direct report still needs all of their access across every connected system. Which campaign type BEST fits this requirement?",
+   "choices": [
+    "Manager campaign",
+    "Search campaign scoped to one source",
+    "Source owner campaign",
+    "Role composition campaign"
+   ],
+   "answer": "Manager campaign",
+   "explanation": "A manager campaign sends each manager the access of their direct reports across sources. A source owner campaign is organized by system, not by reporting line."
+  },
+  {
+   "id": "D8-009",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Auditors want the owner of a licensed trading application to review everyone's access to that application and nothing else. Which campaign type BEST fits?",
+   "choices": [
+    "A manager campaign filtered to the trading department's managers",
+    "A role composition campaign for the roles that contain trading access",
+    "A manager campaign that includes every source in the tenant",
+    "A source owner campaign that includes only the trading application's source"
+   ],
+   "answer": "A source owner campaign that includes only the trading application's source",
+   "explanation": "Source owner campaigns let the owner of one or more selected sources review access on those sources, which suits tightly controlled or licensed applications. Manager campaigns spread the review across managers."
+  },
+  {
+   "id": "D8-010",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "A role owner says she does not want to decide who holds the Payroll Clerk role. She wants to confirm that the role still contains the right access and membership criteria. Which campaign type fits?",
+   "choices": [
+    "Source owner campaign",
+    "Role composition campaign",
+    "Identity search campaign with the manager as reviewer",
+    "Manager campaign"
+   ],
+   "answer": "Role composition campaign",
+   "explanation": "A role composition campaign reviews what a role contains, such as its access and membership criteria. The other types review which identities hold access, not the role's design."
+  },
+  {
+   "id": "D8-011",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Compliance needs a review of only the Finance department identities who hold privileged access on two specific sources. Which approach BEST builds this campaign?",
+   "choices": [
+    "Create a source owner campaign for every source in the tenant",
+    "Create a campaign from a Search query that returns exactly those identities and access",
+    "Create a role composition campaign for the Finance roles",
+    "Create a manager campaign and ask non-Finance managers to approve all items"
+   ],
+   "answer": "Create a campaign from a Search query that returns exactly those identities and access",
+   "explanation": "Search campaigns use a query to target a precise set of identities and access items. A source owner campaign for every source reviews far more than the requirement."
+  },
+  {
+   "id": "D8-012",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Some contractors have no manager in the tenant, but policy says every contractor's access must still get a manager-style review. Which approach includes them?",
+   "choices": [
+    "A Search campaign with Manager as the reviewer, where identities without a manager go to the campaign creator",
+    "A role composition campaign, which reviews contractor roles instead of people",
+    "A source owner campaign, which sends every identity to the owner of the HR source",
+    "A manager campaign, which sends identities without a manager to the source owner"
+   ],
+   "answer": "A Search campaign with Manager as the reviewer, where identities without a manager go to the campaign creator",
+   "explanation": "Manager campaigns exclude identities without a manager, but a Search campaign with Manager as reviewer includes them and routes them to the campaign creator. Source owner campaigns do not review by reporting line."
+  },
+  {
+   "id": "D8-013",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "A SOX control requires the owner of each sensitive access item to review who holds it, whichever department the holders are in. Which design BEST fits?",
+   "choices": [
+    "A Search campaign for those access items with Access Owner as the reviewer",
+    "A source owner campaign for the sources of the sensitive items",
+    "A manager campaign filtered to include only the sensitive access items",
+    "A role composition campaign for every role in the tenant"
+   ],
+   "answer": "A Search campaign for those access items with Access Owner as the reviewer",
+   "explanation": "Search campaigns can target specific access items and assign the access owner as reviewer. A source owner campaign routes reviews to whoever owns the source, not to the owner of each item."
+  },
+  {
+   "id": "D8-014",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Which campaign types does an admin create directly from Admin > Certifications > Campaigns, rather than starting from Search?",
+   "choices": [
+    "Manager and source owner campaigns",
+    "Source owner and identity search campaigns",
+    "Manager and role composition campaigns",
+    "Role composition and access item campaigns"
+   ],
+   "answer": "Manager and source owner campaigns",
+   "explanation": "The campaign creation page offers Manager Campaign and Source Owner Campaign. Identity, access item and role composition campaigns are started from Search."
+  },
+  {
+   "id": "D8-015",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "A manager campaign should not ask managers to review the All Employees distribution group, which every worker receives. What is the BEST way to keep it out of the campaign?",
+   "choices": [
+    "Mark the entitlement as not requestable in the access request settings",
+    "Remove the entitlement from every identity before the campaign starts",
+    "Ask managers to approve that item in bulk once the campaign starts",
+    "Apply a campaign filter that excludes that entitlement"
+   ],
+   "answer": "Apply a campaign filter that excludes that entitlement",
+   "explanation": "Campaign filters limit a campaign to a subset of entitlements or users, so low-value access can be excluded. Making an item not requestable has no effect on certifications."
+  },
+  {
+   "id": "D8-016",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "In an access item campaign with Access Owner as the reviewer, an entitlement has no owner and is not part of any role or access profile. Who is MOST likely to receive its review?",
+   "choices": [
+    "The manager of each identity",
+    "The org admin who started the campaign",
+    "The owner of the entitlement's source",
+    "The campaign's remediation owner"
+   ],
+   "answer": "The owner of the entitlement's source",
+   "explanation": "When the access item has no owner, the reviewer falls through the ownership hierarchy, ending with the source owner. Managers are not part of the access owner hierarchy."
+  },
+  {
+   "id": "D8-017",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "An engineer created a Search campaign with Manager as the reviewer. Twelve identities in the query have no manager defined. What happens to their reviews?",
+   "choices": [
+    "They are dropped from the campaign entirely",
+    "They are approved automatically when the campaign starts",
+    "They are assigned to the owner of the authoritative source",
+    "They are assigned to the creator of the campaign"
+   ],
+   "answer": "They are assigned to the creator of the campaign",
+   "explanation": "In Search campaigns with Manager as reviewer, an identity with no defined manager is reassigned to the campaign creator. Dropping identities without managers is what a manager campaign does."
+  },
+  {
+   "id": "D8-018",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "A campaign preview shows an error next to one certification because the reviewer's identity no longer exists in the tenant. What should the admin do before starting the campaign?",
+   "choices": [
+    "Reassign that certification to an existing identity from the preview",
+    "Recreate the reviewer's identity from an old account export",
+    "Change the campaign type to source owner and regenerate it",
+    "Start the campaign and let the reviewer's certification time out"
+   ],
+   "answer": "Reassign that certification to an existing identity from the preview",
+   "explanation": "The preview lets admins reassign certifications, and a missing reviewer must be replaced with a valid identity. Starting anyway leaves those items without anyone able to review them."
+  },
+  {
+   "id": "D8-019",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "A preview shows one manager assigned 2,000 identities because an HR feed error set the same manager for an entire region. What is the BEST action?",
+   "choices": [
+    "Start the campaign and let that manager delegate the reviews informally",
+    "Reassign all 2,000 reviews to the campaign creator and start the campaign",
+    "Extend the campaign deadline so the one manager can finish the reviews",
+    "Fix the manager data, refresh the identities, then delete and regenerate the campaign"
+   ],
+   "answer": "Fix the manager data, refresh the identities, then delete and regenerate the campaign",
+   "explanation": "Campaigns are generated as a snapshot, so the source data must be fixed and the campaign regenerated to route reviews correctly. Moving everything to the creator hides the data problem instead of fixing it."
+  },
+  {
+   "id": "D8-020",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "In a role composition campaign, a role owner revokes an access profile from the Sales Rep role. Who acts on that revocation?",
+   "choices": [
+    "Each member's manager, who must approve the change to the role",
+    "The source owner, who edits the role on the source system",
+    "The connector, which removes the access profile from every account",
+    "The remediation owner, who gets a task to update the role manually"
+   ],
+   "answer": "The remediation owner, who gets a task to update the role manually",
+   "explanation": "Role composition campaigns name an org or role admin as remediation owner, and revoked items become tasks for that person to update the role. Nothing is removed automatically from accounts."
+  },
+  {
+   "id": "D8-021",
+   "objective": "8.1",
+   "topic": "Campaign Scope and Reviewers",
+   "stem": "Auditors require a written justification for every revoke decision in a campaign. What should the engineer configure?",
+   "choices": [
+    "A governance group as the second reviewer for every certification",
+    "The campaign's comment setting so that reviewers must comment when they revoke",
+    "A campaign filter that excludes items with no description",
+    "Reauthenticated approvals for every access profile in the tenant"
+   ],
+   "answer": "The campaign's comment setting so that reviewers must comment when they revoke",
+   "explanation": "Campaign settings let the admin choose when reviewers must leave comments on their decisions. Reauthenticated approvals apply to access requests, not to certification comments."
+  },
+  {
+   "id": "D8-022",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "An engineer generated a campaign preview on Monday but could not start it until the following Tuesday. What does SailPoint recommend?",
+   "choices": [
+    "Start the campaign, because previews refresh automatically when started",
+    "Run an identity refresh and then start the existing campaign",
+    "Delete the campaign and recreate it so its content is current",
+    "Extend the deadline by one week and then start the campaign"
+   ],
+   "answer": "Delete the campaign and recreate it so its content is current",
+   "explanation": "SailPoint advises starting a campaign within a day of generating its preview, otherwise deleting and recreating it, because the content is a snapshot. An identity refresh does not update the generated campaign."
+  },
+  {
+   "id": "D8-023",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "A new manager joined after a manager campaign was generated, and she cannot see reviews for her new team. What is the MOST likely reason?",
+   "choices": [
+    "Manager campaigns only include managers who existed when the template was saved",
+    "Managers can only see reviews after their first identity refresh of the month",
+    "Campaigns are a snapshot, so manager changes after generation are not reflected",
+    "New managers must be added to the Cert Admin user level first"
+   ],
+   "answer": "Campaigns are a snapshot, so manager changes after generation are not reflected",
+   "explanation": "Campaigns are generated as a snapshot in time, so managers added afterwards do not appear. The Cert Admin user level is for administering certifications, not for reviewing."
+  },
+  {
+   "id": "D8-024",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "A reviewer revokes an entitlement on a delimited file source that has no provisioning connector. How is that revocation carried out?",
+   "choices": [
+    "The revocation is discarded because the source cannot provision",
+    "The virtual appliance edits the delimited file and re-uploads it",
+    "The entitlement is removed during the next account aggregation",
+    "A manual task is created for a person to remove the access on the target system"
+   ],
+   "answer": "A manual task is created for a person to remove the access on the target system",
+   "explanation": "Sources without automated provisioning get manual work items so someone removes the access by hand. Aggregation only reads data; it never removes access on the target."
+  },
+  {
+   "id": "D8-025",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "A reviewer marked several items as revoke a week ago, yet none of the access has been removed. Her certification shows that it has not been signed off. What is the MOST likely cause?",
+   "choices": [
+    "Revocations are processed only during the nightly identity refresh",
+    "Revocations are only processed after the campaign deadline passes",
+    "Revocations always need source owner approval before provisioning",
+    "Decisions are not final until the reviewer signs off on the certification"
+   ],
+   "answer": "Decisions are not final until the reviewer signs off on the certification",
+   "explanation": "Reviewers must decide every item and sign off before their decisions are finalized and remediation starts. Waiting for the deadline is not what releases revocations."
+  },
+  {
+   "id": "D8-026",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "An admin returns to a campaign that was generated but never started and finds its due date has already passed. What can the admin do with it?",
+   "choices": [
+    "Start it as a staged campaign that reviewers can only view",
+    "It cannot be started, so the admin should delete it and create a new campaign",
+    "Convert it into a campaign template and start it from the template",
+    "Start it, and the deadline moves forward by two weeks automatically"
+   ],
+   "answer": "It cannot be started, so the admin should delete it and create a new campaign",
+   "explanation": "A campaign whose due date has passed cannot be started, so it must be recreated. The deadline does not move forward automatically."
+  },
+  {
+   "id": "D8-027",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "Halfway through a campaign, a reviewer goes on extended leave and has not opened her certification. What should the Cert Admin do?",
+   "choices": [
+    "Delete the campaign and generate a new one without her",
+    "Approve her items in bulk on her behalf",
+    "Reassign her certification to another suitable reviewer",
+    "Wait for the deadline so her items are revoked automatically"
+   ],
+   "answer": "Reassign her certification to another suitable reviewer",
+   "explanation": "Admins can reassign a certification to another reviewer while the campaign runs. Approving on someone's behalf defeats the purpose of the review."
+  },
+  {
+   "id": "D8-028",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "When creating a manager campaign, an admin leaves the Deadline field at its default value. When is the campaign due?",
+   "choices": [
+    "Two weeks after the creation date",
+    "Thirty days after the creation date",
+    "One week after the creation date",
+    "At the end of the current calendar quarter"
+   ],
+   "answer": "Two weeks after the creation date",
+   "explanation": "The default deadline is two weeks after the campaign is created. Admins can choose a different deadline when the review needs more or less time."
+  },
+  {
+   "id": "D8-029",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "Every new hire receives an Email Basic access profile through the Active lifecycle state, but managers do not see it in their manager campaign. What is the MOST likely reason?",
+   "choices": [
+    "The access profile has no owner, so it is filtered out of every campaign",
+    "Access profiles granted through lifecycle states are not included in manager campaigns",
+    "The managers have not been given the Cert Admin user level",
+    "Lifecycle state access is only certified in role composition campaigns"
+   ],
+   "answer": "Access profiles granted through lifecycle states are not included in manager campaigns",
+   "explanation": "Access profiles granted through lifecycle states are left out of manager campaigns. Role composition campaigns review roles, not lifecycle state assignments."
+  },
+  {
+   "id": "D8-030",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "A reviewer expected to see three separate SharePoint entitlements for an identity, but sees one access profile instead. The identity holds exactly the entitlements in that access profile. Why?",
+   "choices": [
+    "The identity was given the access profile because it holds all its entitlements, so they are certified as that access profile",
+    "The campaign filter merged the entitlements into one item to reduce volume",
+    "The entitlements were marked privileged, which hides them inside access profiles",
+    "The reviewer lacks rights to see entitlements and can only see access profiles"
+   ],
+   "answer": "The identity was given the access profile because it holds all its entitlements, so they are certified as that access profile",
+   "explanation": "When an identity's entitlements match an access profile, the identity is given that access profile and the entitlements are certified only as part of it. Campaign filters exclude items; they never merge them."
+  },
+  {
+   "id": "D8-031",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "During a manager campaign, a manager says a former team member's account on the ticketing system is missing from her review. The account exists on the source but is uncorrelated. Why is it missing?",
+   "choices": [
+    "Ticketing system sources can only be reviewed in role composition campaigns",
+    "Manager campaigns only include accounts on authoritative sources",
+    "Uncorrelated accounts are not linked to an identity, so they are not in identity-based reviews",
+    "The account was hidden because its entitlements have no descriptions"
+   ],
+   "answer": "Uncorrelated accounts are not linked to an identity, so they are not in identity-based reviews",
+   "explanation": "Manager campaigns review the access of identities, and an uncorrelated account belongs to no identity. Missing descriptions make items harder to read but do not remove them."
+  },
+  {
+   "id": "D8-032",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "An AD group was removed from a user by hand last week, but it still appears in today's campaign. The AD source was last aggregated ten days ago. What is the MOST likely cause?",
+   "choices": [
+    "Campaigns always show access as it was at the start of the quarter",
+    "The group is protected by an SoD policy, which keeps it in reviews",
+    "The campaign uses tenant data from the last aggregation, which predates the removal",
+    "Manager campaigns read access live from AD when each reviewer opens them"
+   ],
+   "answer": "The campaign uses tenant data from the last aggregation, which predates the removal",
+   "explanation": "Campaigns reflect the access the tenant knows about, which is only as current as the last aggregation. Nothing reads access live from the target when a reviewer opens a campaign."
+  },
+  {
+   "id": "D8-033",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "After a campaign, the audit team asks whether every revoke decision was actually carried out on the target sources. Which report BEST answers this?",
+   "choices": [
+    "The Campaign Remediation Status report",
+    "The Identities Without Managers report",
+    "The Certification Sign Off report",
+    "The Campaign Composition report"
+   ],
+   "answer": "The Campaign Remediation Status report",
+   "explanation": "The remediation status report tracks revoked items and their remediation. The sign off report shows who signed off, not whether access was removed."
+  },
+  {
+   "id": "D8-034",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "A source owner campaign sent all reviews for the Oracle Financials source to a former IT manager who moved to marketing. What should the engineer fix before the next campaign?",
+   "choices": [
+    "Change the IT manager's lifecycle state to inactive",
+    "Update the source owner on the Oracle Financials source configuration",
+    "Add a campaign filter that excludes the IT manager's identity",
+    "Remove the IT manager from the Cert Admin user level"
+   ],
+   "answer": "Update the source owner on the Oracle Financials source configuration",
+   "explanation": "Source owner campaigns route reviews to the owner set on each source, so the owner must be corrected there. Changing his lifecycle state would disrupt his own access without fixing the routing."
+  },
+  {
+   "id": "D8-035",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "Reviewers say the Department value shown for many identities in the campaign is wrong. The values come from an identity profile mapping that reads the wrong HR column. What is the BEST fix?",
+   "choices": [
+    "Create a role composition campaign to review the Department attribute",
+    "Correct the identity profile mapping, process the identities, then regenerate the campaign",
+    "Ask reviewers to note the correct department in their decision comments",
+    "Edit the Department value inside the campaign for each identity"
+   ],
+   "answer": "Correct the identity profile mapping, process the identities, then regenerate the campaign",
+   "explanation": "Identity attributes come from identity profile mappings, so the mapping must be fixed and identities processed before regenerating. Campaign data cannot be edited per identity."
+  },
+  {
+   "id": "D8-036",
+   "objective": "8.1",
+   "topic": "Certification Data Troubleshooting",
+   "stem": "A manager campaign generated no reviews at all for 600 identities from a newly onboarded HR source. Their manager attribute is empty. What is the MOST likely root cause?",
+   "choices": [
+    "Manager correlation is not configured on the new HR source",
+    "The new HR source is not set as the campaign's default reviewer",
+    "The new HR source has no account deletion threshold set",
+    "The new HR source uses a delimited file instead of a JDBC connector"
+   ],
+   "answer": "Manager correlation is not configured on the new HR source",
+   "explanation": "Without manager correlation the identities have no manager, and identities without a manager are excluded from manager campaigns. The connector type is irrelevant to the manager relationship."
+  },
+  {
+   "id": "D8-037",
+   "type": "order",
+   "objective": "8.1",
+   "topic": "Campaign Lifecycle and Remediation",
+   "stem": "Put the steps for running a manager certification campaign in order.",
+   "items": [
+    "Aggregate the in-scope sources so access data is current",
+    "Create the manager campaign with its deadline and any campaign filter",
+    "Review the generated preview and reassign certifications where needed",
+    "Start the campaign so reviewers are notified",
+    "Reviewers decide every item and sign off",
+    "Track revocations with the remediation status report"
+   ],
+   "explanation": "Fresh data comes first, then the campaign is defined and its preview checked before it starts. Reviewers sign off to finalize decisions, and remediation is tracked last."
+  },
+  {
+   "id": "D8-038",
+   "type": "match",
+   "objective": "8.1",
+   "topic": "Choosing a Campaign Type",
+   "stem": "Match each business requirement to the campaign type that BEST fits it.",
+   "pairs": [
+    {
+     "item": "Managers confirm their direct reports' access",
+     "match": "Manager campaign"
+    },
+    {
+     "item": "The owner of one licensed application reviews its access",
+     "match": "Source owner campaign"
+    },
+    {
+     "item": "Confirm a role still contains the right access",
+     "match": "Role composition campaign"
+    },
+    {
+     "item": "Review only identities returned by a precise query",
+     "match": "Search campaign for identities"
+    }
+   ],
+   "targets_extra": [
+    "Lifecycle state campaign"
+   ],
+   "explanation": "Each requirement maps to who reviews and what is reviewed. There is no lifecycle state campaign type; lifecycle state access is not certified that way."
+  },
+  {
+   "id": "D8-039",
+   "type": "multi",
+   "objective": "8.1",
+   "topic": "Certification Preparation",
+   "stem": "An engineer is preparing a large manager campaign. Which TWO steps BEST improve the quality of reviews?",
+   "choices": [
+    "Give entitlements clear display names and descriptions",
+    "Check the Identities Without Managers report and fix the gaps",
+    "Remove all campaign filters so every item is included",
+    "Set the deadline to one day so reviewers act quickly",
+    "Start the campaign a week after generating its preview"
+   ],
+   "answers": [
+    "Give entitlements clear display names and descriptions",
+    "Check the Identities Without Managers report and fix the gaps"
+   ],
+   "select": 2,
+   "explanation": "Readable entitlements and complete manager data help reviews reach the right people with understandable content. A week-old preview is stale and should be recreated."
+  },
+  {
+   "id": "D8-040",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "When entitlement requests are enabled globally, an admin opens the reviewer list. Which reviewer option means the owner of the source the entitlement comes from?",
+   "choices": [
+    "Governance Group",
+    "Source Owner",
+    "Entitlement Owner",
+    "Manager"
+   ],
+   "answer": "Source Owner",
+   "explanation": "Source Owner sends entitlement requests to the owner of the entitlement's source. Entitlement Owner is the owner set on the entitlement itself."
+  },
+  {
+   "id": "D8-041",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "A Helpdesk user requests the VPN Users access profile for an employee named Ana. The access profile requires Manager approval. Whose approval is needed?",
+   "choices": [
+    "The VPN source owner",
+    "The Helpdesk user's manager",
+    "The access profile's primary owner",
+    "Ana's manager"
+   ],
+   "answer": "Ana's manager",
+   "explanation": "The Manager option means the manager of the identity the access is being requested for. The requester's own manager is not involved."
+  },
+  {
+   "id": "D8-042",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "An access profile has a primary owner and two additional owners. The business wants any one of the three to be able to approve requests. Which reviewer option should the engineer choose?",
+   "choices": [
+    "All Owners",
+    "Additional Owners",
+    "Manager",
+    "Primary Owner"
+   ],
+   "answer": "All Owners",
+   "explanation": "All Owners lets the primary owner or any additional owner approve. Additional Owners alone excludes the primary owner."
+  },
+  {
+   "id": "D8-043",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "The Treasury Analyst role includes the Bank Portal access profile, which requires approval by its own owner. A user requests the Treasury Analyst role. Which approval process applies?",
+   "choices": [
+    "No approval, because roles never require approval",
+    "Both the role's and the access profile's approval processes",
+    "The role's approval process, not the access profile's",
+    "The access profile's approval process, because it is more specific"
+   ],
+   "answer": "The role's approval process, not the access profile's",
+   "explanation": "An access profile's approval process only applies when the access profile itself is requested; requests for a role use the role's approvals. They are not stacked together."
+  },
+  {
+   "id": "D8-044",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "An engineer set approval on the Email Basic access profile, but new hires still receive it with no approval. The Active lifecycle state grants it. Why is there no approval?",
+   "choices": [
+    "Access granted through lifecycle states or auto-assigned roles does not go through approval",
+    "Lifecycle states always use the global approval settings instead",
+    "Approval only applies once the identity has been active for a day",
+    "The access profile's approvers must be in a governance group first"
+   ],
+   "answer": "Access granted through lifecycle states or auto-assigned roles does not go through approval",
+   "explanation": "Access profiles granted by lifecycle states or auto-assigned roles are provisioned without approval. Approval settings only apply to access requests."
+  },
+  {
+   "id": "D8-045",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "An engineer wants an access profile's approvals handled by a workflow rather than by fixed reviewers. Which trigger must the workflow use to appear in the approval list?",
+   "choices": [
+    "Access Request Submitted",
+    "Provisioning Completed",
+    "Account Aggregation Completed",
+    "Identity Attributes Changed"
+   ],
+   "answer": "Access Request Submitted",
+   "explanation": "Only enabled workflows that use the Access Request Submitted trigger are offered for approval. The other triggers fire on events that are not request approvals."
+  },
+  {
+   "id": "D8-046",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "An engineer edits an access profile for requests but leaves Require Approval switched off. What governs approval for requests of this access profile?",
+   "choices": [
+    "The source owner automatically becomes the approver",
+    "Requests are blocked until an approver is configured",
+    "Requests are approved and provisioned with no checks",
+    "The tenant's global approval configuration still applies"
+   ],
+   "answer": "The tenant's global approval configuration still applies",
+   "explanation": "If Require Approval is not chosen on the item, the global approval configuration still applies. It does not mean the request skips all approval."
+  },
+  {
+   "id": "D8-047",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "Every entitlement on a mainframe source must require source owner approval, and the source has 4,000 entitlements. What is the MOST efficient way to configure this?",
+   "choices": [
+    "Edit each entitlement's request settings one at a time",
+    "Set the source-level entitlement request configuration through the API",
+    "Bundle all 4,000 entitlements into a single requestable role",
+    "Create one SoD policy that lists every mainframe entitlement"
+   ],
+   "answer": "Set the source-level entitlement request configuration through the API",
+   "explanation": "The source-level entitlement request configuration acts like a global setting for that source's entitlements and can still be overridden per entitlement. Bundling everything into one role changes what users can request."
+  },
+  {
+   "id": "D8-048",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "An access profile uses a governance group of five security analysts as its reviewer. How many of the analysts must approve a request?",
+   "choices": [
+    "Any one member of the group",
+    "The group's designated owner only",
+    "A majority of the group",
+    "All five members of the group"
+   ],
+   "answer": "Any one member of the group",
+   "explanation": "Only one identity in a governance group is required to approve on behalf of the group. Requiring everyone would be a multi-approver setup with separate steps."
+  },
+  {
+   "id": "D8-049",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "Policy requires that the requester's manager approves first and the security team approves second for a privileged access profile. How should the engineer configure it?",
+   "choices": [
+    "Add only the security governance group and include the manager in the group",
+    "Add the security governance group, then Manager, and order the group first",
+    "Add Manager and set an escalation chain that ends with the security team",
+    "Add Manager, then the security governance group, and order Manager first"
+   ],
+   "answer": "Add Manager, then the security governance group, and order Manager first",
+   "explanation": "Multiple reviewers are asked in the configured order, so Manager must be listed before the governance group. An escalation chain only acts when approvers do not respond."
+  },
+  {
+   "id": "D8-050",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "A request has three approval levels. The first approver approves, then the second approver denies. What happens?",
+   "choices": [
+    "The access is provisioned because most approvers have not denied it",
+    "The review stops and the access is not provisioned",
+    "The request returns to the first approver to reconsider",
+    "The request moves on to the third approver for a final decision"
+   ],
+   "answer": "The review stops and the access is not provisioned",
+   "explanation": "All required reviewers must approve, and a denial at any level stops the review. The third level is never reached."
+  },
+  {
+   "id": "D8-051",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "An access profile's reviewers are Primary Owner first and Additional Owners second. When do the additional owners see a request?",
+   "choices": [
+    "Only if the primary owner denies it",
+    "At the same time as the primary owner",
+    "Only after the request has timed out",
+    "Only after the primary owner has approved it"
+   ],
+   "answer": "Only after the primary owner has approved it",
+   "explanation": "When the primary owner is the first reviewer, additional owners do not see the request until the primary owner approves. They are a second, sequential step."
+  },
+  {
+   "id": "D8-052",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "An engineer wants pending approvals for an access profile to expire if no one acts on them. What is the longest timeout that can be set?",
+   "choices": [
+    "365 days",
+    "30 days",
+    "90 days",
+    "180 days"
+   ],
+   "answer": "90 days",
+   "explanation": "The Timeout field allows up to 90 days before a request expires. Longer values are not available."
+  },
+  {
+   "id": "D8-053",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "On the approvals admin page, the assignee for a pending approval shows as Multiple. What does this MOST likely mean?",
+   "choices": [
+    "The approval failed and was copied to every org admin",
+    "The request contains several access items from different sources",
+    "The request was submitted for more than one identity",
+    "The approval is assigned to the members of a governance group"
+   ],
+   "answer": "The approval is assigned to the members of a governance group",
+   "explanation": "A review assigned to a governance group is actually assigned to its members, so the assignee shows as Multiple. The members are listed on the Assignees tab."
+  },
+  {
+   "id": "D8-054",
+   "objective": "8.2",
+   "topic": "Multi-Level and Governance Group Approvals",
+   "stem": "A bank wants approvers of its wire-transfer access profile to prove who they are again at the moment they approve. What should the engineer enable?",
+   "choices": [
+    "Required comments when the user requests access",
+    "An escalation chain that starts after one day",
+    "A second governance group as an extra approval level",
+    "Reauthenticated approvals for that access item"
+   ],
+   "answer": "Reauthenticated approvals for that access item",
+   "explanation": "Reauthenticated approvals make reviewers reauthenticate when they approve sensitive or regulated items. An extra approval level adds a person but does not re-verify identity."
+  },
+  {
+   "id": "D8-055",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "The owner of the Finance Reports access profile requests it for herself. She is the only configured reviewer. With default settings, who reviews the request?",
+   "choices": [
+    "She approves it herself as the configured reviewer",
+    "Her manager, because self-approval is not permitted",
+    "Any org admin, picked at random",
+    "The source owner of the reporting source"
+   ],
+   "answer": "Her manager, because self-approval is not permitted",
+   "explanation": "By default the tenant does not permit self-approval, and an individual approval assigned to the requester is reassigned to their manager. The source owner is not part of that reassignment."
+  },
+  {
+   "id": "D8-056",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "A requester belongs to the four-person governance group that approves the access profile she is requesting. What happens to the group's review?",
+   "choices": [
+    "She is left out, and another group member must approve",
+    "The review is reassigned to the governance group owner's manager",
+    "She can approve it because the approval is assigned to the group",
+    "The whole group is skipped and the request is approved"
+   ],
+   "answer": "She is left out, and another group member must approve",
+   "explanation": "For governance group approvals, the requester or recipient is omitted from the review so someone else in the group must act. Skipping the whole group would remove the control."
+  },
+  {
+   "id": "D8-057",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "An engineer wants requests auto-approved when the configured reviewer is the requester, instead of being sent to the requester's manager. How is this enabled?",
+   "choices": [
+    "Add each owner to a governance group that has only one member",
+    "Enable reauthenticated approvals for the owners' access profiles",
+    "Turn off Require Approval on every access profile they own",
+    "Set the autoApprove option in the approval configuration through the API"
+   ],
+   "answer": "Set the autoApprove option in the approval configuration through the API",
+   "explanation": "Automatic approval for self-assigned reviews is set with an API call that sets autoApprove to Direct or Indirect. Turning off approval would affect every requester."
+  },
+  {
+   "id": "D8-058",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "An access profile requires Manager approval, but the recipient has no manager. No escalation chain or fallback approver is set. Who MOST likely receives the approval?",
+   "choices": [
+    "The requester, who can then approve their own request",
+    "No one, so the request is denied at once",
+    "The owner of the requested access profile",
+    "The source owner of the first entitlement in the profile"
+   ],
+   "answer": "The owner of the requested access profile",
+   "explanation": "When a reviewer cannot be resolved, the tenant tries the missing reviewer's manager, the escalation chain, the fallback approver and then the requested object's owner. Self-approval is never the outcome."
+  },
+  {
+   "id": "D8-059",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "An approval has passed through every approver in its escalation chain and still nobody has acted. Who receives it next?",
+   "choices": [
+    "The original requester",
+    "The first approver in the chain again",
+    "The fallback approver",
+    "The tenant's default support admin"
+   ],
+   "answer": "The fallback approver",
+   "explanation": "A fallback approver receives a request once the full escalation chain has been tried with no action. Requests are not sent back to the requester."
+  },
+  {
+   "id": "D8-060",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "Approvers should get a nudge every day starting two days after a request arrives, but the request must stay with them. What should the engineer configure?",
+   "choices": [
+    "Escalations, not reminders",
+    "A second approval level",
+    "Reminders, not escalations",
+    "A shorter request timeout"
+   ],
+   "answer": "Reminders, not escalations",
+   "explanation": "Reminders notify the same approver on a schedule, while escalations move the approval to others in the chain. A shorter timeout would make requests expire sooner, not nudge anyone."
+  },
+  {
+   "id": "D8-061",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "An engineer is building the escalation chain for an access profile. Which reviewer categories can be added to the chain?",
+   "choices": [
+    "Manager, Source Owner, Requester and Owners",
+    "Identity, Governance Group, Requester and Org Admin",
+    "Manager, Cert Admin, Helpdesk and Identity",
+    "Manager, Identity, Governance Group and Owners"
+   ],
+   "answer": "Manager, Identity, Governance Group and Owners",
+   "explanation": "The escalation chain accepts Manager, Identity, Governance Group and Owners. The requester is never an escalation target."
+  },
+  {
+   "id": "D8-062",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "How does a conflicting access SoD policy decide that an identity is in violation?",
+   "choices": [
+    "The identity holds any access item that is marked privileged",
+    "The identity holds access from both of the policy's two access lists",
+    "The identity requested access that its manager did not approve",
+    "The identity holds more than a set number of entitlements on one source"
+   ],
+   "answer": "The identity holds access from both of the policy's two access lists",
+   "explanation": "An SoD policy has two lists, and a violation occurs when an identity has access in both. Privileged classification and access counts are separate concepts."
+  },
+  {
+   "id": "D8-063",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "Which situation is the BEST candidate for an SoD policy rather than an approval rule?",
+   "choices": [
+    "Every request for a sensitive database role needs DBA team approval",
+    "Contractors should lose all access on their end date",
+    "The same person should never both create vendors and approve vendor payments",
+    "New hires should automatically receive email and VPN access"
+   ],
+   "answer": "The same person should never both create vendors and approve vendor payments",
+   "explanation": "SoD prevents toxic combinations of access held by one person. A single sensitive item is handled with approvals, and joiner or leaver access with lifecycle states."
+  },
+  {
+   "id": "D8-064",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "An engineer is building an SoD policy's access lists. Which types of access items can be added to them?",
+   "choices": [
+    "Entitlements, access profiles and roles",
+    "Roles and identity attributes",
+    "Sources, accounts and entitlements",
+    "Entitlements only"
+   ],
+   "answer": "Entitlements, access profiles and roles",
+   "explanation": "SoD access lists can hold entitlements, access profiles and roles. Whole sources and identity attributes are not access items in a conflicting access policy."
+  },
+  {
+   "id": "D8-065",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "An SoD policy's Violation Owner is set to None, and the tenant has no Violation Admin. Who is assigned the violations?",
+   "choices": [
+    "The source owner of the first conflicting item",
+    "An org admin",
+    "Each violator's manager",
+    "The policy owner"
+   ],
+   "answer": "An org admin",
+   "explanation": "With no violation owner, violations go to the Violation Admin, and without one, to an org admin. The policy owner is responsible for the policy, not its violations."
+  },
+  {
+   "id": "D8-066",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "Risk wants SoD policies sorted by how serious a violation would be. Which policy setting supports this?",
+   "choices": [
+    "The policy level, such as Critical, High, Medium or Low",
+    "The order the policies appear on the policies page",
+    "The size of the policy's two access lists",
+    "The policy's tags, set to a number from one to ten"
+   ],
+   "answer": "The policy level, such as Critical, High, Medium or Low",
+   "explanation": "Each SoD policy has a level that classifies its risk, and policies can be filtered by level. Tags are free text and do not express risk."
+  },
+  {
+   "id": "D8-067",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "The business accepts that two warehouse supervisors may hold conflicting access for 60 days while a compensating review is done each week. What should the engineer use?",
+   "choices": [
+    "Change the policy level from High to Low",
+    "A mitigating control on the policy that expires after the agreed period",
+    "Disable the policy for 60 days and enable it again later",
+    "Remove the supervisors' conflicting access from List B"
+   ],
+   "answer": "A mitigating control on the policy that expires after the agreed period",
+   "explanation": "Mitigating controls document accepted exceptions and expire after a set number of days. Disabling the policy hides every other violation as well."
+  },
+  {
+   "id": "D8-068",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "A finance team lists 120 entitlements that must never be held together with a set of payment approval items. What should the engineer keep in mind while designing the policy?",
+   "choices": [
+    "Each access list must contain exactly the same number of items",
+    "Each access list holds at most 50 access items, so the design must group or split them",
+    "Each SoD policy can only include entitlements from one source",
+    "Each SoD policy can only be evaluated against role memberships"
+   ],
+   "answer": "Each access list holds at most 50 access items, so the design must group or split them",
+   "explanation": "SoD policies allow at most 50 access items per list and need at least one per list. Grouping entitlements into access profiles or roles, or splitting the policy, keeps within the limit."
+  },
+  {
+   "id": "D8-069",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "An SoD policy uses the Block submission setting. A user submits a request that would conflict with it. What happens?",
+   "choices": [
+    "The request is cancelled automatically",
+    "The request is sent to the violation owner for approval",
+    "The request is provisioned and a violation is logged",
+    "The request waits until a mitigating control is added"
+   ],
+   "answer": "The request is cancelled automatically",
+   "explanation": "Block submission makes the system cancel access requests that conflict with the policy. Allow submission is the setting that routes conflicting requests to approvers."
+  },
+  {
+   "id": "D8-070",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "An SoD policy uses Allow submission. A conflicting role request reaches the manager for approval. What does the manager see?",
+   "choices": [
+    "A form asking the manager to name a mitigating control",
+    "Nothing, because SoD checks only run on a schedule",
+    "A notice that granting the request would cause an SoD violation",
+    "A request that has already been approved by the policy owner"
+   ],
+   "answer": "A notice that granting the request would cause an SoD violation",
+   "explanation": "With Allow submission, conflicting requests go to the configured approvers, who are notified about the violation. Requesters also see the notice on their submitted requests."
+  },
+  {
+   "id": "D8-071",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "A new SoD policy was just enabled. Thirty users already held both sides of the conflict before it existed. How will these existing violations be found?",
+   "choices": [
+    "Automatically, the next time each user signs in",
+    "Only when each user requests new access",
+    "Only when the policy owner edits List A",
+    "By running the policy now or on a schedule"
+   ],
+   "answer": "By running the policy now or on a schedule",
+   "explanation": "Request-time checks only cover new requests, so existing conflicts are found by running or scheduling the policy. Violations then appear on the Policy Violations page."
+  },
+  {
+   "id": "D8-072",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "Compliance wants an email every Monday listing new violations of a payments SoD policy, even when there are none. What should the engineer configure?",
+   "choices": [
+    "A policy schedule with subscribers and the no-violations email toggle on",
+    "A search subscription filtered on access requests",
+    "A workflow that runs whenever the policy is edited",
+    "An escalation chain on the policy's access lists"
+   ],
+   "answer": "A policy schedule with subscribers and the no-violations email toggle on",
+   "explanation": "Policy schedules set the run time and subscribers, and a toggle controls whether an email is sent when there are no violations. Escalation chains belong to approvals, not SoD."
+  },
+  {
+   "id": "D8-073",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "Auditors want the people who currently violate an SoD policy to have their access reviewed in a certification. What is the MOST direct way to do this?",
+   "choices": [
+    "Export the violations and email them to each manager",
+    "Create a role composition campaign for the conflicting roles",
+    "Use the policy's Create Certification action",
+    "Create a manager campaign for every identity in the tenant"
+   ],
+   "answer": "Use the policy's Create Certification action",
+   "explanation": "The SoD policy Actions menu includes Create Certification, which builds a review of the policy's violations. A tenant-wide manager campaign is far wider than the requirement."
+  },
+  {
+   "id": "D8-074",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "A role assigned automatically by membership criteria gives a user access that conflicts with an SoD policy set to Block submission. How is this violation detected?",
+   "choices": [
+    "The role assignment is blocked when the identity refresh runs",
+    "It is never detected, because roles are exempt from SoD",
+    "When the policy runs, because blocking only applies to access requests",
+    "The role assignment is cancelled and the role owner is notified"
+   ],
+   "answer": "When the policy runs, because blocking only applies to access requests",
+   "explanation": "Block and Allow submission act on access requests; access given by automatic role assignment is found by running the policy. Roles can still be listed in SoD access lists."
+  },
+  {
+   "id": "D8-075",
+   "objective": "8.2",
+   "topic": "SoD Enforcement and Violation Handling",
+   "stem": "A violation owner wants to know what the policy author recommends doing when a violation occurs. Where should the author have recorded this guidance?",
+   "choices": [
+    "In the comments of the policy's approval workflow",
+    "In the policy's mitigation advice and remediation advice fields",
+    "In the policy's external reference tag",
+    "In the description of each entitlement in List A"
+   ],
+   "answer": "In the policy's mitigation advice and remediation advice fields",
+   "explanation": "SoD policies include mitigation and remediation advice fields to guide whoever handles violations. Entitlement descriptions explain access, not what to do about conflicts."
+  },
+  {
+   "id": "D8-076",
+   "type": "order",
+   "objective": "8.2",
+   "topic": "SoD Policy Design",
+   "stem": "Put the steps for creating and enforcing a conflicting access SoD policy in order.",
+   "items": [
+    "Enter the policy details, owner, violation owner and level",
+    "Choose Block submission or Allow submission for access requests",
+    "Add conflicting access items to List A and List B",
+    "Review the policy and finish it",
+    "Enable the policy and run or schedule it to find existing violations"
+   ],
+   "explanation": "Details and request behaviour come first on the policy details tab, then the two lists, review, enablement and a run that finds violations that existed before the policy."
+  },
+  {
+   "id": "D8-077",
+   "type": "match",
+   "objective": "8.2",
+   "topic": "Approver Options",
+   "stem": "Match each reviewer option to who approves the request.",
+   "pairs": [
+    {
+     "item": "Manager",
+     "match": "The manager of the identity receiving the access"
+    },
+    {
+     "item": "Governance Group",
+     "match": "Any one member of the chosen group"
+    },
+    {
+     "item": "All Owners",
+     "match": "The primary owner or any additional owner"
+    },
+    {
+     "item": "Entitlement Owner",
+     "match": "The owner set on the requested entitlement"
+    }
+   ],
+   "targets_extra": [
+    "The manager of the person who submitted the request"
+   ],
+   "explanation": "Each option resolves to a specific approver. Manager means the recipient's manager, not the requester's manager."
+  },
+  {
+   "id": "D8-078",
+   "type": "multi",
+   "objective": "8.2",
+   "topic": "Self-Approval, Escalation and Fallback",
+   "stem": "A requester is listed as the only individual reviewer for the access profile she requests. Which TWO statements describe default behaviour?",
+   "choices": [
+    "Self-approval is not permitted by default",
+    "The approval is reassigned to her manager",
+    "The request is approved automatically",
+    "The request is cancelled with an SoD violation",
+    "The approval is sent to every org admin"
+   ],
+   "answers": [
+    "Self-approval is not permitted by default",
+    "The approval is reassigned to her manager"
+   ],
+   "select": 2,
+   "explanation": "The tenant blocks self-approval by default and reassigns an individual approval to the requester's manager. Auto-approval needs an explicit API setting."
+  }
+ ]
+}
