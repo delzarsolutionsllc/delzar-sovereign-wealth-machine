@@ -1,1081 +1,1081 @@
 {
- "domain": "6",
- "title": "Okta Domain 6 questions (6.1, 6.2)",
- "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
- "questions": [
-  {
-   "id": "D6-001",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "An admin wants every failed event for the user ana@example.com in the System Log. Which filter expression is correct?",
-   "choices": [
-    "user eq \"ana@example.com\" and result = \"FAILURE\"",
-    "actor.alternateId == \"ana@example.com\" && outcome == \"FAILURE\"",
-    "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
-    "actor.alternateId co \"ana@example.com\" or outcome.result eq \"FAILURE\""
-   ],
-   "answer": "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
-   "explanation": "System Log filters use field paths such as actor.alternateId and outcome.result with operators like eq joined by and. The other choices use made-up fields, programming operators, or or, which would also return every other user's failures."
-  },
-  {
-   "id": "D6-002",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "Which System Log filter expression returns sign-ins that start an Okta session?",
-   "choices": [
-    "eventType eq \"user.session.start\"",
-    "eventType eq \"user.session.end\"",
-    "eventType eq \"user.lifecycle.create\"",
-    "eventType eq \"group.user_membership.add\""
-   ],
-   "answer": "eventType eq \"user.session.start\"",
-   "explanation": "user.session.start records the creation of an Okta session at sign-in. user.session.end records a session ending."
-  },
-  {
-   "id": "D6-003",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "An admin wants all lifecycle events, such as user creation, activation and deactivation, in one search. Which filter expression BEST does this?",
-   "choices": [
-    "eventType eq \"user.lifecycle\"",
-    "eventType sw \"user.lifecycle\"",
-    "eventType gt \"user.lifecycle\"",
-    "eventType pr \"user.lifecycle\""
-   ],
-   "answer": "eventType sw \"user.lifecycle\"",
-   "explanation": "The sw operator matches values that start with the given text, so it catches every user.lifecycle event. eq needs an exact match and no event type is just user.lifecycle."
-  },
-  {
-   "id": "D6-004",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "Where in the Admin Console does an admin open the System Log?",
-   "choices": [
-    "Security > General > System Log",
-    "Directory > People > System Log",
-    "Settings > Account > System Log",
-    "Reports > System Log"
-   ],
-   "answer": "Reports > System Log",
-   "explanation": "The System Log is under the Reports menu. Individual user and app pages also link to their own events."
-  },
-  {
-   "id": "D6-005",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "The security team gives an admin a suspicious IP address and asks for every event from it. Which filter expression should the admin use?",
-   "choices": [
-    "client.ipAddress eq \"203.0.113.10\"",
-    "target.ipAddress eq \"203.0.113.10\"",
-    "actor.ipAddress eq \"203.0.113.10\"",
-    "outcome.ipAddress eq \"203.0.113.10\""
-   ],
-   "answer": "client.ipAddress eq \"203.0.113.10\"",
-   "explanation": "The requester's IP address is recorded under the client object of each event. The actor, target and outcome objects do not hold the IP address."
-  },
-  {
-   "id": "D6-006",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "A help desk lead looking at a user's profile wants to jump straight to that user's System Log events. What is the quickest way?",
-   "choices": [
-    "Run the Okta Usage report for the user",
-    "Use the View Logs link on the user's profile",
-    "Open the user in the Profile Editor",
-    "Export the user list from Directory > People"
-   ],
-   "answer": "Use the View Logs link on the user's profile",
-   "explanation": "The profile's View Logs link opens the System Log already filtered to that user. The Okta Usage report summarizes sign-ins but not every event."
-  },
-  {
-   "id": "D6-007",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "A user says she was locked out yesterday afternoon. Which event type shows exactly when the lockout happened?",
-   "choices": [
-    "user.session.end",
-    "user.lifecycle.suspend",
-    "user.account.lock",
-    "user.account.update_password"
-   ],
-   "answer": "user.account.lock",
-   "explanation": "user.account.lock is written when an account becomes Locked out. Suspension is an admin action recorded as a lifecycle event."
-  },
-  {
-   "id": "D6-008",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "Management asks who deactivated a former employee's account last week. Which event type should the admin search, reading the actor field of the result?",
-   "choices": [
-    "user.lifecycle.create",
-    "user.session.start",
-    "application.user_membership.remove",
-    "user.lifecycle.deactivate"
-   ],
-   "answer": "user.lifecycle.deactivate",
-   "explanation": "Deactivation is recorded as user.lifecycle.deactivate, and its actor is the admin or process that performed it. Removing an app assignment is a different event."
-  },
-  {
-   "id": "D6-009",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "An admin needs to know when a user joined the Finance group and whether a group rule or a person added him. Which event type should the admin search?",
-   "choices": [
-    "application.user_membership.add",
-    "group.user_membership.add",
-    "user.account.privilege.grant",
-    "user.lifecycle.activate"
-   ],
-   "answer": "group.user_membership.add",
-   "explanation": "group.user_membership.add records a user being added to a group, and its actor shows who or what added the user. application.user_membership.add is for app assignments."
-  },
-  {
-   "id": "D6-010",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "Which event type shows that a user was assigned to an app integration?",
-   "choices": [
-    "group.user_membership.add",
-    "user.authentication.sso",
-    "user.lifecycle.create",
-    "application.user_membership.add"
-   ],
-   "answer": "application.user_membership.add",
-   "explanation": "Assigning an app to a user writes application.user_membership.add. user.authentication.sso records the user actually signing in to the app."
-  },
-  {
-   "id": "D6-011",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "A user is denied by an app's authentication policy, and the admin wants the event that shows the policy decision and the rule involved. Which event type should the admin search?",
-   "choices": [
-    "user.session.start",
-    "user.account.lock",
-    "policy.evaluate_sign_on",
-    "user.mfa.factor.deactivate"
-   ],
-   "answer": "policy.evaluate_sign_on",
-   "explanation": "policy.evaluate_sign_on records the policy evaluation, including the outcome and the matched policy and rule. user.session.start only shows the Okta session being created."
-  },
-  {
-   "id": "D6-012",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "An auditor asks who gave a user an administrator role. Which event type should the admin search?",
-   "choices": [
-    "user.account.privilege.grant",
-    "group.user_membership.add",
-    "application.user_membership.add",
-    "user.lifecycle.activate"
-   ],
-   "answer": "user.account.privilege.grant",
-   "explanation": "Granting an admin role to a user writes user.account.privilege.grant. A group membership event only matters if the role was assigned to a group."
-  },
-  {
-   "id": "D6-013",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "An admin wants to confirm that a user actually signed in to the payroll app through Okta single sign-on yesterday. Which event type should the admin look for?",
-   "choices": [
-    "user.authentication.sso",
-    "application.user_membership.add",
-    "user.session.start",
-    "policy.evaluate_sign_on"
-   ],
-   "answer": "user.authentication.sso",
-   "explanation": "user.authentication.sso records SSO into an app. user.session.start only proves the user signed in to Okta, not to the app."
-  },
-  {
-   "id": "D6-014",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "In a System Log event, which object identifies who or what performed the action?",
-   "choices": [
-    "target",
-    "client",
-    "actor",
-    "outcome"
-   ],
-   "answer": "actor",
-   "explanation": "The actor is the user, admin or system process that performed the action. The target is the object the action affected."
-  },
-  {
-   "id": "D6-015",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "An admin opens a user.lifecycle.deactivate event and wants to know which account was deactivated. Which part of the event should the admin read?",
-   "choices": [
-    "actor",
-    "client",
-    "debugContext",
-    "target"
-   ],
-   "answer": "target",
-   "explanation": "The target lists the objects the action was performed on, here the deactivated user. The actor is the admin who did it."
-  },
-  {
-   "id": "D6-016",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "A sign-in event shows a FAILURE result. Which field explains why it failed?",
-   "choices": [
-    "outcome.result",
-    "outcome.reason",
-    "actor.displayName",
-    "client.userAgent"
-   ],
-   "answer": "outcome.reason",
-   "explanation": "outcome.result only says success or failure, while outcome.reason gives the cause, such as invalid credentials. The user agent describes the browser."
-  },
-  {
-   "id": "D6-017",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "An admin wants to see which browser, operating system and country a suspicious sign-in came from. Where in the event is this recorded?",
-   "choices": [
-    "In the target details of the event",
-    "In the actor details of the event",
-    "In the event's display message only",
-    "In the client details of the event"
-   ],
-   "answer": "In the client details of the event",
-   "explanation": "The client object holds the IP address, geographic location and user agent of the request. The actor identifies the user, not the device."
-  },
-  {
-   "id": "D6-018",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "An admin sees several events from one sign-in attempt and wants to group the events that belong to the same request. Which value helps with this?",
-   "choices": [
-    "The event's severity",
-    "The actor's display name",
-    "The transaction ID",
-    "The event's display message"
-   ],
-   "answer": "The transaction ID",
-   "explanation": "Events from one request share a transaction ID, so it links them together. Many unrelated events share the same actor name or severity."
-  },
-  {
-   "id": "D6-019",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "A policy.evaluate_sign_on event has the outcome result DENY. What does this tell the admin?",
-   "choices": [
-    "A policy rule blocked the request",
-    "The user's password was typed incorrectly",
-    "The System Log could not record the event",
-    "The user's account was deactivated by an admin"
-   ],
-   "answer": "A policy rule blocked the request",
-   "explanation": "For policy evaluation events, DENY means the matched rule did not allow access. A wrong password produces a failed authentication event instead."
-  },
-  {
-   "id": "D6-020",
-   "objective": "6.1",
-   "topic": "Reading Event Details and Outcomes",
-   "stem": "An admin wants to see which risk behaviors Okta detected for a sign-in, such as a new device or new location. Where in the event should the admin look?",
-   "choices": [
-    "In the target list of the event",
-    "In the debug data under debugContext",
-    "In the actor's alternate ID",
-    "In the legacy event type field of the event"
-   ],
-   "answer": "In the debug data under debugContext",
-   "explanation": "Okta puts extra details such as detected behaviors and risk information in debugContext.debugData. The target lists affected objects, not risk signals."
-  },
-  {
-   "id": "D6-021",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "An admin needs a list of who signed in to Okta during last quarter. Which built-in report BEST fits?",
-   "choices": [
-    "Application Usage report",
-    "MFA Usage report",
-    "Okta Password Health report",
-    "Okta Usage report"
-   ],
-   "answer": "Okta Usage report",
-   "explanation": "The Okta Usage report shows which users signed in to Okta during a period. Application Usage covers sign-ins to individual apps."
-  },
-  {
-   "id": "D6-022",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "Before renewing a license, an app owner wants to know the last time each user signed in to that app. Which report should the admin run?",
-   "choices": [
-    "Okta Usage report",
-    "Application Usage report",
-    "Provisioning Capable Apps report",
-    "Admin Role Assignments report"
-   ],
-   "answer": "Application Usage report",
-   "explanation": "The Application Usage report lists users and their sign-ins to a selected app integration. The Okta Usage report is about Okta sign-ins, not a single app."
-  },
-  {
-   "id": "D6-023",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "Security wants a list of which authenticators each user has enrolled. Which report provides this?",
-   "choices": [
-    "MFA Usage report",
-    "Okta Usage report",
-    "Telephony Usage report",
-    "Suspicious Activity report"
-   ],
-   "answer": "MFA Usage report",
-   "explanation": "The MFA Usage report lists enrolled authenticators per user. The Telephony Usage report covers SMS and voice delivery."
-  },
-  {
-   "id": "D6-024",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "A compliance officer asks for the current status of Okta passwords across the org, as a downloadable file. Which report should the admin provide?",
-   "choices": [
-    "MFA Usage report",
-    "Okta Usage report",
-    "Okta Password Health report",
-    "Deprovision Details report"
-   ],
-   "answer": "Okta Password Health report",
-   "explanation": "The Okta Password Health report is a downloadable file describing the state of users' Okta passwords. The MFA Usage report covers authenticators, not passwords."
-  },
-  {
-   "id": "D6-025",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "An admin wants to find apps that support provisioning but do not have it turned on yet. Which report helps?",
-   "choices": [
-    "SAML Capable Apps report",
-    "Provisioning Capable Apps report",
-    "Application Usage report",
-    "Admin Role Assignments report"
-   ],
-   "answer": "Provisioning Capable Apps report",
-   "explanation": "The Provisioning Capable Apps report highlights integrations that could provision but do not. The SAML Capable Apps report is about SSO options."
-  },
-  {
-   "id": "D6-026",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "An auditor wants to know which users and groups hold administrator roles and with which resource sets. Which report should the admin run?",
-   "choices": [
-    "Okta Usage report",
-    "Suspicious Activity report",
-    "Admin Role Assignments report",
-    "Application Usage report"
-   ],
-   "answer": "Admin Role Assignments report",
-   "explanation": "The Admin Role Assignments report lists role assignments, including roles and resource sets. Usage reports cover sign-in activity."
-  },
-  {
-   "id": "D6-027",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "An investigator needs each individual event for a user, with the actor, IP address and outcome of every action. Which source should the admin use?",
-   "choices": [
-    "The System Log",
-    "The Okta Usage report",
-    "The MFA Usage report",
-    "The Okta Password Health report"
-   ],
-   "answer": "The System Log",
-   "explanation": "Reports give ready-made summaries, while the System Log holds the individual event records with actor, client and outcome details. Usage reports leave out most event detail."
-  },
-  {
-   "id": "D6-028",
-   "objective": "6.1",
-   "topic": "Okta Reports",
-   "stem": "An admin wants a downloadable report of risky events, such as failed logins and locked-out users, over the last month. Which report should the admin run?",
-   "choices": [
-    "Okta Password Health report",
-    "Telephony Usage report",
-    "Deprovision Details report",
-    "Suspicious Activity report"
-   ],
-   "answer": "Suspicious Activity report",
-   "explanation": "The Suspicious Activity report queries the System Log for suspicious events such as failed logins and lockouts and can be downloaded as CSV. The Telephony Usage report covers SMS and voice delivery, and Deprovision Details covers deprovisioning."
-  },
-  {
-   "id": "D6-029",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "An auditor asks for System Log events from five months ago, but the admin finds nothing older than about three months. What explains this?",
-   "choices": [
-    "The System Log deletes events after each release",
-    "Only Super Administrators can see older events",
-    "Events older than 30 days must be restored by an admin",
-    "Okta keeps System Log events for 90 days"
-   ],
-   "answer": "Okta keeps System Log events for 90 days",
-   "explanation": "The System Log keeps events for 90 days, so older events must come from an export or a SIEM. The admin role does not change retention."
-  },
-  {
-   "id": "D6-030",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "Compliance requires sign-in events to be kept for 2 years. What should the admin set up?",
-   "choices": [
-    "A longer session lifetime in the global session policy",
-    "Log streaming or System Log API collection into a SIEM",
-    "A scheduled Okta Usage report sent by email",
-    "A larger retention value in the password policy"
-   ],
-   "answer": "Log streaming or System Log API collection into a SIEM",
-   "explanation": "Events must leave Okta before the 90-day limit, through log streaming or the System Log API, to be kept longer. Reports do not hold every event."
-  },
-  {
-   "id": "D6-031",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "Which standard administrator role can set up log streaming to an external destination?",
-   "choices": [
-    "Report Administrator",
-    "Read-only Administrator",
-    "Super Administrator",
-    "Help Desk Administrator"
-   ],
-   "answer": "Super Administrator",
-   "explanation": "Okta's role comparison lists log streaming management for Super Administrators only. Report and Read-only Administrators can view events but not configure streaming."
-  },
-  {
-   "id": "D6-032",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "A help desk admin with only the Help Desk Administrator role cannot open the System Log. What is the reason?",
-   "choices": [
-    "The Help Desk Administrator role does not include System Log access",
-    "The System Log is turned off for help desk orgs",
-    "The help desk admin must enroll Okta Verify before the System Log opens",
-    "The System Log only opens from a Preview org"
-   ],
-   "answer": "The Help Desk Administrator role does not include System Log access",
-   "explanation": "Help Desk Administrators manage user passwords, unlocks and authenticators but do not get System Log access. Adding a role such as Report Administrator would grant it."
-  },
-  {
-   "id": "D6-033",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "An admin wants the current System Log search results in a spreadsheet for a meeting. What is the simplest way?",
-   "choices": [
-    "Copy the events from the Okta status page",
-    "Run the Okta Password Health report",
-    "Open a support case and request a copy",
-    "Download the search results as a CSV file"
-   ],
-   "answer": "Download the search results as a CSV file",
-   "explanation": "The System Log can export the current results as CSV. Support cases are not needed for data the admin can download."
-  },
-  {
-   "id": "D6-034",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "A developer wants a script to pull System Log events into an internal tool every hour. What should the script call?",
-   "choices": [
-    "The System Log API",
-    "The Users API",
-    "The Okta status page",
-    "The Groups API"
-   ],
-   "answer": "The System Log API",
-   "explanation": "The System Log API returns log events with the same filters as the console. The Users and Groups APIs manage directory objects, not events."
-  },
-  {
-   "id": "D6-035",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "An external auditor needs to view and download reports and the System Log but must not change anything in the org. Which standard role fits BEST?",
-   "choices": [
-    "Help Desk Administrator",
-    "Application Administrator",
-    "Report Administrator",
-    "Group Membership Administrator"
-   ],
-   "answer": "Report Administrator",
-   "explanation": "Report Administrators can view and download reports and the System Log with no change rights. Application Administrators can change apps."
-  },
-  {
-   "id": "D6-036",
-   "type": "order",
-   "objective": "6.1",
-   "topic": "System Log Search and Filter Expressions",
-   "stem": "An admin must find when a user was locked out and why. Put the steps in order.",
-   "items": [
-    "Open Reports > System Log",
-    "Set the date range to cover the reported time",
-    "Enter a filter such as eventType eq \"user.account.lock\"",
-    "Open the matching event and expand its details",
-    "Read the actor, client and outcome fields"
-   ],
-   "explanation": "The admin opens the log, narrows the time window, filters on the event type, and then reads the event's details for the cause and source."
-  },
-  {
-   "id": "D6-037",
-   "type": "multi",
-   "objective": "6.1",
-   "topic": "Log Retention, Export and Access",
-   "stem": "An admin wants to give two auditors access to the System Log without the right to change users. Which TWO standard roles include System Log access?",
-   "choices": [
-    "Report Administrator",
-    "Read-only Administrator",
-    "Help Desk Administrator",
-    "Group Administrator",
-    "Group Membership Administrator"
-   ],
-   "answers": [
-    "Report Administrator",
-    "Read-only Administrator"
-   ],
-   "select": 2,
-   "explanation": "Okta's role comparison grants System Log viewing to Report and Read-only Administrators, among others. Help Desk, Group and Group Membership Administrators do not get it."
-  },
-  {
-   "id": "D6-038",
-   "type": "match",
-   "objective": "6.1",
-   "topic": "Common Event Types",
-   "stem": "Match each event type to what it records.",
-   "pairs": [
+  "domain": "6",
+  "title": "Okta Domain 6 questions (6.1, 6.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with Okta.",
+  "questions": [
     {
-     "item": "user.session.start",
-     "match": "A user started an Okta session"
+      "id": "D6-001",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "An admin wants every failed event for the user ana@example.com in the System Log. Which filter expression is correct?",
+      "choices": [
+        "user eq \"ana@example.com\" and result = \"FAILURE\"",
+        "actor.alternateId == \"ana@example.com\" && outcome == \"FAILURE\"",
+        "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
+        "actor.alternateId co \"ana@example.com\" or outcome.result eq \"FAILURE\""
+      ],
+      "answer": "actor.alternateId eq \"ana@example.com\" and outcome.result eq \"FAILURE\"",
+      "explanation": "System Log filters use field paths such as actor.alternateId and outcome.result with operators like eq joined by and. The other choices use made-up fields, programming operators, or or, which would also return every other user's failures."
     },
     {
-     "item": "user.account.lock",
-     "match": "An account became locked out"
+      "id": "D6-002",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "Which System Log filter expression returns sign-ins that start an Okta session?",
+      "choices": [
+        "eventType eq \"user.session.start\"",
+        "eventType eq \"user.session.end\"",
+        "eventType eq \"user.lifecycle.create\"",
+        "eventType eq \"group.user_membership.add\""
+      ],
+      "answer": "eventType eq \"user.session.start\"",
+      "explanation": "user.session.start records the creation of an Okta session at sign-in. user.session.end records a session ending."
     },
     {
-     "item": "group.user_membership.add",
-     "match": "A user joined a group"
+      "id": "D6-003",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "An admin wants all lifecycle events, such as user creation, activation and deactivation, in one search. Which filter expression BEST does this?",
+      "choices": [
+        "eventType eq \"user.lifecycle\"",
+        "eventType sw \"user.lifecycle\"",
+        "eventType gt \"user.lifecycle\"",
+        "eventType pr \"user.lifecycle\""
+      ],
+      "answer": "eventType sw \"user.lifecycle\"",
+      "explanation": "The sw operator matches values that start with the given text, so it catches every user.lifecycle event. eq needs an exact match and no event type is just user.lifecycle."
     },
     {
-     "item": "application.user_membership.add",
-     "match": "A user was assigned to an app"
+      "id": "D6-004",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "Where in the Admin Console does an admin open the System Log?",
+      "choices": [
+        "Security > General > System Log",
+        "Directory > People > System Log",
+        "Settings > Account > System Log",
+        "Reports > System Log"
+      ],
+      "answer": "Reports > System Log",
+      "explanation": "The System Log is under the Reports menu. Individual user and app pages also link to their own events."
     },
     {
-     "item": "policy.evaluate_sign_on",
-     "match": "A sign-on policy was evaluated"
+      "id": "D6-005",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "The security team gives an admin a suspicious IP address and asks for every event from it. Which filter expression should the admin use?",
+      "choices": [
+        "client.ipAddress eq \"203.0.113.10\"",
+        "target.ipAddress eq \"203.0.113.10\"",
+        "actor.ipAddress eq \"203.0.113.10\"",
+        "outcome.ipAddress eq \"203.0.113.10\""
+      ],
+      "answer": "client.ipAddress eq \"203.0.113.10\"",
+      "explanation": "The requester's IP address is recorded under the client object of each event. The actor, target and outcome objects do not hold the IP address."
+    },
+    {
+      "id": "D6-006",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "A help desk lead looking at a user's profile wants to jump straight to that user's System Log events. What is the quickest way?",
+      "choices": [
+        "Run the Okta Usage report for the user",
+        "Use the View Logs link on the user's profile",
+        "Open the user in the Profile Editor",
+        "Export the list from Directory > People"
+      ],
+      "answer": "Use the View Logs link on the user's profile",
+      "explanation": "The profile's View Logs link opens the System Log already filtered to that user. The Okta Usage report summarizes sign-ins but not every event."
+    },
+    {
+      "id": "D6-007",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "A user says she was locked out yesterday afternoon. Which event type shows exactly when the lockout happened?",
+      "choices": [
+        "user.session.end",
+        "user.lifecycle.suspend",
+        "user.account.lock",
+        "user.account.update_password"
+      ],
+      "answer": "user.account.lock",
+      "explanation": "user.account.lock is written when an account becomes Locked out. Suspension is an admin action recorded as a lifecycle event."
+    },
+    {
+      "id": "D6-008",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "Management asks who deactivated a former employee's account last week. Which event type should the admin search, reading the actor field of the result?",
+      "choices": [
+        "user.lifecycle.create",
+        "user.session.start",
+        "application.user_membership.remove",
+        "user.lifecycle.deactivate"
+      ],
+      "answer": "user.lifecycle.deactivate",
+      "explanation": "Deactivation is recorded as user.lifecycle.deactivate, and its actor is the admin or process that performed it. Removing an app assignment is a different event."
+    },
+    {
+      "id": "D6-009",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "An admin needs to know when a user joined the Finance group and whether a group rule or a person added him. Which event type should the admin search?",
+      "choices": [
+        "application.user_membership.add",
+        "group.user_membership.add",
+        "user.account.privilege.grant",
+        "user.lifecycle.activate"
+      ],
+      "answer": "group.user_membership.add",
+      "explanation": "group.user_membership.add records a user being added to a group, and its actor shows who or what added the user. application.user_membership.add is for app assignments."
+    },
+    {
+      "id": "D6-010",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "Which event type shows that a user was assigned to an app integration?",
+      "choices": [
+        "group.user_membership.add",
+        "user.authentication.sso",
+        "user.lifecycle.create",
+        "application.user_membership.add"
+      ],
+      "answer": "application.user_membership.add",
+      "explanation": "Assigning an app to a user writes application.user_membership.add. user.authentication.sso records the user actually signing in to the app."
+    },
+    {
+      "id": "D6-011",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "A user is denied by an app's authentication policy, and the admin wants the event that shows the policy decision and the rule involved. Which event type should the admin search?",
+      "choices": [
+        "user.session.start",
+        "user.account.lock",
+        "policy.evaluate_sign_on",
+        "user.mfa.factor.deactivate"
+      ],
+      "answer": "policy.evaluate_sign_on",
+      "explanation": "policy.evaluate_sign_on records the policy evaluation, including the outcome and the matched policy and rule. user.session.start only shows the Okta session being created."
+    },
+    {
+      "id": "D6-012",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "An auditor asks who gave a user an administrator role. Which event type should the admin search?",
+      "choices": [
+        "user.account.privilege.grant",
+        "group.user_membership.add",
+        "application.user_membership.add",
+        "user.lifecycle.activate"
+      ],
+      "answer": "user.account.privilege.grant",
+      "explanation": "Granting an admin role to a user writes user.account.privilege.grant. A group membership event only matters if the role was assigned to a group."
+    },
+    {
+      "id": "D6-013",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "An admin wants to confirm that a user actually signed in to the payroll app through Okta single sign-on yesterday. Which event type should the admin look for?",
+      "choices": [
+        "user.authentication.sso",
+        "application.user_membership.add",
+        "user.session.start",
+        "policy.evaluate_sign_on"
+      ],
+      "answer": "user.authentication.sso",
+      "explanation": "user.authentication.sso records SSO into an app. user.session.start only proves the user signed in to Okta, not to the app."
+    },
+    {
+      "id": "D6-014",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "In a System Log event, which object identifies who or what performed the action?",
+      "choices": [
+        "target",
+        "client",
+        "actor",
+        "outcome"
+      ],
+      "answer": "actor",
+      "explanation": "The actor is the user, admin or system process that performed the action. The target is the object the action affected."
+    },
+    {
+      "id": "D6-015",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "An admin opens a user.lifecycle.deactivate event and wants to know which account was deactivated. Which part of the event should the admin read?",
+      "choices": [
+        "actor",
+        "client",
+        "debugContext",
+        "target"
+      ],
+      "answer": "target",
+      "explanation": "The target lists the objects the action was performed on, here the deactivated user. The actor is the admin who did it."
+    },
+    {
+      "id": "D6-016",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "A sign-in event shows a FAILURE result. Which field explains why it failed?",
+      "choices": [
+        "outcome.result",
+        "outcome.reason",
+        "actor.displayName",
+        "client.userAgent"
+      ],
+      "answer": "outcome.reason",
+      "explanation": "outcome.result only says success or failure, while outcome.reason gives the cause, such as invalid credentials. The user agent describes the browser."
+    },
+    {
+      "id": "D6-017",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "An admin wants to see which browser, operating system and country a suspicious sign-in came from. Where in the event is this recorded?",
+      "choices": [
+        "In the target details listed in the event",
+        "In the actor details of the event",
+        "In the event's display message only",
+        "In the client details of the event"
+      ],
+      "answer": "In the client details of the event",
+      "explanation": "The client object holds the IP address, geographic location and user agent of the request. The actor identifies the user, not the device."
+    },
+    {
+      "id": "D6-018",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "An admin sees several events from one sign-in attempt and wants to group the events that belong to the same request. Which value helps with this?",
+      "choices": [
+        "The event's severity",
+        "The actor's display name",
+        "The transaction ID",
+        "The event's display message"
+      ],
+      "answer": "The transaction ID",
+      "explanation": "Events from one request share a transaction ID, so it links them together. Many unrelated events share the same actor name or severity."
+    },
+    {
+      "id": "D6-019",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "A policy.evaluate_sign_on event has the outcome result DENY. What does this tell the admin?",
+      "choices": [
+        "A policy rule blocked the request",
+        "The user's password was typed incorrectly",
+        "The System Log could not record the event",
+        "The user's account was deactivated by an admin"
+      ],
+      "answer": "A policy rule blocked the request",
+      "explanation": "For policy evaluation events, DENY means the matched rule did not allow access. A wrong password produces a failed authentication event instead."
+    },
+    {
+      "id": "D6-020",
+      "objective": "6.1",
+      "topic": "Reading Event Details and Outcomes",
+      "stem": "An admin wants to see which risk behaviors Okta detected for a sign-in, such as a new device or new location. Where in the event should the admin look?",
+      "choices": [
+        "In the target list of the event's details",
+        "In the debug data under debugContext",
+        "In the actor's alternate ID",
+        "In the legacy event type field of the event"
+      ],
+      "answer": "In the debug data under debugContext",
+      "explanation": "Okta puts extra details such as detected behaviors and risk information in debugContext.debugData. The target lists affected objects, not risk signals."
+    },
+    {
+      "id": "D6-021",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "An admin needs a list of who signed in to Okta during last quarter. Which built-in report BEST fits?",
+      "choices": [
+        "Application Usage report",
+        "MFA Usage report",
+        "Okta Password Health report",
+        "Okta Usage report"
+      ],
+      "answer": "Okta Usage report",
+      "explanation": "The Okta Usage report shows which users signed in to Okta during a period. Application Usage covers sign-ins to individual apps."
+    },
+    {
+      "id": "D6-022",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "Before renewing a license, an app owner wants to know the last time each user signed in to that app. Which report should the admin run?",
+      "choices": [
+        "Okta Usage report",
+        "Application Usage report",
+        "Provisioning Capable Apps report",
+        "Admin Role Assignments report"
+      ],
+      "answer": "Application Usage report",
+      "explanation": "The Application Usage report lists users and their sign-ins to a selected app integration. The Okta Usage report is about Okta sign-ins, not a single app."
+    },
+    {
+      "id": "D6-023",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "Security wants a list of which authenticators each user has enrolled. Which report provides this?",
+      "choices": [
+        "MFA Usage report",
+        "Okta Usage report",
+        "Telephony Usage report",
+        "Suspicious Activity report"
+      ],
+      "answer": "MFA Usage report",
+      "explanation": "The MFA Usage report lists enrolled authenticators per user. The Telephony Usage report covers SMS and voice delivery."
+    },
+    {
+      "id": "D6-024",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "A compliance officer asks for the current status of Okta passwords across the org, as a downloadable file. Which report should the admin provide?",
+      "choices": [
+        "MFA Usage report",
+        "Okta Usage report",
+        "Okta Password Health report",
+        "Deprovision Details report"
+      ],
+      "answer": "Okta Password Health report",
+      "explanation": "The Okta Password Health report is a downloadable file describing the state of users' Okta passwords. The MFA Usage report covers authenticators, not passwords."
+    },
+    {
+      "id": "D6-025",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "An admin wants to find apps that support provisioning but do not have it turned on yet. Which report helps?",
+      "choices": [
+        "SAML Capable Apps report",
+        "Provisioning Capable Apps report",
+        "Application Usage report",
+        "Admin Role Assignments report"
+      ],
+      "answer": "Provisioning Capable Apps report",
+      "explanation": "The Provisioning Capable Apps report highlights integrations that could provision but do not. The SAML Capable Apps report is about SSO options."
+    },
+    {
+      "id": "D6-026",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "An auditor wants to know which users and groups hold administrator roles and with which resource sets. Which report should the admin run?",
+      "choices": [
+        "Okta Usage report",
+        "Suspicious Activity report",
+        "Admin Role Assignments report",
+        "Application Usage report"
+      ],
+      "answer": "Admin Role Assignments report",
+      "explanation": "The Admin Role Assignments report lists role assignments, including roles and resource sets. Usage reports cover sign-in activity."
+    },
+    {
+      "id": "D6-027",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "An investigator needs each individual event for a user, with the actor, IP address and outcome of every action. Which source should the admin use?",
+      "choices": [
+        "The System Log",
+        "The Okta Usage report",
+        "The MFA Usage report",
+        "The Okta Password Health report"
+      ],
+      "answer": "The System Log",
+      "explanation": "Reports give ready-made summaries, while the System Log holds the individual event records with actor, client and outcome details. Usage reports leave out most event detail."
+    },
+    {
+      "id": "D6-028",
+      "objective": "6.1",
+      "topic": "Okta Reports",
+      "stem": "An admin wants a downloadable report of risky events, such as failed logins and locked-out users, over the last month. Which report should the admin run?",
+      "choices": [
+        "Okta Password Health report",
+        "Telephony Usage report",
+        "Deprovision Details report",
+        "Suspicious Activity report"
+      ],
+      "answer": "Suspicious Activity report",
+      "explanation": "The Suspicious Activity report queries the System Log for suspicious events such as failed logins and lockouts and can be downloaded as CSV. The Telephony Usage report covers SMS and voice delivery, and Deprovision Details covers deprovisioning."
+    },
+    {
+      "id": "D6-029",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "An auditor asks for System Log events from five months ago, but the admin finds nothing older than about three months. What explains this?",
+      "choices": [
+        "The System Log deletes events after each release",
+        "Only Super Administrators can see older events",
+        "Events older than 30 days must be restored by an admin",
+        "Okta keeps System Log events for 90 days"
+      ],
+      "answer": "Okta keeps System Log events for 90 days",
+      "explanation": "The System Log keeps events for 90 days, so older events must come from an export or a SIEM. The admin role does not change retention."
+    },
+    {
+      "id": "D6-030",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "Compliance requires sign-in events to be kept for 2 years. What should the admin set up?",
+      "choices": [
+        "A longer maximum session lifetime in the global session policy",
+        "Log streaming or System Log API collection into a SIEM",
+        "A scheduled Okta Usage report sent by email",
+        "A larger log retention value set in the org's password policy"
+      ],
+      "answer": "Log streaming or System Log API collection into a SIEM",
+      "explanation": "Events must leave Okta before the 90-day limit, through log streaming or the System Log API, to be kept longer. Reports do not hold every event."
+    },
+    {
+      "id": "D6-031",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "Which standard administrator role can set up log streaming to an external destination?",
+      "choices": [
+        "Report Administrator",
+        "Read-only Administrator",
+        "Super Administrator",
+        "Help Desk Administrator"
+      ],
+      "answer": "Super Administrator",
+      "explanation": "Okta's role comparison lists log streaming management for Super Administrators only. Report and Read-only Administrators can view events but not configure streaming."
+    },
+    {
+      "id": "D6-032",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "A help desk admin with only the Help Desk Administrator role cannot open the System Log. What is the reason?",
+      "choices": [
+        "The Help Desk Administrator role does not include System Log access",
+        "The System Log is turned off for help desk orgs",
+        "The help desk admin must enroll Okta Verify first",
+        "The System Log only opens from a Preview org"
+      ],
+      "answer": "The Help Desk Administrator role does not include System Log access",
+      "explanation": "Help Desk Administrators manage user passwords, unlocks and authenticators but do not get System Log access. Adding a role such as Report Administrator would grant it."
+    },
+    {
+      "id": "D6-033",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "An admin wants the current System Log search results in a spreadsheet for a meeting. What is the simplest way?",
+      "choices": [
+        "Copy the events from the Okta status page",
+        "Run the Okta Password Health report",
+        "Open a support case and request a copy",
+        "Download the search results as a CSV file"
+      ],
+      "answer": "Download the search results as a CSV file",
+      "explanation": "The System Log can export the current results as CSV. Support cases are not needed for data the admin can download."
+    },
+    {
+      "id": "D6-034",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "A developer wants a script to pull System Log events into an internal tool every hour. What should the script call?",
+      "choices": [
+        "The System Log API",
+        "The Users API",
+        "The Okta status page",
+        "The Groups API"
+      ],
+      "answer": "The System Log API",
+      "explanation": "The System Log API returns log events with the same filters as the console. The Users and Groups APIs manage directory objects, not events."
+    },
+    {
+      "id": "D6-035",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "An external auditor needs to view and download reports and the System Log but must not change anything in the org. Which standard role fits BEST?",
+      "choices": [
+        "Help Desk Administrator",
+        "Application Administrator",
+        "Report Administrator",
+        "Group Membership Administrator"
+      ],
+      "answer": "Report Administrator",
+      "explanation": "Report Administrators can view and download reports and the System Log with no change rights. Application Administrators can change apps."
+    },
+    {
+      "id": "D6-036",
+      "type": "order",
+      "objective": "6.1",
+      "topic": "System Log Search and Filter Expressions",
+      "stem": "An admin must find when a user was locked out and why. Put the steps in order.",
+      "items": [
+        "Open Reports > System Log",
+        "Set the date range to cover the reported time",
+        "Enter a filter such as eventType eq \"user.account.lock\"",
+        "Open the matching event and expand its details",
+        "Read the actor, client and outcome fields"
+      ],
+      "explanation": "The admin opens the log, narrows the time window, filters on the event type, and then reads the event's details for the cause and source."
+    },
+    {
+      "id": "D6-037",
+      "type": "multi",
+      "objective": "6.1",
+      "topic": "Log Retention, Export and Access",
+      "stem": "An admin wants to give two auditors access to the System Log without the right to change users. Which TWO standard roles include System Log access?",
+      "choices": [
+        "Report Administrator",
+        "Read-only Administrator",
+        "Help Desk Administrator",
+        "Group Administrator",
+        "Group Membership Administrator"
+      ],
+      "answers": [
+        "Report Administrator",
+        "Read-only Administrator"
+      ],
+      "select": 2,
+      "explanation": "Okta's role comparison grants System Log viewing to Report and Read-only Administrators, among others. Help Desk, Group and Group Membership Administrators do not get it."
+    },
+    {
+      "id": "D6-038",
+      "type": "match",
+      "objective": "6.1",
+      "topic": "Common Event Types",
+      "stem": "Match each event type to what it records.",
+      "pairs": [
+        {
+          "item": "user.session.start",
+          "match": "A user started an Okta session"
+        },
+        {
+          "item": "user.account.lock",
+          "match": "An account became locked out"
+        },
+        {
+          "item": "group.user_membership.add",
+          "match": "A user joined a group"
+        },
+        {
+          "item": "application.user_membership.add",
+          "match": "A user was assigned to an app"
+        },
+        {
+          "item": "policy.evaluate_sign_on",
+          "match": "A sign-on policy was evaluated"
+        }
+      ],
+      "targets_extra": [
+        "A support case was opened"
+      ],
+      "explanation": "Event types name the object and the action, which makes them easy to filter on. Support cases are handled outside the org and do not appear as System Log events."
+    },
+    {
+      "id": "D6-039",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "Within minutes, users across the whole company report that Okta sign-in is failing or very slow. What should the admin check FIRST?",
+      "choices": [
+        "The System Log for each user, one at a time",
+        "The password policy's lockout threshold",
+        "The Okta Community forum for similar posts",
+        "status.okta.com for an incident affecting the org's cell"
+      ],
+      "answer": "status.okta.com for an incident affecting the org's cell",
+      "explanation": "A sudden org-wide problem may be an Okta service incident, which is published on status.okta.com. Checking users one by one wastes time during a possible outage."
+    },
+    {
+      "id": "D6-040",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "An admin wants to be told automatically when Okta posts an incident or maintenance notice. What should the admin do?",
+      "choices": [
+        "Create a group rule that adds the admin team to a group",
+        "Subscribe to notifications on the Okta status page",
+        "Turn on an Early Access feature that sends incident alerts",
+        "Add the admins to the Everyone group"
+      ],
+      "answer": "Subscribe to notifications on the Okta status page",
+      "explanation": "The status page offers subscriptions for incident and maintenance updates. Group rules and features in the org do not send service status alerts."
+    },
+    {
+      "id": "D6-041",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "status.okta.com shows a degraded-performance incident for the cell that hosts the org, matching what users report. What is the BEST next step?",
+      "choices": [
+        "Reset the passwords of every user in the org",
+        "Rotate the signing certificates of every SAML app now",
+        "Follow the incident updates and tell users it is a known issue",
+        "Turn off the global session policy until it ends"
+      ],
+      "answer": "Follow the incident updates and tell users it is a known issue",
+      "explanation": "During a published incident the right step is to communicate and follow Okta's updates. Changing credentials or policies would add risk without fixing the service."
+    },
+    {
+      "id": "D6-042",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "The status page shows every service as operational, but one user cannot sign in. What should the admin do next?",
+      "choices": [
+        "Review that user's events in the System Log",
+        "Wait for Okta to post an incident on the status page",
+        "Open a support case at the highest severity level",
+        "Reset the authenticators of every user"
+      ],
+      "answer": "Review that user's events in the System Log",
+      "explanation": "When the service is healthy, a single-user issue is usually an account or policy problem that the System Log explains. It does not justify a top-severity case."
+    },
+    {
+      "id": "D6-043",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "An admin needs to know whether Okta plans maintenance that could affect sign-in this weekend. Where should the admin look?",
+      "choices": [
+        "The System Log events filtered for maintenance activity",
+        "The scheduled maintenance listed on status.okta.com",
+        "The Okta Usage report for last week",
+        "The release notes for the Preview org"
+      ],
+      "answer": "The scheduled maintenance listed on status.okta.com",
+      "explanation": "The status page lists scheduled maintenance as well as live incidents. The System Log only records what has already happened in the org."
+    },
+    {
+      "id": "D6-044",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "Users reach the Okta dashboard normally, but a third-party SaaS app fails for everyone with an error from the app itself. The Okta status page shows no incident. What is the BEST next step?",
+      "choices": [
+        "Open an Okta case at the highest severity",
+        "Clear the sessions of every user in the org",
+        "Check the app vendor's own status page and contact the vendor",
+        "Deactivate and reactivate every user assigned to the app"
+      ],
+      "answer": "Check the app vendor's own status page and contact the vendor",
+      "explanation": "Okta is healthy and the error comes from the app, so the vendor's status and support are the right place. Clearing sessions does not repair an app outage."
+    },
+    {
+      "id": "D6-045",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "During the Okta Certified Professional Performance exam, which resource does the study guide allow a candidate to use for looking up how to configure an Okta feature?",
+      "choices": [
+        "The Okta Help Center and its product documentation",
+        "The Okta developer forum discussions",
+        "The Okta status page at status.okta.com",
+        "The System Log of the exam org"
+      ],
+      "answer": "The Okta Help Center and its product documentation",
+      "explanation": "The Performance exam study guide allows access to the Okta Help Center, which links to the admin product documentation. The status page reports service health, not configuration steps."
+    },
+    {
+      "id": "D6-046",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "Okta documentation pages can be viewed for Identity Engine or Classic Engine. How can an admin tell which engine the org uses?",
+      "choices": [
+        "Look up the org's entry on status.okta.com for the engine type",
+        "Run the Okta Usage report for the org",
+        "Search the System Log for an engine event",
+        "Check the version shown in the Admin Console footer"
+      ],
+      "answer": "Check the version shown in the Admin Console footer",
+      "explanation": "The Admin Console footer shows the version with E for Identity Engine or C for Classic Engine. The status page shows service health, not the engine."
+    },
+    {
+      "id": "D6-047",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "A developer needs reference details for Okta's management APIs and SDKs. Which site BEST fits?",
+      "choices": [
+        "developer.okta.com",
+        "status.okta.com",
+        "help.okta.com release notes",
+        "The Okta Community ideas board"
+      ],
+      "answer": "developer.okta.com",
+      "explanation": "developer.okta.com hosts the API reference, SDK guides and developer tutorials. The status page and release notes do not document API calls."
+    },
+    {
+      "id": "D6-048",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "An admin follows a documentation page, but the menu names and steps do not match the Admin Console of an Identity Engine org. What is the MOST likely reason?",
+      "choices": [
+        "The org has moved to a different Okta cell since then",
+        "The admin is reading the Classic Engine version of the page",
+        "The admin lacks the Report Administrator role",
+        "The page only applies to Preview orgs"
+      ],
+      "answer": "The admin is reading the Classic Engine version of the page",
+      "explanation": "Okta publishes separate Identity Engine and Classic Engine versions of many pages, and terms differ between them. The cell does not change the console menus."
+    },
+    {
+      "id": "D6-049",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "An admin is setting up SAML for an app from the Okta Integration Network and needs the vendor-specific values to enter on the app's side. Where is the BEST place to find them?",
+      "choices": [
+        "The Okta status page for the org's cell",
+        "The Okta Password Health report",
+        "The setup instructions linked from the app's Sign On tab",
+        "The System Log filtered to the app"
+      ],
+      "answer": "The setup instructions linked from the app's Sign On tab",
+      "explanation": "OIN SAML integrations link to setup instructions that explain what to configure in the app. The System Log shows events, not configuration values."
+    },
+    {
+      "id": "D6-050",
+      "objective": "6.2",
+      "topic": "Okta Product Documentation",
+      "stem": "A new admin wants to compare exactly which permissions each standard administrator role includes before assigning one. Where should the admin look?",
+      "choices": [
+        "The Okta status page incident history",
+        "The Application Usage report for the org",
+        "The release notes for the next Preview release of the Admin Console",
+        "The standard roles and permissions page in the Okta documentation"
+      ],
+      "answer": "The standard roles and permissions page in the Okta documentation",
+      "explanation": "Okta's documentation has a comparison of standard roles and their permissions. The Admin Role Assignments report shows who holds roles, but the documentation explains what each role can do."
+    },
+    {
+      "id": "D6-051",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "The release notes describe a self-service Early Access feature that an admin cannot find in the org. Where should the admin turn it on?",
+      "choices": [
+        "Security > Authenticators in the Admin Console",
+        "The Okta status page subscription settings",
+        "Settings > Features in the Admin Console",
+        "Reports > System Log in the Admin Console"
+      ],
+      "answer": "Settings > Features in the Admin Console",
+      "explanation": "Self-service Early Access features are enabled by an admin on the Features page under Settings. Authenticator settings do not list new product features."
+    },
+    {
+      "id": "D6-052",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "What is the main purpose of an Okta Preview org compared with a Production org?",
+      "choices": [
+        "It keeps System Log events for much longer than a Production org does",
+        "It allows unlimited users without a contract",
+        "It is the only type of Okta org that can host SAML single sign-on apps",
+        "It receives each release earlier so admins can test changes first"
+      ],
+      "answer": "It receives each release earlier so admins can test changes first",
+      "explanation": "Preview orgs get releases before Production orgs, giving admins time to test. Log retention and app support are not what makes a Preview org different."
+    },
+    {
+      "id": "D6-053",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "Where should an admin read about the features and fixes included in Okta's latest release?",
+      "choices": [
+        "The release notes in the Okta documentation",
+        "The System Log for the release weekend",
+        "The Okta Usage report for the month",
+        "The org's authenticator enrollment policy"
+      ],
+      "answer": "The release notes in the Okta documentation",
+      "explanation": "Okta publishes release notes for each release in its documentation. The System Log records org activity, not product changes."
+    },
+    {
+      "id": "D6-054",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "Which statement BEST describes an Early Access feature?",
+      "choices": [
+        "A feature that Okta turns on for every org automatically at release",
+        "An optional feature admins can turn on before general availability",
+        "A feature that only Okta Support staff can see",
+        "A feature that has been retired from the product"
+      ],
+      "answer": "An optional feature admins can turn on before general availability",
+      "explanation": "Early Access features are opt-in and come before general availability. Features that are on for everyone are generally available."
+    },
+    {
+      "id": "D6-055",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "After a weekend, the admin notices that a page in the Admin Console looks different, and no one in the company changed any settings. What is the BEST way to find out whether an Okta release explains it?",
+      "choices": [
+        "Check status.okta.com for an active incident",
+        "Search the System Log for admin changes",
+        "Post the question on the Okta Community forum and wait for replies",
+        "Read the release notes for the most recent release"
+      ],
+      "answer": "Read the release notes for the most recent release",
+      "explanation": "Release notes list interface changes that came with a release. The System Log would show admin changes, which the scenario already rules out."
+    },
+    {
+      "id": "D6-056",
+      "objective": "6.2",
+      "topic": "Release Notes and Early Access Features",
+      "stem": "A release note says a new feature is available, but it appears in the company's Preview org and not yet in its Production org. What is the MOST likely reason?",
+      "choices": [
+        "The Production org needs a separate support case for every new feature",
+        "Production orgs never receive Early Access features from a release",
+        "Releases reach Preview orgs before they reach Production orgs",
+        "The Production org is hosted on a slower Okta cell"
+      ],
+      "answer": "Releases reach Preview orgs before they reach Production orgs",
+      "explanation": "Okta rolls each release to Preview orgs first and to Production orgs later. Production orgs can use Early Access features once they arrive."
+    },
+    {
+      "id": "D6-057",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "An admin wants advice from other Okta customers on how they structure groups for many subsidiaries. Which resource BEST fits?",
+      "choices": [
+        "The Okta Community forum",
+        "The Okta status page",
+        "A highest-severity support case",
+        "The System Log of the org"
+      ],
+      "answer": "The Okta Community forum",
+      "explanation": "The Community forum is where customers and Okta staff discuss design questions. A support case is for problems with the org, not peer advice."
+    },
+    {
+      "id": "D6-058",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "An admin wants Okta to add a feature that does not exist yet. What is the BEST way to request it?",
+      "choices": [
+        "Open a highest-severity support case",
+        "Submit or vote for an idea in the Okta Community",
+        "Post the request on the status page",
+        "Turn on every Early Access feature"
+      ],
+      "answer": "Submit or vote for an idea in the Okta Community",
+      "explanation": "Okta collects feature requests as ideas in its Community, where others can vote on them. Support cases are for help with the current product."
+    },
+    {
+      "id": "D6-059",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "Users see a specific error message during SSO, and the admin suspects it is a known issue. What is the quickest resource to check before opening a case?",
+      "choices": [
+        "The incident history on the Okta status page for the org's cell",
+        "The knowledge base articles in the Okta Help Center",
+        "The Okta Usage report for the org",
+        "The certification study guide"
+      ],
+      "answer": "The knowledge base articles in the Okta Help Center",
+      "explanation": "Knowledge base articles explain known errors and their fixes. The status page covers service incidents, not specific configuration errors."
+    },
+    {
+      "id": "D6-060",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "A new Okta admin wants structured courses and practice environments to build skills. Which resource BEST fits?",
+      "choices": [
+        "The Okta status page",
+        "The Okta developer API reference",
+        "Okta Learning",
+        "The Okta knowledge base search"
+      ],
+      "answer": "Okta Learning",
+      "explanation": "Okta Learning offers courses and learning paths for admins. The API reference documents calls but does not teach administration."
+    },
+    {
+      "id": "D6-061",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "A candidate wants the official study guide and registration details for the Okta Certified Professional exam. Where should the candidate look?",
+      "choices": [
+        "The Okta status page",
+        "The Admin Console Features page",
+        "The System Log of the org",
+        "The Okta Certification site"
+      ],
+      "answer": "The Okta Certification site",
+      "explanation": "The Okta Certification site publishes exam study guides and registration information. The Features page only lists product features."
+    },
+    {
+      "id": "D6-062",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "A developer has a question about calling an Okta API from custom code and wants help from other developers. Which resource BEST fits?",
+      "choices": [
+        "The Okta Developer Forum",
+        "The Okta status page",
+        "The Okta Usage report",
+        "The Admin Role Assignments report"
+      ],
+      "answer": "The Okta Developer Forum",
+      "explanation": "The Developer Forum is the community space for API and SDK questions. Reports describe the org, not how to write code against Okta."
+    },
+    {
+      "id": "D6-063",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "An admin has a problem that the documentation and knowledge base do not solve. Where should the admin open a support case?",
+      "choices": [
+        "On the Okta status page incident form",
+        "In the Okta Community ideas board",
+        "In the Okta Help Center under Get Support",
+        "In the Admin Console System Log"
+      ],
+      "answer": "In the Okta Help Center under Get Support",
+      "explanation": "Support cases are opened through the Okta Help Center's support section. The Community ideas board is for feature requests."
+    },
+    {
+      "id": "D6-064",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "Okta Support asks an admin which org a new case is about. Which detail identifies the org MOST precisely?",
+      "choices": [
+        "The org's Okta URL, such as example.okta.com",
+        "The admin's personal email address",
+        "The name of the company's HR system",
+        "The expiry date of an app's SAML certificate"
+      ],
+      "answer": "The org's Okta URL, such as example.okta.com",
+      "explanation": "Each Okta org has its own URL, which lets Support locate the exact org and its cell. An email address, HR system or certificate date does not identify the org."
+    },
+    {
+      "id": "D6-065",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "Okta Support is investigating a browser-based SSO failure and asks for a capture of the network traffic during the failing attempt. What should the admin provide?",
+      "choices": [
+        "The Okta Password Health report",
+        "A HAR file recorded while the failure happens",
+        "A copy of the global session policy",
+        "The Admin Role Assignments report"
+      ],
+      "answer": "A HAR file recorded while the failure happens",
+      "explanation": "A HAR file records the browser's requests and responses, showing where the SSO flow breaks. Reports do not capture what the browser exchanged."
+    },
+    {
+      "id": "D6-066",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "Okta Support asks for permission to sign in to the org to look at a configuration problem. Where does an admin grant this?",
+      "choices": [
+        "Security > Administrators, by adding Okta Support as an admin user",
+        "Directory > People, by creating a new user account for Okta Support",
+        "Reports > System Log, by sharing the current filter",
+        "Settings > Account, in the Give Access to Okta Support section"
+      ],
+      "answer": "Settings > Account, in the Give Access to Okta Support section",
+      "explanation": "Okta Support access is granted from the Account settings page, without creating accounts for Support staff. Creating a user for Support would add an unmanaged account."
+    },
+    {
+      "id": "D6-067",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "What does selecting Grant impersonation for a case give Okta Support?",
+      "choices": [
+        "Super Administrator access until the case closes",
+        "Access to the org's user passwords for one week",
+        "Read-only admin access to the org for 24 hours",
+        "Permanent read-only access to the System Log"
+      ],
+      "answer": "Read-only admin access to the org for 24 hours",
+      "explanation": "Impersonation for a case gives Support read-only admin access for 24 hours. It never grants super admin rights or password access."
+    },
+    {
+      "id": "D6-068",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "Which of these issues justifies the highest severity when opening an Okta support case?",
+      "choices": [
+        "A question about a feature in a Preview org",
+        "A request for a link to a documentation page",
+        "A spelling error on the custom sign-in page",
+        "No users can sign in to the production org"
+      ],
+      "answer": "No users can sign in to the production org",
+      "explanation": "The highest severity is for a production outage with major business impact. Questions and cosmetic issues use lower severities."
+    },
+    {
+      "id": "D6-069",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "When Okta Support opens a case itself and assigns it to an engineer, which setting lets that engineer access the org's settings?",
+      "choices": [
+        "Approving support access for self-assigned cases in the account settings",
+        "Adding the engineer to the Everyone group in the org",
+        "Turning on an Early Access feature for Okta Support",
+        "Sharing a saved System Log search with the engineer"
+      ],
+      "answer": "Approving support access for self-assigned cases in the account settings",
+      "explanation": "The Give Access to Okta Support section has a separate approval for cases that Support opens and assigns to itself. Adding Support staff to groups is not how access is given."
+    },
+    {
+      "id": "D6-070",
+      "objective": "6.2",
+      "topic": "Okta Status Page",
+      "stem": "The Okta status page lists the health of many separate cells. Which cell's status matters when the admin's users report problems?",
+      "choices": [
+        "The cell nearest to each user's location",
+        "The cell that hosts the company's org",
+        "Every cell, because all orgs share them",
+        "The cell listed first on the status page"
+      ],
+      "answer": "The cell that hosts the company's org",
+      "explanation": "Each Okta org runs on one cell, so only that cell's status explains the org's problems. Users' locations do not change which cell serves the org."
+    },
+    {
+      "id": "D6-071",
+      "type": "order",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "Users report sign-in problems after a change. Put the support steps in the order an admin should follow.",
+      "items": [
+        "Check status.okta.com for an incident",
+        "Search the knowledge base for the error",
+        "Gather affected users, times and System Log events",
+        "Open a support case with a fitting severity",
+        "Grant Okta Support access if they ask for it"
+      ],
+      "explanation": "Ruling out an Okta incident and known issues first saves time; a case with good evidence is solved faster, and access is granted only when Support requests it."
+    },
+    {
+      "id": "D6-072",
+      "type": "multi",
+      "objective": "6.2",
+      "topic": "Support Cases and Support Access",
+      "stem": "An admin is opening a case about users failing to sign in. Which TWO items are MOST useful to include?",
+      "choices": [
+        "Timestamps with time zone and the affected usernames",
+        "The related System Log events",
+        "The affected users' passwords",
+        "A screenshot of the Okta marketing website",
+        "A list of every app in the org"
+      ],
+      "answers": [
+        "Timestamps with time zone and the affected usernames",
+        "The related System Log events"
+      ],
+      "select": 2,
+      "explanation": "Who, when and the matching events let Support trace the failure. Passwords must never be shared, and unrelated screenshots or app lists add noise."
+    },
+    {
+      "id": "D6-073",
+      "type": "match",
+      "objective": "6.2",
+      "topic": "Okta Community, Knowledge Base and Learning",
+      "stem": "Match each need to the Okta resource that BEST fits it.",
+      "pairs": [
+        {
+          "item": "Find out whether Okta has a live incident",
+          "match": "status.okta.com"
+        },
+        {
+          "item": "Look up admin configuration steps",
+          "match": "help.okta.com"
+        },
+        {
+          "item": "Read API reference material",
+          "match": "developer.okta.com"
+        },
+        {
+          "item": "Ask other customers for design advice",
+          "match": "Okta Community"
+        },
+        {
+          "item": "Take a structured admin course",
+          "match": "Okta Learning"
+        }
+      ],
+      "targets_extra": [
+        "The org's end-user dashboard"
+      ],
+      "explanation": "Each resource has a clear role: service health, product docs, developer docs, peer discussion and training. The end-user dashboard only launches apps."
     }
-   ],
-   "targets_extra": [
-    "A support case was opened"
-   ],
-   "explanation": "Event types name the object and the action, which makes them easy to filter on. Support cases are handled outside the org and do not appear as System Log events."
-  },
-  {
-   "id": "D6-039",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "Within minutes, users across the whole company report that Okta sign-in is failing or very slow. What should the admin check FIRST?",
-   "choices": [
-    "The System Log for each user, one at a time",
-    "The password policy for a recent change to the lockout threshold",
-    "The Okta Community forum for similar posts",
-    "status.okta.com for an incident affecting the org's cell"
-   ],
-   "answer": "status.okta.com for an incident affecting the org's cell",
-   "explanation": "A sudden org-wide problem may be an Okta service incident, which is published on status.okta.com. Checking users one by one wastes time during a possible outage."
-  },
-  {
-   "id": "D6-040",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "An admin wants to be told automatically when Okta posts an incident or maintenance notice. What should the admin do?",
-   "choices": [
-    "Create a group rule for the admin team",
-    "Subscribe to notifications on the Okta status page",
-    "Turn on an Early Access feature that sends incident alerts",
-    "Add the admins to the Everyone group"
-   ],
-   "answer": "Subscribe to notifications on the Okta status page",
-   "explanation": "The status page offers subscriptions for incident and maintenance updates. Group rules and features in the org do not send service status alerts."
-  },
-  {
-   "id": "D6-041",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "status.okta.com shows a degraded-performance incident for the cell that hosts the org, matching what users report. What is the BEST next step?",
-   "choices": [
-    "Reset the passwords of every user in the org",
-    "Rotate the signing certificates of every SAML app in the org now",
-    "Follow the incident updates and tell users it is a known issue",
-    "Turn off the global session policy until it ends"
-   ],
-   "answer": "Follow the incident updates and tell users it is a known issue",
-   "explanation": "During a published incident the right step is to communicate and follow Okta's updates. Changing credentials or policies would add risk without fixing the service."
-  },
-  {
-   "id": "D6-042",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "The status page shows every service as operational, but one user cannot sign in. What should the admin do next?",
-   "choices": [
-    "Review that user's events in the System Log",
-    "Wait for Okta to post an incident on the status page",
-    "Open a support case at the highest severity",
-    "Reset the authenticators of every user"
-   ],
-   "answer": "Review that user's events in the System Log",
-   "explanation": "When the service is healthy, a single-user issue is usually an account or policy problem that the System Log explains. It does not justify a top-severity case."
-  },
-  {
-   "id": "D6-043",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "An admin needs to know whether Okta plans maintenance that could affect sign-in this weekend. Where should the admin look?",
-   "choices": [
-    "The System Log events filtered for maintenance activity",
-    "The scheduled maintenance listed on status.okta.com",
-    "The Okta Usage report for last week",
-    "The release notes for the Preview org"
-   ],
-   "answer": "The scheduled maintenance listed on status.okta.com",
-   "explanation": "The status page lists scheduled maintenance as well as live incidents. The System Log only records what has already happened in the org."
-  },
-  {
-   "id": "D6-044",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "Users reach the Okta dashboard normally, but a third-party SaaS app fails for everyone with an error from the app itself. The Okta status page shows no incident. What is the BEST next step?",
-   "choices": [
-    "Open an Okta case at the highest severity",
-    "Clear the sessions of every user in the org",
-    "Check the app vendor's own status page and contact the vendor",
-    "Deactivate and reactivate every user assigned to the app in Okta"
-   ],
-   "answer": "Check the app vendor's own status page and contact the vendor",
-   "explanation": "Okta is healthy and the error comes from the app, so the vendor's status and support are the right place. Clearing sessions does not repair an app outage."
-  },
-  {
-   "id": "D6-045",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "During the Okta Certified Professional Performance exam, which resource does the study guide allow a candidate to use for looking up how to configure an Okta feature?",
-   "choices": [
-    "The Okta Help Center and its product documentation",
-    "The Okta developer forum discussions",
-    "The Okta status page at status.okta.com",
-    "The System Log of the exam org"
-   ],
-   "answer": "The Okta Help Center and its product documentation",
-   "explanation": "The Performance exam study guide allows access to the Okta Help Center, which links to the admin product documentation. The status page reports service health, not configuration steps."
-  },
-  {
-   "id": "D6-046",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "Okta documentation pages can be viewed for Identity Engine or Classic Engine. How can an admin tell which engine the org uses?",
-   "choices": [
-    "Look up the org's entry on status.okta.com for the engine type",
-    "Run the Okta Usage report for the org",
-    "Search the System Log for an engine event",
-    "Check the version shown in the Admin Console footer"
-   ],
-   "answer": "Check the version shown in the Admin Console footer",
-   "explanation": "The Admin Console footer shows the version with E for Identity Engine or C for Classic Engine. The status page shows service health, not the engine."
-  },
-  {
-   "id": "D6-047",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "A developer needs reference details for Okta's management APIs and SDKs. Which site BEST fits?",
-   "choices": [
-    "developer.okta.com",
-    "status.okta.com",
-    "help.okta.com release notes",
-    "The Okta Community ideas board"
-   ],
-   "answer": "developer.okta.com",
-   "explanation": "developer.okta.com hosts the API reference, SDK guides and developer tutorials. The status page and release notes do not document API calls."
-  },
-  {
-   "id": "D6-048",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "An admin follows a documentation page, but the menu names and steps do not match the Admin Console of an Identity Engine org. What is the MOST likely reason?",
-   "choices": [
-    "The org has been moved to a different Okta cell since the page was written",
-    "The admin is reading the Classic Engine version of the page",
-    "The admin lacks the Report Administrator role",
-    "The page only applies to Preview orgs"
-   ],
-   "answer": "The admin is reading the Classic Engine version of the page",
-   "explanation": "Okta publishes separate Identity Engine and Classic Engine versions of many pages, and terms differ between them. The cell does not change the console menus."
-  },
-  {
-   "id": "D6-049",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "An admin is setting up SAML for an app from the Okta Integration Network and needs the vendor-specific values to enter on the app's side. Where is the BEST place to find them?",
-   "choices": [
-    "The Okta status page for the org's cell",
-    "The Okta Password Health report",
-    "The setup instructions linked from the app's Sign On tab",
-    "The System Log filtered to the app"
-   ],
-   "answer": "The setup instructions linked from the app's Sign On tab",
-   "explanation": "OIN SAML integrations link to setup instructions that explain what to configure in the app. The System Log shows events, not configuration values."
-  },
-  {
-   "id": "D6-050",
-   "objective": "6.2",
-   "topic": "Okta Product Documentation",
-   "stem": "A new admin wants to compare exactly which permissions each standard administrator role includes before assigning one. Where should the admin look?",
-   "choices": [
-    "The Okta status page incident history",
-    "The Application Usage report for the org",
-    "The release notes for the next Preview release of the Admin Console",
-    "The standard roles and permissions page in the Okta documentation"
-   ],
-   "answer": "The standard roles and permissions page in the Okta documentation",
-   "explanation": "Okta's documentation has a comparison of standard roles and their permissions. The Admin Role Assignments report shows who holds roles, but the documentation explains what each role can do."
-  },
-  {
-   "id": "D6-051",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "The release notes describe a self-service Early Access feature that an admin cannot find in the org. Where should the admin turn it on?",
-   "choices": [
-    "Security > Authenticators in the Admin Console",
-    "The Okta status page subscription settings",
-    "Settings > Features in the Admin Console",
-    "Reports > System Log in the Admin Console"
-   ],
-   "answer": "Settings > Features in the Admin Console",
-   "explanation": "Self-service Early Access features are enabled by an admin on the Features page under Settings. Authenticator settings do not list new product features."
-  },
-  {
-   "id": "D6-052",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "What is the main purpose of an Okta Preview org compared with a Production org?",
-   "choices": [
-    "It keeps System Log events for much longer than a Production org does",
-    "It allows unlimited users without a contract",
-    "It is the only org type that supports SAML apps",
-    "It receives each release earlier so admins can test changes first"
-   ],
-   "answer": "It receives each release earlier so admins can test changes first",
-   "explanation": "Preview orgs get releases before Production orgs, giving admins time to test. Log retention and app support are not what makes a Preview org different."
-  },
-  {
-   "id": "D6-053",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "Where should an admin read about the features and fixes included in Okta's latest release?",
-   "choices": [
-    "The release notes in the Okta documentation",
-    "The System Log for the release weekend",
-    "The Okta Usage report for the month",
-    "The org's authenticator enrollment policy"
-   ],
-   "answer": "The release notes in the Okta documentation",
-   "explanation": "Okta publishes release notes for each release in its documentation. The System Log records org activity, not product changes."
-  },
-  {
-   "id": "D6-054",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "Which statement BEST describes an Early Access feature?",
-   "choices": [
-    "A feature that Okta turns on for every org automatically at release",
-    "An optional feature admins can turn on before general availability",
-    "A feature that only Okta Support staff can see",
-    "A feature that has been retired from the product"
-   ],
-   "answer": "An optional feature admins can turn on before general availability",
-   "explanation": "Early Access features are opt-in and come before general availability. Features that are on for everyone are generally available."
-  },
-  {
-   "id": "D6-055",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "After a weekend, the admin notices that a page in the Admin Console looks different, and no one in the company changed any settings. What is the BEST way to find out whether an Okta release explains it?",
-   "choices": [
-    "Check status.okta.com for an active incident",
-    "Search the System Log for admin changes",
-    "Post the question on the Okta Community forum and wait for replies",
-    "Read the release notes for the most recent release"
-   ],
-   "answer": "Read the release notes for the most recent release",
-   "explanation": "Release notes list interface changes that came with a release. The System Log would show admin changes, which the scenario already rules out."
-  },
-  {
-   "id": "D6-056",
-   "objective": "6.2",
-   "topic": "Release Notes and Early Access Features",
-   "stem": "A release note says a new feature is available, but it appears in the company's Preview org and not yet in its Production org. What is the MOST likely reason?",
-   "choices": [
-    "The Production org needs a separate support case for every new feature",
-    "Production orgs never receive Early Access features",
-    "Releases reach Preview orgs before they reach Production orgs",
-    "The Production org is hosted on a slower Okta cell"
-   ],
-   "answer": "Releases reach Preview orgs before they reach Production orgs",
-   "explanation": "Okta rolls each release to Preview orgs first and to Production orgs later. Production orgs can use Early Access features once they arrive."
-  },
-  {
-   "id": "D6-057",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "An admin wants advice from other Okta customers on how they structure groups for many subsidiaries. Which resource BEST fits?",
-   "choices": [
-    "The Okta Community forum",
-    "The Okta status page",
-    "A highest-severity support case",
-    "The System Log of the org"
-   ],
-   "answer": "The Okta Community forum",
-   "explanation": "The Community forum is where customers and Okta staff discuss design questions. A support case is for problems with the org, not peer advice."
-  },
-  {
-   "id": "D6-058",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "An admin wants Okta to add a feature that does not exist yet. What is the BEST way to request it?",
-   "choices": [
-    "Open a highest-severity support case",
-    "Submit or vote for an idea in the Okta Community",
-    "Post the request on the status page",
-    "Turn on every Early Access feature"
-   ],
-   "answer": "Submit or vote for an idea in the Okta Community",
-   "explanation": "Okta collects feature requests as ideas in its Community, where others can vote on them. Support cases are for help with the current product."
-  },
-  {
-   "id": "D6-059",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "Users see a specific error message during SSO, and the admin suspects it is a known issue. What is the quickest resource to check before opening a case?",
-   "choices": [
-    "The incident history on the Okta status page for the org's cell",
-    "The knowledge base articles in the Okta Help Center",
-    "The Okta Usage report for the org",
-    "The certification study guide"
-   ],
-   "answer": "The knowledge base articles in the Okta Help Center",
-   "explanation": "Knowledge base articles explain known errors and their fixes. The status page covers service incidents, not specific configuration errors."
-  },
-  {
-   "id": "D6-060",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "A new Okta admin wants structured courses and practice environments to build skills. Which resource BEST fits?",
-   "choices": [
-    "The Okta status page",
-    "The Okta developer API reference",
-    "Okta Learning",
-    "The Okta knowledge base search"
-   ],
-   "answer": "Okta Learning",
-   "explanation": "Okta Learning offers courses and learning paths for admins. The API reference documents calls but does not teach administration."
-  },
-  {
-   "id": "D6-061",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "A candidate wants the official study guide and registration details for the Okta Certified Professional exam. Where should the candidate look?",
-   "choices": [
-    "The Okta status page",
-    "The Admin Console Features page",
-    "The System Log of the org",
-    "The Okta Certification site"
-   ],
-   "answer": "The Okta Certification site",
-   "explanation": "The Okta Certification site publishes exam study guides and registration information. The Features page only lists product features."
-  },
-  {
-   "id": "D6-062",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "A developer has a question about calling an Okta API from custom code and wants help from other developers. Which resource BEST fits?",
-   "choices": [
-    "The Okta Developer Forum",
-    "The Okta status page",
-    "The Okta Usage report",
-    "The Admin Role Assignments report"
-   ],
-   "answer": "The Okta Developer Forum",
-   "explanation": "The Developer Forum is the community space for API and SDK questions. Reports describe the org, not how to write code against Okta."
-  },
-  {
-   "id": "D6-063",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "An admin has a problem that the documentation and knowledge base do not solve. Where should the admin open a support case?",
-   "choices": [
-    "On the Okta status page incident form",
-    "In the Okta Community ideas board",
-    "In the Okta Help Center under Get Support",
-    "In the Admin Console System Log"
-   ],
-   "answer": "In the Okta Help Center under Get Support",
-   "explanation": "Support cases are opened through the Okta Help Center's support section. The Community ideas board is for feature requests."
-  },
-  {
-   "id": "D6-064",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "Okta Support asks an admin which org a new case is about. Which detail identifies the org MOST precisely?",
-   "choices": [
-    "The org's Okta URL, such as example.okta.com",
-    "The admin's personal email address",
-    "The name of the company's HR system",
-    "The expiry date of an app's SAML certificate"
-   ],
-   "answer": "The org's Okta URL, such as example.okta.com",
-   "explanation": "Each Okta org has its own URL, which lets Support locate the exact org and its cell. An email address, HR system or certificate date does not identify the org."
-  },
-  {
-   "id": "D6-065",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "Okta Support is investigating a browser-based SSO failure and asks for a capture of the network traffic during the failing attempt. What should the admin provide?",
-   "choices": [
-    "The Okta Password Health report",
-    "A HAR file recorded while the failure happens",
-    "A copy of the global session policy",
-    "The Admin Role Assignments report"
-   ],
-   "answer": "A HAR file recorded while the failure happens",
-   "explanation": "A HAR file records the browser's requests and responses, showing where the SSO flow breaks. Reports do not capture what the browser exchanged."
-  },
-  {
-   "id": "D6-066",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "Okta Support asks for permission to sign in to the org to look at a configuration problem. Where does an admin grant this?",
-   "choices": [
-    "Security > Administrators, by adding Support as a user",
-    "Directory > People, by creating a new user account for Okta Support",
-    "Reports > System Log, by sharing the current filter",
-    "Settings > Account, in the Give Access to Okta Support section"
-   ],
-   "answer": "Settings > Account, in the Give Access to Okta Support section",
-   "explanation": "Okta Support access is granted from the Account settings page, without creating accounts for Support staff. Creating a user for Support would add an unmanaged account."
-  },
-  {
-   "id": "D6-067",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "What does selecting Grant impersonation for a case give Okta Support?",
-   "choices": [
-    "Super Administrator access until the case closes",
-    "Access to the org's user passwords for one week",
-    "Read-only admin access to the org for 24 hours",
-    "Permanent read-only access to the System Log"
-   ],
-   "answer": "Read-only admin access to the org for 24 hours",
-   "explanation": "Impersonation for a case gives Support read-only admin access for 24 hours. It never grants super admin rights or password access."
-  },
-  {
-   "id": "D6-068",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "Which of these issues justifies the highest severity when opening an Okta support case?",
-   "choices": [
-    "A question about a feature in a Preview org",
-    "A request for a link to a documentation page",
-    "A spelling error on the custom sign-in page",
-    "No users can sign in to the production org"
-   ],
-   "answer": "No users can sign in to the production org",
-   "explanation": "The highest severity is for a production outage with major business impact. Questions and cosmetic issues use lower severities."
-  },
-  {
-   "id": "D6-069",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "When Okta Support opens a case itself and assigns it to an engineer, which setting lets that engineer access the org's settings?",
-   "choices": [
-    "Approving support access for self-assigned cases in the account settings",
-    "Adding the engineer to the Everyone group in the org",
-    "Turning on an Early Access feature for Okta Support",
-    "Sharing a saved System Log search with the assigned support engineer by email"
-   ],
-   "answer": "Approving support access for self-assigned cases in the account settings",
-   "explanation": "The Give Access to Okta Support section has a separate approval for cases that Support opens and assigns to itself. Adding Support staff to groups is not how access is given."
-  },
-  {
-   "id": "D6-070",
-   "objective": "6.2",
-   "topic": "Okta Status Page",
-   "stem": "The Okta status page lists the health of many separate cells. Which cell's status matters when the admin's users report problems?",
-   "choices": [
-    "The cell nearest to each user's location",
-    "The cell that hosts the company's org",
-    "Every cell, because all orgs share them",
-    "The cell listed first on the status page"
-   ],
-   "answer": "The cell that hosts the company's org",
-   "explanation": "Each Okta org runs on one cell, so only that cell's status explains the org's problems. Users' locations do not change which cell serves the org."
-  },
-  {
-   "id": "D6-071",
-   "type": "order",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "Users report sign-in problems after a change. Put the support steps in the order an admin should follow.",
-   "items": [
-    "Check status.okta.com for an incident",
-    "Search the knowledge base for the error",
-    "Gather affected users, times and System Log events",
-    "Open a support case with a fitting severity",
-    "Grant Okta Support access if they ask for it"
-   ],
-   "explanation": "Ruling out an Okta incident and known issues first saves time; a case with good evidence is solved faster, and access is granted only when Support requests it."
-  },
-  {
-   "id": "D6-072",
-   "type": "multi",
-   "objective": "6.2",
-   "topic": "Support Cases and Support Access",
-   "stem": "An admin is opening a case about users failing to sign in. Which TWO items are MOST useful to include?",
-   "choices": [
-    "Timestamps with time zone and the affected usernames",
-    "The related System Log events",
-    "The affected users' passwords",
-    "A screenshot of the Okta marketing website",
-    "A list of every app in the org"
-   ],
-   "answers": [
-    "Timestamps with time zone and the affected usernames",
-    "The related System Log events"
-   ],
-   "select": 2,
-   "explanation": "Who, when and the matching events let Support trace the failure. Passwords must never be shared, and unrelated screenshots or app lists add noise."
-  },
-  {
-   "id": "D6-073",
-   "type": "match",
-   "objective": "6.2",
-   "topic": "Okta Community, Knowledge Base and Learning",
-   "stem": "Match each need to the Okta resource that BEST fits it.",
-   "pairs": [
-    {
-     "item": "Find out whether Okta has a live incident",
-     "match": "status.okta.com"
-    },
-    {
-     "item": "Look up admin configuration steps",
-     "match": "help.okta.com"
-    },
-    {
-     "item": "Read API reference material",
-     "match": "developer.okta.com"
-    },
-    {
-     "item": "Ask other customers for design advice",
-     "match": "Okta Community"
-    },
-    {
-     "item": "Take a structured admin course",
-     "match": "Okta Learning"
-    }
-   ],
-   "targets_extra": [
-    "The org's end-user dashboard"
-   ],
-   "explanation": "Each resource has a clear role: service health, product docs, developer docs, peer discussion and training. The end-user dashboard only launches apps."
-  }
- ]
+  ]
 }
