@@ -192,11 +192,11 @@
    "stem": "Escalations are enabled, but no custom escalation chain has been configured. Where do the escalations go?",
    "choices": [
     "All escalations go to the source owner of the access item, then to the org admins",
-    "Twice to the assigned reviewer's manager, then to the fallback approver",
+    "First two to the current reviewer's manager, then the fallback approver",
     "The first goes to the requester, then to any org admin",
     "All escalations go to the fallback approver right away"
    ],
-   "answer": "Twice to the assigned reviewer's manager, then to the fallback approver",
+   "answer": "First two to the current reviewer's manager, then the fallback approver",
    "explanation": "The default pattern escalates to the manager of the assigned reviewer twice and then to the fallback approver. Source owners and requesters are not default escalation targets."
   },
   {
@@ -503,21 +503,21 @@
    "id": "D3-035",
    "type": "multi",
    "objective": "3.1",
-   "topic": "Segment Use Cases",
-   "stem": "Which TWO requirements are good use cases for access request segments?",
+   "topic": "Segment Configuration",
+   "stem": "An engineer is explaining segment behaviour to the access governance team. Which TWO statements are correct?",
    "choices": [
-    "Show a regional system's access profiles only to staff in that region",
-    "Give contractors a smaller requestable catalog than employees",
-    "Prevent one person holding both vendor setup and payment approval",
-    "Remove access automatically when an employee leaves",
-    "Limit which admins can view identity details"
+    "Access items that are in no segment are visible to every requester",
+    "Org admins see all access items in the Request Center regardless of segments",
+    "Segments remove access from identities that no longer match the criteria",
+    "One segment can match two values of the same attribute with an OR",
+    "Segments stop role membership criteria from assigning access"
    ],
    "answers": [
-    "Show a regional system's access profiles only to staff in that region",
-    "Give contractors a smaller requestable catalog than employees"
+    "Access items that are in no segment are visible to every requester",
+    "Org admins see all access items in the Request Center regardless of segments"
    ],
    "select": 2,
-   "explanation": "Segments control which access items requesters see. SoD policies, lifecycle states and data segmentation handle the other requirements."
+   "explanation": "Unsegmented items are requestable by anyone and org admins always see everything. Segments never remove access or affect role assignment, and an OR between values needs separate segments."
   }
  ]
 }

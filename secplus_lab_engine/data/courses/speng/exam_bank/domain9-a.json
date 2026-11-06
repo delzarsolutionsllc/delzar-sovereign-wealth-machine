@@ -37,12 +37,12 @@
    "topic": "Encryption in Transit",
    "stem": "An auditor asks whether AD data is encrypted all the way from the domain controllers to the tenant. The AD source uses plain LDAP. What is the BEST answer?",
    "choices": [
-    "All hops are encrypted because the VA tunnels everything",
-    "VA-to-cloud traffic uses TLS, but VA-to-DC traffic is encrypted only with LDAPS",
+    "All hops are encrypted because the VA tunnels all of its traffic",
+    "The VA-to-cloud hop uses TLS; the VA-to-DC hop needs LDAPS",
     "No hop is encrypted until data is stored at rest",
     "Only the hop from the DC to the VA is encrypted"
    ],
-   "answer": "VA-to-cloud traffic uses TLS, but VA-to-DC traffic is encrypted only with LDAPS",
+   "answer": "The VA-to-cloud hop uses TLS; the VA-to-DC hop needs LDAPS",
    "explanation": "The VA-to-tenant link is always TLS, but the hop to the target follows the source's own settings. Turning on SSL for the source closes the gap."
   },
   {
@@ -68,7 +68,7 @@
     "The cloud starts all connections into the VAs",
     "The VAs start all connections outbound; the cloud never connects in",
     "Each side starts connections for its own tasks",
-    "Connections start from the domain controllers to the cloud"
+    "Connections start from the domain controllers directly into the cloud"
    ],
    "answer": "The VAs start all connections outbound; the cloud never connects in",
    "explanation": "Because VAs initiate outbound connections, no inbound ports from the internet are opened. Domain controllers never talk to the cloud directly."
@@ -80,11 +80,11 @@
    "stem": "The AD connector uses IQService on a Windows server for mailbox creation. Security requires that link to be encrypted. What does the design need?",
    "choices": [
     "IQService installed on the VA itself",
-    "IQService reached through the SailPoint cloud",
+    "IQService reached through the SailPoint cloud instead of the VA",
     "IQService protected only by an IP allow list",
-    "IQService configured for TLS with a certificate the VAs trust"
+    "IQService set up for TLS with a certificate the VAs trust"
    ],
-   "answer": "IQService configured for TLS with a certificate the VAs trust",
+   "answer": "IQService set up for TLS with a certificate the VAs trust",
    "explanation": "IQService supports TLS, and the VAs must trust its certificate to connect. Allow lists limit who connects but do not encrypt."
   },
   {
@@ -93,12 +93,12 @@
    "topic": "Encryption in Transit",
    "stem": "A security reviewer worries that new passwords typed into ISC could be read by SailPoint in transit to the target. What design feature addresses this?",
    "choices": [
-    "The tenant stores the password in clear text for one hour",
+    "The tenant stores the password in clear text for one hour, then deletes it",
     "The VA emails the password to the target owner",
-    "The browser encrypts the password with the VA's public key before sending it",
+    "The browser encrypts it with the VA's public key before sending",
     "The browser sends the password over plain HTTP to the VA"
    ],
-   "answer": "The browser encrypts the password with the VA's public key before sending it",
+   "answer": "The browser encrypts it with the VA's public key before sending",
    "explanation": "With zero knowledge encryption, the password is encrypted in the browser with the VA's 2048-bit RSA public key so only the VA can decrypt it. SailPoint's cloud cannot read it."
   },
   {
@@ -108,7 +108,7 @@
    "stem": "Which statement BEST describes how ISC protects tenant data at rest?",
    "choices": [
     "It is encrypted with strong encryption such as AES-256",
-    "It is stored in clear text inside a private network",
+    "It is stored in clear text inside a private, firewalled network",
     "It is encrypted only when a customer opts in",
     "It is protected only by user levels"
    ],
@@ -124,7 +124,7 @@
     "SailPoint, because it came from the tenant",
     "The customer, because it now sits outside SailPoint's cloud",
     "The VA, because it encrypts all exports",
-    "The source owner, because the data came from their app"
+    "The source owner, because the data first came from their application"
    ],
    "answer": "The customer, because it now sits outside SailPoint's cloud",
    "explanation": "Once data leaves the tenant, the customer must protect it under its own policies. SailPoint's encryption at rest covers data in the cloud service."
@@ -137,7 +137,7 @@
    "choices": [
     "Copy the logs to a public file share for review",
     "Disable logging on every VA",
-    "Store the VA disk images on removable media",
+    "Store copies of the VA disk images on removable media at another site",
     "Restrict console and SSH access to the VAs and their hypervisor"
    ],
    "answer": "Restrict console and SSH access to the VAs and their hypervisor",
@@ -150,7 +150,7 @@
    "stem": "An auditor asks whether tenant backups are protected the same way as live data. What is the BEST answer?",
    "choices": [
     "No, backups are stored in clear text for speed",
-    "No, customers must encrypt SailPoint's backups",
+    "No, customers must encrypt SailPoint's backups with their own keys",
     "Yes, backups are encrypted at rest like live tenant data",
     "Yes, but only for flat file sources"
    ],
@@ -194,7 +194,7 @@
     "Collect only the attributes and accounts the program needs",
     "Add more identity attributes for future use",
     "Store national IDs as identity attributes",
-    "Aggregate every source as often as possible"
+    "Aggregate every source as often as possible to keep data fresh"
    ],
    "answer": "Collect only the attributes and accounts the program needs",
    "explanation": "Data minimization limits what could ever be exposed. More attributes or more frequent runs increase exposure."
@@ -206,11 +206,11 @@
    "stem": "An admin saves the password for a VA-based source. Who can decrypt it?",
    "choices": [
     "Any SailPoint support engineer",
-    "Only the VAs in the source's cluster, which hold the private key",
+    "Only the VAs in the source's cluster",
     "Any admin with the Source Admin user level",
     "Any VA in any cluster of the tenant"
    ],
-   "answer": "Only the VAs in the source's cluster, which hold the private key",
+   "answer": "Only the VAs in the source's cluster",
    "explanation": "Source credentials are encrypted with the cluster's public key, and only that cluster's VAs hold the private key. Admins can replace credentials but not read them."
   },
   {
@@ -275,12 +275,12 @@
    "topic": "Credential Encryption and VA Keys",
    "stem": "A source is moved from one VA cluster to another. What should the engineer expect to do?",
    "choices": [
-    "Nothing, because credentials are shared by every cluster",
-    "Re-enter the source credentials so they are encrypted for the new cluster",
+    "Nothing, because the same credentials are shared by every cluster in the tenant",
+    "Re-enter the credentials so they are encrypted for the new cluster",
     "Copy the old cluster's config.yaml to the new VAs",
     "Ask SailPoint support to decrypt and move them"
    ],
-   "answer": "Re-enter the source credentials so they are encrypted for the new cluster",
+   "answer": "Re-enter the credentials so they are encrypted for the new cluster",
    "explanation": "Credentials are encrypted for a specific cluster's key, so the new cluster cannot use the old ciphertext. Copying files or asking SailPoint to decrypt breaks the key design."
   },
   {
@@ -290,11 +290,11 @@
    "stem": "Why does SailPoint design source credentials so that only the customer's VAs can decrypt them?",
    "choices": [
     "So that admins can read credentials in the Admin UI",
-    "So a compromise of the cloud service does not expose target system passwords",
+    "So a cloud breach does not expose target system passwords",
     "So credentials can be emailed to source owners",
-    "So that VAs can share credentials with other tenants"
+    "So that VAs can share saved credentials with other customers' tenants"
    ],
-   "answer": "So a compromise of the cloud service does not expose target system passwords",
+   "answer": "So a cloud breach does not expose target system passwords",
    "explanation": "Keeping the private key on customer VAs means the cloud stores only ciphertext. Admins cannot read saved credentials in the UI."
   },
   {
@@ -333,7 +333,7 @@
    "choices": [
     "One cluster per network, each with at least two VAs",
     "One cluster with one VA in each network",
-    "One VA total, with routes opened to both networks",
+    "One VA in total, with new routes opened to both networks",
     "One cluster in the cloud for both networks"
    ],
    "answer": "One cluster per network, each with at least two VAs",
@@ -347,7 +347,7 @@
    "choices": [
     "Place VAs from both data centers in the same cluster",
     "Place every VA in the primary data center",
-    "Keep one VA powered off in the secondary site",
+    "Keep one VA powered off in the secondary site until needed",
     "Rely on the tenant to run the connectors"
    ],
    "answer": "Place VAs from both data centers in the same cluster",
@@ -387,7 +387,7 @@
    "topic": "Virtual Appliance Redundancy",
    "stem": "Several large sources share one cluster, and aggregations queue behind each other. What is a sound design change?",
    "choices": [
-    "Remove VAs so tasks run in a fixed order",
+    "Remove VAs from the cluster so tasks run in a fixed, predictable order",
     "Add VAs to the cluster so more tasks can run in parallel",
     "Move every source to delimited files",
     "Set every source as authoritative"
@@ -431,7 +431,7 @@
    "choices": [
     "The tenant UI and APIs, but tasks for that cluster's sources wait",
     "Nothing, because the tenant depends on the VAs",
-    "All sources, because the cloud runs connectors instead",
+    "All sources, because the cloud runs the connectors itself instead of the VAs",
     "Only aggregations, but not provisioning"
    ],
    "answer": "The tenant UI and APIs, but tasks for that cluster's sources wait",
@@ -472,7 +472,7 @@
    "stem": "Why do customers not size or add servers for the ISC cloud service as their identity count grows?",
    "choices": [
     "Each tenant has a fixed server that never grows",
-    "Customers add capacity by adding identity profiles",
+    "Customers add capacity by adding more identity profiles",
     "SailPoint scales the multi-tenant services for them",
     "Capacity comes only from adding VAs"
    ],

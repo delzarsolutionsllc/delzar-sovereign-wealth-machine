@@ -9,12 +9,12 @@
    "topic": "API Gateway Components",
    "stem": "An architect is explaining what happens when a script calls the Identity Security Cloud REST API. What does the API gateway do with each request before a backend service handles it?",
    "choices": [
-    "Checks the bearer access token and routes the call to the right service",
+    "Checks the bearer token and routes the call to the right service",
     "Decrypts the source credentials with the virtual appliance private key",
     "Runs the request body through the identity profile transforms first",
     "Holds the request in a queue until the next scheduled aggregation"
    ],
-   "answer": "Checks the bearer access token and routes the call to the right service",
+   "answer": "Checks the bearer token and routes the call to the right service",
    "explanation": "The gateway is the single entry point: it validates the token, applies limits and forwards the call to the owning microservice. Credential decryption happens on the VA, not at the gateway."
   },
   {
@@ -37,12 +37,12 @@
    "topic": "API Gateway Components",
    "stem": "A migration script receives HTTP 429 responses. The developer changes it to fetch a new access token from the same API client every 90 calls, but the 429 responses continue. Why?",
    "choices": [
-    "The gateway counts requests per client ID and API version, so new tokens do not reset the count",
+    "Requests are counted per client ID and API version, not per token",
     "The tenant blocks token requests for an hour after the first 429 response",
     "Tokens issued to a script can only call list endpoints, not update endpoints",
     "The gateway counts requests per source, so the limit applies to every client"
    ],
-   "answer": "The gateway counts requests per client ID and API version, so new tokens do not reset the count",
+   "answer": "Requests are counted per client ID and API version, not per token",
    "explanation": "The default gateway limit is tracked per client ID and API version over a short window, so a fresh token from the same client changes nothing. The limit is not tied to sources."
   },
   {
@@ -53,10 +53,10 @@
    "choices": [
     "Send the calls to the tenant UI host instead of the API gateway host",
     "Ask for a longer expires_in value in the access token request body",
-    "Pause when a 429 arrives and retry with backoff, spreading the calls out",
+    "Pause on each 429 and retry with backoff, spreading the calls out",
     "Reuse the Admin UI session cookie so calls bypass the gateway limits"
    ],
-   "answer": "Pause when a 429 arrives and retry with backoff, spreading the calls out",
+   "answer": "Pause on each 429 and retry with backoff, spreading the calls out",
    "explanation": "Honouring 429 responses with backoff keeps the job inside the shared limits. The UI host and session cookies are not supported paths for scripted API calls."
   },
   {
@@ -81,7 +81,7 @@
    "choices": [
     "Switch the token request to the authorization code grant flow",
     "Send the calls through the API gateway host, acme.api.identitynow.com",
-    "Regenerate the client secret and request a fresh access token",
+    "Regenerate the client secret and request a fresh access token from it",
     "Add the colleague's user level to the developer's identity"
    ],
    "answer": "Send the calls through the API gateway host, acme.api.identitynow.com",
@@ -95,7 +95,7 @@
    "choices": [
     "Send the JSON Patch array as query parameters in the URL",
     "Set the Content-Type header to application/json-patch+json",
-    "Change the method to POST and keep the same request body",
+    "Change the method to POST and keep exactly the same request body",
     "Remove the Authorization header from the PATCH request"
    ],
    "answer": "Set the Content-Type header to application/json-patch+json",
@@ -165,7 +165,7 @@
    "choices": [
     "To the tenant token endpoint on the api.identitynow.com host",
     "To the Personal Access Tokens page in the user's preferences",
-    "To the API Management page under the tenant security settings",
+    "To the API Management page under the tenant's global security settings",
     "To the tenant authorize endpoint on the login.sailpoint.com host"
    ],
    "answer": "To the tenant authorize endpoint on the login.sailpoint.com host",
@@ -178,7 +178,7 @@
    "stem": "A portal's authorization code sign-in fails with a redirect error right after users authenticate. What should the engineer check FIRST?",
    "choices": [
     "That the client has the Helpdesk user level assigned to it",
-    "That the client secret is sent in the Authorization header",
+    "That the client secret is sent in the Authorization header of each call",
     "That the app's redirect URL matches one listed on the OAuth client",
     "That the users have created personal access tokens first"
    ],
@@ -193,10 +193,10 @@
    "choices": [
     "It only works for Admin users and fails for every other user level",
     "It creates a new personal access token for every user who signs in",
-    "It exposes credentials to the app and bypasses SSO and strong authentication",
+    "It exposes passwords to the app and bypasses SSO and MFA",
     "It sends traffic through the virtual appliance instead of the gateway"
    ],
-   "answer": "It exposes credentials to the app and bypasses SSO and strong authentication",
+   "answer": "It exposes passwords to the app and bypasses SSO and MFA",
    "explanation": "Collecting passwords in the app hands it the user's credentials and cannot work with SSO, MFA or pass-through sign-in; the authorization code flow avoids this. It has nothing to do with VAs or PATs."
   },
   {
@@ -207,7 +207,7 @@
    "choices": [
     "The client credentials token has no user context, which that endpoint needs",
     "The client's access token expired before the endpoint was called",
-    "The endpoint only accepts tokens issued from the login.sailpoint.com host",
+    "The endpoint only accepts tokens that were issued from the login.sailpoint.com host",
     "The admin's user level was copied to the client and then removed"
    ],
    "answer": "The client credentials token has no user context, which that endpoint needs",
@@ -221,10 +221,10 @@
    "choices": [
     "The call succeeds, because every personal access token has full API scope",
     "The call is queued until an Admin approves it in the Task Manager",
-    "The call is refused, because the token carries only the Helpdesk user's rights",
+    "The call is refused, since the token has only Helpdesk rights",
     "The call succeeds, but the source is hidden from other administrators"
    ],
-   "answer": "The call is refused, because the token carries only the Helpdesk user's rights",
+   "answer": "The call is refused, since the token has only Helpdesk rights",
    "explanation": "A PAT acts with the user levels of the person who generated it, so a Helpdesk token cannot create sources. Scopes can narrow a token but never add rights the user lacks."
   },
   {
@@ -247,7 +247,7 @@
    "topic": "Personal Access Tokens",
    "stem": "An engineer created a personal access token yesterday but did not save the secret and now needs it for a script. What should the engineer do?",
    "choices": [
-    "Open the token in the list and select the option to reveal its secret",
+    "Open the token in the list and select the option to reveal its secret again",
     "Ask SailPoint Support to read the secret back from the tenant",
     "Use the client ID alone, since the secret is optional for PATs",
     "Create a new token, store its secret securely, and delete the old token"
@@ -278,9 +278,9 @@
     "The tenant has turned off API access for every non-Admin user level",
     "The user's identity is in a lifecycle state that blocks new tokens",
     "The tenant's virtual appliance cluster is reporting an unhealthy status",
-    "The user has reached the per-user token limit and must delete unused tokens"
+    "The user hit the per-user token limit and must delete unused ones"
    ],
-   "answer": "The user has reached the per-user token limit and must delete unused tokens",
+   "answer": "The user hit the per-user token limit and must delete unused ones",
    "explanation": "Each user can hold a limited number of PATs (ten), and the button is disabled at the limit. Deleting tokens that are no longer used frees a slot."
   },
   {
@@ -291,10 +291,10 @@
    "choices": [
     "Copy the departing admin's token secret into a shared team password vault",
     "Keep the token, since personal tokens keep working after the user is removed",
-    "Issue the token under a dedicated service identity with only the needed user level",
+    "Issue a token under a service identity with only the needed user level",
     "Give every engineer on the team the Admin level so anyone can recreate it"
    ],
-   "answer": "Issue the token under a dedicated service identity with only the needed user level",
+   "answer": "Issue a token under a service identity with only the needed user level",
    "explanation": "A PAT stops working when its owner loses access, so long-lived integrations should run under a non-expiring service identity with least privilege. Spreading the Admin level widens risk."
   },
   {
@@ -332,7 +332,7 @@
    "stem": "An old script uses a client ID that has no dashes, and its token requests now fail. What should the engineer do?",
    "choices": [
     "Add dashes to the existing client ID and retry the token request",
-    "Grant the legacy client the Admin user level from the identity list",
+    "Grant the legacy client the Admin user level from the identity list page",
     "Send the request to the login.sailpoint.com host instead",
     "Create a new OAuth 2.0 client, because legacy clients no longer work"
    ],
@@ -347,7 +347,7 @@
    "choices": [
     "Add the client credentials grant type to the client or create a separate client",
     "Add the refresh token grant type so the client can renew its token",
-    "Register an extra redirect URL for the script on the existing client",
+    "Register an extra redirect URL for the script on the existing portal client",
     "Give the portal's signed-in users the Report Admin user level"
    ],
    "answer": "Add the client credentials grant type to the client or create a separate client",
@@ -373,12 +373,12 @@
    "topic": "API Clients and Scopes",
    "stem": "A Report Admin creates a personal access token with the all-scopes value and tries to change a source through the API. What is the result?",
    "choices": [
-    "The call is refused, because scopes cannot add rights the user does not have",
+    "The call is refused, since scopes cannot add rights the user lacks",
     "The call succeeds, because the all-scopes value overrides user levels",
     "The call succeeds only if it is sent from inside the corporate network",
     "The call creates an approval item for the source owner to accept"
    ],
-   "answer": "The call is refused, because scopes cannot add rights the user does not have",
+   "answer": "The call is refused, since scopes cannot add rights the user lacks",
    "explanation": "A PAT's effective access is limited by both its scopes and its owner's user levels. A Report Admin cannot manage sources, whatever scopes the token lists."
   },
   {
@@ -676,11 +676,11 @@
    "stem": "A query returns identities whose Workday account is enabled but whose disabled account is on a different source. The query is @accounts(source.name:Workday) AND @accounts(disabled:true). What is the cause?",
    "choices": [
     "Workday accounts are stored in the access collection rather than in accounts",
-    "The two conditions are in separate @accounts clauses, so they can match different accounts",
+    "Separate @accounts clauses can each match a different account",
     "The disabled field only exists on accounts from directory-type sources",
     "The search index ignores Boolean operators placed between nested clauses"
    ],
-   "answer": "The two conditions are in separate @accounts clauses, so they can match different accounts",
+   "answer": "Separate @accounts clauses can each match a different account",
    "explanation": "Each @accounts() clause is evaluated on its own, so different accounts can satisfy each one. Putting both conditions inside one clause forces them onto the same account."
   },
   {
@@ -691,7 +691,7 @@
    "choices": [
     "Location values must always be wrapped in square brackets",
     "Two identity attributes cannot be combined in one query",
-    "The department field must be searched with the @access syntax",
+    "The department field must always be searched with the @access syntax",
     "The Boolean operator is lowercase, so it is not treated as AND"
    ],
    "answer": "The Boolean operator is lowercase, so it is not treated as AND",
@@ -705,10 +705,10 @@
    "choices": [
     "Join the words with a plus sign and drop the field name",
     "Replace the space with an underscore in the source name",
-    "Wrap the value in double quotes so it is searched as one phrase",
+    "Wrap the value in double quotes so it is one phrase",
     "Put the value inside an @source clause with no field name"
    ],
-   "answer": "Wrap the value in double quotes so it is searched as one phrase",
+   "answer": "Wrap the value in double quotes so it is one phrase",
    "explanation": "A value with spaces must be quoted, such as source.name:\"Active Directory\", or the second word is searched separately. Underscores change the value itself."
   },
   {
@@ -748,7 +748,7 @@
     "Search a named field, for example attributes.lastname:Smith",
     "Add a wildcard to the end, for example Smith*",
     "Write the term in lowercase, for example smith",
-    "Wrap the term in parentheses, for example (Smith)"
+    "Wrap the term in parentheses so it is searched exactly, for example (Smith)"
    ],
    "answer": "Search a named field, for example attributes.lastname:Smith",
    "explanation": "An unqualified term matches across many fields, including related manager data. Naming the field limits the match; a wildcard would widen it."
@@ -776,9 +776,9 @@
     "The address must be added as an identity attribute on every profile",
     "A virtual appliance must be configured as the outbound mail relay",
     "Each email template must be edited to hard-code the new sender",
-    "The address, or its domain, must be verified in the From address settings"
+    "The address or its domain must first be verified"
    ],
-   "answer": "The address, or its domain, must be verified in the From address settings",
+   "answer": "The address or its domain must first be verified",
    "explanation": "Addresses must be verified (by the emailed link or a verified domain) before use as the From address, set under System Settings > Product Branding. Mail is sent by the cloud, not relayed through a VA."
   },
   {
@@ -817,7 +817,7 @@
    "choices": [
     "A second From address on a public webmail domain for backup",
     "A custom MAIL FROM domain that is a subdomain of the From address domain",
-    "A MAIL FROM domain that is also used as a user mailbox domain",
+    "A MAIL FROM domain that is also in use as a user mailbox domain for staff",
     "The default sender, since DMARC never applies to cloud mail"
    ],
    "answer": "A custom MAIL FROM domain that is a subdomain of the From address domain",
@@ -831,10 +831,10 @@
    "choices": [
     "Delete the address from production and add it again on the sandbox",
     "Point the sandbox at production's virtual appliance so mail is shared",
-    "Use a separate address, such as one on a sandbox subdomain, for the sandbox",
+    "Use a separate address, for example on a sandbox subdomain",
     "Leave the sandbox on the default sender and disable all its templates"
    ],
-   "answer": "Use a separate address, such as one on a sandbox subdomain, for the sandbox",
+   "answer": "Use a separate address, for example on a sandbox subdomain",
    "explanation": "Each From address can be used by only one tenant unless Support intervenes, and subdomains can be verified separately per environment. A VA has nothing to do with email sending."
   },
   {
@@ -843,12 +843,12 @@
    "topic": "Email Sender Configuration",
    "stem": "A tenant has two configured brands, one for employees and one for contractors. How can each group receive email from a different From address?",
    "choices": [
-    "Set a verified From address on each brand in the branding settings",
+    "Set a verified From address on each brand",
     "Create a separate email template set for each identity profile",
     "Add a transform that rewrites the sender on contractor identities",
     "Configure a second tenant for contractors and send from there"
    ],
-   "answer": "Set a verified From address on each brand in the branding settings",
+   "answer": "Set a verified From address on each brand",
    "explanation": "When brands are configured, the From address can be set per brand and recipients get the address of their brand. Transforms and identity profiles do not control the sender."
   },
   {
@@ -858,7 +858,7 @@
    "stem": "A new sandbox tenant holds copies of real employee identities. What should the engineer configure before testing lifecycle changes?",
    "choices": [
     "Delete every email template so no messages can be sent",
-    "Change all identity email attributes to the engineer's address",
+    "Change all identity email attributes to the engineer's own mailbox address",
     "Redirect all email to a test address in the email template settings",
     "Turn off the virtual appliance so outbound mail stops"
    ],
@@ -872,7 +872,7 @@
    "stem": "After go-live, managers report they receive no access approval emails at all, while one engineer gets all of them. What is the MOST likely cause?",
    "choices": [
     "Email settings are still set to the test address instead of intended recipients",
-    "The approval scheme was changed to use governance groups only",
+    "The approval scheme was changed to use governance groups instead of managers",
     "The managers' identities lack the Helpdesk user level",
     "The From address domain has not yet passed DKIM checks"
    ],
@@ -885,12 +885,12 @@
    "topic": "Email Templates and Redirection",
    "stem": "An engineer edited an email template and wants to see the result before anyone else gets it. What is the BEST approach?",
    "choices": [
-    "Save the template, set a test address, and use the template's test email option",
+    "Save it, set a test address and use the template's test email option",
     "Publish the template and ask a manager to forward any message received",
     "Trigger a real access request for a production user to generate one",
     "Export the template and open the file in a web browser"
    ],
-   "answer": "Save the template, set a test address, and use the template's test email option",
+   "answer": "Save it, set a test address and use the template's test email option",
    "explanation": "Each saved template can send a test email to the test address, which shows the rendered message safely. Using real requests affects real users."
   },
   {
@@ -899,12 +899,12 @@
    "topic": "Email Templates and Redirection",
    "stem": "Managers should get an email when their reports move into the inactive lifecycle state. Where is this BEST configured?",
    "choices": [
-    "In the account aggregation schedule of the authoritative source",
-    "In the email notification settings of that lifecycle state on the identity profile",
+    "In the account aggregation schedule settings of the authoritative source",
+    "In the email settings of that lifecycle state on the identity profile",
     "In the API Management page under the tenant security settings",
     "In the From address settings under product branding"
    ],
-   "answer": "In the email notification settings of that lifecycle state on the identity profile",
+   "answer": "In the email settings of that lifecycle state on the identity profile",
    "explanation": "Lifecycle states can send email notifications to chosen recipients when an identity enters them. The other areas do not send state-based notices."
   },
   {
@@ -915,7 +915,7 @@
    "choices": [
     "Hard-code a sample name and edit it for each request",
     "Insert the template's supported Velocity variable for the requester",
-    "Add a transform to the identity profile that writes the body",
+    "Add a transform to the identity profile that writes the whole message body",
     "Create a search subscription that appends the name"
    ],
    "answer": "Insert the template's supported Velocity variable for the requester",
@@ -928,11 +928,11 @@
    "stem": "Auditors ask who changed the email test address last month. Where should the engineer look?",
    "choices": [
     "Read the virtual appliance logs from the cluster page",
-    "Search the audit events, since changing the test address creates an event",
-    "Open the email template history in the From address list",
+    "Search the audit events, since the change is recorded as an event",
+    "Open the email template history in the From address list of the branding page",
     "Check the identity profile's preview for the auditor"
    ],
-   "answer": "Search the audit events, since changing the test address creates an event",
+   "answer": "Search the audit events, since the change is recorded as an event",
    "explanation": "A change to the test address is recorded as an audit event that can be found in Search. VAs do not handle email settings."
   },
   {
@@ -942,11 +942,11 @@
    "stem": "Operations wants an alert in its monitoring tool whenever a virtual appliance cluster changes health status. What is the BEST approach?",
    "choices": [
     "Schedule a daily search subscription on identity records",
-    "Ask a Helpdesk user to check the cluster page each morning",
-    "Subscribe the monitoring tool to the VA cluster status change event trigger",
+    "Ask a Helpdesk user to check the cluster page every morning by hand",
+    "Subscribe the tool to the VA cluster status change trigger",
     "Run a certification campaign on the VA service accounts"
    ],
-   "answer": "Subscribe the monitoring tool to the VA cluster status change event trigger",
+   "answer": "Subscribe the tool to the VA cluster status change trigger",
    "explanation": "The VA cluster status change trigger pushes the event to a subscribed endpoint as it happens. Manual checks and daily searches miss outages between runs."
   },
   {
@@ -955,12 +955,12 @@
    "topic": "System Monitoring",
    "stem": "The identity team must know when an account aggregation from its HR source fails, without watching the console. What should the engineer set up?",
    "choices": [
-    "An account aggregation completed trigger or workflow that alerts on failed status",
-    "A search subscription for identities created in the last day",
+    "An aggregation completed trigger or workflow that alerts on failure",
+    "A search subscription for identities created in the last day by that source",
     "A lifecycle state that disables accounts after aggregation",
     "A role whose membership criteria check aggregation results"
    ],
-   "answer": "An account aggregation completed trigger or workflow that alerts on failed status",
+   "answer": "An aggregation completed trigger or workflow that alerts on failure",
    "explanation": "The account aggregation completed event reports the status of each run, so a subscription or workflow can alert on errors. Searches for new identities would not reveal a failed run."
   },
   {
@@ -1039,12 +1039,12 @@
    "topic": "Activity Records",
    "stem": "A user's access request was approved but the Active Directory account was never created. Where is the BEST place to find the failure reason?",
    "choices": [
-    "The certification campaign report for the user's manager",
+    "The certification campaign report for the user's manager and department",
     "The From address settings in the tenant branding",
     "The role membership preview for the user's department",
-    "The account activity for that request, which shows each item's result and error"
+    "The account activity for that request, with each item's result"
    ],
-   "answer": "The account activity for that request, which shows each item's result and error",
+   "answer": "The account activity for that request, with each item's result",
    "explanation": "Account activities track each provisioning operation and its outcome, including connector errors. Certification reports do not show provisioning results."
   },
   {
@@ -1179,7 +1179,7 @@
    "stem": "A workflow saves but shows a validation error: the false path of a Compare Strings operator leads nowhere. What must the engineer add?",
    "choices": [
     "An end step, Success or Failure, at the end of that branch",
-    "A second trigger at the start of the false branch",
+    "A second trigger placed at the start of the false branch of the operator",
     "A Loop operator that repeats the comparison step",
     "A Wait action between the trigger and the operator"
    ],
@@ -1250,10 +1250,10 @@
    "choices": [
     "Add both triggers to one workflow and connect them to the first action",
     "Use one trigger and add the second as an action after the end step",
-    "Build two workflows, each with its own trigger, since a workflow has exactly one trigger",
+    "Build two workflows, each with its own trigger",
     "Put the second trigger on the true path of a Compare Strings step"
    ],
-   "answer": "Build two workflows, each with its own trigger, since a workflow has exactly one trigger",
+   "answer": "Build two workflows, each with its own trigger",
    "explanation": "Each workflow has exactly one trigger, so two events need two workflows (duplicating one saves effort). Triggers cannot be placed as actions or inside branches."
   },
   {
@@ -1262,7 +1262,7 @@
    "topic": "Workflow Structure and Order",
    "stem": "Two branches of a workflow must continue with the same Send Email step after their separate actions. What is the BEST design?",
    "choices": [
-    "Copy the Send Email step into each branch and add a second trigger",
+    "Copy the Send Email step into each branch and add a second trigger to it",
     "End both branches with Failure and start a new workflow",
     "Connect the last step of both branches to the shared Send Email step",
     "Replace both branches with a Loop operator"
@@ -1304,12 +1304,12 @@
    "topic": "Workflow Triggers and Filters",
    "stem": "Why should an engineer add a filter to a busy trigger such as Identity Attributes Changed?",
    "choices": [
-    "To make the workflow run with the Admin user level",
+    "To make the workflow always run with the Admin user level",
     "To allow the workflow to have more than one trigger",
     "To send the trigger input to a virtual appliance",
-    "To stop the workflow from running on events it does not need to handle"
+    "To avoid runs for events it does not need to handle"
    ],
-   "answer": "To stop the workflow from running on events it does not need to handle",
+   "answer": "To avoid runs for events it does not need to handle",
    "explanation": "Filters limit when a workflow starts, which avoids needless executions and quota use. They do not change permissions or the one-trigger rule."
   },
   {
@@ -1332,12 +1332,12 @@
    "topic": "Workflow Triggers and Filters",
    "stem": "A ticketing system must start a workflow by calling Identity Security Cloud when a ticket reaches a certain status. Which trigger fits BEST?",
    "choices": [
-    "An external trigger, called with the client credentials it provides",
+    "An external trigger, called with its client credentials",
     "A scheduled trigger that polls the ticketing system",
     "The Identity Attributes Changed trigger with a filter",
     "An Account Aggregation Completed trigger on the ticket source"
    ],
-   "answer": "An external trigger, called with the client credentials it provides",
+   "answer": "An external trigger, called with its client credentials",
    "explanation": "An external trigger gives an outside system a URL and OAuth client to start the workflow on demand. Polling on a schedule adds delay."
   },
   {
@@ -1346,7 +1346,7 @@
    "topic": "Workflow Triggers and Filters",
    "stem": "An engineer built a trigger filter in the Advanced JSONPath editor and now opens the Basic editor to adjust it. What happens?",
    "choices": [
-    "The Basic editor converts the expression into conditions",
+    "The Basic editor converts the JSONPath expression into matching conditions",
     "Both editors stay active and are joined with AND",
     "The filter is moved into a Compare Strings step",
     "The Basic editor starts over and the Advanced filter is lost"
@@ -1375,11 +1375,11 @@
    "stem": "An engineer finished building a leaver workflow. What should happen before it is enabled?",
    "choices": [
     "Enable it in production and watch the first real leaver",
-    "Test it with a sample trigger input and review each step's result",
+    "Test it with sample trigger input and review each step",
     "Export it to a file and ask SailPoint to review it",
     "Add a second trigger so it can be tested twice"
    ],
-   "answer": "Test it with a sample trigger input and review each step's result",
+   "answer": "Test it with sample trigger input and review each step",
    "explanation": "Workflows should be tested with sample input before enabling, and the results show each step. SailPoint does not review workflows."
   },
   {
@@ -1390,10 +1390,10 @@
    "choices": [
     "The workflow must be enabled first so testing becomes available",
     "Testing is only possible after the workflow is exported to JSON",
-    "Validation errors must be fixed before testing, although the draft can be saved",
+    "Validation errors block testing, though the draft can be saved",
     "The fields are filled in automatically during the first test run"
    ],
-   "answer": "Validation errors must be fixed before testing, although the draft can be saved",
+   "answer": "Validation errors block testing, though the draft can be saved",
    "explanation": "Drafts with validation errors can be saved but not tested or enabled. Enabling does not bypass validation."
   },
   {
@@ -1404,7 +1404,7 @@
    "choices": [
     "The execution history, to compare each step's input and output",
     "The From address settings in product branding",
-    "The API Management page under security settings",
+    "The API Management page under the tenant's global security settings",
     "The identity profile's lifecycle state list"
    ],
    "answer": "The execution history, to compare each step's input and output",
@@ -1430,12 +1430,12 @@
    "topic": "Workflow Testing and Ownership",
    "stem": "To avoid orphaned workflows, which practice should the team adopt?",
    "choices": [
-    "Build each workflow from the personal account of the newest engineer",
-    "Build workflows with an admin account that will not expire, such as a managed service identity",
+    "Build each workflow from the personal account of the newest engineer on the team",
+    "Use an admin account that will not expire, such as a service identity",
     "Create every workflow from a Helpdesk account with no other levels",
     "Keep workflows disabled and run them by hand when needed"
    ],
-   "answer": "Build workflows with an admin account that will not expire, such as a managed service identity",
+   "answer": "Use an admin account that will not expire, such as a service identity",
    "explanation": "Workflow owners must be admins whose access lasts, otherwise the workflow's token becomes invalid. Helpdesk accounts cannot create workflows."
   },
   {
@@ -1446,7 +1446,7 @@
    "choices": [
     "The workflow owner's personal access token expired at noon",
     "The daily fast-execution quota was reached, so later runs are throttled",
-    "The trigger filter switched to the Basic editor automatically",
+    "The trigger filter switched itself to the Basic editor automatically at noon",
     "The virtual appliance cluster paused the workflow queue"
    ],
    "answer": "The daily fast-execution quota was reached, so later runs are throttled",
@@ -1459,7 +1459,7 @@
    "stem": "An engineer tries to enable a new workflow and receives an error about the number of enabled workflows. What should the engineer do?",
    "choices": [
     "Disable or remove an unused workflow, then enable the new one",
-    "Duplicate the workflow so the copy can be enabled instead",
+    "Duplicate the workflow so that the copy can be enabled in its place",
     "Change the workflow's trigger to a scheduled trigger",
     "Remove all end steps so it counts as a draft"
    ],
@@ -1472,7 +1472,7 @@
    "topic": "Platform Test Design",
    "stem": "A team has a sandbox and a production tenant. What is the BEST practice for a new transform and identity profile change?",
    "choices": [
-    "Build in production and copy the change to the sandbox later",
+    "Build in production and copy the change back to the sandbox afterwards",
     "Build in both tenants by hand at the same time",
     "Build and test in the sandbox, then promote with Configuration Hub",
     "Build in production during a quiet weekend window"
@@ -1489,7 +1489,7 @@
     "Run a certification campaign for the identity",
     "Read the VA logs after the next aggregation",
     "Use the identity profile preview for a chosen identity",
-    "Submit an access request on the identity's behalf"
+    "Submit a test access request on the identity's behalf and watch it"
    ],
    "answer": "Use the identity profile preview for a chosen identity",
    "explanation": "The preview shows calculated attribute values for one identity before the change is applied. Waiting for logs means the change is already live."
@@ -1502,10 +1502,10 @@
    "choices": [
     "One identity from the engineer's own department",
     "Every production identity on the first full refresh",
-    "Only identities that already have the expected value",
-    "Normal cases plus edge cases such as missing dates, future hires and leavers"
+    "Only identities that already have the expected value in production today",
+    "Normal cases plus edge cases such as missing dates and leavers"
    ],
-   "answer": "Normal cases plus edge cases such as missing dates, future hires and leavers",
+   "answer": "Normal cases plus edge cases such as missing dates and leavers",
    "explanation": "Good tests cover typical and boundary data so null or unusual values do not break the transform. Testing only easy cases hides errors."
   },
   {
@@ -1516,7 +1516,7 @@
    "choices": [
     "Run the aggregation again with optimization disabled",
     "Delete the source and create it again from scratch",
-    "Raise the account deletion threshold on the source",
+    "Raise the account deletion threshold on the source and aggregate again",
     "Wait for the next scheduled certification campaign"
    ],
    "answer": "Run the aggregation again with optimization disabled",
@@ -1528,7 +1528,7 @@
    "topic": "Platform Test Design",
    "stem": "A new certification design is ready. What is the BEST way to test it before the quarterly campaign?",
    "choices": [
-    "Launch the full campaign and cancel it if reviewers complain",
+    "Launch the full campaign and cancel it if reviewers start to complain",
     "Send the reviewer email template to every manager",
     "Run an aggregation with optimization disabled",
     "Run a small campaign on a limited set of test identities first"
@@ -1545,7 +1545,7 @@
     "Grant the engineer the Helpdesk user level",
     "Redirect all tenant email to a test address while testing",
     "Disable optimization on every source aggregation",
-    "Remove all personal access tokens from the tenant"
+    "Remove all personal access tokens from the tenant before the test"
    ],
    "answer": "Redirect all tenant email to a test address while testing",
    "explanation": "Email redirection stops test notifications from reaching real people. The other changes do not affect who is notified."
@@ -1556,7 +1556,7 @@
    "topic": "Platform Test Design",
    "stem": "An engineer moves a source configuration from the sandbox to production with Configuration Hub. What should the test plan include after the import?",
    "choices": [
-    "Re-creating every identity on the production tenant",
+    "Re-creating every identity on the production tenant by hand afterwards",
     "Re-entering and testing the source credentials in production",
     "Deleting the sandbox tenant to avoid duplicates",
     "Turning off all workflows in the sandbox tenant"
@@ -1571,11 +1571,11 @@
    "stem": "An API call returns 401 Unauthorized. What does this MOST likely mean?",
    "choices": [
     "The token is valid but lacks rights for the endpoint",
-    "The Authorization header is missing or the token is invalid or expired",
+    "The token is missing, invalid or expired",
     "The client sent too many requests in a short window",
     "The object ID in the path does not exist"
    ],
-   "answer": "The Authorization header is missing or the token is invalid or expired",
+   "answer": "The token is missing, invalid or expired",
    "explanation": "401 points to a missing, malformed or expired token. A valid token without rights returns 403, too many calls return 429 and a missing object returns 404."
   },
   {
@@ -1586,7 +1586,7 @@
    "choices": [
     "The user level behind the token, or whether the endpoint needs user context",
     "Whether the token has expired since it was issued",
-    "Whether the request URL uses the correct tenant name",
+    "Whether the request URL uses the correct tenant name for the gateway",
     "Whether the request body is valid JSON"
    ],
    "answer": "The user level behind the token, or whether the endpoint needs user context",
@@ -1599,11 +1599,11 @@
    "stem": "A script gets 404 Not Found when fetching a source by ID, although the source is visible in the UI. What is the MOST likely cause?",
    "choices": [
     "The token has expired and must be renewed",
-    "The ID in the path is wrong, such as a name used instead of the source ID",
+    "The ID in the path is wrong, such as a name instead of an ID",
     "The client has sent too many requests",
-    "The source's VA cluster is reporting an error"
+    "The source's VA cluster is reporting an error on its health page"
    ],
-   "answer": "The ID in the path is wrong, such as a name used instead of the source ID",
+   "answer": "The ID in the path is wrong, such as a name instead of an ID",
    "explanation": "404 means the resource at that path was not found, which often comes from using a name or an ID from another tenant. Token or rate problems give 401 or 429."
   },
   {
@@ -1642,7 +1642,7 @@
    "choices": [
     "The aggregation schedule of a non-authoritative source",
     "The transform and mapping in the identity profile preview",
-    "The workflow execution history of an unrelated workflow",
+    "The workflow execution history of an unrelated onboarding workflow",
     "The client secret of the reporting API client"
    ],
    "answer": "The transform and mapping in the identity profile preview",
@@ -1654,12 +1654,12 @@
    "topic": "Platform Error Troubleshooting",
    "stem": "A script's PATCH call to update an access profile keeps failing, while GET calls on the same object work. Which cause should the engineer check FIRST?",
    "choices": [
-    "The access token was issued by the authorization code flow",
-    "The request is not sent as a JSON Patch document with the right content type",
+    "The access token was issued by the authorization code flow instead",
+    "The body is not a JSON Patch document with the right content type",
     "The access profile has too many entitlements to read",
     "The tenant URL is missing the api part of the host"
    ],
-   "answer": "The request is not sent as a JSON Patch document with the right content type",
+   "answer": "The body is not a JSON Patch document with the right content type",
    "explanation": "PATCH endpoints need a JSON Patch array with the application/json-patch+json content type. A wrong host would break the GET calls too."
   },
   {

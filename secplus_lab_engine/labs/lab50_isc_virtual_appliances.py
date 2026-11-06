@@ -23,7 +23,7 @@ Cloud (ISC) tenant. A VA is a SailPoint-managed virtual machine on your
 network. It talks to the tenant with OUTBOUND HTTPS 443 only and runs the
 connectors (the CCG service) that reach your on-premises sources. VAs are
 grouped in clusters; SailPoint requires at least two VAs per cluster
-because it updates and reboots them one at a time. Three parts, each deny
+because it updates and reboots them one at a time. Four parts, each deny
 by default (a value that is missing or not reported counts as failing):
 
 1. **Health per VA**, checks in this order. UNHEALTHY when any of these
@@ -498,7 +498,9 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
     org = data.get("tenant", {})
     ui.section(f"Step 1 — VA health for {org.get('name', 'the tenant')}: {len(health)} VAs")
     ui.table("Virtual appliances", ["VA", "Cluster", "Host", "Heartbeat", "Disk", "Memory", "Health", "First issue"],
-             [[r.id, r.cluster, r.host, raw.get(r.id, {}).get("last_heartbeat_minutes_ago", "-"),
+             [[r.id, r.cluster, r.host,
+               "-" if raw.get(r.id, {}).get("last_heartbeat_minutes_ago") is None
+               else raw[r.id]["last_heartbeat_minutes_ago"],
                f"{raw.get(r.id, {}).get('disk_used_pct', '?')}%", f"{raw.get(r.id, {}).get('memory_used_pct', '?')}%",
                r.health, CHECK_LABELS.get(r.failed[0], r.failed[0]) if r.failed else "-"] for r in health])
     for r in health:
@@ -697,7 +699,7 @@ def generate_scenario(rng, policies: dict) -> dict:
     va(b, h(c2, 2), f"{c2}-DC1", proxy={"required": True, "configured": False},
        outbound_443={x: False for x in endpoints}, last_heartbeat_minutes_ago=rng.randint(30, 200))
     # D: down: DNS failure, time skew, keyPassphrase mismatch.
-    va(d, h(d["id"][3:6], 1), f"{c3}-DC1", dns="failing", outbound_443={x: False for x in endpoints},
+    va(d, h(c3, 1), f"{c3}-DC1", dns="failing", outbound_443={x: False for x in endpoints},
        last_heartbeat_minutes_ago=rng.randint(60, 300))
     va(d, h(c3, 2), f"{c3}-DC2", ntp={"synced": False, "skew_seconds": rng.randint(120, 900)})
     va(d, h(c3, 3), f"{c3}-DC2", keys={"config_yaml": True, "key_passphrase_fingerprint": "kp-other-000"})

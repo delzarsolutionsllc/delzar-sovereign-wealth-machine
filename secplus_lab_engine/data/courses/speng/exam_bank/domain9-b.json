@@ -9,12 +9,12 @@
    "topic": "VA to Cloud Communication",
    "stem": "A network team asks which firewall rules a virtual appliance needs to talk to Identity Security Cloud. What is the BEST answer?",
    "choices": [
-    "Outbound HTTPS on port 443 to SailPoint's cloud, with no inbound ports from the internet",
-    "Inbound HTTPS on port 443 from the tenant to the VA's public address",
+    "Outbound HTTPS on port 443 to the cloud, with no inbound internet rules",
+    "Inbound HTTPS on port 443 from the tenant to the VA's public IP address on the edge",
     "Inbound SSH on port 22 so the tenant can push jobs to the VA",
     "Two-way LDAP on port 389 between the tenant and the VA"
    ],
-   "answer": "Outbound HTTPS on port 443 to SailPoint's cloud, with no inbound ports from the internet",
+   "answer": "Outbound HTTPS on port 443 to the cloud, with no inbound internet rules",
    "explanation": "The VA starts every connection outbound over HTTPS, so no inbound internet rule is needed. LDAP and similar ports are only needed from the VA to on-premises sources."
   },
   {
@@ -23,12 +23,12 @@
    "topic": "VA to Cloud Communication",
    "stem": "How does an on-premises virtual appliance receive an aggregation job started in the tenant?",
    "choices": [
-    "The VA polls cloud message queues over its outbound connection and picks up the job",
+    "The VA polls cloud message queues and picks up the job",
     "The tenant opens a connection into the data center and pushes the job",
     "The tenant emails the job to a mailbox the VA reads every hour",
     "A source owner downloads the job and copies it onto the VA"
    ],
-   "answer": "The VA polls cloud message queues over its outbound connection and picks up the job",
+   "answer": "The VA polls cloud message queues and picks up the job",
    "explanation": "Work is placed on queues that the VA polls, which is why only outbound access is needed. The cloud never connects into the customer network."
   },
   {
@@ -38,11 +38,11 @@
    "stem": "An engineer types an Active Directory service account password into a VA-based source. How is that credential protected?",
    "choices": [
     "It is stored in plain text in the tenant and masked in the user interface",
-    "It is encrypted with the VA cluster's public key, so only the cluster's VAs can decrypt it",
+    "It is encrypted with the VA cluster's public key",
     "It is encrypted with the engineer's personal access token secret",
     "It is copied to every tenant in the region for redundancy"
    ],
-   "answer": "It is encrypted with the VA cluster's public key, so only the cluster's VAs can decrypt it",
+   "answer": "It is encrypted with the VA cluster's public key",
    "explanation": "Source credentials for VA connectors are encrypted with the cluster key pair, and the private key stays on the VAs. SailPoint's cloud cannot read the password."
   },
   {
@@ -66,7 +66,7 @@
    "stem": "A VA cannot connect to the cloud after the security team turned on TLS inspection for all outbound traffic. What is the MOST likely fix?",
    "choices": [
     "Exclude the VA's traffic to SailPoint endpoints from TLS inspection",
-    "Replace the VA's certificate with the inspection certificate",
+    "Replace the VA's certificate with the inspection appliance's certificate",
     "Move the VA to the same subnet as the inspection appliance",
     "Turn off encryption on the VA's connection to the cloud"
    ],
@@ -93,12 +93,12 @@
    "topic": "VA to Cloud Communication",
    "stem": "A company adds a SaaS application whose connector runs entirely in SailPoint's cloud. What does this mean for the integration's network path?",
    "choices": [
-    "The VA must relay every call from the cloud to the SaaS API",
+    "The VA must relay every call from the cloud to the SaaS provider's API",
     "The SaaS application must open an inbound port to the VA",
     "The SaaS application must poll the tenant's message queues",
-    "The cloud connects straight to the SaaS API, with no virtual appliance in the path"
+    "The cloud calls the SaaS API directly, with no VA in the path"
    ],
-   "answer": "The cloud connects straight to the SaaS API, with no virtual appliance in the path",
+   "answer": "The cloud calls the SaaS API directly, with no VA in the path",
    "explanation": "Direct (cloud) connectors call the SaaS service from SailPoint's cloud. VAs are needed for sources that are only reachable inside the customer network."
   },
   {
@@ -109,10 +109,10 @@
    "choices": [
     "The platform pauses the process until the subscriber returns a decision",
     "The subscriber must answer within a set time or the process fails",
-    "The event is sent to subscribers and the platform does not wait for a reply",
+    "The event is sent and the platform does not wait for a reply",
     "The event is held until an Admin releases it from the dashboard"
    ],
-   "answer": "The event is sent to subscribers and the platform does not wait for a reply",
+   "answer": "The event is sent and the platform does not wait for a reply",
    "explanation": "Fire-and-forget triggers notify subscribers and carry on. Request-response triggers wait for the subscriber's answer before continuing."
   },
   {
@@ -121,7 +121,7 @@
    "topic": "Event Trigger Communication",
    "stem": "An external risk engine must decide whether an access request may proceed before approvers see it. Which trigger type fits?",
    "choices": [
-    "A fire-and-forget trigger such as identity created",
+    "A fire-and-forget trigger such as identity created, with a filter",
     "A request-response trigger such as access request pre-approval",
     "A scheduled workflow that runs each night",
     "A search subscription sent to the risk team"
@@ -151,7 +151,7 @@
    "choices": [
     "A personal access token on the endpoint's own server",
     "Basic or bearer token authentication on the HTTP subscription",
-    "A trigger filter that checks the caller's IP address",
+    "A trigger filter that checks the caller's IP address on each event",
     "The VA proxy settings for the endpoint host"
    ],
    "answer": "Basic or bearer token authentication on the HTTP subscription",
@@ -164,11 +164,11 @@
    "stem": "A subscriber needs several minutes to reach a decision on a request-response trigger. Which response approach is BEST?",
    "choices": [
     "Use a synchronous response and keep the connection open for the whole time",
-    "Use an asynchronous response, replying later to the callback provided in the event",
+    "Use an asynchronous response sent later to the callback in the event",
     "Switch the trigger to fire-and-forget and decide afterwards",
     "Return an empty reply at once and email the decision"
    ],
-   "answer": "Use an asynchronous response, replying later to the callback provided in the event",
+   "answer": "Use an asynchronous response sent later to the callback in the event",
    "explanation": "Async mode lets the subscriber acknowledge at once and send the decision to the callback before the deadline. A long synchronous call risks timing out."
   },
   {
@@ -177,12 +177,12 @@
    "topic": "Event Trigger Communication",
    "stem": "An HTTP subscription points at an internal web server with no internet access, and no events arrive. Why?",
    "choices": [
-    "Events are only sent through the VA, which lacks the right proxy",
+    "Events are only sent through the VA, which lacks the right proxy settings",
     "HTTP subscriptions accept only endpoints hosted in AWS",
     "Internal servers need the Admin user level to receive events",
-    "The cloud delivers events over the internet, so the endpoint must be reachable from it"
+    "Events come from SailPoint's cloud, so the endpoint must be reachable"
    ],
-   "answer": "The cloud delivers events over the internet, so the endpoint must be reachable from it",
+   "answer": "Events come from SailPoint's cloud, so the endpoint must be reachable",
    "explanation": "Event trigger delivery comes from SailPoint's cloud, so an internal-only server cannot receive it. A reachable HTTPS endpoint or EventBridge is needed."
   },
   {
@@ -248,11 +248,11 @@
    "stem": "A tenant uses the vanity URL iga.acme.com for its user interface. A developer is unsure which token endpoint to use. What should the developer do?",
    "choices": [
     "Send token requests to https://iga.acme.com/oauth/token",
-    "Ask the DNS team to point the vanity domain at the API gateway",
-    "Read the tenant's OAuth details from the oauth/info endpoint on its API host",
+    "Ask the DNS team to point the vanity domain at the API gateway instead",
+    "Read the tenant's OAuth details from oauth/info on its API host",
     "Use the vanity domain as the authorize and token host"
    ],
-   "answer": "Read the tenant's OAuth details from the oauth/info endpoint on its API host",
+   "answer": "Read the tenant's OAuth details from oauth/info on its API host",
    "explanation": "A vanity URL changes the UI address but the token endpoint stays on tenant.api.identitynow.com; oauth/info lists the exact endpoints. Pointing DNS elsewhere would break the UI."
   },
   {
@@ -261,7 +261,7 @@
    "topic": "Tenant and API URLs",
    "stem": "A team has a production tenant named acme and a sandbox named acme-sb. A script works in production. What must change to run it against the sandbox?",
    "choices": [
-    "Keep the production URL and add a sandbox header to each call",
+    "Keep the production URL and add a sandbox header to each API call made",
     "Use the sandbox's own hosts and an API client created in the sandbox",
     "Keep the production client and change only the URL path",
     "Use the production token, which also works in the sandbox"
@@ -303,12 +303,12 @@
    "topic": "Multi-Tenant Processing",
    "stem": "Identity Security Cloud runs shared microservices for many customers. How does a service know which tenant an API request belongs to?",
    "choices": [
-    "The tenant is identified from the claims in the request's access token",
+    "The tenant is taken from the claims in the request's access token",
     "Each tenant has its own copy of every microservice on its own server",
     "The caller adds the tenant name as a query parameter on every call",
     "The VA tags each request with the tenant before it reaches the cloud"
    ],
-   "answer": "The tenant is identified from the claims in the request's access token",
+   "answer": "The tenant is taken from the claims in the request's access token",
    "explanation": "Tokens carry tenant claims, and the shared services process each request in that tenant's context. VAs are not in the path of API calls."
   },
   {
@@ -317,12 +317,12 @@
    "topic": "Multi-Tenant Processing",
    "stem": "A developer tries to use an access token issued by the sandbox tenant against the production tenant. What happens?",
    "choices": [
-    "The call is refused, because the token is only valid for the tenant that issued it",
-    "The call succeeds, because both tenants belong to the same company",
+    "It is refused, since tokens only work on the tenant that issued them",
+    "The call succeeds, because both tenants belong to the same company account",
     "The call succeeds with read access only on production data",
     "The call is forwarded to the sandbox and runs there"
    ],
-   "answer": "The call is refused, because the token is only valid for the tenant that issued it",
+   "answer": "It is refused, since tokens only work on the tenant that issued them",
    "explanation": "Tokens are bound to their tenant, which keeps tenant data separate. Ownership by the same company does not merge tenants."
   },
   {
@@ -332,11 +332,11 @@
    "stem": "An architect asks why the API enforces rate limits even for a paying customer's busy integration. What is the BEST explanation?",
    "choices": [
     "The limits are only applied when the tenant's VA is offline",
-    "The services are shared, so limits protect every tenant from one client's load",
-    "The limits stop customers from reading their own data too often",
+    "Shared services need limits so one client cannot overload others",
+    "The limits stop customers from reading their own data too often each day",
     "The limits apply only to tokens issued to Helpdesk users"
    ],
-   "answer": "The services are shared, so limits protect every tenant from one client's load",
+   "answer": "Shared services need limits so one client cannot overload others",
    "explanation": "In a multi-tenant platform, per-client limits keep one integration from degrading service for others. They apply regardless of VA state or user level."
   },
   {
@@ -347,10 +347,10 @@
    "choices": [
     "The search index is rebuilt only once each night",
     "Search results come from the VA cache, which syncs hourly",
-    "Processing is asynchronous, so search results update shortly after the change is indexed",
-    "New accounts are hidden until a certification is completed"
+    "Processing is asynchronous, so search updates shortly after indexing",
+    "New accounts are hidden from search until a certification is completed"
    ],
-   "answer": "Processing is asynchronous, so search results update shortly after the change is indexed",
+   "answer": "Processing is asynchronous, so search updates shortly after indexing",
    "explanation": "Jobs and indexing run asynchronously, so search is updated shortly after processing rather than instantly. It is not a nightly rebuild."
   },
   {
@@ -361,10 +361,10 @@
    "choices": [
     "Cloud rules are written in a language SailPoint must translate",
     "Cloud rules run on the customer's VA and need network approval",
-    "Cloud rules are visible to other tenants until they are reviewed",
-    "Cloud rules run inside the shared platform, so they are reviewed to protect all tenants"
+    "Cloud rules are visible to other tenants until SailPoint has reviewed them",
+    "They run inside the shared platform, so review protects all tenants"
    ],
-   "answer": "Cloud rules run inside the shared platform, so they are reviewed to protect all tenants",
+   "answer": "They run inside the shared platform, so review protects all tenants",
    "explanation": "Code that runs in the shared cloud could affect other customers, so SailPoint reviews it before deployment. Connector rules run on the customer's own VA."
   },
   {
@@ -375,10 +375,10 @@
    "choices": [
     "The update can be skipped by turning off the tenant's VA cluster",
     "Each tenant can pin its own platform version in the Admin UI",
-    "SailPoint updates all tenants continuously, so customers do not schedule upgrades",
+    "SailPoint updates every tenant continuously on its own schedule",
     "The update applies only to sandbox tenants until approved"
    ],
-   "answer": "SailPoint updates all tenants continuously, so customers do not schedule upgrades",
+   "answer": "SailPoint updates every tenant continuously on its own schedule",
    "explanation": "As a multi-tenant SaaS service, the platform is updated by SailPoint for everyone. Testing new behaviour in the sandbox is the customer's control."
   },
   {
@@ -388,11 +388,11 @@
    "stem": "A team wants one VA cluster to serve both its sandbox and production tenants to save servers. What is the correct design?",
    "choices": [
     "Register the same VAs to both tenants with two key pairs",
-    "Deploy separate VAs for each tenant, since a VA is registered to one tenant",
+    "Deploy separate VAs for each tenant, as a VA serves one tenant",
     "Use the production VAs and point sandbox sources at them",
     "Let the sandbox use production's cluster during business hours"
    ],
-   "answer": "Deploy separate VAs for each tenant, since a VA is registered to one tenant",
+   "answer": "Deploy separate VAs for each tenant, as a VA serves one tenant",
    "explanation": "Each VA is paired with one tenant's cluster and keys, so sandbox and production need their own. Sharing would also mix test and production traffic."
   },
   {
@@ -403,7 +403,7 @@
    "choices": [
     "Use a service desk integration so provisioning creates tickets",
     "Use a Web Services connector against the app's database",
-    "Use an HTTP subscription that posts to the app's login page",
+    "Use an HTTP subscription that posts each change to the app's login page",
     "Use a search subscription emailed to the app's admins"
    ],
    "answer": "Use a service desk integration so provisioning creates tickets",
@@ -415,7 +415,7 @@
    "topic": "External Integration Options",
    "stem": "A workflow must call a partner's REST API to register each new hire. Which workflow step should the engineer use?",
    "choices": [
-    "The Send Email action to the partner's support address",
+    "The Send Email action addressed to the partner's support mailbox",
     "The Compare Strings operator on the partner's URL",
     "The HTTP Request action with the partner's authentication",
     "A Loop operator over the partner's API pages"

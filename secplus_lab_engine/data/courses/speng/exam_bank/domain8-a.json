@@ -12,7 +12,7 @@
     "Raise the priority of every identity profile in the tenant",
     "Run fresh account and entitlement aggregations on the in-scope sources",
     "Turn off access requests until the campaign has been completed",
-    "Delete last quarter's completed campaigns so their data is not reused"
+    "Delete last quarter's completed campaigns so their old data is not reused again"
    ],
    "answer": "Run fresh account and entitlement aggregations on the in-scope sources",
    "explanation": "Campaigns are built from the access data already in the tenant, so current aggregations are the key preparation step. Deleting old campaigns does not refresh any account or entitlement data."
@@ -26,9 +26,9 @@
     "Convert every Active Directory group into its own role before generating it",
     "Require reviewers to reauthenticate before they can approve any item",
     "Switch the campaign to a source owner campaign so only IT staff review it",
-    "Populate clear display names and descriptions on the entitlements before generating it"
+    "Give the entitlements clear display names and descriptions first"
    ],
-   "answer": "Populate clear display names and descriptions on the entitlements before generating it",
+   "answer": "Give the entitlements clear display names and descriptions first",
    "explanation": "Reviewers make better decisions when entitlements carry business-friendly names and descriptions. Changing the campaign type only moves the confusing names to different reviewers."
   },
   {
@@ -37,7 +37,7 @@
    "topic": "Certification Preparation",
    "stem": "A company is running its first certification campaign across 40,000 identities. The governance lead worries about mistakes reaching every manager at once. What is the BEST approach?",
    "choices": [
-    "Launch the full campaign and fix problems as reviewers report them",
+    "Launch the full campaign at once and fix any problems as reviewers report them",
     "Skip the preview so the campaign reflects the very latest data",
     "Run a pilot campaign for one department first and check its preview carefully",
     "Set a one-day deadline so mistakes are exposed to managers quickly"
@@ -81,10 +81,10 @@
    "choices": [
     "Add a second reviewer so every item is approved by two managers",
     "Send daily reminders until every manager has signed off",
-    "Extend the deadline so managers have more time to approve each item",
-    "Use campaign filters to focus reviews on higher-risk access and leave out birthright items"
+    "Extend the deadline so that managers have more time to read and approve each item",
+    "Use campaign filters to focus on higher-risk access and leave out birthright items"
    ],
-   "answer": "Use campaign filters to focus reviews on higher-risk access and leave out birthright items",
+   "answer": "Use campaign filters to focus on higher-risk access and leave out birthright items",
    "explanation": "Campaign filters cut review volume so reviewers can focus on access that matters, which reduces rubber-stamping. A longer deadline or a second reviewer leaves the same volume of low-value items in place."
   },
   {
@@ -94,11 +94,11 @@
    "stem": "A ticketing application source has 300 accounts that never correlated to identities. A manager campaign starts next week. What should the engineer do so the right managers review this access?",
    "choices": [
     "Delete the uncorrelated accounts from the source so the campaign stays clean",
-    "Fix the correlation so these accounts link to their identities before generating the campaign",
+    "Fix the correlation so these accounts link to their identities first",
     "Add the uncorrelated accounts to a governance group for the campaign",
     "Make the ticketing application authoritative in a new identity profile"
    ],
-   "answer": "Fix the correlation so these accounts link to their identities before generating the campaign",
+   "answer": "Fix the correlation so these accounts link to their identities first",
    "explanation": "Manager campaigns review access held by identities, so accounts must correlate before they can be routed to a manager. Making a ticketing app authoritative would create bogus identities."
   },
   {
@@ -150,11 +150,11 @@
    "stem": "Compliance needs a review of only the Finance department identities who hold privileged access on two specific sources. Which approach BEST builds this campaign?",
    "choices": [
     "Create a source owner campaign for every source in the tenant",
-    "Create a campaign from a Search query that returns exactly those identities and access",
+    "Create a campaign from a Search query that targets those identities",
     "Create a role composition campaign for the Finance roles",
     "Create a manager campaign and ask non-Finance managers to approve all items"
    ],
-   "answer": "Create a campaign from a Search query that returns exactly those identities and access",
+   "answer": "Create a campaign from a Search query that targets those identities",
    "explanation": "Search campaigns use a query to target a precise set of identities and access items. A source owner campaign for every source reviews far more than the requirement."
   },
   {
@@ -163,12 +163,12 @@
    "topic": "Choosing a Campaign Type",
    "stem": "Some contractors have no manager in the tenant, but policy says every contractor's access must still get a manager-style review. Which approach includes them?",
    "choices": [
-    "A Search campaign with Manager as the reviewer, where identities without a manager go to the campaign creator",
+    "A Search campaign with Manager as reviewer, which sends them to the campaign creator",
     "A role composition campaign, which reviews contractor roles instead of people",
     "A source owner campaign, which sends every identity to the owner of the HR source",
-    "A manager campaign, which sends identities without a manager to the source owner"
+    "A manager campaign, which sends any identity without a manager to the source owner instead"
    ],
-   "answer": "A Search campaign with Manager as the reviewer, where identities without a manager go to the campaign creator",
+   "answer": "A Search campaign with Manager as reviewer, which sends them to the campaign creator",
    "explanation": "Manager campaigns exclude identities without a manager, but a Search campaign with Manager as reviewer includes them and routes them to the campaign creator. Source owner campaigns do not review by reporting line."
   },
   {
@@ -262,11 +262,11 @@
    "stem": "A preview shows one manager assigned 2,000 identities because an HR feed error set the same manager for an entire region. What is the BEST action?",
    "choices": [
     "Start the campaign and let that manager delegate the reviews informally",
-    "Reassign all 2,000 reviews to the campaign creator and start the campaign",
+    "Reassign all 2,000 reviews to the campaign creator and then start the campaign as is",
     "Extend the campaign deadline so the one manager can finish the reviews",
-    "Fix the manager data, refresh the identities, then delete and regenerate the campaign"
+    "Fix the manager data, refresh identities, then delete and regenerate the campaign"
    ],
-   "answer": "Fix the manager data, refresh the identities, then delete and regenerate the campaign",
+   "answer": "Fix the manager data, refresh identities, then delete and regenerate the campaign",
    "explanation": "Campaigns are generated as a snapshot, so the source data must be fixed and the campaign regenerated to route reviews correctly. Moving everything to the creator hides the data problem instead of fixing it."
   },
   {
@@ -332,7 +332,7 @@
    "stem": "A reviewer revokes an entitlement on a delimited file source that has no provisioning connector. How is that revocation carried out?",
    "choices": [
     "The revocation is discarded because the source cannot provision",
-    "The virtual appliance edits the delimited file and re-uploads it",
+    "The virtual appliance edits the delimited file and uploads the new version again",
     "The entitlement is removed during the next account aggregation",
     "A manual task is created for a person to remove the access on the target system"
    ],
@@ -401,7 +401,7 @@
    "topic": "Certification Data Troubleshooting",
    "stem": "Every new hire receives an Email Basic access profile through the Active lifecycle state, but managers do not see it in their manager campaign. What is the MOST likely reason?",
    "choices": [
-    "The access profile has no owner, so it is filtered out of every campaign",
+    "The access profile has no owner, so it is filtered out of every certification campaign",
     "Access profiles granted through lifecycle states are not included in manager campaigns",
     "The managers have not been given the Cert Admin user level",
     "Lifecycle state access is only certified in role composition campaigns"
@@ -415,12 +415,12 @@
    "topic": "Certification Data Troubleshooting",
    "stem": "A reviewer expected to see three separate SharePoint entitlements for an identity, but sees one access profile instead. The identity holds exactly the entitlements in that access profile. Why?",
    "choices": [
-    "The identity was given the access profile because it holds all its entitlements, so they are certified as that access profile",
+    "Matching entitlements gave the identity the access profile, so they are certified as it",
     "The campaign filter merged the entitlements into one item to reduce volume",
-    "The entitlements were marked privileged, which hides them inside access profiles",
+    "The entitlements were marked privileged, which hides them inside access profiles in reviews",
     "The reviewer lacks rights to see entitlements and can only see access profiles"
    ],
-   "answer": "The identity was given the access profile because it holds all its entitlements, so they are certified as that access profile",
+   "answer": "Matching entitlements gave the identity the access profile, so they are certified as it",
    "explanation": "When an identity's entitlements match an access profile, the identity is given that access profile and the entitlements are certified only as part of it. Campaign filters exclude items; they never merge them."
   },
   {
@@ -429,12 +429,12 @@
    "topic": "Certification Data Troubleshooting",
    "stem": "During a manager campaign, a manager says a former team member's account on the ticketing system is missing from her review. The account exists on the source but is uncorrelated. Why is it missing?",
    "choices": [
-    "Ticketing system sources can only be reviewed in role composition campaigns",
+    "Ticketing system sources can only be reviewed in role composition or source owner campaigns",
     "Manager campaigns only include accounts on authoritative sources",
-    "Uncorrelated accounts are not linked to an identity, so they are not in identity-based reviews",
+    "Uncorrelated accounts belong to no identity, so identity-based reviews leave them out",
     "The account was hidden because its entitlements have no descriptions"
    ],
-   "answer": "Uncorrelated accounts are not linked to an identity, so they are not in identity-based reviews",
+   "answer": "Uncorrelated accounts belong to no identity, so identity-based reviews leave them out",
    "explanation": "Manager campaigns review the access of identities, and an uncorrelated account belongs to no identity. Missing descriptions make items harder to read but do not remove them."
   },
   {
@@ -446,7 +446,7 @@
     "Campaigns always show access as it was at the start of the quarter",
     "The group is protected by an SoD policy, which keeps it in reviews",
     "The campaign uses tenant data from the last aggregation, which predates the removal",
-    "Manager campaigns read access live from AD when each reviewer opens them"
+    "Manager campaigns read each account's access live from AD whenever a reviewer opens them"
    ],
    "answer": "The campaign uses tenant data from the last aggregation, which predates the removal",
    "explanation": "Campaigns reflect the access the tenant knows about, which is only as current as the last aggregation. Nothing reads access live from the target when a reviewer opens a campaign."
@@ -486,11 +486,11 @@
    "stem": "Reviewers say the Department value shown for many identities in the campaign is wrong. The values come from an identity profile mapping that reads the wrong HR column. What is the BEST fix?",
    "choices": [
     "Create a role composition campaign to review the Department attribute",
-    "Correct the identity profile mapping, process the identities, then regenerate the campaign",
-    "Ask reviewers to note the correct department in their decision comments",
+    "Fix the identity profile mapping, process identities, then regenerate the campaign",
+    "Ask reviewers to note the correct department in the comments on each of their decisions",
     "Edit the Department value inside the campaign for each identity"
    ],
-   "answer": "Correct the identity profile mapping, process the identities, then regenerate the campaign",
+   "answer": "Fix the identity profile mapping, process identities, then regenerate the campaign",
    "explanation": "Identity attributes come from identity profile mappings, so the mapping must be fixed and identities processed before regenerating. Campaign data cannot be edited per identity."
   },
   {
@@ -634,12 +634,12 @@
    "topic": "Approver Options",
    "stem": "An engineer set approval on the Email Basic access profile, but new hires still receive it with no approval. The Active lifecycle state grants it. Why is there no approval?",
    "choices": [
-    "Access granted through lifecycle states or auto-assigned roles does not go through approval",
+    "Lifecycle state and auto-assigned role access bypass approval",
     "Lifecycle states always use the global approval settings instead",
     "Approval only applies once the identity has been active for a day",
     "The access profile's approvers must be in a governance group first"
    ],
-   "answer": "Access granted through lifecycle states or auto-assigned roles does not go through approval",
+   "answer": "Lifecycle state and auto-assigned role access bypass approval",
    "explanation": "Access profiles granted by lifecycle states or auto-assigned roles are provisioned without approval. Approval settings only apply to access requests."
   },
   {
@@ -678,7 +678,7 @@
    "choices": [
     "Edit each entitlement's request settings one at a time",
     "Set the source-level entitlement request configuration through the API",
-    "Bundle all 4,000 entitlements into a single requestable role",
+    "Bundle all 4,000 entitlements into a single requestable role with approval",
     "Create one SoD policy that lists every mainframe entitlement"
    ],
    "answer": "Set the source-level entitlement request configuration through the API",
@@ -788,7 +788,7 @@
    "topic": "Self-Approval, Escalation and Fallback",
    "stem": "The owner of the Finance Reports access profile requests it for herself. She is the only configured reviewer. With default settings, who reviews the request?",
    "choices": [
-    "She approves it herself as the configured reviewer",
+    "She approves it herself, because she is the configured reviewer",
     "Her manager, because self-approval is not permitted",
     "Any org admin, picked at random",
     "The source owner of the reporting source"
@@ -817,7 +817,7 @@
    "stem": "An engineer wants requests auto-approved when the configured reviewer is the requester, instead of being sent to the requester's manager. How is this enabled?",
    "choices": [
     "Add each owner to a governance group that has only one member",
-    "Enable reauthenticated approvals for the owners' access profiles",
+    "Enable reauthenticated approvals for all of the owners' own access profiles",
     "Turn off Require Approval on every access profile they own",
     "Set the autoApprove option in the approval configuration through the API"
    ],
@@ -900,7 +900,7 @@
    "topic": "SoD Policy Design",
    "stem": "Which situation is the BEST candidate for an SoD policy rather than an approval rule?",
    "choices": [
-    "Every request for a sensitive database role needs DBA team approval",
+    "Every request for a sensitive database role needs approval from the DBA team",
     "Contractors should lose all access on their end date",
     "The same person should never both create vendors and approve vendor payments",
     "New hires should automatically receive email and VPN access"
@@ -958,7 +958,7 @@
    "choices": [
     "Change the policy level from High to Low",
     "A mitigating control on the policy that expires after the agreed period",
-    "Disable the policy for 60 days and enable it again later",
+    "Disable the policy for 60 days and then enable it again once they finish",
     "Remove the supervisors' conflicting access from List B"
    ],
    "answer": "A mitigating control on the policy that expires after the agreed period",
@@ -970,12 +970,12 @@
    "topic": "SoD Policy Design",
    "stem": "A finance team lists 120 entitlements that must never be held together with a set of payment approval items. What should the engineer keep in mind while designing the policy?",
    "choices": [
-    "Each access list must contain exactly the same number of items",
-    "Each access list holds at most 50 access items, so the design must group or split them",
+    "Each access list must contain exactly the same number of access items as the other",
+    "Each list holds at most 50 access items, so they must be grouped or split",
     "Each SoD policy can only include entitlements from one source",
     "Each SoD policy can only be evaluated against role memberships"
    ],
-   "answer": "Each access list holds at most 50 access items, so the design must group or split them",
+   "answer": "Each list holds at most 50 access items, so they must be grouped or split",
    "explanation": "SoD policies allow at most 50 access items per list and need at least one per list. Grouping entitlements into access profiles or roles, or splitting the policy, keeps within the limit."
   },
   {
@@ -1028,7 +1028,7 @@
    "choices": [
     "A policy schedule with subscribers and the no-violations email toggle on",
     "A search subscription filtered on access requests",
-    "A workflow that runs whenever the policy is edited",
+    "A workflow that runs whenever the policy is edited and emails the policy owner",
     "An escalation chain on the policy's access lists"
    ],
    "answer": "A policy schedule with subscribers and the no-violations email toggle on",
@@ -1068,7 +1068,7 @@
    "topic": "SoD Enforcement and Violation Handling",
    "stem": "A violation owner wants to know what the policy author recommends doing when a violation occurs. Where should the author have recorded this guidance?",
    "choices": [
-    "In the comments of the policy's approval workflow",
+    "In the comments field of the policy's approval workflow for each request",
     "In the policy's mitigation advice and remediation advice fields",
     "In the policy's external reference tag",
     "In the description of each entitlement in List A"
