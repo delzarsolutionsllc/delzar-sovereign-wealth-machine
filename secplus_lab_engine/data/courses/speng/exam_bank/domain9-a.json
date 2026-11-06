@@ -152,7 +152,7 @@
     "No, backups are kept in clear text so that restores run faster",
     "No, customers must encrypt SailPoint's backups with their own keys",
     "Yes, backups are encrypted at rest like live tenant data",
-    "Yes, but only for flat file sources"
+    "Yes, but only for records that come from delimited flat file sources"
    ],
    "answer": "Yes, backups are encrypted at rest like live tenant data",
    "explanation": "SailPoint's encryption at rest covers stored copies, including backups. Customers do not manage SailPoint's internal backups."
@@ -332,7 +332,7 @@
    "stem": "A company has two isolated networks with no routing between them, each holding different applications. How should the VAs be designed?",
    "choices": [
     "One cluster per network, each with at least two VAs",
-    "One cluster with one VA in each network",
+    "One cluster with one VA placed in each of the two networks",
     "One VA in total, with new routes opened to both networks",
     "One cluster hosted in the SailPoint cloud for both networks"
    ],
@@ -348,7 +348,7 @@
     "Place VAs from both data centers in the same cluster",
     "Place every VA in the primary data center for simpler support",
     "Keep one VA powered off in the secondary site until needed",
-    "Rely on the tenant to run the connectors"
+    "Rely on the tenant to run the connectors if a data center is lost"
    ],
    "answer": "Place VAs from both data centers in the same cluster",
    "explanation": "VAs in both sites within one cluster keep tasks running when one site fails, provided both can reach the sources. A powered-off VA needs manual action."
