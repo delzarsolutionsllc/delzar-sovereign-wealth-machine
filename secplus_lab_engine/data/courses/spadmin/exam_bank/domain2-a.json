@@ -12,7 +12,7 @@
     "To connect the tenant securely to sources inside the organization's network",
     "To store nightly backups of the tenant configuration",
     "To replace identity profiles for on-premises users",
-    "To host a local copy of the tenant's identity database"
+    "To host a local copy of the tenant's identity database for faster sign-in"
    ],
    "answer": "To connect the tenant securely to sources inside the organization's network",
    "explanation": "A VA is the bridge between the multi-tenant cloud service and systems the cloud cannot reach directly, such as on-premises directories and databases. It does not hold the tenant's identity data or configuration backups."
@@ -23,7 +23,7 @@
    "topic": "VA Purpose and Architecture",
    "stem": "A firewall engineer asks which inbound connections from SailPoint's cloud must be opened to the VAs so aggregations can run. What should the administrator tell the engineer?",
    "choices": [
-    "Inbound 443 from SailPoint's published cloud addresses",
+    "Inbound 443 from SailPoint's published cloud addresses to every VA",
     "Inbound 8443 from the tenant's API gateway",
     "None are needed, because each VA polls SailPoint over outbound HTTPS",
     "Inbound 22 so the tenant can run remote commands"
@@ -39,7 +39,7 @@
    "choices": [
     "The tenant opens an SSH session to a VA and starts the aggregation",
     "The administrator's browser sends the request straight to the VA",
-    "The domain controllers push the accounts to the tenant and the VA only logs it",
+    "The domain controllers push the accounts to the tenant, and the VA only records the result in its log",
     "The tenant queues the request for the source's VA cluster and a VA in that cluster picks it up"
    ],
    "answer": "The tenant queues the request for the source's VA cluster and a VA in that cluster picks it up",
@@ -107,7 +107,7 @@
    "topic": "VA Clusters and High Availability",
    "stem": "What is SailPoint's minimum recommendation for the number of VAs in each production cluster?",
    "choices": [
-    "One VA for every source connected to the cluster",
+    "One VA for every source connected to the cluster, sized to its load",
     "Three VAs, so a majority quorum can vote",
     "Two VAs, so the cluster stays available during rolling updates",
     "One VA, protected by a hypervisor snapshot"
@@ -138,7 +138,7 @@
     "A source is linked to a VA cluster, and any VA in that cluster may process its work",
     "A source is pinned to one VA by its host name",
     "Each VA is dedicated to exactly one source",
-    "Sources take work from every cluster in the tenant at random"
+    "Sources send their work to every cluster in the tenant, and the fastest cluster answers"
    ],
    "answer": "A source is linked to a VA cluster, and any VA in that cluster may process its work",
    "explanation": "The source's Base Configuration selects a VA cluster, not an individual VA. Whichever VA in the cluster polls the queue first picks up the request."
@@ -150,7 +150,7 @@
    "stem": "An organization places VAs from its primary and disaster recovery data centers in one cluster, all running. What happens if the primary data center goes offline?",
    "choices": [
     "SailPoint Support must re-pair the DR VAs",
-    "Administrators must re-enter source credentials on a DR cluster",
+    "Administrators must re-enter the source credentials on a separate DR cluster",
     "The DR VAs keep processing the cluster's requests with no action needed",
     "Each source must be reconnected to the DR data center"
    ],
@@ -164,7 +164,7 @@
    "stem": "An organization uses separate primary and DR VA clusters and connects all sources to the primary one. What is the main drawback of this switch-clusters strategy?",
    "choices": [
     "The DR cluster adds latency to daily provisioning",
-    "Both clusters process every request, creating duplicates",
+    "Both clusters pick up every request, so each change is provisioned twice to the target",
     "The DR VAs stop receiving SailPoint updates",
     "Failover means reconnecting each source to the DR cluster and re-entering its credentials"
    ],
@@ -178,7 +178,7 @@
    "stem": "What does SailPoint require for VAs that serve a sandbox tenant?",
    "choices": [
     "Sandbox tenants share the production cluster's VAs",
-    "One sandbox VA is enough because sandbox gets updates later",
+    "One sandbox VA is enough, because sandbox receives VA updates after production does",
     "Sandbox VAs must sit in the DMZ to keep them isolated",
     "A sandbox cluster with at least two VAs, used to test changes before production"
    ],
@@ -192,7 +192,7 @@
    "stem": "A network architect proposes a load balancer in front of the VAs in a cluster for high availability. What should the administrator advise?",
    "choices": [
     "Use a layer 7 load balancer with sticky sessions",
-    "Use the load balancer only for provisioning traffic",
+    "Use the load balancer only for provisioning traffic, and leave aggregation direct",
     "It is not required, because VAs in a cluster share work by polling the queue",
     "Use DNS round robin across the VA host names"
    ],
@@ -235,7 +235,7 @@
    "choices": [
     "On the cluster's Add New VA page in the Admin UI, within four hours",
     "In the VA's config.yaml before a reboot",
-    "In a support case so SailPoint can pair the VA",
+    "In a support case, so SailPoint can pair the VA with the cluster for you",
     "In the source's Base Configuration page"
    ],
    "answer": "On the cluster's Add New VA page in the Admin UI, within four hours",
@@ -250,7 +250,7 @@
     "Ask SailPoint Support to assign an address from the tenant",
     "Create the static.network file with the NIC name, address, gateway and DNS, then reboot",
     "Add an ipAddress line to the VA's config.yaml",
-    "Enter the address on the cluster's Edit page in the Admin UI"
+    "Enter the address, gateway and DNS on the cluster's Edit page in the Admin UI"
    ],
    "answer": "Create the static.network file with the NIC name, address, gateway and DNS, then reboot",
    "explanation": "Static addressing for local VAs is set in /etc/systemd/network/static.network followed by a reboot. The Admin UI does not manage the VA's network interface."
@@ -303,7 +303,7 @@
    "topic": "VA Security and Keys",
    "stem": "What does each VA hold that lets it decrypt the source credentials it uses to reach target systems?",
    "choices": [
-    "A shared key built into every VA image by SailPoint",
+    "A shared symmetric key built into every VA image by SailPoint",
     "A copy of every identity's password hash",
     "A 2048-bit RSA private key generated from the key passphrase",
     "The tenant's OAuth client secret"
@@ -317,12 +317,12 @@
    "topic": "VA Security and Keys",
    "stem": "A security architect asks why SailPoint advises against putting VAs in the DMZ. What is the MOST important reason?",
    "choices": [
-    "SailPoint refuses VAs that have public IP addresses",
+    "SailPoint refuses to pair any VA that has a public IP address on its interface",
     "A VA cannot obtain an IP address inside a DMZ",
     "DMZ firewalls cannot carry outbound HTTPS",
-    "The VA holds the key that decrypts source credentials, so a weaker zone puts them at risk"
+    "The VA holds the key that decrypts source credentials, which a weaker zone exposes"
    ],
-   "answer": "The VA holds the key that decrypts source credentials, so a weaker zone puts them at risk",
+   "answer": "The VA holds the key that decrypts source credentials, which a weaker zone exposes",
    "explanation": "Security is the main concern: the VA is a communication backbone holding its private key. Proximity to sources and fewer internal firewall openings are the other reasons."
   },
   {
@@ -347,7 +347,7 @@
    "choices": [
     "Moving a source deletes its account schema",
     "Credentials expire whenever a VA reboots",
-    "Each cluster requires a separate service account per source",
+    "Each cluster requires its own separate service account for every source it serves",
     "The stored credentials were encrypted for the original cluster's keys"
    ],
    "answer": "The stored credentials were encrypted for the original cluster's keys",
@@ -415,7 +415,7 @@
    "topic": "Monitoring VA Health",
    "stem": "A cluster card shows a warning badge. How can the administrator find which VA has the problem and see its details?",
    "choices": [
-    "Download ccg.log from the source's configuration page",
+    "Download ccg.log from the source's configuration page and search for the VA",
     "Follow the health badge to the VA list and select the affected VA",
     "Run Test Connection on every source in the cluster",
     "Open the identity profile and run a preview"
@@ -432,7 +432,7 @@
     "The cluster's Time Zone setting on the Edit page",
     "The Admin Dashboard Tasks list",
     "The VA's VA Components tab, which lists each process as OK, Busy or Error",
-    "The source's Accounts tab, which lists running aggregations"
+    "The source's Accounts tab, which lists the aggregations running on each VA"
    ],
    "answer": "The VA's VA Components tab, which lists each process as OK, Busy or Error",
    "explanation": "The VA Components view reports each process status so admins can see whether it is available for work or updates. Busy processes may be running long jobs such as aggregations."
@@ -488,7 +488,7 @@
     "The cluster has no VAs and cannot be used until some are added",
     "All of the cluster's VAs are inactive",
     "The cluster's logs have been cleared",
-    "The cluster has no sources connected yet"
+    "The cluster has VAs but no sources have been connected to it yet"
    ],
    "answer": "The cluster has no VAs and cannot be used until some are added",
    "explanation": "Empty Cluster means no VAs exist in it. A cluster with VAs but no sources does not show this badge, and inactive VAs produce a different badge."
@@ -500,7 +500,7 @@
    "stem": "A two-VA cluster shows VA Update in Progress during business hours. What is the expected impact on its sources?",
    "choices": [
     "The sources fall back to SaaS connectors",
-    "All source connections stop until the update ends",
+    "All source connections stop until the update ends on every VA in the cluster",
     "Provisioning is queued but aggregation stops",
     "Normal cluster operation continues while one VA is being configured"
    ],
@@ -515,7 +515,7 @@
    "choices": [
     "Change the cluster's time zone",
     "Work with the network administrator, because the VA cannot connect",
-    "Re-enter the credentials on each connected source",
+    "Re-enter the service account credentials on each source connected to the cluster",
     "Delete the cluster and every source on it"
    ],
    "answer": "Work with the network administrator, because the VA cannot connect",
@@ -541,7 +541,7 @@
    "topic": "VA Status and Alert Messages",
    "stem": "A cluster card shows All VAs Inactive. What is the MOST likely impact on its sources?",
    "choices": [
-    "Sources keep working through the tenant's direct link",
+    "Sources keep working, because the tenant connects to their targets directly instead",
     "Provisioning switches to manual tasks automatically",
     "Aggregation, test connection and provisioning for those sources cannot run",
     "Only scheduled aggregations are delayed"
@@ -625,7 +625,7 @@
    "stem": "A cluster reports a Network Error saying it cannot reach required endpoints. What should the administrator check FIRST?",
    "choices": [
     "That the cluster's time zone matches the sources",
-    "That the source service account password is current",
+    "That the source service account password is current and has not been locked out",
     "That inbound 443 is open from the tenant to each VA",
     "That the firewall allows outbound HTTPS to the required SailPoint and AWS URLs"
    ],
@@ -652,7 +652,7 @@
    "topic": "Network and Firewall Issues",
    "stem": "A tenant runs in the Frankfurt AWS region. Which SQS endpoints must the VAs be allowed to reach?",
    "choices": [
-    "Any SQS endpoint, because the VA picks the nearest one",
+    "Any regional SQS endpoint, because the VA chooses the nearest one automatically",
     "Only sqs.eu-central-1.amazonaws.com",
     "Only sqs.us-east-1.amazonaws.com",
     "Both sqs.us-east-1.amazonaws.com and sqs.eu-central-1.amazonaws.com"
@@ -669,7 +669,7 @@
     "Configure the VAs to trust the private root CA the inspection device uses",
     "Turn off certificate validation on the VAs",
     "Allow the VAs by IP address instead of URL",
-    "Move the VAs to the DMZ to bypass inspection"
+    "Move the VAs into the DMZ so their traffic bypasses the inspection device"
    ],
    "answer": "Configure the VAs to trust the private root CA the inspection device uses",
    "explanation": "VAs reject untrusted certificates, so the inspection CA must be trusted on the VA. Disabling validation is not supported and would weaken security."
@@ -680,7 +680,7 @@
    "topic": "Network and Firewall Issues",
    "stem": "A source shows Target system failing while its VA cluster is healthy. What is the MOST likely cause?",
    "choices": [
-    "The VA cannot reach SailPoint's AWS endpoints",
+    "The VA cannot reach SailPoint's AWS endpoints, so the cluster's queue is not polled",
     "The source has no Create Account policy",
     "The VA cannot reach the target or the source's service credentials are no longer valid",
     "The cluster has only one VA"
@@ -696,7 +696,7 @@
    "choices": [
     "The VA needs a second network card for databases",
     "The address is in a range SailPoint reserves, so VA traffic to it does not route",
-    "The database requires an inbound connection from SailPoint",
+    "The database requires an inbound connection from SailPoint's cloud on its listener port",
     "JDBC sources must use a SaaS connector"
    ],
    "answer": "The address is in a range SailPoint reserves, so VA traffic to it does not route",
@@ -711,7 +711,7 @@
     "Disable time synchronization on the VAs",
     "Set the cluster time zone to UTC in the Admin UI",
     "Point every VA at an internal NTP server in timesyncd.conf and restart the time service",
-    "Point only one VA in each cluster at an internal server"
+    "Point only the first VA in each cluster at an internal NTP server; the others copy its time"
    ],
    "answer": "Point every VA at an internal NTP server in timesyncd.conf and restart the time service",
    "explanation": "Each VA must be configured individually to use internal NTP, and port 123 can close only after all of them are. Accurate time is required for the VA to work."
@@ -737,7 +737,7 @@
    "stem": "A new VA connects to the tenant but cannot resolve the host names of internal domain controllers. What should the administrator check?",
    "choices": [
     "The DNS entry in the VA's static.network file points to internal DNS servers",
-    "The keyPassphrase is the same as on the other VAs",
+    "The keyPassphrase on this VA matches the one set on the other VAs in the cluster",
     "The cluster time zone is the same as the domain's",
     "Port 22 is open from the domain controllers"
    ],
@@ -836,7 +836,7 @@
    "choices": [
     "Restart the VA cluster immediately",
     "Review ccg.log around the failure time for the error and exception details",
-    "Raise the account deletion threshold",
+    "Raise the source's account deletion threshold and run the test connection again",
     "Delete and recreate the source"
    ],
    "answer": "Review ccg.log around the failure time for the error and exception details",
@@ -849,7 +849,7 @@
    "stem": "While reading connector logs after a failure, which search approach does SailPoint recommend?",
    "choices": [
     "Search for the generic message shown in the UI",
-    "Search only for INFO lines that mention the tenant",
+    "Search only for INFO lines that mention the tenant name and the source name",
     "Search the newest line in the file only",
     "Search near the failure time for ERROR, Exception and HTTP or LDAP codes"
    ],
@@ -864,7 +864,7 @@
    "choices": [
     "Debug mode disables log rotation forever",
     "Debugging stores account data on the VA disk",
-    "Debugging encrypts logs and doubles their size",
+    "Debugging encrypts each log file, which doubles its size on the VA's disk over time",
     "Verbose logs filled the disk while debugging stayed on or was turned on again"
    ],
    "answer": "Verbose logs filled the disk while debugging stayed on or was turned on again",
@@ -893,7 +893,7 @@
     "SailPoint deletes the cluster after seven days",
     "The other two VAs must be paired again",
     "No software or maintenance updates are applied to any VA in that cluster",
-    "The other two VAs stop processing requests"
+    "The other two VAs stop processing requests until the third VA comes back online"
    ],
    "answer": "No software or maintenance updates are applied to any VA in that cluster",
    "explanation": "If any VA in a cluster is not connected, SailPoint does not update any VA in it. Fixing or removing the disconnected VA lets updates resume."
@@ -907,7 +907,7 @@
     "Updates can be blocked by removing port 443 for that week",
     "VA updates cannot be skipped or delayed, but sandbox usually gets them about a week earlier",
     "Updates only apply when an admin approves them",
-    "Updates can be postponed from the cluster's Edit page"
+    "Updates can be postponed for up to 30 days from the cluster's Edit page in the Admin UI"
    ],
    "answer": "VA updates cannot be skipped or delayed, but sandbox usually gets them about a week earlier",
    "explanation": "SailPoint manages updates and does not allow delays, so sandbox clusters act as an early check. Blocking traffic would break the VA, not postpone the update."
@@ -921,7 +921,7 @@
     "Set the cluster time zone again",
     "Confirm the pending update with the update engine client and reboot the VA",
     "Re-enter the cluster's keyPassphrase",
-    "Reinstall the VA from the latest image"
+    "Reinstall the VA from the latest image and pair it with the cluster again"
    ],
    "answer": "Confirm the pending update with the update engine client and reboot the VA",
    "explanation": "The warning means Flatcar downloaded an update that needs a reboot to finish. Rebuilding the VA is unnecessary."
@@ -933,7 +933,7 @@
    "stem": "A cluster shows a Service Stability Warning because a container restarted more than 10 times in 30 minutes. What does SailPoint recommend?",
    "choices": [
     "Increase the account deletion threshold",
-    "Turn off the Cloud Connector Gateway component",
+    "Turn off the Cloud Connector Gateway component until the restarts stop",
     "Check that VA services are up to date and restart the cluster",
     "Move the sources to a SaaS connector"
    ],
@@ -948,7 +948,7 @@
    "choices": [
     "Run the aggregation again after the update, since long jobs can be interrupted",
     "Ask SailPoint to roll back the update",
-    "Raise the aggregation's log level to TRACE permanently",
+    "Raise the aggregation's log level to TRACE permanently so the next interruption is logged",
     "Delete the VA that was updated"
    ],
    "answer": "Run the aggregation again after the update, since long jobs can be interrupted",
@@ -1003,7 +1003,7 @@
    "stem": "VAs deployed on small cloud instances keep showing Memory Error. What should the administrator do?",
    "choices": [
     "Resize the instances to meet SailPoint's minimum VA sizes",
-    "Remove the second VA to free resources",
+    "Remove the second VA from the cluster to free memory for the first one",
     "Turn on debugging to find the leak",
     "Lower the root log level to ERROR"
    ],
@@ -1016,7 +1016,7 @@
    "topic": "Resource and Disk Warnings",
    "stem": "An administrator enables the Privileged Access Gateway component on an existing cluster. What must also happen?",
    "choices": [
-    "The cluster must be converted to a different cluster type",
+    "The cluster must be converted to a different cluster type that supports the component",
     "Each VA must get extra processors and memory on top of the minimum size",
     "Each VA must be paired again",
     "Sources must be moved to a new cluster"
@@ -1032,10 +1032,10 @@
    "choices": [
     "Change the keyPassphrase on every VA",
     "Re-pair each VA to get a new key pair",
-    "Restart the cluster to request a new certificate",
-    "Renew the certificate stored in /home/sailpoint/ca-certificates and remove the expired one"
+    "Restart the cluster so each VA requests a new certificate from SailPoint automatically",
+    "Renew the certificate in /home/sailpoint/ca-certificates and remove the expired one"
    ],
-   "answer": "Renew the certificate stored in /home/sailpoint/ca-certificates and remove the expired one",
+   "answer": "Renew the certificate in /home/sailpoint/ca-certificates and remove the expired one",
    "explanation": "The warning fires when a certificate in the VA's certificate folder has expired or expires within 30 days. Restarting or re-pairing does not renew it."
   },
   {
@@ -1059,7 +1059,7 @@
    "stem": "An administrator deletes a VA from a cluster in the Admin UI. What else must be done?",
    "choices": [
     "Delete the cluster as well",
-    "Re-enter credentials on every connected source",
+    "Re-enter the service account credentials on every source connected to the cluster",
     "Shut down the related VA instance on the virtualization platform",
     "Restart the tenant"
    ],
@@ -1089,7 +1089,7 @@
     "Delete the source's account schema",
     "Turn off the Cloud Connector Gateway on the cluster",
     "Select a different VA cluster in the source's Base Configuration and save",
-    "Remove the source from the cluster's Connections tab"
+    "Remove the source from the list on the cluster's Connections tab and save the change"
    ],
    "answer": "Select a different VA cluster in the source's Base Configuration and save",
    "explanation": "The cluster is chosen on the source, so disconnecting means choosing another cluster there. The Connections tab only lists sources."
@@ -1116,7 +1116,7 @@
    "choices": [
     "Check the new cluster's Connections tab lists the same sources",
     "Check the Identities list for new identities",
-    "Check that the failed VAs have new pairing codes",
+    "Check that each failed VA shows a new pairing code on the cluster's Edit page",
     "Check the failed cluster still shows Connected"
    ],
    "answer": "Check the new cluster's Connections tab lists the same sources",

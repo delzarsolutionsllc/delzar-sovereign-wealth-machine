@@ -9,12 +9,12 @@
    "topic": "SoD Policy Types",
    "stem": "A compliance lead asks what separation of duties means as a control in Identity Security Cloud. Which description is BEST?",
    "choices": [
-    "Only the source owner may approve access requests for the source",
+    "Only the source owner may approve access requests for that source's entitlements",
     "Every identity must certify its own access at least once a year",
-    "No single person should hold access that lets them complete a sensitive process alone",
+    "No one person should be able to complete a sensitive process alone",
     "Accounts on a source must all share the same password policy"
    ],
-   "answer": "No single person should hold access that lets them complete a sensitive process alone",
+   "answer": "No one person should be able to complete a sensitive process alone",
    "explanation": "SoD means conflicting duties, such as recording and paying invoices, are split between people. Certifications and password policies are separate governance features."
   },
   {
@@ -26,7 +26,7 @@
     "Conflicting access based policies and general (search query based) policies",
     "Role policies and entitlement policies with separate limits",
     "Source policies and identity profile policies",
-    "Preventive policies and detective policies stored as separate objects"
+    "Preventive policies and detective policies, each stored as a separate object type"
    ],
    "answer": "Conflicting access based policies and general (search query based) policies",
    "explanation": "The API types a policy as conflicting access based (two access lists) or general (defined by a search query). Preventive and detective describe how a policy is enforced, not separate policy objects."
@@ -124,7 +124,7 @@
     "Each list allows at most 50 access items, so the policy must be split",
     "The list accepts them once a governance group owns the policy",
     "The list accepts them, but only the first ten are evaluated",
-    "The list accepts them, because only roles count toward a limit"
+    "The list accepts them, because only roles and access profiles count toward a limit"
    ],
    "answer": "Each list allows at most 50 access items, so the policy must be split",
    "explanation": "Access-based SoD policies allow a maximum of 50 access items per side. Splitting the conflict across policies, or grouping access into access profiles or roles, keeps each list under the limit."
@@ -136,7 +136,7 @@
    "stem": "An admin saves a draft SoD policy with items in List A but leaves List B empty, planning to fill it later. What is the MOST likely result?",
    "choices": [
     "The policy automatically copies List A into List B",
-    "The policy runs normally and simply returns no violations",
+    "The policy runs normally and simply returns no violations until List B is filled",
     "The policy flags everyone holding any List A item",
     "The policy will error until each list has at least one access item"
    ],
@@ -192,7 +192,7 @@
    "stem": "An admin chooses Allow submission on an SoD policy. A user then requests access that conflicts with the policy. What happens?",
    "choices": [
     "The request continues and is routed to the configured approvers",
-    "The request is held until the next scheduled policy run",
+    "The request is held in a queue until the next scheduled run of the policy completes",
     "The request is converted into a certification campaign",
     "The request is cancelled before any approver sees it"
    ],
@@ -205,7 +205,7 @@
    "topic": "Preventive SoD Enforcement",
    "stem": "Leadership wants every ISC access request with any SoD conflict blocked, regardless of individual policy settings. Where should the admin configure this?",
    "choices": [
-    "Admin > Connections > Sources > Account Correlation",
+    "Admin > Connections > Sources > Account Management > Account Correlation",
     "Admin > Identity Management > Identity Profiles > Mappings",
     "Admin > Password Mgmt > Sync Groups",
     "Admin > Global > System Settings > Feature Settings > Access Requests"
@@ -219,7 +219,7 @@
    "topic": "Preventive SoD Enforcement",
    "stem": "An identity governance manager explains the difference between preventive and detective SoD. Which statement describes the preventive side?",
    "choices": [
-    "Running a policy on a schedule to list existing violations",
+    "Running a policy on a schedule to list violations that already exist in the tenant",
     "Certifying violations in a later campaign",
     "Checking requested access against policies before it is granted",
     "Exporting the violations table for auditors"
@@ -234,7 +234,7 @@
    "stem": "An SoD policy is set to Block submission, but a user already held both conflicting entitlements before the policy was created. What should the admin expect?",
    "choices": [
     "The existing conflict appears as a violation when the policy runs",
-    "The policy cannot be enabled until the conflict is removed",
+    "The policy cannot be enabled until the existing conflict is removed from the user",
     "The conflict is ignored because it predates the policy",
     "The policy removes one of the entitlements automatically"
    ],
@@ -291,7 +291,7 @@
    "choices": [
     "Turn off the toggle that sends an email when there are no violations",
     "Remove the policy owner so no emails are sent",
-    "Switch the policy access request option to Allow submission",
+    "Switch the policy's access request option from Block submission to Allow submission",
     "Lower the policy risk level to Low"
    ],
    "answer": "Turn off the toggle that sends an email when there are no violations",
@@ -320,7 +320,7 @@
     "Configuring a password sync group",
     "Subscribing to the SoD Violation Opened event trigger",
     "Setting the policy to Block submission",
-    "Adding the ITSM tool as a policy co-owner"
+    "Adding the ITSM tool's service account as a co-owner of the policy"
    ],
    "answer": "Subscribing to the SoD Violation Opened event trigger",
    "explanation": "SoD event triggers fire on violation lifecycle events, and SoD Violation Opened supports custom notifications or integrations. Ownership and blocking settings do not call external systems."
@@ -362,7 +362,7 @@
     "Lower the policy risk level so it stops reporting",
     "Delete the SoD policy until the migration ends",
     "Mitigate the violation with a mitigating control and comments",
-    "Remove the clerk's identity from the identity profile"
+    "Remove the clerk's identity from the identity profile until the migration ends"
    ],
    "answer": "Mitigate the violation with a mitigating control and comments",
    "explanation": "Mitigating a violation applies a control that documents the accepted risk and can expire. Deleting or weakening the policy removes evidence and protection for everyone else."
@@ -457,13 +457,13 @@
    "topic": "Password Policies and Sync Groups",
    "stem": "An admin is creating a password sync group. Which prerequisite is required?",
    "choices": [
-    "At least two direct connect sources configured for password management and a password policy",
+    "At least two direct connect sources set up for password management and a password policy",
     "A governance group that owns every source in the group",
     "At least one flat file source and one SoD policy",
-    "One authoritative source with delta aggregation enabled"
+    "One authoritative source with delta aggregation enabled and a governance group as its owner"
    ],
-   "answer": "At least two direct connect sources configured for password management and a password policy",
-   "explanation": "Sync groups need two or more direct connect sources set up for password management, an access application on each authentication source, and a password policy. Flat file sources cannot have passwords set."
+   "answer": "At least two direct connect sources set up for password management and a password policy",
+   "explanation": "Sync groups need at least two direct connect sources set up for password management, an access application on each authentication source, and a password policy. Flat file sources cannot have passwords set."
   },
   {
    "id": "D6-234",
@@ -471,7 +471,7 @@
    "topic": "Password Policies and Sync Groups",
    "stem": "An admin wants to stop users choosing common words as passwords. Where is a password dictionary enabled?",
    "choices": [
-    "In the SoD policy rules under Admin > SoD Policies",
+    "In the SoD policy rules under Admin > SoD Policies > Policy Definition",
     "In the source's Account Correlation settings",
     "In a password policy under Admin > Password Mgmt > Policies",
     "In the identity profile's lifecycle states"
