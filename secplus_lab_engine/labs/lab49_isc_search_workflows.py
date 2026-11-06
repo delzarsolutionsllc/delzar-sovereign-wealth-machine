@@ -1347,7 +1347,7 @@ def generate_scenario(rng, policies: dict) -> dict:
         ("Notify the manager", [t, step("Get Identity", "Get Identity", "Send Email", ["$.trigger.identity.id"]),
                                 step("Send Email", "Send Email", end_ok, ["$.getIdentity.email"]),
                                 step(end_ok, end_ok)]),
-        ("Remove leaver access", [t, step("Get Identity", "Get Identity", None, ["$.trigger.identity.id"]),
+        ("Remove leaver access", [t, step("Get Identity", "Get Identity", "Compare Strings", ["$.trigger.identity.id"]),
                                   step("Compare Strings", "Compare Strings", None,
                                        ["$.getIdentity.attributes.cloudLifecycleState"], true="Get Access",
                                        false=end_ok),
@@ -1368,7 +1368,6 @@ def generate_scenario(rng, policies: dict) -> dict:
         ("Two starts", [t, step("Scheduled Trigger", "Scheduled Trigger", "Get Identity"),
                         step("Get Identity", "Get Identity", end_bad, ["$.trigger.identity.id"]), step(end_bad, end_bad)]),
     ]
-    flows[1][1][1]["next"] = "Compare Strings"
     workflows = []
     for k, (name, steps) in enumerate(flows, 1):
         steps = [dict(s) for s in steps]
