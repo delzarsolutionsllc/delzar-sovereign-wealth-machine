@@ -9,7 +9,7 @@
       "topic": "Secure Baselines",
       "stem": "Which of the following BEST describes a secure baseline?",
       "choices": [
-        "A record of normal network traffic volumes for each hour",
+        "A record of normal network traffic volumes for each hour of the business day",
         "A complete list of every hardware and software asset owned by the company",
         "A documented set of minimum security settings that systems must meet",
         "A calendar showing when each system will be patched"
@@ -39,7 +39,7 @@
       "choices": [
         "Establishing",
         "Deploying",
-        "Enumerating",
+        "Decommissioning",
         "Maintaining"
       ],
       "answer": "Maintaining",
@@ -54,7 +54,7 @@
         "Automated compliance scanning against the baseline",
         "Quarterly penetration testing by an outside firm against each server",
         "Full disk encryption on each server",
-        "Nightly image backups of each server"
+        "Nightly image backups of each server to an offsite storage location"
       ],
       "answer": "Automated compliance scanning against the baseline",
       "explanation": "Regularly scanning systems against the baseline detects configuration drift and can alert on it. A penetration test is periodic and looks for exploitable weaknesses, so it would not reliably catch a single setting change in time."
@@ -68,7 +68,7 @@
         "Push it to every laptop overnight",
         "Apply it only to laptops issued to new hires starting next month",
         "Test it on a small, representative group of laptops",
-        "Wait for users to report any problems"
+        "Wait for users to report any problems to the help desk after rollout"
       ],
       "answer": "Test it on a small, representative group of laptops",
       "explanation": "Testing a baseline on a pilot group finds settings that break business applications before they affect everyone. Pushing it to every laptop at once risks a large outage if a setting conflicts with a critical application."
@@ -93,7 +93,7 @@
       "topic": "Hardening Targets",
       "stem": "An auditor finds that the company's edge routers are still using the vendor's default administrator password and are managed over Telnet. Which of the following should be done to harden the routers?",
       "choices": [
-        "Enable SNMPv1 so the routers can be monitored",
+        "Enable SNMPv1 so the routers can be monitored from the central console",
         "Add more memory to the routers",
         "Add a second internet connection so the routers have redundant uplinks",
         "Change the default credentials and manage the routers over SSH"
@@ -109,7 +109,7 @@
       "choices": [
         "Install an EDR agent on each device",
         "Change the default passwords and update the firmware",
-        "Assign each device a public IP address",
+        "Assign each device a public IP address so it can be reached for remote support",
         "Enable Universal Plug and Play so each device can configure the firewall"
       ],
       "answer": "Change the default passwords and update the firmware",
@@ -138,7 +138,7 @@
         "Enable autoscaling for all workloads",
         "Require multifactor authentication for administrative accounts",
         "Move the workloads to larger instance sizes",
-        "Serve the public website through a global content delivery network"
+        "Serve the website through a content delivery network"
       ],
       "answer": "Require multifactor authentication for administrative accounts",
       "explanation": "The cloud management console controls the whole environment, so protecting administrator sign-ins with MFA is a key cloud hardening step. Autoscaling and larger instances improve capacity, not security."
@@ -150,7 +150,7 @@
       "stem": "A factory robot controller runs a real-time operating system on dedicated hardware and must respond to sensor input within milliseconds. Which of the following is the MOST likely reason the vendor does not allow third-party security software on the controller?",
       "choices": [
         "The software could delay time-critical processing",
-        "Real-time operating systems have no network stack",
+        "Real-time operating systems have no network stack at all",
         "Real-time operating systems can never be updated",
         "Real-time operating systems encrypt all storage by default"
       ],
@@ -164,7 +164,7 @@
       "stem": "A heat map of a new wireless network shows that the corporate signal is strong in the public parking lot across the street. Which of the following should the administrator do to reduce the chance of outsiders connecting?",
       "choices": [
         "Hide the network's SSID",
-        "Switch the access points to 2.4 GHz only",
+        "Switch the access points to the 2.4 GHz band only so coverage is more uniform",
         "Add more access points near the windows to improve indoor coverage",
         "Lower the transmit power and reposition the nearby access points"
       ],
@@ -178,7 +178,7 @@
       "stem": "When planning where to mount access points in a new office, which of the following is the MOST important security reason to avoid placing them right next to exterior walls and windows?",
       "choices": [
         "To limit how far the signal leaks outside the building",
-        "To keep the access points from overheating",
+        "To keep the access points from overheating in direct afternoon sunlight",
         "To make firmware updates easier for the network team to install",
         "To reduce the length of the network cables"
       ],
@@ -191,7 +191,7 @@
       "topic": "Wireless Installation",
       "stem": "A wireless engineer reviews a site survey and finds that neighboring access points in the office all use overlapping 2.4 GHz channels, causing interference. Which of the following should the engineer do?",
       "choices": [
-        "Assign every access point to channel 6",
+        "Assign every access point to channel 6 so all clients share one channel",
         "Assign non-overlapping channels such as 1, 6, and 11",
         "Enable WPS on each access point",
         "Disable the 5 GHz band on every access point in the office"
@@ -205,7 +205,7 @@
       "topic": "Mobile Solutions",
       "stem": "A startup allows employees to read work email on their personal phones. The company wants to keep corporate data separate from personal data and be able to remove only the work data when someone leaves. Which of the following BEST meets this need?",
       "choices": [
-        "A full remote wipe of the device when the employee leaves",
+        "A full remote wipe when the employee leaves",
         "A carrier lock on the SIM card",
         "Disabling the camera on the device",
         "MDM containerization with a separate work profile"
@@ -305,7 +305,7 @@
       "choices": [
         "Block all cloud services at the company's internet firewall",
         "Increase the marketing department's budget",
-        "Run vulnerability scans more frequently",
+        "Run vulnerability scans more frequently on the company's internal network",
         "Route all technology purchases through formal procurement"
       ],
       "answer": "Route all technology purchases through formal procurement",
@@ -331,7 +331,7 @@
       "topic": "Acquisition and Procurement",
       "stem": "Two vendors offer similar firewalls. Vendor A's model will reach end of support next year, while Vendor B commits to security updates for six years. From an asset management perspective, why is Vendor B the better choice?",
       "choices": [
-        "The firewall will cost less to buy",
+        "The firewall will cost less to buy and install in the first year",
         "The firewall will keep receiving security patches",
         "The firewall will be easier to classify",
         "The firewall will not need to be tracked in the asset inventory"
@@ -346,7 +346,7 @@
       "stem": "To save money, a buyer orders network switches from an unknown online reseller at a steep discount. Which of the following is the GREATEST security concern with this purchase?",
       "choices": [
         "The switches could arrive several weeks later than expected",
-        "The switches could have a shorter warranty",
+        "The switches could have a shorter warranty than those sold by the vendor",
         "The switches could be counterfeit or tampered with",
         "The switches could use more electricity"
       ],
@@ -360,7 +360,7 @@
       "stem": "Before buying a new software product, a security team asks the vendor for a list of every open-source and third-party component included in the product. Which of the following is the team requesting?",
       "choices": [
         "A software bill of materials",
-        "A certificate of destruction",
+        "A certificate of data destruction",
         "A service-level agreement",
         "A memorandum of understanding"
       ],
@@ -373,7 +373,7 @@
       "topic": "Acquisition and Procurement",
       "stem": "During the purchase of a design application, IT records how many licenses were bought and the terms of use for each. Which risk does this MOST directly reduce?",
       "choices": [
-        "Malware spreading through email attachments",
+        "Malware spreading through email attachments sent to the design staff",
         "Using unlicensed software and facing compliance penalties",
         "Data loss caused by a failed hard drive",
         "Unauthorized people entering the server room without an escort"
@@ -444,7 +444,7 @@
       "stem": "A company ranks every server as critical, important, or standard based on how much the business depends on it. Which of the following decisions will this ranking MOST directly help with?",
       "choices": [
         "Choosing the color of each asset tag",
-        "Calculating depreciation for tax purposes",
+        "Calculating depreciation for tax purposes at the end of each fiscal year",
         "Choosing which systems to patch and restore first",
         "Selecting which vendor to buy replacement servers from next year"
       ],
@@ -471,7 +471,7 @@
       "topic": "Monitoring and Asset Tracking",
       "stem": "Which of the following is the MOST important security reason to keep an accurate hardware and software inventory?",
       "choices": [
-        "An inventory lowers the company's electricity costs",
+        "An inventory lowers the company's electricity and cooling costs each month",
         "An inventory removes the need for separate vulnerability scans of each system",
         "An organization cannot protect assets it does not know it has",
         "An inventory makes user logins faster"
@@ -499,7 +499,7 @@
       "topic": "Monitoring and Asset Tracking",
       "stem": "A company suspects developers have been creating cloud virtual machines outside the approved process. Which of the following would BEST identify these machines?",
       "choices": [
-        "Checking the physical asset tags in the data center",
+        "Checking asset tags in the data center",
         "Querying the cloud provider's management API",
         "Reviewing the data retention policy",
         "Reviewing badge reader logs"
@@ -543,7 +543,7 @@
       "choices": [
         "Purchase order number",
         "Installed operating system and software versions",
-        "Warranty expiration date for each hardware component",
+        "Warranty expiration date of the hardware",
         "Name of the shipping carrier"
       ],
       "answer": "Installed operating system and software versions",
@@ -598,7 +598,7 @@
       "stem": "A data center team is decommissioning a server. In addition to sanitizing its drives, which of the following should the team do?",
       "choices": [
         "Add the server to the nightly backup schedule for one more year",
-        "Renew the server's software licenses",
+        "Renew the server's software licenses for another full year",
         "Update the asset inventory to show the server is retired",
         "Assign the server a new asset owner"
       ],
@@ -724,7 +724,7 @@
       "stem": "Two servers have the same vulnerability with a CVSS base score of 8.1. One is an internet-facing customer portal, and the other is an isolated training server with no sensitive data. Which of the following explains why the team gives the portal's finding a higher priority?",
       "choices": [
         "Environmental factors such as exposure and asset value",
-        "The CVE identifier assigned to the flaw",
+        "The CVE identifier assigned to the flaw by the reporting organization",
         "The vulnerability classification",
         "The vendor and version of the vulnerability scanner used"
       ],
@@ -768,7 +768,7 @@
         "Compensating control",
         "Segmentation",
         "Insurance",
-        "Exemption"
+        "Risk exemption"
       ],
       "answer": "Insurance",
       "explanation": "Cybersecurity insurance transfers part of the financial impact of an incident to an insurer. A compensating control reduces the likelihood or impact of exploitation through a technical or process safeguard, which a policy does not do."
@@ -794,8 +794,8 @@
       "stem": "A critical patch must be applied to a database server, but a previous patch from the same vendor broke the main business application. Which of the following should the administrator do FIRST?",
       "choices": [
         "Apply the patch to production during business hours",
-        "Request a permanent exception for the server",
-        "Buy cybersecurity insurance for the server",
+        "Request a permanent exception for the server from the change board",
+        "Buy cybersecurity insurance for the server to cover any outage",
         "Test the patch in a non-production environment"
       ],
       "answer": "Test the patch in a non-production environment",
@@ -838,7 +838,7 @@
         "Reporting",
         "Remediation",
         "Identification",
-        "Exemption"
+        "Exemption request"
       ],
       "answer": "Reporting",
       "explanation": "Reporting communicates the state of the vulnerability program to stakeholders so they can make decisions. Remediation is the act of fixing vulnerabilities, not summarizing results for leadership."
@@ -849,10 +849,10 @@
       "topic": "Validation and Reporting",
       "stem": "Which of the following metrics would BEST show leadership whether the vulnerability management program is improving over time?",
       "choices": [
-        "Number of scanner licenses purchased",
+        "Number of scanner licenses purchased for the security team",
         "Total number of open ports found on each server last month",
         "Mean time to remediate critical findings",
-        "Version number of the scanning software"
+        "Version number of the scanning software installed on each console"
       ],
       "answer": "Mean time to remediate critical findings",
       "explanation": "A falling mean time to remediate shows the program is closing serious vulnerabilities faster. The number of scanner licenses measures spending, not whether risk is being reduced."
@@ -949,8 +949,8 @@
       "choices": [
         "The devices' clocks are not synchronized",
         "The SIEM is running low on storage for new events",
-        "The firewall logs are encrypted",
-        "The alert rules are too sensitive"
+        "The firewall logs are encrypted before they reach the SIEM",
+        "The alert rules are too sensitive for the volume of events"
       ],
       "answer": "The devices' clocks are not synchronized",
       "explanation": "If devices do not use a common time source such as NTP, their timestamps disagree and correlated events appear out of order. Sensitive alert rules create extra alerts but do not change the timestamps on events."
@@ -961,7 +961,7 @@
       "topic": "Aggregation, Reporting and Archiving",
       "stem": "A compliance manager needs the SIEM to produce a monthly document listing every privileged account login so it can be handed to auditors. Which monitoring activity is this?",
       "choices": [
-        "Archiving",
+        "Log archiving",
         "Scanning",
         "Quarantining",
         "Reporting"
@@ -1005,8 +1005,8 @@
       "choices": [
         "Reconnect the laptop to the network immediately",
         "Rescan the laptop to validate the remediation",
-        "Disable the detection rule that fired",
-        "Archive the alert without further review"
+        "Disable the detection rule that fired so it stops alerting",
+        "Archive the alert without further review once the ticket is closed"
       ],
       "answer": "Rescan the laptop to validate the remediation",
       "explanation": "Validation confirms the threat is gone before the laptop goes back into service. Reconnecting it right away skips that check and could let any remaining infection spread."
@@ -1130,7 +1130,7 @@
       "stem": "A firewall administrator adds explicit rules to allow web and email traffic. Which rule should be placed at the end of the rule list to follow security best practice?",
       "choices": [
         "A rule that denies all other traffic",
-        "A rule that allows all other traffic",
+        "A rule that allows all remaining traffic",
         "A rule that logs only allowed traffic",
         "A rule that allows ICMP from any source"
       ],

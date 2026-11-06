@@ -23,7 +23,7 @@
       "topic": "Cloud models and shared responsibility",
       "stem": "A company extends its on-premises directory and file servers into a public cloud. A review finds that password rules, logging settings and firewall policies differ between the two environments. Which of the following is the MOST significant hybrid cloud challenge shown here?",
       "choices": [
-        "Losing physical control of the on-premises servers",
+        "Losing physical control of the on-premises directory servers",
         "Keeping security policies consistent across environments",
         "Being unable to encrypt data stored in the public cloud",
         "Being unable to use multifactor authentication on premises"
@@ -66,7 +66,7 @@
       "stem": "A company split its online store into separate services for catalog, reviews and checkout. When the reviews service crashed during a sale, customers could still browse and pay. Which of the following benefits of a microservices architecture does this show?",
       "choices": [
         "Fault isolation between services",
-        "A smaller overall attack surface",
+        "A smaller attack surface",
         "Less network traffic between components",
         "Centralized management of a single codebase"
       ],
@@ -108,7 +108,7 @@
       "stem": "A network team is choosing between VLANs on shared switches and separate physical networks for a sensitive system. Which of the following is the MAIN security drawback of logical segmentation compared with physical isolation?",
       "choices": [
         "A misconfiguration can let traffic cross between segments",
-        "It requires separate cabling for every segment",
+        "It requires separate physical cabling and switches for every segment",
         "It cannot be combined with firewall rules",
         "It prevents central management of the switches in each segment"
       ],
@@ -137,7 +137,7 @@
       "choices": [
         "Store the container images on an encrypted volume in the registry",
         "Use only scanned, trusted base images from an approved registry",
-        "Increase the memory limits assigned to each container",
+        "Increase the memory and CPU limits assigned to each running container",
         "Run the containers on a type 2 hypervisor"
       ],
       "answer": "Use only scanned, trusted base images from an approved registry",
@@ -191,7 +191,7 @@
       "topic": "Architecture considerations",
       "stem": "A company is installing battery-powered sensors at remote pipeline sites. The engineers report that the devices cannot run strong encryption or security agents without draining their batteries in days. Which of the following considerations is limiting the security design?",
       "choices": [
-        "Data sovereignty requirements",
+        "Data sovereignty rules",
         "Risk transference",
         "Ease of deployment",
         "Power and compute constraints"
@@ -222,7 +222,7 @@
         "On the internet-facing link in front of the perimeter firewall",
         "On the guest wireless network",
         "On the internal network directly behind the firewall",
-        "On the isolated backup network"
+        "On the isolated backup network used for nightly replication"
       ],
       "answer": "On the internal network directly behind the firewall",
       "explanation": "A sensor just inside the firewall sees traffic that the firewall allowed, which is where successful attacks show up. A sensor in front of the firewall sees every probe from the internet, including attacks the firewall already stopped."
@@ -233,7 +233,7 @@
       "topic": "Device placement and security zones",
       "stem": "An audit finds that a VPN concentrator the company stopped using two years ago is still connected to the internet and still has firewall rules allowing traffic to it. Which of the following actions BEST reduces the attack surface?",
       "choices": [
-        "Change the concentrator's administrator password",
+        "Change the concentrator's administrator password to a long passphrase",
         "Move the concentrator to a different public IP address range",
         "Turn on detailed logging on the concentrator",
         "Decommission the concentrator and remove its firewall rules"
@@ -248,7 +248,7 @@
       "stem": "Which of the following BEST describes a security zone in an enterprise network?",
       "choices": [
         "A physical room that requires badge access to enter",
-        "A list of applications that are approved to run on a host",
+        "A list of applications that are approved to run on each host in the network",
         "A group of systems with similar trust levels that share access rules",
         "A single firewall rule that permits traffic between two specific hosts"
       ],
@@ -360,7 +360,7 @@
       "stem": "Which of the following is the MAIN limitation of a layer 4 firewall?",
       "choices": [
         "It cannot track the state of TCP connections passing through it",
-        "It cannot filter traffic by destination port",
+        "It cannot filter traffic by source address or destination port number",
         "It cannot be placed inline in the network",
         "It cannot inspect the application content inside allowed ports"
       ],
@@ -403,7 +403,7 @@
       "choices": [
         "Regulated data",
         "Legal information",
-        "Financial information",
+        "Financial records",
         "Intellectual property"
       ],
       "answer": "Intellectual property",
@@ -473,7 +473,7 @@
       "choices": [
         "So every data set receives the same level of encryption",
         "So controls can match the value and sensitivity of each data set",
-        "So every data set can be deleted after the same retention period",
+        "So every data set is deleted after the same retention period",
         "So all backups can be stored in a single location"
       ],
       "answer": "So controls can match the value and sensitivity of each data set",
@@ -487,7 +487,7 @@
       "choices": [
         "Processing the data inside a secure enclave",
         "Enabling full-disk encryption on the servers",
-        "Requiring TLS for all client connections",
+        "Requiring TLS 1.3 for all client connections to the service",
         "Encrypting the nightly database backups"
       ],
       "answer": "Processing the data inside a secure enclave",
@@ -513,7 +513,7 @@
       "topic": "Data sovereignty and geolocation",
       "stem": "A national privacy law requires that citizens' personal data stay within the country. A company is selecting a SaaS vendor to hold that data. Which of the following should the company verify FIRST?",
       "choices": [
-        "The vendor's uptime service level agreement",
+        "The vendor's uptime service level agreement and support hours",
         "The encryption algorithm the vendor uses for backups",
         "Where the vendor stores and replicates the data",
         "The vendor's software release schedule"
@@ -529,7 +529,7 @@
       "choices": [
         "The data owner decides who may access the data",
         "Data must be encrypted whenever it is transferred out of a country",
-        "Data must be deleted when its retention period ends",
+        "Data must be securely deleted as soon as its retention period ends",
         "Data is subject to the laws of the country where it is located"
       ],
       "answer": "Data is subject to the laws of the country where it is located",
@@ -724,7 +724,7 @@
       "stem": "A company moves from one cloud provider to a multi-cloud design. Which of the following is the MOST likely drawback of this change?",
       "choices": [
         "Greater dependence on a single provider",
-        "Less resilience to a provider-wide outage",
+        "Less resilience to an outage that affects a whole provider",
         "More complexity in managing security across providers",
         "Inability to spread workloads across geographic regions"
       ],
@@ -807,7 +807,7 @@
       "topic": "Resilience testing",
       "stem": "Which of the following is the PRIMARY advantage of a tabletop exercise compared with a full failover test?",
       "choices": [
-        "It measures the actual recovery time of the systems",
+        "It measures the actual recovery time of the production systems",
         "It confirms that backup data can be restored",
         "It validates the hardware performance at the recovery site",
         "It tests the plan at low cost with no risk to production"
@@ -851,7 +851,7 @@
       "choices": [
         "Take snapshots of the production servers more often",
         "Encrypt the backup storage device",
-        "Add RAID to the backup storage device",
+        "Add RAID mirroring to the backup storage device in the rack",
         "Keep a copy of the backups at an offsite location"
       ],
       "answer": "Keep a copy of the backups at an offsite location",
