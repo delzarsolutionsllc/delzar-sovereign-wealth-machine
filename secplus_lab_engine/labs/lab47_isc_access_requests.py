@@ -48,8 +48,9 @@ Two parts, each deny by default:
    6. every reviewer type must be known for that item type (manager, owner,
       governance_group:<name>), else DENIED;
    7. if the item would complete both sides of a separation of duties (SoD)
-      policy: SOD_VIOLATION. With ``sod_action`` "flag" (what ISC does) the
-      request still routes and reviewers see the violation; "block" stops it;
+      policy: SOD_VIOLATION. ISC sets this per SoD policy: "Allow submission"
+      (``sod_action`` "flag" here) lets the request route with the violation
+      shown to reviewers; "Block submission" (``sod_action`` "block") stops it;
    8. reviewer levels run in order; an empty list means no approval is
       required. For each level the reviewer is resolved, then:
       * self-approval prevention: if the reviewer is the requester or the

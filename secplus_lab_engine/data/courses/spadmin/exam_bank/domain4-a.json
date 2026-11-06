@@ -10,7 +10,7 @@
    "stem": "A manager revokes an entitlement during a manager certification. When is the removal sent for provisioning?",
    "choices": [
     "When the campaign's end date passes",
-    "At the next scheduled account aggregation",
+    "At the next scheduled account aggregation of the source",
     "When the reviewer signs off the certification",
     "As soon as the reviewer clicks Revoke on the item"
    ],
@@ -23,12 +23,12 @@
    "topic": "Provisioning Triggers",
    "stem": "An employee transfers to Finance, and the Finance role uses membership criteria on department. What causes the role's access to be provisioned?",
    "choices": [
-    "Identity processing re-evaluates role membership after the department attribute changes",
-    "An administrator must run a Create Account task",
+    "Identity processing re-evaluates role membership after the department changes",
+    "An administrator must run a Create Account task on each source the Finance role covers",
     "The role owner must approve the new member",
     "The employee must submit an access request for the role, and the manager must approve it"
    ],
-   "answer": "Identity processing re-evaluates role membership after the department attribute changes",
+   "answer": "Identity processing re-evaluates role membership after the department changes",
    "explanation": "Roles with membership criteria are assigned automatically when identity processing sees that the identity now matches, and their access profiles are then provisioned. No request or approval is needed."
   },
   {
@@ -37,12 +37,12 @@
    "topic": "Provisioning Triggers",
    "stem": "HR marks a worker as terminated and the identity's lifecycle state becomes inactive. Which provisioning can this trigger?",
    "choices": [
-    "Deleting the identity from the tenant immediately",
-    "Removing the access profiles and disabling the accounts set for that lifecycle state",
+    "Deleting the identity and every one of its source accounts from the tenant at once",
+    "Removing access profiles and disabling accounts set for that lifecycle state",
     "Starting a certification campaign so the worker's manager reviews all of the access first",
     "Resetting the identity profile's priority"
    ],
-   "answer": "Removing the access profiles and disabling the accounts set for that lifecycle state",
+   "answer": "Removing access profiles and disabling accounts set for that lifecycle state",
    "explanation": "A lifecycle state can remove access profiles, enable or disable accounts and send emails when an identity enters it. It does not delete the identity or start campaigns."
   },
   {
@@ -51,7 +51,7 @@
    "topic": "Provisioning Triggers",
    "stem": "A user requests an access profile that needs manager and source owner approval. When does provisioning to the target begin?",
    "choices": [
-    "As soon as the user submits the request",
+    "As soon as the user submits the request in the portal",
     "At the next nightly identity refresh",
     "After the manager approves, while the source owner reviews",
     "After the final required approval is given"
@@ -93,7 +93,7 @@
    "topic": "Provisioning Triggers",
    "stem": "A workflow runs when an identity's manager changes and revokes a sensitive access profile. What does the workflow's access action produce?",
    "choices": [
-    "A search subscription email with the results",
+    "A search subscription email with the matching results for the owner",
     "A new certification campaign for the old manager to confirm the removal",
     "A change to the identity profile mappings",
     "A provisioning request that removes the access on the source"
@@ -109,7 +109,7 @@
    "choices": [
     "During every account aggregation",
     "When an identity is granted access on a source where it has no account",
-    "When an existing account is disabled",
+    "When an existing account on the source is disabled by a lifecycle state change",
     "Whenever an account attribute changes on the source and is aggregated again"
    ],
    "answer": "When an identity is granted access on a source where it has no account",
@@ -138,7 +138,7 @@
     "A generator that creates a unique account ID from a pattern",
     "The manager's username with a suffix that the source owner types in by hand",
     "A static value shared by both accounts",
-    "The identity's display name copied as is"
+    "The identity's display name copied as is into the account ID field"
    ],
    "answer": "A generator that creates a unique account ID from a pattern",
    "explanation": "A unique account ID generator checks for existing values and adds a counter or other variation. Static or copied values would create duplicates."
@@ -149,7 +149,7 @@
    "topic": "Create Account Policy",
    "stem": "A Create Account policy maps the account's department to the identity's department attribute. A new account is created with an empty department. What is the MOST likely cause?",
    "choices": [
-    "The source's VA was in the Busy state",
+    "The source's VA cluster was in the Busy state while the account was being created",
     "The identity's department attribute was empty when the account was created",
     "Create Account policies cannot take values from identity attributes, only static ones",
     "The account was created by an access request"
@@ -192,7 +192,7 @@
    "stem": "A new source supports provisioning, but no one has reviewed its Create Account policy yet. What is the BEST practice before turning on birthright roles?",
    "choices": [
     "Review and test the Create Account policy in the sandbox tenant",
-    "Delete the policy so the connector picks defaults",
+    "Delete the policy so the connector picks its own defaults for each attribute",
     "Turn on the roles in production and fix each account creation failure as it appears",
     "Assign the roles to every identity at once"
    ],
@@ -221,7 +221,7 @@
    "choices": [
     "A new Create Account policy on the HR source",
     "Attribute sync for the surname on the Active Directory source",
-    "A certification of Active Directory accounts",
+    "A certification of Active Directory accounts that have a changed surname",
     "A higher priority for Active Directory in the identity profile"
    ],
    "answer": "Attribute sync for the surname on the Active Directory source",
@@ -247,7 +247,7 @@
    "topic": "Attribute Sync",
    "stem": "An administrator wants attribute sync on a delimited file source. Why will this not update the target system automatically?",
    "choices": [
-    "Attribute sync works only on authoritative sources",
+    "Attribute sync works only on authoritative sources such as an HR system",
     "Delimited file sources cannot be mapped to identity attributes in an identity profile",
     "The source is not direct-connect and has no automated provisioning",
     "Attribute sync requires a SaaS connector"
@@ -305,7 +305,7 @@
    "choices": [
     "Disconnect the source from its VA cluster so changes cannot reach the target",
     "Remove PROVISIONING from the source's features with the Update Source API",
-    "Delete the source's Create Account policy",
+    "Delete the source's Create Account policy so that no new accounts are written",
     "Remove the source owner"
    ],
    "answer": "Remove PROVISIONING from the source's features with the Update Source API",
@@ -347,7 +347,7 @@
    "choices": [
     "Edit the identity profile so the source becomes its authoritative source",
     "Configure the access profile's multiple account options",
-    "Lower the source's deletion threshold",
+    "Lower the source's deletion threshold so the extra account is removed",
     "Rename one of the accounts"
    ],
    "answer": "Configure the access profile's multiple account options",
@@ -362,7 +362,7 @@
     "The VA cluster has two VAs",
     "The identity profile that uses the source has the wrong priority set",
     "The source's service account can read but not change the target",
-    "The source has no account correlation"
+    "The source has no account correlation configured for its accounts"
    ],
    "answer": "The source's service account can read but not change the target",
    "explanation": "Aggregation needs only read rights, while provisioning needs write rights on the target. Correlation and identity profile settings do not cause permission errors."
@@ -373,7 +373,7 @@
    "topic": "Source Provisioning Components",
    "stem": "Which of these is NOT needed for a role to provision an entitlement automatically to an Active Directory source?",
    "choices": [
-    "The entitlement aggregated from the source",
+    "The entitlement aggregated from the source into the catalog",
     "A source with provisioning enabled",
     "A role that grants the entitlement, directly or through an access profile",
     "A certification campaign that includes the role"
@@ -389,7 +389,7 @@
    "choices": [
     "Whether the source has a direct connection with provisioning enabled",
     "Whether the lifecycle state is set to send an email notification to the manager",
-    "Whether the source is authoritative",
+    "Whether the source is authoritative for the identity profile it feeds",
     "Whether the identity has a manager"
    ],
    "answer": "Whether the source has a direct connection with provisioning enabled",
@@ -401,7 +401,7 @@
    "topic": "Provisioning Channels",
    "stem": "Which list names the main provisioning channels in Identity Security Cloud?",
    "choices": [
-    "Roles, access profiles and entitlements",
+    "Roles, access profiles and entitlements assigned by lifecycle states",
     "Search, reports and subscriptions",
     "Direct connector, service desk integration and manual tasks",
     "Account aggregation, account correlation and identity attribute transforms"
@@ -417,7 +417,7 @@
    "choices": [
     "The entitlement owner, with the source owner as fallback",
     "The tenant administrator who created the role that granted the access profile",
-    "The identity that receives the access",
+    "The identity that receives the access, through a self-service task",
     "The identity's manager"
    ],
    "answer": "The entitlement owner, with the source owner as fallback",
@@ -445,7 +445,7 @@
    "choices": [
     "A manual task assigned to the source owner in the Task Manager",
     "A certification campaign",
-    "A service desk integration",
+    "A service desk integration that opens ServiceNow tickets",
     "A direct connector, either VA-based or SaaS"
    ],
    "answer": "A direct connector, either VA-based or SaaS",
@@ -457,7 +457,7 @@
    "topic": "Provisioning Channels",
    "stem": "A small legacy app has no API, only 15 users and no ticketing process. Which channel is MOST practical?",
    "choices": [
-    "A service desk integration",
+    "A service desk integration with a new ticket queue",
     "A custom direct connector built for the app",
     "Attribute sync on the source",
     "Manual tasks assigned to the source owner"
@@ -485,7 +485,7 @@
    "topic": "Provisioning Channels",
    "stem": "After a service desk ticket is closed in ServiceNow, how does Identity Security Cloud learn that the change is done?",
    "choices": [
-    "ServiceNow writes directly to the identity profile",
+    "ServiceNow writes the completed change directly to the identity profile",
     "The change is assumed done as soon as the ticket is created in ServiceNow",
     "It checks the ticket's status through the service desk integration",
     "The source owner must aggregate the source manually"
@@ -662,7 +662,7 @@
    "stem": "A GET of a cluster's log configuration returns 204 No Content. What does this mean?",
    "choices": [
     "The caller lacks permission to read the cluster's settings",
-    "The cluster ID is wrong",
+    "The cluster ID in the request path is wrong or belongs to a different tenant",
     "The cluster has no VAs",
     "No log configuration is set, so a new one can be created"
    ],
@@ -704,7 +704,7 @@
    "stem": "After raising AD connector logging on a VA cluster, where does the administrator read the new log lines?",
    "choices": [
     "In the identity profile's audit history for the affected user",
-    "In the Provisioning Activity report",
+    "In the Provisioning Activity report under Search > Reports",
     "In the source's Accounts tab",
     "In ccg.log under /home/sailpoint/log on the VAs"
    ],
@@ -748,7 +748,7 @@
     "So SailPoint receives the collected debug logs only after the expiry time passes",
     "So debug logging turns off by itself when troubleshooting is done",
     "So the source is disabled at the expiry",
-    "So debug logs are deleted after the expiry"
+    "So the collected debug logs are deleted from the VAs when the expiry time is reached"
    ],
    "answer": "So debug logging turns off by itself when troubleshooting is done",
    "explanation": "The expiry automatically disables debug logging, preventing verbose logs from running forever. It does not delete logs or disable the source."
@@ -788,7 +788,7 @@
    "stem": "After downloading generated connector logs, what does the administrator receive?",
    "choices": [
     "A PDF report that is emailed to the source owner and the requester",
-    "A link to a live log stream in Search",
+    "A link to a live log stream in Search for the source",
     "A zip file to extract and open in a text editor",
     "A CSV of identity attributes"
    ],
@@ -816,7 +816,7 @@
    "stem": "An access request was approved but the user still lacks the access. Which object should the administrator search FIRST?",
    "choices": [
     "The account activity for that request",
-    "The VA cluster's time zone",
+    "The VA cluster's time zone and its last restart time",
     "The identity profile",
     "The access profile's description and its owner"
    ],
@@ -873,7 +873,7 @@
    "choices": [
     "The action was cancelled and will not be retried",
     "The action is waiting for its next retry after a failure",
-    "The action was confirmed on the source",
+    "The action was confirmed on the source after a retry",
     "The action is in progress"
    ],
    "answer": "The action was cancelled and will not be retried",
@@ -899,7 +899,7 @@
    "topic": "Account Activity Search",
    "stem": "An account request result shows Manual Task Created. What does this tell the administrator?",
    "choices": [
-    "The change was applied automatically to the target",
+    "The change was applied automatically to the target system by the source's connector",
     "The request was rejected by the approver",
     "The source is not direct-connect, so a person must complete the change",
     "The connector failed, so SailPoint opened a support case for the tenant administrator"
@@ -983,7 +983,7 @@
    "topic": "Manual Tasks and Retries",
    "stem": "Provisioning to a VA-based source fails with ConnectException. How does Identity Security Cloud handle it?",
    "choices": [
-    "It deletes the request immediately",
+    "It deletes the request immediately and logs an error",
     "It retries once per hour, up to three times",
     "It retries every minute until it succeeds",
     "It converts the request into a service desk ticket"
@@ -1040,7 +1040,7 @@
    "stem": "Provisioning keeps failing with NoRouteToHostException after all retries. What should the administrator investigate?",
    "choices": [
     "The identity profile's authoritative source and its attribute mappings",
-    "The certification campaign schedule",
+    "The certification campaign schedule for the source's entitlements",
     "Network routing between the VA and the target system",
     "The access profile's approval scheme"
    ],
