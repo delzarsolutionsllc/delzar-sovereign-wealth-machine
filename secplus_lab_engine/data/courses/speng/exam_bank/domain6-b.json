@@ -26,7 +26,7 @@
     "Access management",
     "Identity governance and administration",
     "Security information and event management",
-    "Privileged access management"
+    "Privileged access management for admin accounts"
    ],
    "answer": "Identity governance and administration",
    "explanation": "Visibility of access across systems and periodic reviews are IGA functions. The existing SSO and MFA tool controls sign-in, not entitlement governance."
@@ -65,7 +65,7 @@
    "topic": "Identity Governance and Administration",
    "stem": "Why does an IGA design name the HR system as an authoritative source?",
    "choices": [
-    "It is the only system where SailPoint can provision accounts",
+    "It is the only system where SailPoint can provision and deprovision accounts",
     "It is the trusted record that creates identities and their attributes",
     "It removes the need to correlate any accounts that come from other sources",
     "It stores the passwords that users enter at sign-in"
@@ -94,7 +94,7 @@
    "stem": "An auditor asks which identities hold a specific payroll entitlement across all accounts. Which IGA capability answers this MOST directly?",
    "choices": [
     "Reading the payroll application's sign-in logs for the past several weeks",
-    "Reviewing the firewall rules in front of the payroll server",
+    "Reviewing the firewall rules in front of the payroll application server",
     "Searching correlated accounts and entitlements for that entitlement",
     "Asking each manager to report access for their team"
    ],
@@ -108,7 +108,7 @@
    "stem": "In identity security, what does compliance mean?",
    "choices": [
     "Meeting, and proving you meet, regulations, standards and policies",
-    "Encrypting every system that stores personal information",
+    "Encrypting every system that stores personal information at rest and in transit",
     "Passing a single annual penetration test of the network",
     "Making sure every single user signs in with multi-factor authentication"
    ],
@@ -205,7 +205,7 @@
    "topic": "Authentication vs Authorization",
    "stem": "What is the difference between authentication and authorization?",
    "choices": [
-    "Authentication applies to applications; authorization applies to devices",
+    "Authentication covers applications; authorization covers only devices",
     "Authentication grants access rights; authorization checks the password",
     "Authentication verifies identity; authorization decides permitted access",
     "Authentication happens after authorization, once access is known"
@@ -234,7 +234,7 @@
    "stem": "A help desk analyst can sign in to Identity Security Cloud but does not see the Admin options other engineers see. What MOST likely explains this?",
    "choices": [
     "The analyst signed in through a federated identity provider",
-    "The analyst's identity is in an inactive lifecycle state",
+    "The analyst's identity is in an inactive lifecycle state in ISC",
     "The analyst's user level does not grant those admin rights",
     "The analyst's password does not meet complexity rules"
    ],
@@ -346,7 +346,7 @@
    "stem": "An engineer is setting up a new SAML trust between an identity provider and a service provider. What must the two sides exchange?",
    "choices": [
     "Metadata, including endpoints and the signing certificate",
-    "A shared database account for user lookups",
+    "A shared database account so the SP can run user lookups directly",
     "The identity provider's private signing key",
     "Each user's password hash so the SP can verify sign-ins offline"
    ],
@@ -360,11 +360,11 @@
    "stem": "An application team using OpenID Connect asks which token tells the application who signed in. What is the answer?",
    "choices": [
     "The SAML assertion, wrapped inside an OAuth grant",
-    "The ID token, a signed JWT about the authentication",
+    "The ID token, a signed JWT describing the authentication event",
     "The access token, which carries the user's password",
-    "The refresh token, which carries the user's profile"
+    "The refresh token, which carries the user's full profile"
    ],
-   "answer": "The ID token, a signed JWT about the authentication",
+   "answer": "The ID token, a signed JWT describing the authentication event",
    "explanation": "In OIDC the ID token is a signed JWT with claims about the user and the sign-in event. Access tokens authorize API calls and refresh tokens get new tokens."
   },
   {

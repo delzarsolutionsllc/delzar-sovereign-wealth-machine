@@ -38,7 +38,7 @@
       "stem": "A SaaS vendor wants to release fixes to its certification feature several times a week without taking the rest of the product offline. Which architecture property supports this?",
       "choices": [
         "All features are compiled and shipped together in one deployable artifact",
-        "Releases are bundled into one quarterly upgrade window",
+        "Releases are bundled into one quarterly upgrade window for all customers",
         "Customers install updates on their own servers",
         "Each microservice can be deployed independently of the others"
       ],
@@ -79,7 +79,7 @@
       "topic": "Microservice Advantages",
       "stem": "Different engineering teams want to use the language and data store that best suit their service. What makes this practical in a microservice design?",
       "choices": [
-        "All services share one code base and runtime",
+        "All services share one code base and runtime environment",
         "All services read and write the same shared database tables",
         "Each team must use the same framework version",
         "Services interact only through defined APIs or events"
@@ -138,7 +138,7 @@
         "A POST that creates a new object",
         "A DELETE of a specific object by its ID",
         "A POST that submits a new access request",
-        "A POST that starts a new aggregation"
+        "A POST that starts a new aggregation of a source"
       ],
       "answer": "A DELETE of a specific object by its ID",
       "explanation": "DELETE, like GET and PUT, is idempotent: repeating it leaves the same end state. Each POST shown creates something new, so repeating it can duplicate work."
@@ -151,7 +151,7 @@
       "choices": [
         "The access token used for the call had expired",
         "The client lacks the scope that the endpoint requires",
-        "The requested object no longer exists",
+        "The requested object no longer exists in the tenant",
         "The request body was not valid JSON"
       ],
       "answer": "The access token used for the call had expired",
@@ -179,7 +179,7 @@
       "choices": [
         "No resource with that ID exists in the tenant being called",
         "The token is missing from the request's Authorization header",
-        "The request is valid but is still being processed",
+        "The request is valid but is still being processed by the server",
         "The request was throttled by the API gateway"
       ],
       "answer": "No resource with that ID exists in the tenant being called",
@@ -191,7 +191,7 @@
       "topic": "REST Methods and Status Codes",
       "stem": "A script triggers a long-running operation and receives HTTP 202 Accepted. What should it do next?",
       "choices": [
-        "Treat the operation as finished and successful",
+        "Treat the operation as finished and successful right away",
         "Resend the request, because 202 means the API ignored it",
         "Track the returned task or status until it completes",
         "Assume the operation failed and roll back"
@@ -233,9 +233,9 @@
       "topic": "API Authentication and Tokens",
       "stem": "How should a script present an ISC access token when calling the APIs?",
       "choices": [
-        "As a query parameter named token in every URL",
+        "As a query parameter named token in every request URL",
         "In the Authorization header as a Bearer token",
-        "In the request body of every GET request",
+        "In the request body of every GET request sent to the API",
         "As a cookie set by the Admin UI"
       ],
       "answer": "In the Authorization header as a Bearer token",
@@ -346,7 +346,7 @@
       "stem": "A filter value contains the # character, and the API returns unexpected results. What should the developer do?",
       "choices": [
         "Remove the filters parameter and sort instead",
-        "Wrap the whole URL in single quotation marks",
+        "Wrap the whole URL in single quotation marks in the script",
         "URL-encode the character in the query string",
         "Send the filter in an X-Filter header"
       ],
@@ -403,7 +403,7 @@
       "choices": [
         "The Search API caches results for each client for one day",
         "The identity was updated in a different tenant",
-        "The query used an operator that is not supported",
+        "The query used an operator that the Search API does not support",
         "The search index is refreshed shortly after changes"
       ],
       "answer": "The search index is refreshed shortly after changes",
@@ -431,7 +431,7 @@
       "choices": [
         "Retry immediately in a tight loop until the call succeeds",
         "Wait the seconds given in Retry-After, then retry",
-        "Request a new token, because 429 means it expired",
+        "Request a new token, because 429 means the old one expired",
         "Switch to a different tenant to continue"
       ],
       "answer": "Wait the seconds given in Retry-After, then retry",
@@ -486,7 +486,7 @@
       "stem": "A nightly job makes thousands of small list calls and keeps hitting the rate limit. Which redesign BEST reduces throttling?",
       "choices": [
         "Create many API clients and rotate between them",
-        "Remove all waiting so the job finishes before the limit resets",
+        "Remove all waiting so the job ends before the limit resets",
         "Send every call with count=true",
         "Use larger pages or Search so fewer calls return the same data"
       ],

@@ -319,7 +319,7 @@
    "choices": [
     "The users belong to identity profiles that use different sign-in methods",
     "The users have been assigned different user levels in the tenant",
-    "The users were aggregated through two different virtual appliance clusters",
+    "The users were aggregated through different VA clusters",
     "The users have lifecycle states with different technical names"
    ],
    "answer": "The users belong to identity profiles that use different sign-in methods",
@@ -488,7 +488,7 @@
     "Choose Multifactor Authentication as the profile's sign-in method",
     "Enable Two-Factor Authentication in the password reset and unlock settings",
     "Select Untrusted Geography in the Block Access From settings",
-    "Require manager approval for resets in the profile's access request settings"
+    "Require manager approval for password resets in access request settings"
    ],
    "answer": "Enable Two-Factor Authentication in the password reset and unlock settings",
    "explanation": "Two-Factor Authentication in the reset settings requires two of the enabled reset and unlock methods. The Multifactor Authentication sign-in method affects normal sign-in, not resets."
@@ -513,7 +513,7 @@
    "topic": "Profile Security and Invitations",
    "stem": "New hires are created in a pre-hire lifecycle state two weeks before they start. HR wants them invited to the tenant only on their first day. What should the administrator configure?",
    "choices": [
-    "Manual invitations sent each week from the HR source's list of new accounts",
+    "Manual invitations sent each week from the HR source's account list",
     "A certification campaign that reviews identities in the pre-hire state",
     "An access profile in the pre-hire state that contains an invitation",
     "Automatic invitations for identities that enter the active lifecycle state"
@@ -764,7 +764,7 @@
    "stem": "Employees' department should come from HR, while contractors' department should come from AD. Each group has its own identity profile. How is this handled?",
    "choices": [
     "Map the department attribute differently in each identity profile",
-    "Create two department attributes, one for each of the two source systems",
+    "Create two department attributes, one for each source system",
     "Use a role to copy department values between the two groups",
     "Make the AD source authoritative for the department attribute"
    ],
@@ -889,7 +889,7 @@
    "topic": "Transforms and Rules in Mappings",
    "stem": "A team wants to change how one identity attribute is calculated without waiting for an external review. Which approach is BEST?",
    "choices": [
-    "Use a rule, because rules are deployed instantly by the tenant admins",
+    "Use a rule, because rules are deployed instantly by admins",
     "Use a role, because roles can rewrite identity attribute values",
     "Use a workflow, because workflows replace identity mappings",
     "Use a transform, because transforms do not need a SailPoint review"
@@ -1015,7 +1015,7 @@
    "topic": "Custom Identity Attributes",
    "stem": "On the Mappings page, an administrator selects Remove on a custom attribute and then selects Cancel at the warning message. What happens?",
    "choices": [
-    "The attribute is deleted anyway, but all of the other unsaved changes are kept",
+    "The attribute is deleted anyway, but other unsaved changes are kept",
     "The attribute is restored, and all other unsaved changes are reverted too",
     "The attribute is restored, and other unsaved changes are kept",
     "The attribute is hidden until the administrator saves the page"
@@ -1029,7 +1029,7 @@
    "topic": "Custom Identity Attributes",
    "stem": "The administrator team wants to delete the default costCenter identity attribute because it is unused. What is the recommended action?",
    "choices": [
-    "Delete it with Remove and then Save on the Mappings page of any profile",
+    "Delete it with Remove and Save on any profile's Mappings page",
     "Delete it only after unmapping it in every identity profile first",
     "Leave it in place, because default attributes should not be deleted",
     "Rename it as a custom attribute and then delete the custom copy"
@@ -1114,7 +1114,7 @@
    "stem": "An identity profile is marked as having scheduled processing. What is the reason?",
    "choices": [
     "A mapping uses a transform or rule that is tagged to need a periodic refresh",
-    "The profile's authoritative source has a delta aggregation scheduled every day",
+    "The authoritative source has a daily delta aggregation scheduled",
     "The profile's lifecycle states send a notification email every morning",
     "The profile was created during an account aggregation of its source"
    ],
@@ -1255,7 +1255,7 @@
     "A certification campaign that reviews each new hire's access",
     "An access request that each new hire submits on the first day",
     "An active lifecycle state that grants the needed access profiles",
-    "A search subscription that emails the help desk about each new hire"
+    "A search subscription that emails the help desk about new hires"
    ],
    "answer": "An active lifecycle state that grants the needed access profiles",
    "explanation": "Lifecycle states drive joiner access automatically by granting access profiles when the identity enters the state. Requests and campaigns need people to act and are not automatic birthright access."
@@ -1435,7 +1435,7 @@
    "stem": "The terminated state has Remove all access turned on. Which access does a terminated identity keep?",
    "choices": [
     "Access from birthright roles and access profiles granted by the current state",
-    "Access that was requested within the last 30 days and approved by their manager",
+    "Access requested within the last 30 days and approved by their manager",
     "Access on sources whose accounts are set to be disabled rather than deleted",
     "Access that was certified as approved in the most recent campaign"
    ],
@@ -1687,7 +1687,7 @@
    "stem": "The lifecycle state calculation needs logic too complex for transforms. What does SailPoint recommend?",
    "choices": [
     "A second identity profile that holds the complex logic",
-    "A manual lifecycle state change made for every identity every day by an admin",
+    "A manual lifecycle state change made for every identity each day",
     "A certification that sets the state for each reviewer",
     "A custom rule built with SailPoint Professional Services or a partner"
    ],
@@ -1700,7 +1700,7 @@
    "topic": "Cloud Lifecycle State Attribute",
    "stem": "A role should be assigned automatically only to identities whose lifecycle state is active. What is the BEST way to configure the role?",
    "choices": [
-    "Add the role to the active lifecycle state's Access Profiles tab so it is granted",
+    "Add the role to the active state's Access Profiles tab",
     "Request the role for each active identity by hand",
     "Use membership criteria where the cloudLifecycleState attribute equals active",
     "Set the role's owner to the identity profile's owner"

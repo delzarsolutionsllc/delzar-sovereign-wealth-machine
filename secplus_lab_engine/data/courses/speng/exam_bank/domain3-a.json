@@ -10,7 +10,7 @@
    "stem": "A team is about to change approval schemes and segments for hundreds of access profiles. Where should the engineer test the changes FIRST?",
    "choices": [
     "In a sandbox tenant, then promote the tested configuration to production",
-    "In production, with a note to roll back if users complain",
+    "In production during a quiet weekend, with a note to roll back if users complain",
     "In production, but only on access profiles that nobody has requested so far",
     "In a spreadsheet model of the approval paths and segments"
    ],
@@ -37,8 +37,8 @@
    "topic": "Access Management Test Planning",
    "stem": "An engineer shortens the reminder schedule in Approval Settings and checks a request submitted last week, which still follows the old schedule. What is the BEST next step for the test?",
    "choices": [
-    "Cancel the old request and wait for reminders to restart",
-    "Restart the virtual appliance so the new schedule loads",
+    "Cancel the old request and wait for reminders to restart on the next daily cycle",
+    "Restart the virtual appliance so that the new reminder schedule loads into the tenant",
     "Submit a new request, since changes apply only to requests created afterwards",
     "Reassign the old request so that it picks up the new reminder settings"
    ],
@@ -53,7 +53,7 @@
    "choices": [
     "A second request from the same user with the same justification and the same approver",
     "A removal request and the end-to-end provisioning result on the target source",
-    "A request submitted from a different web browser",
+    "A repeat request submitted from a different web browser on a second workstation",
     "A request made outside working hours"
    ],
    "answer": "A removal request and the end-to-end provisioning result on the target source",
@@ -66,7 +66,7 @@
    "stem": "Which evidence BEST confirms that an access request test passed end to end?",
    "choices": [
     "The requester got the submitted email and the approver's decision email",
-    "The approver clicked Approve in the approval email",
+    "The approver clicked Approve in the approval email within the reminder window",
     "The request is complete and the target account holds the entitlement",
     "The access profile appears in the Request Center"
    ],
@@ -109,7 +109,7 @@
    "choices": [
     "Admin > Access Model > Segments, on each segment",
     "Admin > Identity Management > Identity Profiles, on each profile's settings page",
-    "Admin > Connections > Sources, on each source's settings",
+    "Admin > Connections > Sources, on the approval tab of each source's settings page",
     "Admin > Global > System Settings, under Feature Settings > Approval Settings"
    ],
    "answer": "Admin > Global > System Settings, under Feature Settings > Approval Settings",
@@ -136,7 +136,7 @@
    "stem": "By default, what happens to an access request that no approver acts on?",
    "choices": [
     "It times out after 90 days, and no reminders or escalations happen after that",
-    "It stays pending until an admin cancels it",
+    "It stays pending indefinitely until an admin cancels it from the Access Requests page",
     "It is approved automatically after 30 days",
     "It is escalated back to the requester after 90 days so the requester can cancel it"
    ],
@@ -191,7 +191,7 @@
    "topic": "Escalation Patterns",
    "stem": "Escalations are enabled, but no custom escalation chain has been configured. Where do the escalations go?",
    "choices": [
-    "All escalations go to the item's source owner, then to the org admins",
+    "All escalations go to the item's source owner first, then to the org admins",
     "First two to the current reviewer's manager, then the fallback approver",
     "The first goes to the requester, then to any org admin",
     "All escalations go to the fallback approver right away"
@@ -219,7 +219,7 @@
    "topic": "Escalation Patterns",
    "stem": "When is an approval request sent to the fallback approver?",
    "choices": [
-    "When the first reminder is sent to the approver",
+    "When the first reminder is sent to the approver after the initial waiting period",
     "When the requester cancels and resubmits the request after the timeout",
     "When the escalation chain is used up, or no approver is found",
     "When the approver approves the request partially"
@@ -289,7 +289,7 @@
    "topic": "Segment Use Cases",
    "stem": "A company wants only employees in Germany to see the German payroll access profile in the Request Center. Which feature fits this requirement?",
    "choices": [
-    "A separation of duties policy on the access profile",
+    "A separation of duties policy on the access profile that blocks non-German requesters",
     "A data segment that limits which admins can view and edit the access profile",
     "An access request segment with country criteria holding the access profile",
     "A lifecycle state that grants the access profile"
@@ -347,7 +347,7 @@
    "choices": [
     "Yes, segments remove access from users outside the segment",
     "No, segments only control which items requesters see in the Request Center",
-    "Yes, segments stop role criteria from matching users outside them",
+    "Yes, segments stop role membership criteria from matching users outside them",
     "No, but segments do block provisioning by lifecycle states"
    ],
    "answer": "No, segments only control which items requesters see in the Request Center",

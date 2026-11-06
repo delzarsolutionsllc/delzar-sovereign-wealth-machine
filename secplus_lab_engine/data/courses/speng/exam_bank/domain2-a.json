@@ -40,7 +40,7 @@
         "The account remains on the source with the role's entitlements removed",
         "The account is deleted because ISC created it through role provisioning",
         "The account is disabled because it no longer holds any entitlements",
-        "The account becomes uncorrelated from the identity"
+        "The account becomes uncorrelated from the identity and moves to the uncorrelated list"
       ],
       "answer": "The account remains on the source with the role's entitlements removed",
       "explanation": "Deprovisioning entitlements never removes the source account, even when role provisioning created it or nothing is left on it. Disabling or deleting accounts is a lifecycle state action, not a side effect of losing a role."
@@ -107,7 +107,7 @@
       "topic": "Criteria-Based Role Assignment",
       "stem": "A role uses AND within groups. Group 1 requires department equals Finance and location equals Boston; Group 2 requires title equals Controller. Which identity receives the role?",
       "choices": [
-        "A Finance analyst based in Chicago",
+        "A Finance analyst who works from the Chicago branch office",
         "A Boston employee in the Marketing department",
         "A Controller in the Legal department based in Denver",
         "A Finance contractor whose location attribute is empty"
@@ -121,7 +121,7 @@
       "topic": "Criteria-Based Role Assignment",
       "stem": "A role uses OR within groups. Group 1 is department equals Finance or department equals Accounting; Group 2 is location equals Boston or location equals Austin. Which identity receives the role?",
       "choices": [
-        "A Finance employee based in Denver",
+        "A Finance employee based in the Denver branch office",
         "An Accounting employee based in Austin",
         "A Sales employee based in Boston",
         "An Accounting employee with no location value"
@@ -135,7 +135,7 @@
       "topic": "Criteria-Based Role Assignment",
       "stem": "Role criteria use Lifecycle State equals Full Time Employee, which is the lifecycle state's display name; its technical name is fte. No identities receive the role. What should the engineer change?",
       "choices": [
-        "Change the operation from Equals to Contains",
+        "Change the operation from Equals to Contains so partial matches count",
         "Run an unoptimized aggregation of the authoritative source",
         "Switch the criteria type from Standard Criteria to Identity List",
         "Enter the lifecycle state's technical name in the Value field"
@@ -149,7 +149,7 @@
       "topic": "Criteria-Based Role Assignment",
       "stem": "A role must go to seven named board liaisons who share no common attribute in HR data, and the group changes rarely. Which assignment approach BEST fits?",
       "choices": [
-        "Standard criteria on department with seven OR values",
+        "Standard criteria on the department attribute with seven OR values",
         "An Identity List criteria type that names the seven identities",
         "A lifecycle state that grants the role's access profiles",
         "An entitlement criterion on a group the liaisons do not hold yet"
@@ -291,7 +291,7 @@
       "choices": [
         "In the role's Access Requests settings, where its approvers are defined",
         "In the identity profile used by the identities that will request the role",
-        "On the Create Account definition of each source in the role",
+        "On the Create Account definition of each source whose access is in the role",
         "In the access profile list of the requesters' lifecycle state"
       ],
       "answer": "In the role's Access Requests settings, where its approvers are defined",
@@ -501,7 +501,7 @@
       "choices": [
         "Rename the lifecycle state's display name to Active",
         "Use Contains instead of Equals in the identity profile mapping",
-        "Set every identity's lifecycle state manually to active",
+        "Set every identity's lifecycle state manually to active in the admin UI",
         "Apply a lower transform to the cloudLifecycleState mapping"
       ],
       "answer": "Apply a lower transform to the cloudLifecycleState mapping",
@@ -705,7 +705,7 @@
       "choices": [
         "Wrap the display name in quotation marks inside the pattern",
         "Use the attribute's technical name, such as $(lastname)",
-        "Switch the mapping type from Generator to Disable",
+        "Switch the mapping type from Generator to Disable for that field",
         "Add Family Name to the source's account schema"
       ],
       "answer": "Use the attribute's technical name, such as $(lastname)",
@@ -731,7 +731,7 @@
       "topic": "Generators and Unique Values",
       "stem": "New AD accounts need a random initial password that satisfies the source's password requirements. Which Create Account mapping is MOST appropriate?",
       "choices": [
-        "A Static mapping with one shared initial password",
+        "A Static mapping with one shared initial password for every new hire",
         "An Identity Attribute mapping to the employee number",
         "A password generator mapping on the password attribute",
         "A Create Unique Account ID generator on the password attribute"
@@ -888,7 +888,7 @@
         "ISC applies the access profile's multiple account criteria",
         "The requester picks the account in the request",
         "ISC grants the access to both accounts",
-        "ISC always uses the oldest correlated account"
+        "ISC always uses the oldest correlated account on the source"
       ],
       "answer": "The requester picks the account in the request",
       "explanation": "For access requests, the requester chooses which account needs the access. Multiple account options on the access profile apply only to automated provisioning through roles and lifecycle states."
@@ -1012,7 +1012,7 @@
       "stem": "An engineer is scripting a check of whether a source supports automated account changes. What should the script look for?",
       "choices": [
         "PROVISIONING in the features list returned by the Get Source API",
-        "A non-empty Create Account definition on the source",
+        "A non-empty Create Account definition saved in the source's settings",
         "A healthy status on the source's virtual appliance cluster",
         "At least one entitlement in the source's entitlement catalog after aggregation"
       ],
@@ -1067,7 +1067,7 @@
       "topic": "Provisioning Policy Types and Channels",
       "stem": "An engineer needs to change how a transform-based value is calculated for a field in a source's Create Account definition. Which tool is designed for this?",
       "choices": [
-        "The Attribute Sync page, editing the sync mapping",
+        "The Attribute Sync page, editing the sync mapping for that field",
         "The account schema page, editing the attribute type",
         "The identity profile Preview, editing the sample identity's values",
         "The provisioning policy API, editing the field's transform"
@@ -1190,7 +1190,7 @@
         "Mover and leaver cases that confirm access is removed as designed",
         "More joiner cases with different first names",
         "Performance cases that create thousands of new accounts at the same time",
-        "Cases that confirm the email templates use company branding"
+        "Cases that confirm the email templates use company branding and logos"
       ],
       "answer": "Mover and leaver cases that confirm access is removed as designed",
       "explanation": "Removal paths, such as losing a role on transfer or Remove all access on termination, are where provisioning designs most often fail and carry the most risk. Extra joiner cases add little coverage."
@@ -1243,7 +1243,7 @@
       "topic": "Account Activity and Error Tracing",
       "stem": "A user's access request shows as failed. Where should the engineer look FIRST for the connector's error message?",
       "choices": [
-        "The identity profile's Mappings tab",
+        "The identity profile's Mappings tab and its preview",
         "The source's account schema",
         "The account activity record for that request",
         "The access profile's multiple account options"
@@ -1299,7 +1299,7 @@
       "topic": "Account Activity and Error Tracing",
       "stem": "An access request on an application managed as a delimited file source was approved three days ago and still shows as pending. What is the MOST likely explanation?",
       "choices": [
-        "The virtual appliance is offline and queuing the change",
+        "The virtual appliance is offline and queuing the change until it reconnects",
         "The request is waiting for identity processing at 6:00 PM",
         "The connector is retrying a network error every hour",
         "A manual task is waiting for its assignee to complete it"
@@ -1343,7 +1343,7 @@
       "choices": [
         "The VA cannot reach the domain controllers",
         "The Create Account definition is missing the password generator",
-        "The identity is in an inactive lifecycle state",
+        "The identity is in an inactive lifecycle state that blocks creation",
         "The service account lacks create rights on the target OU"
       ],
       "answer": "The service account lacks create rights on the target OU",
@@ -1356,7 +1356,7 @@
       "stem": "AD account creation fails because an object with the same name already exists in the container. The distinguishedName pattern is CN=$(firstname).$(lastname),OU=Staff,DC=corp,DC=example. What is the BEST fix?",
       "choices": [
         "Move distinguishedName to the end of the Create Account list",
-        "Change the mapping type from Generator to Static",
+        "Change the mapping type from Generator to Static for the attribute",
         "Grant the service account domain admin rights",
         "Add $(uniqueCounter) to the distinguishedName pattern"
       ],
@@ -1441,7 +1441,7 @@
       "choices": [
         "Whether the source's database account can write to those tables",
         "Whether the account schema includes the table's primary key column",
-        "Whether the identity profile maps the department attribute",
+        "Whether the identity profile maps the department attribute correctly",
         "Whether the VA has enough disk space for logs"
       ],
       "answer": "Whether the source's database account can write to those tables",
@@ -1482,7 +1482,7 @@
       "stem": "A provisioning request failed because the target rejected an invalid attribute value, which is not a retryable error. What is the correct recovery?",
       "choices": [
         "Fix the cause of the error, then trigger the change again",
-        "Wait for ISC's three hourly retries to clear the error",
+        "Wait for ISC's three hourly retries to clear the error on their own",
         "Restart the virtual appliance so the failed request is replayed",
         "Delete and recreate the identity"
       ],
@@ -1510,7 +1510,7 @@
       "stem": "A VA was offline for 30 minutes while birthright roles were being provisioned, and the requests failed with connection errors. What is the MOST likely outcome?",
       "choices": [
         "The requests are retried and succeed once the VA is back",
-        "The requests are lost and the roles must be reassigned",
+        "The requests are lost and the roles must be reassigned by an admin",
         "The roles are removed from the identities because provisioning failed",
         "The requests become manual tasks for the source owner"
       ],
@@ -1524,7 +1524,7 @@
       "stem": "A leaver's disable failed on one source and all automatic retries were exhausted. The source is reachable again. What is the MOST direct way to complete the disable?",
       "choices": [
         "Wait for the lifecycle state to repeat the disable on the next refresh",
-        "Restart the VA so the failed request is replayed",
+        "Restart the VA so the failed request is replayed from its queue",
         "Disable the account from the identity's account actions in ISC",
         "Run an unoptimized aggregation of the source"
       ],
@@ -1552,7 +1552,7 @@
       "stem": "Account changes on an attribute sync target are often overwritten later by stale values. Which practice from SailPoint's attribute sync guidance BEST reduces this?",
       "choices": [
         "Run the bulk Sync several times every day",
-        "Disable correlation on the attribute sync target",
+        "Disable correlation on the attribute sync target to stop the overwrites",
         "Aggregate the authoritative and attribute sync sources frequently",
         "Map every account attribute for sync, including attributes nobody uses"
       ],
@@ -1595,7 +1595,7 @@
       "choices": [
         "Use a domain or global administrator account so that no operation is ever blocked",
         "Grant only the rights its operations need, on the containers it manages",
-        "Use the engineer's own account so changes are easy to trace",
+        "Use the engineer's own account so changes are easy to trace in the target's logs",
         "Share one service account across every source to simplify rotation"
       ],
       "answer": "Grant only the rights its operations need, on the containers it manages",
@@ -1624,7 +1624,7 @@
         "Remove the related roles from the identity before deleting its accounts",
         "Disable the role for the identity while it is in the leaver lifecycle state",
         "Turn off identity processing for leavers",
-        "Lower the account deletion threshold for the source"
+        "Lower the account deletion threshold on the source so fewer accounts are deleted"
       ],
       "answer": "Remove the related roles from the identity before deleting its accounts",
       "explanation": "An active role assignment makes ISC recreate the deleted account on the next refresh, so roles should be removed first, for example by adding lifecycle state to the role criteria. Turning off processing would stop other leaver actions too."

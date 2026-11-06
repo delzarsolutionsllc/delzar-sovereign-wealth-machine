@@ -164,7 +164,7 @@
    "stem": "An admin's identity search shows names and emails, but the reviewer also needs each identity's lifecycle state in the results. What is the BEST approach?",
    "choices": [
     "Run one search per lifecycle state value and merge the results",
-    "Edit the identity profile to rename the attribute",
+    "Edit the identity profile to rename the lifecycle state attribute",
     "Open each identity to read the lifecycle state",
     "Add the lifecycle state attribute as a column in the results"
    ],
@@ -191,7 +191,7 @@
    "topic": "Search Categories and Results",
    "stem": "An account aggregation finished a minute ago, but a new account does not yet appear in search results. What is the MOST likely explanation?",
    "choices": [
-    "Search only refreshes once every night",
+    "Search only refreshes once every night, after the scheduled maintenance window",
     "New accounts are indexed only when the next certification campaign generates",
     "Aggregated accounts are excluded from search by design",
     "The search index updates shortly after changes, so results can lag briefly"
@@ -207,7 +207,7 @@
    "choices": [
     "Search events for the word Payroll",
     "Search account activities from the date the role was created",
-    "Search entitlements for the role's owner",
+    "Search entitlements for the role's owner and the entitlements that owner holds",
     "Search identities for those whose access includes that role"
    ],
    "answer": "Search identities for those whose access includes that role",
@@ -290,7 +290,7 @@
    "stem": "Besides the query itself, what does a saved search keep that affects how its results look when it is run again?",
    "choices": [
     "The identity profile and transforms behind each attribute value",
-    "The source that was aggregated last",
+    "The source that was aggregated most recently before the search was saved",
     "The result columns that were displayed when it was saved",
     "The approval scheme of each result"
    ],
@@ -317,7 +317,7 @@
    "topic": "Search Subscriptions and Schedules",
    "stem": "An auditor wants the results of a saved search emailed on the first day of every month. What should the admin configure?",
    "choices": [
-    "A certification campaign that runs monthly",
+    "A certification campaign that runs monthly and emails its reviewers",
     "An access request for the auditor with a monthly sunset date",
     "A subscription on the saved search with a monthly schedule",
     "A monthly account aggregation on the source"
@@ -333,7 +333,7 @@
    "choices": [
     "Choose the team's time zone, a weekly schedule, both days and 8 AM",
     "Choose a daily schedule at 8 AM and have the lead ignore the extra emails",
-    "Choose a monthly schedule with day 1 and day 4",
+    "Choose a monthly schedule with day 1 and day 4 of each month at 8 AM",
     "Create a separate saved search for each of the two days"
    ],
    "answer": "Choose the team's time zone, a weekly schedule, both days and 8 AM",
@@ -347,7 +347,7 @@
    "choices": [
     "Set a monthly schedule so the emails arrive less often",
     "Add a second subscriber to filter results",
-    "Disable the subscription until results appear",
+    "Disable the subscription until results appear, then turn it back on",
     "Leave the send-when-no-items-match option unchecked"
    ],
    "answer": "Leave the send-when-no-items-match option unchecked",
@@ -388,7 +388,7 @@
    "stem": "A recipient of a weekly search subscription leaves the company. What should the admin do?",
    "choices": [
     "Delete the saved search and rebuild it without them",
-    "Disable the identity's sources",
+    "Disable the departed identity's accounts on every source",
     "Edit the subscription and remove the recipient",
     "Change the schedule to monthly"
    ],
@@ -403,7 +403,7 @@
    "choices": [
     "Delete the subscription and recreate it after the freeze",
     "Disable the subscription and enable it again later",
-    "Remove all subscribers except the creator",
+    "Remove all subscribers except the creator until the freeze ends",
     "Change the saved search name"
    ],
    "answer": "Disable the subscription and enable it again later",
@@ -431,7 +431,7 @@
    "choices": [
     "The identity profile's attribute mappings and their transforms",
     "The account activity for that request and its result",
-    "The source's correlation configuration",
+    "The source's correlation configuration for account matching",
     "The role membership criteria"
    ],
    "answer": "The account activity for that request and its result",
@@ -457,7 +457,7 @@
    "topic": "Event and Account Activity Searches",
    "stem": "Security wants to review failed sign-in attempts to the tenant over the past week. Which search approach fits BEST?",
    "choices": [
-    "Search entitlements for the authentication source",
+    "Search entitlements for the authentication source and its sign-in groups",
     "Search roles assigned in the past week",
     "Search events filtered to authentication actions and the date range",
     "Search account activities for password changes made during that week"
@@ -473,7 +473,7 @@
    "choices": [
     "Save a search of failed account activities and subscribe weekly",
     "Export all identities to CSV weekly and compare the files by hand",
-    "Run a certification of all accounts each week",
+    "Run a certification of all accounts each week and review the failures",
     "Enable delta aggregation on every source"
    ],
    "answer": "Save a search of failed account activities and subscribe weekly",
@@ -500,7 +500,7 @@
    "stem": "A helpdesk lead needs the status of an access request submitted for a user this morning. What should the lead check?",
    "choices": [
     "The identity profile preview for that user's attributes",
-    "The transforms applied to the user",
+    "The transforms applied to the user's identity attributes",
     "The virtual appliance health page",
     "The account activity created for that access request"
    ],
@@ -580,7 +580,7 @@
     "As a password query parameter in each request URL",
     "In the Authorization header as a Bearer token",
     "In a cookie set by the Admin UI",
-    "In the request body of every call"
+    "In the request body of every call as a JSON field"
    ],
    "answer": "In the Authorization header as a Bearer token",
    "explanation": "API calls carry the OAuth access token in the Authorization header with the Bearer scheme. Passing secrets in query strings exposes them in logs."
@@ -677,7 +677,7 @@
    "choices": [
     "Full Admin rights, whatever user level the owner has",
     "Only read access to public data",
-    "The rights of whoever last used the token",
+    "The rights of whoever last used the token to call the API",
     "The owner's rights, limited to the token's scopes"
    ],
    "answer": "The owner's rights, limited to the token's scopes",
@@ -692,7 +692,7 @@
     "Create a new token, because the secret is shown only once",
     "Ask an Admin to display the secret",
     "Reopen Preferences and select the token to reveal its secret",
-    "Request the secret from SailPoint Support"
+    "Request the secret from SailPoint Support with the token's ID"
    ],
    "answer": "Create a new token, because the secret is shown only once",
    "explanation": "The secret is displayed once at creation and cannot be retrieved later. A new token is created and the unused one deleted."
@@ -705,7 +705,7 @@
    "choices": [
     "Delete the token so it can no longer be used",
     "Make the repository private",
-    "Change the owner's sign-in password",
+    "Change the owner's sign-in password and enable MFA",
     "Wait for the current access token to time out"
    ],
    "answer": "Delete the token so it can no longer be used",
@@ -718,7 +718,7 @@
    "stem": "How does a script use a personal access token to call the REST API?",
    "choices": [
     "It sends the token secret directly as the Bearer value on each call",
-    "It signs in to the Admin UI with the token name",
+    "It signs in to the Admin UI with the token name and secret as credentials",
     "It uploads the token to the virtual appliance",
     "It exchanges the token's client ID and secret for an access token"
    ],
@@ -732,7 +732,7 @@
    "stem": "A developer needs a personal access token for a script that only reads identities. What is the BEST practice?",
    "choices": [
     "Grant sp:scopes:all so the script never fails later",
-    "Share one token across every script",
+    "Share one token across every script the team runs",
     "Use an Admin colleague's token",
     "Limit the token's scopes to what the script needs"
    ],
@@ -817,7 +817,7 @@
    "choices": [
     "Source Admins must first run an aggregation",
     "Event triggers are available only on the virtual appliance",
-    "The engineer needs the Helpdesk level as well",
+    "The engineer needs the Helpdesk level as well as Source Admin",
     "Event triggers and workflows require the Admin user level"
    ],
    "answer": "Event triggers and workflows require the Admin user level",
@@ -830,7 +830,7 @@
    "stem": "A company wants employees to sign in to Identity Security Cloud with their existing corporate identity provider. What should the admin configure?",
    "choices": [
     "SAML single sign-on with the tenant as the service provider",
-    "A new delimited file source for passwords",
+    "A new delimited file source that stores each employee's password",
     "Pass-through authentication to a flat file of user passwords",
     "A personal access token for each user"
    ],
@@ -900,7 +900,7 @@
    "stem": "The corporate IdP is down and an Admin must still reach the tenant to make an urgent change. What should the organisation have planned?",
    "choices": [
     "A shared admin password emailed to the team so anyone can sign in",
-    "Turning off all authentication during outages",
+    "Turning off all authentication on the tenant during IdP outages",
     "An emergency admin sign-in that bypasses the IdP, with MFA",
     "A personal access token used in the browser"
    ],
@@ -929,7 +929,7 @@
    "choices": [
     "The tenant checks a hashed password copy synchronised to the cloud nightly",
     "The virtual appliance validates the credentials against the directory",
-    "The user's browser connects directly to the domain controller",
+    "The user's browser connects directly to the domain controller over LDAP",
     "SailPoint Support approves each sign-in"
    ],
    "answer": "The virtual appliance validates the credentials against the directory",
@@ -983,7 +983,7 @@
    "topic": "Multi-Factor Authentication",
    "stem": "Which users does Identity Security Cloud require to use MFA by default?",
    "choices": [
-    "Only users who sign in after business hours",
+    "Only users who sign in after business hours or from new locations",
     "Only identities in the inactive lifecycle state on new devices",
     "Only users created by flat file sources",
     "Users with elevated user levels that give Admin menu access"
@@ -997,7 +997,7 @@
    "topic": "Multi-Factor Authentication",
    "stem": "A new elevated user signs in for the first time. What MFA setup will the user MOST likely be asked to complete?",
    "choices": [
-    "Upload a photo ID to SailPoint Support",
+    "Upload a photo ID to SailPoint Support for identity verification",
     "Register an authenticator app that generates time-based codes",
     "Answer a call placed by the virtual appliance to their desk phone",
     "Create a personal access token"

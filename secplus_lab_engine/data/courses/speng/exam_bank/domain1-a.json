@@ -51,7 +51,7 @@
    "topic": "Identity Model Implementation Order",
    "stem": "An engineer tries to create an identity profile for a new HR source while that source's account aggregation is still running. What should the engineer do?",
    "choices": [
-    "Remove the source's correlation configuration and try again",
+    "Remove the source's correlation configuration and try creating the profile again",
     "Wait for the aggregation to finish, then create the identity profile",
     "Create the profile on another source and switch it to HR later",
     "Run identity processing on another profile so the aggregation stops early"
@@ -66,7 +66,7 @@
    "stem": "During design workshops for a new identity model, which activity should be completed before any identity profile is configured?",
    "choices": [
     "Configure approval reminders and escalation chains for every requestable item",
-    "Build manager certification campaigns for every department",
+    "Build manager certification campaigns for every department and business unit",
     "Create access request segments for each business unit",
     "Agree with HR on the system of record and attributes for each population"
    ],
@@ -79,7 +79,7 @@
    "topic": "Identity Model Implementation Order",
    "stem": "Before the first aggregation of a new HR source, which source setting should the engineer verify so identity attributes can be mapped from complete data?",
    "choices": [
-    "The source is selected as the sign-in source for all users",
+    "The source is selected as the sign-in source for all users in the tenant",
     "The account schema includes every HR attribute the mappings will use",
     "Every access profile on the source is marked as requestable",
     "Attribute sync is enabled for each identity attribute that the source supports"
@@ -122,7 +122,7 @@
    "stem": "An architect proposes making Active Directory the authoritative source for every user because all staff have an AD account. What is the MAIN concern with this design?",
    "choices": [
     "Identity Security Cloud cannot read AD attributes through a virtual appliance",
-    "AD accounts cannot be correlated to identities once aggregated",
+    "AD accounts cannot be correlated to identities once they have been aggregated",
     "AD sources are unable to provide work email addresses",
     "Service, test and shared AD accounts would also become identities"
    ],
@@ -150,7 +150,7 @@
    "stem": "Which characteristic MOST qualifies a source to be the authoritative source for a population?",
    "choices": [
     "It is the system of record for that population, with start and end dates",
-    "It is the application that holds the largest number of entitlements",
+    "It is the application that holds the largest number of entitlements and accounts",
     "It supports password changes and account unlocks for users",
     "It can be reached directly from the cloud without needing a virtual appliance"
    ],
@@ -250,7 +250,7 @@
     "Combine both vendor files into one contractor source and one profile",
     "Create one identity profile per vendor file and copy the mappings between them",
     "Load both vendor files into the employee HR identity profile",
-    "Create no identity profile and correlate vendor rows to AD accounts"
+    "Create no identity profile and correlate the vendor rows to existing AD accounts"
    ],
    "answer": "Combine both vendor files into one contractor source and one profile",
    "explanation": "With identical requirements, a single combined contractor source needs only one identity profile, plus a vendor attribute if reporting needs it. Two vendor sources would need two profiles, because each profile has a single authoritative source."
@@ -331,7 +331,7 @@
    "topic": "Identity Profile Priority",
    "stem": "An employee who was also a contractor leaves, and HR removes the Workday record. The person's contractor account is still on the contractor source. What happens to the identity?",
    "choices": [
-    "It is deleted along with all of its correlated accounts",
+    "It is deleted along with all of its correlated accounts on every source",
     "It keeps the Employees profile until an admin moves it",
     "It stays in the Employees profile with frozen attribute values",
     "It moves to the contractor profile, whose mappings then apply"
@@ -418,7 +418,7 @@
     "Nothing changes until an admin selects Apply Changes on the profile",
     "The identity is recreated with a new identity ID",
     "Its attributes are reprocessed automatically after the aggregation",
-    "The change waits until the next certification campaign starts"
+    "The change waits until the next certification campaign starts for that department"
    ],
    "answer": "Its attributes are reprocessed automatically after the aggregation",
    "explanation": "ISC automatically processes identity data that changes during aggregation, so the department updates without manual steps. Apply Changes is needed for configuration changes, not for normal data changes."
@@ -432,7 +432,7 @@
     "The source and all of its accounts are deleted from the tenant",
     "The identities are deleted and their source accounts become uncorrelated",
     "The identities' accounts are deprovisioned from every connected target system",
-    "The identities remain in the tenant without any identity profile"
+    "The identities remain in the tenant without any identity profile assigned to them"
    ],
    "answer": "The identities are deleted and their source accounts become uncorrelated",
    "explanation": "Deleting a profile makes its source non-authoritative and deletes identities that cannot move to another profile, leaving their accounts uncorrelated. It does not delete the source or deprovision accounts in target systems."
@@ -508,7 +508,7 @@
    "stem": "Employees come from Workday, but their work email address is only stored in Active Directory. How should the engineer populate the Work Email identity attribute for the Employees profile?",
    "choices": [
     "Add Active Directory as a second authoritative source of the same profile",
-    "Create a second identity profile on Active Directory that supplies email",
+    "Create a second identity profile on Active Directory that supplies the email value",
     "Map Work Email in the Employees profile to the AD mail account attribute",
     "Use attribute sync to copy the AD mail value into Workday first"
    ],
@@ -522,8 +522,8 @@
    "stem": "The Contractors profile should take department from the contractor source, while the Employees profile takes it from Workday. How should the engineer configure this?",
    "choices": [
     "Create a second department attribute used only by contractors",
-    "Map department once, because mappings are shared by all profiles",
-    "Use a rule that checks the profile name before choosing a source",
+    "Map department once, because mappings are shared by all profiles in the tenant",
+    "Use a rule that checks the profile name before choosing which source to read",
     "Map the department attribute separately in each identity profile"
    ],
    "answer": "Map the department attribute separately in each identity profile",
@@ -566,7 +566,7 @@
     "Exclamation marks are removed from usernames during aggregation",
     "The users' passwords were reset when identity processing last ran",
     "The mapped User Name contains characters not allowed for sign-in",
-    "Usernames must match the users' email address to sign in"
+    "Usernames must match the users' work email address exactly to allow sign-in"
    ],
    "answer": "The mapped User Name contains characters not allowed for sign-in",
    "explanation": "Characters such as * ( ) & ! and the period are not allowed in the source attribute mapped to a username or alternative sign-in attribute, and affected users may not be able to sign in. ISC does not strip the characters for them."
@@ -677,7 +677,7 @@
    "choices": [
     "A governance group named Managers for each department",
     "A custom identity attribute holding each manager's email address for routing",
-    "A lifecycle state that grants a manager access profile",
+    "A lifecycle state that grants a manager access profile to every people leader",
     "Manager Name mapped in the profile and manager correlation on a source"
    ],
    "answer": "Manager Name mapped in the profile and manager correlation on a source",
@@ -803,7 +803,7 @@
    "choices": [
     "Reference the HR account attribute directly in each segment's identity criteria",
     "Store the union code in the department attribute",
-    "Ask SailPoint Support to add the attribute to the tenant",
+    "Ask SailPoint Support to add the union code as a standard attribute to the tenant",
     "Add a custom identity attribute, map it to the HR union code and apply changes"
    ],
    "answer": "Add a custom identity attribute, map it to the HR union code and apply changes",
@@ -887,7 +887,7 @@
    "choices": [
     "Choose Complex Data Source, then pick the rule from the Transform list",
     "Choose the HR source, then type the rule's name into the Attribute dropdown list",
-    "Attach the rule to the HR source's correlation configuration",
+    "Attach the rule to the HR source's correlation configuration for that attribute",
     "Upload the rule on the identity profile's Settings page"
    ],
    "answer": "Choose Complex Data Source, then pick the rule from the Transform list",
@@ -928,7 +928,7 @@
    "stem": "An engineer created a custom transform with the transforms API. How is it applied to an identity attribute?",
    "choices": [
     "Choose Complex Data Source, then choose the transform from the rule list",
-    "Attach the transform to the source's account schema attribute",
+    "Attach the transform to the source's account schema attribute for the HR field",
     "Reference the transform from the identity profile's priority setting",
     "Pick the source and attribute, then choose it from the Transform list"
    ],
@@ -1010,7 +1010,7 @@
    "choices": [
     "Define a terminated state in each identity profile with its own actions",
     "Define one tenant-wide terminated state that both identity profiles share",
-    "Define the terminated state only in the higher priority profile",
+    "Define the terminated state only in the higher priority profile and let it apply to both",
     "Define termination actions on each source instead of in states"
    ],
    "answer": "Define a terminated state in each identity profile with its own actions",
@@ -1051,7 +1051,7 @@
    "stem": "Department-specific birthright access differs across 40 departments, while all active employees get the same email and VPN access. Which design is BEST?",
    "choices": [
     "Create one lifecycle state per department, each granting its own access profiles",
-    "Grant every department's access profiles in the active state",
+    "Grant every department's access profiles in the active state for all employees",
     "Grant common access in the active state and use department roles for the rest",
     "Have managers request department access for each new hire"
    ],
@@ -1095,7 +1095,7 @@
     "Its Lifecycle State attribute is not mapped in the identity profile at all",
     "Its value matches none of the states defined in its identity profile",
     "Its lifecycle state is enabled but has no actions",
-    "Its lifecycle state was changed by an admin by hand"
+    "Its lifecycle state was changed by an admin by hand from the identity details page"
    ],
    "answer": "Its value matches none of the states defined in its identity profile",
    "explanation": "Not Valid means the attribute holds a value that is not a technical name of the profile's states. An unmapped or null value shows Not Set instead."
@@ -1135,7 +1135,7 @@
    "stem": "A rehired employee returns to the active state, but the old Active Directory account that was disabled at termination stays disabled. What should the engineer change?",
    "choices": [
     "Configure the terminated state to delete accounts instead of disabling them",
-    "Add the AD source to the active state's excluded sources",
+    "Add the AD source to the active state's excluded sources so the account is rebuilt",
     "Ask the employee to request a new AD account",
     "Configure the active state to enable accounts on the relevant sources"
    ],
@@ -1205,7 +1205,7 @@
    "stem": "The terminated state disables accounts on All sources. Six months later a new SaaS source is onboarded. What happens when an identity is terminated after that?",
    "choices": [
     "Accounts on the new source stay enabled until it is added to the list by hand",
-    "The terminated state stops working until it is saved again",
+    "The terminated state stops working until it is opened and saved again by an admin",
     "Accounts on the new source are deleted instead of disabled",
     "Accounts on the new source are disabled too, unless the source is excluded"
    ],
