@@ -51,9 +51,9 @@
    "topic": "Encryption in Transit",
    "stem": "Security requires encrypted traffic between the VAs and a SQL Server used by a JDBC source. Where is this BEST configured?",
    "choices": [
-    "In the identity profile of the source",
+    "In the identity profile that uses the source",
     "In the VA cluster's time zone settings",
-    "In the tenant's password policy",
+    "In the tenant's password and session policy",
     "In the JDBC connection URL's encryption properties"
    ],
    "answer": "In the JDBC connection URL's encryption properties",
@@ -177,9 +177,9 @@
    "topic": "Encryption at Rest",
    "stem": "Under the shared responsibility model, which task belongs to the customer for data security?",
    "choices": [
-    "Encrypting the tenant's databases",
+    "Encrypting the tenant's databases and backups",
     "Managing the cloud's storage keys",
-    "Patching SailPoint's cloud services",
+    "Patching SailPoint's multi-tenant cloud services",
     "Choosing what data to aggregate and who can see it"
    ],
    "answer": "Choosing what data to aggregate and who can see it",
@@ -222,7 +222,7 @@
     "The new VA has more memory than the first",
     "The cluster has a time zone set",
     "The new VA's keyPassphrase differs from the cluster's",
-    "The source has two domain controllers"
+    "The cluster's sources list two domain controllers"
    ],
    "answer": "The new VA's keyPassphrase differs from the cluster's",
    "explanation": "Every VA in a cluster must use the identical keyPassphrase so they share the key. A mismatch means the new VA cannot decrypt the credentials."
@@ -303,10 +303,10 @@
    "topic": "Virtual Appliance Redundancy",
    "stem": "What is SailPoint's minimum recommendation for VAs in a production cluster?",
    "choices": [
-    "Exactly one VA so tasks are never split",
+    "Exactly one VA so that tasks are never split",
     "One VA per source in the tenant",
     "At least two VAs so the cluster survives one failure",
-    "One VA plus nightly snapshots of it"
+    "One VA plus nightly snapshots of its disk"
    ],
    "answer": "At least two VAs so the cluster survives one failure",
    "explanation": "At least two VAs per cluster give high availability; if one stops, the other keeps working. Snapshots restore later but do not keep work running."
@@ -373,8 +373,8 @@
    "topic": "Virtual Appliance Redundancy",
    "stem": "A cluster has three VAs, but an AD source lists a single domain controller. What is the remaining single point of failure?",
    "choices": [
-    "The number of VAs in the cluster",
-    "The tenant's storage",
+    "The number of VAs configured in the cluster",
+    "The tenant's storage in the SailPoint cloud",
     "The one domain controller configured on the source",
     "The keyPassphrase of the cluster"
    ],
@@ -415,8 +415,8 @@
    "topic": "Cloud Platform Redundancy",
    "stem": "Which redundancy task is the customer's responsibility in an ISC deployment?",
    "choices": [
-    "Scaling the tenant's microservices",
-    "Replicating the tenant's databases",
+    "Scaling the tenant's microservices under load",
+    "Replicating the tenant's databases across zones",
     "Patching SailPoint's cloud servers",
     "Keeping enough healthy VAs and reachable sources"
    ],
@@ -542,9 +542,10 @@
     "Deploy and start the VA virtual machine from the SailPoint image",
     "Sign in as the sailpoint user and change the default password",
     "Run va-bootstrap set-passphrase with the cluster's existing passphrase",
-    "Confirm the new VA shows as healthy in the cluster"
+    "Run va-bootstrap pair and enter the pairing code on the cluster's new VA page",
+    "Confirm the new VA shows as connected and healthy in the cluster"
    ],
-   "explanation": "The VM comes up first, the default password is changed, the shared passphrase is set so the VA can use the cluster's key, and health is checked before relying on it."
+   "explanation": "The VM comes up first, the default password is changed, the shared passphrase is set so the VA can use the cluster's key, the VA is paired to the cluster, and its status is checked before relying on it."
   }
  ]
 }

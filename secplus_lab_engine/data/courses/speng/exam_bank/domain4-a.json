@@ -401,12 +401,12 @@
    "topic": "VA Network Configurations",
    "stem": "An engineer must give a local VA a fixed address before pairing. Which method is documented?",
    "choices": [
-    "Create /etc/systemd/network/static.network with the NIC name, address, gateway and DNS, then reboot",
+    "Write /etc/systemd/network/static.network with the NIC, address and DNS, then reboot",
     "Type the IP address on the Configure Virtual Appliance page",
     "Add an ipAddress key to /home/sailpoint/config.yaml and restart",
     "Run va-bootstrap pair with the IP address as a command option"
    ],
-   "answer": "Create /etc/systemd/network/static.network with the NIC name, address, gateway and DNS, then reboot",
+   "answer": "Write /etc/systemd/network/static.network with the NIC, address and DNS, then reboot",
    "explanation": "Static IPs are set in a systemd static.network file using the NIC name found with ip addr, followed by a reboot. The Admin UI does not set VA addressing."
   },
   {
@@ -689,12 +689,12 @@
    "topic": "VA Setup and Pairing",
    "stem": "An engineer generated a pairing code on Friday afternoon and comes back on Monday to finish. What should the engineer do?",
    "choices": [
-    "Delete and recreate the cluster before entering any code",
-    "Run va-bootstrap pair again, because a code must be entered within 4 hours",
-    "Enter Friday's code, because codes stay valid until used",
+    "Delete and recreate the cluster before entering any new pairing code",
+    "Run va-bootstrap pair again, since codes must be entered within 4 hours",
+    "Enter Friday's code, because pairing codes stay valid until they are used",
     "Reset the sailpoint password, then enter Friday's code"
    ],
-   "answer": "Run va-bootstrap pair again, because a code must be entered within 4 hours",
+   "answer": "Run va-bootstrap pair again, since codes must be entered within 4 hours",
    "explanation": "The pairing code must be entered within 4 hours, so a fresh code is needed. Recreating the cluster is unnecessary."
   },
   {
@@ -831,11 +831,11 @@
    "choices": [
     "Run set-passphrase with any value, since the cluster adopts the newest",
     "Reset the passphrase from the cluster's settings page in the Admin UI",
-    "Build a new cluster with a recorded passphrase, move the sources and re-enter their credentials",
-    "Ask SailPoint Support to read the passphrase back from the tenant"
+    "Build a new cluster with a recorded passphrase and move the sources",
+    "Pair the new VA without a passphrase, since it inherits the cluster key"
    ],
-   "answer": "Build a new cluster with a recorded passphrase, move the sources and re-enter their credentials",
-   "explanation": "The passphrase is not recoverable from SailPoint and every VA in a cluster must use the same one. A new cluster, with sources moved and credentials re-entered, is the way forward."
+   "answer": "Build a new cluster with a recorded passphrase and move the sources",
+   "explanation": "Every VA in a cluster must be set up with the same keyPassphrase, and it is kept on the VAs only in encrypted form, so an unrecorded value cannot simply be reused. A new cluster with a recorded passphrase, with the sources moved to it and their credentials re-entered, is the dependable path."
   },
   {
    "id": "D4-059",
@@ -849,21 +849,21 @@
     "On the source system, which receives them still encrypted"
    ],
    "answer": "On the VA, with the cluster's private key, when it connects to the source",
-   "explanation": "Source credentials are protected for the VA cluster and only the VAs hold the private key that decrypts them. The cloud services never need the plaintext."
+   "explanation": "SailPoint documents that each VA holds the 2048-bit RSA private key, generated from the cluster's passphrase, that decrypts credentials when it talks to sources. Administrators' browsers and source systems never decrypt them."
   },
   {
    "id": "D4-060",
    "objective": "4.2",
    "topic": "Key Passphrase and Encryption Keys",
-   "stem": "A source is moved from one VA cluster to another. Why must its credentials be re-entered?",
+   "stem": "A source is moved from one VA cluster to another. What does SailPoint document about this change?",
    "choices": [
-    "They are protected with the old cluster's key, which the new VAs lack",
-    "The new cluster's time zone invalidates any saved passwords",
-    "SailPoint deletes credentials whenever any source field is edited and saved",
-    "Moving a source resets it to a delimited file source"
+    "Its source credentials must be re-entered after the move",
+    "Its credentials carry over unchanged to the new cluster's VAs",
+    "Its accounts must be deleted and aggregated again from scratch",
+    "The new cluster must first be switched to the IAI Harvester type"
    ],
-   "answer": "They are protected with the old cluster's key, which the new VAs lack",
-   "explanation": "Each cluster's VAs decrypt with a private key generated from that cluster's passphrase, so credentials protected for the old cluster cannot be read by the new one. SailPoint documents that switching clusters needs credentials re-entered."
+   "answer": "Its source credentials must be re-entered after the move",
+   "explanation": "SailPoint documents that switching a source to another cluster requires re-entering the source credentials, because they are protected for the VAs of the cluster that uses them. Accounts are not deleted, and the cluster type cannot be changed."
   },
   {
    "id": "D4-061",
@@ -899,12 +899,12 @@
    "topic": "Supported VA Changes",
    "stem": "A source's hostname is not in DNS, and the connector must reach it by name. Which change is supported on the VA?",
    "choices": [
-    "Edit /etc/hosts directly and lock the file against changes",
-    "Add an entry for the host in /home/sailpoint/hosts.yaml and restart charon",
+    "Edit /etc/hosts directly and lock the file against later changes",
+    "Add the host to hosts.yaml in /home/sailpoint and restart charon",
     "List the host in proxy.yaml so it bypasses name resolution",
     "Put the IP address in the source's description field"
    ],
-   "answer": "Add an entry for the host in /home/sailpoint/hosts.yaml and restart charon",
+   "answer": "Add the host to hosts.yaml in /home/sailpoint and restart charon",
    "explanation": "SailPoint supports a hosts.yaml file in /home/sailpoint with precise indentation, applied by restarting charon. Direct edits to system files are not the supported method."
   },
   {
@@ -933,7 +933,7 @@
     "Deploy a fresh VA image, set the same passphrase and pair it as a new VA"
    ],
    "answer": "Deploy a fresh VA image, set the same passphrase and pair it as a new VA",
-   "explanation": "Each VA is set up from a fresh image and paired as its own VA object in the cluster. A clone would carry the original VA's identity and configuration."
+   "explanation": "Each VA is deployed from the SailPoint image, given the cluster's passphrase and paired as its own VA in the cluster. Cloning is not part of the documented process and would duplicate the original VA's configuration and identity."
   },
   {
    "id": "D4-066",
@@ -961,7 +961,7 @@
     "Ask SailPoint to open SSH so Splunk can pull the logs"
    ],
    "answer": "Use the VA's log export settings to send logs to Splunk HEC",
-   "explanation": "SailPoint supports exporting VA logs and metrics to third-party tools such as Splunk HEC through the VA's logging configuration. Installing a forwarder is added software."
+   "explanation": "SailPoint supports exporting VA logs to Splunk HEC, CloudWatch Logs or Datadog with a host-logging.yaml file in /home/sailpoint. Installing a forwarder is added software, which the appliance does not support."
   },
   {
    "id": "D4-068",
@@ -1051,7 +1051,7 @@
    "id": "D4-074",
    "objective": "4.2",
    "topic": "Cluster Settings and Lifecycle",
-   "stem": "An engineer tries to delete the only VA in a cluster that still has sources attached, and the deletion is blocked. What should be done?",
+   "stem": "An engineer tries to delete the only VA in a cluster that still has sources attached, and the deletion is blocked. What is the documented way to proceed?",
    "choices": [
     "Reassign those sources to a VA cluster that has working VAs",
     "Restart the cluster and delete the VA while it reboots",
@@ -1226,7 +1226,7 @@
     "Restart ccg every hour so a fresh log captures each failure"
    ],
    "answer": "Enable debugging, reproduce the failure within 24 hours, then read ccg.log",
-   "explanation": "Debugging gives 24 hours of verbose logging across the cluster, enough to capture the issue. Leaving debug on fills the disk."
+   "explanation": "Debugging gives 24 hours of verbose logging across the cluster, enough to capture a failure that happens several times a day. Verbose logging is meant for short troubleshooting windows because it quickly fills the disk."
   },
   {
    "id": "D4-085",
@@ -1305,7 +1305,7 @@
    "stem": "The cluster shows an OS Update Warning that says a reboot is required. Which command confirms that an update is waiting for a reboot?",
    "choices": [
     "cat /etc/os-release",
-    "timedatectl status",
+    "cat /etc/flatcar/update.conf",
     "sudo docker images",
     "sudo update_engine_client -status"
    ],
@@ -1372,15 +1372,15 @@
    "id": "D4-095",
    "objective": "4.3",
    "topic": "Health Warnings and Errors",
-   "stem": "A VA reports a Disk Warning a week after an engineer investigated a source issue. What is the MOST likely cause and fix?",
+   "stem": "A VA reports a Disk Warning after an engineer enabled debugging on its cluster to investigate a source issue. What is the MOST likely cause and fix?",
    "choices": [
-    "Debug logging was left on; turn it off and clean up the logs",
+    "Debug logs filled the disk; turn debugging off and clean up the logs",
     "The disk was too small at setup; rebuild the VA at 64 GB",
     "Aggregated account data is cached on the disk; delete the source",
     "The OS update failed; pair the VA with the cluster again"
    ],
-   "answer": "Debug logging was left on; turn it off and clean up the logs",
-   "explanation": "A Disk Warning means file system usage is over 80%, and SailPoint first recommends turning off debug logging and clearing or splitting logs. Account data is not kept on the VA."
+   "answer": "Debug logs filled the disk; turn debugging off and clean up the logs",
+   "explanation": "A Disk Warning means file system usage is over 80%, and SailPoint first recommends turning off Enable Debugging and clearing or splitting the logs. Account data is not kept on the VA, and rebuilding smaller makes it worse."
   },
   {
    "id": "D4-096",
@@ -1416,7 +1416,7 @@
    "topic": "Health Warnings and Errors",
    "stem": "A VA's status badge reads VA Did Not Update. What should the engineer do FIRST?",
    "choices": [
-    "Download the latest image and upgrade the VA in place",
+    "Download the latest image and upgrade the VA in place from the console",
     "Restart the VA cluster, and contact SailPoint Support if it persists",
     "Disable debugging, which blocks updates while enabled",
     "Delete the VA and remove its sources from the cluster"
@@ -1585,11 +1585,11 @@
    "stem": "Connector errors on a newly built cluster include a message that the VA cannot find the key to decrypt. What is the MOST likely cause?",
    "choices": [
     "The source's service account is locked in the target system",
-    "The VA's NTP server is unreachable on port 123",
+    "The VA's NTP server is unreachable on outbound port 123",
     "The cluster time zone is not set to UTC",
-    "The keyPassphrase has an unsupported character or does not match across the VAs"
+    "The keyPassphrase is invalid or differs between the cluster's VAs"
    ],
-   "answer": "The keyPassphrase has an unsupported character or does not match across the VAs",
+   "answer": "The keyPassphrase is invalid or differs between the cluster's VAs",
    "explanation": "Decryption key errors usually come from a passphrase with an invalid special character or different passphrases on the VAs. Locked accounts give authentication errors instead."
   },
   {
@@ -1598,13 +1598,13 @@
    "topic": "Credential and Service Errors",
    "stem": "Since a third VA joined a cluster, about one in three operations fails with decryption errors, and the failures always come from the new VA. What is the BEST fix?",
    "choices": [
-    "Rebuild the new VA with the same keyPassphrase as the other VAs",
+    "Set up the new VA again with the same keyPassphrase as the others",
     "Restart the cluster so the VAs share their keys",
     "Re-enter all source credentials so that the new VA is able to read them",
     "Enable debugging so the new VA retries with the right key"
    ],
-   "answer": "Rebuild the new VA with the same keyPassphrase as the other VAs",
-   "explanation": "The new VA's passphrase differs, so its private key cannot decrypt the cluster's credentials. Re-entering credentials would break the original VAs instead."
+   "answer": "Set up the new VA again with the same keyPassphrase as the others",
+   "explanation": "Only the new VA fails, so its passphrase, and therefore its private key, differs from the rest of the cluster. Restarts, debugging or re-entering credentials do not give that VA the cluster's key."
   },
   {
    "id": "D4-112",
@@ -1612,12 +1612,12 @@
    "topic": "Credential and Service Errors",
    "stem": "Ten minutes after pairing, sudo docker ps -a shows no ccg container yet. What should the engineer do FIRST?",
    "choices": [
-    "Delete the VA and pair a new one at once",
-    "Install the ccg container by hand from the image",
-    "Change the passphrase and pair the VA again",
-    "Check charon.log for image pull progress and allow time for setup to finish"
+    "Delete the VA at once and pair a replacement VA instead",
+    "Pull and install the ccg container by hand with docker",
+    "Change the keyPassphrase and pair the VA with the cluster again",
+    "Check charon.log for image pulls and allow time for setup"
    ],
-   "answer": "Check charon.log for image pull progress and allow time for setup to finish",
+   "answer": "Check charon.log for image pulls and allow time for setup",
    "explanation": "After pairing, charon checks and pulls images, and setup takes time, often around 30 minutes. charon.log shows progress; installing containers by hand is unsupported."
   },
   {
@@ -1667,7 +1667,7 @@
    "type": "match",
    "objective": "4.3",
    "topic": "VA Log Files",
-   "stem": "Match each VA log file to what it MOSTLY records.",
+   "stem": "Match each VA file to what it MOSTLY records or controls.",
    "pairs": [
     {
      "item": "ccg.log",
@@ -1675,21 +1675,21 @@
     },
     {
      "item": "charon.log",
-     "match": "VA management, image pulls and service updates"
+     "match": "VA management, image pulls and service setup"
     },
     {
      "item": "canal.log",
      "match": "Network tunnel connectivity"
     },
     {
-     "item": "fluent.log",
-     "match": "Forwarding of VA logs"
+     "item": "host-logging.yaml",
+     "match": "Export of VA logs to Splunk HEC, CloudWatch or Datadog"
     }
    ],
    "targets_extra": [
     "Identity profile refresh results"
    ],
-   "explanation": "ccg runs connectors, charon manages the VA, canal is the tunnel and fluent ships logs. Identity refresh happens in the cloud, not on the VA."
+   "explanation": "ccg runs the connectors, charon manages the VA and pulls its images, canal is the network tunnel service, and host-logging.yaml configures log export to third-party tools. Identity refresh happens in the cloud, not on the VA."
   },
   {
    "id": "D4-117",
@@ -1699,11 +1699,11 @@
    "stem": "An LDAPS source fails test connection because the VA does not trust the server certificate. Put the fix in order.",
    "items": [
     "Retrieve the server certificate with openssl s_client against the source host and port",
-    "Save the certificate as a .cer file in /home/sailpoint/certificates",
+    "Save the certificate in PEM format in /home/sailpoint/certificates on each VA in the cluster",
     "Restart the connector service with sudo systemctl restart ccg",
     "Run test connection again and review ccg.log"
    ],
-   "explanation": "The certificate is pulled from the server, saved where the connector service loads certificates and ccg is restarted to read it. A retest confirms the fix."
+   "explanation": "The certificate is pulled from the server with openssl, saved in PEM format where the connector gateway imports certificates on every VA of the cluster, and ccg is restarted to load it. A retest confirms the fix."
   },
   {
    "id": "D4-118",

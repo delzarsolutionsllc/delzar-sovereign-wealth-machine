@@ -192,12 +192,12 @@
       "stem": "A role criterion uses department Equals with the two values Sales and Marketing entered in the Value field. Which identities match this criterion?",
       "choices": [
         "Only identities whose department value contains both words",
-        "Only identities whose department matches the values with the same case",
+        "Only identities whose department equals the last value entered",
         "Identities whose department is Sales or whose department is Marketing",
         "Identities whose department starts with the first value entered"
       ],
       "answer": "Identities whose department is Sales or whose department is Marketing",
-      "explanation": "Multiple values in an Equals criterion are compared as OR, and the value comparison is case insensitive. Contains and Starts With are separate operations with different behaviour."
+      "explanation": "Multiple values in an Equals criterion are compared as OR operations, so either department matches. Contains and Starts With are separate operations with different behaviour."
     },
     {
       "id": "D2-015",
@@ -787,12 +787,12 @@
       "topic": "Attribute Sync Requirements",
       "stem": "An engineer tries to sync each user's manager to an AD account attribute using the built-in Manager identity attribute and finds it cannot be selected. What is the supported approach?",
       "choices": [
-        "Create a custom identity attribute holding the manager value and use it in Create Account and Attribute Sync",
+        "Create a custom identity attribute for the manager and sync that attribute",
         "Map the built-in Manager attribute through a Static template in Create Account",
         "Enable manager correlation on the AD source to push the value",
         "Use a lifecycle state that grants the manager value as an access profile"
       ],
-      "answer": "Create a custom identity attribute holding the manager value and use it in Create Account and Attribute Sync",
+      "answer": "Create a custom identity attribute for the manager and sync that attribute",
       "explanation": "The built-in Manager attribute can be used in Create Account but not for attribute sync, so SailPoint recommends a custom identity attribute populated with the manager name. Manager correlation finds managers; it does not write values."
     },
     {
@@ -817,7 +817,7 @@
       "choices": [
         "Both correlated accounts are updated",
         "Only the account created first is updated",
-        "Only the account chosen by the access profile's multiple account options is updated",
+        "Only the account chosen by multiple account options",
         "Neither is updated until one account is uncorrelated"
       ],
       "answer": "Both correlated accounts are updated",
@@ -902,9 +902,9 @@
         "Add a role criterion requiring that the identity have two AD accounts",
         "Make the access profile requestable so users pick the account",
         "Correlate only the admin accounts and leave standard accounts uncorrelated",
-        "Set multiple account options on the access profile, for example distinguishedName contains OU=Admins"
+        "Set the access profile's multiple account options to match OU=Admins"
       ],
-      "answer": "Set multiple account options on the access profile, for example distinguishedName contains OU=Admins",
+      "answer": "Set the access profile's multiple account options to match OU=Admins",
       "explanation": "Multiple account options on the access profile decide which account receives access in automated role or lifecycle provisioning. Leaving standard accounts uncorrelated would break governance of those accounts."
     },
     {
@@ -998,12 +998,12 @@
       "stem": "The business wants a directly connected source to be governed in ISC, but all account changes must be made by hand by the application team. What should the engineer do?",
       "choices": [
         "Delete the source's Create Account definition so changes cannot be made",
-        "Turn off Enable Provisioning so ISC creates manual work items",
+        "Remove PROVISIONING from the source's features with the Update Source API",
         "Remove the source from every role and access profile",
         "Set the account deletion threshold to zero for the source"
       ],
-      "answer": "Turn off Enable Provisioning so ISC creates manual work items",
-      "explanation": "Turning provisioning off on a direct connect source makes ISC generate manual work items for the required changes, which cannot be disabled. Deleting the create definition only breaks account creation."
+      "answer": "Remove PROVISIONING from the source's features with the Update Source API",
+      "explanation": "Removing PROVISIONING from the source's features through the Update Source API turns off automatic provisioning, so ISC generates manual work items for the required changes. Deleting the create definition only breaks account creation."
     },
     {
       "id": "D2-071",
@@ -1162,9 +1162,9 @@
         "Ten identities that all match the criteria in the same way",
         "Every production identity, to see the role's full membership",
         "One identity that matches, since the logic is the same for all",
-        "Identities that should match, identities that should not, and an identity that stops matching"
+        "Identities that should match, should not match, and one that stops matching"
       ],
-      "answer": "Identities that should match, identities that should not, and an identity that stops matching",
+      "answer": "Identities that should match, should not match, and one that stops matching",
       "explanation": "A good provisioning test covers positive cases, negative cases and a mover whose change should trigger removal. Testing only matches misses over-assignment, and testing on all identities is not a controlled test."
     },
     {
@@ -1203,10 +1203,10 @@
       "choices": [
         "Run a full aggregation of every source in the tenant",
         "Disable all lifecycle states until processing finishes",
-        "Preview several identities to verify the mapping produces the expected states",
+        "Preview sample identities to check the calculated states",
         "Delete identities whose lifecycle state will change"
       ],
-      "answer": "Preview several identities to verify the mapping produces the expected states",
+      "answer": "Preview sample identities to check the calculated states",
       "explanation": "Previewing identities shows the calculated attribute values without processing, so mapping mistakes are caught before Apply Changes starts lifecycle provisioning for everyone. Disabling every state would itself trigger unintended changes."
     },
     {
@@ -1231,10 +1231,10 @@
       "choices": [
         "One test identity with a long first name",
         "A test identity whose lifecycle state is inactive",
-        "Two test identities with the same first and last name provisioned one after the other",
+        "Two test identities with the same first and last name",
         "A test identity with no manager assigned"
       ],
-      "answer": "Two test identities with the same first and last name provisioned one after the other",
+      "answer": "Two test identities with the same first and last name",
       "explanation": "Identical names force a collision, which is the only case where the counter must add a number. The other cases do not exercise uniqueness."
     },
     {
@@ -1274,9 +1274,9 @@
         "The tenant's identity processing summary",
         "The email template used for the request",
         "The browser console of the requester",
-        "The ccg log on the virtual appliances in the source's cluster"
+        "The ccg log on the source's virtual appliances"
       ],
-      "answer": "The ccg log on the virtual appliances in the source's cluster",
+      "answer": "The ccg log on the source's virtual appliances",
       "explanation": "Connector operations for VA-based sources run in ccg on the VA, and its log holds the detailed connector errors. The cloud UI often shows only a summary."
     },
     {
@@ -1316,9 +1316,9 @@
         "A daily export of every identity to a spreadsheet",
         "A certification campaign scheduled each morning",
         "A lifecycle state that emails administrators",
-        "A workflow triggered by the Provisioning Completed event that checks for failures and notifies the team"
+        "A Provisioning Completed workflow that alerts on failures"
       ],
-      "answer": "A workflow triggered by the Provisioning Completed event that checks for failures and notifies the team",
+      "answer": "A Provisioning Completed workflow that alerts on failures",
       "explanation": "The Provisioning Completed event trigger fires after provisioning and carries the result, so a workflow can filter on failures and notify. A certification or export would be slow and manual."
     },
     {
@@ -1369,12 +1369,12 @@
       "topic": "Common Provisioning Errors",
       "stem": "New AD accounts fail with a constraint violation when the password is set. What is the MOST likely cause?",
       "choices": [
-        "The generated password does not meet the domain's password requirements",
+        "The generated password breaks the domain's password rules",
         "The sAMAccountName value contains a counter",
         "The account was created in an OU that is synced",
         "The identity has no manager attribute"
       ],
-      "answer": "The generated password does not meet the domain's password requirements",
+      "answer": "The generated password breaks the domain's password rules",
       "explanation": "A constraint error at password set usually means the value breaks the domain's complexity or length rules, so the password policy in ISC must meet or exceed the domain's. Counters in usernames do not affect password checks."
     },
     {
@@ -1521,15 +1521,15 @@
       "id": "D2-106",
       "objective": "2.3",
       "topic": "Retries and Recovery",
-      "stem": "A leaver's disable failed on one source and all retries were exhausted. Which statement about lifecycle state behaviour is accurate?",
+      "stem": "A leaver's disable failed on one source and all automatic retries were exhausted. The source is reachable again. What is the MOST direct way to complete the disable?",
       "choices": [
-        "The lifecycle state re-attempts the disable during every identity refresh",
-        "The lifecycle state reverts the identity to active so the action can be repeated",
-        "It does not re-enforce the disable, so it must be driven again",
-        "The lifecycle state deletes the account instead of disabling it"
+        "Wait for the lifecycle state to repeat the disable on the next refresh",
+        "Restart the VA so the failed request is replayed",
+        "Disable the account from the identity's account actions in ISC",
+        "Run an unoptimized aggregation of the source"
       ],
-      "answer": "It does not re-enforce the disable, so it must be driven again",
-      "explanation": "Lifecycle state actions execute a single time and are not a persistent retry mechanism, so failures need follow-up. Monitoring failed provisioning makes sure these cases are caught."
+      "answer": "Disable the account from the identity's account actions in ISC",
+      "explanation": "Lifecycle state actions run a single time and the retries are spent, so the disable has to be driven again, for example from the identity's accounts in ISC. A VA restart does not replay failed requests, and aggregation only reads account data."
     },
     {
       "id": "D2-107",
@@ -1691,7 +1691,7 @@
       "targets_extra": [
         "The tenant's API rate limit was exceeded"
       ],
-      "explanation": "Each symptom maps to a documented behaviour: account creation when nothing is correlated, manual fulfilment for flat files, sync loops caused by rules, and ambiguous account selection. API rate limits do not affect internal provisioning."
+      "explanation": "Each symptom maps to a documented behaviour: account creation when nothing is correlated, manual fulfilment for flat files, sync loops caused by rules, and ambiguous account selection. API rate limits explain none of these symptoms."
     }
   ]
 }

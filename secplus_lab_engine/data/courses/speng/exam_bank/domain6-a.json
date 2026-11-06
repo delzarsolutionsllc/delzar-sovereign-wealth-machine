@@ -66,11 +66,11 @@
       "stem": "An architect lists properties of microservice architectures. Which one is a trade-off rather than an advantage?",
       "choices": [
         "Independent scaling of busy services",
-        "More network calls between services, which require distributed monitoring and tracing",
+        "More inter-service network calls to monitor and trace",
         "Isolation of failures to the affected service",
         "Independent release cycles for each team"
       ],
-      "answer": "More network calls between services, which require distributed monitoring and tracing",
+      "answer": "More inter-service network calls to monitor and trace",
       "explanation": "Splitting a system into services adds inter-service network traffic and makes monitoring and debugging harder. The other three options are the usual benefits."
     },
     {
@@ -207,10 +207,10 @@
       "choices": [
         "Authorization code, requiring an administrator to sign in each night",
         "Implicit flow, returning the token in the browser",
-        "Client credentials, exchanging a client ID and secret at the tenant's token endpoint",
+        "Client credentials, exchanging a client ID and secret for a token",
         "Basic authentication with an administrator's user name and password"
       ],
-      "answer": "Client credentials, exchanging a client ID and secret at the tenant's token endpoint",
+      "answer": "Client credentials, exchanging a client ID and secret for a token",
       "explanation": "Client credentials is the machine-to-machine flow: the integration posts its client ID and secret to the token endpoint and receives an access token. Authorization code needs a user present."
     },
     {
@@ -275,12 +275,12 @@
       "topic": "API Authentication and Tokens",
       "stem": "An engineer is calling the ISC token endpoint for the client credentials flow. Which request is correct?",
       "choices": [
-        "POST to the tenant's API host at /oauth/token with grant_type client_credentials",
+        "POST to /oauth/token on the API host with grant_type client_credentials",
         "GET to the Admin UI home page with the secret in the URL",
         "POST to the virtual appliance with the client secret",
         "PUT to the search endpoint with the client ID in the body"
       ],
-      "answer": "POST to the tenant's API host at /oauth/token with grant_type client_credentials",
+      "answer": "POST to /oauth/token on the API host with grant_type client_credentials",
       "explanation": "Tokens are issued by the tenant's OAuth token endpoint on the API host. The VA and other API endpoints do not issue tokens."
     },
     {
@@ -374,11 +374,11 @@
       "stem": "A Search API call should return identities in the Finance department. Which request is correctly formed?",
       "choices": [
         "A GET with the query in the URL path and no request body",
-        "A POST with indices set to identities and a query such as attributes.department:Finance",
+        "A POST whose JSON body names the identities index and the query",
         "A PUT with the identity IDs to search for in the body",
         "A DELETE that removes every identity outside Finance"
       ],
-      "answer": "A POST with indices set to identities and a query such as attributes.department:Finance",
+      "answer": "A POST whose JSON body names the identities index and the query",
       "explanation": "Search is a POST whose JSON body names the indices and holds the query string. The other methods do not run searches."
     },
     {

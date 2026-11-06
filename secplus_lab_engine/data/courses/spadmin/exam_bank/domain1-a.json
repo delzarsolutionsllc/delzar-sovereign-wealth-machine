@@ -177,12 +177,12 @@
    "topic": "Search Categories and Results",
    "stem": "A helpdesk agent types only the word smith into the search box with no field name. What does Identity Security Cloud do?",
    "choices": [
-    "It matches the term against any attribute of items in all search categories",
+    "It searches every category for any attribute containing the term",
     "It rejects the query until a field name is added",
     "It searches only the identity's email attribute",
     "It treats the word as the name of a saved search"
    ],
-   "answer": "It matches the term against any attribute of items in all search categories",
+   "answer": "It searches every category for any attribute containing the term",
    "explanation": "A term with no field searches within all search categories and returns items with any attribute containing the word, such as identities, roles or entitlements. A field name is optional, not required."
   },
   {
@@ -488,9 +488,9 @@
     "Events show only errors; account activities show only successes",
     "Events are kept forever; account activities are kept a day",
     "Events cover sources only; account activities cover identities only",
-    "Events log actions across the tenant; account activities track requested account changes"
+    "Events audit actions tenant-wide; account activities track account changes"
    ],
-   "answer": "Events log actions across the tenant; account activities track requested account changes",
+   "answer": "Events audit actions tenant-wide; account activities track account changes",
    "explanation": "Events are an audit log of actions, while account activities follow a change request through to each account. Neither is limited to only errors or only successes."
   },
   {
@@ -887,10 +887,10 @@
    "choices": [
     "The lifecycle state grants no access profiles when the user signs in",
     "The source's account deletion threshold was reached",
-    "The assertion's subject value does not match the identity attribute the tenant looks up",
+    "The assertion's subject does not match the identity attribute looked up",
     "The search index has not been refreshed"
    ],
-   "answer": "The assertion's subject value does not match the identity attribute the tenant looks up",
+   "answer": "The assertion's subject does not match the identity attribute looked up",
    "explanation": "The tenant matches the value sent in the assertion to an identity attribute such as the username. A mismatch means authentication succeeds at the IdP but no identity is found."
   },
   {
@@ -955,13 +955,13 @@
    "topic": "Pass-Through Authentication",
    "stem": "With pass-through authentication to Active Directory, which password rules apply when the user signs in?",
    "choices": [
-    "A separate password policy stored in the tenant",
+    "Rules applied to a password copy kept in the tenant",
     "No rules, because pass-through skips checks",
-    "The directory's own password and lockout rules",
+    "The directory's own password rules",
     "The rules of the identity provider metadata"
    ],
-   "answer": "The directory's own password and lockout rules",
-   "explanation": "The directory checks the password, so its policy and lockout settings apply. The tenant does not keep its own copy of the password for this check."
+   "answer": "The directory's own password rules",
+   "explanation": "With pass-through the directory validates the password, so its password rules apply and the tenant can enforce the source's expiration policy. The tenant keeps no password copy for this check, and its lockout settings should be aligned with the source."
   },
   {
    "id": "D1-068",
@@ -1041,10 +1041,10 @@
    "choices": [
     "It makes aggregation faster",
     "It removes the need for certifications",
-    "A stolen password alone cannot open the controls that grant access everywhere",
-    "It lets admins share one account safely"
+    "A stolen password alone cannot unlock tenant-wide access controls",
+    "It lets admins share one account safely with a second code"
    ],
-   "answer": "A stolen password alone cannot open the controls that grant access everywhere",
+   "answer": "A stolen password alone cannot unlock tenant-wide access controls",
    "explanation": "Admins can change access across many systems, so a second factor protects the highest-risk accounts. MFA does not replace reviews or make sharing accounts acceptable."
   },
   {
@@ -1179,10 +1179,10 @@
    "choices": [
     "The source's connection settings",
     "The identity profile's mappings",
-    "The user's identity details, including its activity history",
+    "The user's identity details and activity history",
     "The virtual appliance's connector log"
    ],
-   "answer": "The user's identity details, including its activity history",
+   "answer": "The user's identity details and activity history",
    "explanation": "An identity's details show its accounts, access and activity history, which lists changes over time. Source and VA settings are configuration, not history."
   },
   {
@@ -1309,7 +1309,7 @@
     "Email template"
    ],
    "answer": "HTTP",
-   "explanation": "An HTTP subscription posts the event to a URL you provide. A workflow subscription runs logic inside the tenant instead."
+   "explanation": "An HTTP subscription posts the event payload to the integration URL you provide; the other subscription type is Amazon EventBridge. A workflow uses the trigger as its start inside the tenant instead."
   },
   {
    "id": "D1-091",
@@ -1332,12 +1332,12 @@
    "stem": "Before going live, an admin wants to confirm that an endpoint receives and parses a trigger payload. What should the admin do?",
    "choices": [
     "Wait for a real event in production",
-    "Send a test invocation to the subscription",
+    "Use Test Subscription to send a mock payload",
     "Delete and recreate the trigger",
     "Run a full aggregation to generate real events"
    ],
-   "answer": "Send a test invocation to the subscription",
-   "explanation": "A test invocation sends a sample payload to the subscriber without waiting for a real event. Waiting for production events risks bad data."
+   "answer": "Use Test Subscription to send a mock payload",
+   "explanation": "Test Subscription sends the trigger with mock data to the subscriber without waiting for a real event. Waiting for production events risks bad data."
   },
   {
    "id": "D1-093",
@@ -1348,10 +1348,10 @@
     "Include the password in the trigger filter",
     "Disable authentication on the web service",
     "Put the password in an identity attribute in the payload",
-    "Configure the subscription's authentication, such as basic or bearer token"
+    "Configure the subscription's basic or bearer token authentication"
    ],
-   "answer": "Configure the subscription's authentication, such as basic or bearer token",
-   "explanation": "HTTP subscriptions support an authentication setting so calls carry credentials. Turning off the service's authentication exposes it."
+   "answer": "Configure the subscription's basic or bearer token authentication",
+   "explanation": "HTTP subscriptions have an Authentication Type of None, Basic Auth or Bearer Token, so calls carry credentials. Turning off the service's authentication exposes it."
   },
   {
    "id": "D1-094",
@@ -1556,11 +1556,11 @@
    "stem": "What is Configuration Hub mainly used for?",
    "choices": [
     "Monitoring virtual appliance health",
-    "Backing up, restoring and migrating tenant configuration objects",
+    "Backing up, restoring and migrating configuration",
     "Approving access requests in bulk",
     "Writing transforms in a code editor"
    ],
-   "answer": "Backing up, restoring and migrating tenant configuration objects",
+   "answer": "Backing up, restoring and migrating configuration",
    "explanation": "Configuration Hub manages configuration through backups, drafts and deploys, including moves between tenants. VA health and approvals live elsewhere."
   },
   {
@@ -1600,9 +1600,9 @@
     "Backups only keep the source's name",
     "Restores always disable the source",
     "The backup's encryption key has expired",
-    "Secrets and credentials are not backed up and must be re-entered"
+    "Secrets and credentials are not backed up"
    ],
-   "answer": "Secrets and credentials are not backed up and must be re-entered",
+   "answer": "Secrets and credentials are not backed up",
    "explanation": "Configuration Hub does not back up secrets or credentials, so source passwords must be entered again. The rest of the source configuration is restored."
   },
   {
@@ -1641,12 +1641,12 @@
    "stem": "Put the steps in order to build a workflow that emails a manager when an identity changes department.",
    "items": [
     "Choose the Identity Attributes Changed trigger",
-    "Add a Compare Strings operator that checks the changed attribute is department",
-    "Add a Get Identity action to fetch the manager",
+    "Add a Compare Strings operator that checks whether the changed attribute is department",
+    "Inside the department branch, add a Get Identity action to fetch the manager",
     "Add a Send Email action to the manager",
     "Add an end step, test with sample input and enable the workflow"
    ],
-   "explanation": "A workflow starts with a trigger, branches with an operator, gathers data and acts with actions, and finishes with an end step. Testing and enabling come last."
+   "explanation": "A workflow starts with a trigger, branches with an operator, and only in the matching branch gathers the manager with an action and sends the email. Each branch finishes with an end step, and testing and enabling come last."
   },
   {
    "id": "D1-115",
@@ -1672,14 +1672,14 @@
      "match": "Alert when an account change to a source fails"
     },
     {
-     "item": "Access Request Pre-Approval",
+     "item": "Access Request Submitted (pre-approval)",
      "match": "Let a risk engine approve or deny a request early"
     }
    ],
    "targets_extra": [
     "Email a weekly list of identities without managers"
    ],
-   "explanation": "Each trigger matches the event it reports. A weekly emailed list is a search subscription, not an event trigger."
+   "explanation": "Each trigger matches the event it reports. Access Request Submitted (technical ID idn:access-request-pre-approval) is request-response and expects an approval decision. A weekly emailed list is a search subscription, not an event trigger."
   },
   {
    "id": "D1-116",

@@ -11,19 +11,19 @@
    "choices": [
     "Encrypting data at rest on every server in the company",
     "Blocking malicious network traffic at the perimeter",
-    "Managing who has access to what across systems and proving that access is appropriate",
-    "Signing users in to every application with a single password and a second factor at login"
+    "Managing who has access to what and proving that access is appropriate",
+    "Signing users in to every application with one password and a second factor"
    ],
-   "answer": "Managing who has access to what across systems and proving that access is appropriate",
+   "answer": "Managing who has access to what and proving that access is appropriate",
    "explanation": "IGA covers the identity lifecycle, provisioning, requests, reviews and policy, with evidence for auditors. Single sign-on is access management, which controls the sign-in itself."
   },
   {
    "id": "D8-002",
    "objective": "8.1",
    "topic": "IGA Concepts and Pillars",
-   "stem": "A company already has SSO and MFA, but auditors ask who approved each user's access to the finance app. Which capability is missing?",
+   "stem": "A company already has SSO and MFA, but auditors ask for evidence of why each user was given access to the finance app. Which capability is missing?",
    "choices": [
-    "A stronger second factor for sign-in to the finance app and the identity provider",
+    "A stronger second factor for signing in to the finance application",
     "A faster identity provider",
     "A web application firewall",
     "Identity governance with request, approval and review records"
@@ -39,7 +39,7 @@
    "choices": [
     "Any application that has user accounts",
     "The directory that stores the most passwords",
-    "The ticketing system used for access requests and approval records across the company",
+    "The ticketing system that stores all access requests and approvals",
     "The trusted system, such as HR, that defines who an identity is"
    ],
    "answer": "The trusted system, such as HR, that defines who an identity is",
@@ -54,7 +54,7 @@
     "Each account is a separate identity",
     "One identity can own many accounts across different systems",
     "An identity can own only one account",
-    "Accounts exist only in the authoritative source and are copied nowhere else"
+    "Accounts exist only in the authoritative source and nowhere else"
    ],
    "answer": "One identity can own many accounts across different systems",
    "explanation": "An identity represents the person, and their accounts on each system are linked to it. Treating each account as its own identity hides the full picture of access."
@@ -68,7 +68,7 @@
     "The person's job title in the HR system",
     "A specific permission or group on a system that grants some access",
     "A password policy applied to all users",
-    "The total number of accounts a person owns across all connected applications"
+    "The total number of accounts a person owns across all connected systems"
    ],
    "answer": "A specific permission or group on a system that grants some access",
    "explanation": "Entitlements are the fine-grained rights, such as groups or permissions, that accounts hold. Job titles are identity attributes that may drive access."
@@ -93,7 +93,7 @@
    "topic": "IGA Concepts and Pillars",
    "stem": "What is a key benefit of grouping entitlements into roles based on job function?",
    "choices": [
-    "Every user gets every entitlement automatically, so requests are never needed",
+    "Every user gets every entitlement, so requests are never needed",
     "Access is granted consistently and reviewed at a business level",
     "Passwords no longer need to be changed",
     "Reviews are no longer needed for any access"
@@ -108,7 +108,7 @@
    "stem": "A new employee needs email, the intranet and the timesheet app on day one without filing requests. What IGA concept provides this?",
    "choices": [
     "Birthright access granted at the joiner event",
-    "Access granted only after the next quarterly review approves it",
+    "Access granted only after the next quarterly review",
     "Access requested by the new hire on day one",
     "Access copied from a coworker's account"
    ],
@@ -121,12 +121,12 @@
    "topic": "Joiner Mover Leaver Processes",
    "stem": "An analyst moved from Finance to Marketing and still has Finance system access months later. What problem does this show?",
    "choices": [
-    "Privilege creep from a mover process that did not remove old access",
+    "Privilege creep from a mover process that kept old access",
     "A leaver process that ran too early",
-    "A joiner process that granted too little access on the analyst's first day",
+    "A joiner process that granted too little access on day one",
     "A strong password policy that failed"
    ],
-   "answer": "Privilege creep from a mover process that did not remove old access",
+   "answer": "Privilege creep from a mover process that kept old access",
    "explanation": "Movers should lose access they no longer need. When old access stays, rights build up over time, which is privilege creep."
   },
   {
@@ -138,7 +138,7 @@
     "Leave it until the next quarterly review",
     "Transfer it to the employee's manager",
     "Disable or remove it promptly across all connected systems",
-    "Keep it active for a few months in case the employee is rehired or needs files"
+    "Keep it active for a few months in case the employee is rehired"
    ],
    "answer": "Disable or remove it promptly across all connected systems",
    "explanation": "Prompt deprovisioning prevents a former employee from using access after leaving. Waiting for a review leaves a dangerous gap."
@@ -150,7 +150,7 @@
    "stem": "What usually starts joiner, mover and leaver processes in an automated IGA program?",
    "choices": [
     "Requests typed by each user",
-    "Random audits by the security team of each department's user list",
+    "Random audits of each department's user list",
     "Password expiry on the directory",
     "Changes to identity data from the authoritative source"
    ],
@@ -161,12 +161,12 @@
    "id": "D8-012",
    "objective": "8.1",
    "topic": "Joiner Mover Leaver Processes",
-   "stem": "Contractors are engaged for fixed terms. What is the BEST way to make sure their access ends on time?",
+   "stem": "Contractors are engaged for fixed terms. What is the BEST way to make sure their access stops when the term finishes?",
    "choices": [
     "Use their end date to drive automatic removal of access",
     "Ask each contractor to report when they leave",
     "Remove access only during annual reviews",
-    "Give contractors shared accounts that the team removes when the project ends"
+    "Give contractors shared accounts that are removed at project close"
    ],
    "answer": "Use their end date to drive automatic removal of access",
    "explanation": "Driving removal from a known end date closes access without depending on someone to remember. Shared accounts break accountability."
@@ -177,12 +177,12 @@
    "topic": "Joiner Mover Leaver Processes",
    "stem": "A former employee is rehired after a year. What should a well-governed process do?",
    "choices": [
-    "Restore every account and entitlement exactly as it was on the previous last day",
+    "Restore every account and entitlement exactly as it was before",
     "Give them administrator rights to save time",
-    "Grant fresh access for the new role rather than restoring old access",
+    "Grant fresh access for the new role instead of restoring it",
     "Skip provisioning until they ask for access"
    ],
-   "answer": "Grant fresh access for the new role rather than restoring old access",
+   "answer": "Grant fresh access for the new role instead of restoring it",
    "explanation": "A returning employee may have a different job, so access should match the new role. Restoring everything can reintroduce rights no longer needed."
   },
   {
@@ -191,12 +191,12 @@
    "topic": "Joiner Mover Leaver Processes",
    "stem": "Why is automating the leaver process a strong compliance control?",
    "choices": [
-    "It removes access consistently and leaves a record of when it happened",
-    "It allows terminated users to keep email and file access for a full year afterwards",
+    "It removes access consistently and records when it happened",
+    "It lets terminated users keep email and file access for a year",
     "It removes the need for any authoritative source",
     "It prevents new employees from being hired"
    ],
-   "answer": "It removes access consistently and leaves a record of when it happened",
+   "answer": "It removes access consistently and records when it happened",
    "explanation": "Automated deprovisioning is timely and repeatable and produces evidence for auditors. Manual steps are easy to miss."
   },
   {
@@ -261,12 +261,12 @@
    "topic": "Regulatory Compliance Drivers",
    "stem": "In identity governance, what does compliance mean?",
    "choices": [
-    "Meeting regulations and internal policies and being able to prove it",
+    "Meeting regulations and internal policies, and proving it",
     "Buying the newest security tools each year",
-    "Granting users whatever access they request as long as their manager is informed",
+    "Granting whatever access users request if their manager is told",
     "Passing a single audit once and stopping"
    ],
-   "answer": "Meeting regulations and internal policies and being able to prove it",
+   "answer": "Meeting regulations and internal policies, and proving it",
    "explanation": "Compliance is meeting the required rules and showing evidence that you do. A one-off pass without ongoing controls is not sustained compliance."
   },
   {
@@ -275,12 +275,12 @@
    "topic": "Regulatory Compliance Drivers",
    "stem": "Which is an example of a preventive identity control?",
    "choices": [
-    "Reviewing last quarter's access in a certification campaign and revoking what is wrong",
+    "Reviewing last quarter's access in a campaign and revoking errors",
     "Reading audit logs after an incident",
-    "Blocking an access request that would create a separation of duties conflict",
+    "Blocking an access request that would create an SoD conflict",
     "Reporting orphaned accounts each month"
    ],
-   "answer": "Blocking an access request that would create a separation of duties conflict",
+   "answer": "Blocking an access request that would create an SoD conflict",
    "explanation": "Preventive controls stop a problem before it happens. Certifications and reports are detective controls that find problems afterward."
   },
   {
@@ -289,12 +289,12 @@
    "topic": "Regulatory Compliance Drivers",
    "stem": "An organisation wants to show compliance continuously rather than scrambling before each audit. What approach BEST supports this?",
    "choices": [
-    "Automated policies, reviews and reporting that run all year",
-    "One large manual review of every system during the week before the audit",
+    "Automated policies, reviews and reports all year",
+    "One large manual review in the week before the audit",
     "Temporary admin rights for the auditors",
     "Deleting old logs to reduce what auditors see"
    ],
-   "answer": "Automated policies, reviews and reporting that run all year",
+   "answer": "Automated policies, reviews and reports all year",
    "explanation": "Ongoing automated controls keep access in line and produce evidence at any time. A last-minute review is point-in-time and easy to fail."
   },
   {
@@ -305,7 +305,7 @@
    "choices": [
     "Users get the same access as their manager",
     "Users get broad access to avoid delays",
-    "Users get broad access at first, which is reduced only after a security incident",
+    "Users get broad access, which is reduced only after an incident",
     "Users get only the access needed for their job, for as long as they need it"
    ],
    "answer": "Users get only the access needed for their job, for as long as they need it",
@@ -331,12 +331,12 @@
    "topic": "Least Privilege and Separation of Duties",
    "stem": "What is a toxic combination in access governance?",
    "choices": [
-    "An account with an expired password that is still enabled on several systems",
-    "Two or more access rights that together let one person misuse a process",
+    "An enabled account whose password has expired on several systems",
+    "Two or more rights that together let one person misuse a process",
     "A role that has no entitlements",
     "A source with no owner assigned"
    ],
-   "answer": "Two or more access rights that together let one person misuse a process",
+   "answer": "Two or more rights that together let one person misuse a process",
    "explanation": "A toxic combination is access that is acceptable alone but risky together, such as create and approve. SoD policies define and detect them."
   },
   {
@@ -345,12 +345,12 @@
    "topic": "Least Privilege and Separation of Duties",
    "stem": "A rare business need requires one user to hold two conflicting entitlements for a week. What is the BEST governance response?",
    "choices": [
-    "Grant both entitlements permanently and skip any record so the audit stays clean",
-    "Approve a documented, time-limited exception with a mitigating control",
+    "Grant both entitlements permanently and keep no record of it",
+    "Approve a time-limited, documented exception with mitigation",
     "Deny all access to both systems",
     "Remove the separation of duties policy"
    ],
-   "answer": "Approve a documented, time-limited exception with a mitigating control",
+   "answer": "Approve a time-limited, documented exception with mitigation",
    "explanation": "A documented exception with an end date and compensating checks keeps the risk visible and limited. Removing the policy hides all future conflicts."
   },
   {
@@ -362,7 +362,7 @@
     "Privileged accounts are never used",
     "Privileged users dislike reviews",
     "Misuse of privileged access causes much greater impact",
-    "Standard accounts cannot be included in certification campaigns"
+    "Standard accounts cannot be included in certifications"
    ],
    "answer": "Misuse of privileged access causes much greater impact",
    "explanation": "Higher-risk access deserves more frequent review because the damage from misuse is higher. Review frequency should follow risk."
@@ -373,12 +373,12 @@
    "topic": "Least Privilege and Separation of Duties",
    "stem": "A developer needs production database access for a two-day incident. Which approach BEST follows least privilege?",
    "choices": [
-    "Grant permanent access so the developer is ready for any future incidents too",
+    "Grant permanent access so the developer is ready for future incidents",
     "Share the database admin's credentials",
     "Add the developer to every admin group",
-    "Grant time-bound access that is removed automatically when the need ends"
+    "Grant time-bound access that is removed when the need ends"
    ],
-   "answer": "Grant time-bound access that is removed automatically when the need ends",
+   "answer": "Grant time-bound access that is removed when the need ends",
    "explanation": "Time-bound access gives what is needed only while needed. Permanent grants and shared credentials leave standing risk."
   },
   {
@@ -388,7 +388,7 @@
    "stem": "Where should a separation of duties check run to prevent a conflict rather than only detect it?",
    "choices": [
     "Only in the yearly external audit",
-    "Only after the user leaves the company and the accounts are closed",
+    "Only after the user leaves and the accounts are closed",
     "When access is requested, before it is provisioned",
     "Only when passwords are reset"
    ],
@@ -401,12 +401,12 @@
    "topic": "Access Reviews and Audit Evidence",
    "stem": "What is the main purpose of an access certification?",
    "choices": [
-    "To provision new accounts for joiners based on their department and job title",
+    "To provision new accounts for joiners based on their job title",
     "To reset passwords for locked users",
     "To create new sources in the tenant",
-    "To have reviewers confirm or revoke existing access on a regular basis"
+    "To have reviewers confirm or revoke existing access regularly"
    ],
-   "answer": "To have reviewers confirm or revoke existing access on a regular basis",
+   "answer": "To have reviewers confirm or revoke existing access regularly",
    "explanation": "Certifications are periodic reviews where a reviewer decides whether access is still appropriate. Provisioning and password resets are separate processes."
   },
   {
@@ -429,7 +429,7 @@
    "topic": "Access Reviews and Audit Evidence",
    "stem": "Which evidence from an access review is MOST useful to an auditor?",
    "choices": [
-    "The number of reminder emails sent to reviewers and how many of them were opened",
+    "The number of reminder emails sent to reviewers and opened",
     "A screenshot of the review dashboard",
     "Who reviewed each item, the decision, when, and proof revoked access was removed",
     "The reviewers' job titles only"
@@ -444,7 +444,7 @@
    "stem": "A reviewer revokes an entitlement in a certification. What makes this a closed-loop process?",
    "choices": [
     "The revocation is provisioned to the system and its completion is recorded",
-    "The reviewer emails the app owner about it and the decision is never followed up",
+    "The reviewer emails the app owner and nobody follows up",
     "The decision is saved but never acted on",
     "The entitlement is removed only from the report"
    ],
@@ -457,7 +457,7 @@
    "topic": "Access Reviews and Audit Evidence",
    "stem": "A team must decide how often to review access to different applications. What is the BEST basis?",
    "choices": [
-    "The alphabetical order of application names on the list of connected sources",
+    "The alphabetical order of the applications in the source list",
     "How many users complain about reviews",
     "The risk and sensitivity of each application's access",
     "A single yearly date for every system"
@@ -472,7 +472,7 @@
    "stem": "A certification lists highly technical database entitlements. Which reviewer is MOST likely to make informed decisions about them?",
    "choices": [
     "The application or entitlement owner who understands the access",
-    "A random employee from another department chosen to keep the reviews impartial",
+    "A random employee from another department, chosen for impartiality",
     "The newest hire in the company",
     "The user who holds the access"
    ],
@@ -486,7 +486,7 @@
    "stem": "Why does an IGA platform keep an audit trail of access requests, approvals and changes?",
    "choices": [
     "To make aggregations run faster",
-    "To replace the need for any approvals, since every change is logged after it happens",
+    "To replace approvals, since every change is logged afterwards",
     "To store user passwords for recovery",
     "To show what happened, who did it and when during audits and investigations"
    ],

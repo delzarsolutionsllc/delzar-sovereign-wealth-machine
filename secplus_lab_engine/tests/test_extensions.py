@@ -65,7 +65,8 @@ class TestChallengeFramework:
         qs = module.build_challenges(policies, data(data_file))
         assert len(qs) >= 5
         for q in qs:
-            assert q.answer in q.choices and len(q.choices) >= 2 and len(set(q.choices)) == len(q.choices)
+            assert len(q.choices) >= 2 and len(set(q.choices)) == len(q.choices)
+            assert q.answer in q.choices if q.kind == "single" else q.answer   # other kinds: readable answer text
             assert q.objective and q.explanation
         # answering with the engine's own answers must score 100%
         res = run_challenge(quiet_ui, num, qs, ask=_scripted([q.answer for q in qs]), shuffle=False)

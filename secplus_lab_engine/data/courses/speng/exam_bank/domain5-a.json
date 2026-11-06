@@ -289,9 +289,9 @@
    "topic": "Active Directory Search Scope",
    "stem": "Delta aggregation on an AD source fails with an access error while full aggregation works. Which permission does the service account MOST likely lack?",
    "choices": [
-    "Reset Password on the target OUs",
+    "Reset Password rights on the target OUs",
     "Local administrator on the VA",
-    "Write access to the Global Catalog",
+    "Write access to the Global Catalog servers",
     "Replicating Directory Changes on the domain"
    ],
    "answer": "Replicating Directory Changes on the domain",
@@ -303,10 +303,10 @@
    "topic": "JDBC Connection Settings",
    "stem": "Which connection URL format is correct for a JDBC source that reads a Microsoft SQL Server database named HR?",
    "choices": [
-    "ldap://dbhost:1433/databaseName=HR",
+    "ldap://dbhost:1433;databaseName=HR;ssl=true",
     "https://dbhost:1433/HR?driver=jdbc",
     "jdbc:sqlserver://dbhost:1433;databaseName=HR",
-    "sqlserver://dbhost/HR;protocol=jdbc"
+    "sqlserver://dbhost:1433/HR;protocol=jdbc"
    ],
    "answer": "jdbc:sqlserver://dbhost:1433;databaseName=HR",
    "explanation": "JDBC URLs start with jdbc: and the vendor prefix, here jdbc:sqlserver with host, port and databaseName. The other forms are not JDBC URLs."
@@ -376,10 +376,10 @@
     "com.microsoft.sqlserver.jdbc.SQLServerDriver",
     "oracle.jdbc.driver.OracleDriver",
     "com.mysql.cj.jdbc.Driver",
-    "org.postgresql.Driver"
+    "com.ibm.as400.access.AS400JDBCDriver"
    ],
    "answer": "com.microsoft.sqlserver.jdbc.SQLServerDriver",
-   "explanation": "SQL Server's Microsoft driver class is com.microsoft.sqlserver.jdbc.SQLServerDriver. The others are the Oracle, MySQL and PostgreSQL drivers."
+   "explanation": "SQL Server's Microsoft driver class is com.microsoft.sqlserver.jdbc.SQLServerDriver. The others are the Oracle, MySQL and IBM i (AS/400) drivers."
   },
   {
    "id": "D5-028",
@@ -431,11 +431,11 @@
    "choices": [
     "A correlation rule for the account schema",
     "A get object query for single accounts",
-    "A JDBC provision rule that writes the changes",
+    "Provisioning queries or a JDBC provision rule",
     "A second VA in the source's cluster"
    ],
-   "answer": "A JDBC provision rule that writes the changes",
-   "explanation": "The JDBC connector provisions through a JDBC provision connector rule, which SailPoint reviews and deploys. Correlation rules only link accounts to identities."
+   "answer": "Provisioning queries or a JDBC provision rule",
+   "explanation": "A JDBC source provisions only after provisioning is configured, either as SQL queries or stored procedures on the connector or as a JDBCProvision connector rule. Correlation rules only link accounts to identities."
   },
   {
    "id": "D5-032",
@@ -959,10 +959,10 @@
    "topic": "Data Storage and Residency",
    "stem": "A European company must keep identity data stored in the EU. What is the BEST way to meet this?",
    "choices": [
-    "Deploy all VAs in an EU data center",
+    "Deploy every VA cluster in an EU data center",
     "Use only flat file sources",
     "Have the tenant provisioned in a SailPoint EU region",
-    "Turn off search for EU identities"
+    "Turn off search and reports for EU identities"
    ],
    "answer": "Have the tenant provisioned in a SailPoint EU region",
    "explanation": "Data is stored in the region where the tenant is hosted. VA location only affects where connectors run, not where the tenant keeps data."
@@ -1121,8 +1121,8 @@
    "topic": "Service Desk Integration Types",
    "stem": "The goal is to aggregate ServiceNow's own users, groups and roles and certify them. What is needed?",
    "choices": [
-    "A service desk integration for ServiceNow",
-    "The ServiceNow Service Catalog integration",
+    "A service desk integration that raises ServiceNow tickets",
+    "The ServiceNow Service Catalog integration for requests",
     "A ServiceNow source using SailPoint's ServiceNow connector",
     "A workflow that emails ServiceNow admins"
    ],
@@ -1317,10 +1317,10 @@
    "topic": "Connection Testing and Logs",
    "stem": "Every source on one VA cluster suddenly fails Test Connection, and the cluster shows unhealthy. What is the MOST likely area to investigate?",
    "choices": [
-    "The account schema of each source",
+    "The account schema defined on each source",
     "The correlation settings of each source",
     "The VAs' outbound connection to the SailPoint tenant",
-    "The identity profile mappings"
+    "The identity profile mappings for each source"
    ],
    "answer": "The VAs' outbound connection to the SailPoint tenant",
    "explanation": "When all sources on a cluster fail together, the shared path from the VAs to the cloud is the likely problem. Schema or correlation issues affect one source at a time."
@@ -1402,9 +1402,9 @@
    "stem": "Test Connection fails with \"Connection refused\" to a domain controller. What does this MOST likely mean?",
    "choices": [
     "DNS could not find the domain controller",
-    "A firewall silently dropped the packets",
+    "A firewall silently dropped the connection packets",
     "The host answered, but nothing is listening on that port",
-    "The service account is locked"
+    "The service account is locked out in AD"
    ],
    "answer": "The host answered, but nothing is listening on that port",
    "explanation": "Refused means the host actively rejected the connection, often a wrong port or stopped service. Silent drops usually show as timeouts instead."

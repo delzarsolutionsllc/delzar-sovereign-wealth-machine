@@ -26,7 +26,7 @@
     "substring for the first letter, concat to join it with the last name, and lower around the result",
     "leftPad the first name, concat it with the last name, and trim around the result",
     "lookup the first letter, firstValid to add the last name, and lower around the result",
-    "split on the first letter, replace to join it with the last name, and upper around the result value"
+    "split on the first letter, replace to join it with the last name, and upper around the result"
    ],
    "answer": "substring for the first letter, concat to join it with the last name, and lower around the result",
    "explanation": "substring takes the first character, concat joins the parts and lower normalizes case. lookup and firstValid do not extract or join characters."
@@ -96,7 +96,7 @@
     "conditional with one expression for each substitution",
     "replaceAll with a table of regex patterns and their replacements",
     "lookup with a table of every possible department name",
-    "replace with one single regex that matches all three of the cases at once"
+    "replace with one regex that matches all three cases"
    ],
    "answer": "replaceAll with a table of regex patterns and their replacements",
    "explanation": "replaceAll applies a table of pattern and replacement pairs in a single transform. A single replace can only apply one replacement value to every match."
@@ -361,11 +361,11 @@
    "choices": [
     "lookup with a table that maps each manager to an email address",
     "getReferenceIdentityAttribute with uid set to manager and attributeName set to email",
-    "accountAttribute with sourceName set to manager and attributeName set to the work email",
+    "accountAttribute with sourceName set to manager and attributeName set to email",
     "identityAttribute with name set to manager and a lower transform around it"
    ],
    "answer": "getReferenceIdentityAttribute with uid set to manager and attributeName set to email",
-   "explanation": "getReferenceIdentityAttribute reads an attribute from another identity, and the special uid value manager points at the identity's manager. accountAttribute reads accounts on a source, not another identity."
+   "explanation": "getReferenceIdentityAttribute, a rule-type transform that calls the Cloud Services Deployment Utility rule, reads an attribute from another identity, and the special uid value manager points at the identity's manager. accountAttribute reads accounts on a source, not another identity."
   },
   {
    "id": "D10-027",
@@ -477,7 +477,7 @@
     "Converting a hire date from MM/dd/yyyy to ISO8601"
    ],
    "answer": "Looping over each value of a multi-valued attribute with custom logic",
-   "explanation": "Transforms work on single values with fixed operations, so per-item iteration with custom logic needs code. The other three are each a single built-in transform."
+   "explanation": "Custom per-item logic over a multi-valued attribute goes beyond the fixed operations of the built-in transforms, so it is the requirement most likely to need a rule. The other three are each a single built-in transform."
   },
   {
    "id": "D10-035",
@@ -491,21 +491,21 @@
     "A lookup transform with a table of known phone numbers"
    ],
    "answer": "The e164phone transform with a default region",
-   "explanation": "e164phone formats phone numbers to E.164, using a default region when no country code is present. A rule would add review effort for something a built-in transform does."
+   "explanation": "e164phone formats phone numbers to E.164, using its defaultRegion (US unless set) when no country code is present, and returns null for input that is not a valid phone number. A rule would add review effort for something a built-in transform does."
   },
   {
    "id": "D10-036",
    "objective": "10.1",
    "topic": "Transform Feasibility and Testing",
-   "stem": "Where in the Admin UI can an engineer view and manage the tenant's transforms?",
+   "stem": "In the Admin UI, where does an engineer select a saved transform to calculate an identity attribute?",
    "choices": [
-    "Admin > Identity Management > Transforms",
-    "Admin > SoD Policies > Controls",
-    "Admin > Certifications > Campaigns",
-    "Admin > Connections > Virtual Appliances"
+    "The Mappings tab of the identity profile",
+    "The Account Schema tab of the source",
+    "The Accounts tab of the identity's details",
+    "The Controls page of an SoD policy"
    ],
-   "answer": "Admin > Identity Management > Transforms",
-   "explanation": "Transforms are managed under Identity Management, where they can be selected in identity profile mappings. The other pages manage appliances, campaigns and SoD."
+   "answer": "The Mappings tab of the identity profile",
+   "explanation": "Saved transforms are applied to identity attributes on the identity profile's Mappings tab (Admin > Identity Management > Identity Profiles), where the result can then be previewed. Account schemas, identity details and SoD controls do not apply transforms."
   },
   {
    "id": "D10-037",
@@ -794,7 +794,7 @@
     "The rule file and the virtual appliance's keypair",
     "The rule file and a screenshot of the identity profile",
     "The rule, the validator output, the tenant name and Expert Services approval",
-    "The rule file and the org admin's personal access token for the sandbox tenant"
+    "The rule file and an org admin's personal access token"
    ],
    "answer": "The rule, the validator output, the tenant name and Expert Services approval",
    "explanation": "SailPoint asks for the rule, validator output, tenant name and approval for Expert Services through a support request. Credentials and keys must never be sent."
@@ -850,7 +850,7 @@
     "Submit a TEMP copy, apply and validate it in the window, then update the original",
     "Edit the rule code directly in the tenant during the window",
     "Disable the rule, wait a day, then submit the new logic",
-    "Submit a whole new rule with a version number in its name every time logic changes"
+    "Submit a new rule with a version number in its name for each change"
    ],
    "answer": "Submit a TEMP copy, apply and validate it in the window, then update the original",
    "explanation": "The TEMP rule approach gives control over timing while keeping one rule per use case in the end. Keeping many versioned rules is not supported."
