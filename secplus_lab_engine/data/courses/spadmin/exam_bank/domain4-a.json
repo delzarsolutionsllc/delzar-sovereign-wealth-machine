@@ -233,19 +233,19 @@
    "topic": "Attribute Sync",
    "stem": "What starts an attribute sync update to a target account?",
    "choices": [
-    "An account aggregation that finds a different value on the target account than before",
+    "An entitlement aggregation that finds new groups on the target source",
     "A change to the mapped identity attribute found during identity processing",
     "A reviewer approving an access request",
     "A VA restart"
    ],
    "answer": "A change to the mapped identity attribute found during identity processing",
-   "explanation": "Attribute sync reacts to changes in the identity attribute, which identity processing detects. Aggregations read accounts; they do not push values."
+   "explanation": "Attribute sync reacts when a mapped identity attribute changes, for example after an authoritative source aggregation. Entitlement aggregations, approvals and VA restarts do not start it."
   },
   {
    "id": "D4-018",
    "objective": "4.1",
    "topic": "Attribute Sync",
-   "stem": "An administrator wants attribute sync on a delimited file source. Why will this not update the file's system?",
+   "stem": "An administrator wants attribute sync on a delimited file source. Why will this not update the target system automatically?",
    "choices": [
     "Attribute sync works only on authoritative sources",
     "Delimited file sources cannot be mapped to identity attributes in an identity profile",
@@ -253,7 +253,7 @@
     "Attribute sync requires a SaaS connector"
    ],
    "answer": "The source is not direct-connect and has no automated provisioning",
-   "explanation": "Attribute sync writes through the connector, so the source must be a provisioning-capable direct connection. Flat file sources only receive manual tasks."
+   "explanation": "Attribute sync writes through the connector, so automatic updates need a provisioning-capable direct connection. On a flat file source each change becomes a manual task, which can create many work items."
   },
   {
    "id": "D4-019",
@@ -304,12 +304,12 @@
    "stem": "An administrator wants a direct-connect source to stop writing to its target and send manual work items instead. What should the administrator change?",
    "choices": [
     "Disconnect the source from its VA cluster so changes cannot reach the target",
-    "Turn off Enable Provisioning in the source's Base Configuration",
+    "Remove PROVISIONING from the source's features with the Update Source API",
     "Delete the source's Create Account policy",
     "Remove the source owner"
    ],
-   "answer": "Turn off Enable Provisioning in the source's Base Configuration",
-   "explanation": "Without the provisioning feature the source is read-only and changes become manual work items. Deleting the policy or the VA link would break other functions."
+   "answer": "Remove PROVISIONING from the source's features with the Update Source API",
+   "explanation": "SailPoint documents removing the PROVISIONING feature with the Update Source API; the source then generates manual work items instead of writing to the target. Deleting the policy or the VA link would break other functions."
   },
   {
    "id": "D4-023",

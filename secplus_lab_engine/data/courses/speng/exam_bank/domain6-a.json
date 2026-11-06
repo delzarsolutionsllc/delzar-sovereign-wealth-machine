@@ -9,12 +9,12 @@
       "topic": "Microservice Advantages",
       "stem": "Month-end brings a surge of aggregations across many tenants while other activity stays flat. Which microservice advantage lets a SaaS platform absorb this BEST?",
       "choices": [
-        "The aggregation services can be scaled out without scaling the whole platform",
+        "Aggregation services scale out without scaling the whole platform",
         "Every feature shares one process, so spare capacity is used automatically",
         "All services share one database, so no extra capacity is needed",
         "Aggregations can be paused until the platform is redeployed"
       ],
-      "answer": "The aggregation services can be scaled out without scaling the whole platform",
+      "answer": "Aggregation services scale out without scaling the whole platform",
       "explanation": "Microservices scale independently, so only the busy service gets more instances. In a monolith the whole application would have to scale together."
     },
     {
@@ -26,9 +26,9 @@
         "Every service stops until the email service is restarted",
         "All requests are rolled back to keep services consistent",
         "The tenant switches into read-only mode until the fix is deployed",
-        "Emails are delayed while other services, such as access requests, keep working"
+        "Emails are delayed while other services keep working"
       ],
-      "answer": "Emails are delayed while other services, such as access requests, keep working",
+      "answer": "Emails are delayed while other services keep working",
       "explanation": "Fault isolation means a failing service degrades its own function without taking down unrelated services. A monolith is more likely to fail as a whole."
     },
     {
@@ -37,7 +37,7 @@
       "topic": "Microservice Advantages",
       "stem": "A SaaS vendor wants to release fixes to its certification feature several times a week without taking the rest of the product offline. Which architecture property supports this?",
       "choices": [
-        "All features are compiled into one deployable artifact",
+        "All features are compiled and shipped together in one deployable artifact",
         "Releases are bundled into one quarterly upgrade window",
         "Customers install updates on their own servers",
         "Each microservice can be deployed independently of the others"
@@ -53,7 +53,7 @@
       "choices": [
         "All services must be upgraded together in one release",
         "Services evolve and are versioned independently of each other",
-        "Clients must call one central endpoint for every operation",
+        "Clients must call one central endpoint for every operation in every service",
         "Every service shares one schema version"
       ],
       "answer": "Services evolve and are versioned independently of each other",
@@ -80,11 +80,11 @@
       "stem": "Different engineering teams want to use the language and data store that best suit their service. What makes this practical in a microservice design?",
       "choices": [
         "All services share one code base and runtime",
-        "All services read and write the same database tables",
+        "All services read and write the same shared database tables",
         "Each team must use the same framework version",
-        "Services interact only through defined APIs or events, hiding their internals"
+        "Services interact only through defined APIs or events"
       ],
-      "answer": "Services interact only through defined APIs or events, hiding their internals",
+      "answer": "Services interact only through defined APIs or events",
       "explanation": "Because services expose only well-defined interfaces, each one can use its own technology stack. Shared tables or code bases would couple the teams again."
     },
     {
@@ -96,9 +96,9 @@
         "The new capability is deployed only when every other service is updated",
         "The monolith's shared memory makes integration simpler",
         "The new capability does not need any API",
-        "The capability can be built as a new service without changing unrelated code"
+        "It can be built as a new service without changing unrelated code"
       ],
-      "answer": "The capability can be built as a new service without changing unrelated code",
+      "answer": "It can be built as a new service without changing unrelated code",
       "explanation": "New services can be added beside existing ones and integrated through APIs, limiting the change's blast radius. In a monolith any change means rebuilding and redeploying the whole application."
     },
     {
@@ -150,7 +150,7 @@
       "stem": "A call that worked yesterday now returns HTTP 401 Unauthorized, while the same client gets data from other endpoints after fetching a new token. What is the MOST likely cause?",
       "choices": [
         "The access token used for the call had expired",
-        "The client lacks the scope for that endpoint",
+        "The client lacks the scope that the endpoint requires",
         "The requested object no longer exists",
         "The request body was not valid JSON"
       ],
@@ -165,7 +165,7 @@
       "choices": [
         "The token has expired and must be refreshed",
         "The source name contains spaces",
-        "The API is temporarily rate limiting the client",
+        "The API is temporarily rate limiting the client after a burst of calls",
         "The token's user level or scopes do not allow creating sources"
       ],
       "answer": "The token's user level or scopes do not allow creating sources",
@@ -178,7 +178,7 @@
       "stem": "A script sends GET for an identity using an ID copied from another tenant and receives HTTP 404 Not Found. What does this indicate?",
       "choices": [
         "No resource with that ID exists in the tenant being called",
-        "The token is missing from the Authorization header",
+        "The token is missing from the request's Authorization header",
         "The request is valid but is still being processed",
         "The request was throttled by the API gateway"
       ],
@@ -192,11 +192,11 @@
       "stem": "A script triggers a long-running operation and receives HTTP 202 Accepted. What should it do next?",
       "choices": [
         "Treat the operation as finished and successful",
-        "Resend the request because 202 means it was ignored",
-        "Track the returned task or status until the operation completes",
+        "Resend the request, because 202 means the API ignored it",
+        "Track the returned task or status until it completes",
         "Assume the operation failed and roll back"
       ],
-      "answer": "Track the returned task or status until the operation completes",
+      "answer": "Track the returned task or status until it completes",
       "explanation": "202 means the request was accepted for asynchronous processing and is not finished yet. The script should poll the status it was given rather than resend it."
     },
     {
@@ -220,7 +220,7 @@
       "stem": "An engineer creates a personal access token to automate a task. Whose permissions does the token carry?",
       "choices": [
         "Those of the user who created it, further limited by the scopes chosen",
-        "Full tenant administrator rights, regardless of who created it",
+        "Full tenant administrator rights, no matter which user originally created it",
         "Only read access, because personal tokens cannot change data",
         "The permissions of the source owner of each object called"
       ],
@@ -250,9 +250,9 @@
         "Hard-code a token generated in the Admin UI into the script",
         "Retry the same call with the same token until it succeeds",
         "Switch to a user's password in each call",
-        "Request a new token with the client credentials when the current one expires"
+        "Request a new token when the current one expires"
       ],
-      "answer": "Request a new token with the client credentials when the current one expires",
+      "answer": "Request a new token when the current one expires",
       "explanation": "Access tokens are short-lived, so a robust client requests a fresh token when it expires. Retrying with an expired token will keep failing."
     },
     {
@@ -263,10 +263,10 @@
       "choices": [
         "Grant every scope so the job never fails later",
         "Share one token across all teams to reduce sprawl",
-        "Grant only the read scopes the job needs and store the secret in a vault",
+        "Grant only the read scopes needed and keep the secret in a vault",
         "Paste the secret into the job's source code repository"
       ],
-      "answer": "Grant only the read scopes the job needs and store the secret in a vault",
+      "answer": "Grant only the read scopes needed and keep the secret in a vault",
       "explanation": "Least-privilege scopes limit what a leaked token can do, and a vault keeps the secret out of code. Shared, all-powerful tokens destroy accountability."
     },
     {
@@ -289,12 +289,12 @@
       "topic": "Pagination Filtering and Sorting",
       "stem": "A script must list about 1,200 access profiles through a standard list endpoint. How should it page through them?",
       "choices": [
-        "Use limit of up to 250 and increase offset until no more records return",
+        "Use limit up to 250 and raise offset until no records return",
         "Set limit to 1200 to get everything in one call",
         "Call the endpoint repeatedly without parameters until the list changes",
         "Use searchAfter on the list endpoint"
       ],
-      "answer": "Use limit of up to 250 and increase offset until no more records return",
+      "answer": "Use limit up to 250 and raise offset until no records return",
       "explanation": "List endpoints return at most 250 records per page, so the script uses limit and offset to walk the collection. searchAfter is for the Search API."
     },
     {
@@ -361,7 +361,7 @@
       "choices": [
         "Increase offset by 10,000 for each call",
         "Set limit to 60,000 in one request",
-        "Repeat the same query until the results stop changing",
+        "Repeat the same query until the results it returns stop changing",
         "Sort by id and pass the last id from each page in searchAfter"
       ],
       "answer": "Sort by id and pass the last id from each page in searchAfter",
@@ -404,9 +404,9 @@
         "The Search API caches results for each client for one day",
         "The identity was updated in a different tenant",
         "The query used an operator that is not supported",
-        "The search index is updated shortly after the change, not instantly"
+        "The search index is refreshed shortly after changes"
       ],
-      "answer": "The search index is updated shortly after the change, not instantly",
+      "answer": "The search index is refreshed shortly after changes",
       "explanation": "Search reads an index that is refreshed after changes, so there can be a short delay, while direct object endpoints read the current record. Scripts that verify changes should allow for it."
     },
     {
@@ -418,7 +418,7 @@
         "Up to 10,000 records",
         "Up to 250 records",
         "Up to 50 records",
-        "Up to 1,000 records"
+        "Up to 1,000 records per page"
       ],
       "answer": "Up to 10,000 records",
       "explanation": "The Search endpoint defaults to and allows up to 10,000 records per page, unlike list endpoints, which allow 250. Larger result sets are paged with searchAfter."
@@ -430,11 +430,11 @@
       "stem": "A bulk script receives HTTP 429 Too Many Requests. What is the correct client behaviour?",
       "choices": [
         "Retry immediately in a tight loop until the call succeeds",
-        "Wait for the number of seconds in the Retry-After header, then retry",
+        "Wait the seconds given in Retry-After, then retry",
         "Request a new token, because 429 means it expired",
         "Switch to a different tenant to continue"
       ],
-      "answer": "Wait for the number of seconds in the Retry-After header, then retry",
+      "answer": "Wait the seconds given in Retry-After, then retry",
       "explanation": "429 signals the rate limit was reached, and Retry-After gives the seconds to wait. A tight loop keeps the client throttled, and the token is still valid."
     },
     {
@@ -488,9 +488,9 @@
         "Create many API clients and rotate between them",
         "Remove all waiting so the job finishes before the limit resets",
         "Send every call with count=true",
-        "Use larger pages or Search queries so fewer calls retrieve the same data"
+        "Use larger pages or Search so fewer calls return the same data"
       ],
-      "answer": "Use larger pages or Search queries so fewer calls retrieve the same data",
+      "answer": "Use larger pages or Search so fewer calls return the same data",
       "explanation": "Fetching more data per call reduces request volume within the limit. Rotating clients to get around the limit is poor practice, and count=true adds load without reducing calls."
     },
     {

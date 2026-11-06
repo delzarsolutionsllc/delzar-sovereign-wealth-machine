@@ -51,7 +51,7 @@
    "topic": "User Level Capabilities",
    "stem": "An engineer with only the Source Admin user level can create access profiles but cannot find any way to create a role that bundles access from three sources. What is the MOST likely reason?",
    "choices": [
-    "The engineer must first be made owner of all three sources",
+    "The engineer must first own all three sources",
     "Roles must be enabled by SailPoint support first",
     "Roles can only be built through the REST API",
     "Creating roles needs Role Admin, Role Sub-Admin or Admin"
@@ -67,7 +67,7 @@
    "choices": [
     "The HR source is not tied to one of the sub-admin's governance groups",
     "The sub-admin also needs the Helpdesk user level",
-    "Role Sub-Admins can only view roles that contain no access items at all",
+    "Role Sub-Admins can only view roles with no access items",
     "The role has more than one owner assigned to it"
    ],
    "answer": "The HR source is not tied to one of the sub-admin's governance groups",
@@ -96,7 +96,7 @@
     "View aggregation activity on the Admin Dashboard",
     "Edit the owners of access profiles they hold",
     "Request access and act on approvals or certifications assigned to them",
-    "Run Search queries across all identities, accounts and entitlements in the tenant"
+    "Run Search queries across all identities"
    ],
    "answer": "Request access and act on approvals or certifications assigned to them",
    "explanation": "End users can use the Request Center, Approvals, Certifications assigned to them and Task Manager. Search and the Admin Dashboard require an administrative user level such as Report Admin."
@@ -138,10 +138,10 @@
     "In the provisioning policy of the tenant's governance source",
     "On that person's identity in Admin > Identity Management > Identities",
     "In Admin > Global > Security Settings > Password Policies",
-    "In the identity profile mappings for the person's authoritative source"
+    "In the identity profile mappings for the person"
    ],
    "answer": "On that person's identity in Admin > Identity Management > Identities",
-   "explanation": "User levels are set on the identity record under Identity Management > Identities. Identity profile mappings and password policies do not control administrative permissions."
+   "explanation": "User levels are set on the identity record: Admin > Identity Management > Identities, then Actions > Set User Levels. Identity profile mappings and password policies do not control administrative permissions."
   },
   {
    "id": "D5-011",
@@ -180,7 +180,7 @@
     "Source Sub-Admin, in a governance group associated with the ERP source",
     "Source owner on the ERP source with no user level at all",
     "Role Sub-Admin, plus ownership of each ERP access profile",
-    "Source Admin, plus a segment that hides every other source from the lead"
+    "Source Admin, plus a segment that hides other sources"
    ],
    "answer": "Source Sub-Admin, in a governance group associated with the ERP source",
    "explanation": "Source Sub-Admins manage sources and access profiles only for sources associated with governance groups they belong to. Source Admin covers all sources, and segments control requestable access visibility, not admin scope."
@@ -221,7 +221,7 @@
    "choices": [
     "An application that contains the three sources' accounts",
     "A requestable entitlement on each source for managers to request",
-    "One access profile that contains the entitlements from all three sources",
+    "One access profile with entitlements from all three sources",
     "A role containing the access, with membership criteria for sales hires"
    ],
    "answer": "A role containing the access, with membership criteria for sales hires",
@@ -304,12 +304,12 @@
    "stem": "When creating an access profile, which detail must be supplied along with its name and source?",
    "choices": [
     "A lifecycle state that grants it",
-    "An owner identity",
+    "A primary owner identity",
     "An approval workflow for requests",
     "A segment that limits who can see it"
    ],
-   "answer": "An owner identity",
-   "explanation": "An access profile needs a name, a source and an owner; the owner can later be used as a reviewer. Segments, lifecycle states and approval settings are optional configuration."
+   "answer": "A primary owner identity",
+   "explanation": "An access profile needs a name, a source and a primary owner; the primary owner can be configured as a reviewer. Additional owners, segments, lifecycle states and approval settings are optional."
   },
   {
    "id": "D5-023",
@@ -320,7 +320,7 @@
     "The source owner bypassed approval during aggregation",
     "The manager approval expired and was skipped",
     "They received it through an auto-assigned role or a lifecycle state",
-    "The access profile's owner approved all of the requests on the manager's behalf"
+    "The owner approved the requests for the manager"
    ],
    "answer": "They received it through an auto-assigned role or a lifecycle state",
    "explanation": "An access profile's approval process applies only to requests for that access profile. Access granted through auto-assigned roles or lifecycle states involves no approval."
@@ -331,7 +331,7 @@
    "topic": "Access Profiles",
    "stem": "A user already holds the 'VPN Users' access profile on one account and now needs the same access on a second account on that source. The request is not possible. What should the admin suggest?",
    "choices": [
-    "Delete and re-create the access profile under a new name for the second account",
+    "Re-create the access profile under a new name",
     "Run an account aggregation to split the two accounts",
     "Ask the access profile owner to approve it twice",
     "Request the individual entitlements or bundle the access in a role"
@@ -458,7 +458,7 @@
    "stem": "Users want one place in the Request Center where they find all requestable access for the Payroll Portal. What should the admin configure?",
    "choices": [
     "An access application for Payroll Portal with its access profiles added",
-    "A role containing the Payroll Portal source account and its entitlements",
+    "A role containing the Payroll Portal entitlements",
     "A segment named Payroll Portal for all employees",
     "A search subscription that emails the access list"
    ],
@@ -485,7 +485,7 @@
    "topic": "Applications",
    "stem": "An access application is associated with several access profiles, but one user cannot see some of them when browsing the app. What should the admin check FIRST?",
    "choices": [
-    "Whether the user's manager has signed off the user's latest certification",
+    "Whether the user's latest certification is signed off",
     "Whether the source's virtual appliance is offline",
     "Whether segmentation hides those access profiles from that user",
     "Whether the user has the Helpdesk user level"
@@ -821,7 +821,7 @@
    "choices": [
     "Change the operator from Equals to Greater Than",
     "Enter the lifecycle state's technical name as the value",
-    "Use an account attribute from the HR source instead of the identity attribute",
+    "Use an HR account attribute instead",
     "Add the identities to the role by identity list"
    ],
    "answer": "Enter the lifecycle state's technical name as the value",

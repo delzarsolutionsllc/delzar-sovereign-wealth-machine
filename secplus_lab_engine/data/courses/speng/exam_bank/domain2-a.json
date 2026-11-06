@@ -10,7 +10,7 @@
       "stem": "An identity holds Role A and Role B, and both roles grant the Active Directory group VPN Users. After a department change the identity no longer meets Role A's criteria but still meets Role B's. What is the outcome after identity processing?",
       "choices": [
         "The VPN Users group is removed and then provisioned again on the next refresh",
-        "Both roles are removed because they share the same entitlement",
+        "Both roles are removed during identity processing because they grant the same group",
         "Role A stays assigned until a certification campaign revokes it",
         "Role A is removed and the VPN Users group stays because Role B still grants it"
       ],
@@ -53,10 +53,10 @@
       "choices": [
         "The connector writes the change into the next delimited file the source receives",
         "The requester's manager receives a task to update the application",
-        "A manual provisioning task goes to the entitlement owner, with the source owner as fallback",
+        "The entitlement owner gets a manual task, with the source owner as fallback",
         "The request is rejected because delimited file sources cannot be provisioned"
       ],
-      "answer": "A manual provisioning task goes to the entitlement owner, with the source owner as fallback",
+      "answer": "The entitlement owner gets a manual task, with the source owner as fallback",
       "explanation": "ISC cannot push changes to a flat file source, so it creates a manual provisioning task; tasks involving entitlements go to the entitlement owner with the source owner as fallback. The request is not rejected, and the file itself is not edited by ISC."
     },
     {
@@ -80,11 +80,11 @@
       "stem": "An engineer saved new membership criteria on a role at 10:00, but identities that match the criteria and whose attributes have not changed still do not have the role. What is the MOST likely reason?",
       "choices": [
         "Criteria-based roles need approval from the role owner before each assignment",
-        "Role configuration changes apply only when identity processing runs, for example after Apply Changes",
-        "New roles are provisioned only to identities created after the role was saved",
+        "Role changes apply only when identity processing runs, such as after Apply Changes",
+        "New roles are provisioned only to identities that were created after the role was saved",
         "Each affected source must first complete a full, unoptimized aggregation"
       ],
-      "answer": "Role configuration changes apply only when identity processing runs, for example after Apply Changes",
+      "answer": "Role changes apply only when identity processing runs, such as after Apply Changes",
       "explanation": "Role changes are not applied immediately; they are calculated during identity processing, which Apply Changes starts for all identities. Criteria-based assignment has no approval step, and aggregation type does not gate role evaluation."
     },
     {
@@ -166,9 +166,9 @@
         "Ask the contractor's manager to submit a revocation request in Request Center",
         "Delete the role and recreate it so the contractor is not included",
         "Remove the entitlements on the target system and wait for the next aggregation",
-        "Change the criteria or the contractor's data so they no longer match, then let identity processing remove it"
+        "Change the criteria or the contractor's data so they stop matching"
       ],
-      "answer": "Change the criteria or the contractor's data so they no longer match, then let identity processing remove it",
+      "answer": "Change the criteria or the contractor's data so they stop matching",
       "explanation": "Auto-assigned roles cannot be manually revoked; they follow the criteria, so the identity must stop matching. Deleting and recreating the role would not deprovision anything, and native removal leaves the role assignment in place."
     },
     {
@@ -179,10 +179,10 @@
       "choices": [
         "Nothing changes until an administrator selects Apply Changes on the Roles page",
         "The employee keeps the Sales role until the next certification campaign closes",
-        "Event-based identity processing adjusts the role assignments and provisions the changes",
+        "Event-based processing adjusts the role assignments and provisions the change",
         "The Support role is assigned only after the employee's manager approves it"
       ],
-      "answer": "Event-based identity processing adjusts the role assignments and provisions the changes",
+      "answer": "Event-based processing adjusts the role assignments and provisions the change",
       "explanation": "When identity attributes change, event-based processing recalculates role membership and provisions the access changes. Apply Changes is needed for configuration changes to roles, not for attribute changes on individual identities."
     },
     {
@@ -222,9 +222,9 @@
         "It is removed at the next identity processing because the department changed",
         "It is suspended until the user's new manager approves it again",
         "It is converted into individually requested entitlements on the user's accounts",
-        "It stays assigned until it is revoked by request, certification, lifecycle state or an administrator"
+        "It stays until revoked by request, certification, lifecycle state or an admin"
       ],
-      "answer": "It stays assigned until it is revoked by request, certification, lifecycle state or an administrator",
+      "answer": "It stays until revoked by request, certification, lifecycle state or an admin",
       "explanation": "A requested role is not tied to criteria, so attribute changes do not remove it; it must be revoked by a removal request, a certification, a lifecycle state or an administrator. That is why movers often keep requested access unless the design handles it."
     },
     {
@@ -248,7 +248,7 @@
       "stem": "A user holds two assignments of the same requestable role, each targeting a different account on the same source. The administrator must revoke only the assignment on the second account. What should the administrator do?",
       "choices": [
         "In View Assignments, check the account target details and revoke that assignment",
-        "Revoke the role entirely and then request it again for the first account",
+        "Revoke the whole role, then submit a new request for it on the first account only",
         "Remove the second account from ISC so its assignment disappears",
         "Change the role's multiple account options to point at the first account"
       ],
@@ -264,9 +264,9 @@
         "The user is emailed only after the role owner approves the revocation",
         "Administrative revocations are not audited because an administrator performed them",
         "The notification goes to the role owner, who must confirm it before removal",
-        "Administrative revocation sends no notification, but the action is captured in audit records"
+        "No notification is sent, but the revocation is captured in audit records"
       ],
-      "answer": "Administrative revocation sends no notification, but the action is captured in audit records",
+      "answer": "No notification is sent, but the revocation is captured in audit records",
       "explanation": "ISC does not send a notification for an administrative revocation, but the action is recorded for audit. There is no role-owner confirmation step for an administrator's revoke."
     },
     {
@@ -275,12 +275,12 @@
       "topic": "Requested Role Assignment and Revocation",
       "stem": "A requested role contains an Active Directory group and an entitlement on a delimited file application. The role is revoked. How is the access removed?",
       "choices": [
-        "The AD group is removed automatically and a manual task is created for the delimited file entitlement",
+        "AD removal is automatic; a manual task is created for the flat file entitlement",
         "Both entitlements are removed automatically through the virtual appliance",
         "Both entitlements require manual tasks because the role mixes source types",
         "Only the AD group is removed; flat file access must be certified away separately"
       ],
-      "answer": "The AD group is removed automatically and a manual task is created for the delimited file entitlement",
+      "answer": "AD removal is automatic; a manual task is created for the flat file entitlement",
       "explanation": "Revocation of a role's entitlements is automatic on directly connected sources and becomes a manual task where ISC cannot push changes. Mixing source types does not force everything to manual."
     },
     {
@@ -289,12 +289,12 @@
       "topic": "Requested Role Assignment and Revocation",
       "stem": "An engineer needs a requestable role to require approval from the role owner and then from a governance group. Where is this configured?",
       "choices": [
-        "In the role's Access Requests settings, by enabling requests and defining the approvers",
-        "In the identity profile of the identities that will request the role",
+        "In the role's Access Requests settings, where its approvers are defined",
+        "In the identity profile used by the identities that will request the role",
         "On the Create Account definition of each source in the role",
         "In the access profile list of the requesters' lifecycle state"
       ],
-      "answer": "In the role's Access Requests settings, by enabling requests and defining the approvers",
+      "answer": "In the role's Access Requests settings, where its approvers are defined",
       "explanation": "Requestability and the review process for a role are set on the role itself. Identity profiles and Create Account definitions control identity data and new accounts, not request approvals."
     },
     {
@@ -333,10 +333,10 @@
       "choices": [
         "Immediately when the role is saved, without identity processing",
         "Only after the next full aggregation of each affected source",
-        "During the daily propagation identity processing at 6:00 PM in the tenant's time zone",
+        "In the daily 6:00 PM tenant-time identity processing",
         "Never, because removals require someone to select Apply Changes"
       ],
-      "answer": "During the daily propagation identity processing at 6:00 PM in the tenant's time zone",
+      "answer": "In the daily 6:00 PM tenant-time identity processing",
       "explanation": "Identity processing that propagates role changes runs daily at 6:00 PM tenant time and can be started earlier with Apply Changes. Aggregation does not drive role propagation."
     },
     {
@@ -373,12 +373,12 @@
       "topic": "Role Change Propagation",
       "stem": "Role change propagation is disabled. An engineer adds a new entitlement to a criteria-based role and selects Apply Changes. What happens?",
       "choices": [
-        "Members are provisioned the new entitlement, because propagation governs only removals",
+        "Members receive it, because propagation governs only removals",
         "Nothing happens because propagation is disabled for the tenant",
         "Only identities that join the role from now on receive the entitlement",
         "Members must request the new entitlement before it is provisioned"
       ],
-      "answer": "Members are provisioned the new entitlement, because propagation governs only removals",
+      "answer": "Members receive it, because propagation governs only removals",
       "explanation": "Role change propagation does not affect access additions, so identity processing provisions new role access to existing members. The setting controls only whether removals from role definitions deprovision access."
     },
     {
@@ -444,7 +444,7 @@
       "stem": "The archived lifecycle state deletes accounts on App X. An archived identity still holds a criteria-based role, with criteria that ignore lifecycle state, that includes an App X entitlement. What happens after the next identity refresh?",
       "choices": [
         "The account stays deleted and the role is removed automatically",
-        "The role is suspended until the identity returns to an active state",
+        "The role is suspended until the identity returns to an active lifecycle state",
         "The App X account is recreated because the role assignment is still active",
         "ISC refuses to delete the account until the role is revoked"
       ],
@@ -459,10 +459,10 @@
       "choices": [
         "The removal is permanent because administrators override lifecycle states",
         "The identity is moved to a different lifecycle state automatically",
-        "The access profile is provisioned again while the identity remains in that state",
+        "It is provisioned again while the identity stays in that state",
         "The access profile is removed from the lifecycle state configuration"
       ],
-      "answer": "The access profile is provisioned again while the identity remains in that state",
+      "answer": "It is provisioned again while the identity stays in that state",
       "explanation": "Access profiles granted by a lifecycle state are enforced while the identity stays in that state, so a removed one is provisioned again. A permanent change requires changing the state's configuration or the identity's state."
     },
     {
@@ -486,11 +486,11 @@
       "stem": "A leaver's AD account disable failed during a long virtual appliance outage, and the hourly retries were exhausted. The VA is healthy again. Will the lifecycle state disable the account on its own?",
       "choices": [
         "Yes; the lifecycle state disables the account again on every identity refresh",
-        "No; lifecycle state actions run once, so the account must be disabled through another action",
+        "No; lifecycle actions run once, so the disable must be driven another way",
         "Yes; the VA replays every queued disable when it reconnects to the tenant",
         "No; the identity reverts to its previous lifecycle state after the failure"
       ],
-      "answer": "No; lifecycle state actions run once, so the account must be disabled through another action",
+      "answer": "No; lifecycle actions run once, so the disable must be driven another way",
       "explanation": "Lifecycle state actions such as enabling or disabling execute a single time and are not a persistent enforcement mechanism; retryable errors are retried hourly up to three times. After that, the disable must be driven another way."
     },
     {
@@ -664,9 +664,9 @@
         "It ignores the definition because flat file sources cannot create accounts",
         "It writes a new row into the delimited file on the next upload",
         "It holds the access until the joiner's account appears in a later file",
-        "It creates a provisioning task for the source owner containing the computed attribute values"
+        "It creates a task for the source owner with the computed attribute values"
       ],
-      "answer": "It creates a provisioning task for the source owner containing the computed attribute values",
+      "answer": "It creates a task for the source owner with the computed attribute values",
       "explanation": "Because ISC cannot push changes to a flat file source, it creates a task with the account's attribute values, assigns it to the source owner and emails them. The definition is still used to compute those values."
     },
     {
@@ -691,10 +691,10 @@
       "choices": [
         "Generator patterns run before the account schema is loaded",
         "Generator patterns accept only literal text and $(uniqueCounter)",
-        "sAMAccountName must be marked as the Account ID before it can be used",
-        "Generator patterns can reference identity attributes but not other Create Account attributes"
+        "sAMAccountName must first be marked as the Account ID before a pattern can use it",
+        "Patterns can use identity attributes but not other Create Account attributes"
       ],
-      "answer": "Generator patterns can reference identity attributes but not other Create Account attributes",
+      "answer": "Patterns can use identity attributes but not other Create Account attributes",
       "explanation": "Generator patterns use $(technicalName) for identity attributes and cannot reference other Create Account attributes. To build on another account attribute, use a Static Velocity template listed below it."
     },
     {
@@ -720,7 +720,7 @@
         "A connector rule that runs on the virtual appliance after creation",
         "A workflow that edits the account after the create completes",
         "An Attribute Generator cloud rule written by the implementation team",
-        "A Static mapping that calls an external script"
+        "A Static mapping that calls an external script to compute the username"
       ],
       "answer": "An Attribute Generator cloud rule written by the implementation team",
       "explanation": "Additional generators are added through Attribute Generator rules, which are cloud rules. Fixing the name after creation with a workflow would leave the account created with the wrong value first."
@@ -733,10 +733,10 @@
       "choices": [
         "A Static mapping with one shared initial password",
         "An Identity Attribute mapping to the employee number",
-        "A Create Password generator on the password attribute",
+        "A password generator mapping on the password attribute",
         "A Create Unique Account ID generator on the password attribute"
       ],
-      "answer": "A Create Password generator on the password attribute",
+      "answer": "A password generator mapping on the password attribute",
       "explanation": "A password generator produces a random value that follows the configured password policy. A shared static or predictable password is a security weakness, and the unique ID generator is meant for identifiers."
     },
     {
@@ -745,12 +745,12 @@
       "topic": "Generators and Unique Values",
       "stem": "Generated usernames sometimes collide with accounts that administrators created natively in the target yesterday, causing create failures. What is the MOST likely reason?",
       "choices": [
-        "ISC checked uniqueness against account data that had not been aggregated since those accounts were made",
+        "ISC's account data was stale since those accounts had not been aggregated yet",
         "The generator checks uniqueness only against identities, never against accounts",
         "$(uniqueCounter) is ignored when the target is reached through a VA",
         "Unique values are reserved per identity profile rather than per source"
       ],
-      "answer": "ISC checked uniqueness against account data that had not been aggregated since those accounts were made",
+      "answer": "ISC's account data was stale since those accounts had not been aggregated yet",
       "explanation": "The generator relies on the account data ISC holds for the source, so accounts created natively since the last aggregation are invisible to it. Frequent aggregation, or a generator rule that checks the target, reduces collisions."
     },
     {
@@ -761,10 +761,10 @@
       "choices": [
         "Remove $(uniqueCounter) so the generated value is shorter",
         "Map sAMAccountName to the identity's email address instead",
-        "Build the value with transforms that shorten the name parts to fit the AD length limit",
-        "Move sAMAccountName to the bottom of the Create Account list"
+        "Use transforms that shorten the name parts to fit AD's length limit",
+        "Move sAMAccountName to the bottom of the Create Account list so it is computed last"
       ],
-      "answer": "Build the value with transforms that shorten the name parts to fit the AD length limit",
+      "answer": "Use transforms that shorten the name parts to fit AD's length limit",
       "explanation": "sAMAccountName has a short length limit, so the name parts must be truncated, for example with substring logic, while keeping a counter for uniqueness. Removing the counter brings back collisions, and an email address is usually too long as well."
     },
     {
@@ -774,11 +774,11 @@
       "stem": "An engineer wants to sync the title account attribute on an LDAP source, but title is not listed as eligible on the Attribute Sync page. What is the MOST likely reason?",
       "choices": [
         "title is not marked as the account's Account ID in the account schema",
-        "title is not in the Create Account definition with a direct identity attribute mapping",
-        "Attribute sync works only on the identity profile's authoritative source",
+        "title is not mapped directly from an identity attribute in Create Account",
+        "Attribute sync works only on the authoritative source used by the identity profile",
         "The source must have a Before Provisioning rule before it can sync"
       ],
-      "answer": "title is not in the Create Account definition with a direct identity attribute mapping",
+      "answer": "title is not mapped directly from an identity attribute in Create Account",
       "explanation": "An account attribute is eligible for sync only when it is in the source's Create Account definition and mapped directly from an identity attribute. The Account ID flag and rules play no part in eligibility."
     },
     {
@@ -801,12 +801,12 @@
       "topic": "Attribute Sync Requirements",
       "stem": "After enabling attribute sync for department on an LDAP source, most accounts update but several never do. Those accounts are uncorrelated. Why are they not updated?",
       "choices": [
-        "Attribute sync applies only to existing accounts that are correlated to identities",
+        "Attribute sync applies only to accounts correlated to identities",
         "Uncorrelated accounts are synced only during an unoptimized aggregation",
         "Attribute sync processes accounts in batches and skips older ones",
         "Uncorrelated accounts sync only after the bulk Sync is run three times"
       ],
-      "answer": "Attribute sync applies only to existing accounts that are correlated to identities",
+      "answer": "Attribute sync applies only to accounts correlated to identities",
       "explanation": "Attribute sync enforces identity data on correlated accounts; an uncorrelated account has no identity whose data could be enforced. Correlating the accounts brings them under sync."
     },
     {
@@ -829,7 +829,7 @@
       "topic": "Attribute Sync Requirements",
       "stem": "HR data for some users has no mobile number, and after attribute sync is enabled for mobile, existing AD mobile values are being cleared. Why is this happening?",
       "choices": [
-        "Attribute sync clears any value it cannot verify against the account schema",
+        "Attribute sync clears any value that it cannot verify against the account schema",
         "AD rejects the update and ISC writes an empty value as a fallback",
         "A null identity attribute value is propagated to the synced account attribute",
         "The bulk Sync resets all synced attributes before writing new values"
@@ -859,7 +859,7 @@
       "choices": [
         "ISC updates the identity's title to match the AD account",
         "ISC flags the account for certification and leaves the value as is",
-        "ISC ignores the change because only HR aggregations trigger attribute sync",
+        "ISC ignores the change because only HR aggregations can trigger attribute sync",
         "ISC detects the native change and provisions the identity's title back to AD"
       ],
       "answer": "ISC detects the native change and provisions the identity's title back to AD",
@@ -886,11 +886,11 @@
       "stem": "A requester submits an access request for an access profile on a source where the target identity has two accounts. How is the receiving account chosen?",
       "choices": [
         "ISC applies the access profile's multiple account criteria",
-        "The requester selects the account in the request, shown by account name and ID",
+        "The requester picks the account in the request",
         "ISC grants the access to both accounts",
         "ISC always uses the oldest correlated account"
       ],
-      "answer": "The requester selects the account in the request, shown by account name and ID",
+      "answer": "The requester picks the account in the request",
       "explanation": "For access requests, the requester chooses which account needs the access. Multiple account options on the access profile apply only to automated provisioning through roles and lifecycle states."
     },
     {
@@ -914,11 +914,11 @@
       "stem": "An access profile's multiple account criteria match none of a user's three accounts on a source when a role is assigned. What is the outcome?",
       "choices": [
         "ISC grants the access to every account the user has on the source",
-        "ISC creates a fourth account for the user from the Create Account definition",
+        "ISC creates a fourth account for the user from the source's Create Account definition",
         "ISC grants the access to the account that was aggregated most recently",
-        "Provisioning fails unless manual account selection is enabled, which sends the source owner a selection form"
+        "Provisioning fails, or goes to the source owner if manual selection is enabled"
       ],
-      "answer": "Provisioning fails unless manual account selection is enabled, which sends the source owner a selection form",
+      "answer": "Provisioning fails, or goes to the source owner if manual selection is enabled",
       "explanation": "When zero or several accounts match the criteria, provisioning fails; with manual account selection enabled, the source owner picks the account through a form in their tasks. ISC does not guess or create another account."
     },
     {
@@ -929,10 +929,10 @@
       "choices": [
         "Provisioning fails because the single account does not match the criteria",
         "ISC creates an admin account so the criteria can be met",
-        "The access is provisioned to the single account because the criteria are not applied",
+        "The single account receives the access; the criteria are not applied",
         "The role assignment is skipped until a second account exists"
       ],
-      "answer": "The access is provisioned to the single account because the criteria are not applied",
+      "answer": "The single account receives the access; the criteria are not applied",
       "explanation": "Multiple account criteria are applied only to users with more than one account on the source. A user with a single account receives the access on that account."
     },
     {
@@ -943,10 +943,10 @@
       "choices": [
         "Create a second identity for the user to hold the admin account",
         "Remove the access profile from the standard account and request it again",
-        "Request the individual entitlements for the admin account, or bundle the access into a role",
+        "Request the individual entitlements, or bundle the access into a role",
         "Change the access profile's multiple account options to include both accounts"
       ],
-      "answer": "Request the individual entitlements for the admin account, or bundle the access into a role",
+      "answer": "Request the individual entitlements, or bundle the access into a role",
       "explanation": "An access profile can be associated with an identity only once, so the same access for another account must come from individual entitlement requests or roles. A second identity would break the one-person, one-identity model."
     },
     {
@@ -955,12 +955,12 @@
       "topic": "Multiple Account Handling",
       "stem": "During source onboarding, admin accounts named like adm-jsmith appear uncorrelated, while standard accounts correlate on sAMAccountName. Each admin account stores the owner's employee number in an extension attribute. What is the BEST correlation design?",
       "choices": [
-        "Add correlation that maps the employee number identity attribute to that extension attribute",
+        "Correlate the employee number identity attribute to that extension attribute",
         "Rename the admin accounts on AD to match the standard account names",
         "Create a separate identity profile for administrators",
-        "Exclude admin accounts from aggregation so they are never uncorrelated"
+        "Exclude admin accounts from aggregation so they never show as uncorrelated accounts"
       ],
-      "answer": "Add correlation that maps the employee number identity attribute to that extension attribute",
+      "answer": "Correlate the employee number identity attribute to that extension attribute",
       "explanation": "Correlation that compares an identity attribute with an account attribute holding the owner's identifier links admin accounts to the right identity. Excluding them hides privileged access from governance, and renaming breaks naming standards."
     },
     {
@@ -998,11 +998,11 @@
       "stem": "The business wants a directly connected source to be governed in ISC, but all account changes must be made by hand by the application team. What should the engineer do?",
       "choices": [
         "Delete the source's Create Account definition so changes cannot be made",
-        "Turn off Enable Provisioning on the source's Base Configuration so manual work items are created",
+        "Turn off Enable Provisioning so ISC creates manual work items",
         "Remove the source from every role and access profile",
         "Set the account deletion threshold to zero for the source"
       ],
-      "answer": "Turn off Enable Provisioning on the source's Base Configuration so manual work items are created",
+      "answer": "Turn off Enable Provisioning so ISC creates manual work items",
       "explanation": "Turning provisioning off on a direct connect source makes ISC generate manual work items for the required changes, which cannot be disabled. Deleting the create definition only breaks account creation."
     },
     {
@@ -1014,7 +1014,7 @@
         "PROVISIONING in the features list returned by the Get Source API",
         "A non-empty Create Account definition on the source",
         "A healthy status on the source's virtual appliance cluster",
-        "At least one entitlement in the source's entitlement catalog"
+        "At least one entitlement in the source's entitlement catalog after aggregation"
       ],
       "answer": "PROVISIONING in the features list returned by the Get Source API",
       "explanation": "The Get Source response lists source capabilities in its features attribute, and PROVISIONING controls creating and modifying accounts. A create definition or a healthy VA does not prove provisioning is enabled."
@@ -1040,11 +1040,11 @@
       "stem": "Provisioning for an on-premises Active Directory domain is configured in ISC. How does an approved change reach the domain?",
       "choices": [
         "ISC connects to the domain controllers directly from the cloud over LDAPS",
-        "ISC sends the provisioning plan to the source's VA cluster, which runs the connector against AD",
+        "ISC sends the plan to the source's VA cluster, which runs the connector",
         "ISC writes the change to a file that a scheduled AD script imports",
         "ISC places the change in a queue that AD polls through a web service"
       ],
-      "answer": "ISC sends the provisioning plan to the source's VA cluster, which runs the connector against AD",
+      "answer": "ISC sends the plan to the source's VA cluster, which runs the connector",
       "explanation": "VA-based sources receive provisioning through the virtual appliance cluster, which runs the connector inside the customer network. The cloud does not reach domain controllers directly."
     },
     {
@@ -1069,7 +1069,7 @@
       "choices": [
         "The Attribute Sync page, editing the sync mapping",
         "The account schema page, editing the attribute type",
-        "The identity profile Preview, editing the sample identity",
+        "The identity profile Preview, editing the sample identity's values",
         "The provisioning policy API, editing the field's transform"
       ],
       "answer": "The provisioning policy API, editing the field's transform",
@@ -1148,9 +1148,9 @@
         "Enable it in production for one department and watch the results",
         "Run a bulk attribute sync in production to validate the mappings",
         "Ask SailPoint to review the Create Account definition",
-        "Test it in the sandbox tenant against a test domain with test identities"
+        "Test it in the sandbox tenant with test identities"
       ],
-      "answer": "Test it in the sandbox tenant against a test domain with test identities",
+      "answer": "Test it in the sandbox tenant with test identities",
       "explanation": "SailPoint's best practice is to test new provisioning configurations in a sandbox environment before enabling them in production. A pilot in production still changes real accounts, and SailPoint reviews rules, not mappings."
     },
     {
@@ -1174,11 +1174,11 @@
       "stem": "In a provisioning test, the account activity for a new AD account shows success. Which step BEST confirms the result end to end?",
       "choices": [
         "Close the test because the account activity already shows success",
-        "Aggregate the source and confirm ISC's account matches what was intended",
+        "Aggregate the source and confirm the account data in ISC",
         "Run Apply Changes again to make sure the role was evaluated",
         "Check that the identity's lifecycle state is still active"
       ],
-      "answer": "Aggregate the source and confirm ISC's account matches what was intended",
+      "answer": "Aggregate the source and confirm the account data in ISC",
       "explanation": "Re-aggregating confirms that the target holds the expected attributes and entitlements and that the account correlated back to the right identity. A success status alone does not prove the target data is right."
     },
     {
@@ -1189,7 +1189,7 @@
       "choices": [
         "Mover and leaver cases that confirm access is removed as designed",
         "More joiner cases with different first names",
-        "Performance cases that create thousands of accounts at once",
+        "Performance cases that create thousands of new accounts at the same time",
         "Cases that confirm the email templates use company branding"
       ],
       "answer": "Mover and leaver cases that confirm access is removed as designed",
@@ -1216,11 +1216,11 @@
       "stem": "An engineer wants to check a new attribute sync configuration on one test user before syncing a whole source. What should the engineer use?",
       "choices": [
         "The bulk Sync option on the source's Attribute Sync page",
-        "Synchronize Attributes from the Actions menu for that identity",
+        "Synchronize Attributes on that one identity",
         "An unoptimized aggregation of the authoritative source",
         "A certification campaign that includes the test user"
       ],
-      "answer": "Synchronize Attributes from the Actions menu for that identity",
+      "answer": "Synchronize Attributes on that one identity",
       "explanation": "Synchronize Attributes runs an attribute sync for a single identity and analyzes all its accounts. The bulk Sync affects every account on the source and is limited to three runs per day."
     },
     {
@@ -1302,9 +1302,9 @@
         "The virtual appliance is offline and queuing the change",
         "The request is waiting for identity processing at 6:00 PM",
         "The connector is retrying a network error every hour",
-        "A manual provisioning task is waiting for the owner to complete it"
+        "A manual task is waiting for its assignee to complete it"
       ],
-      "answer": "A manual provisioning task is waiting for the owner to complete it",
+      "answer": "A manual task is waiting for its assignee to complete it",
       "explanation": "Flat file sources are fulfilled through manual tasks, so the request stays pending until the assignee completes it. Flat file sources have no VA connection to retry."
     },
     {
@@ -1328,11 +1328,11 @@
       "stem": "After a birthright role is assigned, a user ends up with two accounts on the same source. Account activity shows that ISC created one of them. What should the engineer check FIRST?",
       "choices": [
         "Whether the role's criteria use an AND operator",
-        "Whether the user's existing account was uncorrelated when the role was assigned",
+        "Whether the existing account was uncorrelated",
         "Whether the source's account deletion threshold was reached",
         "Whether the access profile is marked requestable"
       ],
-      "answer": "Whether the user's existing account was uncorrelated when the role was assigned",
+      "answer": "Whether the existing account was uncorrelated",
       "explanation": "ISC creates an account when the identity has none correlated on the source, so an uncorrelated existing account leads to a duplicate. Fixing correlation before enabling provisioning prevents it."
     },
     {
@@ -1344,9 +1344,9 @@
         "The VA cannot reach the domain controllers",
         "The Create Account definition is missing the password generator",
         "The identity is in an inactive lifecycle state",
-        "The connector's service account lacks create rights on the target OU"
+        "The service account lacks create rights on the target OU"
       ],
-      "answer": "The connector's service account lacks create rights on the target OU",
+      "answer": "The service account lacks create rights on the target OU",
       "explanation": "Aggregation needs only read rights, but creating accounts needs write permissions on the container. A network fault would also break aggregation, so it is unlikely here."
     },
     {
@@ -1358,9 +1358,9 @@
         "Move distinguishedName to the end of the Create Account list",
         "Change the mapping type from Generator to Static",
         "Grant the service account domain admin rights",
-        "Add $(uniqueCounter) to the pattern so collisions get a number"
+        "Add $(uniqueCounter) to the distinguishedName pattern"
       ],
-      "answer": "Add $(uniqueCounter) to the pattern so collisions get a number",
+      "answer": "Add $(uniqueCounter) to the distinguishedName pattern",
       "explanation": "Without a counter the generator cannot resolve a name collision, so a second person with the same name fails. Static values never vary, and more permissions do not fix a duplicate name."
     },
     {
@@ -1384,11 +1384,11 @@
       "stem": "A Web Services source returns HTTP 400 Bad Request on account creation, and the target API documentation says lastName is required. ISC's Create Account definition does not include lastName. What should the engineer do?",
       "choices": [
         "Change the HTTP method of the create operation to GET",
-        "Add lastName to the Create Account definition with an identity attribute mapping",
+        "Add lastName to the Create Account definition",
         "Increase the connector timeout on the source",
         "Mark lastName as the source's Account ID attribute"
       ],
-      "answer": "Add lastName to the Create Account definition with an identity attribute mapping",
+      "answer": "Add lastName to the Create Account definition",
       "explanation": "The target rejects the request because a required field is missing, so the field must be provisioned. A timeout change does not fix a validation error."
     },
     {
@@ -1412,7 +1412,7 @@
       "stem": "AD account creation started failing with an error that the parent object does not exist, right after a directory reorganization. The pattern still references OU=Sales. What is the cause?",
       "choices": [
         "The OU in the distinguishedName pattern was renamed or removed on AD",
-        "The uniqueCounter variable reached its maximum value",
+        "The uniqueCounter variable reached the maximum value it can generate on AD",
         "Attribute sync is overwriting the distinguishedName",
         "The role that grants the account is disabled"
       ],
@@ -1427,7 +1427,7 @@
       "choices": [
         "The criteria match more than one account, so ISC cannot pick a target",
         "Privileged groups can only be granted through access requests",
-        "ISC grants role access only to the first account it aggregated",
+        "ISC grants role-based access only to the first account it ever aggregated",
         "The role exceeds the limit on entitlements per role"
       ],
       "answer": "The criteria match more than one account, so ISC cannot pick a target",
@@ -1439,12 +1439,12 @@
       "topic": "Common Provisioning Errors",
       "stem": "A JDBC source aggregates successfully, but every provisioning attempt fails with a SQL permission error. What should the engineer check FIRST?",
       "choices": [
-        "Whether the database account used by the source can write to the tables involved",
-        "Whether the account schema includes the primary key column",
+        "Whether the source's database account can write to those tables",
+        "Whether the account schema includes the table's primary key column",
         "Whether the identity profile maps the department attribute",
         "Whether the VA has enough disk space for logs"
       ],
-      "answer": "Whether the database account used by the source can write to the tables involved",
+      "answer": "Whether the source's database account can write to those tables",
       "explanation": "Aggregation needs only SELECT rights, so writes failing with a permission error points to the source's database account. Schema and identity mappings do not cause SQL permission errors."
     },
     {
@@ -1456,7 +1456,7 @@
         "It retries every minute until the request succeeds",
         "It fails the request immediately without any retry",
         "It treats it as retryable and retries once per hour, up to 3 times",
-        "It converts the request into a manual task for the source owner"
+        "It converts the request into a manual task assigned to the source owner"
       ],
       "answer": "It treats it as retryable and retries once per hour, up to 3 times",
       "explanation": "ISC recognises errors such as ConnectException and NoRouteToHostException as retryable and retries once per hour, up to three times. Endless or minute-level retries would flood the target."
@@ -1469,10 +1469,10 @@
       "choices": [
         "Retries run only after the source is aggregated",
         "Retries need an administrator to approve them",
-        "Retries are scheduled after 60 minutes but can be delayed by other work in the tenant's queue",
-        "Retries run only at the 6:00 PM identity processing"
+        "Retries are scheduled after 60 minutes but can be delayed by queued work",
+        "Retries run only during the scheduled 6:00 PM identity processing each day"
       ],
-      "answer": "Retries are scheduled after 60 minutes but can be delayed by other work in the tenant's queue",
+      "answer": "Retries are scheduled after 60 minutes but can be delayed by queued work",
       "explanation": "The retry is scheduled after 60 minutes but may run later because of other work items in the tenant's queue. It does not wait for aggregation or for approval."
     },
     {
@@ -1481,12 +1481,12 @@
       "topic": "Retries and Recovery",
       "stem": "A provisioning request failed because the target rejected an invalid attribute value, which is not a retryable error. What is the correct recovery?",
       "choices": [
-        "Fix the data or mapping that caused the error and then trigger the change again",
+        "Fix the cause of the error, then trigger the change again",
         "Wait for ISC's three hourly retries to clear the error",
-        "Restart the virtual appliance so the request is replayed",
+        "Restart the virtual appliance so the failed request is replayed",
         "Delete and recreate the identity"
       ],
-      "answer": "Fix the data or mapping that caused the error and then trigger the change again",
+      "answer": "Fix the cause of the error, then trigger the change again",
       "explanation": "Only certain connection errors are retried automatically, so a data error must be corrected at its cause before the change is driven again. A VA restart does not replay failed requests."
     },
     {
@@ -1509,12 +1509,12 @@
       "topic": "Retries and Recovery",
       "stem": "A VA was offline for 30 minutes while birthright roles were being provisioned, and the requests failed with connection errors. What is the MOST likely outcome?",
       "choices": [
-        "The requests are retried within the next hours and succeed once the VA is back",
+        "The requests are retried and succeed once the VA is back",
         "The requests are lost and the roles must be reassigned",
         "The roles are removed from the identities because provisioning failed",
         "The requests become manual tasks for the source owner"
       ],
-      "answer": "The requests are retried within the next hours and succeed once the VA is back",
+      "answer": "The requests are retried and succeed once the VA is back",
       "explanation": "Connection errors are retryable, so ISC retries hourly up to three times, which easily covers a short outage. Failed provisioning does not remove the role assignment."
     },
     {
@@ -1525,10 +1525,10 @@
       "choices": [
         "The lifecycle state re-attempts the disable during every identity refresh",
         "The lifecycle state reverts the identity to active so the action can be repeated",
-        "The lifecycle state does not keep re-enforcing the disable, so it must be driven again",
+        "It does not re-enforce the disable, so it must be driven again",
         "The lifecycle state deletes the account instead of disabling it"
       ],
-      "answer": "The lifecycle state does not keep re-enforcing the disable, so it must be driven again",
+      "answer": "It does not re-enforce the disable, so it must be driven again",
       "explanation": "Lifecycle state actions execute a single time and are not a persistent retry mechanism, so failures need follow-up. Monitoring failed provisioning makes sure these cases are caught."
     },
     {
@@ -1538,11 +1538,11 @@
       "stem": "An engineer can meet a provisioning requirement with either a transform or a cloud rule. Which choice is the recommended practice?",
       "choices": [
         "Use the cloud rule, since rules run faster than transforms",
-        "Use the transform, since cloud rules need SailPoint review and are harder to maintain",
+        "Use the transform, since cloud rules need SailPoint review",
         "Use both, so the rule can check the transform",
         "Use neither and handle the value in a workflow after creation"
       ],
-      "answer": "Use the transform, since cloud rules need SailPoint review and are harder to maintain",
+      "answer": "Use the transform, since cloud rules need SailPoint review",
       "explanation": "Transforms are configurable without code review and are easier to support, while cloud rules must be reviewed by SailPoint before use. Duplicating logic in both invites conflicts."
     },
     {
@@ -1554,7 +1554,7 @@
         "Run the bulk Sync several times every day",
         "Disable correlation on the attribute sync target",
         "Aggregate the authoritative and attribute sync sources frequently",
-        "Map every account attribute for sync, even unused ones"
+        "Map every account attribute for sync, including attributes nobody uses"
       ],
       "answer": "Aggregate the authoritative and attribute sync sources frequently",
       "explanation": "Frequent aggregation keeps identity and account data current, so sync decisions use fresh values. The bulk Sync is limited to three runs a day and is meant for new configuration."
@@ -1566,11 +1566,11 @@
       "stem": "A new source is being onboarded and will later have provisioning enabled. Which practice MOST reduces the risk of duplicate accounts?",
       "choices": [
         "Enable provisioning first and correlate accounts afterwards",
-        "Verify account correlation with the source read-only before enabling provisioning",
-        "Create every account again from ISC so all accounts are ISC-created",
+        "Verify correlation while the source is read-only, then enable provisioning",
+        "Create every account again from ISC so all accounts are ISC-created and correlated",
         "Skip correlation and rely on attribute sync to match accounts"
       ],
-      "answer": "Verify account correlation with the source read-only before enabling provisioning",
+      "answer": "Verify correlation while the source is read-only, then enable provisioning",
       "explanation": "If existing accounts are uncorrelated when provisioning starts, ISC creates new accounts for those identities. Attribute sync works only on accounts that are already correlated."
     },
     {
@@ -1580,11 +1580,11 @@
       "stem": "A provisioning configuration was proven in the sandbox tenant. How should it be moved to production in the MOST consistent way?",
       "choices": [
         "Rebuild every setting by hand in production from screenshots",
-        "Copy the sandbox's identities into production with the configuration",
-        "Migrate the tested objects with configuration hub backup and deploy, then validate in production",
+        "Copy the sandbox's identities and accounts into production along with the configuration",
+        "Move the tested objects with configuration hub, then validate in production",
         "Enable the sandbox source in production through a shared VA"
       ],
-      "answer": "Migrate the tested objects with configuration hub backup and deploy, then validate in production",
+      "answer": "Move the tested objects with configuration hub, then validate in production",
       "explanation": "Configuration hub lets teams back up and move configuration objects between tenants, which avoids manual drift. Identities are data, not configuration, and should not be copied."
     },
     {
@@ -1593,12 +1593,12 @@
       "topic": "Provisioning Best Practices",
       "stem": "Which practice BEST follows least privilege for a connector's provisioning service account?",
       "choices": [
-        "Use a domain or global administrator account so no operation is blocked",
-        "Grant only the rights needed for the operations ISC performs, on the containers it manages",
+        "Use a domain or global administrator account so that no operation is ever blocked",
+        "Grant only the rights its operations need, on the containers it manages",
         "Use the engineer's own account so changes are easy to trace",
         "Share one service account across every source to simplify rotation"
       ],
-      "answer": "Grant only the rights needed for the operations ISC performs, on the containers it manages",
+      "answer": "Grant only the rights its operations need, on the containers it manages",
       "explanation": "A service account scoped to the required operations and containers limits damage if credentials leak. Personal or shared accounts break accountability and widen exposure."
     },
     {
@@ -1608,7 +1608,7 @@
       "stem": "A design uses Create Account to set many attributes once, and the business expects those attributes to stay current as HR data changes. Which configuration completes the design?",
       "choices": [
         "Attribute sync for the attributes that must follow identity changes",
-        "A second Create Account definition that runs each night",
+        "A second Create Account definition that runs each night against existing accounts",
         "A lifecycle state for each department",
         "A certification that reviews the attribute values"
       ],
@@ -1622,7 +1622,7 @@
       "stem": "An identity holds a criteria-based role with entitlements on a source that its lifecycle state deletes accounts on. What does SailPoint recommend to avoid the account being recreated?",
       "choices": [
         "Remove the related roles from the identity before deleting its accounts",
-        "Disable the role while the identity is in the leaver state",
+        "Disable the role for the identity while it is in the leaver lifecycle state",
         "Turn off identity processing for leavers",
         "Lower the account deletion threshold for the source"
       ],

@@ -1,5 +1,5 @@
 {
-  "_description": "Kestrel Ridge Logistics (fictional) on SailPoint Identity Security Cloud: 10 identities, 12 search queries, 5 scheduled searches, 8 workflows given as scrambled step lists, 7 events and 9 trigger subscriptions. All people, ids and domains are invented.",
+  "_description": "Kestrel Ridge Logistics (fictional) on SailPoint Identity Security Cloud: 10 identities, 12 search queries, 5 scheduled searches, 8 workflows given as scrambled step lists, 7 events and 10 trigger subscriptions. All people, ids and domains are invented.",
   "as_of": "2026-11-06",
   "identities": [
     {"id": "2c9180a1000001", "name": "ava.reyes", "displayName": "Ava Reyes", "email": "ava.reyes@kestrelridge.example",
@@ -181,6 +181,8 @@
     {"id": "SUB08", "name": "Broken leaver filter", "trigger": "Identity Attributes Changed", "enabled": true, "type": "HTTP",
      "filter": "$.changes[?(@.attribute = \"cloudLifecycleState\")]"},
     {"id": "SUB09", "name": "Lowercase status check", "trigger": "Account Aggregation Completed", "enabled": true, "type": "HTTP",
-     "filter": "$[?($.status == \"error\")]"}
+     "filter": "$[?($.status == \"error\")]"},
+    {"id": "SUB10", "name": "Lifecycle and department audit log", "trigger": "Identity Attributes Changed", "enabled": true, "type": "EVENTBRIDGE",
+     "filter": "$.changes[?(@.attribute == \"cloudLifecycleState\" || @.attribute == \"department\")]"}
   ]
 }

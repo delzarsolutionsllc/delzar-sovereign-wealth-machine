@@ -191,12 +191,12 @@
    "topic": "Authoritative Sources and Priority",
    "stem": "A person's account is removed from the HR source, which backs the highest-priority profile. They still have an account on the contractor source, which backs another profile. What is MOST likely to happen to the identity?",
    "choices": [
-    "It can be associated with the contractor profile, where it still has an authoritative account",
+    "It is reassigned to the contractor profile, where it has an authoritative account",
     "It is deleted at once, because its first authoritative account is gone",
     "It stays in the HR profile with its last known attribute values forever",
-    "It becomes an uncorrelated account on the contractor source"
+    "It becomes an uncorrelated account on the contractor source instead"
    ],
-   "answer": "It can be associated with the contractor profile, where it still has an authoritative account",
+   "answer": "It is reassigned to the contractor profile, where it has an authoritative account",
    "explanation": "Identities are associated with the highest-priority profile where they still have an authoritative account, so the identity can move to the contractor profile. It is only deleted when no authoritative account remains."
   },
   {
@@ -231,7 +231,7 @@
    "id": "D3-017",
    "objective": "3.1",
    "topic": "Authoritative Sources and Priority",
-   "stem": "Where does an administrator view each identity profile's priority, status and identity exceptions?",
+   "stem": "Where does an administrator go to view the priority, processing status and identity exception reports for each authoritative source configuration?",
    "choices": [
     "Admin > Connections > Sources > Account Schema",
     "Admin > Global > Security Settings > Password",
@@ -357,7 +357,7 @@
    "id": "D3-026",
    "objective": "3.1",
    "topic": "Pass-Through Authentication",
-   "stem": "An administrator wants users in one identity profile to sign in with their Active Directory passwords. Where is this configured?",
+   "stem": "An administrator wants users in one population to use their Active Directory passwords when they sign in to the tenant. Where is this configured?",
    "choices": [
     "Global security settings, in the service provider configuration",
     "Sign-in Method on the identity profile, set to Directory Connection",
@@ -497,7 +497,7 @@
    "id": "D3-036",
    "objective": "3.1",
    "topic": "Profile Security and Invitations",
-   "stem": "Which identity profile option hides most of a user's phone number while they reset their password?",
+   "stem": "Which identity profile option hides most of the digits of a user's contact number while they reset their password?",
    "choices": [
     "Mask Phone Numbers",
     "Enable Two-Factor Authentication",
@@ -705,7 +705,7 @@
    "id": "D3-049",
    "objective": "3.2",
    "topic": "Required and Special Attributes",
-   "stem": "Before using lifecycle states to drive provisioning for an identity profile, which identity attribute must be mapped?",
+   "stem": "Before an identity profile can automatically grant birthright access and disable leavers' accounts based on employment status, which identity attribute must be mapped?",
    "choices": [
     "Identification Number (identificationNumber)",
     "Lifecycle State (cloudLifecycleState)",
@@ -817,7 +817,7 @@
    "id": "D3-057",
    "objective": "3.2",
    "topic": "Transforms and Rules in Mappings",
-   "stem": "International users need their work phone numbers in a standard format so text message resets work. Which transform should be applied to the Work Phone mapping?",
+   "stem": "International users must be able to receive password reset codes by text message. Which built-in transform must be applied to the mapping of their work number?",
    "choices": [
     "ISO3166 Country Format",
     "ToUpper",
@@ -831,7 +831,7 @@
    "id": "D3-058",
    "objective": "3.2",
    "topic": "Transforms and Rules in Mappings",
-   "stem": "Country values arrive from HR as full names such as United States, but a downstream system needs two-letter codes. Which built-in transform fits?",
+   "stem": "Values such as United States arrive from HR as full names, but a downstream system needs two-letter codes such as US. Which built-in transform fits?",
    "choices": [
     "E.164 Phone Format",
     "RFC5646",
@@ -1240,10 +1240,10 @@
    "choices": [
     "Once for the tenant, under the global settings",
     "In each source, under the account schema",
-    "In each identity profile, under Lifecycle Management",
+    "Separately in each identity profile",
     "In each role, under the membership criteria"
    ],
-   "answer": "In each identity profile, under Lifecycle Management",
+   "answer": "Separately in each identity profile",
    "explanation": "Lifecycle states are configured per identity profile, so employees and contractors can have different states and access. They are not global, per source or per role."
   },
   {
@@ -1264,7 +1264,7 @@
    "id": "D3-087",
    "objective": "3.3",
    "topic": "Lifecycle State Use Cases",
-   "stem": "When a worker leaves, all of their source accounts should be disabled automatically. Which feature handles this?",
+   "stem": "When a worker leaves, all of their source accounts should be switched off automatically. Which feature handles this?",
    "choices": [
     "An identity profile priority change for leavers",
     "A source account deletion threshold set to zero",
@@ -1782,7 +1782,7 @@
    "id": "D3-124",
    "objective": "3.3",
    "topic": "Identity States and Notifications",
-   "stem": "An administrator wants to change the wording of the email sent when an identity changes lifecycle state. What should be edited?",
+   "stem": "An administrator wants to change the wording of the notification message that is sent when an identity moves to a new lifecycle state. What should be edited?",
    "choices": [
     "The identity profile's description field",
     "The Lifecycle State Change email template",
@@ -1796,7 +1796,7 @@
    "id": "D3-125",
    "objective": "3.3",
    "topic": "Identity States and Notifications",
-   "stem": "An identity in an Inactive (long-term) state needs one more attribute sync after a correction. How can an administrator do this?",
+   "stem": "An identity in an Inactive (long-term) state needs its corrected identity values pushed to its target accounts one more time. How can an administrator do this?",
    "choices": [
     "Move the identity to another identity profile and then back again",
     "Turn on Remove all access for the identity's lifecycle state",

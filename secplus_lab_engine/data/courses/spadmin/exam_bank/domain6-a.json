@@ -11,7 +11,7 @@
    "choices": [
     "The access is provisioned to the user's account on the source",
     "The request returns to the requester to confirm it",
-    "The access profile owner must re-aggregate the source to finish it",
+    "The owner must re-aggregate the source first",
     "A certification campaign is started for the user"
    ],
    "answer": "The access is provisioned to the user's account on the source",
@@ -135,7 +135,7 @@
    "topic": "Approval Configuration",
    "stem": "An admin enables requests on an access profile but leaves Require Approval unselected. What review applies to its requests?",
    "choices": [
-    "The access profile is hidden from the Request Center until approval is set",
+    "The item stays hidden until approval is set",
     "The tenant's global approval configuration still applies",
     "Every Admin in the tenant must approve it",
     "No review at all, and access is granted instantly"
@@ -247,7 +247,7 @@
    "topic": "Approval Flow",
    "stem": "A requester belongs to the governance group that reviews the access they requested. How does self-approval prevention handle this?",
    "choices": [
-    "The whole group is skipped and the request is approved automatically",
+    "The group is skipped and the request auto-approved",
     "The requester is omitted, and other group members review it",
     "The requester is allowed to approve as a group member",
     "The request is canceled and must be resubmitted"
@@ -320,7 +320,7 @@
     "Change the user's lifecycle state to inactive",
     "Delete the user's account from the source page",
     "Submit an access removal request for the team member",
-    "Edit the access profile to remove the entitlements from everyone"
+    "Edit the access profile for everyone"
    ],
    "answer": "Submit an access removal request for the team member",
    "explanation": "Managers can request removal of access their direct reports obtained through requests. Editing the access profile would affect everyone who holds it."
@@ -347,7 +347,7 @@
    "choices": [
     "Access granted by a lifecycle state or role cannot be removed that way",
     "The manager needs the Cert Admin user level",
-    "Lifecycle state access can be removed only by a certification campaign revoke",
+    "Only a certification can remove lifecycle state access",
     "Removal requests work only for entitlements"
    ],
    "answer": "Access granted by a lifecycle state or role cannot be removed that way",
@@ -362,7 +362,7 @@
     "Approval by every additional owner",
     "No approval, because removal approval is off by default",
     "Manager approval, because it is always required",
-    "The same approvals that are configured for add requests on the item"
+    "The same approvals as add requests"
    ],
    "answer": "No approval, because removal approval is off by default",
    "explanation": "By default no approvals are required for removal; Require Approval for Removal adds reviewers when needed."
@@ -432,7 +432,7 @@
     "None, because managers receive all work automatically",
     "Three, because certifications need two entries",
     "Two, because each configuration covers one work item type",
-    "One, because each configuration covers every work item type at once"
+    "One, because one covers every work item type"
    ],
    "answer": "Two, because each configuration covers one work item type",
    "explanation": "Only one work item type can be chosen per reassignment configuration, so each type needs its own."
@@ -443,7 +443,7 @@
    "topic": "Work Reassignment",
    "stem": "User A reassigns work to User B, and User B tries to reassign work back to User A for the same period. What happens?",
    "choices": [
-    "The second reassignment silently replaces the first one for both users",
+    "The second reassignment replaces the first",
     "Both users receive every work item twice",
     "Work goes to an admin at random",
     "The tenant prevents reassignments that create a loop"
@@ -458,7 +458,7 @@
    "stem": "A reassignment period ends. What happens to approvals that were reassigned while it was active?",
    "choices": [
     "They stay with the user they were reassigned to",
-    "They return to the original user automatically when the period ends",
+    "They return to the original user",
     "They are canceled and must be resubmitted",
     "They are escalated to the fallback approver"
    ],
@@ -485,7 +485,7 @@
    "topic": "Work Reassignment",
    "stem": "A senior executive should never receive certifications or approvals, permanently. What is the BEST approach?",
    "choices": [
-    "Disable all email notifications for the tenant and the executive",
+    "Disable the executive's email notifications",
     "Remove the executive's manager attribute",
     "A work reassignment with no end date to a delegate",
     "Give the executive the Admin user level"
@@ -528,14 +528,14 @@
      "match": "Any one member of the selected group"
     },
     {
-     "item": "Fallback approver",
-     "match": "The approver after the escalation chain gets no response"
+     "item": "Additional Owners",
+     "match": "Any one of the item's secondary owners"
     }
    ],
    "targets_extra": [
     "Every member of the selected group in turn"
    ],
-   "explanation": "Reviewer options decide who is asked; for a governance group one member's decision is enough. The fallback approver is used only after escalation is exhausted."
+   "explanation": "Reviewer options decide who is asked. For a governance group or additional owners, one member's decision is enough; nobody approves in turn on the group's behalf."
   },
   {
    "id": "D6-038",
@@ -564,7 +564,7 @@
    "stem": "An admin selects Preview Campaign for a new manager campaign. What should happen before reviewers receive any work?",
    "choices": [
     "Reviewers approve the preview before it starts",
-    "The campaign starts by itself as soon as the preview finishes generating",
+    "The campaign starts once the preview is ready",
     "SailPoint support activates the campaign",
     "The admin reviews the preview and then selects Start Campaign"
    ],
@@ -916,7 +916,7 @@
     "Lifecycle state access profiles are not included in certifications",
     "They appear only in role composition campaigns",
     "They appear only after the lifecycle state changes",
-    "They are hidden automatically by a campaign filter that the tenant applies"
+    "A default campaign filter hides them"
    ],
    "answer": "Lifecycle state access profiles are not included in certifications",
    "explanation": "Access profiles from the assigned lifecycle state do not appear in certifications at all; they are governed by the lifecycle configuration."
