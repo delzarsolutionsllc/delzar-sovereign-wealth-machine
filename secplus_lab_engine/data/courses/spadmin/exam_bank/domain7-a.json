@@ -24,7 +24,7 @@
       "stem": "An auditor asks why every application must be connected as a source before ISC can govern it. Which reason is MOST accurate?",
       "choices": [
         "ISC can only govern accounts and access it has loaded from a source",
-        "Sources replace the application's own sign-in page",
+        "Sources replace the application's own sign-in page with single sign-on through ISC",
         "Sources are required to create lifecycle states",
         "Sources encrypt the application's database at rest using the tenant's keys"
       ],
@@ -107,7 +107,7 @@
       "topic": "Authoritative Sources",
       "stem": "An HR system feeds employee records that should create identities in ISC. How should the admin use this source?",
       "choices": [
-        "Attach it as List A of an SoD policy",
+        "Attach it as List A of an SoD policy so HR access is checked",
         "Add it to a password sync group",
         "Make it the authoritative source of an identity profile",
         "Leave it non-authoritative and correlate its accounts later"
@@ -150,7 +150,7 @@
       "stem": "An admin plans to change an authoritative source's configuration. Which identity data depends MOST directly on that source?",
       "choices": [
         "Identity attributes mapped from its accounts in the identity profile",
-        "The entitlements aggregated from unrelated directories",
+        "The entitlements aggregated from unrelated directories such as Active Directory",
         "The passwords stored on other non-authoritative sources in the same sync group",
         "The SoD policies' risk levels"
       ],
@@ -235,7 +235,7 @@
       "choices": [
         "Export on the Policy Violations page",
         "Download Correlation File on the Uncorrelated Accounts page",
-        "Generate the Uncorrelated Accounts report",
+        "Generate the Uncorrelated Accounts report for the source",
         "Download Account Schema on Account Aggregation"
       ],
       "answer": "Download Account Schema on Account Aggregation",
@@ -249,7 +249,7 @@
       "choices": [
         "Delta aggregation is disabled",
         "The file is not sorted by account ID",
-        "The source has no source owner",
+        "The source has no source owner assigned",
         "The file is larger than the recommended size"
       ],
       "answer": "The file is not sorted by account ID",
@@ -332,7 +332,7 @@
       "stem": "A source page shows the banner VA cluster failing. What should the admin check FIRST?",
       "choices": [
         "That the SoD policy has items in both lists",
-        "That the identity profile priority is correct",
+        "That the identity profile priority is correct for every authoritative source",
         "That the VA cluster for the source is running, online and visible",
         "That the source owner has accepted ownership of the source in Task Manager"
       ],
@@ -554,7 +554,7 @@
       "stem": "An admin explains aggregation to a new analyst. Which description is BEST?",
       "choices": [
         "Combining several identity profiles into one",
-        "Merging duplicate identities after correlation",
+        "Merging duplicate identities after correlation has finished on each source",
         "Pushing identity attribute changes out to every connected source",
         "Loading accounts and their access from a source into ISC"
       ],
@@ -623,7 +623,7 @@
       "topic": "Account and Entitlement Aggregation",
       "stem": "A data owner asks which account information ISC obtains during account aggregation. Which answer is MOST complete?",
       "choices": [
-        "Only the passwords, so that password policies can be checked",
+        "Only the passwords, so that the password policies can be checked against them",
         "Schema attributes for each account, including the entitlements it holds",
         "Only accounts that already correlate to an identity",
         "Only the account names, with attributes loaded later by identity refresh"
@@ -639,7 +639,7 @@
       "choices": [
         "Entitlement details come from their own entitlement import",
         "Accounts cannot be correlated to identities without the group file",
-        "Deletes are only processed from the group file",
+        "Deletes are only processed from the group file, not from the account file",
         "The source cannot have an owner without it"
       ],
       "answer": "Entitlement details come from their own entitlement import",
@@ -696,7 +696,7 @@
         "Call the load-accounts API with disableOptimization set to true",
         "Select Start Aggregation twice in the UI",
         "Turn on delta aggregation in the source's Aggregation Settings page",
-        "Enable Account Deletion before aggregating"
+        "Enable Account Deletion on the source before starting the aggregation"
       ],
       "answer": "Call the load-accounts API with disableOptimization set to true",
       "explanation": "The load-accounts API accepts disableOptimization=true for that one run. Scheduled and manual UI aggregations always run optimized."
@@ -764,7 +764,7 @@
       "stem": "An admin wants an HR source aggregated every day at 2 AM. Where is this configured?",
       "choices": [
         "On the source's Account Aggregation page, using Enable Schedule",
-        "In the Aggregation Activity list",
+        "In the Aggregation Activity list, by rescheduling the last completed run",
         "On the identity profile page, using the identity refresh schedule",
         "On the SoD policy's Schedule action"
       ],
@@ -820,7 +820,7 @@
       "stem": "An aggregation started by mistake against a slow target system. How can the admin stop it?",
       "choices": [
         "Cancel it from the aggregation card or the Aggregation History page",
-        "Disable the identity profile",
+        "Disable the identity profile that uses this source as its authoritative source",
         "Delete the source while the aggregation runs, which stops the job at once",
         "Restart the browser session"
       ],
@@ -905,7 +905,7 @@
       "choices": [
         "The attribute is not configured as searchable for correlation",
         "Custom identity attributes can never be used as correlation criteria",
-        "Delta aggregation is turned on",
+        "Delta aggregation is turned on for the source being correlated",
         "The source has no owner"
       ],
       "answer": "The attribute is not configured as searchable for correlation",
@@ -959,7 +959,7 @@
       "topic": "Resolving Uncorrelated Accounts",
       "stem": "What is an uncorrelated account in Identity Security Cloud?",
       "choices": [
-        "An account disabled on its source",
+        "An account disabled on its source but still present in ISC",
         "An account on a source that has no source owner assigned yet",
         "An account with no entitlements",
         "A source account not linked to an authoritative identity"
@@ -1031,7 +1031,7 @@
       "choices": [
         "Create a new identity profile for former employees so they correlate",
         "Remove the old accounts from the source system and aggregate again",
-        "Manually correlate them to the source owner",
+        "Manually correlate them to the source owner so someone is accountable",
         "Disable correlation on the source"
       ],
       "answer": "Remove the old accounts from the source system and aggregate again",
@@ -1136,7 +1136,7 @@
       "stem": "With account deletion enabled, how does a full aggregation decide that an account should be deleted from ISC?",
       "choices": [
         "The account has no entitlements left",
-        "The account has been disabled on the source for 30 days",
+        "The account has been disabled on the source for more than 30 consecutive days",
         "The account is no longer returned by the source during the aggregation",
         "The account's identity has moved to a new lifecycle state such as inactive"
       ],
@@ -1249,7 +1249,7 @@
       "choices": [
         "Authoritative sources cannot be aggregated at all unless a threshold is configured",
         "A bad feed could delete many authoritative accounts and their identities",
-        "The threshold decides which identity profile applies",
+        "The threshold decides which identity profile applies to the HR accounts",
         "The threshold controls how often HR is aggregated"
       ],
       "answer": "A bad feed could delete many authoritative accounts and their identities",
@@ -1306,7 +1306,7 @@
         "The identity owns a role, access profile, application or source",
         "The identity's account was disabled on the HR source before it was removed",
         "The identity has never signed in to ISC",
-        "The identity's lifecycle state is active"
+        "The identity's lifecycle state is still active in the identity profile"
       ],
       "answer": "The identity owns a role, access profile, application or source",
       "explanation": "Ownership of access objects is one of the blocking conditions, along with correlated accounts, open work items, being a manager and elevated user levels."
@@ -1443,7 +1443,7 @@
       "topic": "Remove Delete and Reset Actions",
       "stem": "An admin changed a source's schema and wants to reload all its data without losing the source configuration. What should the admin do?",
       "choices": [
-        "Remove each account one at a time",
+        "Remove each account one at a time from the source's account list",
         "Reset the source with the API, then run a full aggregation",
         "Delete the source and create it again with the same configuration",
         "Lower the deletion threshold"
@@ -1600,7 +1600,7 @@
         "Disable account deletion on the source",
         "Restart the VA cluster that serves the source and then retry the upload",
         "Verify the file uses the source's template and upload it again",
-        "Run an unoptimized aggregation using the API"
+        "Run an unoptimized aggregation using the API with disableOptimization set"
       ],
       "answer": "Verify the file uses the source's template and upload it again",
       "explanation": "This banner means an uploaded file did not import correctly, so the template and file must be checked before retrying. Flat file imports do not use a VA."

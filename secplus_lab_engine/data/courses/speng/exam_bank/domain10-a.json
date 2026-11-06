@@ -53,7 +53,7 @@
    "choices": [
     "rightPad with a length of 8 and a padding of 0",
     "leftPad with a length of 8 and a padding of 0",
-    "substring with a begin of 0 and an end of 8",
+    "substring with a begin of 0 and an end of 8 characters",
     "concat with the static value 0000 in front"
    ],
    "answer": "leftPad with a length of 8 and a padding of 0",
@@ -65,7 +65,7 @@
    "topic": "String Manipulation Transforms",
    "stem": "An engineer splits Smith, John on the comma and takes index 1 to get the first name, but the result has a leading space. What is the BEST fix?",
    "choices": [
-    "Change the split index from 1 to 0",
+    "Change the split index from 1 to 0 on the transform",
     "Wrap the split transform in a trim transform",
     "Add a leftPad transform with a length of 4",
     "Replace the split transform with a lower transform"
@@ -150,7 +150,7 @@
    "stem": "An engineer wants a conditional transform to output Senior when an identity's salary band is greater than 7. Why will a conditional transform not express this directly?",
    "choices": [
     "The conditional transform must always output a number",
-    "The conditional transform only works on date values",
+    "The conditional transform only works on date and timestamp values",
     "The conditional transform cannot read any account attributes",
     "The conditional transform only supports the eq comparison"
    ],
@@ -193,7 +193,7 @@
    "choices": [
     "A substring transform with three begin and end values",
     "A dateCompare transform with three separate positiveCondition values",
-    "A reference transform pointing at three saved transforms",
+    "A reference transform pointing at three separately saved transforms",
     "A static transform with a Velocity template using #if and #elseif"
    ],
    "answer": "A static transform with a Velocity template using #if and #elseif",
@@ -247,7 +247,7 @@
    "topic": "Date Transforms",
    "stem": "A lifecycle transform uses dateCompare against now. Identities whose end date passed last week still show active because nothing changed on the HR record. What is the MOST likely fix?",
    "choices": [
-    "Set ignoreErrors to true on the dateCompare transform",
+    "Set ignoreErrors to true on the dateCompare transform so it recalculates",
     "Run an entitlement aggregation on the HR source every night",
     "Change the operator from LT to GTE on the dateCompare transform it uses",
     "Set requiresPeriodicRefresh to true so it is reevaluated nightly"
@@ -289,7 +289,7 @@
    "topic": "Date Transforms",
    "stem": "A dateFormat transform with an outputFormat of yyyy-mm-dd produces values like 2024-00-15 and 2024-37-15. What is the MOST likely cause?",
    "choices": [
-    "Lower-case dd means day of the week, so it should be DD",
+    "Lower-case dd means day of the week, so it should be upper-case DD",
     "ISO8601 input dates can never be written out in any custom date format",
     "Lower-case mm means minutes, so the month pattern should be MM",
     "The year pattern yyyy needs to be written as YYYY"
@@ -319,7 +319,7 @@
    "choices": [
     "The LOCATION value from the identity's account on the Workday source",
     "The LOCATION value from every source the identity has accounts on",
-    "The name of the Workday source joined with the LOCATION value",
+    "The name of the Workday source joined with the account's LOCATION value",
     "The LOCATION identity attribute that was already calculated for the identity"
    ],
    "answer": "The LOCATION value from the identity's account on the Workday source",
@@ -387,7 +387,7 @@
    "topic": "Attribute Retrieval and Nesting",
    "stem": "A lower transform has no input attribute and is selected on an identity profile mapping for the HR source's email field. What value does it lower-case?",
    "choices": [
-    "Nothing, because input is required on every transform",
+    "Nothing, because an input is required on every transform that is used",
     "The identity's current email identity attribute",
     "The first attribute of the first account the identity has on any source",
     "The source attribute chosen for that mapping in the identity profile"
@@ -457,7 +457,7 @@
    "topic": "Transform Feasibility and Testing",
    "stem": "An engineer created a transform through the API, but no identity attributes changed. What is the MOST likely missing step?",
    "choices": [
-    "Upload the transform to the virtual appliance",
+    "Upload the transform file to each virtual appliance in the cluster",
     "Use it in an identity profile mapping and save the profile",
     "Restart the virtual appliance cluster",
     "Submit the transform to SailPoint support for a rule review"
@@ -486,7 +486,7 @@
    "stem": "A target system needs phone numbers in E.164 format, such as +15551234567, from values entered in many local styles. What is the simplest approach?",
    "choices": [
     "A leftPad transform that adds a plus sign",
-    "A cloud rule that parses every phone format",
+    "A cloud rule that parses every local phone number format",
     "The e164phone transform with a default region",
     "A lookup transform with a table of known phone numbers"
    ],
@@ -500,7 +500,7 @@
    "stem": "In the Admin UI, where does an engineer select a saved transform to calculate an identity attribute?",
    "choices": [
     "The Mappings tab of the identity profile",
-    "The Account Schema tab of the source",
+    "The Account Schema tab of the authoritative source",
     "The Accounts tab of the identity's details",
     "The Controls page of an SoD policy"
    ],
@@ -807,7 +807,7 @@
    "choices": [
     "That the rule passes the customer's own user acceptance tests",
     "That the rule has been approved by the manager of each affected identity first",
-    "That the rule produces the business outcome the customer expects",
+    "That the rule produces the business outcome the customer's process owners expect",
     "That the rule meets SailPoint's coding, security and performance guidelines"
    ],
    "answer": "That the rule meets SailPoint's coding, security and performance guidelines",
@@ -889,7 +889,7 @@
    "topic": "Rule Review and Deployment",
    "stem": "A rule deployed last year starts producing wrong values after a business change. Who is responsible for fixing the rule's logic?",
    "choices": [
-    "The virtual appliance vendor, because rules run on the appliance",
+    "The virtual appliance vendor, because the rules execute on the appliance",
     "The customer or implementer, because rules are treated as configuration",
     "SailPoint support, because every deployed rule is a supported product feature",
     "The rule review team, because they approved the rule"
@@ -1016,7 +1016,7 @@
    "stem": "A Before Provisioning rule loops through every account in the tenant to check a value for each plan. Why will this likely be rejected?",
    "choices": [
     "Before Provisioning rules may only read one attribute per run",
-    "Before Provisioning rules may not contain any loops at all",
+    "Before Provisioning rules may not contain for or while loops at all",
     "Before Provisioning rules may only run once per day",
     "Iterating over lists of accounts or identities is prohibited"
    ],

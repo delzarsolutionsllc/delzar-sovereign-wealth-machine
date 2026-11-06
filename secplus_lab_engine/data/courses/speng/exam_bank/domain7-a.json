@@ -96,7 +96,7 @@
     "Send the JSON Patch array as query parameters in the URL",
     "Set the Content-Type header to application/json-patch+json",
     "Change the method to POST and keep exactly the same request body",
-    "Remove the Authorization header from the PATCH request"
+    "Remove the Authorization header from the PATCH request entirely"
    ],
    "answer": "Set the Content-Type header to application/json-patch+json",
    "explanation": "Identity Security Cloud PATCH endpoints expect a JSON Patch document with the application/json-patch+json media type. Changing the method or dropping the token would break the call in other ways."
@@ -177,7 +177,7 @@
    "topic": "OAuth Grant Flows",
    "stem": "A portal's authorization code sign-in fails with a redirect error right after users authenticate. What should the engineer check FIRST?",
    "choices": [
-    "That the client has the Helpdesk user level assigned to it",
+    "That the client has the Helpdesk user level assigned to it in the tenant",
     "That the client secret is sent in the Authorization header of each call",
     "That the app's redirect URL matches one listed on the OAuth client",
     "That the users have created personal access tokens first"
@@ -249,7 +249,7 @@
    "choices": [
     "Open the token in the list and select the option to reveal its secret again",
     "Ask SailPoint Support to read the secret back from the tenant",
-    "Use the client ID alone, since the secret is optional for PATs",
+    "Use the client ID alone, since the secret is optional for personal access tokens",
     "Create a new token, store its secret securely, and delete the old token"
    ],
    "answer": "Create a new token, store its secret securely, and delete the old token",
@@ -689,7 +689,7 @@
    "topic": "Search Query Syntax",
    "stem": "The query attributes.department:Sales and attributes.location:Austin returns far more identities than expected. What is the MOST likely problem?",
    "choices": [
-    "Location values must always be wrapped in square brackets",
+    "Location values must always be wrapped in square brackets to match",
     "Two identity attributes cannot be combined in one query",
     "The department field must always be searched with the @access syntax",
     "The Boolean operator is lowercase, so it is not treated as AND"
@@ -789,7 +789,7 @@
    "choices": [
     "Publish an SPF record listing the virtual appliance IP addresses",
     "Upload the company's mail server certificate to the tenant",
-    "Ask users to add the sender address to their safe senders list",
+    "Ask users to add the custom sender address to their safe senders list",
     "Add the domain and publish the CNAME records it provides in DNS"
    ],
    "answer": "Add the domain and publish the CNAME records it provides in DNS",
@@ -901,7 +901,7 @@
    "choices": [
     "In the account aggregation schedule settings of the authoritative source",
     "In the email settings of that lifecycle state on the identity profile",
-    "In the API Management page under the tenant security settings",
+    "In the API Management page under the tenant's global security settings",
     "In the From address settings under product branding"
    ],
    "answer": "In the email settings of that lifecycle state on the identity profile",
@@ -944,7 +944,7 @@
     "Schedule a daily search subscription on identity records",
     "Ask a Helpdesk user to check the cluster page every morning by hand",
     "Subscribe the tool to the VA cluster status change trigger",
-    "Run a certification campaign on the VA service accounts"
+    "Run a certification campaign on the VA service accounts every week"
    ],
    "answer": "Subscribe the tool to the VA cluster status change trigger",
    "explanation": "The VA cluster status change trigger pushes the event to a subscribed endpoint as it happens. Manual checks and daily searches miss outages between runs."
@@ -986,7 +986,7 @@
     "The Personal Access Tokens page in the engineer's preferences",
     "The email template settings for the tenant",
     "The Admin Dashboard aggregation activity and tasks views",
-    "The access request history of the engineer's identity"
+    "The access request history shown on the engineer's own identity"
    ],
    "answer": "The Admin Dashboard aggregation activity and tasks views",
    "explanation": "The Admin Dashboard shows aggregation activity and task status. The other pages do not report job results."
@@ -1013,7 +1013,7 @@
    "choices": [
     "The virtual appliance logs for the source with the most accounts",
     "SailPoint's service status page for current platform incidents",
-    "The email template settings for redirected messages",
+    "The email template settings for any redirected notification messages",
     "The identity profile preview for a sample identity"
    ],
    "answer": "SailPoint's service status page for current platform incidents",
@@ -1041,7 +1041,7 @@
    "choices": [
     "The certification campaign report for the user's manager and department",
     "The From address settings in the tenant branding",
-    "The role membership preview for the user's department",
+    "The role membership preview for the user's department and location",
     "The account activity for that request, with each item's result"
    ],
    "answer": "The account activity for that request, with each item's result",
@@ -1181,7 +1181,7 @@
     "An end step, Success or Failure, at the end of that branch",
     "A second trigger placed at the start of the false branch of the operator",
     "A Loop operator that repeats the comparison step",
-    "A Wait action between the trigger and the operator"
+    "A Wait action placed between the trigger and the Compare Strings operator"
    ],
    "answer": "An end step, Success or Failure, at the end of that branch",
    "explanation": "Every branch must end in a Success or Failure end step or merge back into the main flow. A workflow can have only one trigger."
@@ -1334,7 +1334,7 @@
    "choices": [
     "An external trigger, called with its client credentials",
     "A scheduled trigger that polls the ticketing system",
-    "The Identity Attributes Changed trigger with a filter",
+    "The Identity Attributes Changed trigger with a ticket status filter",
     "An Account Aggregation Completed trigger on the ticket source"
    ],
    "answer": "An external trigger, called with its client credentials",
@@ -1377,7 +1377,7 @@
     "Enable it in production and watch the first real leaver",
     "Test it with sample trigger input and review each step",
     "Export it to a file and ask SailPoint to review it",
-    "Add a second trigger so it can be tested twice"
+    "Add a second trigger so the workflow can be tested twice"
    ],
    "answer": "Test it with sample trigger input and review each step",
    "explanation": "Workflows should be tested with sample input before enabling, and the results show each step. SailPoint does not review workflows."
@@ -1403,7 +1403,7 @@
    "stem": "A workflow ran but the email it sent had a blank manager name. Where should the engineer look FIRST?",
    "choices": [
     "The execution history, to compare each step's input and output",
-    "The From address settings in product branding",
+    "The From address settings on the product branding page of the tenant",
     "The API Management page under the tenant's global security settings",
     "The identity profile's lifecycle state list"
    ],
@@ -1515,7 +1515,7 @@
    "stem": "After changing the correlation settings on a source, the engineer runs an aggregation but nothing seems to change for existing accounts. What should the engineer do?",
    "choices": [
     "Run the aggregation again with optimization disabled",
-    "Delete the source and create it again from scratch",
+    "Delete the source and create it again from scratch with the new settings",
     "Raise the account deletion threshold on the source and aggregate again",
     "Wait for the next scheduled certification campaign"
    ],
@@ -1544,7 +1544,7 @@
    "choices": [
     "Grant the engineer the Helpdesk user level",
     "Redirect all tenant email to a test address while testing",
-    "Disable optimization on every source aggregation",
+    "Disable optimization on every source aggregation during the test",
     "Remove all personal access tokens from the tenant before the test"
    ],
    "answer": "Redirect all tenant email to a test address while testing",

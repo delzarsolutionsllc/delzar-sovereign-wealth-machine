@@ -222,7 +222,7 @@
     "The manager of each identity",
     "The org admin who started the campaign",
     "The owner of the entitlement's source",
-    "The campaign's remediation owner"
+    "The campaign's assigned remediation owner"
    ],
    "answer": "The owner of the entitlement's source",
    "explanation": "When the access item has no owner, the reviewer falls through the ownership hierarchy, ending with the source owner. Managers are not part of the access owner hierarchy."
@@ -306,7 +306,7 @@
     "Start the campaign, because previews refresh automatically when started",
     "Run an identity refresh and then start the existing campaign",
     "Delete the campaign and recreate it so its content is current",
-    "Extend the deadline by one week and then start the campaign"
+    "Extend the deadline by one week and then start the existing campaign"
    ],
    "answer": "Delete the campaign and recreate it so its content is current",
    "explanation": "SailPoint advises starting a campaign within a day of generating its preview, otherwise deleting and recreating it, because the content is a snapshot. An identity refresh does not update the generated campaign."
@@ -374,7 +374,7 @@
    "stem": "Halfway through a campaign, a reviewer goes on extended leave and has not opened her certification. What should the Cert Admin do?",
    "choices": [
     "Delete the campaign and generate a new one without her",
-    "Approve her items in bulk on her behalf",
+    "Approve all of her remaining items in bulk on her behalf",
     "Reassign her certification to another suitable reviewer",
     "Wait for the deadline so her items are revoked automatically"
    ],
@@ -760,7 +760,7 @@
    "topic": "Multi-Level and Governance Group Approvals",
    "stem": "On the approvals admin page, the assignee for a pending approval shows as Multiple. What does this MOST likely mean?",
    "choices": [
-    "The approval failed and was copied to every org admin",
+    "The approval failed and was copied to every org admin in the tenant",
     "The request contains several access items from different sources",
     "The request was submitted for more than one identity",
     "The approval is assigned to the members of a governance group"
@@ -874,7 +874,7 @@
    "choices": [
     "Manager, Source Owner, Requester and Owners",
     "Identity, Governance Group, Requester and Org Admin",
-    "Manager, Cert Admin, Helpdesk and Identity",
+    "Manager, Cert Admin, Helpdesk and a specific Identity",
     "Manager, Identity, Governance Group and Owners"
    ],
    "answer": "Manager, Identity, Governance Group and Owners",
@@ -888,7 +888,7 @@
    "choices": [
     "The identity holds any access item that is marked privileged",
     "The identity holds access from both of the policy's two access lists",
-    "The identity requested access that its manager did not approve",
+    "The identity requested access that its own manager later did not approve",
     "The identity holds more than a set number of entitlements on one source"
    ],
    "answer": "The identity holds access from both of the policy's two access lists",
@@ -1013,7 +1013,7 @@
    "stem": "A new SoD policy was just enabled. Thirty users already held both sides of the conflict before it existed. How will these existing violations be found?",
    "choices": [
     "Automatically, the next time each user signs in",
-    "Only when each user requests new access",
+    "Only when each affected user requests new access",
     "Only when the policy owner edits List A",
     "By running the policy now or on a schedule"
    ],
@@ -1071,7 +1071,7 @@
     "In the comments field of the policy's approval workflow for each request",
     "In the policy's mitigation advice and remediation advice fields",
     "In the policy's external reference tag",
-    "In the description of each entitlement in List A"
+    "In the description of each entitlement listed in the policy's List A"
    ],
    "answer": "In the policy's mitigation advice and remediation advice fields",
    "explanation": "SoD policies include mitigation and remediation advice fields to guide whoever handles violations. Entitlement descriptions explain access, not what to do about conflicts."

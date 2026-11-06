@@ -10,7 +10,7 @@
    "stem": "A network team asks which firewall rules a virtual appliance needs to talk to Identity Security Cloud. What is the BEST answer?",
    "choices": [
     "Outbound HTTPS on port 443 to the cloud, with no inbound internet rules",
-    "Inbound HTTPS on port 443 from the tenant to the VA's public IP address on the edge",
+    "Inbound HTTPS on port 443 from the tenant to the VA's public IP",
     "Inbound SSH on port 22 so the tenant can push jobs to the VA",
     "Two-way LDAP on port 389 between the tenant and the VA"
    ],
@@ -51,7 +51,7 @@
    "topic": "VA to Cloud Communication",
    "stem": "Corporate policy forces all outbound web traffic through an HTTP proxy. What must the engineer do so the VA can reach the cloud?",
    "choices": [
-    "Open an inbound port so the tenant can reach the VA directly",
+    "Open an inbound port on the firewall so the tenant can reach the VA directly",
     "Install a second VA outside the proxy and route the first through it",
     "Configure the VA's proxy settings for its outbound connections",
     "Change every source to a direct connector so no VA is used"
@@ -67,7 +67,7 @@
    "choices": [
     "Exclude the VA's traffic to SailPoint endpoints from TLS inspection",
     "Replace the VA's certificate with the inspection appliance's certificate",
-    "Move the VA to the same subnet as the inspection appliance",
+    "Move the VA to the same subnet as the inspection appliance's interface",
     "Turn off encryption on the VA's connection to the cloud"
    ],
    "answer": "Exclude the VA's traffic to SailPoint endpoints from TLS inspection",
@@ -95,7 +95,7 @@
    "choices": [
     "The VA must relay every call from the cloud to the SaaS provider's API",
     "The SaaS application must open an inbound port to the VA",
-    "The SaaS application must poll the tenant's message queues",
+    "The SaaS application must poll the tenant's message queues for work",
     "The cloud calls the SaaS API directly, with no VA in the path"
    ],
    "answer": "The cloud calls the SaaS API directly, with no VA in the path",
@@ -124,7 +124,7 @@
     "A fire-and-forget trigger such as identity created, with a filter",
     "A request-response trigger such as access request pre-approval",
     "A scheduled workflow that runs each night",
-    "A search subscription sent to the risk team"
+    "A search subscription that emails the risk team each new request"
    ],
    "answer": "A request-response trigger such as access request pre-approval",
    "explanation": "Request-response triggers pause until the subscriber replies with a decision, which suits pre-approval. Fire-and-forget events cannot influence the outcome."
@@ -149,7 +149,7 @@
    "topic": "Event Trigger Communication",
    "stem": "An HTTP subscription endpoint must reject calls that do not come from Identity Security Cloud. What should the engineer configure?",
    "choices": [
-    "A personal access token on the endpoint's own server",
+    "A personal access token stored on the endpoint's own web server",
     "Basic or bearer token authentication on the HTTP subscription",
     "A trigger filter that checks the caller's IP address on each event",
     "The VA proxy settings for the endpoint host"
@@ -191,7 +191,7 @@
    "topic": "Event Trigger Communication",
    "stem": "An engineer wants to check an HTTP subscription's endpoint handling before real events flow. What is the BEST step?",
    "choices": [
-    "Wait for the next production event and read the logs",
+    "Wait for the next production event and read the endpoint logs",
     "Create a temporary identity in production to cause an event",
     "Run an unoptimized aggregation on every source",
     "Send a test invocation with the trigger's sample payload"
@@ -247,7 +247,7 @@
    "topic": "Tenant and API URLs",
    "stem": "A tenant uses the vanity URL iga.acme.com for its user interface. A developer is unsure which token endpoint to use. What should the developer do?",
    "choices": [
-    "Send token requests to https://iga.acme.com/oauth/token",
+    "Send token requests to https://iga.acme.com/oauth/token directly",
     "Ask the DNS team to point the vanity domain at the API gateway instead",
     "Read the tenant's OAuth details from oauth/info on its API host",
     "Use the vanity domain as the authorize and token host"
@@ -333,7 +333,7 @@
    "choices": [
     "The limits are only applied when the tenant's VA is offline",
     "Shared services need limits so one client cannot overload others",
-    "The limits stop customers from reading their own data too often each day",
+    "The limits stop customers from reading their own data too often",
     "The limits apply only to tokens issued to Helpdesk users"
    ],
    "answer": "Shared services need limits so one client cannot overload others",
@@ -376,7 +376,7 @@
     "The update can be skipped by turning off the tenant's VA cluster",
     "Each tenant can pin its own platform version in the Admin UI",
     "SailPoint updates every tenant continuously on its own schedule",
-    "The update applies only to sandbox tenants until approved"
+    "The update applies only to sandbox tenants until the customer approves"
    ],
    "answer": "SailPoint updates every tenant continuously on its own schedule",
    "explanation": "As a multi-tenant SaaS service, the platform is updated by SailPoint for everyone. Testing new behaviour in the sandbox is the customer's control."
@@ -416,7 +416,7 @@
    "stem": "A workflow must call a partner's REST API to register each new hire. Which workflow step should the engineer use?",
    "choices": [
     "The Send Email action addressed to the partner's support mailbox",
-    "The Compare Strings operator on the partner's URL",
+    "The Compare Strings operator applied to the partner's API URL",
     "The HTTP Request action with the partner's authentication",
     "A Loop operator over the partner's API pages"
    ],
@@ -430,7 +430,7 @@
    "stem": "A company's HR database runs in its own data center with no internet exposure. How should Identity Security Cloud read it?",
    "choices": [
     "A direct cloud connector that queries the database over the internet",
-    "An HTTP subscription that the database calls each night",
+    "An HTTP subscription that the database server calls each night",
     "An external workflow trigger called by the database",
     "A JDBC source that runs through a virtual appliance on site"
    ],
