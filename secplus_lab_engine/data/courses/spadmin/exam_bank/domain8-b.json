@@ -66,7 +66,7 @@
    "stem": "An identity governance platform such as Identity Security Cloud mainly governs which part of access?",
    "choices": [
     "Authorization, by managing which identities hold which access",
-    "Authentication, by checking every password at sign-in",
+    "Authentication, by checking every user's password at each sign-in",
     "Encryption, by issuing keys to every target system",
     "Networking, by routing traffic to each application"
    ],
@@ -79,7 +79,7 @@
    "topic": "Authentication Versus Authorization",
    "stem": "Which of these is an authorization control?",
    "choices": [
-    "A one-time passcode sent to the user's mobile phone",
+    "A one-time passcode sent by text to the user's mobile phone",
     "A role that grants read access to a finance file share",
     "A fingerprint scan when the user unlocks a laptop",
     "A PIN prompt when the user inserts a smart card"
@@ -164,7 +164,7 @@
    "stem": "Which authentication method BEST resists phishing sites that relay sign-in prompts?",
    "choices": [
     "A one-time code sent by text message to the user's phone",
-    "A push notification that the user approves on a phone app",
+    "A push notification that the user approves on a mobile phone app",
     "A FIDO2 security key that is bound to the website's origin",
     "A security question that the user answers during sign-in"
    ],
@@ -178,7 +178,7 @@
    "stem": "Attackers who have a user's password keep sending push approval requests, hoping the user taps Approve. Which control BEST reduces this risk?",
    "choices": [
     "Longer password expiry intervals, so passwords change less often",
-    "Disabling account lockout, so the user is never locked out by mistake",
+    "Disabling account lockout, so that the user is never locked out by mistake",
     "Number matching, where the user enters a code shown on the sign-in screen",
     "Sending a reminder email after each push request is approved"
    ],
@@ -193,7 +193,7 @@
    "choices": [
     "Asks for the same factors at every sign-in for every user",
     "Asks for more verification when the sign-in context looks risky",
-    "Removes the password once a user signs in from a new device",
+    "Removes the password prompt once a user signs in from a new device",
     "Grants extra access when a user signs in from the office"
    ],
    "answer": "Asks for more verification when the sign-in context looks risky",
@@ -206,7 +206,7 @@
    "stem": "Certificate-based authentication relies on which elements?",
    "choices": [
     "A private key held by the user and a certificate the verifier trusts",
-    "A shared password that both the user and the verifier store",
+    "A shared password that both the user and the verifier store and compare",
     "A security question and answer kept in the user's profile",
     "A session cookie issued by the application after sign-in"
    ],
@@ -249,7 +249,7 @@
    "choices": [
     "A trust that lets one domain accept identities verified by another domain",
     "A process that copies every user account into each partner's directory",
-    "A database that stores the passwords of every user across organizations",
+    "A database that stores the passwords of every user across all organizations",
     "A review in which managers approve each user's access every quarter"
    ],
    "answer": "A trust that lets one domain accept identities verified by another domain",
@@ -291,7 +291,7 @@
    "choices": [
     "Federation extends sign-on trust across separate domains or organizations",
     "Federation requires a separate password for every application used",
-    "Federation works only for applications installed on the local network",
+    "Federation works only for the applications installed on the local network",
     "Federation removes the need for any identity provider at all"
    ],
    "answer": "Federation extends sign-on trust across separate domains or organizations",
@@ -331,7 +331,7 @@
    "topic": "Federation Concepts",
    "stem": "What is just-in-time provisioning in a federated setup?",
    "choices": [
-    "Granting temporary admin rights for a short period after a manager approves a request",
+    "Granting temporary admin rights for a short period after a manager approves an access request",
     "Running an aggregation of the identity provider each time a user signs in to an app",
     "Rotating the identity provider's signing certificate just before it expires",
     "Creating the user's account at the service provider from assertion data at first sign-in"
@@ -347,10 +347,10 @@
    "choices": [
     "Sharing a list of every user's password between the two directories",
     "Opening the firewall so each side can read the other's user database",
-    "Exchanging metadata that includes the identity provider's signing certificate",
+    "Exchanging metadata that includes the IdP's signing certificate",
     "Agreeing on the same password policy for both organizations' users"
    ],
-   "answer": "Exchanging metadata that includes the identity provider's signing certificate",
+   "answer": "Exchanging metadata that includes the IdP's signing certificate",
    "explanation": "The SP trusts assertions signed with the IdP's certificate, which is exchanged in metadata along with endpoints. No passwords or databases are shared."
   },
   {
@@ -360,7 +360,7 @@
    "stem": "Many SaaS apps are federated with the corporate identity provider. What is a key benefit when an employee leaves?",
    "choices": [
     "Disabling the IdP account blocks sign-in to every federated app",
-    "Each app's password expires automatically on the same day",
+    "Each app's local password expires automatically on the same day",
     "Each app deletes its own data about the user immediately",
     "Each app emails the user's manager a list of their files"
    ],
@@ -446,9 +446,9 @@
     "Authenticating users to web apps through signed XML assertions",
     "Issuing access tokens so that client apps can call protected APIs",
     "Issuing tickets so that domain users can reach network services",
-    "Provisioning and updating user accounts between systems through a standard API"
+    "Provisioning user accounts between systems through a standard API"
    ],
-   "answer": "Provisioning and updating user accounts between systems through a standard API",
+   "answer": "Provisioning user accounts between systems through a standard API",
    "explanation": "SCIM standardizes account create, update and delete operations between systems. It does not authenticate users, which is the job of SAML, OIDC or Kerberos."
   },
   {
@@ -472,7 +472,7 @@
    "stem": "Why is a SAML assertion digitally signed by the identity provider?",
    "choices": [
     "So the service provider can verify it came unaltered from the trusted IdP",
-    "So the user can read the assertion's contents in the browser bar",
+    "So the user can read the assertion's contents in the browser's address bar",
     "So the service provider can decrypt the user's stored password",
     "So the assertion can be reused by any application without checks"
    ],
@@ -485,7 +485,7 @@
    "topic": "Authentication in Identity Security Cloud",
    "stem": "A company wants employees to sign in to Identity Security Cloud through its existing corporate identity provider. Which configuration fits BEST?",
    "choices": [
-    "Set up the tenant as the identity provider for the corporate IdP",
+    "Set up the tenant as the identity provider for the corporate IdP instead",
     "Create an identity profile on the IdP's sign-in audit log source",
     "Set up SAML single sign-on with the tenant as the service provider",
     "Give every employee a personal access token for the web UI"
@@ -527,7 +527,7 @@
    "topic": "Authentication in Identity Security Cloud",
    "stem": "A user in a profile that uses Directory Connection signs in to the tenant. Which statement about the sign-in is accurate?",
    "choices": [
-    "The user's AD password is copied into the tenant and checked there in the future",
+    "The user's AD password is copied into the tenant and checked there on future sign-ins",
     "An external IdP sends the tenant a signed assertion to start the session",
     "The tenant checks the password against the chosen source instead of an external IdP",
     "The user's manager receives an approval request before the sign-in completes"
@@ -542,7 +542,7 @@
    "stem": "An administrator can sign in to the tenant but cannot open the source configuration pages. Which part of access is causing the problem?",
    "choices": [
     "Authentication, because the admin's password must be reset first",
-    "Federation, because the corporate IdP rejected the admin's assertion",
+    "Federation, because the corporate IdP rejected the admin's SAML assertion",
     "Aggregation, because the admin's account was not yet aggregated",
     "Authorization, because the admin lacks a user level such as Source Admin"
    ],
@@ -586,9 +586,9 @@
     "Embed its client secret in the script so the token never expires",
     "Share the token with the team so everyone uses the same identity",
     "Email the client secret to the help desk as a backup copy",
-    "Store its client secret in a secrets vault and revoke it when no longer needed"
+    "Keep its secret in a secrets vault and revoke it when unused"
    ],
-   "answer": "Store its client secret in a secrets vault and revoke it when no longer needed",
+   "answer": "Keep its secret in a secrets vault and revoke it when unused",
    "explanation": "A PAT carries the owner's permissions, so its secret must be protected and the token deleted when unused. Shared or embedded secrets break accountability and are easily leaked."
   },
   {

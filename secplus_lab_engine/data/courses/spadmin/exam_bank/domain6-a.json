@@ -1,0 +1,1129 @@
+{
+ "domain": "6",
+ "title": "SailPoint Admin Domain 6 questions (6.1, 6.2)",
+ "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+ "questions": [
+  {
+   "id": "D6-001",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "An access request for an access profile has received every required approval. What happens next?",
+   "choices": [
+    "The access is provisioned to the user's account on the source",
+    "The request returns to the requester to confirm it",
+    "The access profile owner must re-aggregate the source to finish it",
+    "A certification campaign is started for the user"
+   ],
+   "answer": "The access is provisioned to the user's account on the source",
+   "explanation": "After all approvals, the tenant provisions the access, either directly through the connector or through a manual task. Certifications and aggregation are not part of the request flow."
+  },
+  {
+   "id": "D6-002",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "An admin wants users to request a newly built access profile. Which configuration must be done FIRST?",
+   "choices": [
+    "Grant every requester the Source Admin user level",
+    "Turn on Allow Access Requests for the access profile",
+    "Create a certification campaign for the access profile",
+    "Add the access profile to a lifecycle state"
+   ],
+   "answer": "Turn on Allow Access Requests for the access profile",
+   "explanation": "An access item must be set up for requests before it appears in the Request Center; then the review process and comment rules are configured. Lifecycle states grant access without requests."
+  },
+  {
+   "id": "D6-003",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "A user with two accounts on the same source requests an access profile from that source. What happens during the request?",
+   "choices": [
+    "The access is added to both accounts automatically after approval",
+    "The request fails until one account is deleted",
+    "The requester selects which account should receive the access",
+    "The source owner picks the account after approval"
+   ],
+   "answer": "The requester selects which account should receive the access",
+   "explanation": "When the identity has multiple accounts on a source, the requester chooses the target account for the access."
+  },
+  {
+   "id": "D6-004",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "A request contains three access items, and the approver denies one of them. What happens to the other two?",
+   "choices": [
+    "They wait until the denied item is resubmitted and approved",
+    "They are converted into a single role request",
+    "They are all canceled with the denied item",
+    "They continue through their own review and provisioning"
+   ],
+   "answer": "They continue through their own review and provisioning",
+   "explanation": "Items in a request can be provisioned or canceled individually without affecting the other items."
+  },
+  {
+   "id": "D6-005",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "An auditor wants a list of all access requests submitted last month with their status. Where should the admin get it?",
+   "choices": [
+    "Search, using the Access Request Activity report",
+    "The virtual appliance health dashboard",
+    "The source's aggregation history page",
+    "The identity profile's preview page"
+   ],
+   "answer": "Search, using the Access Request Activity report",
+   "explanation": "Access requests are tracked in Search through the Access Request Activity report or a query for ACCESS_REQUEST events. Aggregation and VA pages do not record requests."
+  },
+  {
+   "id": "D6-006",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "Contractors may request a privileged access profile but must never hold it for more than 30 days. What should the admin configure on the access profile?",
+   "choices": [
+    "A timeout of 30 days for pending approvals",
+    "Require End Date with a maximum duration of 30 days",
+    "A reminder every 30 days to the access profile owner",
+    "A certification campaign that runs every 30 days"
+   ],
+   "answer": "Require End Date with a maximum duration of 30 days",
+   "explanation": "Require End Date with a maximum duration limits how long requested access lasts. Timeout only controls how long a pending request waits for review."
+  },
+  {
+   "id": "D6-007",
+   "objective": "6.1",
+   "topic": "Access Request Basics",
+   "stem": "A user requests a role that would place them in violation of a separation of duties policy. What does the reviewer see?",
+   "choices": [
+    "An error, because SoD violations block all requests",
+    "A prompt to delete the conflicting role first",
+    "A notice that granting the request would cause an SoD violation",
+    "Nothing, because SoD policies are checked only during certifications"
+   ],
+   "answer": "A notice that granting the request would cause an SoD violation",
+   "explanation": "With SoD policies configured, reviewers are notified when granting a request would create a violation, and requesters see the notice too. The reviewer then decides with that information."
+  },
+  {
+   "id": "D6-008",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "Requests for a payroll access profile must be approved by the requested-for user's manager and then by the payroll security team. What should the admin configure?",
+   "choices": [
+    "Manager only, with the team added to the request as watchers",
+    "Primary Owner only, with the team set as the owner",
+    "Governance Group only, with all of the managers added to the group",
+    "Manager, then a Governance Group for the team, in that order"
+   ],
+   "answer": "Manager, then a Governance Group for the team, in that order",
+   "explanation": "Multiple reviewers can be added and ordered so they are asked one after another. A governance group lets any one team member approve on the team's behalf."
+  },
+  {
+   "id": "D6-009",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "A governance group of five people is a reviewer for an access profile. How many members must approve a request?",
+   "choices": [
+    "Any one member of the group",
+    "All five members",
+    "A majority of three members",
+    "The group's first-listed member only"
+   ],
+   "answer": "Any one member of the group",
+   "explanation": "Only one identity in a governance group needs to approve or deny on behalf of the group."
+  },
+  {
+   "id": "D6-010",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "An admin enables requests on an access profile but leaves Require Approval unselected. What review applies to its requests?",
+   "choices": [
+    "The access profile is hidden from the Request Center until approval is set",
+    "The tenant's global approval configuration still applies",
+    "Every Admin in the tenant must approve it",
+    "No review at all, and access is granted instantly"
+   ],
+   "answer": "The tenant's global approval configuration still applies",
+   "explanation": "If Require Approval is not chosen on the item, the global approval configuration still applies."
+  },
+  {
+   "id": "D6-011",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "Pending approvals for an access profile should expire if nobody acts on them. What is the maximum timeout the admin can set?",
+   "choices": [
+    "365 days",
+    "7 days",
+    "90 days",
+    "30 days"
+   ],
+   "answer": "90 days",
+   "explanation": "The Timeout field sets how many days a request can wait before it expires, with 90 days as the maximum."
+  },
+  {
+   "id": "D6-012",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "Reviewers must explain why they reject requests for a sensitive access profile. What should the admin configure?",
+   "choices": [
+    "Require an access request form for every requester to complete",
+    "Require reauthentication for every requester",
+    "Require a maximum duration for the access profile",
+    "Require Comments when a reviewer denies the request"
+   ],
+   "answer": "Require Comments when a reviewer denies the request",
+   "explanation": "Require Comments has options for when the user requests access and when a reviewer denies it. A request form collects requester input, not reviewer reasons."
+  },
+  {
+   "id": "D6-013",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "An approval has gone through the whole escalation chain and nobody has acted. Who receives it next?",
+   "choices": [
+    "The configured fallback approver",
+    "The SailPoint support team",
+    "The virtual appliance service account",
+    "The requester, to approve it themselves"
+   ],
+   "answer": "The configured fallback approver",
+   "explanation": "A request goes to the fallback approver after it has passed the full escalation chain without action."
+  },
+  {
+   "id": "D6-014",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "An admin wants a request approval to be handled by an automated workflow instead of named reviewers. Which workflows can be selected?",
+   "choices": [
+    "Workflows that run on a daily schedule",
+    "Enabled workflows that use the Access Request Submitted trigger",
+    "Any workflow, whether enabled or disabled",
+    "Any workflow that uses the Identity Created trigger, enabled or not"
+   ],
+   "answer": "Enabled workflows that use the Access Request Submitted trigger",
+   "explanation": "The Workflow review option lists only enabled workflows that use the Access Request Submitted trigger."
+  },
+  {
+   "id": "D6-015",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "A role contains an access profile that requires source owner approval. A user requests the role. Which approval process applies?",
+   "choices": [
+    "Both the role and the access profile processes",
+    "The access profile's approval process only",
+    "The role's own approval process",
+    "No approval, because roles bypass reviews"
+   ],
+   "answer": "The role's own approval process",
+   "explanation": "Requests for a role use the role's approval process; an access profile's process applies only to requests for that access profile itself."
+  },
+  {
+   "id": "D6-016",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "A request has three reviewers in order: manager, owner and governance group. The owner denies it. What happens?",
+   "choices": [
+    "The request returns to the manager for a final decision",
+    "The access is provisioned with a warning",
+    "The governance group can still approve it",
+    "The review stops and the access is not provisioned"
+   ],
+   "answer": "The review stops and the access is not provisioned",
+   "explanation": "Reviewers are asked in the configured order, all must approve, and a denial stops the review so nothing is provisioned."
+  },
+  {
+   "id": "D6-017",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "The owner of an access profile requests it for themselves, and they are its only configured reviewer. What happens by default?",
+   "choices": [
+    "The approval is reassigned to the requester's manager",
+    "The request waits until the access profile owner is changed",
+    "The request is approved automatically",
+    "The request is denied as a self-approval"
+   ],
+   "answer": "The approval is reassigned to the requester's manager",
+   "explanation": "Self-approval is prevented by default: when the requester or recipient is the reviewer, the individual approval goes to their manager. Auto-approval for this case is only available through API configuration."
+  },
+  {
+   "id": "D6-018",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "A requester belongs to the governance group that reviews the access they requested. How does self-approval prevention handle this?",
+   "choices": [
+    "The whole group is skipped and the request is approved automatically",
+    "The requester is omitted, and other group members review it",
+    "The requester is allowed to approve as a group member",
+    "The request is canceled and must be resubmitted"
+   ],
+   "answer": "The requester is omitted, and other group members review it",
+   "explanation": "For governance group reviews, the requester and recipient are left out of the review. If they are the only member, it goes to their manager instead."
+  },
+  {
+   "id": "D6-019",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "One reviewer configured for an access item cannot be resolved, for example because the identity no longer exists. Who is tried FIRST?",
+   "choices": [
+    "The requested access item's owner",
+    "A random org admin",
+    "The missing reviewer's manager",
+    "The fallback approver"
+   ],
+   "answer": "The missing reviewer's manager",
+   "explanation": "For a missing reviewer, the tenant tries the reviewer's manager, then the escalation chain, the fallback approver, the item owner and finally an org admin."
+  },
+  {
+   "id": "D6-020",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "A manager receives an email about a pending access request. Where in Identity Security Cloud does the manager act on it?",
+   "choices": [
+    "In Admin > Identity Management > Identity Profiles",
+    "In Admin > Access Model > Roles",
+    "On the Request Center's Access Items tab",
+    "On the Approvals page"
+   ],
+   "answer": "On the Approvals page",
+   "explanation": "Every user, including those with no admin level, has an Approvals page for reviews assigned to them. Admin pages are not needed to approve."
+  },
+  {
+   "id": "D6-021",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "Approvals for a high-risk entitlement must confirm the reviewer is really present when they approve. What should the admin enable?",
+   "choices": [
+    "Reauthenticated approvals for the item",
+    "A longer request timeout",
+    "Escalations to the fallback approver after one day",
+    "A maximum duration for the access"
+   ],
+   "answer": "Reauthenticated approvals for the item",
+   "explanation": "Reauthenticated approvals require reviewers to authenticate again when approving sensitive or regulated access."
+  },
+  {
+   "id": "D6-022",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "Escalations are enabled on an access profile, and the first reviewer has not acted after the configured number of days. What happens?",
+   "choices": [
+    "The request is denied automatically and the requester is notified",
+    "The approval moves to the next approver in the escalation chain",
+    "The access profile is disabled",
+    "The request is approved automatically"
+   ],
+   "answer": "The approval moves to the next approver in the escalation chain",
+   "explanation": "Escalations forward unhandled approvals along the escalation chain on the configured schedule, ending with the fallback approver. They do not approve or deny automatically."
+  },
+  {
+   "id": "D6-023",
+   "objective": "6.1",
+   "topic": "Access Removal Requests",
+   "stem": "A manager wants a requested access profile removed from a direct report who changed projects. What can the manager do?",
+   "choices": [
+    "Change the user's lifecycle state to inactive",
+    "Delete the user's account from the source page",
+    "Submit an access removal request for the team member",
+    "Edit the access profile to remove the entitlements from everyone"
+   ],
+   "answer": "Submit an access removal request for the team member",
+   "explanation": "Managers can request removal of access their direct reports obtained through requests. Editing the access profile would affect everyone who holds it."
+  },
+  {
+   "id": "D6-024",
+   "objective": "6.1",
+   "topic": "Access Removal Requests",
+   "stem": "What is always required when a user submits an access removal request?",
+   "choices": [
+    "An approval from the source owner",
+    "An access request form",
+    "A certification decision",
+    "A comment"
+   ],
+   "answer": "A comment",
+   "explanation": "Removal requests always require comments when submitted. Approval for removals is optional and off by default."
+  },
+  {
+   "id": "D6-025",
+   "objective": "6.1",
+   "topic": "Access Removal Requests",
+   "stem": "A manager tries to request removal of an access profile that the user received through a lifecycle state. Why is it not allowed?",
+   "choices": [
+    "Access granted by a lifecycle state or role cannot be removed that way",
+    "The manager needs the Cert Admin user level",
+    "Lifecycle state access can be removed only by a certification campaign revoke",
+    "Removal requests work only for entitlements"
+   ],
+   "answer": "Access granted by a lifecycle state or role cannot be removed that way",
+   "explanation": "Only access profiles that are not part of the user's assigned roles or lifecycle state can be removed through removal requests. That access is controlled by the role or lifecycle configuration."
+  },
+  {
+   "id": "D6-026",
+   "objective": "6.1",
+   "topic": "Access Removal Requests",
+   "stem": "An admin enables requests on an access profile but configures nothing for removals. What review do removal requests need?",
+   "choices": [
+    "Approval by every additional owner",
+    "No approval, because removal approval is off by default",
+    "Manager approval, because it is always required",
+    "The same approvals that are configured for add requests on the item"
+   ],
+   "answer": "No approval, because removal approval is off by default",
+   "explanation": "By default no approvals are required for removal; Require Approval for Removal adds reviewers when needed."
+  },
+  {
+   "id": "D6-027",
+   "objective": "6.1",
+   "topic": "Access Removal Requests",
+   "stem": "Which roles can a manager remove from a direct report through a removal request?",
+   "choices": [
+    "Any role, including those assigned by criteria",
+    "Only roles that contain a single entitlement",
+    "Requestable roles the user obtained through an access request",
+    "Only disabled roles that are still assigned"
+   ],
+   "answer": "Requestable roles the user obtained through an access request",
+   "explanation": "Only roles obtained through access requests can be removed this way, so the role must be requestable. Criteria-based roles follow their assignment rules."
+  },
+  {
+   "id": "D6-028",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "Which work items can a work reassignment configuration redirect to another user?",
+   "choices": [
+    "Only aggregation schedules and source errors",
+    "Only password resets and MFA enrollments",
+    "Only certifications, and only after their campaign has been completed",
+    "Access request reviews, certifications and manual provisioning tasks"
+   ],
+   "answer": "Access request reviews, certifications and manual provisioning tasks",
+   "explanation": "Work reassignment redirects access request reviews, certifications and manual provisioning tasks assigned to a user."
+  },
+  {
+   "id": "D6-029",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "A manager will be on leave for three weeks and wants pending approvals handled by a deputy. Who can set up the reassignment?",
+   "choices": [
+    "The manager, the manager's own manager or an admin",
+    "Only the owner of each access profile",
+    "Only an admin who also holds the Helpdesk user level",
+    "Only SailPoint support"
+   ],
+   "answer": "The manager, the manager's own manager or an admin",
+   "explanation": "Users can define reassignments for themselves, managers for their team members and admins for anyone."
+  },
+  {
+   "id": "D6-030",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "An admin must set up work reassignment for an identity who is unexpectedly absent. Where does the admin do this?",
+   "choices": [
+    "In Admin > Global > Email Templates",
+    "The identity's Work Reassignment tab under Identity Management > Identities",
+    "On the source's Provisioning tab",
+    "In the lifecycle states of the identity profile that the identity belongs to"
+   ],
+   "answer": "The identity's Work Reassignment tab under Identity Management > Identities",
+   "explanation": "Admins add reassignment configurations for any identity from the identity's Work Reassignment tab."
+  },
+  {
+   "id": "D6-031",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "An admin wants one identity's approvals and certifications sent to a deputy. How many configurations are needed?",
+   "choices": [
+    "None, because managers receive all work automatically",
+    "Three, because certifications need two entries",
+    "Two, because each configuration covers one work item type",
+    "One, because each configuration covers every work item type at once"
+   ],
+   "answer": "Two, because each configuration covers one work item type",
+   "explanation": "Only one work item type can be chosen per reassignment configuration, so each type needs its own."
+  },
+  {
+   "id": "D6-032",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "User A reassigns work to User B, and User B tries to reassign work back to User A for the same period. What happens?",
+   "choices": [
+    "The second reassignment silently replaces the first one for both users",
+    "Both users receive every work item twice",
+    "Work goes to an admin at random",
+    "The tenant prevents reassignments that create a loop"
+   ],
+   "answer": "The tenant prevents reassignments that create a loop",
+   "explanation": "Identity Security Cloud blocks work reassignments that would create loops in reassignment chains."
+  },
+  {
+   "id": "D6-033",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "A reassignment period ends. What happens to approvals that were reassigned while it was active?",
+   "choices": [
+    "They stay with the user they were reassigned to",
+    "They return to the original user automatically when the period ends",
+    "They are canceled and must be resubmitted",
+    "They are escalated to the fallback approver"
+   ],
+   "answer": "They stay with the user they were reassigned to",
+   "explanation": "When a reassignment ends or is deleted, items that were already reassigned remain with the new owner."
+  },
+  {
+   "id": "D6-034",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "A user's approvals are reassigned to a deputy, but one request was submitted by that deputy. Who reviews that request?",
+   "choices": [
+    "The requester's original manager, but only after a 90-day timeout",
+    "Someone other than the deputy, because self-approval is prevented",
+    "No one, and the request is approved automatically",
+    "The deputy, because reassignment overrides prevention"
+   ],
+   "answer": "Someone other than the deputy, because self-approval is prevented",
+   "explanation": "In access request review reassignment, self-approval prevention stops reassignment to the requester and the access recipient."
+  },
+  {
+   "id": "D6-035",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "A senior executive should never receive certifications or approvals, permanently. What is the BEST approach?",
+   "choices": [
+    "Disable all email notifications for the tenant and the executive",
+    "Remove the executive's manager attribute",
+    "A work reassignment with no end date to a delegate",
+    "Give the executive the Admin user level"
+   ],
+   "answer": "A work reassignment with no end date to a delegate",
+   "explanation": "Work reassignment supports permanent redirection for users who should not receive these tasks, such as senior executives or service identities."
+  },
+  {
+   "id": "D6-036",
+   "type": "order",
+   "objective": "6.1",
+   "topic": "Approval Flow",
+   "stem": "Put the steps of an access request with two reviewers in order.",
+   "items": [
+    "The user selects the access profile in the Request Center and adds a comment",
+    "The request is submitted and the first reviewer, the manager, is notified",
+    "The manager approves on the Approvals page",
+    "A member of the governance group approves",
+    "The access is provisioned to the user's source account"
+   ],
+   "explanation": "Reviewers are asked in the configured order and all must approve before provisioning. A denial at any step would stop the request."
+  },
+  {
+   "id": "D6-037",
+   "type": "match",
+   "objective": "6.1",
+   "topic": "Approval Configuration",
+   "stem": "Match each reviewer option to who approves the request.",
+   "pairs": [
+    {
+     "item": "Manager",
+     "match": "The manager of the identity receiving the access"
+    },
+    {
+     "item": "Primary Owner",
+     "match": "The identity configured to own the access item"
+    },
+    {
+     "item": "Governance Group",
+     "match": "Any one member of the selected group"
+    },
+    {
+     "item": "Fallback approver",
+     "match": "The approver after the escalation chain gets no response"
+    }
+   ],
+   "targets_extra": [
+    "Every member of the selected group in turn"
+   ],
+   "explanation": "Reviewer options decide who is asked; for a governance group one member's decision is enough. The fallback approver is used only after escalation is exhausted."
+  },
+  {
+   "id": "D6-038",
+   "type": "multi",
+   "objective": "6.1",
+   "topic": "Work Reassignment",
+   "stem": "Which TWO statements about work reassignment in Identity Security Cloud are correct?",
+   "choices": [
+    "Managers can add reassignments for their team members",
+    "Items already reassigned stay with the new owner after the period ends",
+    "One configuration can cover every work item type at once",
+    "Reassignment chains that loop back are allowed",
+    "Only SailPoint support can create reassignments"
+   ],
+   "answers": [
+    "Managers can add reassignments for their team members",
+    "Items already reassigned stay with the new owner after the period ends"
+   ],
+   "select": 2,
+   "explanation": "Users, their managers and admins can create reassignments, and reassigned items stay with the new owner. Each configuration covers one work type and loops are blocked."
+  },
+  {
+   "id": "D6-039",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "An admin selects Preview Campaign for a new manager campaign. What should happen before reviewers receive any work?",
+   "choices": [
+    "Reviewers approve the preview before it starts",
+    "The campaign starts by itself as soon as the preview finishes generating",
+    "SailPoint support activates the campaign",
+    "The admin reviews the preview and then selects Start Campaign"
+   ],
+   "answer": "The admin reviews the preview and then selects Start Campaign",
+   "explanation": "A campaign is created, previewed and then started by the admin; reviewers get their certifications only after Start Campaign."
+  },
+  {
+   "id": "D6-040",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "A campaign preview was generated four days ago but never started. What does SailPoint recommend?",
+   "choices": [
+    "Delete it and create the campaign again",
+    "Extend the deadline and start it",
+    "Reassign all reviewers, then start it",
+    "Start it, because previews never go stale"
+   ],
+   "answer": "Delete it and create the campaign again",
+   "explanation": "Campaigns should be started within a day of generating the preview; otherwise they should be deleted and recreated so the data is current."
+  },
+  {
+   "id": "D6-041",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "An admin creates a campaign and does not change the deadline field. When is it due?",
+   "choices": [
+    "At the end of the calendar quarter",
+    "Two weeks after the creation date",
+    "One week after the creation date",
+    "Thirty days after the start date"
+   ],
+   "answer": "Two weeks after the creation date",
+   "explanation": "The default deadline for a certification campaign is two weeks after the creation date."
+  },
+  {
+   "id": "D6-042",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "A new campaign's filter removes every entitlement, so the campaign has no content. What does the admin see?",
+   "choices": [
+    "A preview that lists every identity in the tenant with no access items",
+    "An active campaign with no reviewers",
+    "No preview, and the campaign appears empty in the Completed tab",
+    "A reviewer certification asking for a filter"
+   ],
+   "answer": "No preview, and the campaign appears empty in the Completed tab",
+   "explanation": "If a campaign contains no identities or access items, no preview is created and it appears as an empty campaign in the Completed tab."
+  },
+  {
+   "id": "D6-043",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "An admin returns to a previewed campaign after its due date to start it. What happens?",
+   "choices": [
+    "The campaign starts and completes immediately",
+    "The campaign starts but sends no emails",
+    "The campaign starts and its deadline is moved forward automatically",
+    "The campaign cannot be started once its due date has passed"
+   ],
+   "answer": "The campaign cannot be started once its due date has passed",
+   "explanation": "A previewed campaign can be started later, but not after its due date has passed."
+  },
+  {
+   "id": "D6-044",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "Email notifications were left enabled for a campaign. When do reviewers receive reminder emails by default?",
+   "choices": [
+    "When the campaign is activated and every seven days until they sign off",
+    "Only after the admin selects Email for each reviewer on the campaign card",
+    "Only on the deadline date",
+    "Every day from activation to completion"
+   ],
+   "answer": "When the campaign is activated and every seven days until they sign off",
+   "explanation": "Certification emails go out at activation and then every seven days until the reviewer signs off, the certification expires or the campaign is completed. Admins can also email reviewers manually."
+  },
+  {
+   "id": "D6-045",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "A manager was assigned to a team after a manager campaign was generated. Why does the new manager not see the team's certification?",
+   "choices": [
+    "Managers must be Cert Admins to see certifications",
+    "Campaigns are generated as a snapshot in time",
+    "The campaign shows only identities with no manager",
+    "Reviewer changes need a configuration hub restore"
+   ],
+   "answer": "Campaigns are generated as a snapshot in time",
+   "explanation": "Campaigns capture data when they are generated, so later manager changes are not reflected. The certification can be reassigned if needed."
+  },
+  {
+   "id": "D6-046",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "All reviewers in a campaign signed off before the deadline. What must the admin do to finish the campaign?",
+   "choices": [
+    "Run an aggregation on every source in the campaign",
+    "Delete the campaign so it stops sending emails",
+    "Nothing, because the campaign moves to Completed automatically",
+    "Select Complete and choose whether to revoke the undecided items"
+   ],
+   "answer": "Nothing, because the campaign moves to Completed automatically",
+   "explanation": "When every reviewer has made decisions and signed off, the campaign completes automatically with no admin action for approvals."
+  },
+  {
+   "id": "D6-047",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Each manager must review the access of their direct reports once a year. Which campaign type fits BEST?",
+   "choices": [
+    "Search campaign of uncorrelated accounts",
+    "Source owner campaign",
+    "Role composition campaign",
+    "Manager campaign"
+   ],
+   "answer": "Manager campaign",
+   "explanation": "Manager campaigns send each manager a certification of their direct reports' access. Source owner campaigns are organised by source instead."
+  },
+  {
+   "id": "D6-048",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "A tightly controlled trading system has few licences, and its owner must review everyone with access to it. Which campaign type fits BEST?",
+   "choices": [
+    "Source owner campaign for that source",
+    "Manager campaign for the whole tenant",
+    "Role composition campaign for all roles",
+    "Manager campaign filtered to executives"
+   ],
+   "answer": "Source owner campaign for that source",
+   "explanation": "Source owner campaigns let owners review access only on the sources they own and suit limited-licence or restricted systems."
+  },
+  {
+   "id": "D6-049",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "A source owner campaign for three sources does not generate certifications for one of them. What is the MOST likely cause?",
+   "choices": [
+    "That source's accounts are all correlated",
+    "That source has no source owner assigned",
+    "That source has requestable entitlements",
+    "That source uses a virtual appliance"
+   ],
+   "answer": "That source has no source owner assigned",
+   "explanation": "Source owner campaigns generate only for sources with an assigned source owner, so the owner must be set on the source first."
+  },
+  {
+   "id": "D6-050",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Role owners must confirm that each role still contains the right access profiles and entitlements. Which campaign should the admin create?",
+   "choices": [
+    "A campaign of uncorrelated accounts",
+    "A manager campaign",
+    "A role composition campaign",
+    "A source owner campaign"
+   ],
+   "answer": "A role composition campaign",
+   "explanation": "Role composition campaigns review what a role contains rather than who holds it."
+  },
+  {
+   "id": "D6-051",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Some identities have no manager, and the admin wants them included in a review with manager as the reviewer. What should the admin do?",
+   "choices": [
+    "Run a standard manager campaign, which already includes those identities",
+    "Run a role composition campaign for their roles",
+    "Set each identity as its own manager first",
+    "Create the campaign from Search and choose Manager as the reviewer"
+   ],
+   "answer": "Create the campaign from Search and choose Manager as the reviewer",
+   "explanation": "Standard manager campaigns exclude identities without managers. Campaigns created from Search with Manager as reviewer include them, sending them to the campaign owner."
+  },
+  {
+   "id": "D6-052",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Security wants everyone who holds three privileged database entitlements reviewed, across all departments. Which approach fits BEST?",
+   "choices": [
+    "A campaign created from Search that targets those access items",
+    "A role composition campaign for every role that contains database access",
+    "A source owner campaign for every source",
+    "A manager campaign for every department"
+   ],
+   "answer": "A campaign created from Search that targets those access items",
+   "explanation": "Search-based campaigns can target specific identities or access items found by a query. A manager campaign would review all access of all reports."
+  },
+  {
+   "id": "D6-053",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "An admin wants a manager campaign that covers only entitlements from finance systems. What should the admin apply?",
+   "choices": [
+    "A governance group",
+    "A campaign filter",
+    "A segment",
+    "A lifecycle state"
+   ],
+   "answer": "A campaign filter",
+   "explanation": "Campaign filters limit certifications to a subset of entitlements or users. Segments control requestable access visibility."
+  },
+  {
+   "id": "D6-054",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Which certifications can an admin create from Search in Identity Security Cloud?",
+   "choices": [
+    "Only certifications of uncorrelated accounts",
+    "Only manager certifications for one department",
+    "Certifications of identities, access items and role compositions",
+    "Only source owner certifications, and only for flat file sources"
+   ],
+   "answer": "Certifications of identities, access items and role compositions",
+   "explanation": "Starting a campaign from Search supports certifying identities, access items and role compositions."
+  },
+  {
+   "id": "D6-055",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "A reviewer marked several items Revoke but closed the certification without signing off. What happens to those decisions?",
+   "choices": [
+    "They are converted to approvals",
+    "They are sent to the original requester of each item for approval",
+    "They are applied immediately",
+    "They are not applied until the reviewer signs off"
+   ],
+   "answer": "They are not applied until the reviewer signs off",
+   "explanation": "Revoke decisions that are not signed off are not applied; sign-off triggers remediation."
+  },
+  {
+   "id": "D6-056",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "A reviewer goes on leave mid-campaign and has not signed off. What can the admin do?",
+   "choices": [
+    "Reassign the certification to another reviewer",
+    "Change the campaign type to source owner and restart it",
+    "Copy the reviewer's password to a deputy",
+    "Delete the reviewer's identity"
+   ],
+   "answer": "Reassign the certification to another reviewer",
+   "explanation": "Admins can reassign certifications of reviewers who have not yet signed off. A certification that is already signed off cannot be reassigned."
+  },
+  {
+   "id": "D6-057",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "A manager's certification includes the manager's own access. How does Identity Security Cloud handle this?",
+   "choices": [
+    "It lets the manager approve it with a comment",
+    "It moves that access to a separate certification for another reviewer",
+    "It removes the manager's own access from the campaign entirely and silently",
+    "It revokes the access automatically"
+   ],
+   "answer": "It moves that access to a separate certification for another reviewer",
+   "explanation": "Self-certification is prevented by moving the access to another certification, sent to the identity's manager, else the campaign owner, else a random admin."
+  },
+  {
+   "id": "D6-058",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "An admin tries to manually reassign a certification to a new reviewer, but the reassignment is blocked. What is the MOST likely reason?",
+   "choices": [
+    "The campaign deadline is more than a week away",
+    "The certification contains fewer than ten identities to review",
+    "The certification contains the new reviewer's own access",
+    "The new reviewer is not a Cert Admin"
+   ],
+   "answer": "The certification contains the new reviewer's own access",
+   "explanation": "Manual reassignment is blocked when the certification includes access belonging to the new owner, preventing self-review."
+  },
+  {
+   "id": "D6-059",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "Which two decisions does a reviewer make on access items that were obtained through access requests?",
+   "choices": [
+    "Enable or Disable",
+    "Escalate or Delegate",
+    "Aggregate or Correlate",
+    "Approve or Revoke"
+   ],
+   "answer": "Approve or Revoke",
+   "explanation": "Reviewers approve access that should stay and revoke access that should be removed. Aggregation and correlation are source operations."
+  },
+  {
+   "id": "D6-060",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "Auditors want reviewers to justify every revoke decision in a campaign. Where should the admin configure this?",
+   "choices": [
+    "In the campaign's settings for when reviewers must leave comments",
+    "In the global access request approval settings for the whole tenant",
+    "In each source's account schema",
+    "In each reviewer's work reassignment"
+   ],
+   "answer": "In the campaign's settings for when reviewers must leave comments",
+   "explanation": "When creating a campaign, the admin chooses when reviewers are required to leave comments on their decisions."
+  },
+  {
+   "id": "D6-061",
+   "objective": "6.2",
+   "topic": "Reviewer Decisions",
+   "stem": "Which identity details appear to reviewers in certifications by default to help them decide?",
+   "choices": [
+    "Employee ID, salary and home address",
+    "Email, lifecycle state and manager",
+    "Account IDs on every connected source",
+    "Password, MFA method and last sign-in"
+   ],
+   "answer": "Email, lifecycle state and manager",
+   "explanation": "Certifications show email, lifecycle state and manager by default, and up to five more attributes can be added through the public identity configuration API."
+  },
+  {
+   "id": "D6-062",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "A role assigned to identities by membership criteria appears in a certification. What can the reviewer do with it?",
+   "choices": [
+    "Convert it into a requested role",
+    "Revoke it, which removes it permanently",
+    "Only acknowledge it, because the role model controls the assignment",
+    "Delete the role from the tenant"
+   ],
+   "answer": "Only acknowledge it, because the role model controls the assignment",
+   "explanation": "Roles assigned by criteria can only be acknowledged in certifications, because criteria are evaluated daily and would add the identity back."
+  },
+  {
+   "id": "D6-063",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "A reviewer wants to revoke a criteria-assigned role from one identity. What will actually remove it?",
+   "choices": [
+    "Revoking it twice in two campaigns",
+    "Asking the source owner to delete the account",
+    "Disabling email notifications for the campaign",
+    "Changing the role's criteria or the identity's data so it no longer matches"
+   ],
+   "answer": "Changing the role's criteria or the identity's data so it no longer matches",
+   "explanation": "Auto-assigned roles follow their criteria, so the criteria or the identity's attributes must change for the role to be removed."
+  },
+  {
+   "id": "D6-064",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "Access profiles granted by the identity's lifecycle state do not appear in a manager campaign. Why?",
+   "choices": [
+    "Lifecycle state access profiles are not included in certifications",
+    "They appear only in role composition campaigns",
+    "They appear only after the lifecycle state changes",
+    "They are hidden automatically by a campaign filter that the tenant applies"
+   ],
+   "answer": "Lifecycle state access profiles are not included in certifications",
+   "explanation": "Access profiles from the assigned lifecycle state do not appear in certifications at all; they are governed by the lifecycle configuration."
+  },
+  {
+   "id": "D6-065",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "An identity holds an access profile through a role. How does this access appear in a certification?",
+   "choices": [
+    "It does not appear and cannot be reviewed",
+    "Within the role, and it can be managed only through that role",
+    "As a separate access profile item that the reviewer can revoke on its own",
+    "As individual entitlements for each source"
+   ],
+   "answer": "Within the role, and it can be managed only through that role",
+   "explanation": "Access profiles granted through a role are encapsulated in the role and can only be managed through it."
+  },
+  {
+   "id": "D6-066",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "When does an entitlement appear as its own item in a certification?",
+   "choices": [
+    "Only when it is marked requestable",
+    "Only when it is marked privileged",
+    "When it is not encapsulated in one of the user's access profiles or roles",
+    "Only when it came from a flat file source"
+   ],
+   "answer": "When it is not encapsulated in one of the user's access profiles or roles",
+   "explanation": "Entitlements can be certified individually only if they are not part of the user's access profiles or roles."
+  },
+  {
+   "id": "D6-067",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "A user's entitlements exactly match an access profile they never requested. How is that access shown in a manager certification?",
+   "choices": [
+    "Not at all, because it was not requested",
+    "As an uncorrelated account",
+    "As individual entitlements, because it was not requested",
+    "As the access profile, not as individual entitlements"
+   ],
+   "answer": "As the access profile, not as individual entitlements",
+   "explanation": "When an identity's entitlements match an access profile, the identity is granted that access profile and the entitlements are certified as that access profile."
+  },
+  {
+   "id": "D6-068",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "A reviewer revokes an entitlement on a direct-connected source that supports provisioning and signs off. How is the access removed?",
+   "choices": [
+    "Automatically, through the source connector",
+    "By the reviewer editing the source",
+    "By a manual task that is created for the source owner",
+    "At the next certification campaign"
+   ],
+   "answer": "Automatically, through the source connector",
+   "explanation": "With a direct connection that can provision, remediation is automatic after sign-off."
+  },
+  {
+   "id": "D6-069",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "Access is revoked on a source that the tenant cannot write to. How is the revocation carried out?",
+   "choices": [
+    "The revocation is discarded without notice",
+    "A task is created for the source owner to remove the access manually",
+    "The identity is disabled across every source included in the campaign",
+    "The source is automatically deleted"
+   ],
+   "answer": "A task is created for the source owner to remove the access manually",
+   "explanation": "When the tenant cannot provision to a source, manual remediation creates a task for the source owner to make the change."
+  },
+  {
+   "id": "D6-070",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "After a campaign, the admin needs to confirm that revoked items on non-connected sources were actually removed. What should the admin use?",
+   "choices": [
+    "The virtual appliance health report",
+    "The aggregation history of the authoritative source",
+    "The Campaign Remediation Status Report",
+    "The Identities Without Managers report"
+   ],
+   "answer": "The Campaign Remediation Status Report",
+   "explanation": "The Campaign Remediation Status Report shows revoked items that could not be deprovisioned automatically; regenerate it to confirm removal."
+  },
+  {
+   "id": "D6-071",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "A campaign uses the default setting for undecided items, and the admin completes it after the deadline. What happens to undecided items?",
+   "choices": [
+    "They are sent to the source owners",
+    "Access is revoked for all of them once the admin completes it",
+    "They move to the next campaign",
+    "Access is maintained, because they are treated as approved"
+   ],
+   "answer": "Access is maintained, because they are treated as approved",
+   "explanation": "Maintaining access to undecided items is the default; such items are approved when the admin completes the campaign."
+  },
+  {
+   "id": "D6-072",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "When creating a campaign, an admin can choose 'choose to maintain or revoke access to undecided items'. Why does SailPoint recommend maintaining access instead?",
+   "choices": [
+    "Reinstating access after it is revoked is difficult",
+    "Revoking undecided items is not technically possible",
+    "Maintaining access deletes the campaign history",
+    "Revoking requires a separate SailPoint licence"
+   ],
+   "answer": "Reinstating access after it is revoked is difficult",
+   "explanation": "Bulk revocation of undecided items can remove access people still need, and restoring it is hard. That is why maintaining access is the recommended option."
+  },
+  {
+   "id": "D6-073",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "Where can an admin confirm that access revoked on direct-connected sources was removed after a campaign?",
+   "choices": [
+    "Admin > Access Model > Segments",
+    "Admin > Identity Management > Activities",
+    "Admin > Connections > Virtual Appliances",
+    "Admin > Global > Email Templates"
+   ],
+   "answer": "Admin > Identity Management > Activities",
+   "explanation": "Activities shows provisioning activity, including access revoked automatically because of a certification."
+  },
+  {
+   "id": "D6-074",
+   "objective": "6.2",
+   "topic": "Remediation and Completion",
+   "stem": "An admin deletes an active campaign by mistake. What is the result for reviewers?",
+   "choices": [
+    "All revoke decisions are applied before deletion",
+    "Reviewers keep their decisions and receive a warning email from the tenant",
+    "Decisions are lost and the certifications vanish without any notification",
+    "The campaign is restored automatically after 24 hours"
+   ],
+   "answer": "Decisions are lost and the certifications vanish without any notification",
+   "explanation": "Deleting a campaign loses any decisions made, removes the certifications from participants' views and sends no notification."
+  },
+  {
+   "id": "D6-075",
+   "type": "order",
+   "objective": "6.2",
+   "topic": "Campaign Lifecycle",
+   "stem": "Put the stages of a manager certification campaign in order.",
+   "items": [
+    "Create the campaign and set its name, deadline and options",
+    "Select Preview Campaign and review the preview",
+    "Select Start Campaign so reviewers are notified",
+    "Reviewers approve or revoke items and sign off",
+    "Revoked access is remediated and the campaign completes"
+   ],
+   "explanation": "Campaigns are configured, previewed and started by the admin. Reviewer sign-off triggers remediation, and the campaign completes when all are signed off or the admin completes it."
+  },
+  {
+   "id": "D6-076",
+   "type": "match",
+   "objective": "6.2",
+   "topic": "Campaign Types",
+   "stem": "Match each campaign type to what it reviews.",
+   "pairs": [
+    {
+     "item": "Manager campaign",
+     "match": "Access of each manager's direct reports"
+    },
+    {
+     "item": "Source owner campaign",
+     "match": "Access on the sources each owner owns"
+    },
+    {
+     "item": "Role composition campaign",
+     "match": "The access items each role contains"
+    },
+    {
+     "item": "Campaign from Search",
+     "match": "Identities or access items found by a query"
+    }
+   ],
+   "targets_extra": [
+    "Pending access requests in the approval queue"
+   ],
+   "explanation": "Each type selects reviewers and content differently. Pending requests are handled through approvals, not certifications."
+  },
+  {
+   "id": "D6-077",
+   "type": "multi",
+   "objective": "6.2",
+   "topic": "Certifiable Access",
+   "stem": "Which TWO kinds of access can a reviewer revoke in a certification?",
+   "choices": [
+    "A role the user received through an access request",
+    "An access profile the user received through an access request",
+    "A role assigned by membership criteria",
+    "An access profile granted by the user's lifecycle state",
+    "An access profile granted inside a role"
+   ],
+   "answers": [
+    "A role the user received through an access request",
+    "An access profile the user received through an access request"
+   ],
+   "select": 2,
+   "explanation": "Requested roles and access profiles can be approved or revoked. Criteria-based roles can only be acknowledged, lifecycle access does not appear, and access inside a role is managed through the role."
+  }
+ ]
+}

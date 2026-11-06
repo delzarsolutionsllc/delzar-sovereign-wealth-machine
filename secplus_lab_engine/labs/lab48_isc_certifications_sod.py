@@ -71,7 +71,8 @@ How it works
    gives CANNOT_EVALUATE, never OK. A pending access request is checked
    against current access plus everything in the request: WOULD_VIOLATE
    (BLOCKED when the policy blocks submission, or has no setting; else
-   ROUTED_TO_APPROVERS with the violation shown), OK, or CANNOT_EVALUATE.
+   ROUTED_TO_APPROVERS with the violation shown), OK (normal approval), or
+   CANNOT_EVALUATE (request HELD).
 
 Simplifications: real campaigns also have campaign filters, recommendations,
 machine-account campaigns, governance-group reviewers and email settings.
@@ -482,7 +483,7 @@ def evaluate_request(req: dict, sod: dict, cfg: dict) -> RequestResult:
         reasons = ["no new conflict with current or requested access"]
         if unknown_cur:
             reasons.append(f"note: current access {', '.join(unknown_cur)} could not be decomposed")
-        return RequestResult(rid, who, "OK", "ROUTED_TO_APPROVERS", reasons=reasons)
+        return RequestResult(rid, who, "OK", "NORMAL_APPROVAL", reasons=reasons)
     settings = [c["setting"] or scfg["default_request_setting"] for c in found]
     block = scfg["global_block_all"] or any(s not in scfg["request_actions"] or s == "BLOCK" for s in settings)
     action = scfg["request_actions"]["BLOCK"] if block else scfg["request_actions"]["ALLOW"]
@@ -618,7 +619,7 @@ def build_challenges(policies: dict, data: dict) -> list:
                            explanation="; ".join(p.reasons), objective="6.2"))
     seen = set()
     for r in camp.items:
-        if r.outcome in seen and r.id not in ("C10", "C11"):
+        if r.outcome in seen and not raw_items.get(r.id, {}).get("reassigned_to"):
             continue
         seen.add(r.outcome)
         src = {k: v for k, v in raw_items.get(r.id, {}).items() if k != "id"}
@@ -635,11 +636,11 @@ def build_challenges(policies: dict, data: dict) -> list:
                                answer=r.remediation, explanation="; ".join(r.reasons), objective="6.2"))
             if r.remediation == "MANUAL_WORK_ITEM":
                 break
-    qs.append(Question(prompt=f"What is the campaign status after the deadline, given who signed off?",
+    qs.append(Question(prompt="What is the campaign status after the deadline, given who signed off?",
                        context="; ".join(camp.reasons) or "all reviewers signed off",
                        choices=["STAGED", "ACTIVE", "COMPLETED", "DELETED"], answer=camp.status,
                        explanation="; ".join(camp.history), objective="6.2"))
-    status, why = transition("STAGED", "complete", cfg)
+    _, why = transition("STAGED", "complete", cfg)
     qs.append(Question(prompt="An admin tries to complete a campaign that is still STAGED. What happens?",
                        choices=["the action is refused: a staged campaign must be activated first",
                                 "the campaign completes and all items are approved",

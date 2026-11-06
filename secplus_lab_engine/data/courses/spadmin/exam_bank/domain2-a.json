@@ -12,7 +12,7 @@
     "To connect the tenant securely to sources inside the organization's network",
     "To store nightly backups of the tenant configuration",
     "To replace identity profiles for on-premises users",
-    "To host a local copy of the tenant's identity database for faster sign-in"
+    "To host a local copy of the tenant's identity database for faster user sign-in"
    ],
    "answer": "To connect the tenant securely to sources inside the organization's network",
    "explanation": "A VA is the bridge between the multi-tenant cloud service and systems the cloud cannot reach directly, such as on-premises directories and databases. It does not hold the tenant's identity data or configuration backups."
@@ -23,7 +23,7 @@
    "topic": "VA Purpose and Architecture",
    "stem": "A firewall engineer asks which inbound connections from SailPoint's cloud must be opened to the VAs so aggregations can run. What should the administrator tell the engineer?",
    "choices": [
-    "Inbound 443 from SailPoint's published cloud addresses to every VA",
+    "Inbound 443 from SailPoint's published cloud addresses to every VA host",
     "Inbound 8443 from the tenant's API gateway",
     "None are needed, because each VA polls SailPoint over outbound HTTPS",
     "Inbound 22 so the tenant can run remote commands"
@@ -164,7 +164,7 @@
    "stem": "An organization uses separate primary and DR VA clusters and connects all sources to the primary one. What is the main drawback of this switch-clusters strategy?",
    "choices": [
     "The DR cluster adds latency to daily provisioning",
-    "Both clusters pick up every request, so each change is provisioned twice to the target",
+    "Both clusters pick up every request, so each change is provisioned twice to every target",
     "The DR VAs stop receiving SailPoint updates",
     "Failover means reconnecting each source to the DR cluster and re-entering its credentials"
    ],
