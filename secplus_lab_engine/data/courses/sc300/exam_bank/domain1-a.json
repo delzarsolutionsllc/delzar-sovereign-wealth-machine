@@ -39,7 +39,7 @@
       "choices": [
         "The tenant, an administrative unit or a single application",
         "A management group, an Azure subscription or a single resource group",
-        "The tenant or a single resource group only",
+        "The tenant, a single resource group or a single application only",
         "An administrative unit or an Azure subscription only"
       ],
       "answer": "The tenant, an administrative unit or a single application",
@@ -124,7 +124,7 @@
         "Create a new restricted management unit and move the members into it",
         "Turn on restricted management in the existing unit's properties",
         "Run a Microsoft Graph request to set restricted management on the unit",
-        "Remove all members first, then turn on restricted management"
+        "Remove all members first, then turn on restricted management in the unit"
       ],
       "answer": "Create a new restricted management unit and move the members into it",
       "explanation": "Restricted management can only be set when an administrative unit is created and cannot be changed afterward, so a new unit is required. Editing the property later, through the portal or Graph, is not supported even when the unit is empty."
@@ -152,7 +152,7 @@
         "User Administrator cannot be assigned at an administrative unit scope",
         "Adding a group to an administrative unit does not add the group's members",
         "Password resets work only for members of restricted management administrative units",
-        "Only Global Administrators can manage members of security groups"
+        "Only Global Administrators can reset passwords for members of security groups"
       ],
       "answer": "Adding a group to an administrative unit does not add the group's members",
       "explanation": "When a group is added to an administrative unit, the scoped admin can manage the group object, but its members are not in scope unless they are added to the unit themselves. User Administrator is one of the roles that can be scoped to an administrative unit."
@@ -208,7 +208,7 @@
         "User Administrator cannot reset user passwords",
         "Marketing users are placed in restricted management units by default",
         "His role assignment applies only to objects in the Sales unit",
-        "Password resets require Privileged Role Administrator"
+        "Password resets for other units require the Privileged Role Administrator role"
       ],
       "answer": "His role assignment applies only to objects in the Sales unit",
       "explanation": "A role assigned at an administrative unit scope only applies to the objects in that unit, so a user outside it is out of reach. User Administrator can reset passwords, and administrative units are not restricted management unless created that way."
@@ -248,7 +248,7 @@
       "stem": "Fabrikam sold a business unit and must remove the domain fabrikamtoys.com from its tenant. The deletion fails because the domain is still in use. What should you do FIRST?",
       "choices": [
         "Change the UPNs and email addresses that still use the domain",
-        "Delete the TXT verification record from public DNS",
+        "Delete the TXT verification record for the domain from public DNS first",
         "Convert the domain from managed to federated",
         "Set the initial onmicrosoft.com domain as the tenant's primary domain"
       ],
@@ -376,7 +376,7 @@
         "The setting blocks only the admin center, not Graph or PowerShell",
         "The setting takes 30 days to apply to all users",
         "The user must also be added to an administrative unit before it applies",
-        "The setting only applies to guest users in the tenant"
+        "The setting only applies to guest users and external users in the tenant"
       ],
       "answer": "The setting blocks only the admin center, not Graph or PowerShell",
       "explanation": "Restrict access to Microsoft Entra admin center is not a security boundary: it hides the portal from non-administrators but does not block Microsoft Graph, PowerShell or other clients. To control data access you need other controls, such as Conditional Access."
@@ -416,7 +416,7 @@
       "stem": "Proseware wants only the IT team to create Microsoft 365 groups. Other users must not create them in Outlook, Teams or the portals. Which approach should you use?",
       "choices": [
         "Allow only one security group to create Microsoft 365 groups",
-        "Configure a Microsoft 365 group naming policy",
+        "Configure a Microsoft 365 group naming policy with a blocked words list",
         "Configure a Microsoft 365 group expiration policy for all groups",
         "Set Users can create security groups to No"
       ],
@@ -597,7 +597,7 @@
       "topic": "Users",
       "stem": "Policy at Litware says that a deleted user account must not be recoverable after an offboarding is approved. What should you do after deleting the user?",
       "choices": [
-        "Wait 7 days for the object to be purged",
+        "Wait 7 days for the deleted object to be purged automatically",
         "Disable the account before deleting it",
         "Remove all of the licenses from the account before you delete it",
         "Permanently delete the user from the deleted users list"
@@ -654,7 +654,7 @@
       "stem": "Adatum wants one dynamic group that contains all Windows devices and also the users who sign in to those devices. What should you do?",
       "choices": [
         "Create two dynamic groups, one for users and one for devices",
-        "Write one rule that combines user and device properties",
+        "Write one rule that combines user and device properties with -and",
         "Create one dynamic device rule that includes registered owners",
         "Create one Microsoft 365 group with a dynamic device rule"
       ],
@@ -836,7 +836,7 @@
       "stem": "The support team at Contoso must have local administrator rights on every Microsoft Entra joined Windows device with the LEAST administrative effort. What should you do?",
       "choices": [
         "Add the team to the local Administrators group on each device by hand",
-        "Assign the team the Cloud Device Administrator role",
+        "Assign the team the Cloud Device Administrator role at tenant scope",
         "Assign the Microsoft Entra Joined Device Local Administrator role",
         "Make the team the registered owners of each device"
       ],
@@ -879,7 +879,7 @@
       "choices": [
         "Disable the stale devices, then delete them after a grace period",
         "Delete all of the stale devices immediately",
-        "Remove the licenses from the devices' owners",
+        "Remove the licenses from the devices' registered owners and users",
         "Rotate the BitLocker recovery keys stored for each of the stale devices"
       ],
       "answer": "Disable the stale devices, then delete them after a grace period",

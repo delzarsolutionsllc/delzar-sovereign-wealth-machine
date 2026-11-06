@@ -12,7 +12,7 @@
         "An eligible user receives only the read permissions of the role",
         "An active user must request approval at every sign-in",
         "An eligible user must activate the role before using it",
-        "An active assignment always ends after eight hours"
+        "An active assignment always ends after eight hours of use"
       ],
       "answer": "An eligible user must activate the role before using it",
       "explanation": "An eligible assignment gives no permissions until the user activates the role; an active assignment grants the permissions with no activation step. Eligibility does not grant a read-only subset of the role."
@@ -137,7 +137,7 @@
       "choices": [
         "Only the User Administrator assignments created after the change",
         "Every eligible assignment of User Administrator in the tenant",
-        "Only the user who was selected when the setting was changed",
+        "Only the user who was selected when the setting was changed in PIM",
         "Every eligible assignment of every Microsoft Entra role"
       ],
       "answer": "Every eligible assignment of User Administrator in the tenant",
@@ -222,7 +222,7 @@
         "All Microsoft Entra objects in the tenant directory",
         "Only the resource groups that were named in the activation request",
         "All subscriptions and resources under the management group",
-        "Only the management group object and its settings"
+        "Only the management group object and its own settings, not child scopes"
       ],
       "answer": "All subscriptions and resources under the management group",
       "explanation": "Azure role assignments are inherited down the scope hierarchy, so a role activated at a management group applies to every subscription and resource beneath it. Azure roles do not grant access to Microsoft Entra directory objects."
@@ -234,7 +234,7 @@
       "stem": "Tailwind Traders wants eligible Owner role holders on the finance subscription to give a justification and to be limited to four hours per activation. Other subscriptions must keep their current settings. Where should you configure this?",
       "choices": [
         "The PIM role settings for Owner on the finance subscription",
-        "An Azure Policy assignment on the finance subscription",
+        "An Azure Policy assignment on the finance subscription's resources",
         "A Conditional Access policy with a sign-in frequency control",
         "The PIM role settings for the Global Administrator role"
       ],
@@ -278,7 +278,7 @@
         "Create a new group with role assignment enabled and use it instead",
         "Convert the existing security group into a Microsoft 365 group",
         "Onboard the existing group to PIM for Groups to enable role assignment",
-        "Turn on role assignment in the properties of the existing group"
+        "Turn on role assignment in the properties of the existing security group"
       ],
       "answer": "Create a new group with role assignment enabled and use it instead",
       "explanation": "Whether a group can be assigned Microsoft Entra roles is set only when the group is created and cannot be changed afterward. Onboarding a group to PIM for Groups does not make it role-assignable."
@@ -376,7 +376,7 @@
         "Ask an administrator for a permanent active assignment instead",
         "Request an extension of the eligible assignment in PIM",
         "Submit a new activation request every day",
-        "Activate the role now for the maximum duration"
+        "Activate the role now for the longest activation duration allowed"
       ],
       "answer": "Request an extension of the eligible assignment in PIM",
       "explanation": "Users can request an extension of an eligible assignment that is about to expire, and an administrator approves it. Activating the role does not extend the eligibility end date."
@@ -390,7 +390,7 @@
         "The provisioning logs in the Microsoft Entra admin center",
         "The Identity Secure Score history",
         "The PIM audit history for Microsoft Entra roles",
-        "The service principal sign-in logs"
+        "The service principal sign-in logs for that period"
       ],
       "answer": "The PIM audit history for Microsoft Entra roles",
       "explanation": "PIM audit history records activations, assignments and approvals, including justifications. Sign-in logs show authentications, not role activations."
@@ -415,7 +415,7 @@
       "topic": "PIM audit history, alerts and access reviews",
       "stem": "PIM raises the alert 'Roles are being assigned outside of Privileged Identity Management'. What does this alert indicate?",
       "choices": [
-        "An approver approved a request without entering a reason",
+        "An approver approved a request without entering a reason in the portal",
         "A privileged role was assigned directly instead of through PIM",
         "An eligible assignment was extended beyond its end date",
         "A user activated a privileged role from outside the corporate network"
@@ -659,7 +659,7 @@
       "stem": "A user at Fabrikam cannot open SharePoint Online. The user's sign-in event shows error code 53003. What should you do NEXT?",
       "choices": [
         "Review the Conditional Access details of the sign-in event",
-        "Check the provisioning logs for the SharePoint app",
+        "Check the provisioning logs for the SharePoint Online enterprise app",
         "Unlock the user account that smart lockout has temporarily locked",
         "Reset the user's password and require a change at sign-in"
       ],
@@ -786,7 +786,7 @@
       "choices": [
         "Sign-in logs, for the interactive user sign-in events",
         "Audit logs, for the consent to application activity",
-        "Provisioning logs, for the enterprise applications",
+        "Provisioning logs, for the enterprise applications in the tenant",
         "Identity Secure Score, for the improvement actions"
       ],
       "answer": "Audit logs, for the consent to application activity",
@@ -855,7 +855,7 @@
       "stem": "An administrator configured a diagnostic setting that sends only the AuditLogs and SignInLogs categories to a workspace. An analyst cannot find token refresh activity by a desktop app. What is the MOST likely reason?",
       "choices": [
         "The NonInteractiveUserSignInLogs category was not selected",
-        "The workspace retention is shorter than one day",
+        "The workspace retention is shorter than one day for those tables",
         "The ServicePrincipalSignInLogs category was not selected",
         "Token refresh activity is never logged by Microsoft Entra ID at all"
       ],
@@ -969,7 +969,7 @@
         "The Conditional Access insights and reporting workbook",
         "The audit logs filtered to the Conditional Access service",
         "The authentication methods activity report",
-        "The Sign-ins using legacy authentication workbook"
+        "The Sign-ins using legacy authentication workbook for each policy"
       ],
       "answer": "The Conditional Access insights and reporting workbook",
       "explanation": "The insights and reporting workbook shows the effect of each policy, including report-only results, across sign-ins. Audit logs show changes to policies, not their effect."
@@ -1011,7 +1011,7 @@
         "Authentication methods activity",
         "Usage and insights for applications",
         "Provisioning logs summary",
-        "Identity Secure Score history"
+        "Identity Secure Score improvement history"
       ],
       "answer": "Authentication methods activity",
       "explanation": "The authentication methods activity report shows registration and usage of authentication methods, including MFA and SSPR. Identity Secure Score shows overall posture, not per-method registration."

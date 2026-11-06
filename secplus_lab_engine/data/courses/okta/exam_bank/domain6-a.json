@@ -82,7 +82,7 @@
     "Run the Okta Usage report for the user",
     "Use the View Logs link on the user's profile",
     "Open the user in the Profile Editor",
-    "Export the user list from Directory > People"
+    "Export the list from Directory > People"
    ],
    "answer": "Use the View Logs link on the user's profile",
    "explanation": "The profile's View Logs link opens the System Log already filtered to that user. The Okta Usage report summarizes sign-ins but not every event."
@@ -233,7 +233,7 @@
    "topic": "Reading Event Details and Outcomes",
    "stem": "An admin wants to see which browser, operating system and country a suspicious sign-in came from. Where in the event is this recorded?",
    "choices": [
-    "In the target details of the event",
+    "In the target details listed in the event",
     "In the actor details of the event",
     "In the event's display message only",
     "In the client details of the event"
@@ -275,7 +275,7 @@
    "topic": "Reading Event Details and Outcomes",
    "stem": "An admin wants to see which risk behaviors Okta detected for a sign-in, such as a new device or new location. Where in the event should the admin look?",
    "choices": [
-    "In the target list of the event",
+    "In the target list of the event's details",
     "In the debug data under debugContext",
     "In the actor's alternate ID",
     "In the legacy event type field of the event"
@@ -415,10 +415,10 @@
    "topic": "Log Retention, Export and Access",
    "stem": "Compliance requires sign-in events to be kept for 2 years. What should the admin set up?",
    "choices": [
-    "A longer session lifetime in the global session policy",
+    "A longer maximum session lifetime in the global session policy",
     "Log streaming or System Log API collection into a SIEM",
     "A scheduled Okta Usage report sent by email",
-    "A larger retention value in the password policy"
+    "A larger log retention value set in the org's password policy"
    ],
    "answer": "Log streaming or System Log API collection into a SIEM",
    "explanation": "Events must leave Okta before the 90-day limit, through log streaming or the System Log API, to be kept longer. Reports do not hold every event."
@@ -445,7 +445,7 @@
    "choices": [
     "The Help Desk Administrator role does not include System Log access",
     "The System Log is turned off for help desk orgs",
-    "The help desk admin must enroll Okta Verify before the System Log opens",
+    "The help desk admin must enroll Okta Verify first",
     "The System Log only opens from a Preview org"
    ],
    "answer": "The Help Desk Administrator role does not include System Log access",
@@ -568,7 +568,7 @@
    "stem": "Within minutes, users across the whole company report that Okta sign-in is failing or very slow. What should the admin check FIRST?",
    "choices": [
     "The System Log for each user, one at a time",
-    "The password policy for a recent change to the lockout threshold",
+    "The password policy's lockout threshold",
     "The Okta Community forum for similar posts",
     "status.okta.com for an incident affecting the org's cell"
    ],
@@ -581,7 +581,7 @@
    "topic": "Okta Status Page",
    "stem": "An admin wants to be told automatically when Okta posts an incident or maintenance notice. What should the admin do?",
    "choices": [
-    "Create a group rule for the admin team",
+    "Create a group rule that adds the admin team to a group",
     "Subscribe to notifications on the Okta status page",
     "Turn on an Early Access feature that sends incident alerts",
     "Add the admins to the Everyone group"
@@ -596,7 +596,7 @@
    "stem": "status.okta.com shows a degraded-performance incident for the cell that hosts the org, matching what users report. What is the BEST next step?",
    "choices": [
     "Reset the passwords of every user in the org",
-    "Rotate the signing certificates of every SAML app in the org now",
+    "Rotate the signing certificates of every SAML app now",
     "Follow the incident updates and tell users it is a known issue",
     "Turn off the global session policy until it ends"
    ],
@@ -611,7 +611,7 @@
    "choices": [
     "Review that user's events in the System Log",
     "Wait for Okta to post an incident on the status page",
-    "Open a support case at the highest severity",
+    "Open a support case at the highest severity level",
     "Reset the authenticators of every user"
    ],
    "answer": "Review that user's events in the System Log",
@@ -640,7 +640,7 @@
     "Open an Okta case at the highest severity",
     "Clear the sessions of every user in the org",
     "Check the app vendor's own status page and contact the vendor",
-    "Deactivate and reactivate every user assigned to the app in Okta"
+    "Deactivate and reactivate every user assigned to the app"
    ],
    "answer": "Check the app vendor's own status page and contact the vendor",
    "explanation": "Okta is healthy and the error comes from the app, so the vendor's status and support are the right place. Clearing sessions does not repair an app outage."
@@ -693,7 +693,7 @@
    "topic": "Okta Product Documentation",
    "stem": "An admin follows a documentation page, but the menu names and steps do not match the Admin Console of an Identity Engine org. What is the MOST likely reason?",
    "choices": [
-    "The org has been moved to a different Okta cell since the page was written",
+    "The org has moved to a different Okta cell since then",
     "The admin is reading the Classic Engine version of the page",
     "The admin lacks the Report Administrator role",
     "The page only applies to Preview orgs"
@@ -751,7 +751,7 @@
    "choices": [
     "It keeps System Log events for much longer than a Production org does",
     "It allows unlimited users without a contract",
-    "It is the only org type that supports SAML apps",
+    "It is the only type of Okta org that can host SAML single sign-on apps",
     "It receives each release earlier so admins can test changes first"
    ],
    "answer": "It receives each release earlier so admins can test changes first",
@@ -806,7 +806,7 @@
    "stem": "A release note says a new feature is available, but it appears in the company's Preview org and not yet in its Production org. What is the MOST likely reason?",
    "choices": [
     "The Production org needs a separate support case for every new feature",
-    "Production orgs never receive Early Access features",
+    "Production orgs never receive Early Access features from a release",
     "Releases reach Preview orgs before they reach Production orgs",
     "The Production org is hosted on a slower Okta cell"
    ],
@@ -945,7 +945,7 @@
    "topic": "Support Cases and Support Access",
    "stem": "Okta Support asks for permission to sign in to the org to look at a configuration problem. Where does an admin grant this?",
    "choices": [
-    "Security > Administrators, by adding Support as a user",
+    "Security > Administrators, by adding Okta Support as an admin user",
     "Directory > People, by creating a new user account for Okta Support",
     "Reports > System Log, by sharing the current filter",
     "Settings > Account, in the Give Access to Okta Support section"
@@ -990,7 +990,7 @@
     "Approving support access for self-assigned cases in the account settings",
     "Adding the engineer to the Everyone group in the org",
     "Turning on an Early Access feature for Okta Support",
-    "Sharing a saved System Log search with the assigned support engineer by email"
+    "Sharing a saved System Log search with the engineer"
    ],
    "answer": "Approving support access for self-assigned cases in the account settings",
    "explanation": "The Give Access to Okta Support section has a separate approval for cases that Support opens and assigns to itself. Adding Support staff to groups is not how access is given."

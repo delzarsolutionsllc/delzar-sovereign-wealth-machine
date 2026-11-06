@@ -25,7 +25,7 @@
       "choices": [
         "A system-assigned managed identity enabled on the build server's operating system",
         "A service principal from an app registration that uses a certificate",
-        "A user-assigned managed identity attached to a virtual machine",
+        "A user-assigned managed identity attached to a virtual machine in the build subscription",
         "A shared user account excluded from MFA"
       ],
       "answer": "A service principal from an app registration that uses a certificate",
@@ -51,7 +51,7 @@
       "topic": "Selecting workload identities",
       "stem": "Which statement BEST describes how a managed identity is represented in Microsoft Entra ID?",
       "choices": [
-        "As a user account with a password that never expires",
+        "As a user account with a password that never expires and cannot be reset",
         "As an app registration that the administrator must give a client secret",
         "As a guest account linked to the Azure subscription",
         "As a special type of service principal whose credentials Azure manages"
@@ -262,7 +262,7 @@
       "stem": "Fabrikam transfers an Azure subscription to a different Microsoft Entra tenant. Virtual machines in the subscription used managed identities. What should the administrators expect?",
       "choices": [
         "The managed identities move automatically with all their role assignments",
-        "The managed identities become guest users in the new tenant",
+        "The managed identities are converted into guest users in the new tenant",
         "They must be re-created or re-enabled, and access granted again",
         "The managed identities keep working in the old tenant only"
       ],
@@ -292,7 +292,7 @@
         "Storage Blob Data Reader scoped to the storage account",
         "Reader scoped to the subscription",
         "Storage Account Contributor scoped to the storage account",
-        "Contributor scoped to the resource group"
+        "Contributor scoped to the resource group that holds the storage account"
       ],
       "answer": "Storage Blob Data Reader scoped to the storage account",
       "explanation": "Storage Blob Data Reader grants read access to blob data, and scoping it to the storage account limits it to that account. Reader covers only management-plane metadata, not blob data, and the contributor roles grant more than read."
@@ -361,7 +361,7 @@
       "choices": [
         "The Microsoft Entra sign-in logs filtered to interactive sign-ins",
         "The access control (IAM) check access feature for the identity",
-        "The app's provisioning logs",
+        "The provisioning logs filtered to the managed identity's object ID",
         "The My Apps portal"
       ],
       "answer": "The access control (IAM) check access feature for the identity",
@@ -430,7 +430,7 @@
       "stem": "Woodgrove Bank has Microsoft Entra Workload ID Premium licenses and wants to block a single-tenant service principal from signing in from outside approved IP ranges. Which feature should be used?",
       "choices": [
         "Microsoft Entra ID Protection user risk policy",
-        "Application Proxy pre-authentication",
+        "Application Proxy pre-authentication for the service principal",
         "Conditional Access for workload identities",
         "Self-service password reset"
       ],
@@ -587,7 +587,7 @@
         "Any user in the tenant can sign in to the app, but only assigned users see it in My Apps",
         "No users can sign in to the app until an administrator assigns at least one user or group",
         "Only guest users can sign in to the app",
-        "Users must request access through an access package before signing in"
+        "Users must request access through an access package and wait for approval before signing in"
       ],
       "answer": "Any user in the tenant can sign in to the app, but only assigned users see it in My Apps",
       "explanation": "With assignment not required, any user who reaches the app can get a token, while the My Apps tile shows only for assigned users. That is why assignment is usually required for apps that should be restricted."
@@ -642,7 +642,7 @@
       "choices": [
         "Add the manager as an owner of that enterprise application",
         "Assign the Cloud Application Administrator role at tenant scope",
-        "Assign the Application Administrator role at tenant scope",
+        "Assign the Application Administrator role at tenant scope to the manager",
         "Assign the Global Reader role"
       ],
       "answer": "Add the manager as an owner of that enterprise application",
@@ -699,7 +699,7 @@
         "On a Windows server on-premises that can reach the internal app",
         "On a domain controller in a perimeter network with inbound HTTPS open",
         "On each user's device",
-        "On the SaaS provider's web server"
+        "On the SaaS provider's web server that hosts the public endpoint"
       ],
       "answer": "On a Windows server on-premises that can reach the internal app",
       "explanation": "The connector runs on a Windows server inside the network that can reach the back-end app and connects outbound to the service. It does not need inbound ports, and it is not installed on user devices."
@@ -766,7 +766,7 @@
       "topic": "SaaS app SSO and provisioning",
       "stem": "You are configuring SAML SSO for a gallery app. The vendor gives you the URL where Microsoft Entra ID must post the SAML response. In which setting do you enter it?",
       "choices": [
-        "Identifier (Entity ID)",
+        "Identifier (Entity ID) that uniquely names the app",
         "Reply URL (Assertion Consumer Service URL)",
         "Sign-on URL",
         "Relay state (where users land after sign-in)"
@@ -809,7 +809,7 @@
       "stem": "Provisioning to a SaaS app must include only users whose department attribute is Finance, even though a large group is assigned. What should you configure?",
       "choices": [
         "A scoping filter on the provisioning attribute mappings",
-        "A Conditional Access policy for the app",
+        "A Conditional Access policy for the app that targets the Finance department",
         "An app collection in My Apps",
         "A token lifetime policy that applies only to the Finance department's users"
       ],
@@ -866,7 +866,7 @@
       "choices": [
         "Assign the managers' group to the enterprise application with the Approver role",
         "Add the managers to the Application Administrator role",
-        "Create a Conditional Access policy that targets the app",
+        "Create a Conditional Access policy that targets the app for the managers' security group",
         "Add the managers as owners of the app registration so they can edit the app's roles"
       ],
       "answer": "Assign the managers' group to the enterprise application with the Approver role",
@@ -1061,7 +1061,7 @@
       "stem": "An administrator wants users to be able to group their own assigned apps into personal collections in My Apps. What should the administrator know?",
       "choices": [
         "Only administrators can create collections",
-        "User-created collections replace all administrator collections",
+        "User-created collections replace all administrator collections for that user in My Apps",
         "Users can create their own collections in My Apps in addition to admin-created ones",
         "Each user can create personal collections only after an administrator approves an access review"
       ],

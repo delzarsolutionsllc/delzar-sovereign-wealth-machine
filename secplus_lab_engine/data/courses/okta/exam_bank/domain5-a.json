@@ -10,8 +10,8 @@
    "stem": "A new hire's account was imported from the HR system and shows the status Staged. She has received no email from Okta and cannot sign in. What should the admin do FIRST?",
    "choices": [
     "Reset the user's password and choose a temporary password",
-    "Unsuspend the user from the More Actions menu",
-    "Clear the user's sessions and revoke tokens",
+    "Unsuspend the user from the More Actions menu on the profile",
+    "Clear the user's sessions and revoke tokens from the profile page",
     "Activate the user so Okta can send the activation email"
    ],
    "answer": "Activate the user so Okta can send the activation email",
@@ -24,7 +24,7 @@
    "stem": "A user's profile shows Pending user action. He says he deleted the welcome email before setting up his account. What is the BEST way to let him finish setup?",
    "choices": [
     "Unlock the user account from the profile",
-    "Deactivate the user and then delete the account entirely",
+    "Deactivate the user and then delete the account",
     "Resend the activation email from the user's profile",
     "Reset the user's authenticators"
    ],
@@ -37,7 +37,7 @@
    "topic": "User Status and Sign-In Failures",
    "stem": "An admin suspends a user who is on a leave of absence. Which statement describes the user's account while it stays Suspended?",
    "choices": [
-    "The user is removed from every app and must be provisioned again when unsuspended",
+    "The user is removed from every app and must be provisioned again",
     "The user cannot sign in, and app assignments and group memberships are kept",
     "The user can sign in but sees an empty end-user dashboard",
     "The user is unlocked automatically after the lockout period ends"
@@ -52,8 +52,8 @@
    "stem": "A user is shown as Locked out after several wrong password attempts. Which Okta Identity Engine policy sets how many failed attempts cause this status?",
    "choices": [
     "The password policy that applies to the user's group",
-    "The default rule of the global session policy",
-    "The authenticator enrollment policy for the user",
+    "The default rule of the global session policy for the org",
+    "The authenticator enrollment policy assigned to the user",
     "The authentication policy assigned to the Okta Dashboard app"
    ],
    "answer": "The password policy that applies to the user's group",
@@ -67,7 +67,7 @@
    "choices": [
     "She is blocked until an admin unlocks the account",
     "She must set a new password after entering her current one",
-    "She must enroll Okta Verify again before she can sign in at all",
+    "She must enroll Okta Verify again before signing in",
     "She reaches the dashboard but every app tile is disabled"
    ],
    "answer": "She must set a new password after entering her current one",
@@ -82,7 +82,7 @@
     "Activate the user again and then check the app assignments",
     "Unsuspend the user from the More Actions menu on the profile",
     "Unlock the user from the user's profile",
-    "Clear the user's sessions and revoke tokens"
+    "Clear the user's sessions and revoke tokens from the profile page"
    ],
    "answer": "Activate the user again and then check the app assignments",
    "explanation": "A deactivated user must be activated again; Unsuspend and Unlock apply only to the Suspended and Locked out statuses. Deactivation removes app access, so the admin should confirm assignments afterward."
@@ -107,7 +107,7 @@
    "topic": "User Status and Sign-In Failures",
    "stem": "On Monday morning every user sourced from Active Directory fails to sign in with a correct password, while Okta-sourced users sign in normally. What is the MOST likely cause?",
    "choices": [
-    "The global session policy has a new rule that denies all AD-sourced users",
+    "A new global session policy rule denies all AD-sourced users",
     "The password policy lockout threshold was set too low",
     "Okta FastPass was turned off for the whole organization",
     "No Okta AD agent is available to handle delegated authentication"
@@ -151,8 +151,8 @@
    "choices": [
     "Reset Password and send the password reset link by email",
     "Reset Password and choose the temporary password option",
-    "Suspend the user and email the new password from Okta",
-    "Clear the user's sessions and choose to forget devices"
+    "Suspend the user and email the new password to the user from Okta",
+    "Clear the user's sessions and choose to forget all devices"
    ],
    "answer": "Reset Password and choose the temporary password option",
    "explanation": "The temporary password option shows a password the admin can pass on securely and marks the password as expired, so the user must change it at the next sign-in. A reset link is emailed, not read out."
@@ -165,7 +165,7 @@
    "choices": [
     "AD-sourced users keep using the existing password until they use the link",
     "Okta keeps a cached copy of AD passwords for one day",
-    "The reset link failed because AD-sourced users can never be reset from Okta",
+    "The reset link failed because AD-sourced users can't be reset",
     "The global session policy overrides any pending password reset"
    ],
    "answer": "AD-sourced users keep using the existing password until they use the link",
@@ -178,9 +178,9 @@
    "stem": "A user reports that her password was phished. While resetting her password, the admin also wants every existing Okta session for her to end on all devices. What should the admin do?",
    "choices": [
     "Choose to sign the user out of all sessions during the reset",
-    "Unlock the user before sending the reset link",
+    "Unlock the user before sending the password reset link by email",
     "Reset all of the user's authenticators instead of the password",
-    "Remove the user from every assigned app"
+    "Remove the user from every app and group that is assigned to her"
    ],
    "answer": "Choose to sign the user out of all sessions during the reset",
    "explanation": "The password reset dialog can also revoke all of the user's Okta sessions, which signs the user out on every device. Resetting authenticators does not change a stolen password."
@@ -191,10 +191,10 @@
    "topic": "Unlocking Accounts and Resetting Passwords",
    "stem": "Users who forget their password are only offered email for recovery, but the company also wants text message recovery. Phone is already active under Security > Authenticators. What should the admin change?",
    "choices": [
-    "Require Phone in the global session policy rule",
+    "Require Phone as an extra factor in the default global session policy rule",
     "Allow Phone as a recovery authenticator in the password policy",
     "Add Phone to the authentication policy of each app the users open",
-    "Enable text messages in the Okta Verify settings"
+    "Enable text message codes in the Okta Verify authenticator settings"
    ],
    "answer": "Allow Phone as a recovery authenticator in the password policy",
    "explanation": "Recovery authenticators are chosen in the password policy rule. App authentication policies control access to apps, not the forgot-password flow."
@@ -250,7 +250,7 @@
     "The re-authentication frequency in an app's authentication policy",
     "The maximum password age in the password policy",
     "The idle time setting in a global session policy rule",
-    "The settings of the authenticator enrollment policy"
+    "The settings of the authenticator enrollment policy for the org"
    ],
    "answer": "The idle time setting in a global session policy rule",
    "explanation": "The global session policy rule controls the Okta session, including idle time and maximum lifetime. An app's re-authentication frequency only governs access to that app."
@@ -262,7 +262,7 @@
    "stem": "The finance app must ask for authentication every time it is opened, even when the user already has an Okta session. Which change BEST meets this without affecting other apps?",
    "choices": [
     "Set the finance app's rule to prompt at every sign-in attempt",
-    "Shorten the global session policy lifetime for all users in the org",
+    "Shorten the global session lifetime for all users",
     "Clear every user's sessions on a nightly schedule",
     "Lower the maximum password age in the password policy"
    ],
@@ -289,7 +289,7 @@
    "topic": "Clearing Sessions and Session Lifetime",
    "stem": "What does the Clear Sessions & Revoke Tokens action on a user's profile do?",
    "choices": [
-    "Resets the user's password and sends a reset link",
+    "Resets the user's password and emails the user a reset link to use",
     "Ends the user's Okta sessions and revokes the user's tokens",
     "Removes the user from every group and app assignment the user has",
     "Resets every authenticator the user has enrolled"
@@ -305,7 +305,7 @@
    "choices": [
     "The idle timeout in the global session policy was reached at that time",
     "The user's password expired at the 12-hour mark",
-    "An admin reset the user's Okta Verify authenticator",
+    "An admin reset the user's Okta Verify authenticator at the 12-hour mark",
     "The maximum session lifetime in the global session policy was reached"
    ],
    "answer": "The maximum session lifetime in the global session policy was reached",
@@ -333,8 +333,8 @@
    "choices": [
     "Set Okta Verify to Optional or Required in the policy for Sales",
     "Add Okta Verify to the global session policy rule for the Sales group",
-    "Add the Sales group to the password policy",
-    "Create a network zone for the Sales offices"
+    "Add the Sales group to the password policy and its recovery options",
+    "Create a network zone for the Sales offices' public IP addresses"
    ],
    "answer": "Set Okta Verify to Optional or Required in the policy for Sales",
    "explanation": "The authenticator enrollment policy decides which authenticators a group can or must enroll. Global session and password policies do not control enrollment."
@@ -347,7 +347,7 @@
    "choices": [
     "The global session policy blocks third-party authenticators",
     "It has not been added under Security > Authenticators yet",
-    "Only Super Administrators can see that enrollment policy",
+    "Only Super Administrators can view or edit that enrollment policy",
     "Google Authenticator needs a dynamic network zone first"
    ],
    "answer": "It has not been added under Security > Authenticators yet",
@@ -362,7 +362,7 @@
     "He is denied because no allowed authenticator meets the rule",
     "Okta lets him in with SMS and writes a warning event to the log",
     "Okta lowers the requirement to password and SMS",
-    "Okta enrolls a security key for him automatically"
+    "Okta enrolls a security key for him automatically when he signs in"
    ],
    "answer": "He is denied because no allowed authenticator meets the rule",
    "explanation": "Okta never downgrades an authentication policy requirement; if the user cannot enroll an authenticator that meets the rule, access is denied. SMS is not phishing resistant."
@@ -374,7 +374,7 @@
    "stem": "Where in the Admin Console does an admin reset a single user's enrolled authenticators?",
    "choices": [
     "In Security > Authenticators, by deactivating that authenticator type",
-    "In Directory > Profile Editor, on the user profile",
+    "In Directory > Profile Editor, on the Okta user profile for that user",
     "On the user's profile, under More Actions > Reset Authenticators",
     "In Reports, from the MFA Usage report"
    ],
@@ -388,7 +388,7 @@
    "stem": "A user belongs to both Contractors and Employees. Two authenticator enrollment policies exist, and the Contractors policy is listed first. The user keeps getting the Contractors requirements. Why?",
    "choices": [
     "Okta merges both policies and applies the strictest of the settings",
-    "Okta always applies the most recently edited policy",
+    "Okta always applies the policy that was most recently edited by an admin",
     "The default policy overrides every custom policy",
     "The Contractors policy has higher priority and matches first"
    ],
@@ -401,10 +401,10 @@
    "topic": "Authenticator Enrollment and Reset",
    "stem": "A user lost her FIDO2 security key but still uses Okta Verify every day. The admin wants her to enroll a replacement key without disturbing Okta Verify. What should the admin do?",
    "choices": [
-    "Reset every authenticator the user has enrolled",
+    "Reset every authenticator the user has enrolled in Okta at once",
     "Deactivate the FIDO2 authenticator for every user in the whole org",
     "Reset only the security key authenticator for that user",
-    "Clear the user's sessions and revoke tokens"
+    "Clear the user's sessions and revoke tokens, then ask her to sign in"
    ],
    "answer": "Reset only the security key authenticator for that user",
    "explanation": "Reset Authenticators lets the admin choose which enrollment to remove, so only the lost key is reset. Deactivating the authenticator org-wide would affect everyone."
@@ -418,7 +418,7 @@
     "Her current IP address falls inside a blocklisted network zone",
     "Her password expired while she was traveling abroad",
     "Her Okta Verify enrollment was reset by the help desk during the trip",
-    "Her app assignments were removed by a group rule"
+    "Her app assignments were removed by a group rule while she was away"
    ],
    "answer": "Her current IP address falls inside a blocklisted network zone",
    "explanation": "Requests from blocklisted zones are rejected before authentication starts, which matches being blocked before the password prompt. An expired password would be shown after the password step."
@@ -445,7 +445,7 @@
    "choices": [
     "The password policy has a short maximum password age",
     "The global session policy rule requires a password to start the session",
-    "Okta Verify is set to Optional instead of Required in the enrollment policy",
+    "Okta Verify is Optional rather than Required for enrollment",
     "The app authentication policy allows any two factors"
    ],
    "answer": "The global session policy rule requires a password to start the session",
@@ -472,7 +472,7 @@
    "stem": "A user belongs to groups that are assigned to two different global session policies. Which policy applies when the user signs in?",
    "choices": [
     "The policy that was created most recently",
-    "Both policies, combined so the strictest rule from each one applies",
+    "Both policies, combined so the strictest rule applies",
     "The highest-priority policy whose assignment includes the user",
     "The default policy, whenever several policies match"
    ],
@@ -487,7 +487,7 @@
    "choices": [
     "The VPN's exit addresses match the dynamic zone used in a deny rule",
     "The VPN changes users' passwords when they connect",
-    "Dynamic zones reset the Okta Verify enrollment of each user who connects",
+    "Dynamic zones reset the Okta Verify enrollment of users",
     "The VPN removes users from the group assigned to the app"
    ],
    "answer": "The VPN's exit addresses match the dynamic zone used in a deny rule",
@@ -568,7 +568,7 @@
    "stem": "A user says the expense app is missing from her dashboard, while her teammates see it. What should the admin check FIRST?",
    "choices": [
     "Whether status.okta.com shows an active incident for the org's cell",
-    "Whether the app's SAML certificate expired",
+    "Whether the app's SAML signing certificate expired for the whole org",
     "Whether she is assigned to the app individually or through a group",
     "Whether her password is close to expiring"
    ],
@@ -681,7 +681,7 @@
    "choices": [
     "Delete the group and create a new group with the same name and apps",
     "Suspend the user so the rule releases the membership",
-    "Reset the user's password so the rule evaluates again",
+    "Reset the user's password so the group rule evaluates the user again",
     "Change the user's attribute or exclude the user in the group rule"
    ],
    "answer": "Change the user's attribute or exclude the user in the group rule",
@@ -707,7 +707,7 @@
    "topic": "Group Rules and Membership Errors",
    "stem": "A user moved from Finance to Sales. A rule added her to the Sales group, but she still has access to Finance apps. Her Finance membership was added manually years ago. Why does she still have Finance access?",
    "choices": [
-    "Group rules keep old memberships for 30 days by default",
+    "Group rules keep old memberships for 30 days by default after a change",
     "Users can belong to only one group at any time",
     "The manual Finance membership is not removed by attribute changes",
     "The Sales rule copies her old memberships into the new Sales group"
@@ -749,7 +749,7 @@
    "topic": "Group Types and Directory-Sourced Groups",
    "stem": "An admin cannot add a user to the HR-Staff group in Okta, and the group's source is shown as Active Directory. How should the membership be changed?",
    "choices": [
-    "Make a copy of the group in Okta and add the user to the copy",
+    "Make a copy of the group in Okta and add the user to that new copy instead",
     "Assign the user to the group with the Group Membership Administrator role",
     "Add the user to the group in AD and let the next import update Okta",
     "Edit the group's profile in Okta to change its source to Okta"
@@ -808,7 +808,7 @@
     "Okta removes AD group members who have not signed in",
     "No import from Active Directory has run since the change",
     "AD-sourced groups only change when a group rule runs",
-    "The user must reset her password before she can join any new group"
+    "She must reset her password before joining a group"
    ],
    "answer": "No import from Active Directory has run since the change",
    "explanation": "Changes made in AD reach AD-sourced groups in Okta after the next import. Okta does not remove members for not signing in, and a password reset has no effect on group membership."
@@ -833,7 +833,7 @@
    "topic": "Provisioning and Assignment Errors",
    "stem": "A user was assigned to an app with provisioning, but no account was created in the app. On the Provisioning tab, the To App setting for Create Users is turned off. What should the admin do?",
    "choices": [
-    "Add the user to the Everyone group in Okta",
+    "Add the user to the Everyone group in Okta and assign the app again",
     "Clear the user's sessions and revoke tokens",
     "Reset the user's password with a temporary password and retry it",
     "Turn on Create Users in the app's To App provisioning settings"
@@ -863,7 +863,7 @@
    "choices": [
     "Turn off Create Users and turn it back on again",
     "Remove every user from the app and then assign them all again",
-    "Change the app's sign-in method from SAML to SWA",
+    "Change the app's sign-in method from SAML to SWA for all users",
     "Enter the new token in the provisioning settings and test it"
    ],
    "answer": "Enter the new token in the provisioning settings and test it",
@@ -875,8 +875,8 @@
    "topic": "Provisioning and Assignment Errors",
    "stem": "Two groups are assigned to the same app with different role values, and a user who belongs to both receives the role from the wrong group. What controls which value the user gets?",
    "choices": [
-    "The date when each group was first created",
-    "The user's status shown on the profile",
+    "The date when each group was first created in the Okta org",
+    "The user's status shown on the profile in Directory > People",
     "The group priority order on the app's Assignments tab",
     "The order in which the user enrolled authenticators in Okta"
    ],
@@ -918,7 +918,7 @@
    "stem": "A departed employee was deactivated in Okta, but her account in a provisioning-enabled app is still active. What is the MOST likely cause?",
    "choices": [
     "Her Okta sessions were not cleared before the deactivation took place",
-    "The app was hidden from her dashboard before she left",
+    "The app's tile was hidden from her dashboard a week before she left",
     "She was never part of the Everyone group in Okta",
     "Deactivate Users is not enabled in the app's provisioning settings"
    ],
@@ -934,7 +934,7 @@
     "The app username Okta sends for him is not one the app knows",
     "The app's SAML signing certificate expired for every user of the app",
     "His Okta password expired while the app was open",
-    "The Okta status page lists an incident for the org"
+    "The Okta status page lists an active incident for the org's cell"
    ],
    "answer": "The app username Okta sends for him is not one the app knows",
    "explanation": "The value Okta sends as the user's identifier comes from the app username, and a mismatch makes the app reject only that user. An expired certificate would break sign-in for everyone."
@@ -945,7 +945,7 @@
    "topic": "App Sign-In Failures and Policy Denials",
    "stem": "Right after Okta's SAML signing certificate for an app was rotated, every user fails at the app with a signature error. What is the MOST likely cause?",
    "choices": [
-    "The users' Okta passwords all expired at the same time as the rotation",
+    "All users' Okta passwords expired during the rotation",
     "Group rules removed the users from the app",
     "The app still trusts the previous Okta signing certificate",
     "The app's icon was hidden from the users"
@@ -976,7 +976,7 @@
     "Her app assignment is removed every evening by a scheduled group rule run",
     "The app's authentication policy denies access outside the office zone",
     "Her password expires whenever she leaves the office",
-    "The app's icon is hidden for users outside the office"
+    "The app's icon is hidden for users who sign in from outside the office"
    ],
    "answer": "The app's authentication policy denies access outside the office zone",
    "explanation": "App authentication policy rules can use network zones, so off-network requests can be denied while assignment stays in place. Group rules do not change by location."
@@ -988,9 +988,9 @@
    "stem": "A SWA app opens from the tile, but the app always rejects the user's sign-in because the stored credentials are outdated. The app is set so that users enter their own username and password. What is the BEST fix?",
    "choices": [
     "Switch the app's sign-in method from SWA to SAML for that user",
-    "Clear the user's Okta sessions and revoke tokens",
+    "Clear the user's Okta sessions and revoke all of the user's tokens",
     "Have the user update the app credentials stored in Okta",
-    "Reset the user's Okta password with a reset link"
+    "Reset the user's Okta password and email the user a reset link"
    ],
    "answer": "Have the user update the app credentials stored in Okta",
    "explanation": "With SWA, Okta replays the credentials it holds, so the user should update them when the app password changes. The Okta password is a different credential."
@@ -1002,7 +1002,7 @@
    "stem": "Signing in from the Okta dashboard to a SAML app works, but starting from the app's own login page fails before users reach Okta. What is the MOST likely cause?",
    "choices": [
     "The Okta sign-in URL configured in the app for SP-initiated SSO is wrong",
-    "The users are not assigned to the app in Okta",
+    "The users are not assigned to the app in Okta, either directly or by group",
     "The app's icon is hidden from the dashboard",
     "The global session policy denies sign-in requests that start at the app's page"
    ],
@@ -1018,7 +1018,7 @@
     "The payroll app's authentication policy requires an extra authenticator",
     "The global session expired at the exact moment the payroll app was opened",
     "The user's password expired when the app opened",
-    "A group rule removed the user from the payroll app"
+    "A group rule removed the user from the group assigned to the payroll app"
    ],
    "answer": "The payroll app's authentication policy requires an extra authenticator",
    "explanation": "Each app's authentication policy can demand more assurance than the Okta session already has, which triggers a step-up prompt. A removed assignment would deny access rather than ask for Okta Verify."

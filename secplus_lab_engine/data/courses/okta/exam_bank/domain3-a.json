@@ -10,9 +10,9 @@
    "stem": "An admin needs to store each employee's cost center on their Okta profile. Where should the attribute be added?",
    "choices": [
     "Directory > Profile Editor, in the Okta default user profile",
-    "Applications > the HR app > Sign On tab attribute statements",
+    "Applications > the HR app > Sign On tab, SAML attribute statements",
     "Security > Authenticators > Profile settings",
-    "Directory > Groups > the Finance group profile"
+    "Directory > Groups > the Finance group's custom profile attributes"
    ],
    "answer": "Directory > Profile Editor, in the Okta default user profile",
    "explanation": "Custom user attributes are added to the Okta user profile in the Profile Editor. Attribute statements only send values in a SAML assertion and do not create a profile attribute."
@@ -51,7 +51,7 @@
    "topic": "Profile Editor and Attribute Types",
    "stem": "Users should see their employee number on their Okta profile but not be able to change it. Which attribute setting should the admin use?",
    "choices": [
-    "User permission set to Hide",
+    "User permission set to Hide for that attribute",
     "Attribute marked as Required",
     "Attribute type changed to boolean with a default",
     "User permission set to Read Only"
@@ -94,7 +94,7 @@
    "stem": "A Region attribute must only accept the values North, South, East or West. How should the admin define it?",
    "choices": [
     "Define an enumerated list of values for the attribute",
-    "Make the attribute required and change its type to integer",
+    "Make the attribute required with type integer",
     "Set the attribute's user permission to Hide",
     "Create a group rule for each allowed region"
    ],
@@ -108,7 +108,7 @@
    "stem": "What is an app user profile in the Okta Profile Editor?",
    "choices": [
     "The Okta user profile shared by every app in the org",
-    "The list of authenticators that a user has enrolled for use with one app",
+    "The authenticators a user has enrolled for one app",
     "The attributes Okta keeps for the user's account in one app",
     "The admin role a user holds for one app integration"
    ],
@@ -150,7 +150,7 @@
    "stem": "When assigning an app to a group, the admin fills in a License type field in the assignment dialog. What happens to that value?",
    "choices": [
     "It is written to each member's Okta user profile as a custom attribute",
-    "It replaces the app's SAML attribute statements",
+    "It replaces the app's SAML attribute statements for that group",
     "It is ignored until the admin runs an import",
     "It is applied to the app profile of each group member"
    ],
@@ -180,7 +180,7 @@
     "Open the mapping Preview tab for a random user",
     "Edit that user's assignment on the app's Assignments tab",
     "Search the System Log for the attribute name",
-    "Open the Okta default user profile in the Profile Editor and search"
+    "Search the Okta default user profile in Profile Editor"
    ],
    "answer": "Edit that user's assignment on the app's Assignments tab",
    "explanation": "The user's app assignment shows their app user profile values. The Profile Editor shows attribute definitions, not one user's values."
@@ -192,7 +192,7 @@
    "stem": "A company runs two instances of the same OIN app for two subsidiaries. How are their app user profiles handled?",
    "choices": [
     "Both instances share one app user profile",
-    "Only the first instance gets an app user profile",
+    "Only the first instance gets an app user profile; the second reuses it",
     "Their attributes merge into the Okta user profile under one app name",
     "Each instance has its own app user profile and mappings"
    ],
@@ -205,7 +205,7 @@
    "topic": "Mapping Direction and Apply Rules",
    "stem": "An admin wants the Okta title attribute sent to an app's jobTitle field. Which mapping should the admin edit?",
    "choices": [
-    "The app to Okta User",
+    "The app to Okta User mapping",
     "The group attribute statement",
     "Okta User to the app",
     "The Okta default profile source"
@@ -220,7 +220,7 @@
    "stem": "An HR app is the trusted source of department data, and Okta should receive those values. Which mapping direction applies?",
    "choices": [
     "The HR app to Okta User",
-    "Okta User to the HR app",
+    "Okta User to the HR app mapping",
     "Okta User to every downstream app",
     "Group to Okta User"
    ],
@@ -277,7 +277,7 @@
    "choices": [
     "Push Groups now",
     "Clear user sessions",
-    "Reset the mapping",
+    "Reset the mapping to defaults",
     "Apply updates now"
    ],
    "answer": "Apply updates now",
@@ -401,10 +401,10 @@
    "topic": "Profile Sourcing",
    "stem": "An HR system should master user profiles and lifecycle in Okta. What should the admin enable in that app's To Okta settings?",
    "choices": [
-    "Enable Create Users for the HR app",
+    "Enable Create Users for the HR app integration",
     "Allow the HR app to source Okta users",
     "Enable Sync Password for the HR app",
-    "Push the Everyone group to the HR app"
+    "Push the Everyone group from Okta to the HR app"
    ],
    "answer": "Allow the HR app to source Okta users",
    "explanation": "Profile sourcing makes the app the master of the users it imports. Create Users pushes accounts out of Okta, the opposite direction."
@@ -417,7 +417,7 @@
    "choices": [
     "The user is in Password expired status",
     "The user has not enrolled in Okta Verify",
-    "The title attribute's user permission is set to Hide for end users",
+    "Title's user permission is set to Hide for end users",
     "The attribute is sourced from Active Directory or an HR app"
    ],
    "answer": "The attribute is sourced from Active Directory or an HR app",
@@ -430,7 +430,7 @@
    "stem": "Users can come from both Active Directory and an HR app. Where does the admin set which system wins for a user who exists in both?",
    "choices": [
     "Directory > Groups, by ranking the groups",
-    "Security > Authentication Policies, by ordering the policy rules",
+    "Security > Authentication Policies, by rule order",
     "Directory > Profile Sources, by ordering the sources",
     "Applications > Assignments, by group priority"
    ],
@@ -474,7 +474,7 @@
     "Change it in Okta; the new value will be written back to Active Directory",
     "Change it in Okta and set the attribute to Read Only",
     "Correct it in Active Directory and let the next import update Okta",
-    "Delete the user in Okta and import them again"
+    "Delete the user in Okta and import them again from Active Directory"
    ],
    "answer": "Correct it in Active Directory and let the next import update Okta",
    "explanation": "The source system wins, so the change belongs in AD and flows to Okta at the next import. An edit in Okta is blocked or overwritten."
@@ -487,7 +487,7 @@
    "choices": [
     "The app receives every change made in Okta",
     "The app masters their profile attributes and lifecycle",
-    "The app becomes the only authenticator the users can sign in with",
+    "The app becomes the users' only authenticator",
     "The app is hidden from users' dashboards"
    ],
    "answer": "The app masters their profile attributes and lifecycle",
@@ -622,7 +622,7 @@
     "They are blocked until an admin unlocks the account for them",
     "They receive a new activation email to start over",
     "They must change their password before going further",
-    "They lose all app assignments until reassigned"
+    "They lose all app assignments until an admin reassigns them"
    ],
    "answer": "They must change their password before going further",
    "explanation": "Expiring the password sets Password expired, so the user must choose a new one at sign-in. Unlocking applies to Locked out accounts."
@@ -634,7 +634,7 @@
    "stem": "A contractor starts in two weeks. The admin wants the account ready now but no email sent and no sign-in possible until day one. What is the BEST approach?",
    "choices": [
     "Create and activate the user, then suspend until day one",
-    "Create and activate the user, then deactivate the account until day one",
+    "Create and activate the user, then deactivate until day one",
     "Create the user without activation, then activate on day one",
     "Create the user and expire the password until day one"
    ],
@@ -747,7 +747,7 @@
    "choices": [
     "Reactivate the existing account and then confirm their app access",
     "Create a second account with a slightly different username for the rehire",
-    "Delete the old account and import the user from a CSV file",
+    "Delete the old account, then import the user again from a CSV file",
     "Unsuspend the old account so its assignments come back"
    ],
    "answer": "Reactivate the existing account and then confirm their app access",
@@ -802,7 +802,7 @@
    "stem": "A SAML-only app has no provisioning. A user is deactivated in Okta. What is true about their account in the app?",
    "choices": [
     "Okta deletes the app account through the SAML connection at next sign-in",
-    "The app account is deactivated by the SAML certificate",
+    "The app account is deactivated when the SAML certificate is rotated",
     "The app account is suspended until the user is deleted",
     "The app account still exists and must be handled in the app"
    ],
@@ -999,7 +999,7 @@
    "choices": [
     "A password policy with a 90-day maximum password age",
     "An automation with a user inactivity condition and a lifecycle action",
-    "A global session policy rule with a maximum session lifetime of 90 days",
+    "A global session policy rule with a 90-day session lifetime",
     "A group rule that removes inactive users from Everyone"
    ],
    "answer": "An automation with a user inactivity condition and a lifecycle action",
