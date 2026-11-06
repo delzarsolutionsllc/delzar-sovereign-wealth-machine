@@ -54,9 +54,9 @@ def _obj(props: dict, required=()) -> dict:
 
 
 LAB = {"type": "integer", "minimum": 1, "maximum": 26, "description": "Lab number 1-26"}
-OBJ = {"type": "string", "pattern": r"^[1-5]\.[1-9]$", "description": "Exam objective, e.g. 2.4"}
+OBJ = {"type": "string", "pattern": r"^\d{1,2}\.\d{1,2}$", "description": "Exam objective, e.g. 2.4"}
 QID = {"type": "string", "pattern": r"^[A-Z0-9]{1,4}-\d{3}$|^G-[a-z0-9-]{1,80}:(acr|voc|def)$", "description": "Question id, e.g. D2-014"}
-QUIZ = {"type": "string", "pattern": r"^[1-5]\.[1-9]-(set|t)\d{1,2}$|^g[1-5]-(acr|voc|def)-\d{1,2}$",
+QUIZ = {"type": "string", "pattern": r"^\d{1,2}\.\d{1,2}-(set|t)\d{1,2}$|^g\d{1,2}-(acr|voc|def)-\d{1,2}$",
         "description": "Quiz id from list_quizzes (e.g. 2.4-t1) or a glossary quiz (e.g. g3-acr-1)"}
 SEED = {"type": "integer", "minimum": 0, "maximum": 2 ** 31 - 1}
 

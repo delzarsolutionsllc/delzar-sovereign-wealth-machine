@@ -243,7 +243,7 @@ def main(argv=None) -> int:
     bad = 0
     for f in files:
         data = json.loads(f.read_text(encoding="utf-8"))
-        dom = re.search(r"domain(\d)", f.name)
+        dom = re.search(r"domain(\d{1,2})", f.name)
         qs = data["questions"]
         probs = validate(qs, dom.group(1) if dom else None)
         per_obj = Counter(q.get("objective") for q in qs)

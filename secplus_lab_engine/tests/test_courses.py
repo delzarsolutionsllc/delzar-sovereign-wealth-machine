@@ -182,3 +182,20 @@ def test_okta_labs_stay_in_okta():
         print(json.dumps(sorted({x["objective"] for x in q})))
     """)
     assert set(got) <= {"4.3", "4.2", "4.1"} and got
+
+
+def test_domains_beyond_five_work_everywhere():
+    """Okta has a domain 6 (and SailPoint Engineer will have 10): quiz ids, glossary quizzes,
+    progress import and the MCP schemas must accept them."""
+    got = run_in("okta", """
+        import json
+        from utils import quizzes, glossary, sync
+        q = quizzes.find("6.1-t1"); g = glossary.find("g6-voc-1")
+        c = sync.clean({"objectives": {"6.2": {"attempted": 3, "correct": 2}, "10.1": {"attempted": 1, "correct": 1}}})
+        print(json.dumps({"quiz": bool(q), "gloss": bool(g), "objs": sorted(c["objectives"])}))
+    """)
+    assert got == {"quiz": True, "gloss": True, "objs": ["10.1", "6.2"]}
+    from utils import mcp_server
+    import re
+    assert re.match(mcp_server.OBJ["pattern"], "10.3") and re.match(mcp_server.QUIZ["pattern"], "10.2-t1")
+    assert re.match(mcp_server.QUIZ["pattern"], "g10-acr-1")

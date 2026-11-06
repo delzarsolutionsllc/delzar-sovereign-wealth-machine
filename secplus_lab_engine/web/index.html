@@ -585,8 +585,8 @@ function cleanProgress(raw) {
   if (!isObj(raw) || !["objectives", "srs", "sessions", "watched", "quizzes"].some(k => k in raw)) throw new Error("This file does not contain Delzar Certification Academy progress.");
   const int = (v, lo = 0, hi = 1e7) => { let n = typeof v === "number" ? Math.trunc(v) : typeof v === "boolean" ? Number(v) : typeof v === "string" && /^\s*[-+]?\d+\s*$/.test(v) ? parseInt(v, 10) : NaN; if (!Number.isFinite(n)) n = lo; return Math.max(lo, Math.min(hi, n)); };
   const day = v => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : null);
-  const KEY = /^[\w.\-]{1,40}$/, OBJK = /^[1-5]\.[1-9]$/, out = EMPTY();
-  if (isObj(raw.objectives)) for (const [o, x] of Object.entries(raw.objectives)) if (OBJK.test(o) && isObj(x)) { const a = int(x.attempted); out.objectives[o] = { attempted: a, correct: Math.min(a, int(x.correct)) }; }
+  const KEY = /^[\w.\-]{1,40}$/, OBJK = /^\d{1,2}\.\d{1,2}$/, out = EMPTY();
+  if (isObj(raw.objectives)) for (const [o, x] of Object.entries(raw.objectives)) if (OBJK.test(o) && isObj(x)) { const a = int(x.attempted); if (a) out.objectives[o] = { attempted: a, correct: Math.min(a, int(x.correct)) }; }
   if (isObj(raw.srs)) for (const [q, c] of Object.entries(raw.srs)) if (KEY.test(q) && isObj(c) && day(c.due)) {
     const e = typeof c.ease === "number" && Number.isFinite(c.ease) ? c.ease : 2.5;
     out.srs[q] = { due: c.due, interval_days: int(c.interval_days, 0, 3650), ease: Math.max(1.3, Math.min(2.8, e)), reps: int(c.reps, 0, 10000), lapses: int(c.lapses, 0, 10000),
@@ -1305,7 +1305,7 @@ async function viewGlossary(domain = "") {
    and one concept quiz per topic of the objective (utils/quizzes.py builds the list).
    Untimed, with the answer and the reason after each question. Misses go to the daily review. */
 const OQ = () => CATALOG.objective_quizzes || {};
-const isGlossaryQuiz = id => /^g[1-5]-/.test(String(id));
+const isGlossaryQuiz = id => /^g\d{1,2}-/.test(String(id));
 const objOrder = () => Object.keys(OQ()).sort((a, b) => cmpTuple(a.split(".").map(Number), b.split(".").map(Number)));
 const quizTitle = q => (q.kind === "set" ? q.title : `Concept: ${q.title}`);
 const scoreText = s => (s ? `best ${s.best}% · last ${s.last}% · ${s.attempts} attempt${s.attempts === 1 ? "" : "s"}` : "not taken yet");
@@ -1637,14 +1637,14 @@ function route() {
   if (m) return viewLab(parseInt(m[1], 10));
   if (h === "exam") return viewExam();
   if (h === "quizzes") return viewQuizzes();
-  const om = h.match(/^obj-([1-5]\.[1-9])$/);
+  const om = h.match(/^obj-(\d{1,2}\.\d{1,2})$/);
   if (om) return viewObjective(om[1]);
   if (h === "glossary") return viewGlossary("");
-  const gm = h.match(/^glossary-d([1-5])$/);
+  const gm = h.match(/^glossary-d(\d{1,2})$/);
   if (gm) return viewGlossary(gm[1]);
-  const qm = h.match(/^quiz-([1-5]\.[1-9]-(?:set|t)\d{1,2}|g[1-5]-(?:acr|voc|def)-\d{1,2})$/);
+  const qm = h.match(/^quiz-(\d{1,2}\.\d{1,2}-(?:set|t)\d{1,2}|g\d{1,2}-(?:acr|voc|def)-\d{1,2})$/);
   if (qm) return startObjectiveQuiz(qm[1]);
-  const dm = h.match(/^exam-d([1-5])$/);
+  const dm = h.match(/^exam-d(\d{1,2})$/);
   if (dm) return viewExam(dm[1]);
   if (h === "progress") return viewProgress();
   if (h === "review") return viewReview();
