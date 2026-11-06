@@ -217,7 +217,7 @@ def test_sailpoint_courses(sailpoint):
     assert c["topics_ok"] and c["bank"] >= n_obj * 34
     assert c["exam_domains"] == list(map(str, range(1, n_dom + 1)))
     assert c["glossary"] >= 240 and c["gloss_domains"] == list(map(str, range(1, n_dom + 1)))
-    assert {"43", "44", "45", "46", "47", "48", "49", "50"} <= set(c["labs"])
+    assert {"43", "44", "45", "46", "47", "48", "49", "50", "51"} <= set(c["labs"])
     assert c["videos"] == 0 and c["retires"] is None
 
 
@@ -225,4 +225,4 @@ def test_sailpoint_labs_stay_in_sailpoint():
     from labs import LABS
     from webapi import course_labs
     assert course_labs() == list(range(1, 27))
-    assert all(getattr(LABS[n][0], "COURSES", None) == ("spadmin", "speng") for n in range(43, 51))
+    assert all(getattr(LABS[n][0], "COURSES", None) == ("spadmin", "speng") for n in range(43, 52))

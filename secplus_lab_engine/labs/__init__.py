@@ -60,6 +60,7 @@ from . import (
     lab48_isc_certifications_sod,
     lab49_isc_search_workflows,
     lab50_isc_virtual_appliances,
+    lab51_isc_api_security,
 )
 
 # lab number -> (module, default data file)
@@ -117,6 +118,7 @@ LABS = {
     48: (lab48_isc_certifications_sod, "sample_isc_certifications_sod.json"),
     49: (lab49_isc_search_workflows, "sample_isc_search_workflows.json"),
     50: (lab50_isc_virtual_appliances, "sample_isc_virtual_appliances.json"),
+    51: (lab51_isc_api_security, "sample_isc_api_security.json"),
 }
 
 
