@@ -694,19 +694,22 @@ def _leaves(node) -> list[str]:
 
 
 def _value_choices(answer: str, inputs, transform, key: str) -> list[str]:
-    from utils.challenge import choices_with
-
-    pool = {ERROR_CHOICE, NULL_CHOICE, json.dumps("")}
+    """The answer plus three plausible wrong values: the raw inputs and transform constants first, then the
+    error and null outcomes, then case and whitespace variants."""
     plain = json.loads(answer) if answer.startswith('"') else None
-    for v in [*inputs, plain, *_leaves(transform)]:
+    raw = [v for v in [*inputs, *_leaves(transform)] if isinstance(v, str) and v.strip()]
+    ordered = [json.dumps(v) for v in raw] + [ERROR_CHOICE, NULL_CHOICE]
+    for v in [*raw, plain]:
         if isinstance(v, str) and v.strip():
-            pool |= {json.dumps(v), json.dumps(v.lower()), json.dumps(v.upper()), json.dumps(v.strip())}
+            ordered += [json.dumps(v.strip()), json.dumps(v.lower()), json.dumps(v.upper())]
+    ordered.append(json.dumps(""))
     # Answers typed as text are matched without case, so keep one option per case-folded spelling.
-    folded: dict[str, str] = {}
-    for c in sorted(pool):
-        if c.casefold() != answer.casefold():
-            folded.setdefault(c.casefold(), c)
-    return choices_with(answer, sorted(folded.values()), key=key)
+    picked: dict[str, str] = {answer.casefold(): answer}
+    for c in ordered:
+        if len(picked) == 4:
+            break
+        picked.setdefault(c.casefold(), c)
+    return sorted(picked.values())
 
 
 def _interesting(r: PersonResult, attr: str) -> str | None:
