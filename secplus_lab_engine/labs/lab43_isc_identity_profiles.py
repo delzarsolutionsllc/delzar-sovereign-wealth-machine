@@ -315,7 +315,11 @@ def evaluate(node, ctx: Ctx, implicit=None):
         v = inp()
         if v is None:
             return None
-        return _e164(v, str(attrs.get("defaultRegion", "US")), cfg)
+        region = str(attrs.get("defaultRegion", "US"))
+        out = _e164(v, region, cfg)
+        if out is None:
+            ctx.trace.append(f"e164phone: \"{v}\" is not a valid {region} phone number, so the result is null")
+        return out
     raise TransformError(f"'{ttype}' is listed as supported but has no implementation")  # pragma: no cover
 
 
@@ -670,16 +674,49 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
 # --------------------------------------------------------------------------- #
 # Challenge mode
 # --------------------------------------------------------------------------- #
-def _value_choices(answer: str, raw_input, key: str) -> list[str]:
+_SKIP_KEYS = {"type", "name", "sourceName", "applicationName", "attributeName", "regex", "expression",
+              "inputFormat", "outputFormat", "defaultRegion"}
+
+
+def _leaves(node) -> list[str]:
+    """String values inside a transform (conditions, table values, statics): plausible wrong answers."""
+    out: list[str] = []
+    if isinstance(node, str):
+        out.append(node)
+    elif isinstance(node, list):
+        for v in node:
+            out += _leaves(v)
+    elif isinstance(node, dict):
+        for k, v in node.items():
+            if k not in _SKIP_KEYS:
+                out += _leaves(v)
+    return out
+
+
+def _value_choices(answer: str, inputs, transform, key: str) -> list[str]:
     from utils.challenge import choices_with
 
-    pool = {ERROR_CHOICE, NULL_CHOICE}
-    for v in (raw_input, answer.strip('"') if answer.startswith('"') else None):
-        if isinstance(v, str) and v:
-            pool |= {json.dumps(v), json.dumps(v.lower()), json.dumps(v.upper()), json.dumps(v.strip()),
-                     json.dumps(v.title()), json.dumps(v[1:]) if len(v) > 1 else json.dumps(v + v)}
+    pool = {ERROR_CHOICE, NULL_CHOICE, json.dumps("")}
+    plain = json.loads(answer) if answer.startswith('"') else None
+    for v in [*inputs, plain, *_leaves(transform)]:
+        if isinstance(v, str) and v.strip():
+            pool |= {json.dumps(v), json.dumps(v.lower()), json.dumps(v.upper()), json.dumps(v.strip())}
     pool.discard(answer)
     return choices_with(answer, sorted(pool), key=key)
+
+
+def _interesting(r: PersonResult, attr: str) -> str | None:
+    """Why this attribute's value is worth a question (None = routine)."""
+    if attr in r.errors:
+        return "error"
+    t = " ".join(r.traces.get(attr, []))
+    if "earlier values are null" in t or "default is used" in t or "read from an attribute" in t:
+        return "fallback"
+    if " is false" in t:
+        return "negative"
+    if r.attributes.get(attr) is None:
+        return "null"
+    return None
 
 
 def build_challenges(policies: dict, data: dict) -> list:
@@ -709,30 +746,27 @@ def build_challenges(policies: dict, data: dict) -> list:
                                        for p in data.get("identity_profiles", [])),
                                choices=choices_with(r.profile, names, key=r.id), answer=r.profile,
                                explanation=r.reasons[0], objective="3.1"))
-    # "What value does this mapping produce?" computed by the engine.
-    asked = 0
+    # "What value does this mapping produce?" — computed by the engine, one per kind of tricky case.
+    seen_kinds: set = set()
     for r in people:
-        if not r.profile or asked >= 4:
+        if not r.profile:
             continue
-        for attr in ("email", "firstname", "cloudLifecycleState", "uid"):
-            m = (prof_by_name[r.profile].get("mappings") or {}).get(attr) or {}
-            t = m.get("transform") or {}
-            if t.get("type") in ("firstValid", "conditional", "concat", "lower", "lookup", "replace") and \
-                    (attr in r.errors or r.attributes.get(attr) is not None):
-                ans = show(r.attributes.get(attr), r.errors.get(attr))
-                main = next(a for a in r.accounts if raw[a].get("source") == prof_by_name[r.profile]
-                            ["authoritative_source"])
-                src_val = (raw[main].get("attributes") or {}).get(m.get("attribute")) if m.get("source") else None
-                qs.append(Question(prompt=f"{r.id}: what value does the {attr} mapping produce?",
-                                   context=f"account: {raw[main].get('attributes')}\nmapping: {json.dumps(m)}",
-                                   choices=_value_choices(ans, src_val or (r.attributes.get(attr) or ""),
-                                                          r.id + attr),
-                                   answer=ans, explanation="; ".join(
-                                       [r.errors[attr]] if attr in r.errors else
-                                       [x for x in r.reasons if x.startswith(t.get("type", "?"))] or
-                                       [f"{attr} = {ans}"]), objective="3.2"))
-                asked += 1
-                break
+        prof = prof_by_name[r.profile]
+        main = next(a for a in r.accounts if raw[a].get("source") == prof["authoritative_source"])
+        acct = raw[main].get("attributes") or {}
+        for attr, m in (prof.get("mappings") or {}).items():
+            m = m or {}
+            kind = _interesting(r, attr)
+            if not m.get("transform") or kind is None or (attr, kind) in seen_kinds or len(seen_kinds) >= 6:
+                continue
+            seen_kinds.add((attr, kind))
+            ans = show(r.attributes.get(attr), r.errors.get(attr))
+            why = [r.errors[attr]] if attr in r.errors else r.traces.get(attr) or [f"{attr} = {ans}"]
+            qs.append(Question(prompt=f"{r.id}: what value does the {attr} mapping produce?",
+                               context=f"account {main}: {acct}\nmapping: {json.dumps(m)}",
+                               choices=_value_choices(ans, [acct.get(m.get("attribute"))] if m.get("source") else [],
+                                                      m["transform"], r.id + attr),
+                               answer=ans, explanation="; ".join(why), objective="3.2"))
     by_test = {t.get("id"): t for t in data.get("transform_tests", [])}
     for t in tests:
         src = by_test[t["id"]]
@@ -744,7 +778,9 @@ def build_challenges(policies: dict, data: dict) -> list:
         if src.get("identity") is not None:
             ctx += f"\nidentity attributes already computed: {json.dumps(src['identity'])}"
         qs.append(Question(prompt=f"{t['id']}: what value does this transform produce?", context=ctx,
-                           choices=_value_choices(t["display"], src.get("input") or "", t["id"]),
+                           choices=_value_choices(t["display"], [src.get("input"),
+                                                                   *(src.get("identity") or {}).values()],
+                                                  src.get("transform"), t["id"]),
                            answer=t["display"], explanation="; ".join(t["reasons"]), objective="3.2"))
     for p in profiles:
         qs.append(Question(prompt=f"Identity profile {p.name}: is it ready, or misconfigured?",

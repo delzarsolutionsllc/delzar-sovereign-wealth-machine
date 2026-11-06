@@ -11,7 +11,7 @@
    "choices": [
     "In a sandbox tenant, then promote the tested configuration to production",
     "In production, with a note to roll back if users complain",
-    "In production, on access profiles that nobody has requested yet",
+    "In production, but only on access profiles that nobody has requested so far",
     "In a spreadsheet model of the approval paths and segments"
    ],
    "answer": "In a sandbox tenant, then promote the tested configuration to production",
@@ -24,7 +24,7 @@
    "stem": "An engineer tests a new segment by signing in with an org admin account and finds every access item visible. What should the engineer change in the test?",
    "choices": [
     "Disable the segment and enable it again",
-    "Add the admin account to the segment's identity criteria",
+    "Add the admin account to the segment's identity criteria and sign in again",
     "Remove the access items from all other segments",
     "Sign in as non-admin test identities inside and outside the segment"
    ],
@@ -39,10 +39,10 @@
    "choices": [
     "Cancel the old request and wait for reminders to restart",
     "Restart the virtual appliance so the new schedule loads",
-    "Submit a new access request, because changes apply only to requests created after them",
-    "Reassign the old request to pick up the new configuration"
+    "Submit a new request, since changes apply only to requests created afterwards",
+    "Reassign the old request so that it picks up the newly saved reminder configuration"
    ],
-   "answer": "Submit a new access request, because changes apply only to requests created after them",
+   "answer": "Submit a new request, since changes apply only to requests created afterwards",
    "explanation": "Reminder, escalation and timeout changes only affect requests created after the change; pending requests keep their original configuration. Reassigning only restarts the existing timing."
   },
   {
@@ -51,7 +51,7 @@
    "topic": "Access Management Test Planning",
    "stem": "A test plan for a new access profile covers manager approval for requests. Which additional test case is MOST important to include?",
    "choices": [
-    "A second request with the same user and the same justification",
+    "A second request from the same user with the same justification and the same approver",
     "A removal request and the end-to-end provisioning result on the target source",
     "A request submitted from a different web browser",
     "A request made outside working hours"
@@ -65,12 +65,12 @@
    "topic": "Access Management Test Planning",
    "stem": "Which evidence BEST confirms that an access request test passed end to end?",
    "choices": [
-    "The requester received the request submitted email",
+    "The requester received the request submitted email and the approver's decision email",
     "The approver clicked Approve in the approval email",
-    "The request shows complete and the target account holds the entitlement after aggregation",
+    "The request is complete and the target account holds the entitlement",
     "The access profile appears in the Request Center"
    ],
-   "answer": "The request shows complete and the target account holds the entitlement after aggregation",
+   "answer": "The request is complete and the target account holds the entitlement",
    "explanation": "End-to-end success means the request finished and the target system reflects the change. Emails and approvals are steps along the way, not proof of provisioning."
   },
   {
@@ -79,12 +79,12 @@
    "topic": "Access Management Test Planning",
    "stem": "A new governance group approval scheme is ready. Which test approach follows best practice?",
    "choices": [
-    "Test each approver path, including escalation and the fallback approver, with test identities",
+    "Test every approver path, including escalation and fallback, with test identities",
     "Test only the main approver, because escalation is automatic",
-    "Ask the governance group to approve all pending production requests",
+    "Ask the governance group to approve all pending production requests as the final test",
     "Test the scheme by assigning access directly as an admin"
    ],
-   "answer": "Test each approver path, including escalation and the fallback approver, with test identities",
+   "answer": "Test every approver path, including escalation and fallback, with test identities",
    "explanation": "Every path a request can take, including escalation and fallback, should be exercised before rollout. Direct admin assignment bypasses the approval scheme being tested."
   },
   {
@@ -108,7 +108,7 @@
    "stem": "Where does an engineer configure global approval reminders for requests?",
    "choices": [
     "Admin > Access Model > Segments, on each segment",
-    "Admin > Identity Management > Identity Profiles, on each profile",
+    "Admin > Identity Management > Identity Profiles, on each profile's settings page",
     "Admin > Connections > Sources, on each source's settings",
     "Admin > Global > System Settings, under Feature Settings > Approval Settings"
    ],
@@ -121,12 +121,12 @@
    "topic": "Approval Reminders and Timeouts",
    "stem": "Approvers should get the first reminder three days after a request and then one reminder a week, with no more than four reminders. Which settings achieve this?",
    "choices": [
-    "A three-day timeout, a weekly escalation frequency and four escalations",
-    "Days after the request to start reminders, a weekly reminder frequency and number of reminders set to four",
+    "A three-day timeout, a weekly escalation frequency and four escalation steps",
+    "Start reminders after three days, frequency weekly, number of reminders four",
     "A weekly escalation, a three-day timeout and four fallback approvers",
     "Number of reminders set to three and a four-day reminder frequency"
    ],
-   "answer": "Days after the request to start reminders, a weekly reminder frequency and number of reminders set to four",
+   "answer": "Start reminders after three days, frequency weekly, number of reminders four",
    "explanation": "Reminders are configured by number of reminders, days after the request to start, frequency (daily, weekly or monthly) and time. Timeout and escalations solve other problems."
   },
   {
@@ -138,7 +138,7 @@
     "It times out after 90 days, and no reminders or escalations happen after that",
     "It stays pending until an admin cancels it",
     "It is approved automatically after 30 days",
-    "It is escalated to the requester after 90 days"
+    "It is escalated back to the requester after 90 days so the requester can cancel it"
    ],
    "answer": "It times out after 90 days, and no reminders or escalations happen after that",
    "explanation": "Requests time out after 90 days without action by default, and 90 days is also the maximum timeout. ISC never approves a request just because no one acted."
@@ -149,12 +149,12 @@
    "topic": "Approval Reminders and Timeouts",
    "stem": "Global reminders are enabled, but approvers of one critical access profile receive no reminders. The access profile's own reminder toggle was turned off earlier. What is the cause?",
    "choices": [
-    "Reminders are only sent for roles, not for access profiles",
+    "Reminders are only ever sent for roles and entitlements, never for access profiles",
     "The global setting applies only to entitlement requests",
-    "Turning off reminders on the item overrides the global setting, so no reminders are sent",
+    "The item's own off setting overrides the global setting, so none are sent",
     "Reminders need a governance group as approver to work"
    ],
-   "answer": "Turning off reminders on the item overrides the global setting, so no reminders are sent",
+   "answer": "The item's own off setting overrides the global setting, so none are sent",
    "explanation": "Settings on an individual access item override the global ones, and an explicit off means no reminders even when they are configured globally. The fix is to clear or reconfigure the item's setting."
   },
   {
@@ -191,12 +191,12 @@
    "topic": "Escalation Patterns",
    "stem": "Escalations are enabled, but no custom escalation chain has been configured. Where do the escalations go?",
    "choices": [
-    "All escalations go to the source owner of the access item",
-    "The first two go to the assigned reviewer's manager, and the third to the fallback approver",
+    "All escalations go to the source owner of the access item, then to the org admins",
+    "Twice to the assigned reviewer's manager, then to the fallback approver",
     "The first goes to the requester, then to any org admin",
     "All escalations go to the fallback approver right away"
    ],
-   "answer": "The first two go to the assigned reviewer's manager, and the third to the fallback approver",
+   "answer": "Twice to the assigned reviewer's manager, then to the fallback approver",
    "explanation": "The default pattern escalates to the manager of the assigned reviewer twice and then to the fallback approver. Source owners and requesters are not default escalation targets."
   },
   {
@@ -220,11 +220,11 @@
    "stem": "When is an approval request sent to the fallback approver?",
    "choices": [
     "When the first reminder is sent to the approver",
-    "When the requester cancels and resubmits the request",
-    "When it has passed through the whole escalation chain, or no approver is found during escalation",
+    "When the requester cancels and resubmits the request after the timeout",
+    "When the escalation chain is used up, or no approver is found",
     "When the approver approves the request partially"
    ],
-   "answer": "When it has passed through the whole escalation chain, or no approver is found during escalation",
+   "answer": "When the escalation chain is used up, or no approver is found",
    "explanation": "The fallback approver is the last step after the escalation chain is exhausted, and it also receives requests when no approver can be found. Reminders do not change the assignee."
   },
   {
@@ -247,12 +247,12 @@
    "topic": "Escalation Patterns",
    "stem": "A governance group approves requests, and the escalation chain uses the manager of each reviewer. One member has no manager. What happens at the first escalation?",
    "choices": [
-    "The whole request goes to the fallback approver",
+    "The whole request goes straight to the fallback approver for every group member",
     "The request is denied because a manager is missing",
     "The member's assignment goes to the requester",
-    "That member's assignment stays with them, while the others go to their managers"
+    "That member keeps the assignment, while the others go to their managers"
    ],
-   "answer": "That member's assignment stays with them, while the others go to their managers",
+   "answer": "That member keeps the assignment, while the others go to their managers",
    "explanation": "Each governance group member escalates to their own manager; a member without a manager keeps the assignment. Only when no member has a manager does the request go to the fallback approver."
   },
   {
@@ -275,12 +275,12 @@
    "topic": "Escalation Patterns",
    "stem": "Security wants escalations to begin five days after a request, run every day at 8:00 and go first to the reviewer's manager and then to the IAM governance group. Which settings meet this?",
    "choices": [
-    "Days to start escalation set to five, daily frequency at 8:00, and a chain of Manager then the governance group",
-    "A five-day timeout, daily reminders at 8:00 and the governance group as requester",
+    "Escalation starts at five days, runs daily at 8:00, chain Manager then the group",
+    "A five-day timeout, daily reminders at 8:00 and the governance group set as requester",
     "Five reminders a day starting at 8:00 with the manager as fallback approver",
     "A daily timeout, a five-step chain and the governance group as owner"
    ],
-   "answer": "Days to start escalation set to five, daily frequency at 8:00, and a chain of Manager then the governance group",
+   "answer": "Escalation starts at five days, runs daily at 8:00, chain Manager then the group",
    "explanation": "Escalations are set by days after the request to start, frequency, time and an ordered chain of reviewers. Timeouts and reminders handle expiry and nudges, not reassignment."
   },
   {
@@ -290,11 +290,11 @@
    "stem": "A company wants only employees in Germany to see the German payroll access profile in the Request Center. Which feature fits this requirement?",
    "choices": [
     "A separation of duties policy on the access profile",
-    "A data segment that limits which admins can edit the profile",
-    "An access request segment with country criteria that contains the access profile",
+    "A data segment that limits which admins can view and edit the access profile",
+    "An access request segment with country criteria holding the access profile",
     "A lifecycle state that grants the access profile"
    ],
-   "answer": "An access request segment with country criteria that contains the access profile",
+   "answer": "An access request segment with country criteria holding the access profile",
    "explanation": "Access request segments limit which users can see and request specific access items. Data segmentation controls admin record access, and SoD policies address toxic combinations."
   },
   {
@@ -320,7 +320,7 @@
     "Yes, if the manager is allowed to request on behalf of that person",
     "No, because the recipient must also be in the segment",
     "No, because segments block requests for others",
-    "Yes, but only after an admin adds the person to the segment"
+    "Yes, but only after an admin adds the team member to the Sales segment first"
    ],
    "answer": "Yes, if the manager is allowed to request on behalf of that person",
    "explanation": "Segments apply to the requester's view; if the requester can see an item, they can request it for anyone they are authorized to request for. Segments are not a provisioning control."
@@ -333,7 +333,7 @@
    "choices": [
     "Blocking toxic combinations of finance entitlements",
     "Showing contractors a smaller catalog of requestable access than employees",
-    "Granting access automatically to all staff in a department",
+    "Granting access automatically to all staff in a department when they are hired",
     "Limiting which admins can view identity records"
    ],
    "answer": "Showing contractors a smaller catalog of requestable access than employees",
@@ -346,11 +346,11 @@
    "stem": "Auditors ask whether segments stop a role from being assigned to users outside the segment through role membership criteria. What is the correct answer?",
    "choices": [
     "Yes, segments remove access from users outside the segment",
-    "No, segments only control which access items requesters can see in the Request Center",
-    "Yes, segments block role membership criteria for outside users",
+    "No, segments only control which items requesters see in the Request Center",
+    "Yes, segments block role membership criteria from matching users outside the segment",
     "No, but segments do block provisioning by lifecycle states"
    ],
-   "answer": "No, segments only control which access items requesters can see in the Request Center",
+   "answer": "No, segments only control which items requesters see in the Request Center",
    "explanation": "Segments affect request visibility, not automatic assignment, provisioning or certifications. Controls such as SoD policies and certifications address assignments made by other means."
   },
   {
@@ -359,7 +359,7 @@
    "topic": "Segment Use Cases",
    "stem": "Access must be visible to users in the US or Canada. Segment criteria allow one value per identity attribute. What is the BEST design?",
    "choices": [
-    "Create one segment with country equal to US and country equal to Canada",
+    "Create one segment with country equal to US and country equal to Canada as criteria",
     "Create one segment and leave the country criteria empty",
     "Create one segment for the US and one for Canada, each with the access items",
     "Create a role for both countries and put the role in a segment"
@@ -401,12 +401,12 @@
    "topic": "Segment Configuration",
    "stem": "A segment should be based on an HR field that is not yet an identity attribute. What should the engineer do?",
    "choices": [
-    "Reference the HR account attribute directly in the segment",
+    "Reference the HR account attribute directly in the segment's identity criteria",
     "Put the HR field's values in the segment description",
     "Create one segment per HR account with that value",
-    "Create an identity attribute mapped to that field, then use it in the segment criteria"
+    "Map the field to an identity attribute, then use it in the segment criteria"
    ],
-   "answer": "Create an identity attribute mapped to that field, then use it in the segment criteria",
+   "answer": "Map the field to an identity attribute, then use it in the segment criteria",
    "explanation": "Segment criteria use identity attributes, so other data must first be mapped into an identity attribute. Account attributes cannot be referenced directly."
   },
   {

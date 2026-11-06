@@ -617,6 +617,16 @@ def build_challenges(policies: dict, data: dict) -> list:
                                if k in ("query", "reviewer", "source", "role")),
                            choices=choices_with(label, pool, k=3, key=p.id), answer=label,
                            explanation="; ".join(p.reasons), objective="6.2"))
+    for p in plans:   # "which rule fired": a requirement that matches more than one rule's keywords
+        text = p.text.lower()
+        hits = [r["subject"] for r in cfg["planner_rules"] if any(k in text for k in r["keywords"])]
+        if len(hits) > 1 and p.subject == hits[0]:
+            qs.append(Question(prompt=f"{p.id} matches the keywords of {len(hits)} planning rules. Which subject "
+                                      "decides the campaign?", context=f"requirement: \"{p.text}\"",
+                               choices=sorted(hits), answer=p.subject,
+                               explanation=f"rules are checked in order and the first match wins: {p.reasons[0]}",
+                               objective="6.2"))
+            break
     seen = set()
     for r in camp.items:
         if r.outcome in seen and not raw_items.get(r.id, {}).get("reassigned_to"):

@@ -12,9 +12,9 @@
     "Create the lifecycle states that HR asked for in the design workshop",
     "Build department roles so new identities receive access right away",
     "Aggregate Active Directory so its accounts are ready to correlate later",
-    "Configure the Workday source, test the connection and aggregate its accounts"
+    "Configure and test the Workday source, then aggregate its accounts"
    ],
-   "answer": "Configure the Workday source, test the connection and aggregate its accounts",
+   "answer": "Configure and test the Workday source, then aggregate its accounts",
    "explanation": "An identity profile is built on an existing source, so the HR source must be connected and aggregated first. Roles and lifecycle states depend on identities and attributes that do not exist yet."
   },
   {
@@ -23,12 +23,12 @@
    "topic": "Identity Model Implementation Order",
    "stem": "An engineer has created an identity profile for the HR source and mapped its identity attributes. What should the engineer do before selecting Apply Changes?",
    "choices": [
-    "Preview several identities to confirm the mappings produce the expected values",
+    "Preview several identities to confirm the mapped values",
     "Run an entitlement aggregation on the HR source to refresh its schema",
     "Enable every lifecycle state so identities are assigned during processing",
     "Reset the HR source so its accounts are aggregated again from scratch"
    ],
-   "answer": "Preview several identities to confirm the mappings produce the expected values",
+   "answer": "Preview several identities to confirm the mapped values",
    "explanation": "Preview shows the calculated attribute values for real identities before processing runs across the profile. Resetting or re-aggregating the source adds nothing and enabling unfinished lifecycle states could trigger provisioning."
   },
   {
@@ -39,10 +39,10 @@
    "choices": [
     "Target sources cannot be created in a tenant that has no identity profile",
     "Active Directory accounts are deleted when no identity profile exists yet",
-    "Accounts on other sources correlate to identities, so the identities must exist first",
+    "Other accounts correlate to identities, so identities must exist first",
     "Aggregation of other sources stays blocked until lifecycle states are enabled"
    ],
-   "answer": "Accounts on other sources correlate to identities, so the identities must exist first",
+   "answer": "Other accounts correlate to identities, so identities must exist first",
    "explanation": "Non-authoritative accounts are matched to existing identities by correlation, so building identities first avoids a large set of uncorrelated accounts. Target sources can be created at any time; their accounts would simply remain uncorrelated."
   },
   {
@@ -54,7 +54,7 @@
     "Remove the source's correlation configuration and try again",
     "Wait for the aggregation to finish, then create the identity profile",
     "Create the profile on another source and switch it to HR later",
-    "Run identity processing on another profile to stop the aggregation"
+    "Run identity processing on another profile so the aggregation stops early"
    ],
    "answer": "Wait for the aggregation to finish, then create the identity profile",
    "explanation": "An identity profile cannot be created while an account aggregation is running on the tenant, so the engineer waits for it to complete. Changing correlation or using another source does not lift that restriction."
@@ -65,12 +65,12 @@
    "topic": "Identity Model Implementation Order",
    "stem": "During design workshops for a new identity model, which activity should be completed before any identity profile is configured?",
    "choices": [
-    "Configure approval reminders and escalations for access requests",
+    "Configure approval reminders and escalation chains for every requestable item",
     "Build manager certification campaigns for every department",
     "Create access request segments for each business unit",
-    "Agree with HR which system is the system of record for each population and which attributes it provides"
+    "Agree with HR on the system of record and attributes for each population"
    ],
-   "answer": "Agree with HR which system is the system of record for each population and which attributes it provides",
+   "answer": "Agree with HR on the system of record and attributes for each population",
    "explanation": "Identity profiles depend on knowing each population's authoritative source and its attributes. Reminders, certifications and segments are later governance layers that rely on the identity model being in place."
   },
   {
@@ -82,7 +82,7 @@
     "The source is selected as the sign-in source for all users",
     "The account schema includes every HR attribute the mappings will use",
     "Every access profile on the source is marked as requestable",
-    "Attribute sync is enabled for each identity attribute on the source"
+    "Attribute sync is enabled for each identity attribute that the source supports"
    ],
    "answer": "The account schema includes every HR attribute the mappings will use",
    "explanation": "Mappings can only use attributes that the account schema brings in during aggregation, so missing schema attributes leave identity attributes empty. Pass-through sign-in, requestable access profiles and attribute sync do not affect what is read from HR."
@@ -93,7 +93,7 @@
    "topic": "Identity Model Implementation Order",
    "stem": "An engineer has connected and aggregated the HR source. Which step turns the HR accounts into identities?",
    "choices": [
-    "Running a second account aggregation with correlation turned on",
+    "Running a second account aggregation with the correlation configuration turned on",
     "Adding the HR accounts to a governance group for approval",
     "Creating an identity profile that uses the HR source and processing it",
     "Enabling attribute sync for the HR source's account attributes"
@@ -121,7 +121,7 @@
    "topic": "Authoritative Source Selection",
    "stem": "An architect proposes making Active Directory the authoritative source for every user because all staff have an AD account. What is the MAIN concern with this design?",
    "choices": [
-    "Identity Security Cloud cannot read AD attributes through a VA",
+    "Identity Security Cloud cannot read AD attributes through a virtual appliance",
     "AD accounts cannot be correlated to identities once aggregated",
     "AD sources are unable to provide work email addresses",
     "Service, test and shared AD accounts would also become identities"
@@ -138,7 +138,7 @@
     "Interns cannot be loaded from a source that also holds employees",
     "A source can be the authoritative source for only one identity profile",
     "A second profile would need a separate virtual appliance cluster",
-    "Lifecycle states can only be created in the first profile of a tenant"
+    "Lifecycle states can only be created in the first identity profile of a tenant"
    ],
    "answer": "A source can be the authoritative source for only one identity profile",
    "explanation": "Each source can back only one identity profile, so interns from Workday stay in the Employees profile. Their differences are handled with identity attributes such as worker type and the lifecycle state calculation."
@@ -149,12 +149,12 @@
    "topic": "Authoritative Source Selection",
    "stem": "Which characteristic MOST qualifies a source to be the authoritative source for a population?",
    "choices": [
-    "It is the system of record that lists every person in that population with start and end dates",
+    "It is the system of record for that population, with start and end dates",
     "It is the application that holds the largest number of entitlements",
     "It supports password changes and account unlocks for users",
-    "It can be reached directly from the cloud without a virtual appliance"
+    "It can be reached directly from the cloud without needing a virtual appliance"
    ],
-   "answer": "It is the system of record that lists every person in that population with start and end dates",
+   "answer": "It is the system of record for that population, with start and end dates",
    "explanation": "An authoritative source should be the trusted record of who is in the population and when they join and leave. Entitlement volume, password features and connection type say nothing about whether its people data is trustworthy."
   },
   {
@@ -163,12 +163,12 @@
    "topic": "Authoritative Source Selection",
    "stem": "Contractors exist only as accounts that IT creates by hand in Active Directory, and there is no contractor feed. The client wants contractors governed by lifecycle states. What is the BEST recommendation?",
    "choices": [
-    "Make Active Directory authoritative so every AD account becomes an identity",
+    "Make Active Directory authoritative so that every AD account becomes an identity",
     "Ask HR to enter the contractors in Workday as regular employees",
-    "Introduce a dedicated contractor source, such as a non-employee source, and make it authoritative",
+    "Make a dedicated contractor source, such as a non-employee source, authoritative",
     "Correlate the contractor AD accounts to the Employees identity profile"
    ],
-   "answer": "Introduce a dedicated contractor source, such as a non-employee source, and make it authoritative",
+   "answer": "Make a dedicated contractor source, such as a non-employee source, authoritative",
    "explanation": "A dedicated contractor system of record gives contractors their own identity profile, start and end dates and lifecycle states. AD as authoritative would create identities for every AD account, and correlation alone never creates identities."
   },
   {
@@ -180,9 +180,9 @@
     "Add the board members to the HR identity profile as manual identities",
     "Create the board members as accounts on Active Directory and correlate them",
     "Map the spreadsheet columns into the HR profile as extra identity attributes",
-    "Onboard the spreadsheet as a delimited file source and give it its own identity profile"
+    "Onboard the spreadsheet as a delimited file source with its own profile"
    ],
-   "answer": "Onboard the spreadsheet as a delimited file source and give it its own identity profile",
+   "answer": "Onboard the spreadsheet as a delimited file source with its own profile",
    "explanation": "A delimited file source can be authoritative for a small population when it is the trusted record. Correlating to AD or mapping attributes into the HR profile does not create identities for people missing from HR."
   },
   {
@@ -206,11 +206,11 @@
    "stem": "Workday holds both employees and contingent workers, with a worker type attribute that tells them apart. Each group needs different birthright access. How many identity profiles should the engineer create?",
    "choices": [
     "Two identity profiles on Workday, one for each worker type",
-    "One identity profile for Workday, using the worker type attribute to drive access",
+    "One profile for Workday, with worker type driving access",
     "One identity profile per worker type, each on a copy of the Workday source",
     "Two identity profiles, with contingent workers loaded from Active Directory"
    ],
-   "answer": "One identity profile for Workday, using the worker type attribute to drive access",
+   "answer": "One profile for Workday, with worker type driving access",
    "explanation": "Both groups come from one authoritative source, so one profile is needed and the worker type attribute drives roles or lifecycle logic. Copying the HR source just to split a population adds aggregation load and maintenance for no benefit."
   },
   {
@@ -235,10 +235,10 @@
    "choices": [
     "A tenant is limited to two identity profiles in total",
     "Department values cannot be mapped to identity attributes",
-    "Identity profiles must be created per virtual appliance cluster",
-    "Identity profiles are tied to authoritative sources, so one HR source supports only one profile"
+    "Identity profiles must be created separately for each virtual appliance cluster",
+    "Each source backs only one identity profile, so one HR source means one profile"
    ],
-   "answer": "Identity profiles are tied to authoritative sources, so one HR source supports only one profile",
+   "answer": "Each source backs only one identity profile, so one HR source means one profile",
    "explanation": "One source can back only one identity profile, so department differences belong in identity attributes, roles and lifecycle logic. There is no two-profile limit and department is a default identity attribute."
   },
   {
@@ -247,12 +247,12 @@
    "topic": "Identity Profile Count",
    "stem": "Two staffing vendors each send a contractor file with the same columns, and the business requirements for both vendors' contractors are identical. Which design MINIMIZES the number of identity profiles while meeting the requirements?",
    "choices": [
-    "Combine both vendor files into one contractor source with one identity profile",
-    "Create one identity profile per vendor file and copy the mappings",
+    "Combine both vendor files into one contractor source and one profile",
+    "Create one identity profile per vendor file and copy the mappings between them",
     "Load both vendor files into the employee HR identity profile",
     "Create no identity profile and correlate vendor rows to AD accounts"
    ],
-   "answer": "Combine both vendor files into one contractor source with one identity profile",
+   "answer": "Combine both vendor files into one contractor source and one profile",
    "explanation": "With identical requirements, a single combined contractor source needs only one identity profile, plus a vendor attribute if reporting needs it. Two vendor sources would require two profiles because each source backs one profile."
   },
   {
@@ -264,7 +264,7 @@
     "One profile, with contractor accounts correlated into Workday",
     "Two profiles with equal priority so attributes are merged",
     "Two profiles, with Employees set to a higher priority than Contractors",
-    "Three profiles, adding a separate profile for converted contractors"
+    "Three profiles, adding a separate identity profile just for converted contractors"
    ],
    "answer": "Two profiles, with Employees set to a higher priority than Contractors",
    "explanation": "Two authoritative sources need two profiles, and priority decides which profile an identity with accounts on both uses. Profiles cannot share equal priority to merge data, and a third profile would need a third source."
@@ -317,7 +317,7 @@
    "topic": "Identity Profile Priority",
    "stem": "An identity has an account on the Workday source, whose profile has priority 10, and on the contractor source, whose profile has priority 20. Which profile's mappings populate the identity's attributes?",
    "choices": [
-    "The contractor profile, because its number is larger",
+    "The contractor profile, because its priority number is the larger one",
     "Both profiles, merged attribute by attribute",
     "The Workday profile, because it has the higher priority",
     "Whichever source was aggregated most recently"
@@ -334,9 +334,9 @@
     "It is deleted along with all of its correlated accounts",
     "It keeps the Employees profile until an admin moves it",
     "It stays in the Employees profile with frozen attribute values",
-    "It becomes associated with the contractor profile, whose mappings then apply"
+    "It moves to the contractor profile, whose mappings then apply"
    ],
-   "answer": "It becomes associated with the contractor profile, whose mappings then apply",
+   "answer": "It moves to the contractor profile, whose mappings then apply",
    "explanation": "When the higher priority authoritative account disappears but another authoritative account remains, the identity is associated with the next profile where it has an account. Only an identity with no remaining authoritative account is removed."
   },
   {
@@ -347,10 +347,10 @@
    "choices": [
     "Lifecycle states are shared across the tenant, so names in one profile overwrite the other",
     "Only the highest priority profile is allowed to define lifecycle states",
-    "Lifecycle states are defined per profile, so the calculated value must match a state in the profile the identity lands in",
+    "States are per profile, so the value must match a state in the identity's new profile",
     "Technical names must differ between profiles or processing fails"
    ],
-   "answer": "Lifecycle states are defined per profile, so the calculated value must match a state in the profile the identity lands in",
+   "answer": "States are per profile, so the value must match a state in the identity's new profile",
    "explanation": "Each profile has its own lifecycle states, and an identity whose cloudLifecycleState value has no matching state in its profile shows a not-valid status. Coordinated names keep moves between profiles predictable."
   },
   {
@@ -373,7 +373,7 @@
    "topic": "Identity Processing and Exceptions",
    "stem": "After the first aggregation, the HR identity profile shows identity exceptions for accounts that have no last name. What should the engineer do?",
    "choices": [
-    "Delete the identity profile and create it again on the same source",
+    "Delete the identity profile and create it again on the same HR source afterwards",
     "Remove Last Name from the required attributes in the profile",
     "Correlate the accounts manually to existing identities",
     "Download the exceptions report, fix the records in HR and aggregate again"
@@ -387,12 +387,12 @@
    "topic": "Identity Processing and Exceptions",
    "stem": "Two HR records produce the same User Name value after mapping. What is the result?",
    "choices": [
-    "An identity exception, because User Name must be unique across all identities",
+    "An identity exception, because User Name must be unique",
     "Both identities are created and the second gets a numeric suffix",
     "The second record is merged into the first identity",
     "The older identity is deleted and replaced by the newer one"
    ],
-   "answer": "An identity exception, because User Name must be unique across all identities",
+   "answer": "An identity exception, because User Name must be unique",
    "explanation": "User Name (uid) must be unique across every identity profile, and a duplicate generates an identity exception. ISC does not add suffixes or merge identities on its own; a transform can make the value unique."
   },
   {
@@ -417,10 +417,10 @@
    "choices": [
     "Nothing changes until an admin selects Apply Changes on the profile",
     "The identity is recreated with a new identity ID",
-    "Its identity attributes are reprocessed automatically because aggregation changed its data",
+    "Its attributes are reprocessed automatically after the aggregation",
     "The change waits until the next certification campaign starts"
    ],
-   "answer": "Its identity attributes are reprocessed automatically because aggregation changed its data",
+   "answer": "Its attributes are reprocessed automatically after the aggregation",
    "explanation": "ISC automatically processes identity data that changes during aggregation, so the department updates without manual steps. Apply Changes is needed for configuration changes, not for normal data changes."
   },
   {
@@ -431,7 +431,7 @@
    "choices": [
     "The source and all of its accounts are deleted from the tenant",
     "The identities are deleted and their source accounts become uncorrelated",
-    "The identities' accounts are deprovisioned from every target system",
+    "The identities' accounts are deprovisioned from every connected target system",
     "The identities remain in the tenant without any identity profile"
    ],
    "answer": "The identities are deleted and their source accounts become uncorrelated",
@@ -551,7 +551,7 @@
    "choices": [
     "A mapping transform on a multi-valued attribute uses only the first value",
     "ToUpper removes duplicate values before returning a result",
-    "Identity attributes never accept values longer than one word",
+    "Identity attributes never accept values that are longer than a single word",
     "The HR source only returns one value per aggregation"
    ],
    "answer": "A mapping transform on a multi-valued attribute uses only the first value",
@@ -564,11 +564,11 @@
    "stem": "Some users cannot sign in to the tenant, and all of them have usernames that contain an exclamation mark. What is the MOST likely cause?",
    "choices": [
     "Exclamation marks are removed from usernames during aggregation",
-    "The users' passwords were reset during identity processing",
-    "The source attribute mapped to User Name contains characters not allowed for sign-in",
+    "The users' passwords were reset when identity processing last ran",
+    "The mapped User Name contains characters not allowed for sign-in",
     "Usernames must match the users' email address to sign in"
    ],
-   "answer": "The source attribute mapped to User Name contains characters not allowed for sign-in",
+   "answer": "The mapped User Name contains characters not allowed for sign-in",
    "explanation": "Characters such as * ( ) & ! and the period are not allowed in the source attribute mapped to a username or alternative sign-in attribute, and affected users may not be able to sign in. ISC does not strip the characters for them."
   },
   {
@@ -578,11 +578,11 @@
    "stem": "Contractor identities should no longer receive a costCenter value, but employees still need it. What should the engineer do?",
    "choices": [
     "Delete the costCenter attribute from the Contractors profile",
-    "Set the costCenter mapping's source to None in the Contractors profile and apply changes",
-    "Map costCenter in the Contractors profile to an empty static value in HR",
+    "Set the mapping's source to None in the Contractors profile and apply changes",
+    "Map costCenter in the Contractors profile to an empty static value from the HR source",
     "Remove the costCenter column from the employee HR source schema"
    ],
-   "answer": "Set the costCenter mapping's source to None in the Contractors profile and apply changes",
+   "answer": "Set the mapping's source to None in the Contractors profile and apply changes",
    "explanation": "Choosing None unmaps the attribute for that profile only. Deleting an identity attribute removes it from every profile, and costCenter is a default attribute that should not be deleted."
   },
   {
@@ -592,7 +592,7 @@
    "stem": "The Employees profile maps email from Active Directory, but new hires are aggregated from HR days before their AD account exists. What is the BEST mapping design?",
    "choices": [
     "Map email from HR personal email for all employees",
-    "Wait to aggregate HR until AD accounts have been created",
+    "Wait to aggregate HR until every new hire's AD account has been created by the IT team",
     "Leave email unmapped until the employee's start date",
     "Use a firstValid transform that tries the AD mail value, then a fallback value"
    ],
@@ -621,7 +621,7 @@
    "choices": [
     "Removing Work Email from the list of required attributes",
     "Mapping Work Email to the employee's manager's email",
-    "Creating a separate identity profile for records without email",
+    "Creating a separate identity profile for all of the records that have no email",
     "A transform that falls back to a placeholder value until the real email exists"
    ],
    "answer": "A transform that falls back to a placeholder value until the real email exists",
@@ -633,12 +633,12 @@
    "topic": "Required Identity Attributes",
    "stem": "The Employees and Contractors profiles both map User Name from a numeric ID, and the two systems reuse the same number ranges. What is the risk, and how should the engineer address it?",
    "choices": [
-    "Identities merge across profiles, so contractor IDs should be hidden",
+    "Identities merge across profiles, so contractor IDs should be hidden from mappings",
     "Each profile keeps its own namespace, so no change is needed",
-    "Duplicate user names cause identity exceptions, so a transform should prefix contractor IDs",
+    "Duplicate user names cause exceptions, so prefix contractor IDs with a transform",
     "Numeric user names are rejected, so names must be used instead"
    ],
-   "answer": "Duplicate user names cause identity exceptions, so a transform should prefix contractor IDs",
+   "answer": "Duplicate user names cause exceptions, so prefix contractor IDs with a transform",
    "explanation": "User Name must be unique across all identities from any identity profile, so overlapping IDs generate exceptions. A transform that adds a prefix or suffix keeps contractor values distinct."
   },
   {
@@ -648,11 +648,11 @@
    "stem": "An engineer maps Work Email to an HR field that sometimes holds the text N/A. How will Identity Security Cloud treat this value?",
    "choices": [
     "It rejects the identity and creates a duplicate User Name exception",
-    "It accepts the value, because Work Email is required but not validated as an address",
+    "It accepts it, because Work Email is required but not validated as an address",
     "It replaces the value with the user's Active Directory email automatically",
     "It sends the value to SailPoint for review before saving it"
    ],
-   "answer": "It accepts the value, because Work Email is required but not validated as an address",
+   "answer": "It accepts it, because Work Email is required but not validated as an address",
    "explanation": "Work Email cannot be null, but its format is not validated, so the value is stored as is. The engineer should clean the data or use a transform rather than expect ISC to correct it."
   },
   {
@@ -676,11 +676,11 @@
    "stem": "Beyond the required attributes, what must be in place for manager-based access request approvals to route correctly?",
    "choices": [
     "A governance group named Managers for each department",
-    "A custom identity attribute holding each manager's email",
+    "A custom identity attribute holding each manager's email address for routing",
     "A lifecycle state that grants a manager access profile",
-    "The Manager Name attribute mapped in the profile, plus manager correlation on a source"
+    "Manager Name mapped in the profile and manager correlation on a source"
    ],
-   "answer": "The Manager Name attribute mapped in the profile, plus manager correlation on a source",
+   "answer": "Manager Name mapped in the profile and manager correlation on a source",
    "explanation": "Manager-based features need the Manager Name attribute mapped and a manager correlation configuration that links each identity to its manager. Governance groups and email attributes do not create the manager relationship."
   },
   {
@@ -717,7 +717,7 @@
    "topic": "Manager Correlation",
    "stem": "Where does an engineer define the manager correlation configuration for an HR source?",
    "choices": [
-    "On the identity profile's Mappings page, under the Manager Name attribute",
+    "On the identity profile's Mappings page, under the Manager Name identity attribute",
     "In the global system settings, under identity correlation options",
     "In the source's Account Correlation settings, in the Manager Correlation section",
     "On the source's Provisioning page, in the Create Account policy"
@@ -731,7 +731,7 @@
    "topic": "Manager Correlation",
    "stem": "An engineer wants to correlate managers on the custom identity attribute workerId, but it does not appear in the Identity Attribute list. What should the engineer do?",
    "choices": [
-    "Rename workerId to identificationNumber in the mappings",
+    "Rename workerId to identificationNumber in every identity profile's mappings",
     "Mark workerId as searchable with the identity attribute API",
     "Add workerId to the HR source's entitlement schema",
     "Create a search query that returns the workerId values"
@@ -747,7 +747,7 @@
    "choices": [
     "Configure two manager correlation sections on the source",
     "Map Manager Name to the country code field only",
-    "Assign managers by hand on each identity's details page",
+    "Assign managers by hand on each identity's details page after every aggregation",
     "Use a manager correlation rule to define the matching logic"
    ],
    "answer": "Use a manager correlation rule to define the matching logic",
@@ -773,12 +773,12 @@
    "topic": "Manager Correlation",
    "stem": "An identity has accounts on the Employees source, whose profile has priority 10, and the Contractors source, priority 20. Both sources have manager correlation, but the employee record's manager field is empty. Which source's value is used for manager correlation?",
    "choices": [
-    "The contractor source, as the first in priority order with a non-null manager value",
-    "The employee source, because it always wins for manager data",
+    "The contractor source, the first in priority order with a non-null value",
+    "The employee source, because the higher priority profile always wins for manager data",
     "Neither source, because priority 10 has an empty value",
     "The source aggregated most recently, whatever its priority"
    ],
-   "answer": "The contractor source, as the first in priority order with a non-null manager value",
+   "answer": "The contractor source, the first in priority order with a non-null value",
    "explanation": "Profiles are evaluated in priority order for manager correlation, and the first source with a non-null manager value is used. An empty value on the higher priority source does not stop the check."
   },
   {
@@ -799,9 +799,9 @@
    "id": "D1-057",
    "objective": "1.2",
    "topic": "Custom Identity Attributes",
-   "stem": "Role membership criteria must use the union code from HR, which is not an identity attribute today. What should the engineer do?",
+   "stem": "The union code from HR must appear on each identity's details page and be used in access request segments. It is not an identity attribute today. What should the engineer do?",
    "choices": [
-    "Reference the HR account attribute directly in a segment",
+    "Reference the HR account attribute directly in each segment's identity criteria",
     "Store the union code in the department attribute",
     "Ask SailPoint Support to add the attribute to the tenant",
     "Add a custom identity attribute, map it to the HR union code and apply changes"
@@ -829,12 +829,12 @@
    "topic": "Custom Identity Attributes",
    "stem": "Before deleting a custom identity attribute named region, which check is MOST important?",
    "choices": [
-    "Confirm that region has no value in the HR source",
-    "Find role criteria, transforms, rules and lifecycle calculations that reference it",
+    "Confirm that the region attribute has no value left in the HR source records",
+    "Find roles, transforms, rules and lifecycle logic that use it",
     "Confirm that region is mapped in only one profile",
     "Confirm that no certification is currently active"
    ],
-   "answer": "Find role criteria, transforms, rules and lifecycle calculations that reference it",
+   "answer": "Find roles, transforms, rules and lifecycle logic that use it",
    "explanation": "Deleting a custom attribute removes it from every profile and can break roles, transforms, rules, SAML attribute maps and lifecycle calculations that use it. Its mapping in one profile does not limit the impact."
   },
   {
@@ -872,7 +872,7 @@
    "stem": "An engineer needs to calculate a displayName value from HR data. Both a transform and an Identity Attribute rule could do it. Which approach is BEST practice?",
    "choices": [
     "Use the rule, because rules always run faster than transforms",
-    "Use the rule, because transforms cannot read account attributes",
+    "Use the rule, because transforms cannot read the account attributes of other sources",
     "Use both, so the rule can check the transform's output",
     "Use a transform, because rules need SailPoint review and add maintenance"
    ],
@@ -885,12 +885,12 @@
    "topic": "Identity Attribute Rules and Transforms",
    "stem": "How does an engineer select an Identity Attribute rule for an identity attribute in the identity profile mappings?",
    "choices": [
-    "Choose Complex Data Source as the source, then pick the rule from the Transform list",
-    "Choose the HR source, then type the rule name in the Attribute list",
+    "Choose Complex Data Source, then pick the rule from the Transform list",
+    "Choose the HR source, then type the rule's name into the Attribute dropdown list",
     "Attach the rule to the HR source's correlation configuration",
     "Upload the rule on the identity profile's Settings page"
    ],
-   "answer": "Choose Complex Data Source as the source, then pick the rule from the Transform list",
+   "answer": "Choose Complex Data Source, then pick the rule from the Transform list",
    "explanation": "Rules are applied to an identity attribute by selecting Complex Data Source and then the rule. Correlation and source settings do not populate identity attributes."
   },
   {
@@ -914,7 +914,7 @@
    "stem": "An engineer has written a new Identity Attribute rule. How does it become available in the tenant?",
    "choices": [
     "It is uploaded by the engineer with the transforms API",
-    "It is placed on the virtual appliance and picked up at restart",
+    "It is placed on the virtual appliance and picked up at the next service restart",
     "It is submitted to SailPoint for review and deployed after approval",
     "It is pasted into the identity profile's mapping editor"
    ],
@@ -930,9 +930,9 @@
     "Choose Complex Data Source, then choose the transform from the rule list",
     "Attach the transform to the source's account schema attribute",
     "Reference the transform from the identity profile's priority setting",
-    "Select the source and attribute in the mapping, then choose the transform from the Transform list"
+    "Pick the source and attribute, then choose it from the Transform list"
    ],
-   "answer": "Select the source and attribute in the mapping, then choose the transform from the Transform list",
+   "answer": "Pick the source and attribute, then choose it from the Transform list",
    "explanation": "Uploaded transforms appear in the Transform list of the identity profile mapping beside the built-in simple transforms. Complex Data Source is for rules."
   },
   {
@@ -941,12 +941,12 @@
    "topic": "Identity Attribute Rules and Transforms",
    "stem": "The displayName identity attribute must read Last, First from two HR attributes. Which approach is the MOST direct?",
    "choices": [
-    "A concat transform that combines the two HR account attributes with a separator",
+    "A concat transform that joins the two HR attributes with a separator",
     "An Identity Attribute rule that reads both attributes",
     "Two mappings to displayName, one for each attribute",
-    "A lookup transform that maps each first name to a last name"
+    "A lookup transform that maps each employee's first name to their last name"
    ],
-   "answer": "A concat transform that combines the two HR account attributes with a separator",
+   "answer": "A concat transform that joins the two HR attributes with a separator",
    "explanation": "concat joins several values, including account attribute references and static text such as a comma, without a rule. An attribute has only one mapping, and lookup is for value tables."
   },
   {
@@ -1009,7 +1009,7 @@
    "stem": "Employees and contractors are in separate identity profiles, and the business wants different termination behaviour for each group. Which design is valid?",
    "choices": [
     "Define a terminated state in each identity profile with its own actions",
-    "Define one tenant-wide terminated state that both profiles share",
+    "Define one tenant-wide terminated state that both identity profiles share",
     "Define the terminated state only in the higher priority profile",
     "Define termination actions on each source instead of in states"
    ],
@@ -1050,12 +1050,12 @@
    "topic": "Lifecycle State Design",
    "stem": "Department-specific birthright access differs across 40 departments, while all active employees get the same email and VPN access. Which design is BEST?",
    "choices": [
-    "Create one lifecycle state per department, each with its own access profiles",
+    "Create one lifecycle state per department, each granting its own access profiles",
     "Grant every department's access profiles in the active state",
-    "Grant the common access in the active state and use roles with department criteria for the rest",
+    "Grant common access in the active state and use department roles for the rest",
     "Have managers request department access for each new hire"
    ],
-   "answer": "Grant the common access in the active state and use roles with department criteria for the rest",
+   "answer": "Grant common access in the active state and use department roles for the rest",
    "explanation": "Lifecycle states suit access that depends on employment status, while roles with membership criteria scale for attribute-based access. Forty department states would multiply the lifecycle logic."
   },
   {
@@ -1092,12 +1092,12 @@
    "topic": "Lifecycle State Design",
    "stem": "An identity shows the status Lifecycle State Not Valid. What does this indicate?",
    "choices": [
-    "Its Lifecycle State attribute is not mapped in the profile",
-    "Its Lifecycle State value matches none of the states defined in its identity profile",
+    "Its Lifecycle State attribute is not mapped in the identity profile at all",
+    "Its value matches none of the states defined in its identity profile",
     "Its lifecycle state is enabled but has no actions",
     "Its lifecycle state was changed by an admin by hand"
    ],
-   "answer": "Its Lifecycle State value matches none of the states defined in its identity profile",
+   "answer": "Its value matches none of the states defined in its identity profile",
    "explanation": "Not Valid means the attribute holds a value that is not a technical name of the profile's states. An unmapped or null value shows Not Set instead."
   },
   {
@@ -1106,12 +1106,12 @@
    "topic": "Joiner States",
    "stem": "Identities are created from HR in a pre-hire state two weeks before their start date. The company wants them invited to Identity Security Cloud only on day one. What should the engineer configure?",
    "choices": [
-    "Automatic invitations sent when identities enter the active lifecycle state",
+    "Automatic invitations when identities enter the active state",
     "Manual invitations sent by the manager on day one",
     "An invitation sent when the HR source is aggregated",
-    "An invitation sent when the identity enters pre-hire"
+    "An invitation sent automatically when the identity enters the pre-hire state"
    ],
-   "answer": "Automatic invitations sent when identities enter the active lifecycle state",
+   "answer": "Automatic invitations when identities enter the active state",
    "explanation": "Identity profiles can send invitations automatically when identities enter a chosen lifecycle state, such as active on the start date. Inviting at pre-hire or aggregation would be too early."
   },
   {
@@ -1120,12 +1120,12 @@
    "topic": "Joiner States",
    "stem": "The lifecycle state must change from prehire to active on the start date even when HR sends no update that day. Which mapping design supports this?",
    "choices": [
-    "A date-comparison transform on startDate that is marked to require periodic refresh",
+    "A date-comparison transform on startDate marked requiresPeriodicRefresh",
     "A static transform that always returns active",
-    "A lookup transform on the HR employee status code",
+    "A lookup transform on the HR employee status code that HR updates on day one",
     "A manual lifecycle change by HR on each start date"
    ],
-   "answer": "A date-comparison transform on startDate that is marked to require periodic refresh",
+   "answer": "A date-comparison transform on startDate marked requiresPeriodicRefresh",
    "explanation": "A transform that compares startDate with the current date must be tagged requiresPeriodicRefresh so scheduled processing recalculates it daily. Without that, the value only changes when the identity's data changes."
   },
   {
@@ -1134,7 +1134,7 @@
    "topic": "Joiner States",
    "stem": "A rehired employee returns to the active state, but the old Active Directory account that was disabled at termination stays disabled. What should the engineer change?",
    "choices": [
-    "Configure the terminated state to delete accounts instead",
+    "Configure the terminated state to delete accounts instead of disabling them",
     "Add the AD source to the active state's excluded sources",
     "Ask the employee to request a new AD account",
     "Configure the active state to enable accounts on the relevant sources"
@@ -1148,12 +1148,12 @@
    "topic": "Joiner States",
    "stem": "Managers want an email when a new hire becomes active. Where should the engineer configure this?",
    "choices": [
-    "In the HR source's Account Correlation settings",
-    "In the active state's Email Notification List, with Manager selected",
+    "In the HR source's Account Correlation settings, under Manager Correlation",
+    "In the active state's Email Notification List, selecting Manager",
     "In the Approval Settings reminders section",
     "In the identity profile's Mappings page"
    ],
-   "answer": "In the active state's Email Notification List, with Manager selected",
+   "answer": "In the active state's Email Notification List, selecting Manager",
    "explanation": "Each lifecycle state has an Email Notification List that can notify the manager, all SailPoint admins or specific addresses. Approval reminders relate to pending access requests."
   },
   {
@@ -1162,12 +1162,12 @@
    "topic": "Joiner States",
    "stem": "New hires need a mailbox ready before their first day, but must not get VPN until they start. Which design meets this?",
    "choices": [
-    "Grant both access profiles in pre-hire and disable VPN later",
+    "Grant both access profiles in pre-hire and disable the VPN account until day one",
     "Grant both access profiles in active on the start date",
-    "Grant the mailbox access profile in pre-hire and the VPN access profile in active",
+    "Grant the mailbox in pre-hire and the VPN access profile in active",
     "Grant the VPN access profile in pre-hire and remove it at active"
    ],
-   "answer": "Grant the mailbox access profile in pre-hire and the VPN access profile in active",
+   "answer": "Grant the mailbox in pre-hire and the VPN access profile in active",
    "explanation": "Each lifecycle state grants its own access profiles, so splitting them between pre-hire and active matches the timing. Granting everything at once misses either the early mailbox or the VPN control."
   },
   {
@@ -1191,11 +1191,11 @@
    "stem": "An engineer enables Remove all access on the terminated state. Which access does a terminated identity keep?",
    "choices": [
     "All access that was approved through an access request",
-    "Access from birthright roles and access profiles granted by the terminated state",
-    "All access profiles granted by the previous lifecycle state",
+    "Birthright role access and access profiles granted by the terminated state",
+    "All access profiles that were granted by the identity's previous lifecycle state",
     "Entitlements on sources with no disable action"
    ],
-   "answer": "Access from birthright roles and access profiles granted by the terminated state",
+   "answer": "Birthright role access and access profiles granted by the terminated state",
    "explanation": "Remove all access revokes roles, access profiles and entitlements, but keeps birthright role access and access profiles granted by the current state. Requested access is removed, and approvals for removal are bypassed."
   },
   {
@@ -1204,7 +1204,7 @@
    "topic": "Leaver States",
    "stem": "The terminated state disables accounts on All sources. Six months later a new SaaS source is onboarded. What happens when an identity is terminated after that?",
    "choices": [
-    "Accounts on the new source stay enabled until it is added by hand",
+    "Accounts on the new source stay enabled until the source is added to the list by hand",
     "The terminated state stops working until it is saved again",
     "Accounts on the new source are deleted instead of disabled",
     "Accounts on the new source are disabled too, unless the source is excluded"
@@ -1235,7 +1235,7 @@
     "The AD source's deletion threshold was exceeded",
     "The identities still have a role that includes AD entitlements",
     "The archived state does not send email notifications",
-    "The AD accounts were disabled before they were deleted"
+    "The AD accounts were disabled first, which blocks a later delete operation"
    ],
    "answer": "The identities still have a role that includes AD entitlements",
    "explanation": "An active role assignment provisions its entitlements again, recreating the deleted account. Roles should be removed before accounts are deleted."
@@ -1247,11 +1247,11 @@
    "stem": "Legal requires that a leaver's mailbox stay active for 30 days so the manager can review it, while all other access ends on the termination date. Which design meets this?",
    "choices": [
     "A terminated state that deletes all accounts, including email",
-    "A terminated state that keeps all accounts enabled for 30 days",
+    "A terminated state that keeps all accounts enabled for 30 days, then disables everything",
     "A manual task asking IT to disable email each month",
-    "A terminated state that disables all sources except email, then a later state that disables email"
+    "Terminate by disabling all sources except email, then disable email in a later state"
    ],
-   "answer": "A terminated state that disables all sources except email, then a later state that disables email",
+   "answer": "Terminate by disabling all sources except email, then disable email in a later state",
    "explanation": "Two states give two timings: termination disables everything except the mailbox, and a post-termination state based on the end date handles email. The other designs either lose the mailbox or keep everything active."
   },
   {
@@ -1260,12 +1260,12 @@
    "topic": "Leaver States",
    "stem": "The terminated state disables Active Directory and also grants an access profile that moves accounts to a Disabled Users OU. Terminated users' AD accounts stay enabled. Why?",
    "choices": [
-    "Accounts are not disabled on a source that has an access profile in the state's Access Profiles tab",
-    "Access profiles in a terminated state are ignored by provisioning",
+    "Accounts are not disabled on a source the state also grants an access profile on",
+    "Access profiles granted in a terminated state are ignored by the provisioning engine",
     "AD accounts can only be disabled by a workflow",
     "The Disabled Users OU blocks the disable operation"
    ],
-   "answer": "Accounts are not disabled on a source that has an access profile in the state's Access Profiles tab",
+   "answer": "Accounts are not disabled on a source the state also grants an access profile on",
    "explanation": "Source accounts are not disabled or deleted if the state also grants an access profile on that source. The OU move belongs elsewhere, for example in a Before Provisioning rule on the disable operation."
   },
   {
@@ -1316,7 +1316,7 @@
    "topic": "Lifecycle State Actions",
    "stem": "A helpdesk analyst removes an access profile from an active employee, and the access profile is granted by the active lifecycle state. What happens next?",
    "choices": [
-    "The access profile stays removed until the next certification",
+    "The access profile stays removed until the next certification campaign is completed",
     "The access profile is provisioned again while the identity stays in that state",
     "The identity's lifecycle state changes to manual",
     "The access profile is removed from the lifecycle state too"
@@ -1330,12 +1330,12 @@
    "topic": "Lifecycle State Actions",
    "stem": "A disable action in the terminated state failed for one account because the target system was offline for two days. What should the engineer know about retries?",
    "choices": [
-    "Retryable failures are retried hourly up to three times, so the account may need a manual follow-up",
+    "Retryable errors are retried hourly up to three times, then need follow-up",
     "The action retries every hour until the account is disabled",
-    "The action runs again at every identity refresh until it succeeds",
+    "The action runs again at every identity refresh until the account is finally disabled",
     "Failed lifecycle actions are always ignored and never retried"
    ],
-   "answer": "Retryable failures are retried hourly up to three times, so the account may need a manual follow-up",
+   "answer": "Retryable errors are retried hourly up to three times, then need follow-up",
    "explanation": "Lifecycle actions run once and are not a persistent enforcement mechanism; retryable errors are retried once an hour up to three times. After a long outage, the engineer must confirm and fix the account."
   },
   {
@@ -1346,10 +1346,10 @@
    "choices": [
     "The account is disabled first, then deleted",
     "The account is deleted, and the disable is skipped",
-    "The account is disabled, and deletion waits for archive",
-    "This is not allowed, because a source cannot have more than one operation in a state"
+    "The account is disabled at once, and the deletion waits for the archived state",
+    "It is not allowed, because a source can have only one operation per state"
    ],
-   "answer": "This is not allowed, because a source cannot have more than one operation in a state",
+   "answer": "It is not allowed, because a source can have only one operation per state",
    "explanation": "Each source can be configured for only one operation per lifecycle state. Disabling and then deleting needs two states, such as terminated and archived."
   },
   {
@@ -1375,7 +1375,7 @@
     "A lookup transform that maps each HR code to a technical name",
     "A ToUpper transform on the HR status code",
     "Renaming the lifecycle states to A, L and T",
-    "A manual lifecycle change for each identity"
+    "A manual lifecycle change by an admin for each identity whenever HR status changes"
    ],
    "answer": "A lookup transform that maps each HR code to a technical name",
    "explanation": "A lookup transform converts source values into the exact technical names, with a default for unknown codes. Renaming states to codes makes them harder to read and does not handle bad values."
@@ -1386,7 +1386,7 @@
    "topic": "Lifecycle State Change Requirements",
    "stem": "HR reports an urgent termination at 10 a.m., but the HR feed will not show it until the next day. What is the fastest way to start the leaver actions?",
    "choices": [
-    "Run a full aggregation of every connected source",
+    "Run a full aggregation of every connected source, then run identity processing",
     "Delete the identity from the tenant",
     "Manually set the identity's lifecycle state to terminated",
     "Remove the identity from all of its roles"
@@ -1414,12 +1414,12 @@
    "topic": "Lifecycle State Change Requirements",
    "stem": "When a leaver enters the terminated state, the company also wants a ticket opened in a service desk and a message to the security team. What should the engineer recommend?",
    "choices": [
-    "A workflow triggered when the identity's lifecycle state attribute changes",
-    "A second email notification list on the terminated state",
+    "A workflow triggered when the identity's lifecycle state changes",
+    "A second email notification list on the terminated state that includes the service desk",
     "An access profile that opens the ticket when it is removed",
     "A certification campaign that runs each time an identity leaves"
    ],
-   "answer": "A workflow triggered when the identity's lifecycle state attribute changes",
+   "answer": "A workflow triggered when the identity's lifecycle state changes",
    "explanation": "Workflows can listen for identity attribute changes such as cloudLifecycleState and run extra actions, including calls to external systems. Lifecycle states only manage accounts, access profiles and notifications."
   },
   {
@@ -1429,7 +1429,7 @@
    "stem": "The lifecycle state calculation needs the HR status, the start date and the end date together. Which approach should the engineer try FIRST?",
    "choices": [
     "An Identity Attribute rule submitted for review",
-    "A separate lifecycle state for every combination",
+    "A separate lifecycle state for every combination of status, start date and end date",
     "A combined transform using date comparison and conditional logic",
     "A daily manual update by the HR team"
    ],
