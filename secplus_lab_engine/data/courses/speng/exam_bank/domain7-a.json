@@ -998,11 +998,11 @@
    "stem": "Monitoring alerts are currently sent to one administrator's personal mailbox. What is the BEST improvement?",
    "choices": [
     "Send alerts to the From address used for notifications",
-    "Send alerts to a shared team address or ticket queue that others can watch",
+    "Send alerts to a shared team mailbox or ticket queue",
     "Turn alerts off and rely on users to report problems",
     "Forward alerts to every identity in the tenant"
    ],
-   "answer": "Send alerts to a shared team address or ticket queue that others can watch",
+   "answer": "Send alerts to a shared team mailbox or ticket queue",
    "explanation": "Shared destinations keep alerts visible when one person is away or leaves. Sending to everyone or no one defeats the purpose."
   },
   {
@@ -1069,7 +1069,7 @@
    "choices": [
     "The tenant's Admin Dashboard overview page",
     "The identity details page of the source owner",
-    "The audit events for API client changes",
+    "The audit events recorded for the source's last configuration change",
     "The connector log on the virtual appliance that ran the job"
    ],
    "answer": "The connector log on the virtual appliance that ran the job",
@@ -1097,7 +1097,7 @@
    "choices": [
     "The audit events for the identity's user level change",
     "The identity profile's attribute mappings",
-    "The aggregation activity for the HR source",
+    "The aggregation activity for the HR source on the dashboard",
     "The tenant's From address settings"
    ],
    "answer": "The audit events for the identity's user level change",
@@ -1626,12 +1626,12 @@
    "topic": "Platform Error Troubleshooting",
    "stem": "Every aggregation on an on-premises source fails with a connection timeout, while other sources on the same VA cluster work. What is the BEST next step?",
    "choices": [
-    "Delete the VA cluster and deploy a new one",
-    "Disable optimization on every other source",
-    "Run Test Connection and check the VA connector log for that source",
-    "Change the tenant From address"
+    "Delete the VA cluster and deploy a new one with fresh keys",
+    "Disable optimization on every other source on the cluster",
+    "Run Test Connection and read that source's VA connector log",
+    "Raise the account deletion threshold on that source"
    ],
-   "answer": "Run Test Connection and check the VA connector log for that source",
+   "answer": "Run Test Connection and read that source's VA connector log",
    "explanation": "A single failing source on a healthy cluster points to its own settings or network path, which the connection test and connector log reveal. Rebuilding the cluster is unnecessary."
   },
   {
@@ -1671,7 +1671,7 @@
    "items": [
     "Identity Created trigger, filtered to employees",
     "Get Identity action for the new hire's manager",
-    "Compare Strings operator on the department value",
+    "Compare Strings operator on the department returned for the manager",
     "Send Email action to the manager on the true path",
     "Success end step"
    ],

@@ -26,10 +26,10 @@
     "attributes.costCenter:null",
     "NOT _exists_:attributes.costCenter",
     "attributes.costCenter:*",
-    "attributes.costCenter:\"\" OR attributes.costCenter:null"
+    "attributes.costCenter:\"\""
    ],
    "answer": "NOT _exists_:attributes.costCenter",
-   "explanation": "The _exists_ operator tests whether a field has a value, and NOT inverts it. attributes.costCenter:* does the opposite and matches identities that do have a value."
+   "explanation": "The _exists_ keyword matches items that have any non-null value in a field, and NOT inverts it. attributes.costCenter:* does the opposite and matches identities that do have a value, and null or \"\" are searched as literal terms."
   },
   {
    "id": "D1-003",
@@ -37,13 +37,13 @@
    "topic": "Search Query Syntax",
    "stem": "An admin wants identities whose name starts with Jon, such as Jon, Jonas and Jonathan. Which query should the admin use?",
    "choices": [
-    "name:\"Jon*\"",
+    "name:\"Jon\"",
     "name:Jon*",
     "name:Jon?",
     "name:%Jon%"
    ],
    "answer": "name:Jon*",
-   "explanation": "The * wildcard matches any number of characters after the prefix. Inside quotes the asterisk is not treated as a wildcard, and ? matches only one character."
+   "explanation": "The * wildcard matches any number of characters after the prefix. name:\"Jon\" matches only the exact name Jon, ? matches exactly one character, and % is not a search wildcard."
   },
   {
    "id": "D1-004",
@@ -52,12 +52,12 @@
    "stem": "A search for attributes.department:Human Resources returns many identities from other departments. What is the MOST likely fix?",
    "choices": [
     "Put the value in quotes: attributes.department:\"Human Resources\"",
-    "Replace the colon with an equals sign between the field and the value",
+    "Replace the colon with an equals sign",
     "Write the department value in lowercase letters only",
     "Add a trailing asterisk after the word Resources"
    ],
    "answer": "Put the value in quotes: attributes.department:\"Human Resources\"",
-   "explanation": "Without quotes only the first word is bound to the field and the second word is searched as free text, so quotes make it an exact phrase. Lowercasing does not change how the words are grouped."
+   "explanation": "If a term contains spaces it must be in double quotes; otherwise the words are treated as if OR sat between them, so Resources is matched anywhere. Quoting makes it a phrase bound to the field."
   },
   {
    "id": "D1-005",
@@ -65,13 +65,13 @@
    "topic": "Search Query Syntax",
    "stem": "Security wants a list of identities created in the last seven days. Which query BEST meets the request?",
    "choices": [
-    "created:[now TO now-7d]",
+    "created:[now-7y TO now]",
     "created:[now-7d TO now]",
     "created:last7days",
     "created:now-7d TO now"
    ],
    "answer": "created:[now-7d TO now]",
-   "explanation": "Range queries use square brackets with the lower bound first, and date math such as now-7d is supported. Reversing the bounds gives an empty range."
+   "explanation": "Relative dates use range brackets with the earlier bound first, and d is the unit for days, so [now-7d TO now] covers the last week. now-7y would mean seven years, and the other forms are not valid range syntax."
   },
   {
    "id": "D1-006",
@@ -85,7 +85,7 @@
     "As SQL keywords inside a WHERE clause"
    ],
    "answer": "In uppercase, such as AND, OR and NOT",
-   "explanation": "The query string syntax treats uppercase AND, OR and NOT as operators. Lowercase words are searched as ordinary terms."
+   "explanation": "Search operators must be written in capital letters (AND, OR, NOT), or as their symbols &&, || and !. Lowercase and, or and not are treated as ordinary search terms."
   },
   {
    "id": "D1-007",
@@ -137,7 +137,7 @@
    "choices": [
     "Only identities and the accounts they own",
     "Only audit events from the last day",
-    "Virtual appliance logs, connector traces and cluster health data",
+    "Virtual appliance logs and connector traces",
     "Identities, access items, events and account activities"
    ],
    "answer": "Identities, access items, events and account activities",
@@ -150,9 +150,9 @@
    "stem": "A manager asks for the search results in a spreadsheet for an offline review. What should the admin do?",
    "choices": [
     "Take screenshots of each results page",
-    "Ask SailPoint Support for a database extract",
+    "Request a database extract from Support",
     "Download the search results as a CSV file",
-    "Copy the values from each identity's details page"
+    "Copy values from each identity's page"
    ],
    "answer": "Download the search results as a CSV file",
    "explanation": "Search results can be downloaded as a CSV report that opens in a spreadsheet. Support extracts and manual copying are slow and error-prone."
@@ -163,7 +163,7 @@
    "topic": "Search Categories and Results",
    "stem": "An admin's identity search shows names and emails, but the reviewer also needs each identity's lifecycle state in the results. What is the BEST approach?",
    "choices": [
-    "Run a separate search for every lifecycle state value and merge them",
+    "Run one search per lifecycle state and merge the results",
     "Edit the identity profile to rename the attribute",
     "Open each identity to read the lifecycle state",
     "Add the lifecycle state attribute as a column in the results"
@@ -177,13 +177,13 @@
    "topic": "Search Categories and Results",
    "stem": "A helpdesk agent types only the word smith into the search box with no field name. What does Identity Security Cloud do?",
    "choices": [
-    "It matches the term against the default searchable fields of the documents",
+    "It matches the term against any attribute of items in all search categories",
     "It rejects the query until a field name is added",
     "It searches only the identity's email attribute",
-    "It searches only the email attribute of identities in the active lifecycle state"
+    "It treats the word as the name of a saved search"
    ],
-   "answer": "It matches the term against the default searchable fields of the documents",
-   "explanation": "A term with no field is a free-text search across the default fields, such as names. A field name is optional, not required."
+   "answer": "It matches the term against any attribute of items in all search categories",
+   "explanation": "A term with no field searches within all search categories and returns items with any attribute containing the word, such as identities, roles or entitlements. A field name is optional, not required."
   },
   {
    "id": "D1-014",
@@ -192,12 +192,12 @@
    "stem": "An account aggregation finished a minute ago, but a new account does not yet appear in search results. What is the MOST likely explanation?",
    "choices": [
     "Search only refreshes once every night",
-    "New accounts are never indexed until the next certification campaign generates",
+    "Accounts are indexed only when the next certification campaign generates",
     "Aggregated accounts are excluded from search by design",
     "The search index updates shortly after changes, so results can lag briefly"
    ],
    "answer": "The search index updates shortly after changes, so results can lag briefly",
-   "explanation": "Search reads from an index that is refreshed after changes, so there can be a short delay. Waiting briefly and rerunning the search is the right first step."
+   "explanation": "Data is copied into the search index after it changes, which usually takes seconds to a few minutes and can be longer under load. Waiting briefly and rerunning the search is the right first step."
   },
   {
    "id": "D1-015",
@@ -206,7 +206,7 @@
    "stem": "An access review team needs to see which identities hold a role named Payroll Approver. Which approach BEST returns those identities?",
    "choices": [
     "Search events for the word Payroll",
-    "Search account activities for the day the role was first created in the tenant",
+    "Search account activities from the date the role was created",
     "Search entitlements for the role's owner",
     "Search identities for those whose access includes that role"
    ],
@@ -219,7 +219,7 @@
    "topic": "Saved Searches",
    "stem": "An admin runs the same complex identity query every week and is tired of retyping it. What should the admin do?",
    "choices": [
-    "Bookmark the browser address of the results page",
+    "Bookmark the results page URL",
     "Save the query as a saved search",
     "Create a role with the same criteria",
     "Store the query text in the identity profile"
@@ -245,7 +245,7 @@
    "id": "D1-018",
    "objective": "1.1",
    "topic": "Saved Searches",
-   "stem": "An admin realises the query in an existing saved search is wrong. How should the admin correct it?",
+   "stem": "An admin realises the query in an existing saved search is wrong. How should the admin correct it in the Search interface?",
    "choices": [
     "Edit the query text on the saved search details page",
     "Change the query in the subscription settings",
@@ -253,7 +253,7 @@
     "Save the corrected query as a new saved search"
    ],
    "answer": "Save the corrected query as a new saved search",
-   "explanation": "Only the name and description of a saved search can be edited, not its query. A new saved search, with any subscriptions recreated, is required."
+   "explanation": "In Search, only the name and description of a saved search can be edited, not its query. A new saved search, with any subscriptions recreated, is required."
   },
   {
    "id": "D1-019",
@@ -264,7 +264,7 @@
     "The colleague lacks the Helpdesk user level",
     "Saved searches appear only after a nightly refresh",
     "Saved searches are visible only to the user who created them",
-    "The query must be approved by a second admin before it is shared with others"
+    "A second admin must approve it before it is shared"
    ],
    "answer": "Saved searches are visible only to the user who created them",
    "explanation": "Saved searches belong to their creator. To share results with others, the creator can add them as subscribers to a subscription."
@@ -289,7 +289,7 @@
    "topic": "Saved Searches",
    "stem": "Besides the query itself, what does a saved search keep that affects how its results look when it is run again?",
    "choices": [
-    "The identity profile and the transforms that produced each attribute value",
+    "The identity profile and transforms behind each attribute value",
     "The source that was aggregated last",
     "The result columns that were displayed when it was saved",
     "The approval scheme of each result"
@@ -303,7 +303,7 @@
    "topic": "Saved Searches",
    "stem": "A script needs to list and create saved searches programmatically. Which interface should the developer use?",
    "choices": [
-    "The virtual appliance command line over an SSH session",
+    "The virtual appliance command line",
     "The saved searches endpoints of the REST API",
     "A connector rule on a source",
     "The email template editor"
@@ -318,7 +318,7 @@
    "stem": "An auditor wants the results of a saved search emailed on the first day of every month. What should the admin configure?",
    "choices": [
     "A certification campaign that runs monthly",
-    "An access request for the auditor with a sunset date at the end of each month",
+    "An access request for the auditor with a monthly sunset date",
     "A subscription on the saved search with a monthly schedule",
     "A monthly account aggregation on the source"
    ],
@@ -332,7 +332,7 @@
    "stem": "A team lead wants a report every Monday and Thursday at 8 AM local time. Which subscription settings meet this?",
    "choices": [
     "Choose the team's time zone, a weekly schedule, both days and 8 AM",
-    "Choose a daily schedule at 8 AM and ask the lead to ignore the emails on other days",
+    "Choose a daily schedule at 8 AM and ignore the extra emails",
     "Choose a monthly schedule with day 1 and day 4",
     "Create a separate saved search for each of the two days"
    ],
@@ -345,7 +345,7 @@
    "topic": "Search Subscriptions and Schedules",
    "stem": "A security manager only wants the subscription email when the query actually finds something. How should the subscription be set?",
    "choices": [
-    "Set the schedule to monthly so that the emails arrive much less often overall",
+    "Set a monthly schedule so the emails arrive less often",
     "Add a second subscriber to filter results",
     "Disable the subscription until results appear",
     "Leave the option to send the report when no items match unchecked"
@@ -376,7 +376,7 @@
     "Sensitive access details in email can be a security risk",
     "It disables the scheduled delivery",
     "It removes the link to the report",
-    "It converts the subscription into a certification campaign for the recipients"
+    "It turns the subscription into a certification"
    ],
    "answer": "Sensitive access details in email can be a security risk",
    "explanation": "Detailed data in an email body can leak if mail is forwarded or intercepted. Leaving it off keeps recipients going to the report link instead."
@@ -387,7 +387,7 @@
    "topic": "Search Subscriptions and Schedules",
    "stem": "A recipient of a weekly search subscription leaves the company. What should the admin do?",
    "choices": [
-    "Delete the saved search and rebuild it with a new list of subscribers",
+    "Delete the saved search and rebuild it without them",
     "Disable the identity's sources",
     "Edit the subscription and remove the recipient",
     "Change the schedule to monthly"
@@ -401,7 +401,7 @@
    "topic": "Search Subscriptions and Schedules",
    "stem": "A team must pause a weekly report during a freeze but keep its settings for later. What is the BEST option?",
    "choices": [
-    "Delete the subscription now and recreate it with the same settings after the freeze",
+    "Delete the subscription and recreate it after the freeze",
     "Disable the subscription and enable it again later",
     "Remove all subscribers except the creator",
     "Change the saved search name"
@@ -429,7 +429,7 @@
    "topic": "Event and Account Activity Searches",
    "stem": "A user says the Active Directory account requested for them last week was never created. Where should the admin look FIRST?",
    "choices": [
-    "The identity profile's attribute mappings and the transforms they use",
+    "The identity profile's attribute mappings",
     "The account activity for that request and its provisioning result",
     "The source's correlation configuration",
     "The role membership criteria"
@@ -460,10 +460,10 @@
     "Search entitlements for the authentication source",
     "Search roles assigned in the past week",
     "Search events filtered to authentication actions and the date range",
-    "Search account activities for password changes made during the past week only"
+    "Search account activities for password changes in that week"
    ],
    "answer": "Search events filtered to authentication actions and the date range",
-   "explanation": "Authentication actions are recorded as events, which can be filtered by type and time. Entitlements and roles describe access, not sign-in attempts."
+   "explanation": "Authentication actions are recorded as audit events (type:AUTH), which can be filtered by action, status and date. Entitlements and roles describe access, and account activities track changes made on sources."
   },
   {
    "id": "D1-034",
@@ -472,7 +472,7 @@
    "stem": "An admin wants a weekly list of provisioning actions that failed. Which approach is BEST?",
    "choices": [
     "Save an account activity search for failures and subscribe to it weekly",
-    "Export all identities to CSV each week and compare the two files by hand",
+    "Export all identities weekly and compare the files by hand",
     "Run a certification of all accounts each week",
     "Enable delta aggregation on every source"
    ],
@@ -499,7 +499,7 @@
    "topic": "Event and Account Activity Searches",
    "stem": "A helpdesk lead needs the status of an access request submitted for a user this morning. What should the lead check?",
    "choices": [
-    "The identity profile preview for the user and its calculated attributes",
+    "The identity profile preview for the user",
     "The transforms applied to the user",
     "The virtual appliance health page",
     "The account activity created for that access request"
@@ -560,7 +560,7 @@
    "choices": [
     "Saved searches are visible only to the user who created them",
     "A saved search can have several subscriptions",
-    "The query of a saved search can be edited after saving",
+    "The query can be edited on the saved search details page",
     "Subscriptions can only run once a month",
     "Subscriptions always send email even with no results"
    ],
@@ -569,7 +569,7 @@
     "A saved search can have several subscriptions"
    ],
    "select": 2,
-   "explanation": "Saved searches are private to their creator and each can carry multiple subscriptions. The query itself cannot be edited, schedules can be daily, weekly or monthly, and sending empty reports is optional."
+   "explanation": "Saved searches are private to their creator and each can carry up to 10 subscriptions. The query cannot be edited in the saved search details (only name and description), schedules can be daily, weekly or monthly, and sending empty reports is optional."
   },
   {
    "id": "D1-040",
@@ -577,7 +577,7 @@
    "topic": "REST API Authentication",
    "stem": "How does a client present its access token when calling the Identity Security Cloud REST API?",
    "choices": [
-    "As a query parameter named password on every request URL",
+    "As a password query parameter in each request URL",
     "In the Authorization header as a Bearer token",
     "In a cookie set by the Admin UI",
     "In the request body of every call"
@@ -633,7 +633,7 @@
    "topic": "REST API Authentication",
    "stem": "A script's API call returns 401 Unauthorized after it ran fine this morning. What is the MOST likely cause?",
    "choices": [
-    "The source the script reads from is missing a recent entitlement aggregation",
+    "The source is missing a recent aggregation",
     "The access token has expired and a new one must be requested",
     "The tenant's search index is rebuilding",
     "The identity profile has an unsaved change"
@@ -647,7 +647,7 @@
    "topic": "REST API Authentication",
    "stem": "An API call with a fresh, valid token returns 403 Forbidden. What does this MOST likely mean?",
    "choices": [
-    "The token was sent to the login page of a different tenant than the one that issued it",
+    "The token was requested from the login page instead of the API host",
     "The token is valid but lacks the rights or scopes for that endpoint",
     "The client secret has been rotated",
     "The endpoint does not exist in this API version"
@@ -663,7 +663,7 @@
    "choices": [
     "In Admin > Connections > Sources",
     "In their own Preferences, under Personal Access Tokens",
-    "In the identity profile's mappings tab for the user's authoritative source",
+    "In the identity profile's mappings tab",
     "On the virtual appliance console"
    ],
    "answer": "In their own Preferences, under Personal Access Tokens",
@@ -675,7 +675,7 @@
    "topic": "Personal Access Tokens",
    "stem": "Which permissions does an API call made with a personal access token have?",
    "choices": [
-    "Full Admin rights regardless of the user level of the identity that owns it",
+    "Full Admin rights, whatever the owner's user level",
     "Only read access to public data",
     "The rights of whoever last used the token",
     "Those of the user who owns the token, limited to its scopes"
@@ -691,7 +691,7 @@
    "choices": [
     "Create a new token, because the secret is shown only once",
     "Ask an Admin to display the secret",
-    "Open Preferences again and select the token to reveal its secret once more",
+    "Reopen Preferences and select the token to reveal its secret",
     "Request the secret from SailPoint Support"
    ],
    "answer": "Create a new token, because the secret is shown only once",
@@ -706,7 +706,7 @@
     "Delete the token so it can no longer be used",
     "Make the repository private",
     "Change the owner's sign-in password",
-    "Wait for the current access token to expire on its own schedule"
+    "Wait for the current access token to expire"
    ],
    "answer": "Delete the token so it can no longer be used",
    "explanation": "Deleting the token revokes it at once, so the leaked secret becomes useless. Hiding the repository does not remove copies already taken."
@@ -717,7 +717,7 @@
    "topic": "Personal Access Tokens",
    "stem": "How does a script use a personal access token to call the REST API?",
    "choices": [
-    "It sends the token secret directly as the Bearer token value on every API call",
+    "It sends the token secret as the Bearer value on each call",
     "It signs in to the Admin UI with the token name",
     "It uploads the token to the virtual appliance",
     "It exchanges the token's client ID and secret for an access token"
@@ -731,13 +731,13 @@
    "topic": "Personal Access Tokens",
    "stem": "A developer needs a personal access token for a script that only reads identities. What is the BEST practice?",
    "choices": [
-    "Accept the default of all scopes so the script never fails on a new endpoint",
+    "Grant sp:scopes:all so the script never fails",
     "Share one token across every script",
     "Use an Admin colleague's token",
     "Limit the token's scopes to what the script needs"
    ],
    "answer": "Limit the token's scopes to what the script needs",
-   "explanation": "Least privilege applies to tokens too: narrow scopes limit damage if the token leaks. Shared or borrowed tokens break accountability."
+   "explanation": "Least privilege applies to tokens too: a PAT can be limited to specific scopes, and narrow scopes limit damage if it leaks. sp:scopes:all grants every right of the owner's user level, and shared or borrowed tokens break accountability."
   },
   {
    "id": "D1-052",
@@ -816,12 +816,12 @@
    "stem": "An engineer with the Source Admin level is asked to build an event trigger subscription and cannot find the Event Triggers page. Why?",
    "choices": [
     "Source Admins must first run an aggregation",
-    "Event triggers are only available through the virtual appliance",
+    "Event triggers run only on the virtual appliance",
     "The engineer needs the Helpdesk level as well",
     "Event triggers and workflows require the Admin user level"
    ],
    "answer": "Event triggers and workflows require the Admin user level",
-   "explanation": "Event Triggers and Workflows are Admin-only pages. Adding Helpdesk would not grant them."
+   "explanation": "Among the built-in user levels, the Event Triggers and Workflows pages are available only to Admins. Adding Helpdesk would not grant them."
   },
   {
    "id": "D1-058",
@@ -831,7 +831,7 @@
    "choices": [
     "SAML single sign-on with the tenant as the service provider",
     "A new delimited file source for passwords",
-    "Pass-through authentication to a delimited flat file of usernames and passwords",
+    "Pass-through authentication to a flat file of passwords",
     "A personal access token for each user"
    ],
    "answer": "SAML single sign-on with the tenant as the service provider",
@@ -858,7 +858,7 @@
    "stem": "While setting up SAML SSO, which details does the tenant need from the corporate identity provider?",
    "choices": [
     "The IdP's entity ID, sign-in URL and signing certificate",
-    "The IdP's database administrator password and its backup encryption key",
+    "The IdP's database administrator password",
     "A list of every user's password hash",
     "The IdP's virtual appliance keys"
    ],
@@ -885,7 +885,7 @@
    "topic": "Tenant Single Sign-On",
    "stem": "Users are authenticated by the corporate IdP, but the tenant says it cannot find a matching identity. What is the MOST likely cause?",
    "choices": [
-    "The identity's lifecycle state has no access profiles configured to be granted on sign-in",
+    "The lifecycle state grants no access profiles when the user signs in",
     "The source's account deletion threshold was reached",
     "The assertion's subject value does not match the identity attribute the tenant looks up",
     "The search index has not been refreshed"
@@ -899,13 +899,13 @@
    "topic": "Tenant Single Sign-On",
    "stem": "The corporate IdP is down and an Admin must still reach the tenant to make an urgent change. What should the organisation have planned?",
    "choices": [
-    "A shared admin password emailed to the whole team so anyone can sign in during an outage",
+    "A shared admin password emailed to the whole team",
     "Turning off all authentication during outages",
     "An emergency admin sign-in that bypasses the IdP, protected by MFA",
     "A personal access token used in the browser"
    ],
    "answer": "An emergency admin sign-in that bypasses the IdP, protected by MFA",
-   "explanation": "A break-glass path that bypasses the IdP lets admins work during an outage, and MFA still protects it. Shared passwords and disabled authentication are unsafe."
+   "explanation": "A break-glass path that bypasses the IdP (the tenant sign-in page opened with ?prompt=true) lets admins work during an outage, and elevated users must still pass their registered authenticator (TOTP). Shared passwords and disabled authentication are unsafe."
   },
   {
    "id": "D1-064",
@@ -915,7 +915,7 @@
    "choices": [
     "SAML SSO with the tenant as the IdP",
     "A flat file source of user passwords",
-    "Personal access tokens issued to each user for signing in through the browser",
+    "Personal access tokens used to sign in through the browser",
     "Pass-through authentication to the Active Directory source"
    ],
    "answer": "Pass-through authentication to the Active Directory source",
@@ -927,7 +927,7 @@
    "topic": "Pass-Through Authentication",
    "stem": "How is a pass-through sign-in checked against an on-premises directory?",
    "choices": [
-    "The tenant compares the password with a hashed copy synchronised into the cloud nightly",
+    "The tenant checks a hashed copy synchronised to the cloud nightly",
     "The virtual appliance validates the credentials against the directory",
     "The user's browser connects directly to the domain controller",
     "SailPoint Support approves each sign-in"
@@ -944,7 +944,7 @@
     "The search subscription schedules",
     "The health of the virtual appliances that serve the directory source",
     "The role membership criteria",
-    "The certification campaign deadlines and reminders sent to reviewers this week"
+    "The certification campaign deadlines"
    ],
    "answer": "The health of the virtual appliances that serve the directory source",
    "explanation": "Pass-through depends on the VA reaching the directory, so a VA or connectivity problem blocks those sign-ins. Searches and campaigns do not affect authentication."
@@ -970,7 +970,7 @@
    "stem": "An architect wants pass-through sign-ins to keep working if one virtual appliance fails. What is the BEST design?",
    "choices": [
     "Move the directory source to a flat file",
-    "Increase the search subscription frequency so failures are reported sooner",
+    "Send search subscription reports more often",
     "Run more than one virtual appliance in the cluster",
     "Give every user the Helpdesk level"
    ],
@@ -984,12 +984,12 @@
    "stem": "Which users does Identity Security Cloud require to use MFA by default?",
    "choices": [
     "Only users who sign in after business hours",
-    "Only identities in the inactive lifecycle state who sign in from new devices",
+    "Only inactive identities that sign in from new devices",
     "Only users created by flat file sources",
     "Users with elevated user levels that give Admin menu access"
    ],
    "answer": "Users with elevated user levels that give Admin menu access",
-   "explanation": "Elevated accounts, meaning user levels with access to the Admin menu, require MFA by default. Lifecycle state and source type do not decide this."
+   "explanation": "Elevated users, meaning any user level with access to the Admin menu, require MFA by default and must register a TOTP authenticator. Lifecycle state and source type do not decide this."
   },
   {
    "id": "D1-070",
@@ -999,7 +999,7 @@
    "choices": [
     "Upload a photo ID to SailPoint Support",
     "Register an authenticator app that generates time-based codes",
-    "Answer a verification call placed by the virtual appliance to their desk phone",
+    "Answer a call placed by the virtual appliance to their phone",
     "Create a personal access token"
    ],
    "answer": "Register an authenticator app that generates time-based codes",
@@ -1028,10 +1028,10 @@
     "On every single page they open",
     "When they bypass the IdP, such as with an emergency admin sign-in",
     "Only when an aggregation fails",
-    "Only when they download a search report that contains identity attribute data"
+    "Only when they download a search report"
    ],
    "answer": "When they bypass the IdP, such as with an emergency admin sign-in",
-   "explanation": "After registration, IdP sign-ins rely on the IdP, and the tenant's TOTP prompt applies when the IdP is bypassed. It is not tied to reports or aggregations."
+   "explanation": "Elevated users register a TOTP device, but once it is registered they are not prompted for it on sign-ins through the IdP. They are prompted only when they bypass the IdP, such as with an emergency admin account."
   },
   {
    "id": "D1-073",
@@ -1042,7 +1042,7 @@
     "It makes aggregation faster",
     "It removes the need for certifications",
     "A stolen password alone cannot open the controls that grant access everywhere",
-    "It lets admins share one account safely because every sign-in needs a second code"
+    "It lets admins share one account safely"
    ],
    "answer": "A stolen password alone cannot open the controls that grant access everywhere",
    "explanation": "Admins can change access across many systems, so a second factor protects the highest-risk accounts. MFA does not replace reviews or make sharing accounts acceptable."
@@ -1056,10 +1056,10 @@
     "In each source's correlation settings",
     "In the search subscription options",
     "In the identity profile settings for those users",
-    "In the virtual appliance network settings for the cluster that serves the users"
+    "In the virtual appliance network settings"
    ],
    "answer": "In the identity profile settings for those users",
-   "explanation": "MFA requirements for users are configured on their identity profile. Correlation and VA networking are unrelated."
+   "explanation": "MFA for regular users is enabled per identity profile, by choosing Multifactor Authentication as the sign-in method. Correlation and VA networking are unrelated."
   },
   {
    "id": "D1-075",
@@ -1138,7 +1138,7 @@
     "The account activity for the request and its provisioning status",
     "The identity profile's priority setting",
     "The certification history for the user",
-    "The source's entitlement aggregation schedule and the time of its last run"
+    "The source's entitlement aggregation schedule"
    ],
    "answer": "The account activity for the request and its provisioning status",
    "explanation": "The account activity shows whether provisioning succeeded, failed or is still pending, with any error. Priority and certification history do not explain a missing account."
@@ -1151,7 +1151,7 @@
    "choices": [
     "As manual work items assigned to the source owner",
     "As failed events that retry every hour",
-    "As entries in the next search subscription email sent to the Admins",
+    "As entries in the next search subscription email",
     "As new uncorrelated accounts on the source"
    ],
    "answer": "As manual work items assigned to the source owner",
@@ -1166,10 +1166,10 @@
     "Run a daily certification of all accounts",
     "Schedule an hourly full aggregation",
     "Subscribe to the Provisioning Completed trigger and filter for failures",
-    "Give the operations team the Admin user level so they can watch every source page"
+    "Give the operations team the Admin level to watch each source"
    ],
    "answer": "Subscribe to the Provisioning Completed trigger and filter for failures",
-   "explanation": "The Provisioning Completed trigger fires when provisioning finishes, and a subscription filter can pass on only failed results. Aggregations and certifications do not alert on failures."
+   "explanation": "The Provisioning Completed trigger fires after a provisioning action completes on a source, and its payload includes each account request's provisioning result and any errors, so a subscription filter can pass on only failures. Aggregations and certifications do not alert on failures."
   },
   {
    "id": "D1-081",
@@ -1180,7 +1180,7 @@
     "The source's connection settings",
     "The identity profile's mappings",
     "The user's identity details, including its activity history",
-    "The virtual appliance's network page and the connector log for the cluster"
+    "The virtual appliance's connector log"
    ],
    "answer": "The user's identity details, including its activity history",
    "explanation": "An identity's details show its accounts, access and activity history, which lists changes over time. Source and VA settings are configuration, not history."
@@ -1191,7 +1191,7 @@
    "topic": "Monitoring Provisioning Activity",
    "stem": "After an identity moves to a terminated lifecycle state, how can the admin confirm its accounts were actually disabled?",
    "choices": [
-    "Assume success, because a lifecycle state change always disables every account",
+    "Assume success, since the state change always disables accounts",
     "Wait for the next quarterly certification",
     "Read the identity profile's transforms",
     "Check the account activities created by the lifecycle state change"
@@ -1205,13 +1205,13 @@
    "topic": "Monitoring Provisioning Activity",
    "stem": "When does the Provisioning Completed event trigger fire?",
    "choices": [
-    "Only when a source is first created and its connection test passes for the first time",
+    "Only when a new source passes its first connection test",
     "Only after a successful aggregation",
     "After a provisioning action completes, whether it succeeded or failed",
     "Before any approval is collected"
    ],
    "answer": "After a provisioning action completes, whether it succeeded or failed",
-   "explanation": "It fires when provisioning finishes and the payload includes the result for each account request. That is why subscribers can filter on failures."
+   "explanation": "It fires after a provisioning action completes on a source, and the payload includes the provisioning result for each account request and any errors. That is why subscribers can filter on failures."
   },
   {
    "id": "D1-084",
@@ -1247,13 +1247,13 @@
    "topic": "Event Trigger Use Cases",
    "stem": "An external risk engine must approve or deny access requests before the normal approval process starts. Which kind of trigger supports this?",
    "choices": [
-    "A fire-and-forget trigger such as Identity Created that sends the request details",
+    "A fire-and-forget trigger such as Identity Created",
     "A search subscription on access requests",
-    "A request-response trigger such as Access Request Pre-Approval",
+    "A request-response trigger such as Access Request Submitted",
     "A scheduled certification campaign"
    ],
-   "answer": "A request-response trigger such as Access Request Pre-Approval",
-   "explanation": "Request-response triggers wait for the subscriber's answer, and pre-approval lets an outside system decide early. Fire-and-forget triggers cannot change the outcome."
+   "answer": "A request-response trigger such as Access Request Submitted",
+   "explanation": "Request-response (response required) triggers wait for the subscriber's answer. Access Request Submitted (technical ID idn:access-request-pre-approval, formerly called Access Request Pre-Approval) expects an approval decision before normal approval begins. Fire-and-forget triggers cannot change the outcome."
   },
   {
    "id": "D1-087",
@@ -1275,7 +1275,7 @@
    "topic": "Event Trigger Use Cases",
    "stem": "What is the difference between a fire-and-forget trigger and a request-response trigger?",
    "choices": [
-    "Only fire-and-forget triggers can deliver their payloads to an HTTP endpoint",
+    "Only fire-and-forget triggers can post to an HTTP endpoint",
     "Only request-response can be filtered",
     "Fire-and-forget triggers run only once a day",
     "Only request-response waits for the subscriber's reply to continue"
@@ -1290,12 +1290,12 @@
    "stem": "The infrastructure team wants an alert when a virtual appliance cluster becomes unhealthy. Which approach is BEST?",
    "choices": [
     "Search identities for the cluster's name",
-    "Subscribe to the VA cluster status change trigger",
+    "Subscribe to the VA Cluster Status Change trigger",
     "Run a certification on the VA's source",
-    "Subscribe to the Identity Created trigger and watch for appliance identities"
+    "Watch the Identity Created trigger for appliance identities"
    ],
-   "answer": "Subscribe to the VA cluster status change trigger",
-   "explanation": "A trigger exists for VA cluster status changes, so the team is alerted when health changes. Identity searches and certifications do not track VA health."
+   "answer": "Subscribe to the VA Cluster Status Change trigger",
+   "explanation": "The VA Cluster Status Change trigger fires after the status of a VA cluster changes, so the team is alerted when health changes. Identity searches and certifications do not track VA health."
   },
   {
    "id": "D1-090",
@@ -1317,7 +1317,7 @@
    "topic": "Event Trigger Subscriptions",
    "stem": "A subscription to Identity Attributes Changed should only fire for identities in the Sales department. What should the admin configure?",
    "choices": [
-    "A separate tenant for the Sales department with its own copy of the trigger",
+    "A separate tenant just for the Sales department",
     "A role for Sales with membership criteria",
     "A daily schedule on the trigger",
     "A filter on the subscription that matches the department value"
@@ -1334,7 +1334,7 @@
     "Wait for a real event in production",
     "Send a test invocation to the subscription",
     "Delete and recreate the trigger",
-    "Run a full aggregation on every source so that real events are generated"
+    "Run a full aggregation on every source"
    ],
    "answer": "Send a test invocation to the subscription",
    "explanation": "A test invocation sends a sample payload to the subscriber without waiting for a real event. Waiting for production events risks bad data."
@@ -1347,7 +1347,7 @@
    "choices": [
     "Include the password in the trigger filter",
     "Disable authentication on the web service",
-    "Store the service password in an identity attribute that the trigger payload includes",
+    "Put the password in an identity attribute in the payload",
     "Configure the subscription's authentication, such as basic or bearer token"
    ],
    "answer": "Configure the subscription's authentication, such as basic or bearer token",
@@ -1359,7 +1359,7 @@
    "topic": "Event Trigger Subscriptions",
    "stem": "An admin wants to react to an event with low-code logic inside the tenant rather than building an external service. What is the BEST choice?",
    "choices": [
-    "An HTTP subscription to a new web server that hosts the custom logic",
+    "An HTTP subscription to a new custom web server",
     "A workflow that starts from the event trigger",
     "A search subscription on events",
     "A connector rule on the source"
@@ -1443,13 +1443,13 @@
    "topic": "Workflow Components",
    "stem": "An action needs the ID of the identity from the event that started the workflow. How is this value referenced?",
    "choices": [
-    "By typing the identity's name into every step of the workflow by hand",
+    "By typing the identity's name into each step by hand",
     "With a JSONPath variable such as $.trigger.identity.id",
     "With a SQL query against the tenant",
     "By reading it from the virtual appliance log"
    ],
    "answer": "With a JSONPath variable such as $.trigger.identity.id",
-   "explanation": "Workflow steps read data from earlier steps and the trigger with JSONPath expressions. Hard-coded names would only work for one person."
+   "explanation": "Workflow steps read data from the trigger input and earlier steps with JSONPath expressions starting at $.trigger or the step name; the exact path follows the trigger's input schema. Hard-coded names would only work for one person."
   },
   {
    "id": "D1-101",
@@ -1485,7 +1485,7 @@
    "topic": "Workflow Testing and Execution",
    "stem": "A workflow execution failed overnight. Where should the admin look to see which step failed and why?",
    "choices": [
-    "The source's correlation configuration and its last aggregation report",
+    "The source's correlation configuration",
     "The identity's access profiles",
     "The search subscription email",
     "The workflow's execution history and step details"
@@ -1499,7 +1499,7 @@
    "topic": "Workflow Testing and Execution",
    "stem": "An admin wants to try a new workflow without waiting for a real identity to change. What should the admin do?",
    "choices": [
-    "Change a real executive's department in HR and wait for the next aggregation",
+    "Change a real executive's department in HR",
     "Test the workflow with sample trigger input",
     "Turn off all other workflows",
     "Clone the tenant first"
@@ -1514,7 +1514,7 @@
    "stem": "A ticketing system must start a workflow by calling it. Which trigger type and setup does this require?",
    "choices": [
     "An external trigger with an OAuth client for the caller",
-    "An event trigger for Identity Created that the ticketing system subscribes to",
+    "An Identity Created event trigger subscription",
     "A scheduled trigger at midnight",
     "A search subscription on tickets"
    ],
@@ -1529,7 +1529,7 @@
    "choices": [
     "Loop",
     "Wait",
-    "Compare Booleans",
+    "Compare Boolean",
     "End step"
    ],
    "answer": "Loop",
@@ -1555,7 +1555,7 @@
    "topic": "Configuration Backup and Restore",
    "stem": "What is Configuration Hub mainly used for?",
    "choices": [
-    "Monitoring virtual appliance CPU, memory and disk use across all clusters",
+    "Monitoring virtual appliance health",
     "Backing up, restoring and migrating tenant configuration objects",
     "Approving access requests in bulk",
     "Writing transforms in a code editor"
@@ -1569,7 +1569,7 @@
    "topic": "Configuration Backup and Restore",
    "stem": "An admin is about to change several identity profiles and transforms. What should the admin do FIRST to make rollback possible?",
    "choices": [
-    "Download a search CSV of all identities and their current attribute values",
+    "Download a search CSV of all identities and their attributes",
     "Disable every source",
     "Create a Configuration Hub backup of those object types",
     "Run a certification of all admins"
@@ -1583,7 +1583,7 @@
    "topic": "Configuration Backup and Restore",
    "stem": "A bad change was deployed and the admin wants configuration back as it was in last week's backup. Which sequence is correct?",
    "choices": [
-    "Delete the live objects and wait for the next automated weekly backup to restore them",
+    "Delete the live objects and wait for the weekly backup",
     "Upload the backup to a virtual appliance",
     "Restore the backup directly with no draft",
     "Create a draft from the backup, review it, then deploy it"
@@ -1599,7 +1599,7 @@
    "choices": [
     "Backups only keep the source's name",
     "Restores always disable the source",
-    "Backups are encrypted with a tenant key that expires and blocks the restored connection",
+    "The backup's encryption key has expired",
     "Secrets and credentials are not backed up and must be re-entered"
    ],
    "answer": "Secrets and credentials are not backed up and must be re-entered",
@@ -1628,10 +1628,10 @@
     "Only through daily email of search results",
     "SailPoint takes automated weekly backups that it manages",
     "By the virtual appliance every hour",
-    "It is not backed up at all, so manual backups are the only copy that exists"
+    "It is not backed up, so manual backups are the only copy"
    ],
    "answer": "SailPoint takes automated weekly backups that it manages",
-   "explanation": "Automated weekly backups appear as created by the system and their retention is managed by SailPoint. Admins can also schedule their own recurring backups."
+   "explanation": "SailPoint backs up production configuration weekly, keeping up to five automated backups listed as created by SYSTEM, with retention managed by SailPoint. Admins can also schedule their own recurring backups."
   },
   {
    "id": "D1-114",
