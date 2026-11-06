@@ -9,7 +9,7 @@
    "topic": "Connector Types and Selection",
    "stem": "A payroll vendor can only drop a nightly CSV export on a file share and offers no API. The team wants the data in Identity Security Cloud as soon as possible. Which source type is the BEST fit?",
    "choices": [
-    "A JDBC source that queries the file share",
+    "A JDBC source that queries the CSV file on the file share",
     "A delimited file source loaded from the export",
     "A Web Services source with a GET operation",
     "An Active Directory source with a custom schema"
@@ -24,7 +24,7 @@
    "stem": "A cloud application has a documented REST API but no prebuilt SailPoint connector. The engineer needs aggregation and provisioning. Which connector should the engineer configure?",
    "choices": [
     "JDBC, with a SQL query for each action",
-    "Delimited File, with a scheduled upload",
+    "Delimited File, with a scheduled upload of an API export",
     "Web Services, with HTTP operations for each action",
     "Active Directory, with a custom object type for the app"
    ],
@@ -38,7 +38,7 @@
    "stem": "A company with no on-premises data center wants to connect a SaaS application that has a SailPoint SaaS connector. What is true about where that connector runs?",
    "choices": [
     "It runs on a virtual appliance that the company must deploy and patch",
-    "It runs on an IQService host inside the company network",
+    "It runs on an IQService host installed inside the company network",
     "It runs in the application vendor's tenant as a plug-in",
     "It runs in the SailPoint cloud and needs no virtual appliance"
    ],
@@ -54,7 +54,7 @@
     "A JDBC source served by a VA cluster that can reach the database",
     "A Web Services source called directly from the SailPoint cloud over the internet",
     "A delimited file source fed by a manual export",
-    "A SaaS connector that reads the tables over the internet"
+    "A SaaS connector that reads the database tables directly over the internet"
    ],
    "answer": "A JDBC source served by a VA cluster that can reach the database",
    "explanation": "A JDBC source runs on a VA, which reaches the private database and sends results to the tenant. A manual export would lose direct aggregation and provisioning."
@@ -68,7 +68,7 @@
     "A direct source always needs a service desk; a flat file source never does",
     "A direct source cannot be authoritative; a flat file source can",
     "A direct source connects to the target system; a flat file source is loaded from files",
-    "A direct source stores its data on the VA; a flat file source stores its data in the tenant"
+    "A direct source stores data on the VA; a flat file source stores it in the tenant"
    ],
    "answer": "A direct source connects to the target system; a flat file source is loaded from files",
    "explanation": "Direct connectors aggregate from and provision to the target system. Flat file sources load from uploaded files, and both kinds can be authoritative."
@@ -81,7 +81,7 @@
    "choices": [
     "The entitlement is written to the CSV file automatically",
     "A manual work item is created for the source owner to fulfill",
-    "The request fails because flat file sources are read only",
+    "The request fails because flat file sources are always read only",
     "The VA connects to the application and adds the entitlement directly"
    ],
    "answer": "A manual work item is created for the source owner to fulfill",
@@ -95,7 +95,7 @@
    "choices": [
     "Use the prebuilt connector, which already handles the vendor's API and schema",
     "Build the Web Services source, because prebuilt connectors cannot be authoritative",
-    "Use a delimited file source, because HR sources should not be direct",
+    "Use a delimited file source, since HR sources should never be direct connections",
     "Use JDBC against Workday's database for better performance"
    ],
    "answer": "Use the prebuilt connector, which already handles the vendor's API and schema",
@@ -108,7 +108,7 @@
    "stem": "An engineer is planning a new Active Directory source for an on-premises forest. Which component must be in place first?",
    "choices": [
     "A SaaS connector registered in the forest root domain",
-    "A ServiceNow integration that relays LDAP calls",
+    "A ServiceNow integration that relays LDAP calls to the controllers",
     "An inbound firewall rule from the SailPoint cloud to each domain controller",
     "A VA cluster with network access to the domain controllers"
    ],
@@ -123,7 +123,7 @@
    "choices": [
     "Use the Global Catalog port for all password operations",
     "Use SSL so the connector talks to the domain controllers over LDAPS",
-    "Use plain LDAP on port 389 with a stronger service account",
+    "Use plain LDAP on port 389 together with a more privileged service account",
     "Use a delimited file to send each new password to the help desk team"
    ],
    "answer": "Use SSL so the connector talks to the domain controllers over LDAPS",
@@ -138,7 +138,7 @@
     "List several domain controllers in the domain's server settings",
     "Add a second VA cluster that points to the same domain controller",
     "Lower the account deletion threshold for the source",
-    "Point the source at the Global Catalog port only"
+    "Point the source at the Global Catalog port of a single controller"
    ],
    "answer": "List several domain controllers in the domain's server settings",
    "explanation": "Listing several servers lets the connector use another domain controller when one is unreachable. A second cluster aimed at the same DC still fails when that DC is down."
@@ -149,7 +149,7 @@
    "topic": "Active Directory Connection Settings",
    "stem": "A forest has a root domain and two child domains. Accounts aggregate, but memberships in universal groups from other domains are missing. What is the MOST likely gap?",
    "choices": [
-    "The account deletion threshold is set too low",
+    "The account deletion threshold is set too low for the forest",
     "The source connects with LDAPS instead of plain LDAP on port 389",
     "No Global Catalog server is configured for the forest",
     "The identity profile uses the wrong priority"
@@ -165,7 +165,7 @@
    "choices": [
     "A second AD source dedicated to Exchange",
     "A cloud rule that SailPoint deploys and runs inside the tenant",
-    "A JDBC source pointed at the Exchange database",
+    "A JDBC source pointed at the Exchange mailbox database server",
     "IQService on a Windows server, configured on the source"
    ],
    "answer": "IQService on a Windows server, configured on the source",
@@ -220,7 +220,7 @@
    "stem": "Computer objects are showing up as accounts on an AD source. Which setting should the engineer change?",
    "choices": [
     "The iterate search filter, to return only person objects",
-    "The group search DN, to exclude computer groups",
+    "The group search DN, to exclude the computer groups from the domain",
     "The account correlation, to skip computer names",
     "The Global Catalog port, to avoid reading machine accounts at all"
    ],
@@ -236,7 +236,7 @@
     "An account search DN that points to the App Groups OU",
     "A group search DN that points to the App Groups OU",
     "A role that removes the unwanted groups",
-    "A lifecycle state that hides the unwanted groups"
+    "A lifecycle state that hides the unwanted groups from requesters"
    ],
    "answer": "A group search DN that points to the App Groups OU",
    "explanation": "The group search scope controls which groups become entitlements. The account search DN controls user objects, not groups."
@@ -317,7 +317,7 @@
    "topic": "JDBC Connection Settings",
    "stem": "Test Connection on a new JDBC source fails with \"No suitable driver found\". What is the MOST likely cause?",
    "choices": [
-    "The service account password has expired",
+    "The service account password has expired on the SQL server",
     "The driver is missing or the URL prefix does not match it",
     "The account SQL query returns too many rows for one aggregation",
     "The VA cluster has only one appliance"
@@ -346,7 +346,7 @@
    "stem": "A JDBC source can reach the database from an engineer's laptop but Test Connection times out from the tenant. Where should the engineer look FIRST?",
    "choices": [
     "The identity profile mappings and transforms for the source",
-    "The access profiles that use the source",
+    "The access profiles and roles that grant the source's entitlements",
     "The browser that ran Test Connection",
     "Network access from the source's VAs to the database port"
    ],
@@ -362,7 +362,7 @@
     "Grant the database owner role to make troubleshooting easier",
     "Grant SELECT on a view that exposes only the needed columns",
     "Reuse the application's own admin account",
-    "Grant SELECT on every table in the database"
+    "Grant SELECT on every table and view in the application database"
    ],
    "answer": "Grant SELECT on a view that exposes only the needed columns",
    "explanation": "A view with only needed columns limits both rights and data sent to the cloud. Owner or admin rights go far beyond reading accounts."
@@ -390,7 +390,7 @@
     "Add more identity attributes to the source's identity profile",
     "Switch the source to a delimited file upload",
     "Enable partitioning so several statements split the rows",
-    "Lower the percentage of deleted accounts allowed"
+    "Lower the percentage of deleted accounts allowed for the source"
    ],
    "answer": "Enable partitioning so several statements split the rows",
    "explanation": "Partitioned aggregation runs several SQL statements in parallel, each covering part of the data. A delimited file would lose direct connectivity and not be faster."
@@ -403,7 +403,7 @@
    "choices": [
     "Mark the group column as the account's display attribute in the schema",
     "Merge rows on the account identity column and sort the query by it",
-    "Run entitlement aggregation twice in a row",
+    "Run the entitlement aggregation twice in a row after each account run",
     "Change the source to a SaaS connector"
    ],
    "answer": "Merge rows on the account identity column and sort the query by it",
@@ -417,7 +417,7 @@
    "choices": [
     "A group SQL query that returns every group with its members",
     "A delta table for the whole source",
-    "A second identity profile for the source",
+    "A second identity profile that uses the source as authoritative",
     "A get object query that selects one account by its ID"
    ],
    "answer": "A get object query that selects one account by its ID",
@@ -445,7 +445,7 @@
    "choices": [
     "A group query and an entitlement attribute in the schema",
     "An access profile created for each group before any aggregation",
-    "A role with membership criteria on each group",
+    "A role with membership criteria defined on each of the groups",
     "A delimited file with every group listed"
    ],
    "answer": "A group query and an entitlement attribute in the schema",
@@ -472,7 +472,7 @@
    "stem": "An engineer enables delta aggregation on a JDBC source, but every run still reads all rows. What is the MOST likely reason?",
    "choices": [
     "JDBC sources never support delta aggregation",
-    "Delta aggregation only works for sources that are authoritative for an identity profile",
+    "Delta aggregation only works for authoritative sources",
     "Delta aggregation requires a delimited file",
     "JDBC delta aggregation needs extra configuration to track changed rows"
    ],
@@ -555,7 +555,7 @@
    "choices": [
     "A tenant microservice calling the controllers directly",
     "The administrator's browser through the Admin UI",
-    "The identity profile engine in the SailPoint cloud",
+    "The identity profile engine running in the SailPoint cloud",
     "The connector service on a VA in the source's cluster"
    ],
    "answer": "The connector service on a VA in the source's cluster",
@@ -570,7 +570,7 @@
     "The VA cluster has more than one appliance",
     "Optimized aggregation skipped the accounts because they were new",
     "No identity profile uses it as an authoritative source",
-    "The source has no entitlement aggregation schedule"
+    "The source has no entitlement aggregation schedule configured"
    ],
    "answer": "No identity profile uses it as an authoritative source",
    "explanation": "Identities are created from accounts on an authoritative source tied to an identity profile. Without that profile the accounts stay as accounts."
@@ -583,7 +583,7 @@
    "choices": [
     "Single-account aggregation deletes accounts only when run by an Admin",
     "Account deletions are processed only by full source aggregations",
-    "The identity must be in an inactive lifecycle state first",
+    "The identity must first be moved to an inactive lifecycle state by an admin",
     "The VA keeps a cached copy that blocks deletion"
    ],
    "answer": "Account deletions are processed only by full source aggregations",
@@ -598,7 +598,7 @@
     "Schedules use the VA cluster's GMT offset, which ignores daylight saving",
     "Schedules follow each admin's browser time zone",
     "Schedules follow the time zone of the source owner",
-    "Schedules always run in the US Eastern time zone of the tenant's hosting region"
+    "Schedules always run in the tenant's US Eastern time zone"
    ],
    "answer": "Schedules use the VA cluster's GMT offset, which ignores daylight saving",
    "explanation": "The aggregation schedule uses the time zone offset set on the connected VA cluster, which does not move with daylight saving. Browser settings play no part."
@@ -610,7 +610,7 @@
    "stem": "An app owner wants a non-authoritative source aggregated every hour during the workday. What is the BEST advice?",
    "choices": [
     "Aggregate every hour, since more frequent runs keep the data safer",
-    "Aggregate only when an access request is submitted",
+    "Aggregate only when an access request is submitted for the source",
     "Replace aggregation with a weekly certification",
     "Aggregate rarely, usually once a day and outside business hours"
    ],
@@ -624,7 +624,7 @@
    "stem": "An admin is preparing the first CSV for a new flat file source and needs the expected columns. What should the admin use?",
    "choices": [
     "Download Account Schema on the source's account aggregation page",
-    "Export the identity profile's mappings as a CSV",
+    "Export the identity profile's attribute mappings to a CSV template",
     "Run a search query and export the results",
     "Copy the column names from another flat file source's latest upload"
    ],
@@ -653,7 +653,7 @@
    "choices": [
     "Create an access profile whose entitlement is the empId attribute value",
     "Map identity attribute employeeNumber to account attribute empId",
-    "Map empId to the identity's display name",
+    "Map account attribute empId to the identity's display name attribute",
     "Add empId as a lifecycle state"
    ],
    "answer": "Map identity attribute employeeNumber to account attribute empId",
@@ -679,7 +679,7 @@
    "topic": "Correlation During Aggregation",
    "stem": "After aggregation, 200 accounts have no attribute that matches any identity. What is the BEST approach?",
    "choices": [
-    "Delete all 200 accounts from ISC",
+    "Delete all 200 accounts from ISC and aggregate the source again",
     "Create a new identity for each account so that none stay uncorrelated",
     "Make the source authoritative",
     "Fix the data where possible and manually correlate the rest"
@@ -737,7 +737,7 @@
    "choices": [
     "A connector rule that runs on the IQService host during aggregation",
     "A correlation rule, which SailPoint reviews before deployment",
-    "A lifecycle state that renames the account",
+    "A lifecycle state that renames the account to match the HR number",
     "A provisioning policy on the source"
    ],
    "answer": "A correlation rule, which SailPoint reviews before deployment",
@@ -749,7 +749,7 @@
    "topic": "Aggregation Optimization and Safeguards",
    "stem": "What does the default optimized account aggregation do?",
    "choices": [
-    "Reads only records changed since the last run",
+    "Reads only the records that changed at the source since the last run",
     "Reads every record and reprocesses all of them, including correlation",
     "Reads every record and skips processing for unchanged accounts",
     "Reads only accounts that are correlated"
@@ -780,7 +780,7 @@
     "Start Aggregation twice in the Admin UI so the second run is full",
     "Schedule the aggregation for midnight",
     "Call the load-accounts API with disableOptimization set to true",
-    "Enable delta aggregation on the source"
+    "Enable delta aggregation on the source, then start a new aggregation"
    ],
    "answer": "Call the load-accounts API with disableOptimization set to true",
    "explanation": "Unoptimized aggregation is triggered through the API with disableOptimization, and only for that run. UI aggregations always run optimized."
@@ -807,7 +807,7 @@
    "choices": [
     "It rounds to zero accounts, so only a 100% deletion cancels the run",
     "Every aggregation is canceled because 3% is too strict for small sources",
-    "Deleted accounts are kept forever as hidden accounts",
+    "Deleted accounts are kept forever as hidden accounts in the tenant instead",
     "The threshold is ignored for small sources"
    ],
    "answer": "It rounds to zero accounts, so only a 100% deletion cancels the run",
@@ -835,7 +835,7 @@
    "choices": [
     "It stays as a hidden identity because ownership blocks deletion",
     "It moves to the inactive lifecycle state and stays visible in search",
-    "It is deleted immediately along with the access profile",
+    "It is deleted immediately, along with the access profile it owns",
     "It is reassigned to the source owner's identity profile"
    ],
    "answer": "It stays as a hidden identity because ownership blocks deletion",
@@ -849,7 +849,7 @@
    "choices": [
     "Aggregate every row and delete the old ones in ISC",
     "Aggregate every row and hide old identities with a lifecycle state",
-    "Export only old rows to a separate flat file source",
+    "Export only the old rows to a separate flat file source for archiving",
     "Add a WHERE clause to the account query to exclude old rows"
    ],
    "answer": "Add a WHERE clause to the account query to exclude old rows",
@@ -864,7 +864,7 @@
     "Aggregate them and leave them uncorrelated",
     "Aggregate them and certify them quarterly",
     "Exclude that OU through the account search DN or search filter",
-    "Aggregate them and then remove their entitlements in ISC each week"
+    "Aggregate them and remove their entitlements in ISC weekly"
    ],
    "answer": "Exclude that OU through the account search DN or search filter",
    "explanation": "Scoping the search keeps the objects on premises. Leaving them uncorrelated still stores them in the tenant."
@@ -875,7 +875,7 @@
    "topic": "Filtering Data Sent to the Cloud",
    "stem": "A SaaS application returns a national ID number with every user, and no one needs it in ISC. What is the BEST step?",
    "choices": [
-    "Map the attribute to a hidden identity attribute",
+    "Map the attribute to a hidden identity attribute on the profile",
     "Remove the attribute from the source's account schema",
     "Add a transform that uppercases the attribute",
     "Create an access profile that excludes the attribute value"
@@ -919,7 +919,7 @@
    "choices": [
     "Add a lifecycle state that disables inactive users after aggregation",
     "Add a role that removes inactive users",
-    "Add a second cluster for inactive users",
+    "Add a second VA cluster that handles aggregation of the inactive users",
     "Add the status filter to the aggregation HTTP operation's request"
    ],
    "answer": "Add the status filter to the aggregation HTTP operation's request",
@@ -947,7 +947,7 @@
    "choices": [
     "Yes, each VA keeps a full replica of the tenant",
     "No, VAs move data to the tenant, which is where it is stored",
-    "Yes, VAs store data so the cloud can read it later",
+    "Yes, VAs store the data so that the cloud can read it again later",
     "No, aggregated data stays only on the source system it came from"
    ],
    "answer": "No, VAs move data to the tenant, which is where it is stored",
@@ -976,7 +976,7 @@
     "A nightly sync adds such changes to Search, within 24 hours",
     "The aggregation failed and must be rerun",
     "The VA cached the old value permanently",
-    "Search only shows data from authoritative sources, not from apps"
+    "Search only shows data from authoritative sources"
    ],
    "answer": "A nightly sync adds such changes to Search, within 24 hours",
    "explanation": "Changes that affect identities appear in Search quickly, but other updates can wait for the nightly synchronization job. The aggregation itself succeeded."
@@ -1095,7 +1095,7 @@
    "choices": [
     "A ServiceNow Service Catalog integration for the application's users",
     "A Web Services source pointed at ServiceNow",
-    "A JDBC source pointed at the ServiceNow database",
+    "A JDBC source pointed at the ServiceNow instance's database tables",
     "A service desk integration attached to the application's source"
    ],
    "answer": "A service desk integration attached to the application's source",
@@ -1194,7 +1194,7 @@
     "The source's account deletion threshold is set far too low",
     "The VA cluster is in the wrong time zone",
     "The closed status is not mapped to a completed status",
-    "The identity profile priority is set incorrectly"
+    "The identity profile priority is set incorrectly for the source"
    ],
    "answer": "The closed status is not mapped to a completed status",
    "explanation": "ISC reads the ticket status and relies on the status mapping to know a ticket is done. An unmapped status leaves the request waiting."
@@ -1248,7 +1248,7 @@
    "stem": "Five disconnected applications must all be fulfilled through the same ServiceNow instance. What is the simplest design?",
    "choices": [
     "Five ServiceNow instances, one per source",
-    "Five Web Services sources calling ServiceNow",
+    "Five Web Services sources, each calling the ServiceNow REST API",
     "One service desk integration with all five sources attached",
     "One flat file source that holds the accounts of all five applications"
    ],
@@ -1347,7 +1347,7 @@
    "choices": [
     "Clear the cached jobs on each VA and reboot them one at a time",
     "Delete the source and its accounts",
-    "Reboot all VAs in the cluster at the same time so they reload settings",
+    "Reboot all VAs in the cluster at the same time",
     "Raise the account deletion threshold"
    ],
    "answer": "Clear the cached jobs on each VA and reboot them one at a time",
@@ -1541,7 +1541,7 @@
    "topic": "Authentication and Permission Errors",
    "stem": "A JDBC source for SQL Server fails with \"Login failed for user\". What should the engineer check FIRST?",
    "choices": [
-    "The DNS records for the database host",
+    "The DNS records that resolve the database host name for the VAs",
     "The firewall rule that opens the database port to the cluster's VAs",
     "The JDBC driver JAR version",
     "The database credentials and whether SQL logins are allowed"
