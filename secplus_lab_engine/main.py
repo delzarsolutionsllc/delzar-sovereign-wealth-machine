@@ -199,6 +199,48 @@ def exam(ui: UI, policies: dict, count: int = 90, minutes: float = 90, seed: int
     return run_exam(ui, questions, minutes, ask=ask, progress=progress, shortfall=shortfall)
 
 
+def interview_cmd(ui: UI, count: int = 5, role: str | None = None, category: str | None = None,
+                  level: str | None = None, seed: int | None = None, ask=None):
+    """A mock IAM job interview: answer out loud or type, then compare with what interviewers listen for."""
+    from utils import interview
+    ask = ask or ui.ask
+    try:
+        qs = interview.pick(max(1, min(int(count), 15)), category=category, level=level, role=role, seed=seed)
+    except ValueError as e:
+        raise SystemExit(str(e))
+    ui.header("MOCK IAM INTERVIEW", f"{len(qs)} question(s). Answer out loud (or type), then rate yourself 0-5.")
+    if not qs:
+        ui.print("No interview questions match those filters.", style="yellow")
+        return {"done": 0, "average": None}
+    scores = []
+    for i, q in enumerate(qs, 1):
+        name = interview.CATEGORIES[q["category"]][0]
+        ui.section(f"Question {i}/{len(qs)}  ·  {name}  ·  {q['level']}")
+        ui.print(f"[bold]{q['question']}[/bold]")
+        try:
+            ask("Your answer (Enter when done):")
+        except (EOFError, KeyboardInterrupt):
+            break
+        ui.print("What the interviewer listens for:", style="cyan")
+        for pt in q["listen_for"]:
+            ui.print(f"  - {pt}")
+        ui.print("Model answer:", style="cyan")
+        ui.print(f"  {q['model_answer']}")
+        ui.print("Red flags: " + "; ".join(q["red_flags"]), style="yellow")
+        ui.print("Likely follow-up: " + q["follow_ups"][0])
+        try:
+            raw = ask("How many of the points did you cover? Rate 0-5:").strip()
+        except (EOFError, KeyboardInterrupt):
+            break
+        if raw.isdigit() and 0 <= int(raw) <= 5:
+            scores.append(int(raw))
+    avg = round(sum(scores) / len(scores), 1) if scores else None
+    ui.section("Summary")
+    ui.print(f"Self-rated average: {avg if avg is not None else 'n/a'} / 5 over {len(scores)} question(s).")
+    ui.print("Free AI grading: python main.py mcp, then ask Claude: 'Run the mock_interview prompt'.")
+    return {"done": len(scores), "average": avg}
+
+
 def review(ui: UI, count: int = 15, seed: int | None = None, ask=None, progress_path: str | None = None,
            today=None):
     """Today's daily review: answer, see the right answer and why at once, then a summary."""
@@ -504,6 +546,12 @@ def build_parser() -> argparse.ArgumentParser:
     w.add_argument("--no-browser", action="store_true", help="don't open a browser window")
     sc = sub.add_parser("install-shortcut", help="create a desktop launcher for the web app")
     sc.add_argument("--desktop", metavar="DIR", help="folder to put the shortcut in (default: your desktop)")
+    iv = sub.add_parser("interview", help="mock IAM job interview: questions, what interviewers listen for, model answers")
+    iv.add_argument("--count", type=int, default=5)
+    iv.add_argument("--role", choices=["analyst", "entra_admin", "okta_admin", "iga_engineer", "iam_engineer"])
+    iv.add_argument("--category", choices=["fundamentals", "protocols", "pam", "entra", "okta", "iga", "troubleshooting", "behavioral", "projects"])
+    iv.add_argument("--level", choices=["entry", "mid", "senior"])
+    iv.add_argument("--seed", type=int)
     mc = sub.add_parser("mcp", help="AI tutor: an MCP server for Claude or another MCP client (stdio)")
     mc.add_argument("--grant", action="append", default=[], metavar="SCOPE",
                     help="extra scope to grant, e.g. progress:write (default grants: read, quiz)")
@@ -546,6 +594,8 @@ def main(argv: list[str] | None = None) -> int:
         glossary_cmd(ui, args.term, args.domain, args.quiz, seed=args.seed)
     elif args.command == "quiz":
         quiz(ui, args.objective, args.set_n, args.topic_n, seed=args.seed)
+    elif args.command == "interview":
+        interview_cmd(ui, args.count, args.role, args.category, args.level, args.seed)
     elif args.command == "review":
         review(ui, args.count, args.seed)
     elif args.command == "videos":

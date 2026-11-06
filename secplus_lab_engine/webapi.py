@@ -25,7 +25,7 @@ from utils.challenge import Progress
 from utils.exam import DOMAIN_NAMES, DOMAIN_TEST_TARGET, DOMAIN_WEIGHTS, PASS_SCALED, build_domain_test, build_exam
 from utils.loader import load_data, load_policies
 from utils.scenario_generator import GENERATORS, generate
-from utils import glossary, portfolio, quizzes, review, sync, videos
+from utils import glossary, interview, portfolio, quizzes, review, sync, videos
 from utils.terminal_ui import UI
 
 
@@ -166,6 +166,7 @@ def catalog(policies: dict) -> dict:
             "exam_target": EXAM_TARGET, "course": _course.summary(), "objectives": names,
             "video_course": vc,
             "career_tracks": portfolio.career(),
+            "interview": interview.catalog(),
             "objective_quizzes": quizzes.catalog(), "quiz_set_size": quizzes.SET_SIZE,
             "glossary": glossary.catalog(),
             "domains": [{"id": d, "name": DOMAIN_NAMES[d], "weight": w} for d, w in DOMAIN_WEIGHTS.items()]}

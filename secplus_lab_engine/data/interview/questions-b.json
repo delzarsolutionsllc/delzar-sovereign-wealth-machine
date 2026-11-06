@@ -1,0 +1,1291 @@
+{
+  "questions": [
+    {
+      "id": "IV-ENT-001",
+      "category": "entra",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How does Conditional Access in Microsoft Entra ID decide what happens when a user signs in, and what happens when several policies apply at once?",
+      "listen_for": [
+        "Policies are if-then: assignments (users, target resources, conditions) then access controls",
+        "Grant controls versus session controls",
+        "Every matching policy is enforced together; all requirements must be met",
+        "Block wins over any grant",
+        "Report-only mode to test before enforcing"
+      ],
+      "model_answer": "Conditional Access is the policy engine in Microsoft Entra ID, formerly Azure AD. Each policy is an if-then statement. The 'if' part is the assignments: which users or groups, which target resources such as apps, and conditions like sign-in risk, device platform, location or client app. The 'then' part is the access controls: grant controls like block, require multifactor authentication (MFA), require an authentication strength or a compliant device, and session controls like sign-in frequency. Policies are not first-match. Every policy that applies is enforced together, so the user must satisfy all of their requirements, and if any applicable policy says block, the sign-in is blocked. Inside one policy you choose whether the user needs all selected grant controls or just one. Before turning a new policy on, I run it in report-only mode and check the sign-in logs.",
+      "follow_ups": [
+        "How would you test a policy before switching it on?",
+        "What is the difference between a grant control and a session control?"
+      ],
+      "red_flags": [
+        "Saying policies are evaluated in priority order and the first match wins",
+        "Not knowing that block overrides grant"
+      ],
+      "labs": [
+        25
+      ]
+    },
+    {
+      "id": "IV-ENT-002",
+      "category": "entra",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the difference between an app registration and an enterprise application in Microsoft Entra ID?",
+      "listen_for": [
+        "App registration = application object, the global definition in the home tenant",
+        "Enterprise application = service principal, the local instance in each tenant that uses the app",
+        "One application object, many service principals (multi-tenant apps)",
+        "Where you configure what: credentials, redirect URIs and API permissions vs assignment, SSO and consent",
+        "Gallery and SaaS apps appear only as enterprise apps in your tenant"
+      ],
+      "model_answer": "An app registration creates the application object. It is the blueprint that lives in the developer's home tenant: redirect URIs, client secrets or certificates, the API permissions it asks for, and the roles it exposes. An enterprise application is a service principal, which is the local copy of that app inside a tenant that actually uses it. For a multi-tenant app there is one application object in the publisher's tenant and a service principal in every customer tenant that consents. As an administrator I spend most of my time on the enterprise application side: who is assigned, whether user assignment is required, single sign-on settings, granted permissions and sign-in logs. If I add a SaaS app from the gallery, I usually only see the enterprise application, because the application object belongs to the vendor.",
+      "follow_ups": [
+        "Where would you look to see which permissions an app has actually been granted?",
+        "What is a managed identity and how is it related to a service principal?"
+      ],
+      "red_flags": [
+        "Treating the two as unrelated objects",
+        "Saying you must create an app registration for every gallery SaaS app"
+      ],
+      "labs": [
+        28,
+        29
+      ]
+    },
+    {
+      "id": "IV-ENT-003",
+      "category": "entra",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What are emergency access accounts in Microsoft Entra ID, and how would you set them up and protect them?",
+      "listen_for": [
+        "At least two cloud-only accounts on the onmicrosoft.com domain, not synced from on-premises",
+        "Permanent Global Administrator, not dependent on one person, phone or federation",
+        "Strong, phishing-resistant authentication such as FIDO2 security keys, stored securely",
+        "Excluded from Conditional Access policies that could lock everyone out, with compensating controls",
+        "Alerting on every sign-in and regular testing"
+      ],
+      "model_answer": "Emergency access, or break-glass, accounts are how we get back into the tenant if normal admin sign-in breaks, for example a bad Conditional Access policy or a federation outage. I create at least two cloud-only accounts on the onmicrosoft.com domain so they do not depend on on-premises Active Directory or a federation server. They hold Global Administrator permanently, not through Privileged Identity Management (PIM) activation. Because Microsoft now enforces MFA for admin portals, I protect them with phishing-resistant methods such as FIDO2 security keys kept in separate safes, not a single person's phone. I exclude them from the Conditional Access policies that could lock us out, but monitor them closely: any sign-in fires an alert to the security team through Log Analytics or Microsoft Sentinel. Finally, I test them on a schedule and document the procedure.",
+      "follow_ups": [
+        "Why cloud-only and not synced from Active Directory?",
+        "How would you alert on their use?"
+      ],
+      "red_flags": [
+        "Using a named person's daily admin account as the break-glass account",
+        "Having only one account or no monitoring",
+        "Saying break-glass accounts need no MFA at all in 2026"
+      ],
+      "labs": [
+        25,
+        35
+      ]
+    },
+    {
+      "id": "IV-ENT-004",
+      "category": "entra",
+      "level": "entry",
+      "kind": "technical",
+      "question": "In Privileged Identity Management, what is the difference between an eligible and an active role assignment, and why does it matter?",
+      "listen_for": [
+        "Eligible = the user must activate the role before using it; active = always on",
+        "Activation settings: duration, MFA, justification, ticket number, approval",
+        "Time-bound assignments with expiry",
+        "Reduces standing privilege and attack surface; audit trail of each activation",
+        "Needs Microsoft Entra ID P2 or Entra ID Governance licensing"
+      ],
+      "model_answer": "With Privileged Identity Management, or PIM, an eligible assignment means the person can use a role but does not hold it day to day. When they need it they activate it, and the role settings decide what that takes: for example a maximum duration of a few hours, MFA or an authentication context, a justification, a ticket number and, for the most sensitive roles, approval by another admin. An active assignment is standing access that is always on. Eligible assignments matter because most admin accounts get attacked when nobody is using them; just-in-time access shrinks that window and gives auditors a record of who activated what, when and why. I also put end dates on assignments and run access reviews on privileged roles. PIM needs Microsoft Entra ID P2 or Entra ID Governance licences.",
+      "follow_ups": [
+        "Which roles would you require approval for?",
+        "How would you handle a role that a service account needs permanently?"
+      ],
+      "red_flags": [
+        "Describing eligible as 'read-only'",
+        "Recommending permanent active Global Administrator for all IT staff"
+      ],
+      "labs": [
+        25,
+        35
+      ]
+    },
+    {
+      "id": "IV-ENT-005",
+      "category": "entra",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What does the Authentication methods policy control in Microsoft Entra ID, and what is an authentication strength?",
+      "listen_for": [
+        "Central policy that enables methods per group: Authenticator, passkeys/FIDO2, certificate-based, SMS, voice, TAP",
+        "Replaced the legacy per-user MFA and SSPR method settings (migration completed in 2025)",
+        "Authentication strength = a Conditional Access grant control naming which method combinations count",
+        "Built-in strengths: MFA, passwordless MFA, phishing-resistant MFA",
+        "Temporary Access Pass for onboarding and recovery"
+      ],
+      "model_answer": "The Authentication methods policy is where I decide which sign-in methods are allowed and for whom. Each method, such as Microsoft Authenticator, passkeys and FIDO2 security keys, certificate-based authentication, Temporary Access Pass, SMS or voice, can be enabled for all users or specific groups, with extra settings like number matching. It replaced the older separate MFA and self-service password reset (SSPR) method lists, which Microsoft retired in 2025. An authentication strength is different: it is a Conditional Access grant control that says which combinations of methods satisfy a policy. There are built-in strengths for MFA, passwordless MFA and phishing-resistant MFA, and you can create custom ones. So the methods policy decides what people can register and use, and the authentication strength decides what a specific app or admin role demands.",
+      "follow_ups": [
+        "How would you use Temporary Access Pass?",
+        "Why would you require phishing-resistant MFA for admins?"
+      ],
+      "red_flags": [
+        "Confusing the methods policy with Conditional Access",
+        "Calling SMS phishing-resistant"
+      ],
+      "labs": [
+        33
+      ]
+    },
+    {
+      "id": "IV-ENT-006",
+      "category": "entra",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user says they are blocked when they open a business app, but colleagues can get in. How do you troubleshoot it in Microsoft Entra ID?",
+      "listen_for": [
+        "Get the time, app, device and the error code or correlation ID",
+        "Sign-in logs: status, failure reason, error code",
+        "Conditional Access tab: which policies applied, failed or were not applied",
+        "What If tool to replay the sign-in conditions",
+        "Check assignment requirements, device compliance, location, risk; fix the cause, not just exclude the user"
+      ],
+      "model_answer": "First I collect facts: the exact time, the app, the device and browser, and the error code or the correlation ID from the error page. Then I open the sign-in logs in Microsoft Entra, filter on the user and that time, and read the failure reason and error code. The Conditional Access tab on that sign-in shows every policy and whether it succeeded, failed or did not apply, so I can see, for example, that a 'require compliant device' policy failed because their laptop is not enrolled in Intune. If the sign-in never reached a policy, I check whether the enterprise app requires user assignment and whether they are in the right group. I can use the What If tool to replay the user, app, location and device conditions. Finally I fix the cause, like device enrollment or group membership, rather than excluding the user from the policy.",
+      "follow_ups": [
+        "What does a sign-in with 'interrupted' status mean?",
+        "When would you check the audit log instead of sign-in logs?"
+      ],
+      "red_flags": [
+        "Jumping straight to excluding the user from policies",
+        "Not using the sign-in logs at all"
+      ],
+      "labs": [
+        25,
+        31
+      ]
+    },
+    {
+      "id": "IV-ENT-007",
+      "category": "entra",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "You need to roll out Conditional Access so every user needs MFA and legacy authentication is blocked, without locking anyone out. How do you plan it?",
+      "listen_for": [
+        "Exclude emergency access accounts; plan for service accounts and workload identities",
+        "Start in report-only mode and review the insights workbook / sign-in logs",
+        "Block legacy authentication; find clients still using it first",
+        "Target all resources, use authentication strengths, stronger rules for admins",
+        "Phased rollout with pilot groups, communication and registration campaign",
+        "Rollback plan and change control"
+      ],
+      "model_answer": "I start with protection against my own mistakes: both emergency access accounts are excluded, and I list service accounts that still sign in interactively so they can be replaced with workload identities instead of being quietly excluded. Next I make sure users have registered MFA methods, using a registration campaign and Temporary Access Pass for new starters. Then I create the policies in report-only mode: require MFA for all users and all resources, require phishing-resistant MFA for admin roles, and block legacy authentication protocols that cannot do MFA. I let report-only run for a week or two and use the Conditional Access insights workbook and sign-in logs to find who would be blocked, such as an old scanner using basic authentication. Then I enable for a pilot group, then by department, with communication to the service desk and a documented rollback through change management.",
+      "follow_ups": [
+        "How do you find which apps still use legacy authentication?",
+        "Why should exclusions be groups that are reviewed?"
+      ],
+      "red_flags": [
+        "Enabling for all users in one step with no report-only phase",
+        "Forgetting the break-glass accounts",
+        "Large permanent exclusions for 'difficult' users"
+      ],
+      "labs": [
+        25,
+        33
+      ]
+    },
+    {
+      "id": "IV-ENT-008",
+      "category": "entra",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How do Microsoft Entra Connect Sync and Microsoft Entra Cloud Sync differ, and how would you choose between password hash sync, pass-through authentication and federation?",
+      "listen_for": [
+        "Connect Sync: full server-based engine, wide feature set, staging server for resilience",
+        "Cloud Sync: lightweight agents, configuration in the cloud, multiple agents for high availability, good for disconnected forests and mergers",
+        "Password hash synchronization: syncs a hash of the password hash; simplest, enables leaked credential detection, cloud keeps working if on-prem is down",
+        "Pass-through authentication: on-prem agents validate passwords, depends on agents and DCs",
+        "Federation (AD FS): most complex, only for real requirements; Microsoft recommends moving to cloud authentication"
+      ],
+      "model_answer": "Microsoft Entra Connect Sync is the full synchronization engine installed on a Windows server. It supports the widest set of scenarios and advanced customisation, and you protect it with a staging-mode server. Cloud Sync uses lightweight provisioning agents with the configuration held in the cloud; you install several agents for high availability, and it suits multiple disconnected forests or a merger. For sign-in, my default is password hash synchronization: it syncs a hash of the password hash, is simple, keeps cloud sign-in working if on-premises is down, and lets ID Protection detect leaked credentials. Pass-through authentication validates passwords against on-premises domain controllers through agents, which some organisations want for policy reasons, but it adds a dependency. Federation with AD FS is the most complex and I only keep it for a real requirement; you can still enable password hash sync as a backup.",
+      "follow_ups": [
+        "How does a staging server help during an upgrade?",
+        "What is seamless single sign-on?"
+      ],
+      "red_flags": [
+        "Saying password hash sync sends plain-text passwords to the cloud",
+        "Recommending federation by default"
+      ],
+      "labs": [
+        30
+      ]
+    },
+    {
+      "id": "IV-ENT-009",
+      "category": "entra",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "After enabling sync, a user who already had a cloud-only account now has two accounts, or the sync reports a duplicate attribute error. What is happening and how do you fix it?",
+      "listen_for": [
+        "Soft match on userPrincipalName or primary SMTP address vs hard match on the source anchor (ImmutableId / ms-DS-ConsistencyGuid)",
+        "Duplicate attribute errors: proxyAddresses or UPN conflict between objects",
+        "Use the Connect Health / sync errors report to find the conflicting object",
+        "Fix the data in the source (on-prem AD), not in the cloud",
+        "Soft matching to accounts holding admin roles is blocked by default for security"
+      ],
+      "model_answer": "When an on-premises user syncs, Microsoft Entra tries to join it to an existing cloud account. A hard match uses the source anchor, the ImmutableId that maps to ms-DS-ConsistencyGuid in Active Directory. If there is no hard match, it tries a soft match on the userPrincipalName or primary email address. If neither matches, because the UPN or email is different, you get a second account. If two objects claim the same proxyAddress or UPN, sync throws a duplicate attribute error. I look in the Microsoft Entra Connect Health sync errors report, find the conflicting object, decide which account is the real one, correct the attributes in Active Directory, and re-run a delta sync so the accounts merge. I also check whether the cloud account holds an admin role, because soft matching to privileged accounts is blocked by default to stop account takeover.",
+      "follow_ups": [
+        "What tool would you run before a first sync to clean the directory?",
+        "How would you set the ImmutableId to force a hard match?"
+      ],
+      "red_flags": [
+        "Deleting the cloud account without checking its mailbox or data",
+        "Editing synced attributes directly in the cloud"
+      ],
+      "labs": [
+        30
+      ]
+    },
+    {
+      "id": "IV-ENT-010",
+      "category": "entra",
+      "level": "mid",
+      "kind": "technical",
+      "question": "A partner company needs access to your Teams and SharePoint. How do B2B collaboration and cross-tenant access settings work, and what would you configure?",
+      "listen_for": [
+        "B2B collaboration: guest user objects in your tenant; B2B direct connect: no guest object (Teams shared channels)",
+        "Cross-tenant access settings: default plus per-organization inbound and outbound rules",
+        "Inbound trust settings: accept partner MFA, compliant or hybrid-joined device claims",
+        "Limit which users/groups and apps; external collaboration settings for who can invite",
+        "Guest lifecycle: access reviews or access packages with expiry"
+      ],
+      "model_answer": "With B2B collaboration, partner users are invited and appear in our tenant as guest users who sign in with their home credentials. B2B direct connect is different: it creates no guest object and is used for Teams shared channels, so both tenants must allow it. Cross-tenant access settings control both directions. There are default settings and organization-specific settings, so I would add the partner's tenant, allow inbound B2B collaboration only for the groups and apps they need, and set inbound trust to accept their MFA claims. That way our Conditional Access requiring MFA is met by their own MFA instead of forcing a second registration in our tenant. I would also restrict who can invite guests and deliver the access through an entitlement management access package with an expiry date and a sponsor, so guests do not linger forever.",
+      "follow_ups": [
+        "What is cross-tenant synchronization and when would you use it?",
+        "How would you clean up stale guests?"
+      ],
+      "red_flags": [
+        "Thinking guests get their own password in your tenant by default",
+        "Allowing all external domains with no lifecycle control"
+      ],
+      "labs": [
+        32,
+        27
+      ]
+    },
+    {
+      "id": "IV-ENT-011",
+      "category": "entra",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Several users granted consent to an unfamiliar app that requested permission to read their mail. How do you respond, and how do you stop it happening again?",
+      "listen_for": [
+        "Recognise an illicit consent grant / consent phishing",
+        "Review the enterprise app: publisher, permissions, who consented, audit logs",
+        "Contain: disable sign-in for the service principal or delete it, remove the permission grants, revoke user sessions",
+        "Investigate data accessed with audit logs and incident response",
+        "Prevent: restrict user consent (verified publishers, low-risk permissions), admin consent workflow, app governance"
+      ],
+      "model_answer": "This looks like consent phishing, where an attacker gets access through OAuth permissions instead of a password, so MFA and a password reset do not remove it. I would open the enterprise application in Microsoft Entra, check the publisher, the delegated permissions like Mail.Read, and which users consented, using the audit logs for 'Consent to application'. To contain it I disable sign-in for that service principal, remove the OAuth permission grants, and revoke the affected users' refresh tokens. Then I work with the security team to review mailbox audit logs for what was read and treat it as an incident. To prevent repeats, I restrict user consent so users can only consent to apps from verified publishers asking for low-risk permissions, and turn on the admin consent workflow so other requests come to reviewers.",
+      "follow_ups": [
+        "What is the difference between delegated and application permissions?",
+        "Why does resetting the password not fix this?"
+      ],
+      "red_flags": [
+        "Only resetting passwords",
+        "Turning off all consent with no request path, so users find workarounds"
+      ],
+      "labs": [
+        28
+      ]
+    },
+    {
+      "id": "IV-ENT-012",
+      "category": "entra",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How would you use entitlement management access packages and access reviews together to manage access to a project's resources?",
+      "listen_for": [
+        "Catalog holds resources: groups, apps, SharePoint sites; delegated catalog owners",
+        "Access package bundles roles; policies define who can request, approvals, expiry",
+        "Connected organizations for external users",
+        "Access reviews on the package or groups; auto-apply results to remove denied access",
+        "Separation of duties: incompatible packages"
+      ],
+      "model_answer": "In entitlement management I create a catalog for the project and let the project lead be a catalog owner. The catalog holds the resources: a Microsoft 365 group, the project SharePoint site and an app role. I bundle these into an access package, for example 'Project Atlas member'. The policy says who can request it, such as employees in a department or users from a connected partner organization, who approves, often the manager and then the project lead, and when access expires, say after 180 days with an option to extend. I then attach a recurring access review to the package, quarterly for guests, and set the review to auto-apply results, so anyone who is denied or not reviewed loses access. I can also mark packages as incompatible to enforce separation of duties.",
+      "follow_ups": [
+        "What happens to a guest when their last access package expires?",
+        "Who should be the reviewer in an access review, and why?"
+      ],
+      "red_flags": [
+        "Assigning the resources directly and calling it governance",
+        "Running reviews without auto-applying the results"
+      ],
+      "labs": [
+        27,
+        26
+      ]
+    },
+    {
+      "id": "IV-ENT-013",
+      "category": "entra",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What is the difference between user risk and sign-in risk in Microsoft Entra ID Protection, and how would you respond to each?",
+      "listen_for": [
+        "Sign-in risk: chance that this sign-in is not the owner (unfamiliar properties, anonymous IP, token anomalies)",
+        "User risk: chance the account is compromised (leaked credentials, attacker activity)",
+        "Configure risk-based policies in Conditional Access; the legacy ID Protection policies retired in October 2026",
+        "Sign-in risk: require MFA; user risk: require secure password change or risk remediation",
+        "Investigate in risky users/sign-ins, confirm compromise or dismiss; needs P2"
+      ],
+      "model_answer": "Sign-in risk is the probability that a particular sign-in is not really the account owner, based on detections like an anonymous IP address, impossible travel, unfamiliar sign-in properties or anomalous token use. User risk is the probability that the account itself is compromised, for example when Microsoft finds the user's credentials in a leak. I respond to them through Conditional Access, because the old risk policies inside ID Protection were retired in October 2026. For medium or high sign-in risk I require MFA, ideally a strong method. For high user risk I require a secure password change or Microsoft's risk remediation option, which also suits passwordless users. In the risky users and risky sign-ins reports I investigate, confirm compromise when it is real so the model learns, or dismiss false positives. These features need Microsoft Entra ID P2.",
+      "follow_ups": [
+        "Why is password hash sync relevant to leaked credential detection?",
+        "What would you do if a user is high risk but is a privileged admin?"
+      ],
+      "red_flags": [
+        "Mixing up user risk and sign-in risk",
+        "Saying the answer is to block every risky sign-in permanently"
+      ],
+      "labs": [
+        31,
+        25
+      ]
+    },
+    {
+      "id": "IV-ENT-014",
+      "category": "entra",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Design an administration model for a 20,000-user Microsoft Entra tenant with regional IT teams. How do you keep privilege to a minimum?",
+      "listen_for": [
+        "Separate cloud-only admin accounts, phishing-resistant MFA, privileged access workstations",
+        "Least privilege built-in roles, custom roles where needed, few Global Administrators",
+        "Administrative units to scope regional helpdesk; restricted management AUs for sensitive accounts",
+        "PIM eligible assignments, role-assignable groups, approval for Tier 0 roles",
+        "Access reviews, monitoring, break-glass accounts"
+      ],
+      "model_answer": "I start with tiers. Very few people, under five plus two emergency accounts, hold Global Administrator, and only as eligible roles in PIM with approval. Everyone else gets the smallest built-in role that fits, such as Helpdesk Administrator, User Administrator or Application Administrator, or a custom role. For regional IT I create administrative units per region, populated by dynamic rules on a country or office attribute, and scope their roles to that unit, so the Paris helpdesk can reset passwords only for French users. Executives and admins go into restricted management administrative units so even tenant-wide admins cannot casually change them. Admins use separate cloud-only accounts, phishing-resistant MFA and privileged access workstations, enforced through Conditional Access. Role assignments go through role-assignable groups managed in PIM, with quarterly access reviews and alerts on new permanent assignments.",
+      "follow_ups": [
+        "How would you handle a vendor who needs temporary admin access?",
+        "What would you alert on in the audit logs?"
+      ],
+      "red_flags": [
+        "Giving regional teams Global Administrator 'to keep it simple'",
+        "Using synced on-prem accounts for cloud admin roles"
+      ],
+      "labs": [
+        35,
+        25
+      ]
+    },
+    {
+      "id": "IV-ENT-015",
+      "category": "entra",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Your company still federates Microsoft Entra ID with AD FS. Leadership wants to retire it. How do you plan the migration to cloud authentication?",
+      "listen_for": [
+        "Inventory: relying party trusts, claims rules, MFA adapters, apps using AD FS",
+        "Enable password hash sync (and seamless SSO) first; decide PHS vs PTA",
+        "Staged rollout with pilot groups before converting the domain",
+        "Move AD FS apps to Microsoft Entra enterprise apps; recreate claims and Conditional Access",
+        "Convert domain to managed, monitor, keep rollback, then decommission"
+      ],
+      "model_answer": "First I inventory what AD FS does today: the Microsoft 365 trust, every other relying party trust, the claims rules and any MFA or access rules on them. Many teams forget the other apps, and they break on the day AD FS is switched off. I enable password hash synchronization, or pass-through authentication if there is a policy reason, plus seamless single sign-on, and confirm the hashes are syncing. Then I use staged rollout to move pilot groups to cloud authentication while the domain is still federated, and test sign-in, MFA and Conditional Access. Meanwhile I move each AD FS app into Microsoft Entra as an enterprise application with matching claims, using the AD FS application activity report to prioritise. When pilots are clean I convert the domain to managed in a change window, keep AD FS running briefly for rollback, then decommission it.",
+      "follow_ups": [
+        "How would you rebuild AD FS access control rules in Entra?",
+        "What is your rollback if sign-ins fail after conversion?"
+      ],
+      "red_flags": [
+        "Converting the domain without an app inventory",
+        "No pilot or rollback plan"
+      ],
+      "labs": [
+        30
+      ]
+    },
+    {
+      "id": "IV-ENT-016",
+      "category": "entra",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Attackers are stealing session tokens through adversary-in-the-middle phishing pages, even from users who completed MFA. How do you harden Microsoft Entra ID against this?",
+      "listen_for": [
+        "Explain why push or code MFA can be relayed and the session cookie replayed",
+        "Phishing-resistant MFA: passkeys / FIDO2, Windows Hello for Business, certificate-based authentication",
+        "Require compliant or hybrid-joined devices for sensitive apps; token protection session control",
+        "Continuous access evaluation and session revocation; sign-in frequency for risky contexts",
+        "Detection: ID Protection token anomalies, incident response to revoke sessions"
+      ],
+      "model_answer": "Adversary-in-the-middle kits sit between the user and the real sign-in page, so the user completes MFA and the attacker takes the session cookie. Push or one-time code MFA does not stop that. My first control is phishing-resistant MFA: passkeys in Microsoft Authenticator, FIDO2 security keys, Windows Hello for Business or certificate-based authentication, which are bound to the real site and will not work through a fake domain. I enforce it with an authentication strength, starting with admins and high-value users. Second, I require a compliant or hybrid-joined device for sensitive apps, so a stolen token from the attacker's machine fails, and I use the token protection session control where supported. Third, continuous access evaluation lets critical events like disabling an account or high user risk cut sessions quickly. Finally, I watch ID Protection detections and revoke sessions as part of the response.",
+      "follow_ups": [
+        "How would you roll out passkeys to 10,000 users?",
+        "What are the limits of token protection today?"
+      ],
+      "red_flags": [
+        "Thinking more MFA prompts or shorter passwords solve token theft",
+        "Saying number matching makes MFA phishing-resistant"
+      ],
+      "labs": [
+        25,
+        31,
+        33
+      ]
+    },
+    {
+      "id": "IV-OKT-001",
+      "category": "okta",
+      "level": "entry",
+      "kind": "technical",
+      "question": "In Okta Identity Engine, what is the difference between the global session policy and an authentication policy?",
+      "listen_for": [
+        "Global session policy: when someone establishes an Okta session; primary authentication, session lifetime, whether MFA at sign-in",
+        "Authentication policy (app sign-in policy): per app requirements, assurance level, possession factor, device conditions",
+        "Both evaluated; the user must meet both",
+        "Rules within a policy are evaluated in priority order; first matching rule wins",
+        "Policies are assigned to groups (GSP) or to apps (authentication policy)"
+      ],
+      "model_answer": "The global session policy controls how a user starts an Okta session at all. Its rules, assigned by group, decide things like which first factor is allowed, whether MFA is required when the session is established, how long the session lasts and whether it can persist across browser restarts. An authentication policy, sometimes called an app sign-in policy, is attached to applications and decides what assurance that app needs, for example any two factors, a possession factor, a phishing-resistant authenticator, or a managed device. When a user opens an app, Okta checks both: the session must be valid under the global session policy, and the user must satisfy the app's authentication policy, so they may be asked for more factors. Inside each policy, rules are checked in priority order and the first rule that matches is used.",
+      "follow_ups": [
+        "Where would you require Okta Verify only for the HR app?",
+        "Why might a user be prompted for MFA twice?"
+      ],
+      "red_flags": [
+        "Thinking only the global session policy exists in Identity Engine",
+        "Saying all matching rules combine in Okta like Entra Conditional Access"
+      ],
+      "labs": [
+        40
+      ]
+    },
+    {
+      "id": "IV-OKT-002",
+      "category": "okta",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is an authenticator enrollment policy in Okta, and how is it different from the authenticators you configure?",
+      "listen_for": [
+        "Authenticators are configured org-wide (password, Okta Verify, email, phone, security key or biometric, etc.)",
+        "Enrollment policy decides, per group, which authenticators are required, optional or disabled to enroll",
+        "Priority-ordered policies and rules, assigned to groups",
+        "Enrollment is separate from when a factor is demanded (authentication policies)",
+        "Avoid weak methods such as SMS or security questions for sensitive groups"
+      ],
+      "model_answer": "Authenticators are the methods themselves, set up once for the organization: password, Okta Verify, email, phone, security key or biometric using FIDO2 WebAuthn, Google Authenticator and others. The authenticator enrollment policy decides which of those a particular group of users must set up, may set up or cannot use. For example, I could make Okta Verify required and security keys optional for employees, and make phone disabled for administrators. Policies are assigned to groups and evaluated in priority order. Enrollment is not the same as authentication: the enrollment policy only controls what people register, while the global session and authentication policies decide when a factor is actually asked for. A common mistake is requiring a factor in an authentication policy that the user was never allowed to enroll, which leaves them stuck.",
+      "follow_ups": [
+        "How would you require a security key for admins only?",
+        "What happens when an authentication policy needs a factor the user has not enrolled?"
+      ],
+      "red_flags": [
+        "Mixing up enrollment and sign-on requirements",
+        "Enabling every authenticator for everyone, including weak ones for admins"
+      ],
+      "labs": [
+        40,
+        41
+      ]
+    },
+    {
+      "id": "IV-OKT-003",
+      "category": "okta",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is Okta FastPass, and what makes it phishing-resistant?",
+      "listen_for": [
+        "Passwordless sign-in through Okta Verify on a registered device",
+        "Device-bound cryptographic key checked by Okta; works with biometrics for user verification",
+        "Okta Verify confirms it is talking to the real Okta origin, so a fake site cannot relay it",
+        "Can satisfy phishing-resistant requirements and device assurance checks",
+        "Needs device registration; plan for unmanaged or shared devices"
+      ],
+      "model_answer": "Okta FastPass is a passwordless sign-in that uses the Okta Verify app on a registered computer or phone. When the user signs in, Okta Verify proves possession of a key stored on that device, and the user can confirm with a biometric like Windows Hello or Touch ID, so it can count as more than one factor. It is phishing-resistant because Okta Verify checks the origin of the request and only answers the genuine Okta sign-in, so a look-alike phishing page cannot relay the challenge the way it can with a push notification or a typed code. FastPass also lets Okta read device signals, so you can combine it with device assurance policies, such as a minimum operating system version or disk encryption. It does need device registration, so you plan for shared devices and users without a managed laptop.",
+      "follow_ups": [
+        "How would you require phishing resistance for an app in an authentication policy?",
+        "What is a device assurance policy?"
+      ],
+      "red_flags": [
+        "Describing FastPass as just an Okta Verify push notification",
+        "Claiming any MFA is phishing-resistant"
+      ],
+      "labs": [
+        40
+      ]
+    },
+    {
+      "id": "IV-OKT-004",
+      "category": "okta",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How do Okta group rules work, and what limitations or surprises have you seen with them?",
+      "listen_for": [
+        "Rules use user profile attributes or group membership with Okta Expression Language",
+        "Assign users to Okta groups automatically; groups then drive app assignments",
+        "Rules must be activated; evaluated when profiles change",
+        "Cannot target groups that hold an admin role (admin rights are never granted by a rule)",
+        "Exclusions, overlapping rules, and deactivated users are not removed automatically"
+      ],
+      "model_answer": "A group rule watches user attributes, such as department equals Finance, and automatically puts matching users into one or more Okta groups. Those groups then drive app assignments and policies, so a new finance hire gets the right apps without a ticket. Rules are written with Okta Expression Language, need to be activated, and are re-evaluated when the user's profile changes, which is how movers drop out of old groups. Some surprises: a rule cannot add people to a group that holds an admin role, so admin rights are never granted automatically. Overlapping rules can make it hard to see why someone is in a group, so I name them clearly and document them. You can exclude specific users, and deactivated users can remain in rule-based groups, which matters when you report on membership.",
+      "follow_ups": [
+        "How would you test a new rule before activating it?",
+        "When would you manage membership in Active Directory instead of with an Okta rule?"
+      ],
+      "red_flags": [
+        "Using a group rule to hand out admin roles",
+        "No awareness that profile changes drive re-evaluation"
+      ],
+      "labs": [
+        36
+      ]
+    },
+    {
+      "id": "IV-OKT-005",
+      "category": "okta",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What happens when you suspend a user in Okta versus deactivate one, and when would you delete a user?",
+      "listen_for": [
+        "Suspend: cannot sign in, but app assignments and groups stay; no deprovisioning; easy to unsuspend",
+        "Deactivate: sessions end, user unassigned from apps, deprovisioning runs where enabled; group memberships remain",
+        "Delete: only after deactivation, permanent, removes groups and history ties",
+        "Use suspend for leave or investigation, deactivate for leavers, delete per retention policy",
+        "Reactivation may restore app access through group-based assignments"
+      ],
+      "model_answer": "Suspending is a pause. The user cannot sign in, but their app assignments and group memberships stay as they are and nothing is deprovisioned downstream, so it fits extended leave or a short investigation, and you can unsuspend quickly. Deactivating is what we do for leavers. Okta unassigns the user from their apps, and where provisioning has deactivation enabled, the downstream accounts are disabled or removed. Group memberships remain, which matters: if you reactivate the user, group-based app assignments can come back, so for a rehire I check groups first. Delete is only possible after deactivation and cannot be undone, so I follow our retention policy and normally keep deactivated users for a period for audit purposes before deleting. Usually all of this is driven automatically by the HR source rather than by hand.",
+      "follow_ups": [
+        "How would you make sure a leaver's sessions are ended immediately?",
+        "What could go wrong if you reactivate a rehire?"
+      ],
+      "red_flags": [
+        "Thinking suspend deprovisions apps",
+        "Deleting leavers straight away and losing the audit trail"
+      ],
+      "labs": [
+        39
+      ]
+    },
+    {
+      "id": "IV-OKT-006",
+      "category": "okta",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user says Okta keeps rejecting their sign-in. How do you use the System Log to find out why?",
+      "listen_for": [
+        "Search the System Log by user and time; use the Okta user ID",
+        "Look at outcome and reason on events like user.session.start and user.authentication events",
+        "Policy evaluation events show which policy and rule matched",
+        "Use the transaction ID / request details to follow one sign-in; check client IP, zone, device",
+        "Check lockout, password expiry, unenrolled authenticator, app assignment"
+      ],
+      "model_answer": "I ask for the time and what they see, then search the System Log for that user in that window. I look at the sign-in events, such as user.session.start and the authentication and verification events, and read the outcome and the reason, for example 'invalid credentials', 'locked out' or 'verification error'. I expand the event to see the client IP address, the network zone, the user agent and the transaction ID, and use the transaction ID to group all events from that one attempt. Policy evaluation events show which global session or authentication policy rule matched, so I can tell if they were denied because they came from a blocked zone or because the rule needed an authenticator they never enrolled. Common answers are an account lockout, an expired password or a missing app assignment. I fix the cause and note it in the ticket.",
+      "follow_ups": [
+        "How would you check whether the user is locked out?",
+        "How long does Okta keep System Log data, and how do you keep it longer?"
+      ],
+      "red_flags": [
+        "Resetting the password before looking at any logs",
+        "Not knowing the System Log exists"
+      ],
+      "labs": [
+        42,
+        41
+      ]
+    },
+    {
+      "id": "IV-OKT-007",
+      "category": "okta",
+      "level": "mid",
+      "kind": "technical",
+      "question": "Explain profile sourcing and attribute mappings in Okta. If HR and Active Directory both send a user's title, which one wins?",
+      "listen_for": [
+        "Profile source (formerly profile master) decides which system owns the user profile",
+        "Priority order when several sources are enabled; attribute-level sourcing for specific attributes",
+        "Mappings: app to Okta (inbound) and Okta to app (outbound), using Okta Expression Language",
+        "Base vs custom attributes in Universal Directory; push on profile change",
+        "Test with preview before applying, watch for overwrites"
+      ],
+      "model_answer": "Each Okta user has one profile source, previously called the profile master, which is the system allowed to own their profile. If more than one app is enabled as a source, the priority list decides which is in charge for that user. On top of that, attribute-level sourcing lets a specific attribute, say mobile phone, be owned by a different system or by Okta. Mappings define the data flow. Inbound mappings take values from a source like Workday or Active Directory into the Okta profile, and outbound mappings send Okta values to downstream apps, often with Okta Expression Language to transform them. So if HR has the higher priority and title is mapped from HR, HR wins, and an AD value will be overwritten at the next import. I always use the mapping preview with a test user before saving, because a wrong mapping can overwrite thousands of profiles.",
+      "follow_ups": [
+        "How would you build an email address from first and last name in a mapping?",
+        "What happens if a user is edited directly in Okta when HR is the source?"
+      ],
+      "red_flags": [
+        "Saying the last system to update wins",
+        "Not knowing outbound and inbound mappings are different"
+      ],
+      "labs": [
+        39,
+        36
+      ]
+    },
+    {
+      "id": "IV-OKT-008",
+      "category": "okta",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Can you walk me through adding a SaaS app from the Okta Integration Network with SAML single sign-on and SCIM provisioning?",
+      "listen_for": [
+        "Add from OIN; configure SAML: ACS URL, audience / entity ID, NameID format, attribute statements",
+        "Exchange metadata or certificate with the vendor; plan certificate rollover",
+        "Assign through groups, not individuals",
+        "Enable provisioning: API credentials, create users, update attributes, deactivate users, push groups",
+        "Test with a pilot user, check System Log and the vendor side; document"
+      ],
+      "model_answer": "I add the app from the Okta Integration Network so most SAML settings are pre-filled. I confirm the values the vendor needs, such as the Assertion Consumer Service URL, the audience or entity ID, the NameID format, usually email, and any attribute statements like department or role. Then I give the vendor Okta's identity provider metadata or signing certificate and set the app to use Okta for sign-in, keeping a local admin account for emergencies. I assign the app to groups rather than individuals. On the provisioning tab I connect with the vendor's API token or OAuth, then enable create users, update user attributes and deactivate users, and push groups if the app uses them for roles. I test with a pilot user: sign in from the Okta dashboard and from the app side, check that deactivation reaches the app, and review the System Log.",
+      "follow_ups": [
+        "What is the difference between SP-initiated and IdP-initiated SAML?",
+        "How do you handle the signing certificate expiring?"
+      ],
+      "red_flags": [
+        "Assigning users one by one",
+        "Skipping deactivation, leaving orphaned SaaS accounts"
+      ],
+      "labs": [
+        38
+      ]
+    },
+    {
+      "id": "IV-OKT-009",
+      "category": "okta",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Users who left the company still have active accounts in a SaaS app that is provisioned from Okta. How do you investigate?",
+      "listen_for": [
+        "Confirm the Okta user is deactivated / unassigned",
+        "Check provisioning settings: is Deactivate Users enabled; is the integration connected; expired API token",
+        "Review failed provisioning tasks and System Log events for the app",
+        "Check accounts created outside Okta (not imported or matched); run an import to reconcile",
+        "Fix, retry tasks, clean up existing orphans, add a periodic reconciliation"
+      ],
+      "model_answer": "First I confirm what Okta thinks: are those users deactivated or unassigned from the app? Then I check the app's provisioning settings, because 'deactivate users' is often left off or the API token has expired, so the integration quietly fails. Failed provisioning actions show up as tasks in the admin console and as failure events in the System Log, which give the vendor's error message. If the accounts were never created through Okta, for example made by the vendor's admin directly, Okta does not know about them, so I run an import from the app to match them to Okta users and find unmatched accounts. Once I fix the cause, I retry the failed tasks, disable the orphaned accounts with the app owner, and add a regular reconciliation report so we catch drift before the auditors do.",
+      "follow_ups": [
+        "Who should own clean-up of the orphaned accounts?",
+        "How would you prove to an auditor that this is fixed?"
+      ],
+      "red_flags": [
+        "Disabling accounts manually and not finding the root cause",
+        "Blaming the vendor without checking Okta settings"
+      ],
+      "labs": [
+        39,
+        38,
+        42
+      ]
+    },
+    {
+      "id": "IV-OKT-010",
+      "category": "okta",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How do Okta admin roles, custom roles and resource sets work, and how would you give the helpdesk password reset rights for only one region?",
+      "listen_for": [
+        "Standard roles: Super Admin, Org Admin, Group Admin, Help Desk Admin, App Admin, Read-Only Admin, etc.",
+        "Custom admin role = a set of permissions",
+        "Resource set = the users, groups, apps or other resources the role applies to",
+        "Assignment binds role + resource set to a user or group",
+        "Least privilege; limit Super Admins; protect admins with strong authentication"
+      ],
+      "model_answer": "Okta has standard admin roles such as Super Administrator, Organization Administrator, Group Administrator, Help Desk Administrator, Application Administrator and Read-Only Administrator. Some, like Help Desk, can be scoped to specific groups. For finer control I use custom admin roles. A custom role is a list of permissions, for example view users, reset passwords and reset authenticators. A resource set is the list of things the role can act on, such as the 'EMEA employees' group. The assignment binds the role and the resource set to an admin or an admin group. So for the regional helpdesk I create a 'Helpdesk reset' role with only those permissions, a resource set containing the EMEA users group, and assign it to the EMEA helpdesk group. I keep Super Administrators to a small number and review admin assignments regularly.",
+      "follow_ups": [
+        "Why should admin roles be assigned to groups rather than individuals?",
+        "How would you prevent a helpdesk admin from resetting a Super Admin?"
+      ],
+      "red_flags": [
+        "Giving the helpdesk Org Admin or Super Admin",
+        "Confusing resource sets with groups"
+      ],
+      "labs": [
+        37
+      ]
+    },
+    {
+      "id": "IV-OKT-011",
+      "category": "okta",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "How would you use network zones in Okta policies, and what can go wrong with them?",
+      "listen_for": [
+        "IP zones (gateway IPs and trusted proxies) vs dynamic zones (location, ASN, anonymizers/Tor)",
+        "Enhanced dynamic zones for finer proxy and IP type control",
+        "Use zones in global session and authentication policy rules; blocklist zones",
+        "Proxy issues: configure trusted proxy IPs so the real client IP is used",
+        "Do not rely on IP alone as trust; zones change with VPN and remote work"
+      ],
+      "model_answer": "Network zones let policy rules react to where a request comes from. An IP zone is a list of gateway addresses, like our office egress IPs, plus trusted proxy addresses so Okta reads the real client IP behind our proxy. A dynamic zone matches by country, region, autonomous system number or proxy type, such as Tor and anonymizers, and enhanced dynamic zones give finer control. I use them in rules, for example 'block sign-ins from the anonymizer zone' or 'require a stronger authenticator outside the corporate zone'. You can also mark a zone as a blocklist so requests are denied early. What goes wrong: forgetting trusted proxies, so everyone looks like they come from one IP; office IP ranges changing without telling IAM; and treating the office network as fully trusted, which conflicts with Zero Trust. I prefer zones as one signal alongside device and authenticator strength.",
+      "follow_ups": [
+        "How would you troubleshoot a user wrongly matched to the wrong zone?",
+        "Why shouldn't 'on the corporate network' skip MFA?"
+      ],
+      "red_flags": [
+        "Using the office IP zone to skip all MFA",
+        "Not knowing about trusted proxy configuration"
+      ],
+      "labs": [
+        40
+      ]
+    },
+    {
+      "id": "IV-OKT-012",
+      "category": "okta",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Attackers are calling your service desk pretending to be employees to get MFA reset. What Okta and process changes would you make?",
+      "listen_for": [
+        "Strong identity verification before any reset (callback, manager confirmation, ID verification)",
+        "Self-service recovery with strong authenticators instead of helpdesk; avoid SMS / security questions",
+        "Restrict who can reset authenticators via custom roles; protect admins separately",
+        "Monitor System Log for authenticator resets and new enrollments; alert",
+        "Require re-enrollment with strong factors, notify user on changes"
+      ],
+      "model_answer": "Help desk social engineering is a real attack pattern, so I treat it as both a process and a configuration problem. Process first: no reset without verified identity, such as a callback to a number already in HR, manager confirmation or an identity verification check, and never for administrators over the phone. In Okta, I configure password policies and recovery so users can recover themselves with a strong authenticator like Okta Verify, and remove weak recovery options like security questions or SMS for sensitive groups. I limit who can reset authenticators using a custom admin role scoped to standard users, not admins. I set end-user notifications for new authenticator enrollment, and I alert on System Log events for authenticator resets followed by new enrollments from unusual locations, so the security team can respond quickly.",
+      "follow_ups": [
+        "Which System Log events would you alert on?",
+        "How do you balance this with user experience?"
+      ],
+      "red_flags": [
+        "Only adding a script for agents with no technical controls",
+        "Allowing the helpdesk to reset admin factors without verification"
+      ],
+      "labs": [
+        41,
+        42,
+        37
+      ]
+    },
+    {
+      "id": "IV-OKT-013",
+      "category": "okta",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Can you tell me about a time you troubleshot an identity issue end to end and had to escalate to a vendor or another team?",
+      "listen_for": [
+        "Clear situation and impact (users affected, urgency)",
+        "Own investigation first: logs, evidence, reproducing the issue",
+        "Good escalation: concise case with timestamps, IDs, steps tried",
+        "Communication with users and stakeholders while waiting",
+        "Result and what was improved afterwards (runbook, monitoring)"
+      ],
+      "model_answer": "Situation: in [my last role / a lab project], about [number] users suddenly could not sign in to [app] through single sign-on after [a change, such as a certificate update]. Task: I owned the ticket and needed to restore access quickly and find the cause. Action: I reproduced the error with a test account, captured the SAML response with a browser tracer, and checked the System Log, which showed [the error, for example a signature or audience mismatch]. I confirmed our side was configured correctly, then opened a vendor case with the timestamps, transaction IDs, the error and what I had already tried. While waiting, I sent the affected users an update and a workaround [such as the vendor's backup login]. Result: the vendor found [the cause] and access came back in [time]. Afterwards I added certificate expiry reminders and a troubleshooting runbook for the team.",
+      "follow_ups": [
+        "What would you do differently next time?",
+        "How did you keep stakeholders informed?"
+      ],
+      "red_flags": [
+        "Escalating with no evidence gathered",
+        "Blaming the vendor or colleagues",
+        "No measurable result"
+      ],
+      "labs": [
+        42,
+        38
+      ]
+    },
+    {
+      "id": "IV-OKT-014",
+      "category": "okta",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "How would you design Okta sign-on policies for an organization with low-, medium- and high-risk apps, and how would you roll out phishing-resistant authentication?",
+      "listen_for": [
+        "Tiered authentication policies shared across apps by sensitivity",
+        "Global session policy: reasonable lifetime, MFA at session establishment",
+        "High tier: phishing-resistant (FastPass / FIDO2), managed device via device assurance, shorter re-authentication",
+        "Enrollment policy and recovery aligned with the tiers",
+        "Phased rollout, pilot, metrics, exceptions with expiry, communication"
+      ],
+      "model_answer": "I build a small number of shared authentication policies instead of one per app. Low tier, like the intranet, accepts any two factors and a longer re-authentication interval. Medium, like email and collaboration, needs a possession factor and a registered device. High, like finance systems, HR and admin consoles, requires a phishing-resistant authenticator such as Okta FastPass or a FIDO2 security key, a managed device that passes a device assurance policy, and frequent re-authentication. The global session policy requires MFA when the session starts and sets a sensible lifetime. For rollout, I update enrollment policies so people can register Okta Verify and security keys, pilot with IT, then admins, then high-tier app users, tracking enrollment numbers in reports. Exceptions get an owner and an expiry date. Finally, I tighten recovery so a weak method cannot be used to bypass the high tier.",
+      "follow_ups": [
+        "How do you handle contractors on unmanaged devices?",
+        "What metrics would you report to leadership?"
+      ],
+      "red_flags": [
+        "One policy for all apps",
+        "Phishing-resistant rule with weak recovery left in place"
+      ],
+      "labs": [
+        40,
+        41
+      ]
+    },
+    {
+      "id": "IV-OKT-015",
+      "category": "okta",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Your company uses Workday as the HR system, Active Directory on premises and Okta for SaaS apps. How would you design joiner, mover and leaver flows?",
+      "listen_for": [
+        "Workday as the source of truth; Okta imports and owns lifecycle from HR",
+        "Profile source priority and attribute ownership decided per attribute",
+        "Provision to AD through the AD agent; birthright groups via group rules",
+        "Movers: attribute changes update groups and apps; remove old access",
+        "Leavers: termination date drives deactivation; contractors and rehires handled"
+      ],
+      "model_answer": "I make Workday the authoritative source. Okta imports workers from Workday, with Workday set as the highest-priority profile source, and I agree with HR which attributes it owns, like name, department, manager and termination date, while Okta or AD own things like the username. For joiners, Okta creates the user before day one, provisions the Active Directory account through the AD agent into the right organizational unit, and group rules on department and location assign birthright groups and apps. Activation happens on the start date. For movers, a department change in Workday updates the profile, group rules move the user to new groups, and old app access is removed or sent for manager confirmation. For leavers, the termination triggers deactivation, which deprovisions apps and disables the AD account. Contractors and rehires need agreed rules, such as matching on employee ID.",
+      "follow_ups": [
+        "What happens if HR enters a termination date wrong?",
+        "Where would Okta Workflows fit in?"
+      ],
+      "red_flags": [
+        "Making AD the source of truth for HR attributes",
+        "No plan for movers keeping old access"
+      ],
+      "labs": [
+        39,
+        36
+      ]
+    },
+    {
+      "id": "IV-OKT-016",
+      "category": "okta",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "How would you protect the Okta tenant itself from being taken over by an attacker who targets administrators?",
+      "listen_for": [
+        "Few Super Admins; least-privilege custom roles, assigned through groups",
+        "Phishing-resistant MFA and managed devices for the Admin Console app",
+        "Admin session protections (e.g. binding admin sessions to network/ASN), short sessions",
+        "Monitor System Log and stream to SIEM: policy changes, new admins, authenticator resets",
+        "Change control, break-glass admin, review of API tokens and integrations"
+      ],
+      "model_answer": "The Okta tenant is a Tier 0 system, so I protect it like domain controllers. Very few people hold Super Administrator, and everyone else uses custom roles with resource sets, assigned through groups that are reviewed regularly. Admins must use a phishing-resistant authenticator, such as FastPass or a security key, on managed devices, enforced through the Admin Console authentication policy with short re-authentication. I keep Okta's admin session protections on, so an admin session copied to another network is ended. I stream the System Log to our security information and event management (SIEM) system and alert on high-value events: new admin assignments, policy or zone changes, authenticator resets for admins and new API tokens. I also review API tokens and integrations, since they act with an admin's rights, keep a tested break-glass admin, and put policy changes through change control.",
+      "follow_ups": [
+        "What would you do in the first hour if you saw an unexpected Super Admin assignment?",
+        "How do you review API tokens?"
+      ],
+      "red_flags": [
+        "Treating Okta admins like normal users",
+        "Many shared Super Admin accounts"
+      ],
+      "labs": [
+        37,
+        42
+      ]
+    },
+    {
+      "id": "IV-IGA-001",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is an authoritative source in identity governance, and why is the HR system usually the authoritative source?",
+      "listen_for": [
+        "The system trusted to say who a person is and whether they should exist (create identities)",
+        "HR knows hires, job changes and terminations; drives joiner, mover and leaver",
+        "In SailPoint ISC, an identity profile is tied to one authoritative source",
+        "Non-employees may come from a separate source (contractors, vendors)",
+        "Data quality in HR directly affects access accuracy"
+      ],
+      "model_answer": "An authoritative source is the system we trust to tell us which people exist and their key details, so the governance platform creates identities from it. HR is normally the authoritative source because it already records hires, transfers and terminations, and those events should drive joiner, mover and leaver access automatically. In SailPoint Identity Security Cloud, each identity profile is linked to one authoritative source, such as Workday, and the attributes come from that source through mappings. Contractors and vendors are often not in HR, so they come from a separate source, for example a contractor system or ISC's non-employee feature, with their own identity profile and an end date. The catch is data quality: if HR has the wrong manager or a late termination, access will be wrong, so I build checks and a good relationship with the HR systems team.",
+      "follow_ups": [
+        "How would you handle a person who is both an employee and a contractor?",
+        "What HR attributes do you need at minimum?"
+      ],
+      "red_flags": [
+        "Saying Active Directory should be the authoritative source for people",
+        "Ignoring contractors"
+      ],
+      "labs": [
+        43,
+        1
+      ]
+    },
+    {
+      "id": "IV-IGA-002",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "In SailPoint Identity Security Cloud, what are identity profiles, attribute mappings and transforms?",
+      "listen_for": [
+        "Identity profile: links an authoritative source to identity creation and settings, with priority",
+        "Identity attribute mappings: which source attribute fills each identity attribute",
+        "Transforms: JSON rules that change data (lower, concat, substring, lookup, dateFormat, firstValid, conditional)",
+        "Preview with sample identities before applying",
+        "Lifecycle state usually calculated by a transform"
+      ],
+      "model_answer": "An identity profile tells Identity Security Cloud how to build identities from one authoritative source. It holds the attribute mappings and settings like the lifecycle states, and if a person appears in more than one profile, the profile priority decides which one wins. Attribute mappings say which source account attribute fills each identity attribute, for example the Workday 'Legal_First_Name' field into firstname, or the manager's employee number into manager. Transforms are reusable JSON rules that reshape data on the way in. Common ones are lower and upper case, concatenation, substring, lookup tables for codes, date formatting and firstValid, which picks the first non-empty value. A typical example is a transform that calculates the lifecycle state from hire and termination dates. I always preview the profile against real identities before applying it, because a bad mapping changes every identity.",
+      "follow_ups": [
+        "What would firstValid be used for?",
+        "Why is the manager attribute important?"
+      ],
+      "red_flags": [
+        "Thinking transforms are only for formatting emails",
+        "Applying a mapping change without preview"
+      ],
+      "labs": [
+        43
+      ]
+    },
+    {
+      "id": "IV-IGA-003",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the difference between aggregation and correlation, and what is an uncorrelated account?",
+      "listen_for": [
+        "Aggregation: reading accounts and entitlements from a source into the platform",
+        "Correlation: linking each account to the right identity using rules (e.g. employee ID, email)",
+        "Uncorrelated account: no matching identity; could be service account, orphan or data mismatch",
+        "Fix with better correlation attributes or manual correlation; classify service accounts with owners",
+        "Uncorrelated and orphaned accounts are an audit and security risk"
+      ],
+      "model_answer": "Aggregation is when Identity Security Cloud connects to a source, like Active Directory or a database, and reads its accounts and entitlements. Correlation is the next step: matching each account to the person it belongs to, using correlation rules such as employee ID equals the employeeNumber attribute, or email equals email. An uncorrelated account is one that could not be matched to any identity. It might be a service or admin account, an orphan left behind by a leaver, or a data mismatch like a missing employee ID. I review them regularly, fix the correlation configuration or the source data where possible, correlate the rest manually, give service accounts a named owner, and disable real orphans with the app owner's agreement. Uncorrelated accounts matter because nobody reviews them in certifications, which is exactly where auditors and attackers look.",
+      "follow_ups": [
+        "How would you choose a good correlation attribute?",
+        "How would you treat service accounts?"
+      ],
+      "red_flags": [
+        "Saying uncorrelated accounts can simply be deleted",
+        "Confusing aggregation with provisioning"
+      ],
+      "labs": [
+        45,
+        26
+      ]
+    },
+    {
+      "id": "IV-IGA-004",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the difference between entitlements, access profiles and roles in SailPoint Identity Security Cloud?",
+      "listen_for": [
+        "Entitlement: a specific permission on one source (an AD group, an app role)",
+        "Access profile: bundles entitlements from one source, can be requestable with approvals",
+        "Role: business-level bundle of access profiles (and entitlements) across sources",
+        "Roles can be assigned automatically by membership criteria (birthright)",
+        "Owners and descriptions make access understandable for reviewers"
+      ],
+      "model_answer": "An entitlement is the lowest level: one specific permission on one source, such as an Active Directory group or an 'approver' role in a finance app. On its own it often has a technical name nobody understands. An access profile groups entitlements from a single source into something meaningful, like 'Salesforce sales user', with an owner and a description, and it can be made requestable with approvals. A role sits above that and represents a business function, like 'Accounts Payable Clerk', bundling access profiles from several sources. Roles can be assigned automatically using membership criteria, such as department and job code, which is how we give birthright access, or they can be requested. Good names, descriptions and owners at every level matter, because they are what managers see when they request or review access.",
+      "follow_ups": [
+        "When would you make an access profile requestable rather than a role?",
+        "Who should own a role?"
+      ],
+      "red_flags": [
+        "Saying access profiles can span multiple sources",
+        "Treating roles and entitlements as the same thing"
+      ],
+      "labs": [
+        47
+      ]
+    },
+    {
+      "id": "IV-IGA-005",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What are lifecycle states in SailPoint Identity Security Cloud, and how do they support joiner, mover and leaver processes?",
+      "listen_for": [
+        "Identity attribute (cloudLifecycleState) usually calculated by a transform from HR dates and status",
+        "States such as prehire, active, leave, inactive, terminated",
+        "Each state can enable or disable accounts, add or remove access profiles, send emails",
+        "Identity state (active / inactive) and effect on licences and access",
+        "Leaver state removes access quickly; test with sample identities"
+      ],
+      "model_answer": "A lifecycle state is an identity attribute, cloudLifecycleState, that describes where a person is in their employment, such as prehire, active, on leave, inactive or terminated. It is usually calculated by a transform from HR data like start date, end date and employment status. Each lifecycle state in the identity profile can trigger actions: enable or disable accounts on chosen sources, grant or remove access profiles, and send notification emails to the manager or the user. For a joiner, the prehire state can create accounts a few days before the start date, and active enables them. For a leaver, the terminated state disables accounts on all sources and removes access. Movers are handled more by roles and workflows reacting to attribute changes. I test the transform with edge cases, like a rehire or a back-dated termination, before turning it on.",
+      "follow_ups": [
+        "How would you handle someone on long-term leave?",
+        "What happens if HR back-dates a termination?"
+      ],
+      "red_flags": [
+        "Thinking lifecycle states are typed in manually by admins",
+        "No mention of actions tied to states"
+      ],
+      "labs": [
+        44
+      ]
+    },
+    {
+      "id": "IV-IGA-006",
+      "category": "iga",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is a certification campaign, and what types of campaigns would you run?",
+      "listen_for": [
+        "Periodic review where reviewers approve or revoke access, with evidence",
+        "Manager campaign: managers review their reports' access",
+        "Source owner campaign: app owners review all access on their app",
+        "Search-based and role composition campaigns; targeted reviews for privileged access",
+        "Revocations must be completed and tracked; deadlines and escalation"
+      ],
+      "model_answer": "A certification campaign is a scheduled review where a reviewer confirms that each person's access is still needed, and either approves or revokes it. It is how we catch access that was never removed and show auditors the review happened. In SailPoint Identity Security Cloud the main types are manager campaigns, where managers review their direct reports' access; source owner campaigns, where an application owner reviews everyone's access to their app; search campaigns built from a search query, which suit targeted reviews such as all privileged access or all accounts with a sensitive entitlement; and role composition campaigns, where role owners confirm what a role contains. I set deadlines, reminders and escalation, and I make sure revocations actually flow to provisioning and are closed, because an approved-or-revoked decision with no follow-through is not a control.",
+      "follow_ups": [
+        "How often would you review privileged access versus normal access?",
+        "How do you confirm a revocation was completed?"
+      ],
+      "red_flags": [
+        "Describing certifications as just exporting a spreadsheet",
+        "No mention of acting on revocations"
+      ],
+      "labs": [
+        48,
+        26
+      ]
+    },
+    {
+      "id": "IV-IGA-007",
+      "category": "iga",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Can you tell me about a time you had to get business reviewers to take access reviews seriously instead of approving everything?",
+      "listen_for": [
+        "Situation with evidence of rubber-stamping (approval rate, time per item)",
+        "Actions on design: smaller, risk-focused reviews, readable descriptions, context like last login",
+        "Actions on people: training, leadership support, reporting by reviewer",
+        "Measurable result (revocation rate, completion time, audit outcome)",
+        "No blaming reviewers; treat it as a design problem"
+      ],
+      "model_answer": "Situation: at [organization], the quarterly reviews had a [near 100 percent] approval rate and some managers approved [hundreds] of items in [a few minutes], which the auditors noticed. Task: I was asked to make the reviews meaningful without overloading managers. Action: I pulled reviewer statistics to show the pattern, then fixed the design. I cut the scope to risky access, such as privileged and financial entitlements, added plain descriptions and owners to entitlements, and showed context like last login and whether access came from a role. I added a small training session and a one-page guide, and got [a senior leader] to send the message that approvals are personal accountability. I also reported completion and approval rates by department. Result: the next campaign had [X percent] revocations, fewer items per reviewer and positive feedback from audit.",
+      "follow_ups": [
+        "What would you do with a reviewer who keeps approving everything?",
+        "How did you decide what was 'risky' access?"
+      ],
+      "red_flags": [
+        "Blaming managers as lazy",
+        "Only adding more reminders",
+        "No measurable outcome"
+      ],
+      "labs": [
+        48
+      ]
+    },
+    {
+      "id": "IV-IGA-008",
+      "category": "iga",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How do separation of duties policies work in identity governance, and how would you handle a legitimate violation?",
+      "listen_for": [
+        "SoD: two pieces of access that together allow fraud or error (create vendor + approve payment)",
+        "Defined as conflicting entitlements or access sets; owners in the business and audit",
+        "Preventive: checked at access request; detective: violations shown in certifications and reports",
+        "Exceptions: documented, approved, time-limited, with mitigating controls",
+        "Start with a small set of real business conflicts"
+      ],
+      "model_answer": "Separation of duties means one person should not hold two pieces of access that together let them commit fraud or a serious error without anyone noticing, like creating a vendor and approving payments to that vendor. In SailPoint Identity Security Cloud I define an SoD policy as two conflicting sets of entitlements or access profiles, with a business owner, usually from finance or compliance. The policy works preventively when someone requests access, showing the conflict to approvers, and detectively, where existing violations appear in reports and in certification campaigns. Sometimes a violation is legitimate, for example in a small team. Then I record an exception with a business justification, an approver at the right level, an expiry date, and a mitigating control, such as a monthly review of that person's transactions. I would start with a small number of conflicts the business actually agrees on.",
+      "follow_ups": [
+        "Who should own the SoD rule set?",
+        "How would you report SoD violations to audit?"
+      ],
+      "red_flags": [
+        "Permanent exceptions with no mitigating control",
+        "Defining hundreds of theoretical conflicts with no business input"
+      ],
+      "labs": [
+        48
+      ]
+    },
+    {
+      "id": "IV-IGA-009",
+      "category": "iga",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "An aggregation from Active Directory suddenly shows thousands of accounts about to be removed. What do you do?",
+      "listen_for": [
+        "Stop and do not let the deletions proceed; delete threshold / aggregation safeguards",
+        "Check the connector: credentials, search base / OU scope, filters, partial results",
+        "Check the virtual appliance and source connectivity",
+        "Compare counts with the source; test connection and preview",
+        "Fix the cause, rerun, communicate, add monitoring"
+      ],
+      "model_answer": "A sudden mass deletion almost always means a problem with what the connector could see, not that thousands of people left. First I make sure the deletions do not go through. Sources have an account deletion threshold so that, if an aggregation would delete more than a set percentage of accounts, it stops instead, and I check that it caught this run. Then I investigate: did the service account password expire or lose read rights, did someone change the search base or organizational unit scope, or did a filter change? I check the virtual appliance health and connectivity to the domain controller, run a test connection, and compare the account count with what Active Directory reports. Once I fix the cause, I rerun the aggregation and confirm the counts match. Afterwards I add an alert for big changes in account numbers and update the runbook.",
+      "follow_ups": [
+        "Why is a mass deletion dangerous beyond the reports?",
+        "How would you set the threshold?"
+      ],
+      "red_flags": [
+        "Letting the aggregation complete to 'see what happens'",
+        "Assuming the accounts were really deleted in AD"
+      ],
+      "labs": [
+        45,
+        50
+      ]
+    },
+    {
+      "id": "IV-IGA-010",
+      "category": "iga",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What is a provisioning policy, such as a create account policy, and how would you generate a unique username for new accounts?",
+      "listen_for": [
+        "Provisioning (account) policies define attributes sent when creating, updating or disabling accounts",
+        "Values from identity attributes, static values or transforms; attribute generators",
+        "Unique username generation with checks against existing accounts and fallbacks",
+        "Direct connectors provision automatically; disconnected apps create manual work items",
+        "Test with a pilot identity and handle failures"
+      ],
+      "model_answer": "A provisioning policy tells Identity Security Cloud which attributes to send to a source when it creates, updates or disables an account. The create account policy for Active Directory might set the distinguished name, sAMAccountName, userPrincipalName, display name, department and an initial password, pulling each value from identity attributes, static values or transforms. For a unique username I use a generator that builds, for example, first initial plus last name, checks it against existing accounts on the source, and adds a number if it is taken, while respecting length limits like 20 characters for sAMAccountName. For sources with a direct connector the account is created automatically. For disconnected apps without a connector, provisioning becomes a manual work item for the app owner, which I track so it does not get forgotten. I test the policy with a pilot identity first.",
+      "follow_ups": [
+        "What would you do if provisioning keeps failing for one source?",
+        "How do you handle a name change?"
+      ],
+      "red_flags": [
+        "Assuming usernames are always unique without a check",
+        "Ignoring disconnected applications"
+      ],
+      "labs": [
+        46
+      ]
+    },
+    {
+      "id": "IV-IGA-011",
+      "category": "iga",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "The business wants role-based access, but a role mining exercise produced hundreds of near-identical roles. How do you fix role explosion?",
+      "listen_for": [
+        "Recognise role explosion: too many narrow roles, unmanageable and unreviewable",
+        "Start top-down from business functions plus bottom-up mining for evidence",
+        "Use a small set of birthright roles by attributes, keep requestable access for the rest",
+        "Thresholds for commonality, owners for every role, role composition reviews",
+        "Measure coverage instead of aiming for 100 percent"
+      ],
+      "model_answer": "Role explosion happens when mining turns every small difference in access into its own role, so you end up with more roles than you can explain, own or review. I would step back and combine two approaches. Top-down, I work with business leaders to define a small set of business functions, like 'branch teller' or 'HR generalist'. Bottom-up, I use the mining results only as evidence of common access within those groups, using a high threshold, for example access shared by most people in the group. I build a few birthright roles assigned automatically by department and job code, and leave less common access as requestable access profiles. Every role gets an owner and a role composition review. I measure success by coverage, such as 70 to 80 percent of access coming from roles, rather than trying to model every entitlement.",
+      "follow_ups": [
+        "How do you keep roles accurate over time?",
+        "What data quality problems hurt role mining?"
+      ],
+      "red_flags": [
+        "Accepting every mined role as is",
+        "Aiming for 100 percent of access through roles"
+      ],
+      "labs": [
+        47
+      ]
+    },
+    {
+      "id": "IV-IGA-012",
+      "category": "iga",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How would you use workflows in SailPoint Identity Security Cloud, and give an example you would build?",
+      "listen_for": [
+        "Workflows: trigger, then actions and operators (conditions, loops, approvals, HTTP requests)",
+        "Triggers: event triggers (e.g. identity attributes changed, identity created), scheduled, external",
+        "Example: mover workflow on department change notifies manager and launches a review",
+        "Use for what built-in features cannot do; error handling and testing",
+        "Credentials and permissions for HTTP steps kept least privilege"
+      ],
+      "model_answer": "Workflows are low-code automations in Identity Security Cloud. Each has a trigger, then a series of actions and operators like conditions, loops, approvals, emails and HTTP requests to other systems. Triggers can be event triggers, such as identity created or identity attributes changed, a schedule, or an external call. An example I would build is a mover workflow. When an identity's department attribute changes, the workflow checks that it really is a change between departments, emails the new manager a summary of the person's current access, and launches a targeted certification so old access is reviewed within a few days. Another is notifying the security team when someone gets privileged access. I use workflows for gaps that built-in features do not cover, test them with a test identity, add failure notifications and keep any API credentials they use tightly scoped.",
+      "follow_ups": [
+        "When would you use a workflow instead of a lifecycle state action?",
+        "How do you monitor workflow failures?"
+      ],
+      "red_flags": [
+        "Building workflows for things built-in features already do",
+        "No testing or error handling"
+      ],
+      "labs": [
+        49
+      ]
+    },
+    {
+      "id": "IV-IGA-013",
+      "category": "iga",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "A source that connects through a virtual appliance has stopped aggregating. How do you troubleshoot it?",
+      "listen_for": [
+        "Virtual appliance (VA) runs connectors on premises, in a cluster",
+        "Check cluster and VA health status in the admin console",
+        "Network: outbound HTTPS 443 to the tenant, DNS, proxy, firewall; source ports like LDAPS 636",
+        "Credentials, test connection, connector logs on the VA",
+        "Run at least two VAs per cluster for resilience; patch and monitor"
+      ],
+      "model_answer": "Virtual appliances run inside our network and host the connectors that reach on-premises sources like Active Directory, so I start there. In the admin console I check the cluster and each virtual appliance's health status. If a VA is unhealthy, I check that it can make outbound HTTPS connections on port 443 to the tenant, that DNS and any proxy settings are correct, and that the firewall still allows it to reach the source, for example port 636 for LDAPS to the domain controllers. If the VA is healthy, I run a test connection on the source, check the service account credentials, and review the connector logs on the VA. A common cause is an expired service account password. I also recommend at least two VAs per cluster, so one failure or update does not stop aggregation and provisioning.",
+      "follow_ups": [
+        "What does the VA need for outbound access?",
+        "How would you collect logs for SailPoint support?"
+      ],
+      "red_flags": [
+        "Assuming the cloud tenant connects inbound to the VA",
+        "Not checking network or credentials"
+      ],
+      "labs": [
+        50,
+        45
+      ]
+    },
+    {
+      "id": "IV-IGA-014",
+      "category": "iga",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "You are the first IGA engineer at a company with no governance tool. How would you plan a SailPoint Identity Security Cloud rollout?",
+      "listen_for": [
+        "Goals and sponsors: audit findings, JML speed, risk reduction; define metrics",
+        "Phase 1: HR authoritative source, identity data quality, identity profiles and lifecycle states",
+        "Phase 2: high-risk / SOX apps aggregated and correlated, certifications",
+        "Phase 3: automated provisioning, birthright roles, access requests, SoD",
+        "Governance model: app owners, change control, operating runbooks"
+      ],
+      "model_answer": "I would start with why: the business drivers, like audit findings, slow onboarding or leavers keeping access, agreed with a sponsor and turned into metrics. Phase one is the foundation: connect HR as the authoritative source, clean up identity data like managers and job codes, build identity profiles, transforms and lifecycle states, and stand up virtual appliances. Phase two brings visibility: aggregate the highest-risk applications, starting with Active Directory and SOX in-scope systems, fix correlation, and run the first certifications. That alone gives audit value early. Phase three adds automation: provisioning for joiners and leavers, a small set of birthright roles, access requests with approvals, and separation of duties policies. Throughout, I set up the operating model: named application owners, an onboarding checklist for new apps, change control and runbooks, so the program keeps going after go-live.",
+      "follow_ups": [
+        "How would you choose which apps come first?",
+        "What would you show leadership after 90 days?"
+      ],
+      "red_flags": [
+        "Trying to connect every application at once",
+        "Starting with role mining before identity data is clean"
+      ],
+      "labs": [
+        43,
+        44,
+        45,
+        46,
+        48
+      ]
+    },
+    {
+      "id": "IV-IGA-015",
+      "category": "iga",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "An auditor is testing your quarterly user access review for a SOX in-scope application. What evidence do you provide, and what do auditors usually challenge?",
+      "listen_for": [
+        "Completeness and accuracy of the population (report generated by the system, timestamps, counts reconciled)",
+        "Reviewer appropriateness and independence (no self-review)",
+        "Decisions with timestamps, comments for privileged access",
+        "Proof revocations were completed in the target system",
+        "Exceptions, late reviews and leavers handled; consistent process documentation"
+      ],
+      "model_answer": "For a SOX (Sarbanes-Oxley) application, auditors test whether the review is a reliable control, so I give evidence for each step. First, completeness and accuracy of the population: the review data came straight from the system through aggregation, with the timestamp and an account count reconciled to the application, so nobody could filter it by hand. Second, the right reviewers: managers or application owners, and no one reviewing their own access. Third, the decisions: who approved or revoked each item and when, with comments for privileged access. Fourth, follow-through: proof that every revocation was actually removed in the application, such as the completed provisioning item and a later aggregation showing the access gone. Auditors usually challenge rubber-stamping, late completion, self-review, service accounts nobody reviewed and revocations that were never completed, so I check those myself before they arrive.",
+      "follow_ups": [
+        "What is IPE (information produced by the entity) and why does it matter?",
+        "How would you handle a reviewer who missed the deadline?"
+      ],
+      "red_flags": [
+        "Only showing a completed campaign screenshot",
+        "No proof that revocations happened"
+      ],
+      "labs": [
+        48,
+        26
+      ]
+    },
+    {
+      "id": "IV-IGA-016",
+      "category": "iga",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "People who change departments keep collecting access from every job they have had. How would you design the mover process to stop access accumulation?",
+      "listen_for": [
+        "Root cause: requested access stays; no trigger on job change",
+        "Birthright roles by attribute so role-based access moves automatically",
+        "Event trigger on department / job code change: workflow, manager notification",
+        "Targeted mover certification or automatic removal after a grace period",
+        "Measure: access per identity over time, SoD violations after moves"
+      ],
+      "model_answer": "Access piles up because a job change only adds access: birthright access may move, but anything that was requested stays forever. I would fix it in layers. First, as much standard access as possible comes from roles with membership criteria on department and job code, so when the attribute changes, old roles drop off and new ones are assigned automatically. Second, for requested access, I use an event trigger on department or job code change to start a workflow that notifies the new and old managers and launches a targeted mover certification of everything not covered by roles, due within a short window, for example two weeks. Access that is not confirmed is removed, with a grace period so the person can finish handover. Third, I check separation of duties after each move and track the average number of entitlements per identity to show the trend improving.",
+      "follow_ups": [
+        "How do you handle a temporary assignment to another team?",
+        "What if the new manager wants to keep all old access?"
+      ],
+      "red_flags": [
+        "Relying only on the annual review",
+        "Removing all access instantly on move with no transition plan"
+      ],
+      "labs": [
+        44,
+        47,
+        49
+      ]
+    }
+  ]
+}

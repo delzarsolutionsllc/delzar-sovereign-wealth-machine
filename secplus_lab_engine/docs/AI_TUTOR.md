@@ -67,3 +67,16 @@ The server is built like a small policy enforcement point:
 Interview talking point: "I built an MCP server for my study platform with deny-by-default, scope-based authorization, schema validation and an audit log. The AI agent gets least privilege: it can quiz me but never sees the answer key until I respond."
 
 Tests: `tests/test_mcp_server.py` covers the protocol, the authorization decisions, validation, audit records, every tool and the stdio transport. The server also works with the official MCP Python SDK client.
+
+## Mock job interviews
+
+The tutor also runs IAM job interviews from the academy's interview bank (`data/interview/`):
+
+| Scope | Tool | What it does |
+|---|---|---|
+| read | `interview_roles` | IAM roles (analyst, Entra admin, Okta admin, IGA/SailPoint engineer, IAM engineer) and question areas |
+| quiz | `interview_start` | Interview questions **without** the answer key, by role, area or level |
+| quiz | `interview_rubric` | After you answer: what interviewers listen for, a model answer, follow-ups and red flags |
+
+Try the `mock_interview` prompt, or ask: "Give me a mock interview for an IGA engineer role, one question at a time, and grade me."
+No API key is needed; it uses your own Claude plan.

@@ -148,7 +148,7 @@ def test_read_tools(server):
 
 def test_prompts(server):
     names = [p["name"] for p in server.handle({"jsonrpc": "2.0", "id": 1, "method": "prompts/list"})["result"]["prompts"]]
-    assert names == ["quiz_me", "plan_my_day", "explain_lab"]
+    assert names == ["quiz_me", "plan_my_day", "mock_interview", "explain_lab"]
     r = server.handle({"jsonrpc": "2.0", "id": 2, "method": "prompts/get", "params": {"name": "quiz_me", "arguments": {"objective": "2.4<script>"}}})
     text = r["result"]["messages"][0]["content"]["text"]
     assert "objective 2.4script" in text and "<" not in text

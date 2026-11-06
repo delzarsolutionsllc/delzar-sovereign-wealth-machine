@@ -1,0 +1,1292 @@
+{
+  "questions": [
+    {
+      "id": "IV-FND-001",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Can you walk me through the difference between identification, authentication and authorization?",
+      "listen_for": [
+        "Identification is claiming an identity (username, email)",
+        "Authentication proves the claim with factors",
+        "Authorization decides what the proven identity may do",
+        "Order matters: authorization only happens after authentication",
+        "Gives a concrete everyday or IT example"
+      ],
+      "model_answer": "Identification is when I claim who I am, for example typing my username or email. Authentication is proving that claim, with something I know like a password, something I have like a phone or security key, or something I am like a fingerprint. Authorization comes after that: the system checks what that proven identity is allowed to do, usually through group memberships, roles or policies. A simple example is a hotel. Saying my name at the desk is identification, showing my ID is authentication, and the key card that only opens my room and the gym is authorization. In IAM (identity and access management) terms, the identity provider usually handles authentication, while the application or a policy engine enforces authorization.",
+      "follow_ups": [
+        "Where does accounting or auditing fit into that model?",
+        "Which of these does single sign-on (SSO) actually solve?"
+      ],
+      "red_flags": [
+        "Using authentication and authorization as if they mean the same thing",
+        "Saying a username alone authenticates someone"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-FND-002",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the principle of least privilege, and how is it different from need to know?",
+      "listen_for": [
+        "Least privilege: minimum permissions needed to do the job, for the minimum time",
+        "Need to know: access to specific information only when the task requires it",
+        "Need to know narrows least privilege further, often for classified or sensitive data",
+        "Applies to human and non-human accounts",
+        "Practical example of each"
+      ],
+      "model_answer": "Least privilege means every account gets only the permissions it needs to do its job, and ideally only for as long as it needs them. That applies to people, service accounts and applications alike. Need to know is a narrower idea about information. Even if someone has the right level of clearance or role, they only see a specific record or data set if their current task requires it. For example, a help desk analyst has least privilege if they can reset passwords but not change admin roles. Need to know means that analyst can see the ticket for the user they are helping, but not browse the HR salary file just because their account technically could. Together they shrink the damage any single compromised account can do.",
+      "follow_ups": [
+        "How would you actually measure whether least privilege is working?",
+        "How does just-in-time access support least privilege?"
+      ],
+      "red_flags": [
+        "Defining least privilege as 'giving people no access'",
+        "Treating the two terms as identical with no distinction"
+      ],
+      "labs": [
+        1,
+        25
+      ]
+    },
+    {
+      "id": "IV-FND-003",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How do role-based, attribute-based and policy-based access control differ, and when would you use each?",
+      "listen_for": [
+        "RBAC: permissions grouped into roles that map to job functions",
+        "ABAC: decisions from attributes of user, resource, action and environment",
+        "PBAC: centrally managed policies, often combining roles and attributes, evaluated at request time",
+        "RBAC is simpler to audit; ABAC/PBAC are more flexible and context aware",
+        "Most real environments use a hybrid"
+      ],
+      "model_answer": "With role-based access control, or RBAC, I bundle permissions into roles that match job functions, like 'Accounts Payable Clerk', and assign people to roles. It is easy to understand and audit. Attribute-based access control, or ABAC, decides at the moment of the request using attributes, such as the user's department, the data's classification, the device's health or the time of day. Policy-based access control, or PBAC, is the umbrella term for writing those rules as central, readable policies, often mixing roles and attributes, and evaluating them in a policy engine. I use RBAC for stable, coarse access like birthright apps, and ABAC or policies when context matters, such as 'only managed devices can open customer data'. Most organizations end up with a hybrid.",
+      "follow_ups": [
+        "What is role explosion and how do you avoid it?",
+        "Where would you see attribute-based decisions in Entra ID or Okta?"
+      ],
+      "red_flags": [
+        "Claiming one model is always better with no trade-offs",
+        "Confusing ABAC with simply having more groups"
+      ],
+      "labs": [
+        1,
+        47
+      ]
+    },
+    {
+      "id": "IV-FND-004",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Can you describe the joiner-mover-leaver lifecycle and what typically goes wrong at each stage?",
+      "listen_for": [
+        "Joiner: account created from an authoritative source like HR, with birthright access on day one",
+        "Mover: access added for the new role and old access removed",
+        "Leaver: timely disablement, deprovisioning and credential cleanup",
+        "Common failures: late day-one access, movers keeping old access, orphaned accounts after leavers",
+        "Automation from HR events reduces the errors"
+      ],
+      "model_answer": "Joiner-mover-leaver, often shortened to JML, is the identity lifecycle. A joiner should be created automatically from the HR (human resources) system, the authoritative source, and receive birthright access so they can work on day one. What goes wrong is manual tickets that leave new hires waiting. A mover changes department or role. They should gain the new role's access and lose the old role's access, but the removal step is often skipped, which causes access creep. A leaver must be disabled quickly, have access removed from every connected system, and have sessions and tokens revoked. Failures here create orphaned accounts that attackers love. The fix across all three is driving the lifecycle from HR events through an identity governance tool rather than email requests.",
+      "follow_ups": [
+        "How fast should a leaver's access be removed?",
+        "How do you handle contractors who are not in the HR system?"
+      ],
+      "red_flags": [
+        "Forgetting the mover stage entirely",
+        "Saying deleting the account immediately is always correct, ignoring data retention and audit needs"
+      ],
+      "labs": [
+        1,
+        44,
+        39
+      ]
+    },
+    {
+      "id": "IV-FND-005",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is separation of duties, and can you give me an example of a toxic combination?",
+      "listen_for": [
+        "No single person can complete a high-risk process end to end",
+        "Splits duties such as request, approve, execute and reconcile",
+        "Toxic combination example: create vendor plus approve payment",
+        "Enforced preventively in provisioning and detectively in reviews",
+        "Mentions compensating controls when separation is impossible"
+      ],
+      "model_answer": "Separation of duties, or SoD, means a single person should not be able to complete a sensitive process from start to finish, because that makes fraud or serious mistakes easy and hard to detect. A classic toxic combination is someone who can create a new vendor in the finance system and also approve payments to vendors. They could create a fake vendor and pay themselves. Another is a developer who can both write code and deploy it to production without review. In identity and access management (IAM) we enforce SoD preventively, by having the governance tool block or flag a conflicting access request, and detectively, by scanning existing access and reviewing violations. Where a team is too small to separate duties, we add compensating controls like extra approvals or transaction monitoring.",
+      "follow_ups": [
+        "How would you define SoD rules in an identity governance tool?",
+        "What do you do with an approved SoD exception?"
+      ],
+      "red_flags": [
+        "Describing SoD as just having two administrators",
+        "No real-world example of a conflict"
+      ],
+      "labs": [
+        1,
+        48
+      ]
+    },
+    {
+      "id": "IV-FND-006",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is access creep, and what controls stop it from building up?",
+      "listen_for": [
+        "Access creep (privilege creep) is permissions accumulating over time beyond current need",
+        "Main cause is movers keeping old access and temporary grants never removed",
+        "Controls: automated mover removal, time-bound access, periodic access reviews",
+        "Role-based assignments make removal predictable",
+        "Monitoring for unused entitlements"
+      ],
+      "model_answer": "Access creep, also called privilege creep, is when someone slowly collects more access than their current job needs. It usually happens when people change roles and keep their old permissions, or when temporary access for a project is never taken away. After a few years a long-serving employee can have access that no single role would ever justify, which breaks least privilege and creates separation of duties conflicts. To stop it, I make mover events remove access tied to the old role automatically, give project or elevated access an end date, and run regular access certifications where managers or application owners confirm or revoke what people hold. I also look at usage data and flag entitlements nobody has used in, say, ninety days.",
+      "follow_ups": [
+        "Who should review the access: the manager or the application owner?",
+        "How do you stop reviewers from approving everything?"
+      ],
+      "red_flags": [
+        "Relying only on annual reviews with no lifecycle automation",
+        "Blaming users for requesting access instead of fixing the process"
+      ],
+      "labs": [
+        1,
+        26,
+        48
+      ]
+    },
+    {
+      "id": "IV-FND-007",
+      "category": "fundamentals",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is birthright access, and how do you decide what belongs in it?",
+      "listen_for": [
+        "Access granted automatically based on attributes like department, location, job code",
+        "Provisioned at joiner time without a request",
+        "Should be low risk and genuinely needed by everyone in that population",
+        "Sensitive or privileged access stays request-based with approval",
+        "Revisited as roles change; removed automatically when attributes change"
+      ],
+      "model_answer": "Birthright access is access a person gets automatically because of who they are in the HR record, such as their department, location, employee type or job code, without anyone having to request it. Typical examples are email, the intranet, the collaboration suite and maybe the department's shared drive. To decide what belongs there, I look for access that almost everyone in that population needs and that is low risk if it is a little broader than needed. Anything sensitive, privileged or used by only a few people stays request-based with approval. Because birthright is tied to attributes, it should also come off automatically when those attributes change, for example when someone transfers to another department.",
+      "follow_ups": [
+        "How would you use data to find candidates for birthright roles?",
+        "Should contractors get the same birthright access as employees?"
+      ],
+      "red_flags": [
+        "Putting admin or financial approval rights into birthright access",
+        "Thinking birthright access never needs to be removed"
+      ],
+      "labs": [
+        44,
+        47
+      ]
+    },
+    {
+      "id": "IV-FND-008",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What does zero trust mean to you in practice, and why do people say identity is the new perimeter?",
+      "listen_for": [
+        "Never trust by network location; verify every request explicitly",
+        "Use identity, device health and context for each access decision",
+        "Least privilege and assume breach",
+        "Cloud, SaaS and remote work removed the network edge, so identity is the control point",
+        "Concrete controls: Conditional Access, phishing-resistant MFA, device compliance, segmentation"
+      ],
+      "model_answer": "Zero trust means I stop treating anything as trusted just because it is on the corporate network. Every request is verified explicitly using who the user is, how strongly they authenticated, the health of their device and the risk of the sign-in. It also means least privilege and assuming a breach has already happened, so we limit how far an attacker can move. People say identity is the new perimeter because users now reach SaaS (software as a service) apps and cloud resources from anywhere. The firewall no longer sits between the user and the data, so the sign-in is where we make the decision. In practice that looks like Conditional Access policies in Microsoft Entra ID, phishing-resistant multifactor authentication, device compliance checks and short sessions for risky access.",
+      "follow_ups": [
+        "What are the policy engine, policy administrator and policy enforcement point?",
+        "Where would you start a zero trust rollout?"
+      ],
+      "red_flags": [
+        "Describing zero trust as a single product you buy",
+        "Saying zero trust means a VPN for everyone"
+      ],
+      "labs": [
+        2,
+        25,
+        34
+      ]
+    },
+    {
+      "id": "IV-FND-009",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "An audit finds that an employee who moved from Finance to Marketing eight months ago still has full access to the payments system. How do you handle it now, and how do you stop it happening again?",
+      "listen_for": [
+        "Immediate: confirm with the owner and remove the stale access",
+        "Check whether the access was used after the move and escalate if so",
+        "Find the root cause in the mover process",
+        "Look for other movers with the same gap",
+        "Prevent: automate mover removal, re-certify access on transfer"
+      ],
+      "model_answer": "First I would confirm the finding with the payments application owner and the employee's new manager, then remove the access, because there is no business reason for it. Next I would check the application logs to see whether the account did anything in the payments system after the transfer date. If it did, that becomes a security or fraud question and I would bring in the security team rather than quietly close it. Then I would look for the root cause, which is usually that the mover event added Marketing access but never removed Finance access. I would run a query for every other mover in the last year with leftover access from the old department. The long-term fix is automating removal on department change, plus a quick manager review triggered on every transfer.",
+      "follow_ups": [
+        "What if the new manager says the person still helps Finance occasionally?",
+        "How would you report this back to the auditors?"
+      ],
+      "red_flags": [
+        "Removing the access without checking whether it was used",
+        "Fixing only this one user and not the process"
+      ],
+      "labs": [
+        1,
+        26,
+        44
+      ]
+    },
+    {
+      "id": "IV-FND-010",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "HR tells you at 3 p.m. that a systems administrator is being terminated involuntarily at 4 p.m. today. What do you do, and in what order?",
+      "listen_for": [
+        "Coordinate timing with HR and the manager; act at the moment of notice",
+        "Disable the primary identity and revoke active sessions and tokens",
+        "Cover privileged, local, shared and cloud admin accounts, plus VPN and remote access",
+        "Rotate shared or service credentials the person knew",
+        "Preserve data and logs; monitor for activity afterwards"
+      ],
+      "model_answer": "I would coordinate with HR so the access removal happens at the moment the person is told, not hours later. Before 4 p.m. I would inventory everything they hold, especially privileged access: their normal account, any separate admin accounts, cloud admin roles, VPN (virtual private network) access, and any shared or service accounts they know the passwords for. At the time of notice I disable the identity in the identity provider, revoke active sessions and refresh tokens so existing logins stop working, and remove their admin roles. Then I rotate any shared credentials, vault passwords and keys they could have seen. I keep the mailbox and files for the manager and for legal hold rather than deleting them, and I watch the logs for any activity from their accounts over the next days.",
+      "follow_ups": [
+        "Why is disabling the account alone not enough in a cloud environment?",
+        "What if they have a personal phone enrolled for MFA?"
+      ],
+      "red_flags": [
+        "Waiting for the normal overnight deprovisioning job",
+        "Deleting the account and its data immediately",
+        "Forgetting shared or service account passwords"
+      ],
+      "labs": [
+        1,
+        39,
+        44
+      ]
+    },
+    {
+      "id": "IV-FND-011",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What is an orphaned account, and how do authoritative sources and correlation help you find them?",
+      "listen_for": [
+        "Orphaned account: an account in a target system with no active owner identity",
+        "Authoritative source (HR, contractor system) defines who should exist",
+        "Correlation links accounts to identities using attributes like employee ID or email",
+        "Uncorrelated or leaver-linked accounts are investigated and removed",
+        "Some accounts are service accounts needing an owner, not deletion"
+      ],
+      "model_answer": "An orphaned account is an account in an application or directory that is no longer tied to an active person, usually because the owner left and the account was never removed. To find them, I start from the authoritative source, which is normally the HR system for employees and a vendor or contractor system for non-employees. That defines who should have access. The identity governance tool aggregates accounts from each connected application and correlates them to identities using a reliable attribute like employee ID. Accounts that correlate to a terminated identity, or that do not correlate to anyone at all, go into a review queue. Some of those turn out to be service accounts, which need a named owner rather than deletion. The rest get disabled and then removed.",
+      "follow_ups": [
+        "Why is email address a weak correlation attribute?",
+        "How do you avoid accidentally deleting thousands of accounts after a bad aggregation?"
+      ],
+      "red_flags": [
+        "Deleting every uncorrelated account without investigation",
+        "Not knowing what an authoritative source is"
+      ],
+      "labs": [
+        26,
+        45,
+        43
+      ]
+    },
+    {
+      "id": "IV-FND-012",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "A manager asks you to give a new hire 'the same access as Bob'. How do you respond?",
+      "listen_for": [
+        "Explain the risk: copies Bob's accumulated access creep and SoD conflicts",
+        "Ask what job the new hire will do and map to the role or birthright",
+        "Use request workflow with approvals for extra access",
+        "Stay helpful and fast so the business is not blocked",
+        "Use the moment to check whether Bob's access is still appropriate"
+      ],
+      "model_answer": "I would be friendly but I would not just clone Bob. Copying a user copies everything Bob has collected over the years, including access from past roles and maybe separation of duties conflicts, so the new person starts with access creep on day one. Instead I would ask the manager what the new hire will actually do, then give them the role or birthright access for that job, which usually covers most of what they need. Anything extra goes through the normal access request so the right owner approves it. To keep the manager happy, I would make sure the standard role is ready for day one. I would also note Bob's profile, because if his access is the template people want, it might need a review itself.",
+      "follow_ups": [
+        "What if the manager escalates because the new hire starts tomorrow?",
+        "How would you build a role from this kind of request?"
+      ],
+      "red_flags": [
+        "Cloning the access without questions",
+        "Refusing flatly with no alternative offered"
+      ],
+      "labs": [
+        1,
+        47
+      ]
+    },
+    {
+      "id": "IV-FND-013",
+      "category": "fundamentals",
+      "level": "mid",
+      "kind": "technical",
+      "question": "Access reviews often turn into managers clicking 'approve all'. How do you make certifications meaningful?",
+      "listen_for": [
+        "Explain rubber-stamping as the core problem",
+        "Give reviewers context: plain-language entitlement descriptions, usage data, risk flags",
+        "Scope reviews by risk rather than reviewing everything at the same depth",
+        "Right reviewer: application or entitlement owners for technical access",
+        "Revocations actually provisioned and tracked; metrics on revoke rate and timeliness"
+      ],
+      "model_answer": "Rubber-stamping usually happens because reviewers see hundreds of cryptic entitlement names with no context, so approving is the safe default. I fix that in a few ways. First, every entitlement gets a plain-English description and an owner. Second, I add context like last-used date, whether the access came from a role or a one-off request, and risk flags such as privileged or separation of duties conflict. Third, I scope campaigns by risk: privileged and financial access reviewed quarterly by the application owner, low-risk birthright access less often or not at all because it is managed by rules. Finally, I make sure revocations really get provisioned, and I track metrics like completion time and revoke rate. A zero percent revoke rate on a large campaign is a warning sign.",
+      "follow_ups": [
+        "Who should review a service account's access?",
+        "What do you do with a reviewer who never completes on time?"
+      ],
+      "red_flags": [
+        "Proposing more frequent reviews as the only fix",
+        "Not mentioning that revoke decisions must be executed and verified"
+      ],
+      "labs": [
+        26,
+        48
+      ]
+    },
+    {
+      "id": "IV-FND-014",
+      "category": "fundamentals",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "In a small finance team, one person must be able to both create vendors and release payments, so you cannot separate the duties. What would you recommend?",
+      "listen_for": [
+        "Accept the business reality but document a formal, time-bound risk exception with an owner",
+        "Compensating controls: second approval above a threshold, detective review of vendor changes and payments",
+        "Logging and monitoring of the conflicting actions, reviewed by someone independent",
+        "Mandatory vacation or periodic rotation to expose fraud",
+        "Re-evaluate as the team grows; report to risk or audit"
+      ],
+      "model_answer": "I would not pretend we can force separation that the business cannot staff. Instead I would treat it as a documented risk exception with a business owner, a reason, and an expiry date so it gets revisited. Then I would add compensating controls. For example, any new vendor or bank detail change triggers an independent review by someone outside the team, and payments above a set amount need a second approver, even if that is the finance director. I would make sure the system logs both actions and that someone independent, maybe internal audit, reviews a monthly report of vendors created and paid by the same person. Mandatory vacation helps too, because fraud often surfaces when the person is away. I would recheck the exception every certification cycle.",
+      "follow_ups": [
+        "How would you configure this as an approved exception in your governance tool?",
+        "How do you explain the residual risk to the CFO?"
+      ],
+      "red_flags": [
+        "Granting the access with no exception record or controls",
+        "Insisting the business hire another person as the only option"
+      ],
+      "labs": [
+        48
+      ]
+    },
+    {
+      "id": "IV-FND-015",
+      "category": "fundamentals",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "You join a mid-sized company that has no central IAM program: accounts are created by email request and nobody owns access reviews. What do you prioritize in your first 90 days?",
+      "listen_for": [
+        "Discover first: inventory of identity sources, critical apps, admins",
+        "Quick risk wins: MFA everywhere, remove leavers and orphaned accounts, reduce admin count",
+        "Connect HR as authoritative source and automate leaver first",
+        "Bring critical apps under SSO; define owners",
+        "Build a roadmap with business sponsorship and measurable outcomes"
+      ],
+      "model_answer": "I would spend the first few weeks discovering: where identities live, which applications are business-critical, who has admin rights and how leavers are handled today. Then I would go after the biggest risks that are quick to fix. That usually means enforcing multifactor authentication for everyone, starting with admins, cleaning up accounts belonging to people who already left, and cutting the number of standing administrators. Next I would connect the HR system as the authoritative source and automate the leaver process first, because a late deprovision is the most dangerous gap. In parallel I would bring the top applications under single sign-on and assign an owner to each. By day 90 I want a roadmap the leadership has signed off, with metrics like time-to-deprovision and percentage of apps behind SSO.",
+      "follow_ups": [
+        "Why leaver before joiner automation?",
+        "How would you get application owners to cooperate?"
+      ],
+      "red_flags": [
+        "Starting with a tool purchase before understanding the environment",
+        "Trying to do role mining and full governance in the first month"
+      ],
+      "labs": [
+        1,
+        26,
+        35
+      ]
+    },
+    {
+      "id": "IV-FND-016",
+      "category": "fundamentals",
+      "level": "senior",
+      "kind": "technical",
+      "question": "For a large organization, how do you decide between a role-based model and attribute or policy-based access, and how do you avoid role explosion?",
+      "listen_for": [
+        "Role explosion: too many narrow roles that nobody can maintain or review",
+        "Use a small number of business roles for stable, common access",
+        "Use attributes or policies for context and fine-grained conditions",
+        "Role mining with owner validation; prune unused roles",
+        "Governance: role owners, periodic role certification, naming standards"
+      ],
+      "model_answer": "I start with what is stable. Access that follows job function and changes rarely fits roles well, so I build a modest set of business roles, ideally built from role mining and confirmed with each role's owner. Role explosion happens when we try to capture every variation, like 'Finance Analyst, London, night shift', as its own role. Then nobody can maintain or review them. Those variations are better expressed as attributes or policies, for example a role grants the app and a policy restricts which records or regions the person can see. To keep things healthy, each role has an owner, roles are certified periodically, and I retire roles with few members or no usage. I measure success by how much access comes from roles versus one-off requests.",
+      "follow_ups": [
+        "How do you run role mining without just encoding today's mess?",
+        "Where does the access policy get enforced: the IdP, the app, or a policy engine?"
+      ],
+      "red_flags": [
+        "Answering 'just create a role for each team'",
+        "No mention of ownership or ongoing maintenance of roles"
+      ],
+      "labs": [
+        47,
+        1
+      ]
+    },
+    {
+      "id": "IV-PRO-001",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "In SAML single sign-on, what do the identity provider and service provider each do, and what is inside a SAML assertion?",
+      "listen_for": [
+        "IdP authenticates the user and issues the assertion; SP is the application that trusts it",
+        "Trust is set up by exchanging metadata: entity IDs, ACS URL, signing certificate",
+        "Assertion contains subject (NameID), issuer, audience, conditions/validity window, attributes",
+        "Assertion is digitally signed by the IdP; SP validates with the IdP's public certificate",
+        "Travels through the browser, usually via HTTP POST"
+      ],
+      "model_answer": "In SAML 2.0 (Security Assertion Markup Language), the identity provider, or IdP, is the system that authenticates the user, like Okta or Microsoft Entra ID. The service provider, or SP, is the application the user wants to reach, and it trusts the IdP instead of checking passwords itself. The two are connected by exchanging metadata: each side's entity ID, the SP's assertion consumer service URL where assertions are posted, and the IdP's signing certificate. The assertion is an XML document that says who the user is through the NameID, who issued it, which SP it is meant for in the audience, a short validity window, and attributes like email, name or groups. The IdP signs it with its private key, and the SP checks that signature with the IdP's public certificate before logging the user in.",
+      "follow_ups": [
+        "What is the NameID format and why does it matter?",
+        "Is the assertion encrypted as well as signed?"
+      ],
+      "red_flags": [
+        "Saying the SP receives the user's password",
+        "Mixing up which side signs and which side validates"
+      ],
+      "labs": [
+        38
+      ]
+    },
+    {
+      "id": "IV-PRO-002",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the difference between OAuth 2.0 and OpenID Connect, and between an ID token and an access token?",
+      "listen_for": [
+        "OAuth 2.0 is delegated authorization: getting access to an API",
+        "OIDC is an identity layer on top of OAuth 2.0 for authentication",
+        "ID token: a JWT for the client app describing the user's sign-in; audience is the client",
+        "Access token: presented to the resource API; audience is the API; scopes define what it may do",
+        "Do not use ID tokens to call APIs"
+      ],
+      "model_answer": "OAuth 2.0 is an authorization framework. It lets an application get an access token so it can call an API on a user's behalf, or on its own behalf, without handling the user's password. On its own it does not tell the application who the user is. OpenID Connect, or OIDC, adds that identity layer on top of OAuth 2.0. When I request the 'openid' scope, I also get an ID token, which is a JSON Web Token, or JWT, meant for the client application. It says who signed in, when, and how, and its audience is the client. The access token is meant for the API, its audience is the API, and its scopes say what it is allowed to do. The app should never send the ID token to an API as a credential.",
+      "follow_ups": [
+        "What are scopes and claims?",
+        "What is the UserInfo endpoint for?"
+      ],
+      "red_flags": [
+        "Calling OAuth an authentication protocol",
+        "Saying ID tokens and access tokens are interchangeable"
+      ],
+      "labs": [
+        28
+      ]
+    },
+    {
+      "id": "IV-PRO-003",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What are the three parts of a JSON Web Token, and is the information inside it secret?",
+      "listen_for": [
+        "Header, payload, signature, Base64URL-encoded and separated by dots",
+        "Header holds the algorithm (alg) and key ID (kid)",
+        "Payload holds claims like iss, sub, aud, exp, iat",
+        "Signature proves integrity and issuer, it does not hide contents",
+        "Anyone can decode a signed JWT; do not put secrets in it (JWE exists for encryption)"
+      ],
+      "model_answer": "A JSON Web Token, or JWT, has three parts separated by dots: a header, a payload and a signature, each Base64URL encoded. The header says which signing algorithm was used and usually a key ID, so the receiver knows which public key to check it with. The payload contains claims, such as the issuer, the subject or user, the audience it is meant for, when it was issued and when it expires, plus things like email or roles. The signature lets the receiver prove the token came from the issuer and was not changed. But it is not secret. Encoding is not encryption, so anyone holding the token can decode and read the payload. That is why we never put passwords or sensitive data in a normal signed JWT.",
+      "follow_ups": [
+        "How would a receiving API find the right public key?",
+        "What is the difference between a signed JWT and an encrypted one?"
+      ],
+      "red_flags": [
+        "Saying Base64 encoding protects the contents",
+        "Not knowing what the signature is for"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRO-004",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is SCIM, and why would you use it instead of just-in-time provisioning or CSV uploads?",
+      "listen_for": [
+        "SCIM 2.0 is a standard REST/JSON API and schema for user and group provisioning",
+        "Supports create, update, and deactivate/delete, plus group membership",
+        "JIT via SAML only creates or updates at sign-in and cannot deprovision",
+        "CSV uploads are manual, delayed and error-prone",
+        "Deprovisioning is the main security benefit"
+      ],
+      "model_answer": "SCIM, the System for Cross-domain Identity Management, is a standard REST API with a common JSON schema for users and groups. Version 2.0 is what Okta, Microsoft Entra ID and most SaaS apps support. The identity provider acts as the SCIM client and pushes changes to the application: create a user, update their attributes, change group membership, and deactivate or delete them. Just-in-time provisioning through SAML only creates or updates the account when the user signs in, so it can never remove an account for someone who has left. CSV uploads are manual, late and easy to get wrong. The biggest win with SCIM is deprovisioning: when HR terminates someone, the deactivation flows to every connected app within minutes instead of waiting for someone to remember.",
+      "follow_ups": [
+        "How does an app usually handle a deactivation over SCIM?",
+        "What attributes would you map for a new SCIM app?"
+      ],
+      "red_flags": [
+        "Thinking SCIM handles authentication or single sign-on",
+        "Claiming SAML JIT can remove users"
+      ],
+      "labs": [
+        38,
+        39,
+        46
+      ]
+    },
+    {
+      "id": "IV-PRO-005",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What types of multifactor authentication are there, and which ones are resistant to phishing?",
+      "listen_for": [
+        "Factor categories: knowledge, possession, inherence",
+        "Weaker: SMS and voice codes (SIM swap, interception), simple push approvals",
+        "Better: authenticator app with number matching, TOTP",
+        "Phishing-resistant: FIDO2/WebAuthn security keys and passkeys, certificate or smart card auth",
+        "Why: origin binding means the credential will not work on a fake site"
+      ],
+      "model_answer": "Multifactor authentication, or MFA, combines at least two different categories: something you know like a password, something you have like a phone or security key, and something you are like a fingerprint. Not all methods are equal. SMS and voice codes are the weakest because of SIM swapping and because a user can type the code into a fake site. NIST guidance treats SMS as a restricted method. Authenticator apps with one-time codes or push with number matching are better, but a convincing phishing proxy can still relay them. Phishing-resistant methods are FIDO2 (Fast Identity Online) or WebAuthn security keys, passkeys, Windows Hello for Business and certificate-based authentication. They are bound to the real website's origin, so a look-alike domain simply cannot get a valid response.",
+      "follow_ups": [
+        "What is an adversary-in-the-middle phishing attack?",
+        "What is the difference between a synced passkey and a device-bound one?"
+      ],
+      "red_flags": [
+        "Calling two passwords 'multifactor'",
+        "Saying any MFA stops phishing"
+      ],
+      "labs": [
+        33,
+        40
+      ]
+    },
+    {
+      "id": "IV-PRO-006",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is the difference between LDAP and LDAPS, and why does it matter for a directory like Active Directory?",
+      "listen_for": [
+        "LDAP is the protocol for querying and modifying directories; default port 389",
+        "Simple bind sends credentials in clear text unless protected",
+        "LDAPS is LDAP over TLS, typically port 636; StartTLS upgrades 389",
+        "Applications that bind to AD should use encrypted channels and signing",
+        "Service account used for binds should be least privilege"
+      ],
+      "model_answer": "LDAP, the Lightweight Directory Access Protocol, is how applications look up and sometimes change information in a directory such as Active Directory: users, groups and attributes. Many older apps authenticate by doing an LDAP bind with the user's credentials. Plain LDAP runs on port 389, and a simple bind over it sends the username and password in clear text, so anyone sniffing the network could capture them. LDAPS wraps LDAP in TLS (Transport Layer Security), usually on port 636, and StartTLS is another option that upgrades a connection on 389 to encrypted. For Active Directory I would require encrypted or signed connections, and make sure the service account the application binds with has read-only, least-privilege rights instead of being a domain admin.",
+      "follow_ups": [
+        "What is the global catalog and what ports does it use?",
+        "How would you troubleshoot an app that suddenly cannot bind after certificates were changed?"
+      ],
+      "red_flags": [
+        "Thinking LDAPS is a different directory product",
+        "Using a domain admin account for application binds"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRO-007",
+      "category": "protocols",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user calls saying their phone keeps getting MFA push prompts they did not start. What do you do?",
+      "listen_for": [
+        "Treat it as compromise: the password is likely known to an attacker",
+        "Tell the user to deny the prompts and not approve",
+        "Reset the password, revoke sessions, review recent sign-ins and MFA registrations",
+        "Check sign-in logs for source IP, location, and whether anything was approved",
+        "Prevent: number matching, phishing-resistant methods, risk-based policies, report-fraud option"
+      ],
+      "model_answer": "I would treat this as a likely account compromise, because unexpected prompts usually mean someone already has the password and is trying multifactor authentication (MFA) fatigue, hoping the user taps approve. First I tell the user to deny every prompt and report them. Then I reset the password, revoke their active sessions and refresh tokens, and check that no new MFA method was registered by the attacker. In the sign-in logs I look at the source IP addresses and locations and, most importantly, whether any prompt was approved. If one was, it becomes a security incident and I escalate. To prevent this, I make sure number matching is on so blind approvals fail, enable the option to report suspicious prompts, and move people toward phishing-resistant methods like passkeys.",
+      "follow_ups": [
+        "Where would you see these attempts in Okta or Entra ID logs?",
+        "What would you check if one prompt was approved?"
+      ],
+      "red_flags": [
+        "Telling the user to just ignore the prompts",
+        "Not resetting the password because 'MFA blocked it'"
+      ],
+      "labs": [
+        31,
+        42,
+        33
+      ]
+    },
+    {
+      "id": "IV-PRO-008",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What is the difference between SP-initiated and IdP-initiated SAML sign-on, and which do you prefer?",
+      "listen_for": [
+        "SP-initiated: user starts at the app, which sends an AuthnRequest to the IdP",
+        "IdP-initiated: user starts at the IdP portal, which sends an unsolicited assertion",
+        "SP-initiated lets the SP match InResponseTo, reducing replay/injection risk",
+        "RelayState carries the deep link or return URL",
+        "Prefer SP-initiated; support IdP-initiated for portal convenience with care"
+      ],
+      "model_answer": "With SP-initiated sign-on, the user goes to the application first. The service provider, or SP, sees no session, builds a SAML (Security Assertion Markup Language) authentication request and redirects the browser to the identity provider. After login, the IdP posts back an assertion that references that request, so the SP can check it is answering something it actually asked for. With IdP-initiated, the user clicks a tile in a portal like the Okta dashboard or My Apps, and the IdP sends an assertion the SP never requested. That is convenient, but it is easier to abuse with stolen or injected assertions because there is no request to match. RelayState is used in both to carry where the user should land. I prefer SP-initiated as the main flow, and allow IdP-initiated only where the app handles it safely.",
+      "follow_ups": [
+        "What does the InResponseTo attribute protect against?",
+        "A user can sign in from the portal but not from the app's URL. What do you check?"
+      ],
+      "red_flags": [
+        "Saying the two flows are identical in security",
+        "Not knowing what RelayState does"
+      ],
+      "labs": [
+        38
+      ]
+    },
+    {
+      "id": "IV-PRO-009",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "technical",
+      "question": "Can you walk me through the OAuth 2.0 authorization code flow with PKCE, and explain why the implicit flow is no longer recommended?",
+      "listen_for": [
+        "Client creates a code verifier and sends a hashed code challenge with the authorization request",
+        "User authenticates and consents; authorization server returns a short-lived code to the redirect URI",
+        "Client exchanges code plus code verifier at the token endpoint for tokens",
+        "PKCE stops a stolen authorization code being redeemed by an attacker",
+        "Implicit returned tokens in the URL fragment, exposing them; current best practice drops it"
+      ],
+      "model_answer": "In the authorization code flow with PKCE, which stands for Proof Key for Code Exchange, the app first generates a random secret called the code verifier and hashes it into a code challenge. It redirects the user to the authorization server with the client ID, redirect URI, scopes, a state value and that code challenge. The user signs in and consents, and the server redirects back with a short-lived authorization code. The app then calls the token endpoint directly, sending the code plus the original code verifier. The server hashes the verifier, compares it to the challenge, and only then issues the tokens. If an attacker intercepts the code, it is useless without the verifier. The implicit flow returned tokens straight in the browser URL, where they leak through history and logs, so current guidance says not to use it.",
+      "follow_ups": [
+        "What is the state parameter for?",
+        "Does a confidential web app with a client secret still need PKCE?"
+      ],
+      "red_flags": [
+        "Saying the access token comes back in the redirect URL",
+        "Recommending implicit flow for a new single-page app"
+      ],
+      "labs": [
+        28
+      ]
+    },
+    {
+      "id": "IV-PRO-010",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "technical",
+      "question": "If you were writing an API that receives JWT access tokens, what checks must it perform before trusting one?",
+      "listen_for": [
+        "Verify the signature using the issuer's published keys (JWKS), selecting by kid",
+        "Enforce an allow-list of algorithms; reject 'none' and algorithm confusion",
+        "Check iss matches the expected issuer and aud is this API",
+        "Check exp and nbf with small clock skew allowance",
+        "Then authorize using scopes or roles in the token"
+      ],
+      "model_answer": "First I verify the signature. The API downloads the issuer's public keys from its JSON Web Key Set, or JWKS, endpoint, picks the key that matches the key ID in the header, and checks the signature. I only accept the algorithms I expect, for example RS256, and I reject 'none' or any attempt to switch to a symmetric algorithm using the public key as a secret. Then I validate the claims: the issuer must be exactly my identity provider, the audience must be this API and not some other application, and the token must be inside its not-before and expiry times, allowing a minute or two of clock skew. Only after all that do I authorize the call by checking the scopes or roles in the token against what the endpoint requires.",
+      "follow_ups": [
+        "How do you handle key rotation at the identity provider?",
+        "How would you revoke a JWT before it expires?"
+      ],
+      "red_flags": [
+        "Only decoding the token without verifying the signature",
+        "Skipping the audience check"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRO-011",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "SAML single sign-on to a key application stopped working for every user this morning. How do you troubleshoot it?",
+      "listen_for": [
+        "Scope: all users, one app, sudden; look for a recent change",
+        "Check signing certificate rollover or expiry on IdP or SP side",
+        "Capture the SAML response (browser tracer) and compare issuer, audience, ACS URL, NameID",
+        "Check IdP and app logs for the specific error",
+        "Check clock skew and metadata; communicate and roll back if needed"
+      ],
+      "model_answer": "Because it is every user of one app and it started suddenly with SAML (Security Assertion Markup Language) single sign-on, I would look first for a change: a certificate rollover, an app upgrade, or someone editing the configuration. The most common cause is the IdP signing certificate. Either it expired, or the IdP rolled to a new one and the application still has the old certificate, so signature validation fails. I would check the IdP's system log for the app and the application's own error message. Then I would capture a SAML response with a browser tracer extension and compare the issuer, audience, assertion consumer service URL, NameID format and signing certificate against what the app expects. I would also check the clock on the app server. Meanwhile I keep the help desk and app owner updated, and roll back if a change caused it.",
+      "follow_ups": [
+        "How do you plan a signing certificate rotation so this does not happen?",
+        "What would an audience mismatch error tell you?"
+      ],
+      "red_flags": [
+        "Resetting users' passwords for an SSO configuration problem",
+        "Making random changes without capturing the SAML response"
+      ],
+      "labs": [
+        38,
+        42
+      ]
+    },
+    {
+      "id": "IV-PRO-012",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How does Kerberos authentication work in an Active Directory domain?",
+      "listen_for": [
+        "Key Distribution Center on domain controllers: Authentication Service and Ticket Granting Service",
+        "User gets a Ticket Granting Ticket after proving knowledge of their key",
+        "User presents TGT to get a service ticket for a specific service (SPN)",
+        "Service validates the ticket without the password crossing the network",
+        "Time synchronization matters (default 5-minute tolerance); attacks like Kerberoasting and golden tickets"
+      ],
+      "model_answer": "Kerberos is a ticket-based protocol, and in Active Directory every domain controller runs the Key Distribution Center, or KDC. When I log on, my computer proves I know my password-derived key to the KDC's authentication service, and gets back a Ticket Granting Ticket, or TGT, encrypted with the key of the special krbtgt account. When I want to reach a file server or web app, I present the TGT to the ticket granting service and ask for a service ticket for that service's service principal name. The service ticket is encrypted with the service account's key, so the server can validate it without my password ever crossing the network. Clocks must be closely in sync, five minutes by default. Attackers target it with Kerberoasting and forged golden tickets.",
+      "follow_ups": [
+        "What is Kerberoasting and how do you reduce the risk?",
+        "Why does Kerberos fail when you connect by IP address instead of hostname?"
+      ],
+      "red_flags": [
+        "Saying Kerberos sends the password to each server",
+        "Not knowing what a TGT is"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRO-013",
+      "category": "protocols",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "A back-end service needs to call an internal API every night with no user present. Which OAuth flow would you use, and how would you secure it?",
+      "listen_for": [
+        "Client credentials grant: the app authenticates as itself",
+        "No user and no refresh token; request a new access token when needed",
+        "Prefer certificate or private key JWT, or a managed identity, over a client secret",
+        "Least privilege: only the application permissions or scopes needed; admin consent",
+        "Store any secret in a vault, rotate it, assign an owner, monitor usage"
+      ],
+      "model_answer": "I would use the client credentials grant, because there is no user to sign in. The service authenticates to the authorization server as itself and receives an access token for the API's application permissions. There is no refresh token in this flow; the service just asks for a new access token when the old one expires. To secure it, I avoid a plain client secret where possible. If it runs in Azure, a managed identity removes the secret entirely. Otherwise I use a certificate or a signed client assertion. If a secret is unavoidable, it lives in a vault, not the code, and is rotated. I grant only the specific permissions the job needs, get admin consent recorded, assign an owner, and monitor the service principal's sign-ins for unusual use.",
+      "follow_ups": [
+        "Why should the API check roles in the token rather than just that a token exists?",
+        "What is workload identity federation?"
+      ],
+      "red_flags": [
+        "Suggesting a user account with a non-expiring password",
+        "Using the resource owner password grant"
+      ],
+      "labs": [
+        29,
+        28,
+        51
+      ]
+    },
+    {
+      "id": "IV-PRO-014",
+      "category": "protocols",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "You are designing token handling for a new single-page app and mobile app. How do you approach access token lifetime, refresh tokens and revocation?",
+      "listen_for": [
+        "Short-lived access tokens; refresh tokens for session continuity",
+        "Public clients: authorization code with PKCE, refresh token rotation with reuse detection or sender-constrained tokens",
+        "Secure storage: platform keychain on mobile; consider a backend-for-frontend for the SPA",
+        "Revocation paths: sign-out, admin revoke, password reset, risk events; continuous access evaluation where available",
+        "Balance security with user experience and API load"
+      ],
+      "model_answer": "I keep access tokens short, minutes rather than hours, so a stolen one has a small window, and use refresh tokens to keep the session going without constant sign-ins. Both apps are public clients, so they use authorization code with PKCE (Proof Key for Code Exchange) and cannot hold a real secret. For refresh tokens I would turn on rotation, so each use returns a new refresh token and the reuse of an old one revokes the whole chain, or use sender-constrained tokens such as DPoP (Demonstrating Proof of Possession) where the platform supports it. On mobile, tokens go in the platform keychain. For the browser app, I would consider a backend-for-frontend so tokens never sit in JavaScript. Finally I define revocation: sign-out, admin disable, password reset and high-risk events must kill refresh tokens quickly.",
+      "follow_ups": [
+        "Why not just make access tokens last 24 hours to reduce load?",
+        "What does a backend-for-frontend pattern change?"
+      ],
+      "red_flags": [
+        "Storing long-lived tokens in browser localStorage without concern",
+        "Giving a public client a client secret and treating it as safe"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRO-015",
+      "category": "protocols",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Leadership wants phishing-resistant MFA for the whole company within a year. How would you plan the rollout?",
+      "listen_for": [
+        "Define target: FIDO2 security keys, passkeys, Windows Hello for Business, certificate-based auth",
+        "Phase by risk: admins first, then high-risk groups, then everyone",
+        "Enforce with policies (e.g., authentication strengths in Entra, authenticator policies in Okta)",
+        "Plan registration, recovery and lost-device processes with strong identity proofing",
+        "Exceptions, shared devices, frontline workers, legacy apps; measure adoption"
+      ],
+      "model_answer": "I would start by defining the target methods: passkeys, FIDO2 security keys, Windows Hello for Business and certificate-based authentication, depending on device mix. Then I phase by risk. Administrators go first, ideally within the first quarter, followed by finance, executives and anyone with access to sensitive data, then the general workforce. Enforcement comes through policy, for example authentication strengths in Microsoft Entra Conditional Access or authenticator requirements in Okta authentication policies, first in report-only mode so we see the impact. The hardest part is recovery: if someone loses their key, the help desk must verify identity strongly, otherwise attackers just social-engineer a reset. I also plan for frontline workers on shared devices and legacy apps that cannot do modern authentication. I report adoption weekly and retire SMS as the final step.",
+      "follow_ups": [
+        "How do you stop the help desk becoming the weak point?",
+        "What do you do with an app that only supports LDAP authentication?"
+      ],
+      "red_flags": [
+        "Big-bang enforcement for everyone on one day",
+        "Ignoring account recovery and lost-device scenarios"
+      ],
+      "labs": [
+        33,
+        40,
+        25
+      ]
+    },
+    {
+      "id": "IV-PRO-016",
+      "category": "protocols",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "A business-critical SaaS vendor supports SAML single sign-on with just-in-time account creation, but not SCIM. How do you handle provisioning and, especially, deprovisioning?",
+      "listen_for": [
+        "Identify the gap: JIT creates accounts but never removes them; local sessions may persist",
+        "Ask the vendor for SCIM or a user management API; contract requirement for renewal",
+        "Interim: enforce SSO-only login so disabling in the IdP blocks access; disable local passwords",
+        "Remove via API automation or a governance tool's manual/ticket provisioning with tracking",
+        "Detective control: regular account reconciliation against active identities; check session lifetime"
+      ],
+      "model_answer": "The risk is that just-in-time provisioning through SAML (Security Assertion Markup Language) creates accounts at login but never removes them, so leavers keep an account and sometimes a valid session. First I would make sure the app enforces single sign-on (SSO) only, with local passwords disabled, so disabling the user in the identity provider stops new logins. Then I check the app's session lifetime and whether it supports single logout, because long sessions undermine that. For actual removal, I would look for a vendor user management API we can automate against, or set the app up in our governance tool with manual provisioning tasks that create tracked tickets to the app owner with a service level. I would add a monthly reconciliation of the app's user export against active identities. Long-term, I would push for SCIM (System for Cross-domain Identity Management) as a contract requirement at renewal.",
+      "follow_ups": [
+        "How would you prove to auditors that leavers are removed from this app?",
+        "What if the app also bills per active account?"
+      ],
+      "red_flags": [
+        "Assuming disabling the user in the IdP fully solves deprovisioning",
+        "No plan to involve the vendor or contract"
+      ],
+      "labs": [
+        38,
+        46,
+        26
+      ]
+    },
+    {
+      "id": "IV-PAM-001",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is privileged access management, and why are privileged accounts the main target for attackers?",
+      "listen_for": [
+        "Privileged accounts: admin, root, domain admin, cloud admin, service accounts with high rights",
+        "PAM discovers, secures, controls and monitors their use",
+        "Attackers want them because they allow control of systems, data and other accounts",
+        "Typical capabilities: vaulting, rotation, just-in-time elevation, session monitoring",
+        "Reduces blast radius of a compromise"
+      ],
+      "model_answer": "Privileged access management, or PAM, is the set of tools and processes that control accounts with elevated rights: domain admins, cloud global admins, root on servers, database administrators and powerful service accounts. Attackers go after these because one privileged account can turn a small breach into a full takeover. With it they can create users, turn off security tools, read any data or deploy ransomware everywhere. PAM reduces that risk in a few ways. It discovers where privileged accounts exist, stores their credentials in a vault and rotates them, gives people elevation only when they need it, and monitors or records what is done in privileged sessions. The goal is that even if an attacker gets in, there is very little standing privilege for them to steal.",
+      "follow_ups": [
+        "What would you look for first when discovering privileged accounts?",
+        "Is a help desk password reset role 'privileged'?"
+      ],
+      "red_flags": [
+        "Defining PAM as only a password manager",
+        "Thinking only human admins count as privileged"
+      ],
+      "labs": [
+        25,
+        37
+      ]
+    },
+    {
+      "id": "IV-PAM-002",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How do password vaulting and credential rotation work in a PAM solution?",
+      "listen_for": [
+        "Privileged credentials stored encrypted in a central vault, not known by people",
+        "Users check out or launch sessions without seeing the password",
+        "Access to the vault is controlled by role, MFA and approval",
+        "Rotation: automatic change on a schedule and after each use",
+        "Audit trail of who used which credential and when"
+      ],
+      "model_answer": "With vaulting, privileged passwords and keys are stored encrypted in a central vault instead of spreadsheets or people's heads. An admin signs in to the privileged access management (PAM) tool with multifactor authentication, requests the account they need, and may need approval. Ideally the tool injects the credential and opens the session for them, so they never actually see the password. Rotation means the vault changes the password on the target system automatically, on a schedule and often right after each use or check-in. That way, even if someone did see or copy the password, it stops working shortly afterwards. Every check-out is logged, so we can answer exactly who used the domain admin account at 2 a.m. and why. It also means shared accounts finally have accountability.",
+      "follow_ups": [
+        "What could break when you rotate a service account password?",
+        "How does a vault itself get protected?"
+      ],
+      "red_flags": [
+        "Describing the vault as a shared spreadsheet with a password",
+        "Not mentioning rotation after use"
+      ],
+      "labs": [
+        25,
+        51
+      ]
+    },
+    {
+      "id": "IV-PAM-003",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What are just-in-time and just-enough access, and why is standing privilege a risk?",
+      "listen_for": [
+        "Standing privilege: admin rights held permanently, even when not in use",
+        "Just-in-time: elevation only when needed, for a limited time, then removed automatically",
+        "Just-enough: only the specific rights needed for the task, scoped narrowly",
+        "Reduces the attack surface and limits the impact of stolen credentials",
+        "Example: Entra Privileged Identity Management eligible roles"
+      ],
+      "model_answer": "Standing privilege means someone holds admin rights all the time, even though they use them for maybe an hour a week. If their account is phished on any day, the attacker gets those rights instantly. Just-in-time access fixes the timing: the person is only eligible for the role, and when they need it they activate it, usually with multifactor authentication and a reason, and it expires automatically after a few hours. Just-enough access fixes the scope: instead of Global Administrator, they get, for example, the Exchange Administrator role, or rights to one resource group. In Microsoft Entra ID this is done with Privileged Identity Management, or PIM, and eligible assignments. Together they mean most of the time there is simply no privilege to steal.",
+      "follow_ups": [
+        "What would you require before someone can activate a highly privileged role?",
+        "Are there accounts that should keep standing privilege?"
+      ],
+      "red_flags": [
+        "Saying JIT means granting admin by help desk ticket and removing it 'later' manually",
+        "Confusing just-enough with simply fewer admins"
+      ],
+      "labs": [
+        25,
+        29
+      ]
+    },
+    {
+      "id": "IV-PAM-004",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is a break-glass or emergency access account, and how should it be protected?",
+      "listen_for": [
+        "Highly privileged account for when normal admin access fails (IdP outage, CA lockout, MFA failure)",
+        "Cloud-only, not tied to a person, at least two of them",
+        "Strong protection: very long credential and phishing-resistant MFA such as FIDO2 keys, stored securely",
+        "Excluded from policies that could lock it out, but tightly monitored with alerts on any use",
+        "Tested regularly and reviewed; use is documented"
+      ],
+      "model_answer": "A break-glass account, also called an emergency access account, is a highly privileged account kept for the moment normal administration fails, for example when the federation service is down, a Conditional Access policy locks out every admin, or the MFA service is unavailable. Good practice is to have at least two, cloud-only, not tied to any individual employee and not dependent on on-premises systems. They need very strong protection, such as a long random password plus a phishing-resistant multifactor authentication method like a FIDO2 (Fast Identity Online) security key, with the key and credentials kept in a physical safe. They are excluded from policies that could lock them out, but any sign-in triggers an immediate alert to the security team. I would test them on a schedule and document every use.",
+      "follow_ups": [
+        "How often would you test a break-glass account, and what does the test involve?",
+        "Why should it not be synchronized from on-premises Active Directory?"
+      ],
+      "red_flags": [
+        "Using a named admin's everyday account as the emergency account",
+        "No monitoring or alerting on its use"
+      ],
+      "labs": [
+        25,
+        35
+      ]
+    },
+    {
+      "id": "IV-PAM-005",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How are service accounts and other non-human identities different from user accounts, and what risks do they bring?",
+      "listen_for": [
+        "Non-human identities: service accounts, service principals, managed identities, API keys, bots",
+        "Often outnumber humans; no HR record so no natural lifecycle",
+        "Risks: over-privilege, never-expiring secrets, no owner, interactive logon allowed",
+        "Controls: owner assignment, least privilege, secret rotation or secretless auth, monitoring",
+        "Exclude from MFA only with compensating controls"
+      ],
+      "model_answer": "Non-human identities are accounts used by software instead of people: service accounts in Active Directory, service principals and managed identities in the cloud, API keys, bots and automation scripts. They often outnumber human users many times over. The big difference is that they have no HR (human resources) record, so nothing triggers a joiner-mover-leaver lifecycle. That leads to the common risks: they collect too many permissions because someone granted admin to make an app work, their passwords or secrets never expire, nobody remembers who owns them, and sometimes they can log on interactively. Because they cannot do multifactor authentication, a leaked secret is often all an attacker needs. I manage them by assigning a named owner, granting least privilege, rotating secrets or removing them with managed identities, and monitoring for unusual use.",
+      "follow_ups": [
+        "How would you build an inventory of non-human identities?",
+        "What happens to a service account when its owner leaves?"
+      ],
+      "red_flags": [
+        "Treating service accounts as low risk because no person uses them",
+        "Suggesting everyone share one service account"
+      ],
+      "labs": [
+        29,
+        5,
+        51
+      ]
+    },
+    {
+      "id": "IV-PAM-006",
+      "category": "pam",
+      "level": "entry",
+      "kind": "technical",
+      "question": "What is an Azure managed identity, and what is the difference between system-assigned and user-assigned?",
+      "listen_for": [
+        "Managed identity: an Entra ID identity for an Azure resource with credentials handled by Azure",
+        "No secret for developers to store, leak or rotate",
+        "System-assigned: tied to one resource, deleted with it",
+        "User-assigned: standalone resource, can be shared by several resources, separate lifecycle",
+        "Still needs least-privilege role assignments"
+      ],
+      "model_answer": "A managed identity is an identity in Microsoft Entra ID that Azure creates for a resource like a virtual machine, function app or container. Azure handles the credentials behind the scenes, so the code just asks the platform for a token and there is no client secret for a developer to paste into a config file, leak or forget to rotate. A system-assigned managed identity belongs to one resource and is deleted when that resource is deleted, which keeps the lifecycle clean. A user-assigned managed identity is its own Azure resource; you can attach it to several resources and it survives when they are removed, which helps with scale sets or pre-granting access. Either way, it only gets the access we give it, so I still assign least-privilege Azure roles.",
+      "follow_ups": [
+        "When would you choose user-assigned over system-assigned?",
+        "Can a managed identity be used from outside Azure?"
+      ],
+      "red_flags": [
+        "Saying managed identities need their own password rotation",
+        "Assigning a managed identity Owner on the whole subscription by default"
+      ],
+      "labs": [
+        29
+      ]
+    },
+    {
+      "id": "IV-PAM-007",
+      "category": "pam",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A developer tells you they accidentally pushed a cloud API key to a public GitHub repository an hour ago. What do you do?",
+      "listen_for": [
+        "Assume the key is compromised; public repos are scanned by bots within minutes",
+        "Revoke or rotate the key immediately, before cleaning the repo",
+        "Check provider logs for any use of the key since exposure",
+        "Remove from code and history, but removal is not a substitute for rotation",
+        "Prevent: secret scanning and push protection, vault or managed identity, blameless follow-up"
+      ],
+      "model_answer": "I assume the key is already compromised, because automated bots scan public repositories for secrets within minutes. The first step is to revoke or rotate the key right away, before anything else. Deleting the commit does not help if someone already copied it. Then I check the cloud provider's logs for any activity using that key since it was pushed, such as new resources, data downloads or permission changes. If I find anything suspicious, it becomes a security incident. After that, the developer removes the secret from the code and the repository history, and the application is switched to read its secret from a vault or, better, to use a managed identity. To prevent repeats, I would turn on secret scanning and push protection, and I would thank the developer for reporting quickly.",
+      "follow_ups": [
+        "What if the key belonged to a third-party service with no logs?",
+        "How would you find other secrets already sitting in your repositories?"
+      ],
+      "red_flags": [
+        "Only deleting the commit or making the repo private",
+        "Punishing the developer, which discourages future reporting"
+      ],
+      "labs": [
+        20,
+        29,
+        51
+      ]
+    },
+    {
+      "id": "IV-PAM-008",
+      "category": "pam",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What is privileged session management or session recording, and what value does it give an organization?",
+      "listen_for": [
+        "Privileged sessions go through a PAM proxy or jump host instead of direct connections",
+        "Records keystrokes, commands or video for audit and forensics",
+        "Can monitor live and terminate risky sessions; credential injection hides passwords",
+        "Deterrent effect and evidence for compliance",
+        "Considerations: privacy notice, storage, retention, someone actually reviewing alerts"
+      ],
+      "model_answer": "Privileged session management means admins do not connect straight to servers or consoles. They go through the privileged access management (PAM) tool or a hardened jump host, which injects the credential and brokers the remote desktop, SSH (Secure Shell) or web session. Because all traffic passes through it, the tool can record the session as video or as a log of commands and keystrokes. That gives three things. First, an audit trail: we can prove exactly what a contractor did on a database server. Second, forensics: after an incident we can replay the session. Third, live control: some tools alert on risky commands and let security terminate the session. It also deters misuse. I would make sure users are told sessions are recorded, set a retention period, and actually review flagged sessions.",
+      "follow_ups": [
+        "Would you record every privileged session or only some?",
+        "How do you handle cloud consoles that are not behind a jump host?"
+      ],
+      "red_flags": [
+        "Claiming recording alone prevents attacks",
+        "Ignoring privacy notice and retention of recordings"
+      ],
+      "labs": [
+        25
+      ]
+    },
+    {
+      "id": "IV-PAM-009",
+      "category": "pam",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "An audit shows 40 users with permanent Global Administrator rights in Microsoft Entra ID. How would you fix it?",
+      "listen_for": [
+        "Find who really needs what by reviewing activity and tasks",
+        "Move most to least-privileged built-in roles or administrative units",
+        "Use Privileged Identity Management eligible assignments with MFA, justification, approval for the top roles",
+        "Keep Global Administrator count small (Microsoft recommends fewer than five) plus two break-glass accounts",
+        "Separate admin accounts, access reviews of role assignments, communication plan"
+      ],
+      "model_answer": "I would start by finding out what those 40 people actually do. The audit logs show which admin actions each one has taken, and a quick conversation fills the gaps. Most will turn out to need something narrower, like User Administrator, Exchange Administrator or Helpdesk Administrator, sometimes scoped to an administrative unit. I would move them to those roles. For the few who genuinely need Global Administrator, I would make the assignment eligible through Privileged Identity Management, or PIM, so they activate it for a few hours with phishing-resistant multifactor authentication (MFA), a justification and, for this role, an approval. Microsoft recommends fewer than five Global Administrators, plus at least two emergency access accounts. I would also use separate cloud-only admin accounts and schedule recurring access reviews on privileged roles.",
+      "follow_ups": [
+        "Someone says PIM activation slows them down during incidents. How do you respond?",
+        "How would you report progress to leadership?"
+      ],
+      "red_flags": [
+        "Removing everyone's access overnight with no analysis",
+        "Leaving the access permanent because 'they are senior'"
+      ],
+      "labs": [
+        25,
+        35,
+        37
+      ]
+    },
+    {
+      "id": "IV-PAM-010",
+      "category": "pam",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "You find a service account with Domain Admin rights, a password that never expires, used by a dozen applications, and no known owner. How do you remediate it safely?",
+      "listen_for": [
+        "Investigate before changing: logon events, SPNs, servers and services using it",
+        "Find and assign an owner; document dependencies",
+        "Split into separate least-privilege accounts per application, or group managed service accounts (gMSA)",
+        "Vault and rotate remaining passwords; deny interactive logon",
+        "Change in stages under change control with rollback; monitor"
+      ],
+      "model_answer": "I would not just reset the password, because that could break a dozen applications at once. First I investigate. I look at domain controller logon events to see which servers and services use the account, check its service principal names and scheduled tasks, and talk to the server teams to find a business owner. Then I document each dependency and the rights it truly needs, which is almost never Domain Admin. The plan is to give each application its own least-privilege account, ideally a group managed service account, or gMSA, which Active Directory rotates automatically. Anything that cannot use a gMSA gets a vaulted, rotated password. I would deny interactive logon, move applications one at a time under change control with a rollback, and finally remove Domain Admin.",
+      "follow_ups": [
+        "Why is a service account with an SPN and a weak password a Kerberoasting target?",
+        "What if one vendor application insists it needs Domain Admin?"
+      ],
+      "red_flags": [
+        "Resetting the password or disabling it immediately with no dependency analysis",
+        "Leaving it untouched because nobody owns it"
+      ],
+      "labs": [
+        29,
+        26,
+        4
+      ]
+    },
+    {
+      "id": "IV-PAM-011",
+      "category": "pam",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How would you remove long-lived cloud secrets from a CI/CD pipeline?",
+      "listen_for": [
+        "Problem: stored secrets in pipeline variables are long-lived and copyable",
+        "Workload identity federation: pipeline gets a short-lived OIDC token from its platform",
+        "Cloud trusts that token via a federated credential or trust policy scoped to repo, branch or environment",
+        "Exchanged for short-lived cloud access token; nothing to rotate",
+        "Least privilege per pipeline and environment; protect production with approvals"
+      ],
+      "model_answer": "Pipelines often store a cloud client secret or access key as a variable. Anyone who can edit the pipeline or read its logs could exfiltrate it, and it usually lives for months. I would replace it with workload identity federation. The CI/CD (continuous integration and continuous delivery) platform, for example GitHub Actions, issues the running job a short-lived OpenID Connect token that says which repository, branch or environment it comes from. In the cloud, I configure a federated credential on the Entra ID app or managed identity, or an IAM (identity and access management) role trust policy in AWS, that only trusts tokens matching that exact repository and branch. The job exchanges the token for a short-lived cloud access token. There is no stored secret left to leak or rotate. I would also scope each pipeline's permissions to its environment.",
+      "follow_ups": [
+        "What happens if the trust condition is too broad, for example any branch?",
+        "How do you handle a tool that does not support federation?"
+      ],
+      "red_flags": [
+        "Suggesting simply rotating the secret more often as the full answer",
+        "Granting the pipeline owner-level rights across all environments"
+      ],
+      "labs": [
+        29,
+        20
+      ]
+    },
+    {
+      "id": "IV-PAM-012",
+      "category": "pam",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Your monitoring alerts that a break-glass account signed in at 2 a.m. on a Sunday. What do you do?",
+      "listen_for": [
+        "Treat as a potential incident until proven otherwise",
+        "Verify immediately with the people authorized to use it and check for an open emergency or change",
+        "Review the sign-in details and audit log: source IP, location, method, actions taken",
+        "If unauthorized: contain (disable/reset, revoke sessions, rotate), review changes, escalate to incident response",
+        "If authorized: document, rotate credentials after use, review why it was needed"
+      ],
+      "model_answer": "I treat it as a possible incident from the start, because that account should almost never be used. First I check whether there is a known emergency: an outage, an open incident, or a documented change, and I call the people authorized to use it. At the same time, I review the sign-in details, such as source IP address, location and authentication method, and the audit log of everything the account did after signing in. If nobody can explain it, I follow the incident response process: revoke the session, reset the credentials, check for new admins, app consents or policy changes the attacker might have made, and escalate. If it was legitimate, I still document it, rotate the credentials afterwards, and look at why normal admin access failed.",
+      "follow_ups": [
+        "What changes would you look for first in the audit log?",
+        "How do you make sure this alert reaches someone at 2 a.m.?"
+      ],
+      "red_flags": [
+        "Waiting until Monday to look at it",
+        "Assuming it was a colleague without verifying"
+      ],
+      "labs": [
+        25,
+        31,
+        7
+      ]
+    },
+    {
+      "id": "IV-PAM-013",
+      "category": "pam",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Tell me about a time you had to push back on a request for elevated or permanent access. How did you handle it?",
+      "listen_for": [
+        "Clear situation and stakes",
+        "Understood the real business need rather than just refusing",
+        "Offered a safer alternative (time-bound, narrower role, JIT)",
+        "Kept the relationship and escalated appropriately if needed",
+        "Measurable result and what they learned"
+      ],
+      "model_answer": "Situation: in my role as [your role] at [organization], a [team lead or vendor] asked for permanent administrator access to [system] because they were tired of waiting for tickets. Task: I needed to keep them productive without creating standing privilege. Action: I asked what tasks actually needed admin rights and found that most were [specific tasks], which only required [narrower role or permission]. I proposed that role permanently, plus time-bound elevation for the rare admin tasks, approved by [the system owner]. I explained the risk in business terms: if their account was phished, an attacker would have full control. Result: they agreed, their tickets dropped by [number or percentage], and we used the same approach for [other teams]. I learned that offering a faster safe path works better than just saying no.",
+      "follow_ups": [
+        "What would you have done if they escalated to a director?",
+        "How did you document the decision?"
+      ],
+      "red_flags": [
+        "Story where they just refused with no alternative",
+        "Story where they granted the access to avoid conflict",
+        "Blaming the requester"
+      ],
+      "labs": [
+        25,
+        47
+      ]
+    },
+    {
+      "id": "IV-PAM-014",
+      "category": "pam",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "You are asked to build a privileged access management program from scratch. How do you sequence the work in the first year?",
+      "listen_for": [
+        "Discovery of privileged accounts, human and non-human, across on-premises, cloud and SaaS",
+        "Prioritize tier 0: domain admins, cloud global admins, identity systems, backup admins",
+        "Quick wins: separate admin accounts, MFA, cut standing admins, break-glass setup",
+        "Vault and rotate shared and service credentials; then JIT elevation and session management",
+        "Governance: ownership, access reviews of privileged access, metrics, executive sponsor"
+      ],
+      "model_answer": "I start with discovery, because you cannot protect what you have not found: privileged accounts in Active Directory, cloud tenants, SaaS admin consoles, databases, network devices, and service accounts. Then I prioritize by impact, with tier 0 first. That means anything that controls identity itself, such as domain admins, Entra ID Global Administrators, the identity provider and backup systems. The early quick wins are separate admin accounts for admins, phishing-resistant multifactor authentication on all of them, cutting the number of standing admins, and setting up and monitoring break-glass accounts. Next I vault and rotate shared and service credentials, then roll out just-in-time elevation and session recording for the highest-risk systems. Throughout, I need an executive sponsor, named owners, quarterly reviews of privileged access, and metrics such as standing admin count and percentage of privileged accounts vaulted.",
+      "follow_ups": [
+        "How do you get server teams to adopt the vault instead of working around it?",
+        "Which metric would you show the board?"
+      ],
+      "red_flags": [
+        "Buying a PAM tool and onboarding random accounts with no prioritization",
+        "Ignoring service accounts and cloud or SaaS admins"
+      ],
+      "labs": [
+        25,
+        29,
+        35
+      ]
+    },
+    {
+      "id": "IV-PAM-015",
+      "category": "pam",
+      "level": "senior",
+      "kind": "technical",
+      "question": "How do tiered administration and privileged access workstations protect against credential theft attacks such as pass-the-hash?",
+      "listen_for": [
+        "Credential theft: hashes or tickets stolen from memory on a compromised machine and reused",
+        "Tiering separates control of identity (tier 0), servers (tier 1), workstations (tier 2)",
+        "Rule: higher-tier credentials never log on to lower-tier systems",
+        "Privileged access workstations: hardened, dedicated devices for admin work, no email or browsing",
+        "Supporting controls: separate admin accounts, protected groups, LAPS, restricted logon rights"
+      ],
+      "model_answer": "Attacks like pass-the-hash work because when an admin logs on to a machine, reusable credential material such as password hashes or Kerberos tickets stays in memory. If that machine is compromised, the attacker lifts the credential and reuses it elsewhere. Tiered administration stops the chain. Tier 0 is anything controlling identity, like domain controllers and the identity provider; tier 1 is servers and applications; tier 2 is user workstations. The rule is that a higher-tier credential never logs on to a lower-tier system, so a domain admin never signs in to a laptop. Admins use separate accounts per tier and do privileged work from a privileged access workstation, or PAW, which is a hardened device with no email or web browsing. Supporting controls include unique local admin passwords via LAPS (Local Administrator Password Solution) and logon restrictions per tier.",
+      "follow_ups": [
+        "How does this model map to cloud administration in Entra ID?",
+        "What is the Protected Users group and what does it change?"
+      ],
+      "red_flags": [
+        "Saying a strong password alone prevents pass-the-hash",
+        "Allowing domain admins to use their admin account for email"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PAM-016",
+      "category": "pam",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Your company is deploying AI agents and automation that each need access to internal systems, so non-human identities are multiplying quickly. How would you govern them?",
+      "listen_for": [
+        "Inventory all non-human identities and require a named human owner and purpose",
+        "One identity per agent or workload; no shared credentials; least privilege and scoped permissions",
+        "Prefer secretless or short-lived credentials (managed identities, federation); vault anything else",
+        "Lifecycle: creation through a request process, expiry or review dates, decommission when unused",
+        "Guardrails: human approval for high-impact actions, logging, anomaly monitoring, kill switch"
+      ],
+      "model_answer": "I would treat every agent and automation as an identity with the same governance as a person, plus some extra guardrails. First, inventory: every non-human identity needs a named human owner, a stated purpose and the systems it touches. Second, each agent gets its own identity, never a shared one, with only the permissions its task needs, scoped to specific resources. Third, I avoid long-lived secrets by using managed identities or workload federation, and anything else sits in a vault with rotation. Fourth, lifecycle: identities are created through a request with approval, carry a review or expiry date, and are disabled when unused or when the owner leaves without a handover. Finally, high-impact actions like deleting data or granting access require human approval, every action is logged, and we have a fast way to revoke an agent's access.",
+      "follow_ups": [
+        "How would you detect an agent behaving outside its normal pattern?",
+        "Should an AI agent ever be allowed to approve access requests?"
+      ],
+      "red_flags": [
+        "Letting agents run under a developer's personal account",
+        "Granting broad admin rights 'so the agent does not get stuck'"
+      ],
+      "labs": [
+        5,
+        29
+      ]
+    }
+  ]
+}

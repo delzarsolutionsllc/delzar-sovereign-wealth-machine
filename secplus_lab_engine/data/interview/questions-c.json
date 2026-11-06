@@ -1,0 +1,1336 @@
+{
+  "questions": [
+    {
+      "id": "IV-TRB-001",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user changed their password this morning and now cannot sign in to anything. Walk me through how you would fix it?",
+      "listen_for": [
+        "Gathers facts first: exact error, which apps, which device, when it started",
+        "Checks the account state: locked, disabled, password expired, sync delay",
+        "Reads the sign-in log or System Log for the failure reason",
+        "Looks for devices or apps still holding the old password",
+        "Verifies with the user and explains how to prevent a repeat"
+      ],
+      "model_answer": "First I would get the facts: the exact error message, which apps fail, which device, and whether it worked right after the change. Then I check the account itself. In Microsoft Entra ID I open the sign-in logs and filter on the user; error 50126 means the password being sent is wrong, and 50053 means the account is locked. In Okta I would read the System Log for the same user. A very common cause is a phone or laptop still sending the old password, which keeps locking the account. In a hybrid setup I also check that the new password has synced from Active Directory. Once I find it, I unlock the account if needed, have the user update the saved password on every device, and confirm a clean sign-in in the log. Finally I note the cause in the ticket so the service desk can spot it faster next time.",
+      "follow_ups": [
+        "How would you find which device is sending the old password?",
+        "What changes if the company uses pass-through authentication instead of password hash sync?"
+      ],
+      "red_flags": [
+        "Resetting the password again without finding the cause",
+        "Never looking at any log",
+        "Unlocking the account repeatedly while the stale device keeps locking it"
+      ],
+      "labs": [
+        3,
+        30,
+        31,
+        41
+      ]
+    },
+    {
+      "id": "IV-TRB-002",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "A SAML app that worked yesterday now shows 'invalid signature' for every user. How do you troubleshoot it?",
+      "listen_for": [
+        "Recognises that 'every user' points to configuration, not one account",
+        "Suspects a signing certificate rotation or mismatch first",
+        "Compares the certificate the IdP signs with to the one the SP trusts",
+        "Checks whether the SP expects the assertion, the response or both signed",
+        "Uses a SAML tracer to see the real response; fixes and verifies with a test user"
+      ],
+      "model_answer": "Because every user fails at once, I treat it as a configuration change, not a user problem. The first question is: did anyone rotate or renew the signing certificate on either side? Security Assertion Markup Language (SAML) works only if the service provider (SP) trusts the exact certificate the identity provider (IdP) signs with. I capture a sign-in with a SAML tracer browser extension and compare the certificate thumbprint in the response with the one uploaded to the app. I also check what the app expects to be signed, the response, the assertion or both, because a mismatch there also shows as a bad signature. In my practice lab one failure was exactly this: Okta was signing with a new certificate the SP did not trust yet. The fix is to upload the current certificate or metadata to the SP, test with one account, then confirm in the logs and tell users.",
+      "follow_ups": [
+        "How would you rotate a signing certificate without an outage next time?",
+        "What is the difference between signing and encrypting an assertion?"
+      ],
+      "red_flags": [
+        "Resetting user passwords for a signature error",
+        "Turning off signature validation to make it work",
+        "Changing several settings at once without testing"
+      ],
+      "labs": [
+        17,
+        38
+      ]
+    },
+    {
+      "id": "IV-TRB-003",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Some users get a SAML error that the assertion is not yet valid or has expired, but only from one office. What is going on and how do you fix it?",
+      "listen_for": [
+        "Identifies clock skew against the NotBefore and NotOnOrAfter conditions",
+        "Checks the clocks of the SP servers that office reaches, and of the IdP, against NTP",
+        "Notes SPs allow only a small tolerance",
+        "Fixes time synchronisation instead of widening tolerance as a first move",
+        "Verifies and adds monitoring for time drift"
+      ],
+      "model_answer": "That pattern points to time. A SAML assertion carries a validity window, NotBefore and NotOnOrAfter, and the service provider (SP) rejects it if its own clock says the time is outside that window. Most SPs allow only a few minutes of tolerance. Since it is one office, I would check whether that office reaches a different SP node or proxy, then compare the server's time with a trusted Network Time Protocol (NTP) source. A server that drifted several minutes or has the wrong time zone setting is the usual cause. I would use a SAML tracer to read the timestamps in a failing response and compare them with the server clock. The fix is to correct NTP on the drifting machine, not to stretch the tolerance, which weakens replay protection. Then I test with an affected user and ask the infrastructure team to alert on time drift.",
+      "follow_ups": [
+        "Why can a too-wide clock tolerance be a security risk?",
+        "Where else in identity does clock skew break things?"
+      ],
+      "red_flags": [
+        "Blaming the user's browser without evidence",
+        "Setting a very large tolerance as the permanent fix",
+        "Not knowing that assertions have a validity window"
+      ],
+      "labs": [
+        17,
+        38
+      ]
+    },
+    {
+      "id": "IV-TRB-004",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "You just set up SAML for a new app and the IdP returns an audience or reply URL mismatch error. How do you resolve it?",
+      "listen_for": [
+        "Knows the Audience URI or Identifier must equal the SP entity ID exactly",
+        "Knows the ACS or reply URL must match what the SP sends",
+        "Reads the exact values from the error or SAML trace",
+        "Checks case, trailing slashes, tenant-specific URLs",
+        "Re-tests both SP-initiated and IdP-initiated sign-in"
+      ],
+      "model_answer": "Those errors mean the two sides disagree on names. The Audience URI, called the Identifier in Microsoft Entra ID, must exactly equal the service provider's (SP's) entity ID. The Assertion Consumer Service (ACS) URL, called the reply URL in Entra, must exactly match where the SP asks for the response. In Entra, an error like AADSTS50011 tells you the reply URL in the request is not registered, and it shows the value the app sent, which is gold. I capture the request with a SAML tracer, copy the exact values and compare them character by character: https versus http, a trailing slash, upper case, or a generic URL where the SP wants a tenant-specific one. In my practice lab one app failed because the audience was the vendor's generic URL instead of the company's own tenant URL. I correct the value from the vendor's metadata, then test SP-initiated and IdP-initiated sign-in.",
+      "follow_ups": [
+        "What is the difference between SP-initiated and IdP-initiated sign-in?",
+        "Why prefer importing metadata over typing values by hand?"
+      ],
+      "red_flags": [
+        "Guessing values instead of reading the trace or metadata",
+        "Adding wildcard reply URLs to make it work",
+        "Not knowing what the ACS URL is"
+      ],
+      "labs": [
+        38
+      ]
+    },
+    {
+      "id": "IV-TRB-005",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user says they are stuck in an MFA loop: they approve the prompt and get asked again and again. How would you handle it?",
+      "listen_for": [
+        "First rules out an attack: did the user start these sign-ins?",
+        "Checks sign-in logs for repeated MFA results and the Conditional Access policies applied",
+        "Looks at session settings such as a very short sign-in frequency",
+        "Considers browser cookies, device time, and device-state issues",
+        "Fixes the cause and confirms a clean sign-in"
+      ],
+      "model_answer": "First I make sure it really is a loop and not an attack. If the user is getting prompts they did not start, that is multifactor authentication (MFA) fatigue: someone has their password, so I would block the account, revoke sessions and reset the password. If the user is starting the sign-ins, I open the Entra sign-in logs, or the Okta System Log, and look at the sequence: is MFA succeeding and then a policy asks again? The Conditional Access tab shows which policy applied and its session controls; a sign-in frequency set far too short can cause it. Other common causes are a browser blocking cookies, so the session is never saved, or a policy needing a compliant device that the browser cannot prove. I fix the setting or the browser, have the user test, and confirm one clean sign-in in the log.",
+      "follow_ups": [
+        "How would you prove the prompts came from the user's own device?",
+        "What setting reduces MFA fatigue attacks?"
+      ],
+      "red_flags": [
+        "Telling the user to keep approving prompts",
+        "Turning MFA off for the user",
+        "Ignoring the possibility of an attack"
+      ],
+      "labs": [
+        25,
+        31,
+        40
+      ]
+    },
+    {
+      "id": "IV-TRB-006",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A new hire was assigned an app in the IdP, but automatic provisioning to that app failed and no account was created. Walk me through your troubleshooting?",
+      "listen_for": [
+        "Finds the provisioning error in the right log (Entra provisioning logs, Okta System Log or tasks, ISC account activities)",
+        "Reads the actual error text before acting",
+        "Checks the connector credentials, required attributes and mappings",
+        "Checks for an existing matching account",
+        "Retries one user, verifies, and fixes the root cause for the next hire"
+      ],
+      "model_answer": "I start with the provisioning record, not with guesses. In Microsoft Entra ID that is the provisioning logs for the enterprise app; in Okta it is the System Log event for the push, plus the failed task; in SailPoint Identity Security Cloud it is the failed account activity. The error text usually names the cause. The common ones are: the connector token or service account expired or lost rights, a required attribute such as department is empty or mapped wrong, or the app already has an account with that username. In my practice lab one failure said a matching user already existed in Salesforce, and another came from an empty required attribute in the create-account policy. I fix the specific cause, retry just that user, and check the account exists with the right access. Then I fix the source data or mapping so the next joiner does not hit it.",
+      "follow_ups": [
+        "What do you do if the error is a timeout to an on-premises app?",
+        "How do you stop a bad mapping from hitting hundreds of users?"
+      ],
+      "red_flags": [
+        "Creating the account by hand and closing the ticket without root cause",
+        "Not knowing where provisioning errors are logged",
+        "Re-running provisioning for everyone"
+      ],
+      "labs": [
+        38,
+        42,
+        46
+      ]
+    },
+    {
+      "id": "IV-TRB-007",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "An employee left last week, and today a manager reports that person still opened an internal app. What do you do?",
+      "listen_for": [
+        "Contains first: disable the account and revoke sessions and refresh tokens",
+        "Checks every path in: local app accounts, password-based apps, other directories",
+        "Uses logs to see what was accessed and tells security",
+        "Finds why offboarding missed it (HR feed, suspend vs deactivate, no deprovisioning)",
+        "Fixes the process and verifies no access remains"
+      ],
+      "model_answer": "I treat it as a security issue first. I confirm the person is really a leaver, then disable their identity provider (IdP) account if it is not already, revoke all sessions and refresh tokens, and disable the account inside that app directly. I tell the security team, because we need the logs of what they opened. Then I look for every other way in. Single sign-on (SSO) only protects apps that force SSO; an app with its own local password, or a password-vault app, still lets the person sign in with the saved credentials. In my practice lab, a leaver still reached three apps for exactly those reasons, and a suspended user kept all assignments because suspend is not deactivate. Once access is closed, I find the root cause: a late HR feed, missing deprovisioning, or a manual step skipped. I fix that and record evidence for audit.",
+      "follow_ups": [
+        "Why does revoking sessions matter if the account is disabled?",
+        "How would you check all the other apps this person had?"
+      ],
+      "red_flags": [
+        "Only disabling the directory account and assuming that is enough",
+        "Not involving security",
+        "Blaming HR without fixing the process"
+      ],
+      "labs": [
+        1,
+        26,
+        39
+      ]
+    },
+    {
+      "id": "IV-TRB-008",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "An employee moved from Finance to Sales a month ago and still has their old Finance access. How do you fix it and stop it happening again?",
+      "listen_for": [
+        "Explains privilege creep and why it matters (SoD, audit)",
+        "Separates birthright access from requested or manually granted access",
+        "Removes old access with the new manager's input and checks SoD",
+        "Fixes the mover process: removal on attribute change, reviews on move",
+        "Searches for other movers with the same problem"
+      ],
+      "model_answer": "This is privilege creep, and it is a real risk: Finance plus Sales access may break separation of duties (SoD) and will fail an audit. First I list exactly what the user has and where each item came from. Birthright access assigned by rules, such as role membership criteria, should drop when the department attribute changes; access that was requested or added by hand usually stays until someone removes it. I confirm with the new manager what the Sales job needs, remove the Finance access, and run an SoD check on what remains. Then I fix the process. Movers should trigger removal of old birthright access and a short review of everything else by the new manager. In my practice lab the mover kept old rights precisely because the model added the new role without taking away the old one. Last, I search for other recent movers with leftover access.",
+      "follow_ups": [
+        "Why might you keep some old access for a short time after a move?",
+        "How would you find every mover with leftover access?"
+      ],
+      "red_flags": [
+        "Removing everything without asking what the new job needs",
+        "Saying movers are not a risk",
+        "Fixing one user but not the process"
+      ],
+      "labs": [
+        1,
+        44,
+        46,
+        47
+      ]
+    },
+    {
+      "id": "IV-TRB-009",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user's Active Directory account keeps locking out every few hours even after you unlock it. How do you find the cause?",
+      "listen_for": [
+        "Suspects a device or service holding an old password (phone mail, mapped drive, saved credential)",
+        "Uses Windows security events: 4740 lockout with caller computer, 4771 or 4776 failures on DCs, 4625 on the target machine",
+        "Checks the identity provider sign-in log for client app and IP",
+        "Removes the stale credential, then unlocks",
+        "Considers an attack if the source is unknown"
+      ],
+      "model_answer": "Repeated lockouts after an unlock almost always mean something is still trying an old password. On the domain controllers I look at the security log: event 4740 records the lockout and the caller computer name, and failure events, 4771 for Kerberos pre-authentication or 4776 for NTLM, show where the bad attempts come from; 4625 appears on the machine where a logon failed. In the cloud sign-in logs I check the client app and IP, because an old phone mail app using Exchange ActiveSync is a classic cause. Other suspects are a mapped drive, a saved Windows credential or a scheduled task running as the user. I have the user update or remove the password on that device, then unlock the account and watch for an hour. If the attempts come from an IP or device the user does not recognise, I treat it as password guessing and involve security instead.",
+      "follow_ups": [
+        "Which domain controller would you check first for lockout events?",
+        "How does Entra smart lockout differ from Active Directory lockout?"
+      ],
+      "red_flags": [
+        "Raising the lockout threshold as the fix",
+        "Unlocking repeatedly with no investigation",
+        "Not knowing any relevant event IDs or logs"
+      ],
+      "labs": [
+        3,
+        41,
+        42
+      ]
+    },
+    {
+      "id": "IV-TRB-010",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "The CFO is blocked by a Conditional Access policy while travelling and wants you to remove the policy right now. What do you do?",
+      "listen_for": [
+        "Stays calm and helps fast without disabling a company-wide control",
+        "Reads the sign-in log Conditional Access tab and failure reason (for example 53003)",
+        "Uses the What If tool to see which policy and condition fired",
+        "Fixes the real gap (device compliance, MFA method, location) or uses an approved, time-limited exception",
+        "Documents the exception and its expiry"
+      ],
+      "model_answer": "I acknowledge the urgency and get to work, but I do not switch off a policy that protects the whole company. I open the Microsoft Entra sign-in logs for the CFO's attempt; error 53003 means Conditional Access blocked it, and the Conditional Access tab shows which policy and which condition, for example an unmanaged device or a blocked country. The What If tool lets me test the same conditions safely. Usually there is a quick, safe fix: sign in from the managed laptop, register a working MFA method, or use an approved app. If none works and the business need is real, I follow our exception process: a named security approver, a small exclusion group just for the CFO, and an expiry date, with the sign-ins watched while it lasts. Afterwards I remove the exception and review whether the policy needs a better design for travellers.",
+      "follow_ups": [
+        "Why is a senior executive a higher-value target, not a lower one?",
+        "How would you design policies so travel does not keep causing this?"
+      ],
+      "red_flags": [
+        "Disabling the policy for everyone",
+        "Granting a permanent exclusion with no approval or expiry",
+        "Not reading the sign-in log before acting"
+      ],
+      "labs": [
+        2,
+        25,
+        31
+      ]
+    },
+    {
+      "id": "IV-TRB-011",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "Okta is provisioning users to an app through SCIM, and some pushes fail with a 409 Conflict. What does that mean and how do you fix it?",
+      "listen_for": [
+        "409 means the resource already exists (a uniqueness clash, often userName)",
+        "Finds the existing app account and decides if it is the same person",
+        "Links or matches the existing account instead of creating a duplicate",
+        "Checks the username mapping and format on both sides",
+        "Retries and verifies; prevents with import and match before go-live"
+      ],
+      "model_answer": "In System for Cross-domain Identity Management (SCIM), a 409 Conflict means the app refused to create the user because one already exists with a unique value, usually the userName or email. It often happens when an app had manual accounts before provisioning was switched on. I read the failed event in the Okta System Log to get the exact user and attribute, then look in the app for the existing account. If it is the same person, I link the two by importing app users and matching them, so Okta updates that account instead of trying to create a new one. If it is a different person with a clashing name, the username mapping or format needs fixing. Then I retry the push and confirm the account is updated. Next time, I would import and match existing accounts before turning on create.",
+      "follow_ups": [
+        "What other HTTP status codes would you expect from a SCIM server and what do they mean?",
+        "What is the risk of matching on email alone?"
+      ],
+      "red_flags": [
+        "Deleting the existing app account to clear the error",
+        "Not knowing what 409 means",
+        "Matching accounts without checking they belong to the same person"
+      ],
+      "labs": [
+        38,
+        42,
+        45
+      ]
+    },
+    {
+      "id": "IV-TRB-012",
+      "category": "troubleshooting",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "New hires created in Active Directory yesterday are not showing up in Microsoft Entra ID. How do you find out why the sync stopped?",
+      "listen_for": [
+        "Checks whether sync stopped for everyone or only some objects",
+        "Looks at Entra Connect Health or the sync status in the portal and the last successful sync time",
+        "Checks the sync server, its service and its errors (Synchronization Service Manager) or Cloud Sync agent status",
+        "Checks scoping: OU filters, UPN suffix, duplicate attributes",
+        "Fixes, runs a delta sync, verifies the users, and adds alerting"
+      ],
+      "model_answer": "First I decide whether sync stopped for everyone or just those users. In the Entra admin center I check the last successful sync time and Microsoft Entra Connect Health alerts. If nothing has synced for hours, I go to the sync server: is the ADSync service running, has the server been patched or rebooted, did the service account password change? Synchronization Service Manager shows errors per run. For Cloud Sync I check the agent status and whether the job is in quarantine. If only some users are missing, it is usually scoping: they were created in an organizational unit (OU) outside the sync filter, have an unverified user principal name (UPN) suffix, or clash on a duplicate attribute. In my practice lab I found all of those, plus a stale server. After the fix I run a delta sync, confirm the users appear, and make sure stale sync raises an alert.",
+      "follow_ups": [
+        "What protects you if a sync run would delete thousands of users?",
+        "Why would a user get an onmicrosoft.com UPN after sync?"
+      ],
+      "red_flags": [
+        "Creating the users by hand in the cloud, which causes duplicates",
+        "Running a full sync repeatedly with no diagnosis",
+        "Not knowing that OU filtering exists"
+      ],
+      "labs": [
+        30
+      ]
+    },
+    {
+      "id": "IV-TRB-013",
+      "category": "troubleshooting",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "You learn that a SAML signing certificate used by 40 apps expires in nine days. How do you handle the rollover without an outage?",
+      "listen_for": [
+        "Inventories which apps use that certificate and how each takes a new one (metadata URL vs manual upload)",
+        "Creates the new certificate in advance and shares it before activation where the app supports two",
+        "Plans waves, change windows and app owner contacts",
+        "Has a rollback (keep the old certificate available until expiry)",
+        "Prevents repeats with expiry monitoring and owner tracking"
+      ],
+      "model_answer": "Nine days is tight but workable if I start today. First, inventory: list every app on that certificate, its owner, and how it takes a new certificate. Apps that read the identity provider's metadata URL pick it up themselves; others need a manual upload. Then I create the new certificate now. Where the service provider can trust two certificates at once, I give them the new one before switching, so nothing breaks at cut-over. For apps that trust only one, I book a short change window with the owner, switch, test sign-in and keep the old certificate ready to roll back while it is still valid. I raise this as a change request, track each app on a checklist, and report status daily. Afterwards I fix the root cause: certificate expiry alerts at 60 and 30 days and a named owner for every app integration.",
+      "follow_ups": [
+        "What would you do about apps whose owners do not respond?",
+        "How is this similar to expiring client secrets on service principals?"
+      ],
+      "red_flags": [
+        "Switching all 40 apps at once with no testing",
+        "Having no rollback plan",
+        "No plan to stop it happening again"
+      ],
+      "labs": [
+        4,
+        17,
+        29,
+        38
+      ]
+    },
+    {
+      "id": "IV-TRB-014",
+      "category": "troubleshooting",
+      "level": "entry",
+      "kind": "scenario",
+      "question": "A user says they cannot see an app tile in their dashboard that their teammate has. How do you troubleshoot it?",
+      "listen_for": [
+        "Checks user status first (active, suspended, deactivated)",
+        "Checks app assignment directly or through a group, and group rules",
+        "Compares the user's attributes and groups with the teammate's",
+        "Confirms the access is approved before adding it",
+        "Verifies the tile and SSO work"
+      ],
+      "model_answer": "I work through it in order. First, is the user active, not suspended or deactivated? Then, is the user assigned to the app, either directly or through a group? Assignment is the gate: with no assignment there is no tile and no single sign-on (SSO), however well the app is set up. Next I compare the user with the teammate. If access comes from a group rule, for example department equals Sales, a small difference such as a misspelled or differently cased department value in HR data keeps the user out of the group. In Okta I would confirm this in the System Log by looking for a group membership or app assignment event. I would not just copy the teammate's access; I check that the user is entitled to it, through a request or the manager. Then I fix the data or assignment and have the user refresh and sign in.",
+      "follow_ups": [
+        "Why is copying a teammate's access a bad habit?",
+        "If the fix is a wrong HR attribute, where do you correct it?"
+      ],
+      "red_flags": [
+        "Assigning the app with no approval",
+        "Editing the attribute in the IdP when HR is the source and will overwrite it",
+        "Not checking user status"
+      ],
+      "labs": [
+        36,
+        38,
+        39,
+        42
+      ]
+    },
+    {
+      "id": "IV-TRB-015",
+      "category": "troubleshooting",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "A nightly aggregation from your HR source suddenly shows that 40 percent of accounts would be deleted. What do you do?",
+      "listen_for": [
+        "Stops: assumes a broken or truncated feed, not mass leavers",
+        "Knows the delete threshold should cancel the run; checks it did",
+        "Investigates the export: file size, query, connector credentials, VA health",
+        "Confirms with HR before any deprovisioning",
+        "Re-runs after the fix and reviews the threshold and alerting"
+      ],
+      "model_answer": "Forty percent of staff did not leave overnight, so I assume the data is broken until proven otherwise. In SailPoint Identity Security Cloud the account delete threshold should have cancelled that aggregation; I check it did and that no lifecycle changes or deprovisioning started. If anything did start, I pause it. Then I find the cause: a truncated export file, a changed report or query on the HR side, an expired connector credential, or a virtual appliance that could not reach the source. I compare record counts with the previous run and ask the HR system team whether anything changed. Only after HR confirms the numbers do I re-run the aggregation and check that the deletion count is normal. In my practice lab an empty file was treated as broken, never as everyone leaving. Afterwards I review whether the threshold is right and that a cancelled run alerts the team.",
+      "follow_ups": [
+        "What would happen downstream if those deletions had gone through?",
+        "How would you set a sensible delete threshold for a source?"
+      ],
+      "red_flags": [
+        "Letting the aggregation complete to see what happens",
+        "Raising the threshold to make the run succeed",
+        "Not contacting the source owner"
+      ],
+      "labs": [
+        44,
+        45,
+        50
+      ]
+    },
+    {
+      "id": "IV-TRB-016",
+      "category": "troubleshooting",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "Several apps report failed provisioning and aggregation at once, all from on-premises sources behind a SailPoint virtual appliance cluster. How would you approach it?",
+      "listen_for": [
+        "Sees the common component and checks VA cluster health first",
+        "Checks outbound 443, DNS and NTP, and disk, memory and certificate warnings",
+        "Reads ccg.log and restarts the CCG service only with evidence",
+        "Checks redundancy (at least two VAs) and whether an update failed",
+        "Communicates impact and retries the failed work after recovery"
+      ],
+      "model_answer": "When several on-premises sources fail together, I look at what they share: the virtual appliance (VA) cluster. On the Virtual Appliances page I check each VA's health: is it connected, did it update, are disk or memory over the warning limits, is a certificate close to expiry? A VA needs only outbound HTTPS on 443 plus DNS and time sync, so I ask the network team whether a firewall or proxy change happened. Then I read the connector log, ccg.log, for the actual error, and restart the CCG service only if the log points to a stuck service. If the cluster has a single VA, that is a design gap; it should have at least two. I tell app owners what is affected, and once the VA recovers I retry the failed provisioning and run aggregations again. Finally I write up the cause and add the missing monitoring or second appliance.",
+      "follow_ups": [
+        "Why does a VA never need an inbound port from the internet?",
+        "What would you check if only one source on the cluster fails?"
+      ],
+      "red_flags": [
+        "Rebuilding the appliance before reading any logs",
+        "Opening inbound firewall ports to the VA",
+        "Forgetting to retry the failed transactions"
+      ],
+      "labs": [
+        46,
+        50
+      ]
+    },
+    {
+      "id": "IV-BEH-001",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Tell me about yourself and why you are moving into identity and access management?",
+      "listen_for": [
+        "A short, structured story: past, present, future",
+        "Links earlier experience to IAM skills (process, detail, customer service, risk)",
+        "Shows real effort: certifications and hands-on practice",
+        "Ends with why this role and this company",
+        "Under two minutes, no life history"
+      ],
+      "model_answer": "I spent [number] years in [previous field], where I [main responsibility, for example handled sensitive customer records or ran a process with strict approvals]. The part I enjoyed most was [making sure the right people had the right access or fixing a process], and that led me to security. Over the past [time] I have studied for [Security+, SC-300, Okta or SailPoint certifications] and built a practice portfolio of more than fifty hands-on labs: joiner, mover and leaver automation, Conditional Access, access reviews and system log investigations. IAM fits me because it mixes technology, process and people: every request has a real person waiting and a real risk behind it. I am looking for an [analyst or engineer] role where I can handle day-to-day identity work well and grow into [engineering or governance], and your team's work on [something specific about the company] is why I applied.",
+      "follow_ups": [
+        "What has been the hardest part of switching careers?",
+        "Which of your labs best shows what you can do?"
+      ],
+      "red_flags": [
+        "Reciting the whole CV",
+        "Apologising for being a career changer",
+        "Claiming production experience you do not have"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-002",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Why identity and access management specifically, and not another area of security?",
+      "listen_for": [
+        "Explains identity as the main control point today (cloud, SaaS, remote work)",
+        "Shows understanding of the work itself, not only the salary",
+        "Gives a personal reason or moment that sparked interest",
+        "Mentions the mix of technical, process and people skills",
+        "Sounds genuine and specific"
+      ],
+      "model_answer": "Most attacks today start with a stolen identity, not a broken firewall: phished passwords, leftover accounts, too much access. With cloud apps and remote work, identity is the control that follows the user everywhere, so I see IAM as where security actually happens day to day. I also like that the work is concrete. A joiner gets the right access on day one, a leaver loses everything on their last day, an auditor gets clean evidence. My interest started when [moment, for example I saw a former colleague still had access to a shared system months after leaving], and when I started studying, the identity topics were the ones I kept going deeper on. I enjoy the mix of logic, like building policies, and people work, like explaining to a manager why a request needs approval.",
+      "follow_ups": [
+        "Which part of IAM do you want to specialise in?",
+        "What do you think is the hardest problem in IAM today?"
+      ],
+      "red_flags": [
+        "Only 'it pays well' or 'it seemed easy'",
+        "Vague answer that could fit any field",
+        "Not knowing what an IAM team does day to day"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-003",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Tell me about a mistake you made at work and what you did about it?",
+      "listen_for": [
+        "Picks a real mistake with real impact, not a disguised strength",
+        "Owns it without blaming others",
+        "Acted fast to limit the damage and told the right people",
+        "Explains what they changed afterwards (checklist, peer review, test)",
+        "Shows the change worked"
+      ],
+      "model_answer": "Situation: in my role at [company], I [made a mistake, for example sent a bulk update to the wrong customer list or approved a change without checking a dependency]. Task: once I noticed, I had to limit the damage and tell people quickly. Action: I told my manager within [minutes or an hour] instead of trying to hide it, explained exactly what happened, and [fixed it, for example contacted the affected people and reversed the change]. Then I looked at why it happened: I had skipped a check because I was rushing. I wrote a short checklist and asked a colleague to review any bulk change before it ran. Result: [the impact was limited to ...], and in the [months] since, [no repeat or the checklist became the team standard]. In IAM I apply the same lesson: test a change on one account before running it on hundreds.",
+      "follow_ups": [
+        "How did your manager react?",
+        "What would you do if you made a mistake that removed access for many users?"
+      ],
+      "red_flags": [
+        "Claiming to have never made a mistake",
+        "Blaming a colleague or the system",
+        "A mistake with no lesson or change"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-004",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "A senior executive calls you directly and demands admin access to a system today, skipping the request process. How do you handle it?",
+      "listen_for": [
+        "Stays respectful and solution-focused under pressure",
+        "Understands the real business need behind the demand",
+        "Explains the risk and the process in business terms",
+        "Offers the fastest legitimate route (urgent request, JIT, someone doing the task)",
+        "Escalates through their own manager if pressured, and documents"
+      ],
+      "model_answer": "Situation: [a director or vice president] needed [admin rights or access to a system] for [a deadline] and wanted me to add it straight away. Task: help them get the job done without bypassing controls I am responsible for. Action: I stayed polite and asked what they actually needed to do. It turned out they needed [one report or one change], not full admin rights. I explained, in plain words, that admin rights without approval would show up in our audit and make them a bigger target for attackers. Then I offered the quickest legitimate path: I raised an urgent request with the system owner, and meanwhile [a colleague with the right access ran the report or temporary just-in-time access was approved]. I kept my manager informed. Result: [they had what they needed within hours], and later [they used the normal process without arguing].",
+      "follow_ups": [
+        "What if they threaten to go over your head?",
+        "When is emergency access appropriate?"
+      ],
+      "red_flags": [
+        "Granting the access because of their title",
+        "Refusing flatly with no alternative",
+        "Not telling your manager"
+      ],
+      "labs": [
+        25,
+        47
+      ]
+    },
+    {
+      "id": "IV-BEH-005",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Tell me about a time you had to say no to a request. How did you do it?",
+      "listen_for": [
+        "A clear reason for the no (policy, risk, fairness)",
+        "Listened first and understood the need",
+        "Explained the reason without jargon",
+        "Offered an alternative or next step",
+        "The relationship stayed good"
+      ],
+      "model_answer": "Situation: at [company] a [colleague or customer] asked me to [share data, skip an approval, give them a colleague's login]. Task: I could not do it because [it broke policy or created risk], but I still wanted to help. Action: I listened to what they were really trying to achieve, which was [goal]. I explained that I could not do it as asked because [reason in plain words], and I made it about the rule and the risk, not about them. Then I offered what I could do: [the correct process, a partial option, or putting them in touch with the right approver], and I followed up to check it worked. Result: [they got what they needed by the right route], and they [came back to me later or thanked me]. In IAM this happens daily, so I see a good no as one that still ends with a path forward.",
+      "follow_ups": [
+        "What if the person was your manager?",
+        "Have you ever said no and later realised you were wrong?"
+      ],
+      "red_flags": [
+        "Never having said no to anyone",
+        "A no with no explanation or alternative",
+        "Hiding behind 'policy says so' without understanding the policy"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-006",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Describe a time you explained a technical problem to someone who was not technical?",
+      "listen_for": [
+        "Knows the audience and what they care about",
+        "Uses an everyday analogy instead of jargon",
+        "Focuses on impact and what the person must do",
+        "Checked understanding",
+        "The person could act on it"
+      ],
+      "model_answer": "Situation: [a manager or customer] could not understand why [their access request was denied, or they had to set up MFA]. Task: explain it so they understood and would act, without drowning them in detail. Action: I started from what they cared about, getting their work done, and used an everyday comparison. For multifactor authentication (MFA), for example, I said a password is like a house key anyone can copy, and the app on their phone is a second lock only they carry. I skipped protocol names and told them exactly what to do next, in three steps. Then I asked them to say back what they would do, to check it landed. Result: [they completed it the same day or stopped escalating], and [I turned the explanation into a short guide the help desk still uses].",
+      "follow_ups": [
+        "How would you explain single sign-on to a new manager?",
+        "How do you adjust when the person is senior and impatient?"
+      ],
+      "red_flags": [
+        "Using acronyms throughout the story",
+        "Talking down to the person",
+        "No check that they understood"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-007",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "You come in on Monday to forty open access tickets, including a termination, a VIP request and an outage report. How do you prioritise?",
+      "listen_for": [
+        "Ranks by risk and impact, not by who shouts loudest",
+        "Puts terminations, especially for cause, and outages affecting many users first",
+        "Communicates expected times to people waiting",
+        "Groups similar tickets and uses automation or templates",
+        "Escalates if the queue is beyond capacity"
+      ],
+      "model_answer": "I sort by risk and impact. First, anything security-critical: a termination, especially one for cause, because a leaver with live access is a direct risk, and any sign of a compromised account. Second, the outage, because it blocks many people; I would confirm its scope quickly and start on it or hand it to the right team. Then time-bound business needs such as joiners starting today. The VIP request gets handled on its merits, quickly, but not ahead of a security issue. After that, I group similar tickets, like several requests for the same app, and work them together. I send short updates to people waiting so they know when to expect help. If the volume is beyond what I can safely do, I tell my lead early rather than rushing approvals. In a past role at [company], [example of prioritising a busy queue and the result].",
+      "follow_ups": [
+        "What if the VIP's manager complains that you made them wait?",
+        "How would you reduce the number of tickets over time?"
+      ],
+      "red_flags": [
+        "First in, first out with no risk thinking",
+        "Putting the VIP ahead of a termination",
+        "Silently letting tickets age"
+      ],
+      "labs": [
+        1
+      ]
+    },
+    {
+      "id": "IV-BEH-008",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Tell me about a time you had to learn a new tool or system quickly?",
+      "listen_for": [
+        "A clear deadline or pressure",
+        "A learning method: official docs, sandbox, small tests, asking experts",
+        "Hands-on practice rather than only reading",
+        "Shares knowledge afterwards",
+        "A measurable result"
+      ],
+      "model_answer": "Situation: [at work, or while preparing for IAM roles] I had [time frame] to learn [tool, for example SailPoint Identity Security Cloud or a new ticketing system]. Task: get to the point where I could [use it confidently or pass the certification]. Action: I started with the vendor's own documentation and training path so I learned the real terms, then set up a practice environment and did small exercises every day, breaking things on purpose to see the errors. For identity tools, I built labs for each core idea, such as identity profiles, aggregation and access requests, and wrote notes in my own words. When I got stuck I asked in [community or a colleague] instead of losing hours. Result: [passed the exam, or took over the task within two weeks], and I turned my notes into [a guide others used].",
+      "follow_ups": [
+        "How do you know when you understand a tool well enough?",
+        "What would you do in your first week with a tool our team uses that you have never seen?"
+      ],
+      "red_flags": [
+        "Only 'I watched videos'",
+        "Pretending to already know every tool",
+        "No result or proof of learning"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-009",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Tell me about a time you worked with auditors or had to provide evidence for an audit?",
+      "listen_for": [
+        "Understands what auditors want: complete, accurate, repeatable evidence",
+        "Answered exactly what was asked, nothing guessed",
+        "Organised evidence with dates, sources and owners",
+        "Was honest about gaps and helped fix them",
+        "Kept a good working relationship"
+      ],
+      "model_answer": "Situation: during [an internal or external audit at company], the auditors asked for [proof that leavers lost access within one day, or a list of who approved access to a system]. Task: give them complete, accurate evidence on time. Action: I clarified the exact request and period before pulling anything, so I did not hand over the wrong data. I exported the records from the system of record, with the date, the source and who ran the export, and kept the original files unchanged. When I found [two cases that did not meet the policy], I did not hide them; I told my manager and the auditors, explained the cause and the fix. Result: [the finding was rated low because we had already fixed it], and I wrote a repeatable process so the next audit took [less time]. In my lab practice I treat certification records the same way: every decision has a reviewer, date and reason.",
+      "follow_ups": [
+        "What would you do if an auditor asked for something you thought was outside scope?",
+        "Which IAM controls do auditors test most often?"
+      ],
+      "red_flags": [
+        "Treating auditors as the enemy",
+        "Editing or 'cleaning up' evidence",
+        "Guessing at answers instead of checking"
+      ],
+      "labs": [
+        26,
+        48
+      ]
+    },
+    {
+      "id": "IV-BEH-010",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Give me an example of a process you improved. What was the impact?",
+      "listen_for": [
+        "Identified a real pain point with evidence",
+        "Measured the before state",
+        "Involved the people who use the process",
+        "Implemented the change carefully",
+        "Measured the after state with a number"
+      ],
+      "model_answer": "Situation: at [company], [process, for example onboarding new staff] took [time] and often went wrong because [steps lived in emails and people forgot them]. Task: I wanted to make it faster and more reliable, though it was not formally my job. Action: I first measured it: I tracked [number] cases and found [the most common failure]. I talked to the people who did the work to understand why. Then I built [a checklist, template or simple automation], tested it on a few cases, and adjusted it from their feedback before rolling it out. Result: [time dropped from X to Y, errors fell by Z percent], and it became the team standard. I bring the same habit to IAM: for example, turning a manual joiner checklist into automated birthright access based on HR attributes, then measuring how many tickets disappear.",
+      "follow_ups": [
+        "How did you convince people to change how they worked?",
+        "What would you measure in an access request process?"
+      ],
+      "red_flags": [
+        "No numbers or evidence of impact",
+        "Changing a process without asking the people who use it",
+        "Taking credit for a team's work"
+      ],
+      "labs": [
+        1,
+        44
+      ]
+    },
+    {
+      "id": "IV-BEH-011",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "Tell me about a conflict with a teammate and how you resolved it?",
+      "listen_for": [
+        "Describes the conflict fairly, including the other view",
+        "Talked directly and privately, not through others",
+        "Focused on the shared goal and the facts",
+        "Reached a workable agreement",
+        "Relationship was fine or better afterwards"
+      ],
+      "model_answer": "Situation: a teammate and I disagreed about [how to handle a task, for example whether to grant access before the approval came back to meet a deadline]. Task: we had to agree quickly without damaging the working relationship. Action: I asked to talk one to one instead of arguing in the team chat. I listened first, and their concern was fair: [the user was blocked and the business was unhappy]. I explained mine: [granting without approval would leave us with an audit finding]. We focused on what we both wanted, the user working and the control intact, and found a middle path: [chase the approver together and escalate to the manager for a fast decision]. Result: [access was approved within the hour], and we agreed how to handle similar cases next time. We [worked well together afterwards and later wrote that into the runbook].",
+      "follow_ups": [
+        "What would you do if you could not agree?",
+        "Tell me about a time you were the one who was wrong."
+      ],
+      "red_flags": [
+        "Painting the teammate as the villain",
+        "Escalating to a manager before talking to them",
+        "No resolution"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-012",
+      "category": "behavioral",
+      "level": "senior",
+      "kind": "behavioral",
+      "question": "Describe a time you had to handle an outage or urgent incident under pressure?",
+      "listen_for": [
+        "Stayed calm and assessed scope first",
+        "Communicated early and regularly to stakeholders",
+        "Restored service safely before chasing perfection",
+        "Coordinated with others instead of working alone",
+        "Ran or contributed to a blameless post-incident review with actions"
+      ],
+      "model_answer": "Situation: [at company, a system that many people relied on, for example sign-in, the phone system or an order platform] stopped working at [time], affecting [number] people. Task: help restore service quickly and keep people informed. Action: I confirmed the scope first: who was affected and since when. I posted a short update to [the incident channel or managers] straight away and set a time for the next one. Then I worked through recent changes, because most outages follow a change, and found [the cause]. We agreed on the safest fix, [rolling back the change], tested it with a small group and then for everyone. I kept updates going until it was stable. Result: [service back within X minutes]. Afterwards I helped write a blameless review with [two or three] actions, such as [testing changes in a sandbox first]. For identity, I would also keep emergency access accounts ready for exactly this situation.",
+      "follow_ups": [
+        "What would you do if the sign-in service itself was down?",
+        "How do you decide between a quick fix and a proper fix?"
+      ],
+      "red_flags": [
+        "Panic or heroics with no communication",
+        "Making untested changes in production under pressure",
+        "Blaming people in the review"
+      ],
+      "labs": [
+        4,
+        7,
+        25
+      ]
+    },
+    {
+      "id": "IV-BEH-013",
+      "category": "behavioral",
+      "level": "entry",
+      "kind": "behavioral",
+      "question": "What do you do when someone asks you something and you do not know the answer?",
+      "listen_for": [
+        "Says honestly they do not know rather than guessing",
+        "Explains how they would find out (docs, logs, lab, colleagues)",
+        "Gives a time for the follow-up and keeps it",
+        "Shares what they learned afterwards",
+        "A concrete example"
+      ],
+      "model_answer": "I say so honestly, because in identity a confident wrong answer can lock people out or open a hole. I tell the person I will find out and when they will hear back. Then I go to reliable sources: the vendor documentation first, then logs or a test in a practice environment, then a more experienced colleague, with what I have already tried. For example, [situation where you were asked something you did not know, such as how a group rule treats upper and lower case]. I checked the documentation, tested it in my lab, found that [the comparison was case-sensitive], and came back to the person [the same day] with the answer and the evidence. Then I added it to my notes so the next person who asks gets it faster. Not knowing is fine; not finding out is the real problem.",
+      "follow_ups": [
+        "What if the question comes up in the middle of an incident?",
+        "How would you handle not knowing something in front of a customer?"
+      ],
+      "red_flags": [
+        "Guessing to look knowledgeable",
+        "Never following up",
+        "Saying they always know the answer"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-014",
+      "category": "behavioral",
+      "level": "mid",
+      "kind": "behavioral",
+      "question": "Tell me about a time you received critical feedback. What did you do with it?",
+      "listen_for": [
+        "A real piece of critical feedback",
+        "Listened without being defensive",
+        "Asked questions to understand it",
+        "Made a specific change",
+        "Followed up to check improvement"
+      ],
+      "model_answer": "Situation: [a manager or colleague] told me that [my ticket notes were too brief for others to pick up, or I jumped to fixes before understanding the problem]. Task: I had to take it on board, even though my first reaction was [to feel defensive]. Action: I thanked them and asked for an example so I understood exactly what they meant. They showed me [a ticket where the next person had to start again]. I changed how I worked: I started writing notes with what I checked, what I found and what I changed, and I asked them to look at a few of my tickets a month later. Result: [they confirmed it was better, and colleagues started using my notes as a model]. For IAM work that habit matters a lot, because good notes are also audit evidence.",
+      "follow_ups": [
+        "How do you give critical feedback to someone else?",
+        "What feedback have you had that you disagreed with?"
+      ],
+      "red_flags": [
+        "Choosing feedback that is secretly praise",
+        "Defensiveness in the retelling",
+        "No change made"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-BEH-015",
+      "category": "behavioral",
+      "level": "senior",
+      "kind": "behavioral",
+      "question": "Tell me about a time you spotted a risk nobody had asked you to look at. What did you do?",
+      "listen_for": [
+        "Noticed something outside their direct task",
+        "Checked the facts before raising alarm",
+        "Raised it through the right channel with evidence",
+        "Proposed a fix or next step",
+        "Followed through to an outcome"
+      ],
+      "model_answer": "Situation: while [doing a routine task at company], I noticed [for example that a shared login was used by several people, or a former contractor still received internal reports]. Task: it was not my area, but if it was real it was a risk. Action: before raising it, I checked the facts quietly so I was not crying wolf: [how you confirmed it]. Then I took it to [my manager or the owner] with what I saw, why it mattered in plain terms, and a suggested fix, [for example individual accounts or removing the access]. I did not try to fix it myself without authority. Result: [the access was removed or the process changed within days], and [the owner added a regular check]. In IAM, this is the core of the job: finding the dormant account or the unowned service account before an attacker does.",
+      "follow_ups": [
+        "What if the owner ignored you?",
+        "How do you avoid overstepping when it is not your system?"
+      ],
+      "red_flags": [
+        "Fixing it alone without authority",
+        "Ignoring it because it was not their job",
+        "Raising alarms with no evidence"
+      ],
+      "labs": [
+        26,
+        29
+      ]
+    },
+    {
+      "id": "IV-BEH-016",
+      "category": "behavioral",
+      "level": "senior",
+      "kind": "behavioral",
+      "question": "Tell me about a change you had to push through that users did not like, such as a new security requirement. How did you get people on board?",
+      "listen_for": [
+        "Understood the resistance and the reasons behind it",
+        "Explained the why in terms users care about",
+        "Phased the change with a pilot and early adopters",
+        "Made it easy: guides, support, sensible exceptions",
+        "Measured adoption and adjusted"
+      ],
+      "model_answer": "Situation: at [company] we had to [introduce a new mandatory step, for example MFA, a new approval flow or a new system], and many people saw it as extra hassle. Task: [my part, for example helping roll it out to my team or department] without stopping work. Action: I first listened to the complaints, which were mostly [time and confusion]. I explained the why in their terms: [what attack or problem it prevents, with a real example]. We started with a pilot group of willing people, fixed the rough edges they found, and wrote a one-page guide with screenshots. I held short drop-in sessions and made sure help was easy to reach on go-live day. Exceptions went through a clear process with an end date. Result: [adoption reached X percent by the deadline with few tickets], and [the pilot users became helpers for others].",
+      "follow_ups": [
+        "How would you handle one department that refuses outright?",
+        "What numbers would you watch during the rollout?"
+      ],
+      "red_flags": [
+        "Forcing the change with no communication",
+        "Giving up and granting broad permanent exceptions",
+        "Dismissing users' concerns"
+      ],
+      "labs": [
+        33
+      ]
+    },
+    {
+      "id": "IV-PRJ-001",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "Walk me through an access review or certification campaign you have designed or run?",
+      "listen_for": [
+        "Picks the right reviewer: manager, entitlement or source owner",
+        "Explains the campaign lifecycle and what happens to revocations",
+        "Handles edge cases: self-review, missing manager, undecided items",
+        "Detects rubber-stamping and requires justification on high-risk approvals",
+        "Honest framing as a practice environment"
+      ],
+      "model_answer": "In my practice environment I worked through two certification labs. In the first, every decision was checked against rules: a terminated identity was revoked automatically, self-review was escalated for reassignment, a critical-risk approval with no comment was escalated, and a reviewer who approved five items at a median of four seconds each was flagged as rubber-stamping. Items with no decision at close were revoked by policy. In the second, modelled on SailPoint Identity Security Cloud, I chose the campaign type from the business requirement, manager, source owner, search or role composition, and ran it from staged to active to completed. I saw why some items fall out: manager campaigns skip identities without a manager, and uncorrelated accounts never appear in identity campaigns. Sign-off was refused while items were undecided, and revocations became remediation work. In a real company I would add reporting on completion and revocation rates.",
+      "follow_ups": [
+        "How would you stop managers from approving everything?",
+        "What do you do with accounts that cannot be tied to any person?"
+      ],
+      "red_flags": [
+        "Claiming to have run a real company-wide campaign",
+        "No idea what happens to revoked items",
+        "Ignoring rubber-stamping"
+      ],
+      "labs": [
+        26,
+        48
+      ]
+    },
+    {
+      "id": "IV-PRJ-002",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How did you build and test a Conditional Access policy set?",
+      "listen_for": [
+        "Explains assignments, conditions and grant or session controls",
+        "Knows how policies combine: any block wins, all required controls must be met",
+        "Uses report-only mode and the What If tool before enforcing",
+        "Excludes and monitors break-glass accounts",
+        "Finds coverage gaps for sensitive apps"
+      ],
+      "model_answer": "In my practice environment I worked with a lab that models Microsoft Entra Conditional Access and Privileged Identity Management. It had eight policies: block legacy authentication, MFA for admins, MFA for medium or high sign-in risk, MFA plus a compliant device for payroll off the network, an approved app for mobile mail, guest terms of use, a high-risk block in report-only mode, and an old pilot switched off. I ran thirteen sign-ins through them and had to explain each result. Key lessons: every applicable policy is combined, so any block wins and otherwise all required controls must be met; report-only logs what a policy would do without enforcing it; and a What If view shows why each policy did or did not apply. It also flagged problems: payroll reached with no policy at all, a break-glass account not excluded from six policies, and a missing sign-in alert on emergency accounts.",
+      "follow_ups": [
+        "Why block legacy authentication first?",
+        "How would you roll a new policy out to the whole company safely?"
+      ],
+      "red_flags": [
+        "Turning a policy straight to on for all users",
+        "Not excluding emergency access accounts",
+        "Thinking the first matching policy wins"
+      ],
+      "labs": [
+        25,
+        33
+      ]
+    },
+    {
+      "id": "IV-PRJ-003",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Describe a joiner-mover-leaver automation you have built or worked with?",
+      "listen_for": [
+        "HR as the authoritative source that drives the events",
+        "Birthright access for joiners from attributes",
+        "Movers lose old access, not just gain new",
+        "Leavers: disable first, revoke sessions, then remove access; urgent path for terminations for cause",
+        "Shows the lifecycle state model and its traps"
+      ],
+      "model_answer": "In my practice environment I did this at two levels. The first lab replays an HR feed: joiners get role-based permissions, movers change roles, and leavers produce deprovisioning tickets. It showed me two things clearly. A mover kept old permissions because the role change only added rights, which is privilege creep. And a termination for cause gets a one-hour priority with access cut before the person is told, while a resignation gets a normal one-day deadline. The second lab models SailPoint Identity Security Cloud lifecycle states. The state is calculated from HR data such as start and end dates, and entering a state runs its configured actions, like enabling accounts or removing access profiles. The traps were useful: actions run only on a change of state, an unknown HR status must fail safe, and a leaver state with too few actions leaves people with access.",
+      "follow_ups": [
+        "What would you do about a rehire?",
+        "Why keep a disabled account instead of deleting it immediately?"
+      ],
+      "red_flags": [
+        "Leaver process that deletes everything immediately with no legal hold",
+        "Forgetting movers entirely",
+        "Driving lifecycle from manual tickets instead of the HR source"
+      ],
+      "labs": [
+        1,
+        44,
+        46
+      ]
+    },
+    {
+      "id": "IV-PRJ-004",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How have you designed or tested separation-of-duties rules?",
+      "listen_for": [
+        "Defines toxic combinations from business processes (create vendor + pay invoice)",
+        "Checks both existing access and pending requests",
+        "Breaks roles and access profiles down to entitlements",
+        "Chooses an action: block, flag for approval, or a mitigating control",
+        "Handles cases that cannot be evaluated"
+      ],
+      "model_answer": "In my practice environment I worked with separation of duties (SoD) in three labs. The first scans combined permissions for toxic pairs, such as creating and approving purchase orders or creating a vendor and paying invoices, and it caught a user who picked up a conflict through temporary coverage. The second runs the check on access requests: a request that would create a conflict was flagged but still routed for approval, which is a business decision. The third models SailPoint Identity Security Cloud policies with List A and List B. Roles and access profiles are broken down to entitlements before comparison, so a conflict hidden inside a bundle is still found. It also showed what to do when an access profile cannot be broken down: report that it cannot be evaluated instead of saying it is fine. For a real rollout, I would agree the rule list with Finance first.",
+      "follow_ups": [
+        "What is a mitigating control when a conflict must be allowed?",
+        "Who should own the list of conflicting entitlements?"
+      ],
+      "red_flags": [
+        "Only comparing role names instead of entitlements",
+        "Treating 'cannot evaluate' as a pass",
+        "Writing SoD rules without the business"
+      ],
+      "labs": [
+        1,
+        47,
+        48
+      ]
+    },
+    {
+      "id": "IV-PRJ-005",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Tell me about a time you found orphaned or dormant accounts. How did you identify and handle them?",
+      "listen_for": [
+        "Aggregates accounts and correlates them to HR identities",
+        "Defines orphan, dormant, duplicate and terminated-with-access",
+        "Handles service accounts by owner, not by HR",
+        "Chooses disable before delete, with a remediation list",
+        "Knows correlation can fail (no match or several matches)"
+      ],
+      "model_answer": "In my practice environment I ran an account reconciliation lab. It pulls accounts from three apps, ERP, CRM and a file share, and correlates each to the HR authoritative source, first by employee ID, then by email. Anything that does not fit gets a finding: orphaned accounts with no matching person, dormant accounts with no sign-in for over ninety days, duplicates, a terminated employee whose account was still enabled, and privileged or service accounts without a named owner, including one whose owner had left. The output is a remediation list: revoke for terminated and duplicate accounts, disable for orphans and dormant ones so they can be restored if we were wrong. A second lab showed correlation in SailPoint, where an email that matched two identities stayed uncorrelated for manual review rather than being guessed. In a real job I would confirm each orphan with the app owner before disabling.",
+      "follow_ups": [
+        "Why disable rather than delete straight away?",
+        "How would you handle a service account with no owner?"
+      ],
+      "red_flags": [
+        "Deleting accounts on the first finding",
+        "Ignoring service accounts",
+        "Correlating on display name"
+      ],
+      "labs": [
+        26,
+        45
+      ]
+    },
+    {
+      "id": "IV-PRJ-006",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Walk me through setting up SAML single sign-on for an app and how you tested it?",
+      "listen_for": [
+        "Prefers federation (SAML or OIDC) over password vaulting",
+        "Names the values both sides must agree on: ACS URL, Audience URI, NameID, signing certificate",
+        "Assignment is required for access",
+        "Tests SP- and IdP-initiated sign-in and negative cases",
+        "Separately enables provisioning features"
+      ],
+      "model_answer": "In my practice environment I worked through an Okta app integration lab. For each app request I first chose the sign-on method: federation with Security Assertion Markup Language (SAML) or OpenID Connect (OIDC) where possible, secure web authentication (SWA) password vaulting only when the app cannot federate. Then I checked the SAML settings that both sides must agree on: the Assertion Consumer Service (ACS) URL, the Audience URI, the NameID format and value, and the signing certificate. The lab simulated fourteen sign-ins, and the failures taught me the most: a user with no assignment, a deactivated user, a NameID that matched no account in the app, an audience using the vendor's generic URL, an ACS mismatch, and a certificate the app did not trust. I tested both SP-initiated and IdP-initiated sign-in. Provisioning was a separate step, with each push feature switched on individually.",
+      "follow_ups": [
+        "When would you choose OIDC over SAML?",
+        "What does NameID usually contain and why does it matter?"
+      ],
+      "red_flags": [
+        "Not knowing what the ACS URL or audience is",
+        "Only testing with an admin account",
+        "Defaulting to password vaulting for apps that support SAML"
+      ],
+      "labs": [
+        38
+      ]
+    },
+    {
+      "id": "IV-PRJ-007",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How have you verified that an offboarding actually removed a leaver's access everywhere?",
+      "listen_for": [
+        "Does not trust the IdP status alone",
+        "Checks each app: deprovisioning, local passwords, SWA apps, apps not in the catalog",
+        "Knows suspend versus deactivate",
+        "Collects evidence per app",
+        "Turns failures into process fixes"
+      ],
+      "model_answer": "In my practice environment I ran an Okta lab that checks, app by app, whether a leaver can still get in. It showed me that a deactivated Okta account is not the end of the story. Apps with deactivation provisioning turned on lost the account. A chat app with no deprovisioning kept an orphan account, but sign-in was only through single sign-on, so access was gone. But a password-vaulted wiki and a SAML CRM that also accepted their own local passwords were still reachable, and a payroll app missing from the catalog could not be verified, so it failed by default. A second leaver had only been suspended, which blocks sign-in but keeps assignments and accounts. The result was five of nine checks failing. My takeaway: offboarding needs per-app evidence, deprovisioning turned on where possible, local passwords disabled, and a full app inventory.",
+      "follow_ups": [
+        "When is suspending the right action instead of deactivating?",
+        "How do you handle apps that cannot be provisioned automatically?"
+      ],
+      "red_flags": [
+        "Assuming SSO removal covers every app",
+        "Treating suspend as deprovisioning",
+        "No evidence trail"
+      ],
+      "labs": [
+        1,
+        39
+      ]
+    },
+    {
+      "id": "IV-PRJ-008",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "How did you approach privileged access, such as just-in-time admin roles?",
+      "listen_for": [
+        "Replaces standing admin rights with eligible, time-bound activation",
+        "Activation needs MFA, justification and sometimes approval",
+        "No self-approval",
+        "Break-glass accounts kept separate, excluded and monitored",
+        "Least-privileged role at the smallest scope"
+      ],
+      "model_answer": "In my practice environment I worked through a privileged access lab modelled on Microsoft Entra Privileged Identity Management (PIM). It first flagged permanent Global Administrator and User Administrator assignments as standing privilege to convert into eligible, just-in-time roles. Then it ran activation requests: one approved for two hours and removed automatically, a high-privilege role waiting for approval, a requester trying to approve their own activation and denied, a user who was not eligible denied, a twelve-hour request outside the allowed range denied, and one denied for missing justification and MFA. It also checked the two break-glass accounts: one was correctly excluded and alerted on use; the other was not excluded from six policies. A separate delegation lab taught me to pick the least-privileged role and the smallest scope, such as an administrative unit.",
+      "follow_ups": [
+        "How many break-glass accounts would you keep and how would you protect them?",
+        "What is an administrative unit and when would you use one?"
+      ],
+      "red_flags": [
+        "Giving Global Administrator for convenience",
+        "Break-glass accounts with no monitoring",
+        "Allowing self-approval"
+      ],
+      "labs": [
+        25,
+        35,
+        37
+      ]
+    },
+    {
+      "id": "IV-PRJ-009",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "Tell me about an identity investigation you did using sign-in or system logs?",
+      "listen_for": [
+        "Knows the key fields: who, what, target, result, where, when",
+        "Uses error or result codes and filters",
+        "Correlates events (failures then success, impossible travel)",
+        "Picks a proportionate response from risk",
+        "Only treats success outcomes as proof something happened"
+      ],
+      "model_answer": "In my practice environment I worked through two log labs. In the Okta System Log lab I answered support questions from twenty-nine events: who did what to what, with what outcome, from where and when. I found that one user could not open Workday because they were never assigned, another had a provisioning failure because a matching user already existed, one was denied by a managed-device rule, one was locked out after five failures from an unfamiliar country, and an admin had added someone to the Admins group. One case had no explaining event, and the right answer was to say so and escalate. In the Microsoft Entra lab I read sign-in result codes, such as 50126 for a wrong password, and saw risk-based responses: require MFA for risky sign-ins, a secure password change for high user risk, and block plus revoke sessions for an MFA fatigue attack.",
+      "follow_ups": [
+        "How long are Entra sign-in logs kept and how would you keep them longer?",
+        "What does a burst of failures followed by one success tell you?"
+      ],
+      "red_flags": [
+        "Treating a failure event as proof the action happened",
+        "Guessing a cause when the log shows nothing",
+        "Not knowing any log fields"
+      ],
+      "labs": [
+        3,
+        31,
+        42
+      ]
+    },
+    {
+      "id": "IV-PRJ-010",
+      "category": "projects",
+      "level": "senior",
+      "kind": "technical",
+      "question": "How did you assess and clean up non-human identities such as service principals and API clients?",
+      "listen_for": [
+        "Chooses managed identities or workload identity federation over stored secrets",
+        "Finds expired or expiring secrets and unowned identities",
+        "Reduces over-broad roles and scopes",
+        "Disables unused identities",
+        "Applies the same least privilege to API tokens"
+      ],
+      "model_answer": "In my practice environment I ran a workload identity lab modelled on Microsoft Entra and Azure. First I chose the identity type for each workload: a system-assigned managed identity for an app on a single resource, a user-assigned one shared by three resources, workload identity federation for a GitHub Actions pipeline so no secret is stored, and a certificate for an on-premises job. Then I audited existing service principals and found a client secret on a pipeline that could use federation, a secret that had expired six days earlier, one expiring within thirty days, principals with no owner, a managed identity with Owner on a whole subscription, and one unused for 241 days with Contributor rights. Each got a fix: rotate, replace with federation, assign an owner, reduce scope, or disable. A SailPoint API lab added the same thinking for tokens: choose the right grant type and the narrowest scopes.",
+      "follow_ups": [
+        "Why is a federated credential safer than a client secret?",
+        "Who should own a service principal?"
+      ],
+      "red_flags": [
+        "Long-lived secrets in code as normal practice",
+        "Ignoring ownership of non-human accounts",
+        "Giving workloads Owner because it is easier"
+      ],
+      "labs": [
+        29,
+        51
+      ]
+    },
+    {
+      "id": "IV-PRJ-011",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How would you design an access request and approval flow, and what have you built to practise it?",
+      "listen_for": [
+        "Bundles: entitlement, access profile, role or access package",
+        "Decides who can request, who approves, and when access ends",
+        "Prevents self-approval and handles out-of-office reviewers",
+        "Checks SoD before provisioning",
+        "Only requestable, existing items can be requested"
+      ],
+      "model_answer": "In my practice environment I built this in two platforms. In a SailPoint Identity Security Cloud lab, entitlements are bundled into access profiles for one source, and access profiles into roles for a job. Roles with membership criteria are assigned automatically; requestable items go through approval levels in order, and any denial stops the request. The lab showed self-approval prevention passing the decision to the requester's manager, out-of-office reassignment, a reassignment loop, an SoD conflict flagged during the request, and items that could not be requested because they were not requestable or disabled. In a Microsoft Entra entitlement management lab I used catalogs, access packages and assignment policies, including separate policies for employees and partners and an expiry date on access. My design rule is simple: the manager approves need, the resource owner approves risk, and access expires unless renewed.",
+      "follow_ups": [
+        "When would you use automatic assignment instead of requests?",
+        "How would you set access expiry for contractors?"
+      ],
+      "red_flags": [
+        "Everything approved by IT alone",
+        "No expiry on access",
+        "Ignoring SoD at request time"
+      ],
+      "labs": [
+        27,
+        47
+      ]
+    },
+    {
+      "id": "IV-PRJ-012",
+      "category": "projects",
+      "level": "senior",
+      "kind": "technical",
+      "question": "How did you plan hybrid identity between Active Directory and the cloud?",
+      "listen_for": [
+        "Chooses the authentication method: password hash sync by default, PTA or federation only with a real need",
+        "Chooses Connect Sync or Cloud Sync for the situation",
+        "Checks sync health: scope, UPN suffixes, duplicates, stale sync",
+        "Plans redundancy for agents",
+        "Uses staged rollout to migrate safely"
+      ],
+      "model_answer": "In my practice environment I worked through a hybrid identity planning lab for Microsoft Entra ID. The first step was choosing the authentication method: password hash sync by default, because sign-in keeps working if on-premises fails; pass-through authentication only when on-premises rules such as logon hours must apply immediately; and federation only for a real requirement, since it is the most complex. Then the sync tool: Cloud Sync with lightweight agents for disconnected forests, Connect Sync for the widest features. The health checks were the most practical part: objects filtered out because they sat outside the synced OUs, duplicate email values that would be quarantined, a UPN suffix that was not a verified domain, too few pass-through and Cloud Sync agents for high availability, a sync server stale for twenty-four hours, and staged rollout groups that were too large or dynamic.",
+      "follow_ups": [
+        "What happens to sign-in during an on-premises outage with each method?",
+        "How would you move from federation to password hash sync?"
+      ],
+      "red_flags": [
+        "Choosing federation by default",
+        "Running a single sync agent",
+        "Not knowing what password hash sync actually stores"
+      ],
+      "labs": [
+        30
+      ]
+    },
+    {
+      "id": "IV-PRJ-013",
+      "category": "projects",
+      "level": "mid",
+      "kind": "technical",
+      "question": "What metrics or KPIs would you use to show an IAM program is working?",
+      "listen_for": [
+        "Lifecycle speed: time to provision joiners and to remove leavers",
+        "Hygiene: orphaned, dormant, unowned and terminated-with-access accounts",
+        "Governance: certification completion, revocation rate, SoD violations open",
+        "Authentication: MFA and phishing-resistant coverage, legacy authentication use",
+        "Privilege: standing admin count, JIT usage; tie metrics to risk and audit"
+      ],
+      "model_answer": "I would track a few metrics in four groups and tie each to a risk. Lifecycle: how long a joiner waits for access on day one, and how long until a leaver loses all access, with terminations for cause measured in minutes. Hygiene: counts of orphaned, dormant and unowned accounts, and any terminated user still enabled, which should be zero. Governance: certification completion on time, the revocation rate, which tells you whether reviewers actually look, and open separation-of-duties violations. Authentication and privilege: percentage of users with multifactor authentication (MFA), the share using phishing-resistant methods, remaining legacy authentication sign-ins, and the number of standing admin assignments versus just-in-time ones. In my practice labs, most findings, such as dormant accounts, rubber-stamping reviewers and standing Global Administrators, map straight onto these numbers. I would report trends monthly, not one-off totals.",
+      "follow_ups": [
+        "Which single metric would you show a CISO first?",
+        "Why can a very low revocation rate be a bad sign?"
+      ],
+      "red_flags": [
+        "Only counting tickets closed",
+        "Metrics with no link to risk",
+        "Vanity numbers with no target or trend"
+      ],
+      "labs": [
+        25,
+        26,
+        31,
+        33,
+        48
+      ]
+    },
+    {
+      "id": "IV-PRJ-014",
+      "category": "projects",
+      "level": "mid",
+      "kind": "scenario",
+      "question": "How would you roll out MFA to a company of 2,000 people that has never used it?",
+      "listen_for": [
+        "Starts with admins and high-risk groups, keeps break-glass accounts",
+        "Chooses methods: authenticator app or passkeys, aims for phishing-resistant, limits SMS",
+        "Registration campaign, guides and help desk readiness",
+        "Pilot, report-only, then phased enforcement with Conditional Access",
+        "Blocks legacy authentication and plans recovery (SSPR, Temporary Access Pass)"
+      ],
+      "model_answer": "I would do it in phases. First, admins, with phishing-resistant methods such as passkeys, FIDO2 keys or Windows Hello for Business, and two emergency access accounts excluded and monitored. Then I choose the methods for everyone: an authenticator app with number matching as the baseline, passkeys where devices support them, and SMS only as a fallback because it can be phished or SIM-swapped. Next, a registration campaign with clear guides, help desk training, and a Temporary Access Pass process for people who are stuck. I pilot with IT and a friendly department, put the Conditional Access policy in report-only mode to see the impact, then enforce in waves by department. I block legacy authentication, since it cannot do MFA. In my practice labs I checked self-service password reset readiness and saw which users had too few methods registered, which is exactly the report I would use to chase stragglers.",
+      "follow_ups": [
+        "How would you handle staff who do not have a company phone?",
+        "What is the difference between MFA and phishing-resistant MFA?"
+      ],
+      "red_flags": [
+        "Turning MFA on for everyone on one day with no communication",
+        "SMS as the main method",
+        "No recovery process for lost devices"
+      ],
+      "labs": [
+        25,
+        33,
+        40
+      ]
+    },
+    {
+      "id": "IV-PRJ-015",
+      "category": "projects",
+      "level": "senior",
+      "kind": "scenario",
+      "question": "What would your first 90 days in this IAM role look like?",
+      "listen_for": [
+        "Days 1-30: learn people, systems, processes, policies; no big changes",
+        "Builds an inventory: apps, sources, admins, service accounts, open findings",
+        "Days 31-60: quick wins with low risk (orphan cleanup, documentation, MFA gaps)",
+        "Days 61-90: a prioritised plan agreed with the manager, with metrics",
+        "Earns trust by doing the daily work well"
+      ],
+      "model_answer": "In the first thirty days I would listen and learn: meet my team, the service desk, HR and key app owners, and learn how joiners, movers and leavers really flow today. I would read the policies, past audit findings and the ticket queue, and build my own map of the identity systems, connected apps, admin roles and service accounts. I would take on daily tickets early, because that is how you learn the environment and earn trust. From day thirty to sixty I would look for low-risk quick wins with my manager, such as cleaning up orphaned accounts, documenting a messy process, or closing MFA gaps for admins. From sixty to ninety I would propose a short, prioritised list of improvements with a metric for each, for example leaver removal time. My practice labs give me a checklist of what to look for, but I would not change anything before I understand why it is the way it is.",
+      "follow_ups": [
+        "What would you do if you found a serious risk in week one?",
+        "How would you measure your own success after 90 days?"
+      ],
+      "red_flags": [
+        "Planning to redesign everything in the first month",
+        "No mention of learning from people",
+        "No link to the team's priorities"
+      ],
+      "labs": []
+    },
+    {
+      "id": "IV-PRJ-016",
+      "category": "projects",
+      "level": "entry",
+      "kind": "technical",
+      "question": "How have you set up delegated administration so help desk staff can do their job without full admin rights?",
+      "listen_for": [
+        "Starts from the least-privileged built-in role for the task",
+        "Scopes the role to groups, apps or an administrative unit",
+        "Uses custom roles with resource sets where built-in roles are too broad",
+        "Knows who can assign admin roles",
+        "Reviews admin assignments regularly"
+      ],
+      "model_answer": "In my practice environment I worked through two delegation labs. In the Okta lab I matched each task to the smallest standard role: Help Desk Administrator for password resets and unlocks, Group Membership Administrator for adding people to groups, Application Administrator for apps, and Read-only Administrator for reporting. Several of these roles can be limited to specific groups or apps. Where no standard role fit, I built a custom role: chosen permissions, a resource set such as users in one group, and an assignee. I also learned that only a Super Administrator can assign admin roles. In the Microsoft Entra lab I picked the least-privileged role for each task and then the smallest scope, such as an administrative unit for one region's users, and saw that some roles, like Conditional Access Administrator, can only be assigned tenant-wide. I would review these assignments in every access review.",
+      "follow_ups": [
+        "What is a restricted management administrative unit?",
+        "Why should the help desk not reset administrators' passwords?"
+      ],
+      "red_flags": [
+        "Giving the help desk Super Administrator or Global Administrator",
+        "Not scoping roles",
+        "Never reviewing admin assignments"
+      ],
+      "labs": [
+        35,
+        37
+      ]
+    }
+  ]
+}
