@@ -77,7 +77,7 @@
    "id": "D4-006",
    "objective": "4.1",
    "topic": "Provisioning Triggers",
-   "stem": "A Helpdesk user needs an Active Directory account disabled immediately while HR finishes paperwork. What can trigger this directly?",
+   "stem": "An administrator needs an Active Directory account disabled immediately while HR finishes paperwork. What can trigger this directly?",
    "choices": [
     "Editing the source's account schema",
     "Running an entitlement aggregation",
@@ -373,13 +373,13 @@
    "topic": "Source Provisioning Components",
    "stem": "Which of these is NOT needed for a role to provision an entitlement automatically to an Active Directory source?",
    "choices": [
-    "An access profile that contains the entitlement",
+    "The entitlement aggregated from the source",
     "A source with provisioning enabled",
-    "A role that includes the access profile",
+    "A role that grants the entitlement, directly or through an access profile",
     "A certification campaign that includes the role"
    ],
    "answer": "A certification campaign that includes the role",
-   "explanation": "Automated provisioning needs a provisioning-enabled source, the entitlement in an access profile and the profile in a role. Certifications review access but are not part of granting it."
+   "explanation": "Automated provisioning needs a provisioning-enabled source, an aggregated entitlement and a role that grants it. Certifications review access but are not part of granting it."
   },
   {
    "id": "D4-028",
@@ -502,7 +502,7 @@
    "pairs": [
     {
      "item": "On-premises Active Directory reached through a VA",
-     "match": "Direct connector"
+     "match": "Direct connector through a VA cluster"
     },
     {
      "item": "Disconnected app whose changes the IT team handles as ServiceNow tickets",
@@ -514,7 +514,7 @@
     },
     {
      "item": "Cloud app with a SaaS connector",
-     "match": "Direct SaaS connector"
+     "match": "SaaS connector running in SailPoint's cloud"
     }
    ],
    "targets_extra": [
@@ -545,17 +545,17 @@
    "stem": "A role must grant an Active Directory group automatically. Which TWO items must be in place on the source side?",
    "choices": [
     "Provisioning enabled on the source",
-    "An access profile containing the group",
+    "The group aggregated as an entitlement from the source",
     "A certification campaign on the source",
     "A search subscription on the group",
     "Enable Debugging on the cluster"
    ],
    "answers": [
     "Provisioning enabled on the source",
-    "An access profile containing the group"
+    "The group aggregated as an entitlement from the source"
    ],
    "select": 2,
-   "explanation": "The source must allow provisioning and the entitlement must be in an access profile that the role includes. Certifications and subscriptions are governance and reporting features."
+   "explanation": "The source must allow provisioning and the group must exist in ISC as an aggregated entitlement before a role can grant it. Certifications and subscriptions are governance and reporting features."
   },
   {
    "id": "D4-036",

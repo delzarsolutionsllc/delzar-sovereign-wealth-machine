@@ -110,6 +110,7 @@ class PersonResult:
     outcome: str
     attributes: dict = field(default_factory=dict)
     errors: dict = field(default_factory=dict)       # attribute -> transform error message
+    traces: dict = field(default_factory=dict)       # attribute -> how the transform reached its value
     findings: list[str] = field(default_factory=list)
     reasons: list[str] = field(default_factory=list)
 
@@ -224,7 +225,8 @@ def evaluate(node, ctx: Ctx, implicit=None):
                 ctx.trace.append(f"firstValid: value {i + 1} errored and was skipped (ignoreErrors): {e}")
                 continue
             if out is not None:
-                ctx.trace.append(f"firstValid: value {i + 1} is the first non-null")
+                if i:
+                    ctx.trace.append(f"firstValid: value {i + 1} is the first non-null (earlier values are null)")
                 return out
         return None
     if ttype in ("lower", "upper", "trim"):
@@ -482,12 +484,14 @@ def choose_profile(group: list[dict], profiles: list[dict]) -> tuple[dict | None
 # --------------------------------------------------------------------------- #
 # Part 3 — mappings, required attributes, uniqueness (3.2)
 # --------------------------------------------------------------------------- #
-def compute_attributes(group: list[dict], profile: dict, cfg: dict) -> tuple[dict, dict, list[str]]:
-    """Evaluate the profile's mappings in order. Returns (attributes, errors, trace)."""
+def compute_attributes(group: list[dict], profile: dict, cfg: dict) -> tuple[dict, dict, dict]:
+    """Evaluate the profile's mappings in order. Returns (attributes, errors, traces per attribute)."""
     ctx = Ctx({a.get("source"): (a.get("attributes") or {}) for a in group}, {}, cfg)
     errors: dict[str, str] = {}
+    traces: dict[str, list[str]] = {}
     for attr, m in (profile.get("mappings") or {}).items():
         m = m or {}
+        ctx.trace = []
         implicit = None
         if m.get("source"):
             acct = ctx.accounts.get(m["source"]) or {}
@@ -497,7 +501,9 @@ def compute_attributes(group: list[dict], profile: dict, cfg: dict) -> tuple[dic
             ctx.identity[attr] = _str(evaluate(m["transform"], ctx, implicit)) if m.get("transform") else implicit
         except TransformError as e:
             errors[attr] = str(e)
-    return ctx.identity, errors, ctx.trace
+        if ctx.trace:
+            traces[attr] = list(ctx.trace)
+    return ctx.identity, errors, traces
 
 
 def _blank(v) -> bool:
@@ -516,7 +522,7 @@ def evaluate_people(data: dict, cfg: dict) -> list[PersonResult]:
                                         reasons=reasons))
             continue
         main = next(a for a in g if a.get("source") == prof["authoritative_source"])
-        attrs, errors, trace = compute_attributes(g, prof, cfg)
+        attrs, errors, traces = compute_attributes(g, prof, cfg)
         found: list[tuple[str, str]] = [("TRANSFORM_ERROR", f"{k}: {v}") for k, v in errors.items()]
         mapped = prof.get("mappings") or {}
         for attr, why in cfg["required_attributes"].items():
@@ -533,8 +539,9 @@ def evaluate_people(data: dict, cfg: dict) -> list[PersonResult]:
                           f"{prof.get('name')} ({', '.join(states) or 'none defined'})"))
         found.sort(key=lambda f: prec.index(f[0]))
         outcome = found[0][0] if found else "OK"
+        notes = [f"{k}: {t}" for k, ts in traces.items() for t in ts if k not in errors]
         results.append(PersonResult(main.get("id", ids[0]), ids, srcs, prof.get("name"), outcome, attrs, errors,
-                                    [f for f, _ in found], reasons + [r for _, r in found] + trace))
+                                    traces, [f for f, _ in found], reasons + [r for _, r in found] + notes))
     # Uniqueness: uid must be unique across all identities from any identity profile.
     seen: dict[str, str] = {}
     for r in results:

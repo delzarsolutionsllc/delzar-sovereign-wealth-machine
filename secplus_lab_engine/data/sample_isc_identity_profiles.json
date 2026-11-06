@@ -1,0 +1,668 @@
+{
+  "_description": "Cobalt Ridge Example Ltd (fictional) is onboarding its HR sources into SailPoint Identity Security Cloud: employees from a Workday-style HR system, contractors from a CSV file, interns from a tracker spreadsheet and an old payroll database that is not authoritative. Three identity profiles, 16 accounts and 7 transform tests to check before go-live.",
+  "sources": [
+    {
+      "name": "Workday HR",
+      "type": "HR (Workday-style)",
+      "correlation_attribute": "WORK_EMAIL"
+    },
+    {
+      "name": "Contractor CSV",
+      "type": "Delimited file",
+      "correlation_attribute": "email"
+    },
+    {
+      "name": "Intern Tracker",
+      "type": "Delimited file",
+      "correlation_attribute": "email"
+    },
+    {
+      "name": "Legacy Payroll",
+      "type": "JDBC (not authoritative)",
+      "correlation_attribute": "email"
+    },
+    {
+      "name": "Corp AD",
+      "type": "Active Directory",
+      "correlation_attribute": "mail"
+    }
+  ],
+  "identity_profiles": [
+    {
+      "name": "Contractors",
+      "authoritative_source": "Contractor CSV",
+      "priority": 20,
+      "sign_in": {
+        "method": "USERNAME_PASSWORD",
+        "block_access_from": [
+          "off_network"
+        ],
+        "network_ranges": []
+      },
+      "lifecycle_states": [
+        "active",
+        "inactive"
+      ],
+      "mappings": {
+        "uid": {
+          "source": "Contractor CSV",
+          "attribute": "contractor_id",
+          "transform": {
+            "type": "lower",
+            "attributes": {
+              "input": {
+                "type": "replace",
+                "attributes": {
+                  "regex": "[^A-Za-z0-9]",
+                  "replacement": ""
+                }
+              }
+            }
+          }
+        },
+        "email": {
+          "source": "Contractor CSV",
+          "attribute": "email",
+          "transform": {
+            "type": "lower"
+          }
+        },
+        "firstname": {
+          "source": "Contractor CSV",
+          "attribute": "first_name"
+        },
+        "lastname": {
+          "source": "Contractor CSV",
+          "attribute": "last_name"
+        },
+        "department": {
+          "transform": {
+            "type": "static",
+            "attributes": {
+              "value": "Contractor ($vendor)",
+              "vendor": {
+                "type": "accountAttribute",
+                "attributes": {
+                  "sourceName": "Contractor CSV",
+                  "attributeName": "vendor"
+                }
+              }
+            }
+          }
+        },
+        "endDate": {
+          "source": "Contractor CSV",
+          "attribute": "end_date",
+          "transform": {
+            "type": "dateFormat",
+            "attributes": {
+              "inputFormat": "yyyy-MM-dd",
+              "outputFormat": "ISO8601"
+            }
+          }
+        },
+        "cloudLifecycleState": {
+          "transform": {
+            "type": "conditional",
+            "attributes": {
+              "expression": "$status eq A",
+              "positiveCondition": "active",
+              "negativeCondition": "inactive",
+              "status": {
+                "type": "accountAttribute",
+                "attributes": {
+                  "sourceName": "Contractor CSV",
+                  "attributeName": "status"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Employees",
+      "authoritative_source": "Workday HR",
+      "priority": 10,
+      "sign_in": {
+        "method": "DIRECTORY_CONNECTION",
+        "authentication_source": "Corp AD"
+      },
+      "lifecycle_states": [
+        "prehire",
+        "active",
+        "inactive"
+      ],
+      "mappings": {
+        "uid": {
+          "transform": {
+            "type": "lower",
+            "attributes": {
+              "input": {
+                "type": "concat",
+                "attributes": {
+                  "values": [
+                    {
+                      "type": "substring",
+                      "attributes": {
+                        "begin": 0,
+                        "end": 1,
+                        "input": {
+                          "type": "accountAttribute",
+                          "attributes": {
+                            "sourceName": "Workday HR",
+                            "attributeName": "FIRST_NAME"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "trim",
+                      "attributes": {
+                        "input": {
+                          "type": "accountAttribute",
+                          "attributes": {
+                            "sourceName": "Workday HR",
+                            "attributeName": "LAST_NAME"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "email": {
+          "transform": {
+            "type": "firstValid",
+            "attributes": {
+              "values": [
+                {
+                  "type": "accountAttribute",
+                  "attributes": {
+                    "sourceName": "Workday HR",
+                    "attributeName": "WORK_EMAIL"
+                  }
+                },
+                {
+                  "type": "concat",
+                  "attributes": {
+                    "values": [
+                      {
+                        "type": "identityAttribute",
+                        "attributes": {
+                          "name": "uid"
+                        }
+                      },
+                      "@cobaltridge.example"
+                    ]
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "firstname": {
+          "transform": {
+            "type": "firstValid",
+            "attributes": {
+              "values": [
+                {
+                  "type": "accountAttribute",
+                  "attributes": {
+                    "sourceName": "Workday HR",
+                    "attributeName": "PREFERRED_NAME"
+                  }
+                },
+                {
+                  "type": "accountAttribute",
+                  "attributes": {
+                    "sourceName": "Workday HR",
+                    "attributeName": "FIRST_NAME"
+                  }
+                }
+              ]
+            }
+          }
+        },
+        "lastname": {
+          "source": "Workday HR",
+          "attribute": "LAST_NAME",
+          "transform": {
+            "type": "trim"
+          }
+        },
+        "department": {
+          "source": "Workday HR",
+          "attribute": "DEPT_CODE",
+          "transform": {
+            "type": "lookup",
+            "attributes": {
+              "table": {
+                "FIN": "Finance",
+                "ENG": "Engineering",
+                "OPS": "Operations",
+                "default": "Unassigned"
+              }
+            }
+          }
+        },
+        "startDate": {
+          "source": "Workday HR",
+          "attribute": "HIRE_DATE",
+          "transform": {
+            "type": "dateFormat",
+            "attributes": {
+              "inputFormat": "PEOPLE_SOFT",
+              "outputFormat": "ISO8601"
+            }
+          }
+        },
+        "phone": {
+          "source": "Workday HR",
+          "attribute": "WORK_PHONE",
+          "transform": {
+            "type": "e164phone",
+            "attributes": {
+              "defaultRegion": "US"
+            }
+          }
+        },
+        "cloudLifecycleState": {
+          "source": "Workday HR",
+          "attribute": "WORKER_STATUS",
+          "transform": {
+            "type": "lookup",
+            "attributes": {
+              "table": {
+                "Active": "active",
+                "Pre-hire": "prehire",
+                "Terminated": "inactive",
+                "Leave": "leave"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Interns",
+      "authoritative_source": "Intern Tracker",
+      "priority": 30,
+      "sign_in": {
+        "method": "DIRECTORY_CONNECTION",
+        "authentication_source": "Campus LDAP"
+      },
+      "lifecycle_states": [
+        "active",
+        "inactive"
+      ],
+      "mappings": {
+        "uid": {
+          "source": "Intern Tracker",
+          "attribute": "intern_id",
+          "transform": {
+            "type": "lower"
+          }
+        },
+        "email": {
+          "source": "Intern Tracker",
+          "attribute": "email"
+        },
+        "firstname": {
+          "source": "Intern Tracker",
+          "attribute": "first_name",
+          "transform": {
+            "type": "titleCase"
+          }
+        },
+        "lastname": {
+          "source": "Intern Tracker",
+          "attribute": "last_name"
+        },
+        "cloudLifecycleState": {
+          "transform": {
+            "type": "static",
+            "attributes": {
+              "value": "active"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "accounts": [
+    {
+      "id": "W01",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W10231",
+        "FIRST_NAME": "Amara",
+        "LAST_NAME": "Okoye",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "amara.okoye@cobaltridge.example",
+        "DEPT_CODE": "FIN",
+        "HIRE_DATE": "03/14/2019",
+        "WORK_PHONE": "(312) 555-0142",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W02",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W10388",
+        "FIRST_NAME": "Jordan",
+        "LAST_NAME": "Park",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "jordan.park@cobaltridge.example",
+        "DEPT_CODE": "ENG",
+        "HIRE_DATE": "09/01/2021",
+        "WORK_PHONE": "312-555-0177",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W03",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W11902",
+        "FIRST_NAME": "Jamie",
+        "LAST_NAME": "Park",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "jamie.park@cobaltridge.example",
+        "DEPT_CODE": "OPS",
+        "HIRE_DATE": "10/20/2026",
+        "WORK_PHONE": "312.555.0119",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W04",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W11455",
+        "FIRST_NAME": "Luis",
+        "LAST_NAME": "Ferreira",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "luis.ferreira@cobaltridge.example",
+        "DEPT_CODE": "ENG",
+        "HIRE_DATE": "06/02/2024",
+        "WORK_PHONE": "(312) 555-0160",
+        "WORKER_STATUS": "Pending"
+      }
+    },
+    {
+      "id": "W05",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W11590",
+        "FIRST_NAME": "Mei",
+        "LAST_NAME": "Tanaka",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "",
+        "DEPT_CODE": "LEG",
+        "HIRE_DATE": "01/08/2025",
+        "WORK_PHONE": "(312) 555-0133",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W06",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W11611",
+        "FIRST_NAME": "Noor",
+        "LAST_NAME": "   ",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "noor.haddad@cobaltridge.example",
+        "DEPT_CODE": "FIN",
+        "HIRE_DATE": "02/17/2025",
+        "WORK_PHONE": "(312) 555-0105",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W07",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W11720",
+        "FIRST_NAME": "Priya",
+        "LAST_NAME": "Raman",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "priya.raman@cobaltridge.example",
+        "DEPT_CODE": "ENG",
+        "HIRE_DATE": "11/03/2026",
+        "WORK_PHONE": "(312) 555-0128",
+        "WORKER_STATUS": "Pre-hire"
+      }
+    },
+    {
+      "id": "W08",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W10045",
+        "FIRST_NAME": "Robert",
+        "LAST_NAME": "Lind",
+        "PREFERRED_NAME": "Bobby",
+        "WORK_EMAIL": "robert.lind@cobaltridge.example",
+        "DEPT_CODE": "OPS",
+        "HIRE_DATE": "07/15/2016",
+        "WORK_PHONE": "ext. 2201",
+        "WORKER_STATUS": "Active"
+      }
+    },
+    {
+      "id": "W09",
+      "source": "Workday HR",
+      "attributes": {
+        "WORKER_ID": "W10777",
+        "FIRST_NAME": "Kai",
+        "LAST_NAME": "Moreau",
+        "PREFERRED_NAME": "",
+        "WORK_EMAIL": "kai.moreau@cobaltridge.example",
+        "DEPT_CODE": "FIN",
+        "HIRE_DATE": "04/04/2020",
+        "WORK_PHONE": "(312) 555-0191",
+        "WORKER_STATUS": "Leave"
+      }
+    },
+    {
+      "id": "C01",
+      "source": "Contractor CSV",
+      "attributes": {
+        "contractor_id": "C-1017",
+        "first_name": "Priya",
+        "last_name": "Raman",
+        "email": "PRIYA.RAMAN@cobaltridge.example",
+        "vendor": "Northwind Staffing",
+        "end_date": "2026-10-31",
+        "status": "T"
+      }
+    },
+    {
+      "id": "C02",
+      "source": "Contractor CSV",
+      "attributes": {
+        "contractor_id": "C-1042",
+        "first_name": "Diego",
+        "last_name": "Santos",
+        "email": "diego.santos@cobaltridge.example",
+        "vendor": "Bluebird Talent",
+        "end_date": "2027-03-31",
+        "status": "A"
+      }
+    },
+    {
+      "id": "C03",
+      "source": "Contractor CSV",
+      "attributes": {
+        "contractor_id": "C-1088",
+        "first_name": "Elif",
+        "last_name": "Kaya",
+        "email": "elif.kaya@cobaltridge.example",
+        "vendor": "Northwind Staffing",
+        "end_date": "2027-01-15",
+        "status": "a"
+      }
+    },
+    {
+      "id": "C04",
+      "source": "Contractor CSV",
+      "attributes": {
+        "contractor_id": "C-1093",
+        "first_name": "Tomas",
+        "last_name": "",
+        "email": "tomas.novak@cobaltridge.example",
+        "vendor": "Granite Partners",
+        "end_date": "2026-12-31",
+        "status": "A"
+      }
+    },
+    {
+      "id": "C05",
+      "source": "Contractor CSV",
+      "attributes": {
+        "contractor_id": "C-1101",
+        "first_name": "Sven",
+        "last_name": "Berg",
+        "email": "sven.berg@cobaltridge.example",
+        "vendor": "Bluebird Talent",
+        "end_date": "2027-06-30",
+        "status": ""
+      }
+    },
+    {
+      "id": "I01",
+      "source": "Intern Tracker",
+      "attributes": {
+        "intern_id": "INT-207",
+        "first_name": "ana",
+        "last_name": "Lopes",
+        "email": "ana.lopes@cobaltridge.example"
+      }
+    },
+    {
+      "id": "L01",
+      "source": "Legacy Payroll",
+      "attributes": {
+        "emp_no": "4410",
+        "name": "Hugo Brandt",
+        "email": "hugo.brandt@cobaltridge.example"
+      }
+    }
+  ],
+  "transform_tests": [
+    {
+      "id": "X1",
+      "description": "employee number without prefix and leading zeros",
+      "transform": {
+        "type": "replace",
+        "attributes": {
+          "regex": "^0+",
+          "replacement": "",
+          "input": {
+            "type": "substring",
+            "attributes": {
+              "begin": 4
+            }
+          }
+        }
+      },
+      "input": "EMP-00731"
+    },
+    {
+      "id": "X2",
+      "description": "office city, cleaned and upper-case",
+      "transform": {
+        "type": "upper",
+        "attributes": {
+          "input": {
+            "type": "trim"
+          }
+        }
+      },
+      "input": "  Rotterdam "
+    },
+    {
+      "id": "X3",
+      "description": "termination check written with ne",
+      "transform": {
+        "type": "conditional",
+        "attributes": {
+          "expression": "$s ne T",
+          "positiveCondition": "active",
+          "negativeCondition": "inactive",
+          "s": {
+            "type": "static",
+            "attributes": {
+              "value": "A"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "X4",
+      "description": "first valid of a failing lookup and a static fallback",
+      "transform": {
+        "type": "firstValid",
+        "attributes": {
+          "ignoreErrors": true,
+          "values": [
+            {
+              "type": "lookup",
+              "attributes": {
+                "table": {
+                  "NL": "Netherlands"
+                }
+              }
+            },
+            {
+              "type": "static",
+              "attributes": {
+                "value": "Unknown country"
+              }
+            }
+          ]
+        }
+      },
+      "input": "PT"
+    },
+    {
+      "id": "X5",
+      "description": "contract end date to PeopleSoft format",
+      "transform": {
+        "type": "dateFormat",
+        "attributes": {
+          "inputFormat": "yyyy-MM-dd",
+          "outputFormat": "PEOPLE_SOFT"
+        }
+      },
+      "input": "2026-03-02"
+    },
+    {
+      "id": "X6",
+      "description": "manager uid read before it is calculated",
+      "transform": {
+        "type": "identityAttribute",
+        "attributes": {
+          "name": "managerUid"
+        }
+      },
+      "identity": {
+        "uid": "jdoe"
+      }
+    },
+    {
+      "id": "X7",
+      "description": "work phone to E.164",
+      "transform": {
+        "type": "e164phone"
+      },
+      "input": "(312) 555-0142"
+    }
+  ]
+}

@@ -311,7 +311,9 @@ def sod_conflicts(current: set[str], adding: set[str], cfg: dict) -> list[str]:
     for pol in cfg.get("sod_policies", []):
         left, right = set(pol["left"]) & after, set(pol["right"]) & after
         if left and right and (left | right) & (adding - current):
-            out.append(f"SoD policy '{pol['name']}': {', '.join(sorted(left))} + {', '.join(sorted(right))}")
+            owner = pol.get("violation_owner")
+            out.append(f"SoD policy '{pol['name']}': {', '.join(sorted(left))} + {', '.join(sorted(right))}"
+                       + (f" (violation owner {owner})" if owner else ""))
     return out
 
 
@@ -479,7 +481,7 @@ def evaluate_request(req: dict, data: dict, cfg: dict, access: dict | None = Non
     for s in schemes:
         base = s.split(":", 1)[0] if isinstance(s, str) else None
         if base not in allowed or (base == "governance_group" and not s.split(":", 1)[1:]):
-            return done("DENIED", "reviewer_type", f"reviewer type '{s}' is not valid for a {kind.replace('_', ' ')} "
+            return done("DENIED", "reviewer_type", f"reviewer type '{s}' is not valid for {'an access profile' if kind == 'access_profile' else 'a role'} "
                         f"({', '.join(allowed)}): cannot route the approval (deny by default)")
     conflicts = sod_conflicts(held["entitlements"], item_entitlements(item, kind, data), cfg)
     if conflicts and cfg.get("sod_action") == "block":
@@ -557,9 +559,11 @@ def run_demo(ui, policies: dict, data: dict) -> dict:
         rows.append([role.get("id"), role.get("name", ""), mem, "yes" if role.get("enabled") else "no",
                      len(got), ", ".join(got) or "-"])
     ui.table("Roles", ["Role", "Name", "Membership", "Enabled", "Assigned", "Identities"], rows)
+    for role in data.get("roles", []):
+        if not role.get("enabled", False):
+            ui.bullet(f"{role.get('id')}: disabled, so it assigns nobody even where the criteria match", style="dim")
     for r in roles:
-        if r.outcome == "NOT_ASSIGNED" and any(k in " ".join(r.reasons) for k in ("missing", "disabled",
-                                                                                    "cannot be evaluated")):
+        if r.outcome == "NOT_ASSIGNED" and any(k in " ".join(r.reasons) for k in ("missing", "cannot be evaluated")):
             ui.bullet(f"{r.identity} {names.get(r.identity, '')} / {r.role}: NOT_ASSIGNED: {'; '.join(r.reasons)}",
                       style="yellow")
     ui.section("Step 2 — What the roles grant (role → access profile → entitlement)")
@@ -719,18 +723,22 @@ def build_challenges(policies: dict, data: dict) -> list:
 FIRST = ["Ana", "Bo", "Cyra", "Dario", "Esme", "Femi", "Gus", "Hana", "Ivo", "Jada", "Kenji", "Lior", "Maya",
          "Nils", "Oona", "Pavel", "Rhea", "Sami", "Tova", "Uri"]
 LAST = ["Achebe", "Berg", "Costa", "Dahl", "Eze", "Fontaine", "Gupta", "Holm", "Ito", "Jensen", "Kovac", "Laine"]
-TEAMS = [("Finance", "ERP", "Invoice Entry"), ("Procurement", "SRM", "Purchase Order Entry")]
+TEAMS = ["Finance", "Procurement", "Accounting"]
 
 
 def generate_scenario(rng, policies: dict) -> dict:
-    dept, src, ap_name = rng.choice(TEAMS)
+    cfg = policies["isc_access_requests"]
+    dept = rng.choice(TEAMS)
+    sod = cfg["sod_policies"][0]                       # the scenario's supplier/payment pair uses the policy's names
+    vendor_ent, pay_ent = sod["left"][0], sod["right"][0]
+    src = vendor_ent.split(":")[0]
     loc = rng.choice(["US", "DE", "CA"])
     other_loc = rng.choice([x for x in ("UK", "FR", "MX") if x != loc])
     names = rng.sample(FIRST, 15)
     base = rng.randint(2, 7) * 1000
-    ids = [f"E{base + i}" for i in range(1, 16)]
+    ids = [f"E{base + i}" for i in range(1, 15)] + [cfg["escalation"]["fallback_approver"]]
     (staff, other, sales, it_eng, mgr, sales_mgr, it_mgr, exec_, ctrl, it_admin, leaver, blank, mkt, sec,
-     desk) = ids
+     _desk) = ids
 
     def person(i, d, title, manager, location=loc, state="active", wr=None):
         p = {"id": ids[i], "name": f"{names[i]} {rng.choice(LAST)}", "department": d, "title": title,
@@ -754,13 +762,13 @@ def generate_scenario(rng, policies: dict) -> dict:
     ]
     p = src
     aps = [
-        {"id": f"AP-{p}-ENTRY", "name": f"{src} {ap_name}", "source": src, "owner": ctrl, "enabled": True,
+        {"id": f"AP-{p}-ENTRY", "name": f"{src} Entry", "source": src, "owner": ctrl, "enabled": True,
          "requestable": True, "entitlements": [f"{p}:ENTRY", f"{p}:VIEW"], "approval_schemes": ["manager", "owner"]},
         {"id": f"AP-{p}-PAY", "name": f"{src} Payment Release", "source": src, "owner": ctrl, "enabled": True,
-         "requestable": True, "entitlements": [f"{p}:PAY"],
+         "requestable": True, "entitlements": [pay_ent],
          "approval_schemes": ["manager", "owner", "governance_group:Controls"]},
         {"id": f"AP-{p}-VENDOR", "name": f"{src} Supplier Maintenance", "source": src, "owner": exec_,
-         "enabled": True, "requestable": True, "entitlements": [f"{p}:VENDOR"], "approval_schemes": ["manager", "owner"]},
+         "enabled": True, "requestable": True, "entitlements": [vendor_ent], "approval_schemes": ["manager", "owner"]},
         {"id": "AP-CRM-SALES", "name": "CRM Sales User", "source": "CRM", "owner": sales_mgr, "enabled": True,
          "requestable": True, "entitlements": ["CRM:EDIT"], "approval_schemes": ["manager"]},
         {"id": "AP-CRM-EXPORT", "name": "CRM Export", "source": "CRM", "owner": sales_mgr, "enabled": True,
@@ -824,8 +832,7 @@ def generate_scenario(rng, policies: dict) -> dict:
         ("APPROVED", blank, blank, "AP-AD-VPN", {}, 0),
         ("DENIED", staff, staff, "AP-HR-COMP", {"manager": "approve"}, 0),
         ("DENIED", sales, it_eng, "AP-AD-VPN", {}, 0),
-        ("DENIED", blank, blank, f"AP-{p}-PAY", {}, policies["isc_access_requests"]["timeout_days"] +
-         rng.randint(0, 5)),
+        ("DENIED", blank, blank, f"AP-{p}-PAY", {}, cfg["timeout_days"] + rng.randint(0, 5)),
     ]
     order = list(range(len(reqs)))
     rng.shuffle(order)
@@ -833,6 +840,4 @@ def generate_scenario(rng, policies: dict) -> dict:
                  "decisions": reqs[k][4], "days_pending": reqs[k][5]} for n, k in enumerate(order)]
     return {"_description": f"Generated Identity Security Cloud scenario: {dept} in {loc}, {len(requests)} requests.",
             "identities": identities, "access_profiles": aps, "roles": roles,
-            "governance_groups": {"Controls": [ctrl, exec_]}, "requests": requests,
-            "_fallback_note": f"fallback approver in the policy is {policies['isc_access_requests']['escalation']['fallback_approver']}; "
-                              f"this scenario's governance desk is {desk}"}
+            "governance_groups": {"Controls": [ctrl, exec_]}, "requests": requests}

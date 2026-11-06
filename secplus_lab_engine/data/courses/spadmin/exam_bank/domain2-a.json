@@ -860,15 +860,15 @@
    "id": "D2-057",
    "objective": "2.2",
    "topic": "VA Logs and Debugging",
-   "stem": "An admin turned on Enable Debugging last week and forgot about it. A month later the cluster shows a Disk Warning. What is the MOST likely link?",
+   "stem": "A cluster shows a Disk Warning. Over the past weeks the team has repeatedly raised log levels to troubleshoot sources. What should the administrator check FIRST?",
    "choices": [
-    "Debug mode disables log rotation forever",
-    "Debugging stores account data on the VA disk",
-    "Debugging encrypts each log file, which doubles its size on the VA's disk over time",
-    "Verbose logs filled the disk while debugging stayed on or was turned on again"
+    "Whether the cluster time zone matches the sources",
+    "Whether the sources have too many entitlements for the VA to store on disk",
+    "Whether the keyPassphrase differs between the VAs",
+    "Whether debugging or raised log levels are still producing verbose logs"
    ],
-   "answer": "Verbose logs filled the disk while debugging stayed on or was turned on again",
-   "explanation": "SailPoint's first recommendation for a Disk Warning is to check log levels and turn off debug logging that is not needed, since verbose logs use the most space. Debug mode does not store identity data."
+   "answer": "Whether debugging or raised log levels are still producing verbose logs",
+   "explanation": "SailPoint's first recommendation for a Disk Warning is to check log levels and turn off debug logging that is not needed, since verbose logs use the most space. The VA does not store a source's entitlements on its disk."
   },
   {
    "id": "D2-058",
