@@ -1,0 +1,989 @@
+{
+  "_description": "Halden Example Co (fictional): the morning review of last night's Identity Security Cloud aggregations across eight sources: Active Directory and an LDAP directory and Web Services portal on the HQ virtual appliance cluster, a JDBC finance database on a branch cluster, two SaaS connectors and two delimited file (CSV) sources. Covers every aggregation, diff and correlation outcome, the delete threshold (one source exactly at it), an empty CSV upload and three different source errors.",
+  "tenant": {
+    "name": "Halden Example Co"
+  },
+  "identities": [
+    {
+      "id": "ID-1001",
+      "name": "Ava Lindqvist",
+      "attributes": {
+        "employeeId": "E1001",
+        "email": "ava.lindqvist@halden.example",
+        "department": "Sales"
+      }
+    },
+    {
+      "id": "ID-1002",
+      "name": "Ben Okoro",
+      "attributes": {
+        "employeeId": "E1002",
+        "email": "ben.okoro@halden.example",
+        "department": "IT"
+      }
+    },
+    {
+      "id": "ID-1003",
+      "name": "Chloe Marsh",
+      "attributes": {
+        "employeeId": "E1003",
+        "email": "chloe.marsh@halden.example",
+        "department": "Finance"
+      }
+    },
+    {
+      "id": "ID-1004",
+      "name": "Dev Patel",
+      "attributes": {
+        "employeeId": "E1004",
+        "email": "dev.patel@halden.example",
+        "department": "IT"
+      }
+    },
+    {
+      "id": "ID-1005",
+      "name": "Elif Kaya",
+      "attributes": {
+        "employeeId": "E1005",
+        "email": "elif.kaya@halden.example",
+        "department": "HR"
+      }
+    },
+    {
+      "id": "ID-1006",
+      "name": "Finn Byrne",
+      "attributes": {
+        "employeeId": "E1006",
+        "email": "finn.byrne@halden.example",
+        "department": "Sales"
+      }
+    },
+    {
+      "id": "ID-1007",
+      "name": "Grace Ito",
+      "attributes": {
+        "employeeId": "E1007",
+        "email": "grace.ito@halden.example",
+        "department": "IT"
+      }
+    },
+    {
+      "id": "ID-1008",
+      "name": "Hamid Rahimi",
+      "attributes": {
+        "employeeId": "E1008",
+        "email": "hamid.rahimi@halden.example",
+        "department": "Ops"
+      }
+    },
+    {
+      "id": "ID-1009",
+      "name": "Ines Duarte",
+      "attributes": {
+        "employeeId": "E1009",
+        "email": "ines.duarte@halden.example",
+        "department": "Finance"
+      }
+    },
+    {
+      "id": "ID-1010",
+      "name": "Jon Moreau",
+      "attributes": {
+        "employeeId": "E1010",
+        "email": "jon.moreau@halden.example",
+        "department": "Ops"
+      }
+    },
+    {
+      "id": "ID-1011",
+      "name": "Kai Nakamura",
+      "attributes": {
+        "employeeId": "E1011",
+        "email": "kai.nakamura@halden.example",
+        "department": "Sales"
+      }
+    },
+    {
+      "id": "ID-1012",
+      "name": "Kai Nakamura (rehire, old record)",
+      "attributes": {
+        "employeeId": "E1012",
+        "email": "kai.nakamura@halden.example",
+        "department": "Sales"
+      }
+    },
+    {
+      "id": "ID-1013",
+      "name": "Lena Vogel",
+      "attributes": {
+        "employeeId": "E1013",
+        "email": "lena.vogel@halden.example",
+        "department": "Finance"
+      }
+    }
+  ],
+  "sources": [
+    {
+      "id": "SRC-AD",
+      "name": "Corporate Active Directory",
+      "connector": "active_directory",
+      "cluster": {
+        "name": "HQ cluster",
+        "status": "HEALTHY"
+      },
+      "authoritative": false,
+      "aggregation": {
+        "mode": "full"
+      },
+      "delete_threshold_percent": 10,
+      "correlation": [
+        {
+          "account_attribute": "employeeID",
+          "identity_attribute": "employeeId"
+        },
+        {
+          "account_attribute": "mail",
+          "identity_attribute": "email"
+        }
+      ],
+      "previous_accounts": [
+        {
+          "id": "alindqvist",
+          "attributes": {
+            "employeeID": "E1001",
+            "mail": "ava.lindqvist@halden.example",
+            "department": "Sales",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1001"
+        },
+        {
+          "id": "bokoro",
+          "attributes": {
+            "employeeID": "E1002",
+            "mail": "ben.okoro@halden.example",
+            "department": "IT",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1002"
+        },
+        {
+          "id": "cmarsh",
+          "attributes": {
+            "employeeID": "E1003",
+            "mail": "chloe.marsh@halden.example",
+            "department": "Finance",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1003"
+        },
+        {
+          "id": "dpatel",
+          "attributes": {
+            "employeeID": "E1004",
+            "mail": "dev.patel@halden.example",
+            "department": "IT",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1004"
+        },
+        {
+          "id": "ekaya",
+          "attributes": {
+            "employeeID": "E1005",
+            "mail": "elif.kaya@halden.example",
+            "department": "HR",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1005"
+        },
+        {
+          "id": "fbyrne",
+          "attributes": {
+            "employeeID": "E1006",
+            "mail": "finn.byrne@halden.example",
+            "department": "Sales",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1006"
+        },
+        {
+          "id": "gito",
+          "attributes": {
+            "employeeID": "E1007",
+            "mail": "grace.ito@halden.example",
+            "department": "IT",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1007"
+        },
+        {
+          "id": "hrahimi",
+          "attributes": {
+            "employeeID": "E1008",
+            "mail": "hamid.rahimi@halden.example",
+            "department": "Ops",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1008"
+        },
+        {
+          "id": "iduarte",
+          "attributes": {
+            "employeeID": "E1009",
+            "mail": "ines.duarte@halden.example",
+            "department": "Finance",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Staff",
+            "CN=VPN Users"
+          ],
+          "identity": "ID-1009"
+        },
+        {
+          "id": "svc-backup",
+          "manually_correlated": true,
+          "identity": "ID-1007",
+          "attributes": {
+            "description": "Backup service account",
+            "disabled": false
+          },
+          "entitlements": [
+            "CN=Backup Operators"
+          ]
+        }
+      ],
+      "result": {
+        "status": "ok",
+        "accounts": [
+          {
+            "id": "alindqvist",
+            "attributes": {
+              "employeeID": "E1001",
+              "mail": "ava.lindqvist@halden.example",
+              "department": "Sales",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "bokoro",
+            "attributes": {
+              "employeeID": "E1002",
+              "mail": "ben.okoro@halden.example",
+              "department": "IT",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "cmarsh",
+            "attributes": {
+              "employeeID": "E1003",
+              "mail": "chloe.marsh@halden.example",
+              "department": "Treasury",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "dpatel",
+            "attributes": {
+              "employeeID": "E1004",
+              "mail": "dev.patel@halden.example",
+              "department": "IT",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users",
+              "CN=Payroll Readers"
+            ]
+          },
+          {
+            "id": "ekaya",
+            "attributes": {
+              "employeeID": "E1005",
+              "mail": "elif.kaya@halden.example",
+              "department": "HR",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "gito",
+            "attributes": {
+              "employeeID": "E1007",
+              "mail": "grace.ito@halden.example",
+              "department": "IT",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "hrahimi",
+            "attributes": {
+              "employeeID": "E1008",
+              "mail": "hamid.rahimi@halden.example",
+              "department": "Ops",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "iduarte",
+            "attributes": {
+              "employeeID": "E1009",
+              "mail": "ines.duarte@halden.example",
+              "department": "Finance",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "svc-backup",
+            "attributes": {
+              "description": "Backup service account",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Backup Operators"
+            ]
+          },
+          {
+            "id": "lvogel",
+            "attributes": {
+              "employeeID": "",
+              "mail": "lena.vogel@halden.example",
+              "department": "Finance",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff",
+              "CN=VPN Users"
+            ]
+          },
+          {
+            "id": "test-admin",
+            "attributes": {
+              "description": "temporary test account",
+              "disabled": false
+            },
+            "entitlements": [
+              "CN=Staff"
+            ]
+          }
+        ]
+      },
+      "previous_entitlements": [
+        "CN=Staff",
+        "CN=VPN Users",
+        "CN=Backup Operators",
+        "CN=Old Print Ops"
+      ],
+      "entitlement_result": {
+        "status": "ok",
+        "entitlements": [
+          "CN=Staff",
+          "CN=VPN Users",
+          "CN=Backup Operators",
+          "CN=Payroll Readers"
+        ]
+      }
+    },
+    {
+      "id": "SRC-CHAT",
+      "name": "Team Chat (SaaS)",
+      "connector": "saas",
+      "aggregation": {
+        "mode": "optimized"
+      },
+      "delete_threshold_percent": 10,
+      "correlation": [
+        {
+          "account_attribute": "email",
+          "identity_attribute": "email"
+        }
+      ],
+      "manual_correlations": {
+        "ops-bot": "ID-1008"
+      },
+      "previous_accounts": [
+        {
+          "id": "ava.lindqvist@halden.example",
+          "attributes": {
+            "email": "ava.lindqvist@halden.example",
+            "displayName": "Ava Lindqvist",
+            "role": "Member"
+          },
+          "identity": "ID-1001"
+        },
+        {
+          "id": "ben.okoro@halden.example",
+          "attributes": {
+            "email": "ben.okoro@halden.example",
+            "displayName": "Ben Okoro",
+            "role": "Member"
+          },
+          "identity": "ID-1002"
+        },
+        {
+          "id": "chloe.marsh@halden.example",
+          "attributes": {
+            "email": "chloe.marsh@halden.example",
+            "displayName": "Chloe Marsh",
+            "role": "Member"
+          },
+          "identity": "ID-1003"
+        },
+        {
+          "id": "dev.patel@halden.example",
+          "attributes": {
+            "email": "dev.patel@halden.example",
+            "displayName": "Dev Patel",
+            "role": "Member"
+          },
+          "identity": "ID-1004"
+        },
+        {
+          "id": "kai.nakamura@halden.example",
+          "attributes": {
+            "email": "kai.nakamura@halden.example",
+            "displayName": "Kai Nakamura",
+            "role": "Member"
+          }
+        },
+        {
+          "id": "ops-bot",
+          "attributes": {
+            "email": "",
+            "displayName": "Ops bot",
+            "role": "Bot"
+          }
+        }
+      ],
+      "result": {
+        "status": "ok",
+        "accounts": [
+          {
+            "id": "ava.lindqvist@halden.example",
+            "attributes": {
+              "email": "ava.lindqvist@halden.example",
+              "displayName": "Ava Lindqvist",
+              "role": "Member"
+            }
+          },
+          {
+            "id": "ben.okoro@halden.example",
+            "attributes": {
+              "email": "ben.okoro@halden.example",
+              "displayName": "Benjamin Okoro",
+              "role": "Member"
+            }
+          },
+          {
+            "id": "chloe.marsh@halden.example",
+            "attributes": {
+              "email": "chloe.marsh@halden.example",
+              "displayName": "Chloe Marsh",
+              "role": "Member"
+            }
+          },
+          {
+            "id": "dev.patel@halden.example",
+            "attributes": {
+              "email": "dev.patel@halden.example",
+              "displayName": "Dev Patel",
+              "role": "Member"
+            }
+          },
+          {
+            "id": "kai.nakamura@halden.example",
+            "attributes": {
+              "email": "kai.nakamura@halden.example",
+              "displayName": "Kai Nakamura",
+              "role": "Workspace Admin"
+            }
+          },
+          {
+            "id": "ops-bot",
+            "attributes": {
+              "email": "",
+              "displayName": "Ops bot",
+              "role": "Bot"
+            }
+          },
+          {
+            "id": "riley@northgate-partner.example",
+            "attributes": {
+              "email": "riley@northgate-partner.example",
+              "displayName": "Riley (contractor)",
+              "role": "Guest"
+            }
+          }
+        ]
+      },
+      "previous_entitlements": [
+        "Member",
+        "Workspace Admin",
+        "Guest"
+      ],
+      "entitlement_result": {
+        "status": "ok",
+        "entitlements": [
+          "Member",
+          "Workspace Admin",
+          "Guest",
+          "Workspace Owner"
+        ]
+      }
+    },
+    {
+      "id": "SRC-FINDB",
+      "name": "Finance ledger database",
+      "connector": "jdbc",
+      "cluster": {
+        "name": "Branch office cluster",
+        "status": "UNREACHABLE"
+      },
+      "delete_threshold_percent": 10,
+      "previous_accounts": [
+        {
+          "id": "chloem",
+          "identity": "ID-1003",
+          "attributes": {
+            "emp_no": "E1003"
+          }
+        },
+        {
+          "id": "inesd",
+          "identity": "ID-1009",
+          "attributes": {
+            "emp_no": "E1009"
+          }
+        },
+        {
+          "id": "lenav",
+          "identity": "ID-1013",
+          "attributes": {
+            "emp_no": "E1013"
+          }
+        },
+        {
+          "id": "elifk",
+          "identity": "ID-1005",
+          "attributes": {
+            "emp_no": "E1005"
+          }
+        }
+      ],
+      "result": {
+        "status": "error",
+        "error": "va_unreachable",
+        "message": "no virtual appliance in the cluster responded within the timeout"
+      }
+    },
+    {
+      "id": "SRC-BADGE",
+      "name": "Badge system (CSV)",
+      "connector": "delimited_file",
+      "delete_threshold_percent": 100,
+      "previous_accounts": [
+        {
+          "id": "B-1001",
+          "identity": "ID-1001",
+          "attributes": {
+            "badge": "B-1001"
+          }
+        },
+        {
+          "id": "B-1002",
+          "identity": "ID-1002",
+          "attributes": {
+            "badge": "B-1002"
+          }
+        },
+        {
+          "id": "B-1004",
+          "identity": "ID-1004",
+          "attributes": {
+            "badge": "B-1004"
+          }
+        },
+        {
+          "id": "B-1006",
+          "identity": "ID-1006",
+          "attributes": {
+            "badge": "B-1006"
+          }
+        },
+        {
+          "id": "B-1007",
+          "identity": "ID-1007",
+          "attributes": {
+            "badge": "B-1007"
+          }
+        },
+        {
+          "id": "B-1010",
+          "identity": "ID-1010",
+          "attributes": {
+            "badge": "B-1010"
+          }
+        }
+      ],
+      "result": {
+        "status": "ok",
+        "accounts": []
+      }
+    },
+    {
+      "id": "SRC-LDAP",
+      "name": "Engineering LDAP",
+      "connector": "ldap",
+      "cluster": {
+        "name": "HQ cluster",
+        "status": "HEALTHY"
+      },
+      "aggregation": {
+        "mode": "full"
+      },
+      "delete_threshold_percent": 20,
+      "correlation": [
+        {
+          "account_attribute": "employeeNumber",
+          "identity_attribute": "employeeId"
+        }
+      ],
+      "previous_accounts": [
+        {
+          "id": "uid=bokoro",
+          "identity": "ID-1002",
+          "attributes": {
+            "employeeNumber": "E1002",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=dpatel",
+          "identity": "ID-1004",
+          "attributes": {
+            "employeeNumber": "E1004",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=gito",
+          "identity": "ID-1007",
+          "attributes": {
+            "employeeNumber": "E1007",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=jmoreau",
+          "identity": "ID-1010",
+          "attributes": {
+            "employeeNumber": "E1010",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=hrahimi",
+          "identity": "ID-1008",
+          "attributes": {
+            "employeeNumber": "E1008",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=ekaya",
+          "identity": "ID-1005",
+          "attributes": {
+            "employeeNumber": "E1005",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=iduarte",
+          "identity": "ID-1009",
+          "attributes": {
+            "employeeNumber": "E1009",
+            "shell": "/bin/bash"
+          }
+        },
+        {
+          "id": "uid=cmarsh",
+          "identity": "ID-1003",
+          "attributes": {
+            "employeeNumber": "E1003",
+            "shell": "/bin/bash"
+          }
+        }
+      ],
+      "result": {
+        "status": "ok",
+        "accounts": [
+          {
+            "id": "uid=bokoro",
+            "attributes": {
+              "employeeNumber": "E1002",
+              "shell": "/bin/bash"
+            }
+          },
+          {
+            "id": "uid=dpatel",
+            "attributes": {
+              "employeeNumber": "E1004",
+              "shell": "/bin/bash"
+            }
+          },
+          {
+            "id": "uid=gito",
+            "attributes": {
+              "employeeNumber": "E1007",
+              "shell": "/bin/bash"
+            }
+          },
+          {
+            "id": "uid=jmoreau",
+            "attributes": {
+              "employeeNumber": "E1010",
+              "shell": "/bin/bash"
+            }
+          },
+          {
+            "id": "uid=hrahimi",
+            "attributes": {
+              "employeeNumber": "E1008",
+              "shell": "/bin/bash"
+            }
+          }
+        ]
+      },
+      "previous_entitlements": [
+        "cn=developers",
+        "cn=sre"
+      ],
+      "entitlement_result": {
+        "status": "ok",
+        "entitlements": [
+          "cn=developers",
+          "cn=sre"
+        ]
+      }
+    },
+    {
+      "id": "SRC-VIDEO",
+      "name": "Video Meetings (SaaS)",
+      "connector": "saas",
+      "delete_threshold_percent": 10,
+      "previous_accounts": [
+        {
+          "id": "ava.lindqvist@halden.example",
+          "identity": "ID-1001",
+          "attributes": {
+            "email": "ava.lindqvist@halden.example"
+          }
+        },
+        {
+          "id": "ben.okoro@halden.example",
+          "identity": "ID-1002",
+          "attributes": {
+            "email": "ben.okoro@halden.example"
+          }
+        },
+        {
+          "id": "chloe.marsh@halden.example",
+          "identity": "ID-1003",
+          "attributes": {
+            "email": "chloe.marsh@halden.example"
+          }
+        },
+        {
+          "id": "dev.patel@halden.example",
+          "identity": "ID-1004",
+          "attributes": {
+            "email": "dev.patel@halden.example"
+          }
+        }
+      ],
+      "result": {
+        "status": "error",
+        "error": "auth_failure",
+        "message": "401 Unauthorized: the API token has expired"
+      }
+    },
+    {
+      "id": "SRC-PORTAL",
+      "name": "Contractor portal",
+      "connector": "web_services",
+      "cluster": {
+        "name": "HQ cluster",
+        "status": "HEALTHY"
+      },
+      "delete_threshold_percent": 10,
+      "previous_accounts": [
+        {
+          "id": "c-riley",
+          "attributes": {
+            "email": "riley@northgate-partner.example"
+          }
+        }
+      ],
+      "result": {
+        "status": "error",
+        "error": "connection_failure",
+        "message": "connection timed out after 60 seconds (portal.halden.example:443)"
+      }
+    },
+    {
+      "id": "SRC-TRAIN",
+      "name": "Training records (CSV)",
+      "connector": "delimited_file",
+      "correlation": [
+        {
+          "account_attribute": "employeeNumber",
+          "identity_attribute": "employeeId"
+        }
+      ],
+      "previous_accounts": [
+        {
+          "id": "T-1001",
+          "identity": "ID-1001",
+          "attributes": {
+            "employeeNumber": "E1001",
+            "course": "Security basics",
+            "completed": "2026-03-01"
+          }
+        },
+        {
+          "id": "T-1003",
+          "identity": "ID-1003",
+          "attributes": {
+            "employeeNumber": "E1003",
+            "course": "Security basics",
+            "completed": "2026-03-01"
+          }
+        },
+        {
+          "id": "T-1005",
+          "identity": "ID-1005",
+          "attributes": {
+            "employeeNumber": "E1005",
+            "course": "Security basics",
+            "completed": "2026-03-01"
+          }
+        },
+        {
+          "id": "T-1008",
+          "identity": "ID-1008",
+          "attributes": {
+            "employeeNumber": "E1008",
+            "course": "Security basics",
+            "completed": "2026-03-01"
+          }
+        }
+      ],
+      "result": {
+        "status": "ok",
+        "accounts": [
+          {
+            "id": "T-1001",
+            "attributes": {
+              "employeeNumber": "E1001",
+              "course": "Security basics",
+              "completed": "2026-03-01"
+            }
+          },
+          {
+            "id": "T-1003",
+            "attributes": {
+              "employeeNumber": "E1003",
+              "course": "Security basics",
+              "completed": "2026-03-01"
+            }
+          },
+          {
+            "id": "T-1005",
+            "attributes": {
+              "employeeNumber": "E1005",
+              "course": "Security basics",
+              "completed": "2026-10-30"
+            }
+          },
+          {
+            "id": "T-1008",
+            "attributes": {
+              "employeeNumber": "E1008",
+              "course": "Security basics",
+              "completed": "2026-03-01"
+            }
+          },
+          {
+            "id": "T-9999",
+            "attributes": {
+              "employeeNumber": "E9999",
+              "course": "Security basics",
+              "completed": "2026-10-31"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,687 @@
+{
+  "_description": "Juniper Ridge Example Co, a fictional distributor, runs SailPoint Identity Security Cloud with four sources: Active Directory (direct connector), a Finance ERP (Web Services connector), a Badge System handled through a ServiceNow service desk integration, and a read-only Legacy Payroll flat file. Twelve changes from today's identity refresh and access requests need a provisioning plan. Each change is planned against this starting snapshot.",
+  "sources": {
+    "Active Directory": {
+      "connector": "Active Directory",
+      "provisioning": true,
+      "owner": "it-identity@juniperridge.example",
+      "create_policy": [
+        {
+          "name": "sAMAccountName",
+          "type": "generator",
+          "generator": "unique_username",
+          "pattern": "$(firstname).$(lastname)$(uniqueCounter)",
+          "max_uniqueness_checks": 5,
+          "required": true
+        },
+        {
+          "name": "mail",
+          "type": "identityAttribute",
+          "attribute": "email",
+          "required": true
+        },
+        {
+          "name": "department",
+          "type": "identityAttribute",
+          "attribute": "department",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "static",
+          "value": "Provisioned by Identity Security Cloud"
+        },
+        {
+          "name": "password",
+          "type": "generator",
+          "generator": "password",
+          "required": true
+        }
+      ],
+      "existing_usernames": [
+        "maria.lopez",
+        "maria.lopez1",
+        "raj.patel",
+        "dana.kim",
+        "ivan.novak",
+        "adm-ivan.novak",
+        "grace.chen",
+        "tom.reyes"
+      ],
+      "attribute_sync": {
+        "department": "department",
+        "title": "title"
+      }
+    },
+    "Finance ERP": {
+      "connector": "Web Services",
+      "provisioning": true,
+      "owner": "erp-admins@juniperridge.example",
+      "create_policy": [
+        {
+          "name": "userName",
+          "type": "identityAttribute",
+          "attribute": "email",
+          "required": true
+        },
+        {
+          "name": "costCenter",
+          "type": "identityAttribute",
+          "attribute": "costCenter",
+          "required": true
+        },
+        {
+          "name": "userType",
+          "type": "static",
+          "value": "EMPLOYEE",
+          "required": true
+        }
+      ],
+      "attribute_sync": {
+        "department": "dept"
+      }
+    },
+    "Badge System": {
+      "connector": "Delimited File",
+      "provisioning": false,
+      "service_desk": "ServiceNow Service Desk",
+      "owner": "facilities@juniperridge.example",
+      "create_policy": [
+        {
+          "name": "badgeHolder",
+          "type": "identityAttribute",
+          "attribute": "displayName",
+          "required": true
+        },
+        {
+          "name": "site",
+          "type": "static",
+          "value": "HQ"
+        }
+      ],
+      "attribute_sync": {
+        "title": "title"
+      }
+    },
+    "Legacy Payroll": {
+      "connector": "Delimited File",
+      "provisioning": false,
+      "read_only": true,
+      "owner": "payroll-lead@juniperridge.example",
+      "create_policy": [
+        {
+          "name": "employeeId",
+          "type": "identityAttribute",
+          "attribute": "employeeNumber",
+          "required": true
+        }
+      ],
+      "attribute_sync": {
+        "title": "jobTitle"
+      }
+    }
+  },
+  "access_profiles": {
+    "AP-AD-Finance": {
+      "source": "Active Directory",
+      "entitlements": [
+        "CN=Finance-Share",
+        "CN=VPN-Users"
+      ],
+      "requestable": false
+    },
+    "AP-AD-Sales": {
+      "source": "Active Directory",
+      "entitlements": [
+        "CN=Sales-Team",
+        "CN=VPN-Users"
+      ],
+      "requestable": false
+    },
+    "AP-AD-VPN": {
+      "source": "Active Directory",
+      "entitlements": [
+        "CN=VPN-Users"
+      ],
+      "requestable": true
+    },
+    "AP-ERP-AP-Clerk": {
+      "source": "Finance ERP",
+      "entitlements": [
+        "AP Invoice Entry"
+      ],
+      "requestable": false
+    },
+    "AP-ERP-Approver": {
+      "source": "Finance ERP",
+      "entitlements": [
+        "Invoice Approver"
+      ],
+      "requestable": true
+    },
+    "AP-Badge-HQ": {
+      "source": "Badge System",
+      "entitlements": [
+        "HQ Floor 3"
+      ],
+      "requestable": true
+    },
+    "AP-Payroll-View": {
+      "source": "Legacy Payroll",
+      "entitlements": [
+        "Payroll Read"
+      ],
+      "requestable": false
+    },
+    "AP-Old-CRM": {
+      "source": "Old CRM",
+      "entitlements": [
+        "CRM User"
+      ],
+      "requestable": true
+    }
+  },
+  "roles": {
+    "Finance Analyst": {
+      "criteria": [
+        {
+          "attribute": "department",
+          "equals": "Finance"
+        }
+      ],
+      "requestable": false,
+      "access_profiles": [
+        "AP-AD-Finance",
+        "AP-ERP-AP-Clerk",
+        "AP-Payroll-View"
+      ]
+    },
+    "Sales Rep": {
+      "criteria": [
+        {
+          "attribute": "department",
+          "equals": "Sales"
+        }
+      ],
+      "requestable": false,
+      "access_profiles": [
+        "AP-AD-Sales",
+        "AP-Badge-HQ"
+      ]
+    },
+    "Facilities Access": {
+      "criteria": [],
+      "requestable": true,
+      "access_profiles": [
+        "AP-Badge-HQ"
+      ]
+    }
+  },
+  "identities": {
+    "maria.lopez": {
+      "attributes": {
+        "firstname": "Maria",
+        "lastname": "Lopez",
+        "displayName": "Maria Lopez",
+        "email": "maria.lopez@juniperridge.example",
+        "department": "Finance",
+        "title": "Analyst",
+        "costCenter": null,
+        "employeeNumber": "E20431",
+        "cloudLifecycleState": "prehire"
+      },
+      "roles": [],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {}
+    },
+    "raj.patel": {
+      "attributes": {
+        "firstname": "Raj",
+        "lastname": "Patel",
+        "displayName": "Raj Patel",
+        "email": "raj.patel@juniperridge.example",
+        "department": "Finance",
+        "title": "Analyst",
+        "costCenter": "CC-410",
+        "employeeNumber": "E18822",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [
+        "Finance Analyst"
+      ],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "raj.patel",
+            "enabled": true,
+            "entitlements": [
+              "CN=Finance-Share",
+              "CN=VPN-Users"
+            ],
+            "attributes": {
+              "department": "Finance",
+              "title": "Analyst"
+            }
+          }
+        ],
+        "Finance ERP": [
+          {
+            "id": "erp-1188",
+            "enabled": true,
+            "entitlements": [
+              "AP Invoice Entry"
+            ],
+            "attributes": {
+              "dept": "Finance"
+            }
+          }
+        ],
+        "Legacy Payroll": [
+          {
+            "id": "P-18822",
+            "enabled": true,
+            "entitlements": [
+              "Payroll Read"
+            ],
+            "attributes": {
+              "jobTitle": "Analyst"
+            }
+          }
+        ]
+      }
+    },
+    "dana.kim": {
+      "attributes": {
+        "firstname": "Dana",
+        "lastname": "Kim",
+        "displayName": "Dana Kim",
+        "email": "dana.kim@juniperridge.example",
+        "department": "Sales",
+        "title": "Account Executive",
+        "costCenter": "CC-410",
+        "employeeNumber": "E15530",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [
+        "Sales Rep"
+      ],
+      "access_profiles": [
+        "AP-AD-VPN"
+      ],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "dana.kim",
+            "enabled": true,
+            "entitlements": [
+              "CN=Sales-Team",
+              "CN=VPN-Users"
+            ],
+            "attributes": {
+              "department": "Sales",
+              "title": "Account Executive"
+            }
+          }
+        ],
+        "Badge System": [
+          {
+            "id": "badge-5530",
+            "enabled": true,
+            "entitlements": [
+              "HQ Floor 3"
+            ],
+            "attributes": {}
+          }
+        ]
+      }
+    },
+    "ivan.novak": {
+      "attributes": {
+        "firstname": "Ivan",
+        "lastname": "Novak",
+        "displayName": "Ivan Novak",
+        "email": "ivan.novak@juniperridge.example",
+        "department": "IT",
+        "title": "Systems Engineer",
+        "costCenter": "CC-410",
+        "employeeNumber": "E14102",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "ivan.novak",
+            "enabled": true,
+            "entitlements": [],
+            "attributes": {
+              "department": "IT"
+            }
+          },
+          {
+            "id": "adm-ivan.novak",
+            "enabled": true,
+            "entitlements": [
+              "CN=Server-Admins"
+            ],
+            "attributes": {
+              "department": "IT"
+            }
+          }
+        ]
+      }
+    },
+    "grace.chen": {
+      "attributes": {
+        "firstname": "Grace",
+        "lastname": "Chen",
+        "displayName": "Grace Chen",
+        "email": "grace.chen@juniperridge.example",
+        "department": "Finance",
+        "title": "Senior Accountant",
+        "costCenter": "CC-410",
+        "employeeNumber": "E11907",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [
+        "Finance Analyst"
+      ],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "grace.chen",
+            "enabled": true,
+            "entitlements": [
+              "CN=Finance-Share",
+              "CN=VPN-Users"
+            ],
+            "attributes": {
+              "department": "Finance"
+            }
+          }
+        ],
+        "Finance ERP": [
+          {
+            "id": "erp-1190",
+            "enabled": false,
+            "entitlements": [
+              "AP Invoice Entry"
+            ],
+            "attributes": {
+              "dept": "Finance"
+            }
+          }
+        ],
+        "Badge System": [
+          {
+            "id": "badge-1907",
+            "enabled": true,
+            "entitlements": [
+              "HQ Floor 3"
+            ],
+            "attributes": {}
+          }
+        ],
+        "Legacy Payroll": [
+          {
+            "id": "P-11907",
+            "enabled": true,
+            "entitlements": [
+              "Payroll Read"
+            ],
+            "attributes": {
+              "jobTitle": "Senior Accountant"
+            }
+          }
+        ]
+      }
+    },
+    "tom.reyes": {
+      "attributes": {
+        "firstname": "Tom",
+        "lastname": "Reyes",
+        "displayName": "Tom Reyes",
+        "email": "tom.reyes@juniperridge.example",
+        "department": "Finance",
+        "title": "Analyst",
+        "costCenter": "CC-410",
+        "employeeNumber": "E16644",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [
+        "Finance Analyst"
+      ],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "tom.reyes",
+            "enabled": true,
+            "entitlements": [
+              "CN=Finance-Share",
+              "CN=VPN-Users"
+            ],
+            "attributes": {
+              "department": "Finance",
+              "title": "Analyst"
+            }
+          }
+        ],
+        "Finance ERP": [
+          {
+            "id": "erp-1664",
+            "enabled": true,
+            "entitlements": [
+              "AP Invoice Entry"
+            ],
+            "attributes": {
+              "dept": "Finance"
+            }
+          }
+        ],
+        "Legacy Payroll": [
+          {
+            "id": "P-16644",
+            "enabled": true,
+            "entitlements": [
+              "Payroll Read"
+            ],
+            "attributes": {
+              "jobTitle": "Analyst"
+            }
+          }
+        ]
+      }
+    },
+    "lena.hart": {
+      "attributes": {
+        "firstname": "Lena",
+        "lastname": "Hart",
+        "displayName": "Lena Hart",
+        "email": "lena.hart@juniperridge.example",
+        "department": "Sales",
+        "title": "Sales Associate",
+        "costCenter": "CC-410",
+        "employeeNumber": "E19075",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {}
+    },
+    "sam.ortiz": {
+      "attributes": {
+        "firstname": "Sam",
+        "lastname": "Ortiz",
+        "displayName": "Sam Ortiz",
+        "email": "sam.ortiz@juniperridge.example",
+        "department": "Facilities",
+        "title": "Facilities Coordinator",
+        "costCenter": "CC-410",
+        "employeeNumber": "E20518",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {}
+    },
+    "omar.haddad": {
+      "attributes": {
+        "firstname": "Omar",
+        "lastname": "Haddad",
+        "displayName": "Omar Haddad",
+        "email": "omar.haddad@juniperridge.example",
+        "department": "Operations",
+        "title": "Operations Manager",
+        "costCenter": "CC-410",
+        "employeeNumber": "E13360",
+        "cloudLifecycleState": "active"
+      },
+      "roles": [],
+      "access_profiles": [],
+      "direct_entitlements": [],
+      "accounts": {
+        "Active Directory": [
+          {
+            "id": "omar.haddad",
+            "enabled": true,
+            "entitlements": [
+              "CN=VPN-Users"
+            ],
+            "attributes": {
+              "department": "Operations"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "changes": [
+    {
+      "id": "C01",
+      "identity": "maria.lopez",
+      "type": "role_assigned",
+      "role": "Finance Analyst",
+      "via": "membership_criteria",
+      "note": "New hire in Finance picked up by the identity refresh"
+    },
+    {
+      "id": "C02",
+      "identity": "raj.patel",
+      "type": "access_profile_granted",
+      "access_profile": "AP-ERP-Approver",
+      "via": "access_request",
+      "note": "Approved access request",
+      "execution": {
+        "Finance ERP": "HTTP 403 Forbidden: the ERP integration user cannot assign the Invoice Approver role"
+      }
+    },
+    {
+      "id": "C03",
+      "identity": "dana.kim",
+      "type": "role_removed",
+      "role": "Sales Rep",
+      "via": "admin",
+      "note": "Mover: leaving Sales"
+    },
+    {
+      "id": "C04",
+      "identity": "ivan.novak",
+      "type": "access_profile_granted",
+      "access_profile": "AP-AD-VPN",
+      "via": "access_request",
+      "note": "Request submitted without choosing an account"
+    },
+    {
+      "id": "C05",
+      "identity": "ivan.novak",
+      "type": "access_profile_granted",
+      "access_profile": "AP-AD-VPN",
+      "via": "access_request",
+      "account_selection": {
+        "Active Directory": "ivan.novak"
+      },
+      "note": "Same request resubmitted with the standard account selected"
+    },
+    {
+      "id": "C06",
+      "identity": "grace.chen",
+      "type": "lifecycle_state",
+      "to": "inactive",
+      "note": "Leaver: HR end date reached"
+    },
+    {
+      "id": "C07",
+      "identity": "tom.reyes",
+      "type": "attribute_change",
+      "attribute": "title",
+      "value": "Senior Analyst",
+      "note": "Promotion recorded in HR"
+    },
+    {
+      "id": "C08",
+      "identity": "tom.reyes",
+      "type": "attribute_change",
+      "attribute": "department",
+      "value": "Finance",
+      "note": "HR re-sent the same department value"
+    },
+    {
+      "id": "C09",
+      "identity": "lena.hart",
+      "type": "role_assigned",
+      "role": "Finance Analyst",
+      "via": "membership_criteria",
+      "note": "Identity refresh evaluated Finance criteria"
+    },
+    {
+      "id": "C10",
+      "identity": "omar.haddad",
+      "type": "role_assigned",
+      "role": "Finance Analyst",
+      "via": "access_request",
+      "note": "User tried to request a birthright role"
+    },
+    {
+      "id": "C11",
+      "identity": "sam.ortiz",
+      "type": "role_assigned",
+      "role": "Facilities Access",
+      "via": "access_request",
+      "note": "Approved request for a building badge"
+    },
+    {
+      "id": "C12",
+      "identity": "sam.ortiz",
+      "type": "access_profile_granted",
+      "access_profile": "AP-Old-CRM",
+      "via": "access_request",
+      "note": "Access profile still points at a decommissioned source"
+    },
+    {
+      "id": "C13",
+      "identity": "omar.haddad",
+      "type": "grant_admin_rights",
+      "via": "admin",
+      "note": "Script sent an action ISC does not have"
+    },
+    {
+      "id": "C14",
+      "identity": "dana.kim",
+      "type": "lifecycle_state",
+      "to": "leave",
+      "note": "Parental leave starts"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "isc_certifications_sod": {
+    "_note": "Simplified model of SailPoint Identity Security Cloud (ISC) certification campaigns and Separation of Duties (SoD) policies, following SailPoint's ISC documentation as checked 2026-11-06. Keyword planning rules, the comment rule and the reassignment-reason rule are this course's own settings, not ISC defaults.",
+    "campaign_types": ["MANAGER", "SOURCE_OWNER", "SEARCH", "ROLE_COMPOSITION"],
+    "search_types": ["IDENTITIES", "ACCESS_ITEMS", "UNCORRELATED_ACCOUNTS"],
+    "planner_rules": [
+      {"subject": "role_composition", "keywords": ["role contains", "role composition", "inside the role", "what the role grants"]},
+      {"subject": "uncorrelated_accounts", "keywords": ["uncorrelated", "not linked to an identity"]},
+      {"subject": "access_items", "keywords": ["everyone who has", "who holds the", "identities that have the"]},
+      {"subject": "single_identity", "keywords": ["one identity", "single identity", "held by one"]},
+      {"subject": "identities_query", "keywords": ["search query", "found by a search", "identities whose", "identities in"]},
+      {"subject": "source", "keywords": ["source owner", "owner of the", "on the source"]},
+      {"subject": "all_identities", "keywords": ["direct reports", "manager review", "managers review", "all access"]}
+    ],
+    "no_manager_keywords": ["no manager", "without a manager", "without managers"],
+    "subject_plans": {
+      "role_composition": {"type": "ROLE_COMPOSITION", "search_type": null, "reviewer": "role owner"},
+      "uncorrelated_accounts": {"type": "SEARCH", "search_type": "UNCORRELATED_ACCOUNTS", "reviewer": "source owner"},
+      "access_items": {"type": "SEARCH", "search_type": "ACCESS_ITEMS", "reviewer": null},
+      "single_identity": {"type": "SEARCH", "search_type": "IDENTITIES", "reviewer": null},
+      "identities_query": {"type": "SEARCH", "search_type": "IDENTITIES", "reviewer": null},
+      "source": {"type": "SOURCE_OWNER", "search_type": null, "reviewer": "source owner"},
+      "all_identities": {"type": "MANAGER", "search_type": null, "reviewer": "manager"}
+    },
+    "certification": {
+      "comment_required_for": ["revoke"],
+      "require_reassign_reason": true,
+      "undecided_action_default": "REVOKE",
+      "admin_fallback": "an org admin chosen at random",
+      "remediation_by_connection": {"direct": "PROVISIONING_TASK", "flat_file": "MANUAL_WORK_ITEM"},
+      "remediation_unknown_connection": "MANUAL_WORK_ITEM",
+      "transitions": {
+        "STAGED": {"activate": "ACTIVE", "delete": "DELETED"},
+        "ACTIVE": {"complete": "COMPLETED"}
+      }
+    },
+    "sod": {
+      "include_in_flight_access": true,
+      "default_request_setting": "BLOCK",
+      "request_actions": {"BLOCK": "BLOCKED", "ALLOW": "ROUTED_TO_APPROVERS"},
+      "global_block_all": false
+    },
+    "concepts": {
+      "manager campaign": "A certification campaign in which each identity's manager reviews all of that identity's access; identities without a manager are left out.",
+      "source owner campaign": "A certification campaign in which the owner of one or more sources reviews the accounts and access on those sources.",
+      "search campaign": "A certification campaign whose contents come from a search query: identities, access items, uncorrelated accounts or machine accounts, with a reviewer you choose.",
+      "role composition campaign": "A certification campaign in which the role owner confirms what a role contains and who it is assigned to, rather than reviewing people.",
+      "sign-off": "The reviewer's final step that submits all decisions in a certification; revocations are processed after it.",
+      "remediation": "The work that removes revoked access: a provisioning task for a direct-connected source or a manual task for a flat-file source, then verified.",
+      "SoD policy": "A Separation of Duties rule made of two access lists; a human identity that holds access from both lists is in violation.",
+      "violation owner": "The person or governance group responsible for resolving violations of one SoD policy."
+    }
+  }
+}

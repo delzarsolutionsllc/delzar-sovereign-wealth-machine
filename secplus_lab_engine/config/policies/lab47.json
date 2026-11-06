@@ -1,0 +1,64 @@
+{
+  "isc_access_requests": {
+    "_note": "Simplified model of SailPoint Identity Security Cloud (ISC) roles, access profiles and access request approvals. Reviewer types, self-approval prevention, autoApprove, the missing-reviewer sequence, reminders, escalations, the fallback approver and the 90-day timeout follow SailPoint's documentation (checked 2026-11-06); the comparison rules, the escalation of governance groups and the 'block' SoD action are simplifications.",
+    "criteria": {
+      "operations": ["EQUALS", "NOT_EQUALS", "CONTAINS", "STARTS_WITH", "ENDS_WITH"],
+      "logical": ["AND", "OR"],
+      "max_depth": 3,
+      "case_insensitive": true
+    },
+    "active_lifecycle_states": ["active"],
+    "request_for_others": "managers_only",
+    "reviewer_types": {
+      "access_profile": ["manager", "owner", "governance_group"],
+      "role": ["manager", "owner", "governance_group"]
+    },
+    "default_approval_schemes": ["manager"],
+    "auto_approve": "OFF",
+    "work_reassignment_max_hops": 3,
+    "reminders": {"enabled": true, "start_after_days": 1, "frequency_days": 1, "max_reminders": 3},
+    "escalation": {
+      "enabled": true,
+      "start_after_days": 3,
+      "frequency_days": 2,
+      "chain": ["manager_of", "manager_of"],
+      "fallback_approver": "E1099"
+    },
+    "timeout_days": 90,
+    "sod_action": "flag",
+    "sod_policies": [
+      {
+        "name": "Create supplier vs release payment",
+        "left": ["ERP:VENDOR_CREATE"],
+        "right": ["ERP:AP_PAYMENT_RELEASE"],
+        "violation_owner": "E1015"
+      },
+      {
+        "name": "Approve own server changes",
+        "left": ["AD:SERVER_ADMINS"],
+        "right": ["AD:CHANGE_APPROVERS"],
+        "violation_owner": "E1015"
+      }
+    ],
+    "concepts": {
+      "entitlement": "A single permission on one source, such as membership of one group or one transaction code, aggregated into Identity Security Cloud.",
+      "access profile": "A bundle of entitlements from one source that can be requested or granted as a unit.",
+      "role": "A business-level bundle of access profiles and entitlements that matches a job and can be assigned automatically by membership criteria or requested.",
+      "membership criteria": "Rules on identity attributes, joined with AND and OR, that decide which identities a role is automatically assigned to.",
+      "governance group": "A named group of identities that can act as one reviewer, where any single member's decision completes the step.",
+      "work reassignment": "A setting an identity makes so that new approvals assigned to them during a time window go to another identity instead.",
+      "fallback approver": "The identity that receives a request when the escalation chain is exhausted or a reviewer cannot be found.",
+      "separation of duties policy": "A rule naming two sets of access that one identity must not hold together, checked when access is requested."
+    },
+    "outcome_definitions": {
+      "ASSIGNED": "The identity matches the role's membership criteria (or is on its identity list), so the role and its access are granted without a request.",
+      "NOT_ASSIGNED": "The identity does not match the role's membership, or the role is disabled or its criteria cannot be evaluated.",
+      "APPROVED": "Every reviewer level approved, so the access is provisioned.",
+      "PENDING": "A reviewer level is still waiting for a decision from the current approver.",
+      "DENIED": "A reviewer denied the request, the request timed out, or an input was unknown or not allowed (deny by default).",
+      "NOT_REQUESTABLE": "The item exists but is disabled or not marked requestable, so it cannot be requested in the Request Center.",
+      "ALREADY_HAS_ACCESS": "The recipient already holds the item, directly or through a role, so no request is created.",
+      "SOD_VIOLATION": "Granting the item would give the recipient both sides of a separation of duties policy."
+    }
+  }
+}

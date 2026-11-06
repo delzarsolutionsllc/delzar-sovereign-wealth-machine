@@ -1,0 +1,1628 @@
+{
+  "part": "Vocabulary",
+  "entries": [
+    {
+      "term": "Access item",
+      "kind": "term",
+      "definition": "General name for anything an identity can hold or request: an entitlement, an access profile, a role, or an application grouping access for request.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Access profile",
+      "kind": "term",
+      "definition": "A bundle of one or more entitlements that all come from a single source, usually made requestable with its own approval steps; unlike a role, it cannot span several sources.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Access request",
+      "kind": "term",
+      "definition": "An ask, made in Request Center or through the API, to grant or remove a role, access profile or entitlement for oneself or others, routed through configured approvers before changes happen.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Access token",
+      "kind": "term",
+      "definition": "A short-lived credential issued by an authorization server and presented as a bearer value on API calls; whoever holds it can use it until it expires.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Account",
+      "kind": "term",
+      "definition": "A record of a user's login or presence on one connected system, collected by aggregation and, once matched, linked to exactly one identity in the tenant.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Account activity",
+      "kind": "term",
+      "definition": "The record of an operation affecting accounts, such as a request, refresh, revocation or lifecycle change, listing each provisioning step and its success or failure for troubleshooting.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Account aggregation",
+      "kind": "term",
+      "definition": "The job that reads every user record and its schema attributes from a connected system, then matches each to an owner; on authoritative sources it can create new identities.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Account deletion threshold",
+      "kind": "term",
+      "definition": "A safeguard that stops an aggregation when more than a set percentage of existing accounts, 10 percent by default, would be removed, protecting against a truncated file or bad query.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Account schema",
+      "kind": "term",
+      "definition": "The definition of which attributes a system returns for each account, including the unique key and display attribute; only listed attributes are stored in the cloud, limiting data sent.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "accountAttribute transform",
+      "kind": "term",
+      "definition": "Reads a named attribute from a person's account on a specified source, optionally choosing among several accounts, as input for further data processing.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Active Directory connector",
+      "kind": "term",
+      "definition": "Integration that reads and writes Microsoft directory users and groups over LDAP from the appliance, relying on IQService for password resets, Exchange mailboxes and PowerShell native rules.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "After provisioning rule",
+      "kind": "term",
+      "definition": "Logic run once a target has processed a change; in Identity Security Cloud this is done with connector-side after-operation rules, such as an AD after-create PowerShell script via IQService, not a cloud rule.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Aggregation",
+      "kind": "term",
+      "definition": "Pulling account or group data from a connected system into the tenant on a schedule or on demand, followed by correlation and a refresh of affected identities.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "API client",
+      "kind": "term",
+      "definition": "An OAuth client registered by an administrator with chosen grant types, scopes and token lifetimes, used for system integrations that should not depend on any one person's login.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "API gateway",
+      "kind": "term",
+      "definition": "The single front door for REST calls to a tenant, at its api subdomain, which validates OAuth tokens and routes each call to the correct back-end microservice.",
+      "domain": "7",
+      "objectives": [
+        "7.1",
+        "9.2"
+      ]
+    },
+    {
+      "term": "Appliance logs",
+      "kind": "term",
+      "definition": "Files under the sailpoint user's log directory on a VA, chiefly ccg.log, examined to diagnose connection, collection and provisioning errors or to send to SailPoint support.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Application",
+      "kind": "term",
+      "definition": "A user-facing tile in Request Center that groups requestable access profiles for one system under a friendly name and icon, so people find access by business name.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Approval scheme",
+      "kind": "term",
+      "definition": "The ordered list of approvers, such as manager, owner, source owner, application owner or a governance group, that a request must pass through one after another before access is granted.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Assertion",
+      "kind": "term",
+      "definition": "A signed statement issued by the system that verified a user, telling an application who the user is and sometimes their attributes, so the application can trust the sign-in.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Asynchronous messaging",
+      "kind": "term",
+      "definition": "The design in which cloud services and appliances exchange work through queued messages that the appliance polls for outbound, so jobs and results survive brief network or service outages.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "Attribute generator rule",
+      "kind": "term",
+      "definition": "Cloud-run code called from a create or update provisioning policy to compute an account value, such as a unique username, when transforms and built-in generators cannot express the logic.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Attribute sync",
+      "kind": "term",
+      "definition": "A feature that pushes changes in identity attributes, such as a new department or surname, out to mapped account attributes on target systems so they stay consistent with authoritative data.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Audit event",
+      "kind": "term",
+      "definition": "A record of something that happened in the tenant, such as a login, access request, provisioning change or configuration edit, kept for searching during audits and troubleshooting.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Authentication",
+      "kind": "term",
+      "definition": "Proving that a user or service is who it claims to be, using passwords, keys, tokens or multiple factors, as distinct from deciding what it may do afterward.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Authoritative source",
+      "kind": "term",
+      "definition": "A system of record, usually HR, whose accounts create identities and supply core data such as name, manager and hire date; each identity profile points at exactly one.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Authorization",
+      "kind": "term",
+      "definition": "Deciding what an already-verified user or service is permitted to see or do, based on assigned rights, roles or policies; it follows proving who the caller is.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Authorization code grant",
+      "kind": "term",
+      "definition": "The OAuth 2.0 flow in which a person signs in through a browser and the application swaps the returned short-lived code for tokens, so it can act on that person's behalf.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "BeanShell",
+      "kind": "term",
+      "definition": "A lightweight Java scripting language, interpreted at runtime with Java syntax and libraries, in which most SailPoint customization code is written.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Before provisioning rule",
+      "kind": "term",
+      "definition": "Cloud-run code that inspects and modifies the provisioning plan just before it goes to the connector, for example adding a disable step or moving an account to another OU.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Beta API",
+      "kind": "term",
+      "definition": "Endpoints published under the beta path that offer newer capabilities which may change or be removed without notice, unlike the stable versioned endpoints recommended for production scripts.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Birthright access",
+      "kind": "term",
+      "definition": "Baseline access granted automatically to everyone matching broad criteria, such as an email box and directory account for all employees, usually delivered by lifecycle states or criteria-based roles.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Build map rule",
+      "kind": "term",
+      "definition": "Appliance-side code run for each row during collection from delimited-file or database systems, reshaping raw columns into the attribute map stored for each account.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Campaign filter",
+      "kind": "term",
+      "definition": "Criteria that exclude specific identities, access items or sources from a review campaign so reviewers see only relevant items and are not overloaded.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Certification Admin",
+      "kind": "term",
+      "definition": "An administrative level allowed to create, launch, manage and monitor review campaigns without wider tenant configuration rights.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Certification campaign",
+      "kind": "term",
+      "definition": "A time-boxed review in which designated reviewers confirm or revoke the access people hold, producing audit evidence; types include manager, source owner, search and role composition.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Certification reassignment",
+      "kind": "term",
+      "definition": "A reviewer forwarding selected review items to someone better placed to decide, such as a colleague who knows the system, while the campaign continues.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Certification sign-off",
+      "kind": "term",
+      "definition": "The final reviewer action that locks a campaign's decisions once every item is approved or revoked, after which revoked access is sent for removal; unsigned reviews do not remediate.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Client credentials",
+      "kind": "term",
+      "definition": "The OAuth 2.0 grant where a program trades a client ID and secret directly for an access token with no interactive sign-in, used by personal tokens and admin-created API clients.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Clock drift",
+      "kind": "term",
+      "definition": "An appliance's system time falling out of step with real time; it breaks token and TLS validation and makes the appliance appear disconnected until time synchronization is fixed.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Cloud Connector Gateway",
+      "kind": "term",
+      "definition": "The container on each appliance that runs connector code, carries out collections and account changes for the cloud, and writes the main log reviewed during troubleshooting.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Cloud rule",
+      "kind": "term",
+      "definition": "Custom code that executes inside SailPoint's cloud, such as correlation, identity attribute or before provisioning logic; it must be submitted to SailPoint for review and deployment, unlike appliance-side connector code.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "cloudLifecycleState",
+      "kind": "term",
+      "definition": "The special identity attribute, usually calculated by a transform from HR dates or status, whose value decides which employment stage a person is in and therefore which actions run.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Compliance",
+      "kind": "term",
+      "definition": "Meeting regulatory and audit obligations such as SOX, HIPAA or GDPR by proving who has access, how it was approved and that it is reviewed regularly.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "concat transform",
+      "kind": "term",
+      "definition": "Joins an ordered array of strings and nested results into one string, for instance building a display name from first name, a space and last name.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "conditional transform",
+      "kind": "term",
+      "definition": "Evaluates a simple equality expression between two values and returns one result when it is true and another when false, such as setting a flag only for one location.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "config.yaml",
+      "kind": "term",
+      "definition": "The file placed on a new appliance during setup that holds the pairing details, tenant API address and key passphrase it needs to register with its cluster.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "Configuration backup",
+      "kind": "term",
+      "definition": "A point-in-time JSON snapshot of selected tenant objects that can later be reviewed as a draft and restored or uploaded, protecting against harmful changes and supporting migrations.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Configuration hub",
+      "kind": "term",
+      "definition": "The tool for backing up, comparing and restoring tenant configuration objects such as sources, transforms, roles and workflows, and for moving them between tenants like sandbox and production.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Connector",
+      "kind": "term",
+      "definition": "The integration component that speaks a target system's protocol or API, letting the tenant read accounts and groups and perform create, modify, disable and delete operations.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Connector rule",
+      "kind": "term",
+      "definition": "Custom code that executes on the virtual appliance within a connector, such as a JDBC build map or web services after-operation step; customers upload it through the API after validation, without SailPoint review.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Correlation",
+      "kind": "term",
+      "definition": "Matching each collected account to the identity that owns it by comparing configured attribute pairs, such as employee number to employeeId, or by a cloud rule when simple comparison fails.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Correlation rule",
+      "kind": "term",
+      "definition": "Cloud-run code used during aggregation when attribute-pair matching cannot link accounts to people; it returns the identity attribute and value that identify each account's owner.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Create profile",
+      "kind": "term",
+      "definition": "The provisioning policy on a source listing which attributes, with values from identity data, transforms or generators, are set when a new account is made there.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Criteria-based role assignment",
+      "kind": "term",
+      "definition": "Access granted because an identity matches a role's conditions; when attributes change and the match ends, a later refresh removes the role and its access, unlike a requested assignment.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "dateCompare transform",
+      "kind": "term",
+      "definition": "Compares two dates with operators such as greater than or less than and returns a chosen value, often used to set employment stages from hire or termination dates.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "dateFormat transform",
+      "kind": "term",
+      "definition": "Converts a date string between formats, for example from an HR system's MM/dd/yyyy text to ISO8601, so date comparisons and lifecycle logic work reliably.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Delimited file source",
+      "kind": "term",
+      "definition": "A system whose account and group data are uploaded as CSV files rather than read live; changes for it are handed to people as manual work items.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Delta aggregation",
+      "kind": "term",
+      "definition": "Collection that retrieves only records changed since the last run, using change tracking on the target such as directory change markers; faster than a full run, which reads everything.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Direct connector",
+      "kind": "term",
+      "definition": "An integration that reads and writes the target system automatically, for example over LDAP or JDBC, usually through the virtual appliance, as opposed to file uploads or manual handling.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Disconnected source",
+      "kind": "term",
+      "definition": "Any system with no automated read and write connectivity, where updates are fulfilled by people through manual work items or helpdesk tickets rather than by a connector.",
+      "domain": "2",
+      "objectives": [
+        "2.3"
+      ]
+    },
+    {
+      "term": "Email template",
+      "kind": "term",
+      "definition": "Customizable notification content, with Velocity variables for names and links, sent for events such as approvals, campaign launches or lifecycle changes; sender address and branding can also be set.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Encryption at rest",
+      "kind": "term",
+      "definition": "Protecting stored data such as databases, file stores and backups with strong ciphers like AES-256, so that copied or stolen storage yields nothing readable without the keys.",
+      "domain": "9",
+      "objectives": [
+        "9.1"
+      ]
+    },
+    {
+      "term": "Encryption in transit",
+      "kind": "term",
+      "definition": "Protecting data moving between browsers, appliances, cloud services and target systems with TLS, so it cannot be read or altered by anyone intercepting network traffic.",
+      "domain": "9",
+      "objectives": [
+        "9.1"
+      ]
+    },
+    {
+      "term": "End step",
+      "kind": "term",
+      "definition": "The terminal node of an automation that marks its run as succeeded or failed; every branch needs one so execution history shows a clear outcome.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Entitlement",
+      "kind": "term",
+      "definition": "An access right on a connected system, such as a group, permission or license; it can be marked requestable or privileged, given an owner and description, and bundled into access profiles.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Entitlement aggregation",
+      "kind": "term",
+      "definition": "The job collecting groups, permissions and other access objects with their descriptions from a connected system, separate from collecting user records, so access can be described and assigned.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Escalation",
+      "kind": "term",
+      "definition": "Automatically moving an overdue approval to a higher-level person, usually the approver's manager or a backup, after a set number of reminders or days, so requests do not stall.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Event trigger",
+      "kind": "term",
+      "definition": "A published platform occurrence, such as identity created, identity attributes changed or aggregation completed, that subscribers like HTTP endpoints or workflows receive in order to run automation.",
+      "domain": "7",
+      "objectives": [
+        "7.2",
+        "7.3"
+      ]
+    },
+    {
+      "term": "Federation",
+      "kind": "term",
+      "definition": "A trust arrangement letting users sign in once with their home identity provider and reach applications in other domains via signed assertions, without separate passwords per app.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "firstValid transform",
+      "kind": "term",
+      "definition": "Returns the first non-null value from an ordered list of inputs, useful when an attribute may be empty on some systems and a fallback value should be used instead.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Full aggregation",
+      "kind": "term",
+      "definition": "Collection that reads every account from a connected system each time; slower than collecting only changes, but needed to detect deletions reliably and correct drift.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Generic rule",
+      "kind": "term",
+      "definition": "Cloud-run code with no fixed calling context, typically invoked from a rule-type transform when declarative operations cannot produce the needed value.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Governance group",
+      "kind": "term",
+      "definition": "A named set of identities acting together as approver or reviewer, where a decision by any one member completes the step, avoiding single points of delay.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Health check",
+      "kind": "term",
+      "definition": "Ongoing status checks reported for each appliance, cluster and connected system, such as connectivity, version and resource use, shown as healthy or unhealthy in the admin interface.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Helpdesk",
+      "kind": "term",
+      "definition": "An administrative level for support staff that can view identities and assist users, for example with password and invitation tasks, without broad configuration rights.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "High availability",
+      "kind": "term",
+      "definition": "Designing so service continues through component failure, for example several appliances per cluster spread across hosts or sites, backed by redundant SailPoint cloud services.",
+      "domain": "9",
+      "objectives": [
+        "9.1"
+      ]
+    },
+    {
+      "term": "Identity",
+      "kind": "term",
+      "definition": "A person or non-human entity tracked by the tenant, built from authoritative account data and linked to all of its accounts on other systems, carrying attributes, a lifecycle state and access.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Identity attribute",
+      "kind": "term",
+      "definition": "A named property on an identity, such as email, department, manager or cloudLifecycleState; standard ones exist by default and custom ones can be added and used in searches and criteria.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Identity attribute mapping",
+      "kind": "term",
+      "definition": "Configuration on an identity profile stating where each identity property gets its value, from a source account attribute, a transform or a rule, evaluated on every refresh.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Identity attribute rule",
+      "kind": "term",
+      "definition": "A cloud-run script that computes an identity property with custom code when a transform cannot express the logic, attached through the identity profile's mappings.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Identity profile",
+      "kind": "term",
+      "definition": "Configuration tied to one authoritative source that turns its accounts into identities, defining attribute mappings, lifecycle states and priority; each identity is governed by exactly one.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Identity profile priority",
+      "kind": "term",
+      "definition": "A number deciding which configuration governs a person who has accounts on more than one authoritative source; the higher-priority profile wins.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Identity Refresh",
+      "kind": "term",
+      "definition": "The process that recalculates attributes, lifecycle state, role membership and resulting access for identities, run after aggregations and profile changes, nightly, or on demand.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Identity Security Cloud",
+      "kind": "term",
+      "definition": "SailPoint's multi-tenant SaaS governance platform, formerly IdentityNow, run and updated by SailPoint, reaching on-premises systems through virtual appliances and limiting custom code to reviewed rules.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "identityAttribute transform",
+      "kind": "term",
+      "definition": "Returns the current value of an existing identity property, commonly used inside provisioning policies to copy identity data into new account attributes.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "IdentityIQ",
+      "kind": "term",
+      "definition": "SailPoint's customer-managed governance product, installed on the customer's own servers and broadly customizable with BeanShell, unlike the SaaS platform SailPoint runs and updates.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "IQService",
+      "kind": "term",
+      "definition": "A lightweight Windows service on a domain member server that the appliance calls for Microsoft tasks needing native APIs, such as password changes, Exchange mailboxes and PowerShell after scripts.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "JDBC connector",
+      "kind": "term",
+      "definition": "Integration for relational databases that reads accounts and groups with SQL queries through a driver on the appliance, and makes changes with SQL, stored procedures or a provision rule.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "JDBC provision rule",
+      "kind": "term",
+      "definition": "Appliance-side code invoked by the database connector to carry out account creates, updates and deletes with custom SQL or stored procedures when standard statements are not enough.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "Joiner",
+      "kind": "term",
+      "definition": "A new person entering the organization; once they appear in the system of record they receive an identity and birthright access, ideally ready on their first day.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "keyPassphrase",
+      "kind": "term",
+      "definition": "The secret set in an appliance's config.yaml that protects its private key; it must match across the cluster and be safeguarded, because losing it means re-entering source credentials.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "Least privilege",
+      "kind": "term",
+      "definition": "Giving each user or service only the minimum access needed to do its job, for only as long as needed, limiting the damage from mistakes or compromise.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Leaver",
+      "kind": "term",
+      "definition": "A person departing the organization, whose accounts must be disabled or removed promptly, typically driven by a terminated status or end date in the HR system.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Lifecycle account action",
+      "kind": "term",
+      "definition": "Setting on an employment stage that enables or disables accounts on chosen systems whenever a person enters it, for example disabling every account when status becomes terminated.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Lifecycle state",
+      "kind": "term",
+      "definition": "A named employment stage such as prehire, active or inactive, defined per identity profile, which can enable or disable accounts, grant access profiles and send emails when entered.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "lookup transform",
+      "kind": "term",
+      "definition": "Maps an input value to an output through a key-value table, such as converting department codes into department names, with a default entry for unmatched inputs.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "lower transform",
+      "kind": "term",
+      "definition": "Converts every character of an input string to lowercase, often applied to email addresses and usernames so they are formatted consistently.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Machine identity",
+      "kind": "term",
+      "definition": "A non-human actor such as a service account, bot or API client that holds access and needs an owner, reviews and lifecycle controls like a person does.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Manager certification",
+      "kind": "term",
+      "definition": "A review campaign where each manager decides whether direct reports should keep their current access; people with no manager need a fallback reviewer or are left out.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Manager correlation",
+      "kind": "term",
+      "definition": "Settings that map a source account attribute, such as a supervisor's employee ID, to an identity attribute so each person's manager is found, enabling manager approvals and manager reviews.",
+      "domain": "1",
+      "objectives": [
+        "1.2"
+      ]
+    },
+    {
+      "term": "Manual work item",
+      "kind": "term",
+      "definition": "A task assigned to a person, usually the source owner, to make a change by hand on a system that cannot be updated automatically, and then mark it complete.",
+      "domain": "2",
+      "objectives": [
+        "2.3"
+      ]
+    },
+    {
+      "term": "Membership criteria",
+      "kind": "term",
+      "definition": "Conditions on a role, built from identity attributes, account attributes or held entitlements, or a list of named identities, that decide who receives it automatically during refresh.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Microservice architecture",
+      "kind": "term",
+      "definition": "Platform design built from many small, independently deployed services, each owning one function such as search or provisioning, that talk over APIs and message queues and scale separately.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Mover",
+      "kind": "term",
+      "definition": "An existing person changing department, location or job, whose access should be adjusted to the new position while old access is removed to prevent accumulation.",
+      "domain": "1",
+      "objectives": [
+        "1.3"
+      ]
+    },
+    {
+      "term": "Multi-tenant",
+      "kind": "term",
+      "definition": "A SaaS model where many customers run on shared cloud services and infrastructure while each customer's data is tagged, logically isolated and processed separately from everyone else's.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "Multiple accounts",
+      "kind": "term",
+      "definition": "Support for one identity holding more than one account on the same source, such as standard and admin; requesters pick the target account and create profiles generate a distinct one.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Native change detection",
+      "kind": "term",
+      "definition": "A source setting that flags changes made directly on the target system outside the tenant, such as a group added by hand, so they can trigger events or workflows.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Native identity",
+      "kind": "term",
+      "definition": "The unique key an account has on its own system, such as a distinguished name or employee number, used to track and target that account.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Non-employee identity",
+      "kind": "term",
+      "definition": "A contractor, vendor, partner or other external worker whose access must be governed with defined sponsors and end dates, often lacking an HR record.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "OAuth 2.0",
+      "kind": "term",
+      "definition": "An authorization framework in which a server issues scoped access tokens to client applications, so APIs can be called without ever sharing a user's password.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "OAuth scope",
+      "kind": "term",
+      "definition": "A label limiting what an access token may do, so an API client or personal token can be granted only the specific permissions a script needs instead of everything.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "OpenID Connect",
+      "kind": "term",
+      "definition": "An identity layer on top of OAuth 2.0 that adds an ID token describing the signed-in user, widely used for modern web and mobile sign-in.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Optimized aggregation",
+      "kind": "term",
+      "definition": "Default behavior where the cloud skips processing accounts whose data is unchanged since the last collection, although the connector still reads them all, unlike a delta run.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Org Admin",
+      "kind": "term",
+      "definition": "The highest administrative level, with full control over every tenant setting, identity, source and API, so it should be limited to very few trusted people.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Orphan account",
+      "kind": "term",
+      "definition": "An account with no valid owner, often left behind after someone departs; a common audit finding that governance tools aim to detect and remove.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Pass-through authentication",
+      "kind": "term",
+      "definition": "Letting people sign in to the tenant with existing directory credentials, checked live against a connected system such as Active Directory, instead of keeping a separate SailPoint password.",
+      "domain": "1",
+      "objectives": [
+        "1.1"
+      ]
+    },
+    {
+      "term": "Personal access token",
+      "kind": "term",
+      "definition": "A client ID and secret tied to one user, inheriting that user's permissions and chosen scopes, which scripts exchange for an OAuth access token through the client credentials grant.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Policy violation",
+      "kind": "term",
+      "definition": "A detected case of someone holding conflicting access defined by a separation-of-duties rule, assigned to an owner who can remediate it or approve an exception with justification.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Preventive SoD check",
+      "kind": "term",
+      "definition": "Evaluation during an access request that shows the requester and approvers when granting an item would create a separation-of-duties conflict, before access is granted.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Privilege creep",
+      "kind": "term",
+      "definition": "Gradual buildup of unneeded access as people change jobs without old rights being removed, which mover processes and access reviews aim to prevent.",
+      "domain": "6",
+      "objectives": [
+        "6.1"
+      ]
+    },
+    {
+      "term": "Privileged entitlement",
+      "kind": "term",
+      "definition": "Access flagged as high-risk, such as domain admin group membership, so it is highlighted in reviews, easy to target with searches and given stricter approvals.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Provisioning",
+      "kind": "term",
+      "definition": "Creating, modifying, enabling, disabling or deleting accounts and access on target systems, triggered by requests, role changes, lifecycle changes, attribute sync or certification revocations.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Provisioning failure",
+      "kind": "term",
+      "definition": "An account operation that the connector or target rejected, shown with an error in account activity; common causes are bad credentials, missing required attributes or policy-generated duplicate values.",
+      "domain": "2",
+      "objectives": [
+        "2.3"
+      ]
+    },
+    {
+      "term": "Provisioning plan",
+      "kind": "term",
+      "definition": "The internal instruction set listing account and attribute operations to send to a connector for one identity; rules and policies can inspect or alter it before execution.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Provisioning policy",
+      "kind": "term",
+      "definition": "Source configuration defining which attribute values to send for an operation type such as create, update, enable or disable; the create version is the one most often configured.",
+      "domain": "2",
+      "objectives": [
+        "2.2"
+      ]
+    },
+    {
+      "term": "Proxy configuration",
+      "kind": "term",
+      "definition": "Optional appliance settings in a proxy.yaml file that route its outbound cloud traffic through a corporate web proxy, with exclusions so internal target systems are reached directly.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "reference transform",
+      "kind": "term",
+      "definition": "Calls another saved transform by its identifier and returns that result, letting common logic be defined once and reused inside many other definitions.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Remediation",
+      "kind": "term",
+      "definition": "Removal of access a reviewer revoked in a campaign, carried out automatically through a connector or as a manual work item for disconnected systems, and tracked until complete.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Reminder",
+      "kind": "term",
+      "definition": "An automated email nudging an approver or campaign reviewer who has not yet acted, sent at a configured interval until the item is decided or passed upward.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "replace transform",
+      "kind": "term",
+      "definition": "Finds text matching a regular expression in an input string and substitutes new text, such as stripping spaces, apostrophes or accented characters from names.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Request Center",
+      "kind": "term",
+      "definition": "The end-user portal where people browse and ask for access for themselves or others, follow pending requests and see their status.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Request-response trigger",
+      "kind": "term",
+      "definition": "An event subscription type where the tenant waits for the subscriber's reply and can act on it, such as an external approval decision, unlike fire-and-forget delivery that only notifies.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Requestable",
+      "kind": "term",
+      "definition": "A flag that makes an access profile, role or entitlement appear in Request Center so users can ask for it, subject to segments and approvals.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "REST API",
+      "kind": "term",
+      "definition": "The HTTP interface that exposes tenant functions as resources with JSON payloads and versioned paths such as v3 and beta, used for scripting, automation and integration with other tools.",
+      "domain": "6",
+      "objectives": [
+        "6.2"
+      ]
+    },
+    {
+      "term": "Role",
+      "kind": "term",
+      "definition": "A business-level bundle of access profiles and entitlements that may span several sources, assigned by membership criteria or request; unlike an access profile it models a job function, not one system's access.",
+      "domain": "2",
+      "objectives": [
+        "2.1"
+      ]
+    },
+    {
+      "term": "Role composition certification",
+      "kind": "term",
+      "definition": "A review campaign where role owners confirm each role still contains the right access profiles and entitlements and its criteria are still valid, rather than reviewing individual people.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Rule",
+      "kind": "term",
+      "definition": "Custom Java BeanShell code that extends behavior where configuration falls short; unlike a declarative JSON transform it is procedural, and it executes either in SailPoint's cloud or on the appliance.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "rule transform",
+      "kind": "term",
+      "definition": "A JSON definition that hands its input to a generic cloud rule and returns the code's output, used when logic is too complex for declarative operations.",
+      "domain": "10",
+      "objectives": [
+        "10.1",
+        "10.2"
+      ]
+    },
+    {
+      "term": "Rule Validator",
+      "kind": "term",
+      "definition": "SailPoint's command-line tool that scans BeanShell code for disallowed classes and risky patterns before it is uploaded or submitted, catching problems before deployment.",
+      "domain": "10",
+      "objectives": [
+        "10.2"
+      ]
+    },
+    {
+      "term": "SaaS connector",
+      "kind": "term",
+      "definition": "A cloud-hosted integration that reaches internet-facing applications straight from SailPoint's cloud with no virtual appliance, built on the newer connectivity framework.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "sailpoint user",
+      "kind": "term",
+      "definition": "The built-in Linux account used to sign in to an appliance over SSH or the console for diagnostics; its default password must be changed at first login.",
+      "domain": "4",
+      "objectives": [
+        "4.3"
+      ]
+    },
+    {
+      "term": "Sandbox tenant",
+      "kind": "term",
+      "definition": "A separate non-production instance used to build and test transforms, rules, workflows and other changes safely before promoting the configuration to the production instance.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Saved search",
+      "kind": "term",
+      "definition": "A stored query with chosen columns and filters that can be rerun from the search page and reused as the basis for scheduled email reports or search-based review campaigns.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Scheduled aggregation",
+      "kind": "term",
+      "definition": "A recurring timer on a connected system that runs its account or group collection automatically, for instance nightly, so changes reach the tenant without manual starts.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "Search certification",
+      "kind": "term",
+      "definition": "A review campaign whose population comes from a query, such as everyone holding privileged entitlements, letting administrators target a precise slice of access.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Search query",
+      "kind": "term",
+      "definition": "An Elasticsearch-style expression such as attributes.department:Finance AND NOT attributes.cloudLifecycleState:inactive, used to find identities, access items, accounts or events across the tenant.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Search subscription",
+      "kind": "term",
+      "definition": "A schedule attached to a stored query that emails its results as a CSV attachment to chosen recipients daily, weekly or monthly, optionally only when results exist.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Segment",
+      "kind": "term",
+      "definition": "A visibility scope that limits which access items particular users can see and request, based on identity criteria; it controls what is displayed, not what someone already holds.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Service desk integration",
+      "kind": "term",
+      "definition": "Sends account changes as tickets to an ITSM tool such as ServiceNow and polls their status, so a help desk team carries out changes on systems without direct connectivity.",
+      "domain": "5",
+      "objectives": [
+        "5.3"
+      ]
+    },
+    {
+      "term": "SoD policy",
+      "kind": "term",
+      "definition": "A separation-of-duties definition listing two conflicting sets of access, such as creating vendors and approving payments, so holders of both are flagged in requests, reviews and reports.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Source",
+      "kind": "term",
+      "definition": "A connected system, such as HR, a directory, database or SaaS app, configured in the tenant with a connector, from which accounts and entitlements are collected and where changes are made.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Source health status",
+      "kind": "term",
+      "definition": "An indicator on each connected system showing whether recent connection tests and collections succeeded, used to spot expired credentials, broken network paths or offline appliances.",
+      "domain": "5",
+      "objectives": [
+        "5.3"
+      ]
+    },
+    {
+      "term": "Source owner",
+      "kind": "term",
+      "definition": "The identity accountable for a connected system, who may approve requests for its access, review its accounts in campaigns and receive manual work items for it.",
+      "domain": "8",
+      "objectives": [
+        "8.2"
+      ]
+    },
+    {
+      "term": "Source owner certification",
+      "kind": "term",
+      "definition": "A review campaign where the owner of each selected system evaluates every account and entitlement on it, regardless of which manager the account holders report to.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "Source Sub-Admin",
+      "kind": "term",
+      "definition": "An administrative level scoped through governance groups to particular connected systems, letting delegated staff manage only those systems' settings, aggregations and access profiles.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "Staged campaign",
+      "kind": "term",
+      "definition": "A review campaign generated but not yet activated, letting administrators preview reviewers and items and catch data problems such as missing managers before anyone is notified.",
+      "domain": "8",
+      "objectives": [
+        "8.1"
+      ]
+    },
+    {
+      "term": "static transform",
+      "kind": "term",
+      "definition": "Returns a fixed value or a Velocity-template expression built from other inputs, useful for constants or for combining several results with simple template logic.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "substring transform",
+      "kind": "term",
+      "definition": "Extracts part of a string using begin and end index positions, such as taking the first letter of a first name when building a username.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Tenant",
+      "kind": "term",
+      "definition": "An organization's own isolated instance of the SailPoint cloud service, reached at a unique subdomain and holding its identities, sources, policies and configuration apart from other customers.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "Tenant region",
+      "kind": "term",
+      "definition": "The cloud geography, for example US, EU or Asia-Pacific, where an organization's instance and data are hosted, chosen at purchase for latency and data-residency requirements.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "Tenant URL",
+      "kind": "term",
+      "definition": "The web address of an organization's instance, in the form company.identitynow.com for the user interface, while REST calls go to the matching company.api.identitynow.com host.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "Test connection",
+      "kind": "term",
+      "definition": "A source action verifying that the appliance can reach and authenticate to the target with the saved settings; the first troubleshooting step when collection or changes fail.",
+      "domain": "5",
+      "objectives": [
+        "5.3"
+      ]
+    },
+    {
+      "term": "Transform",
+      "kind": "term",
+      "definition": "A reusable JSON object that reshapes data, such as formatting dates, joining names or mapping codes, without writing code; unlike a rule it is declarative and customers manage it themselves through the API.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Uncorrelated account",
+      "kind": "term",
+      "definition": "An account that could not be matched to any identity during aggregation; on a non-authoritative system it stays unowned until linked manually or the matching logic is fixed.",
+      "domain": "5",
+      "objectives": [
+        "5.2"
+      ]
+    },
+    {
+      "term": "User level",
+      "kind": "term",
+      "definition": "An administrative permission set assigned to an identity, such as Admin, Helpdesk, Source Sub-Admin or Role Admin, controlling which admin pages and APIs it may use.",
+      "domain": "7",
+      "objectives": [
+        "7.1"
+      ]
+    },
+    {
+      "term": "usernameGenerator transform",
+      "kind": "term",
+      "definition": "Used in a create provisioning policy to try a series of candidate patterns, checking each for uniqueness on the target system, until an unused account name is found.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "VA cluster",
+      "kind": "term",
+      "definition": "A group of appliances serving the same sources and sharing work and keys, so that if one fails the others carry on; at least two members are recommended for availability.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "VA key pair",
+      "kind": "term",
+      "definition": "Public and private keys generated for an appliance cluster; source passwords typed into the UI are encrypted with the public key so that only the appliance can decrypt them.",
+      "domain": "9",
+      "objectives": [
+        "9.1"
+      ]
+    },
+    {
+      "term": "VA network requirements",
+      "kind": "term",
+      "definition": "The appliance needs outbound TLS on port 443 to SailPoint's cloud, working DNS, accurate time and reach to its target systems; no inbound internet firewall openings are required.",
+      "domain": "9",
+      "objectives": [
+        "9.2"
+      ]
+    },
+    {
+      "term": "VA updates",
+      "kind": "term",
+      "definition": "Automatic patching in which SailPoint pushes operating system and connector service updates to appliances, so customers normally do not upgrade them by hand; members may reboot as needed.",
+      "domain": "4",
+      "objectives": [
+        "4.2"
+      ]
+    },
+    {
+      "term": "Velocity template",
+      "kind": "term",
+      "definition": "Apache templating syntax supported in static transforms and email content to build values from variables, conditions and string methods.",
+      "domain": "10",
+      "objectives": [
+        "10.1"
+      ]
+    },
+    {
+      "term": "Virtual appliance",
+      "kind": "term",
+      "definition": "A Linux-based virtual machine deployed in the customer's network that hosts connector services, reaches on-premises systems, and talks to the SaaS service using only outbound HTTPS.",
+      "domain": "4",
+      "objectives": [
+        "4.1"
+      ]
+    },
+    {
+      "term": "Web Services connector",
+      "kind": "term",
+      "definition": "A configurable integration that calls a target's REST or SOAP endpoints through defined HTTP operations, with paging and response mapping, for applications lacking a dedicated connector.",
+      "domain": "5",
+      "objectives": [
+        "5.1"
+      ]
+    },
+    {
+      "term": "Webhook subscription",
+      "kind": "term",
+      "definition": "An HTTP endpoint registered to receive event payloads as JSON POST calls, secured with basic or bearer authentication, so external systems can react to tenant events.",
+      "domain": "7",
+      "objectives": [
+        "7.2"
+      ]
+    },
+    {
+      "term": "Work reassignment",
+      "kind": "term",
+      "definition": "Delegating approvals and other pending tasks from one identity to another for a date range, for example during leave, so work keeps moving without sharing credentials.",
+      "domain": "3",
+      "objectives": [
+        "3.1"
+      ]
+    },
+    {
+      "term": "Workflow",
+      "kind": "term",
+      "definition": "A low-code automation assembled in a visual editor that starts from a trigger and runs actions and operators, for example emailing a manager when someone's department changes.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Workflow action",
+      "kind": "term",
+      "definition": "An automation step that performs work, such as getting identity details, managing access, creating a certification, sending an email or making an HTTP request to another system.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Workflow execution history",
+      "kind": "term",
+      "definition": "The record of each automation run showing its trigger input, step outputs, status and errors, which is the first place to look when troubleshooting a failed or unexpected run.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Workflow operator",
+      "kind": "term",
+      "definition": "A logic step that controls flow rather than doing work, such as comparing strings or numbers, verifying data types, looping or waiting, deciding which branch an automation follows.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    },
+    {
+      "term": "Workflow trigger",
+      "kind": "term",
+      "definition": "The starting point of an automation: a platform event, a schedule, an external call or a manual launch, which supplies the input data available to every later step.",
+      "domain": "7",
+      "objectives": [
+        "7.3"
+      ]
+    }
+  ]
+}

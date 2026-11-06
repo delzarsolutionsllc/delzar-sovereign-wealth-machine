@@ -1,0 +1,34 @@
+{
+  "lab": 44,
+  "ticket": "IAM-44017",
+  "type": "Service request",
+  "priority": "P2",
+  "requested_by": "Noor Haddad, Identity Operations Lead",
+  "title": "Check today's joiner, mover and leaver events before the lifecycle changes provision",
+  "situation": "Ironbark Example Logistics runs SailPoint Identity Security Cloud (ISC). Two identity profiles are fed by HR: employees from PeopleCore HR and contractors from VendorLink. Today's HR aggregation brought 14 events: new hires, people reaching their start date, a leave of absence, terminations, a rehire and two records with a status nobody recognises. Security suspects the contractor profile was set up in a hurry and that some leavers are keeping their access.",
+  "your_task": [
+    "Work out the cloudLifecycleState value each person should have from their HR status, start date and end date, treating any unrecognised status as inactive.",
+    "Check that each value matches the technical name of a lifecycle state on that person's identity profile.",
+    "List the provisioning each state change triggers: access profiles granted or removed, accounts enabled or disabled, and email notifications.",
+    "Flag unknown lifecycle states, leavers who keep accounts or access, and pre-hire states that give access before the start date.",
+    "Confirm which events need no action because the lifecycle state did not change."
+  ],
+  "why_it_matters": "Lifecycle states are how ISC turns HR changes into access changes without a ticket. If a technical name is wrong or a leaver state only sends an email, people who have left keep their accounts, and nobody notices because the automation looks like it ran.",
+  "done_when": [
+    "All 14 events have a calculated lifecycle state, an outcome and a written reason.",
+    "Every triggered provisioning action is listed per person.",
+    "Each flagged event names the configuration gap that caused it, ready for a change request on the identity profile."
+  ],
+  "glossary": {
+    "SailPoint Identity Security Cloud (ISC)": "SailPoint's software-as-a-service identity governance platform, formerly called IdentityNow.",
+    "Identity profile": "The configuration that builds identities from one authoritative source and decides how their attributes are calculated.",
+    "Lifecycle state": "A named employment stage on an identity profile, such as active or terminated, with actions that run when someone enters it.",
+    "cloudLifecycleState": "The identity attribute whose value decides which lifecycle state a person is in; it must equal the state's technical name.",
+    "Technical name": "The exact value a lifecycle state is known by inside ISC, separate from its display name.",
+    "Access profile": "A bundle of entitlements from one source that can be granted or removed as a unit.",
+    "Joiner-mover-leaver (JML)": "The three identity events of starting work, changing job or status, and leaving.",
+    "Transform": "Reusable logic in ISC, such as a date comparison, that calculates an identity attribute from source data."
+  },
+  "job_roles": ["SailPoint ISC Administrator", "IAM Engineer", "Identity Governance (IGA) Analyst", "Identity Operations Analyst"],
+  "talking_point": "Processed 14 joiner, mover and leaver events across 2 identity profiles: 7 moved cleanly to their new lifecycle state, 2 needed no change, and 5 were flagged (2 unknown lifecycle states, 2 leavers keeping access and 1 pre-hire state granting access too early), with 36 provisioning actions triggered."
+}

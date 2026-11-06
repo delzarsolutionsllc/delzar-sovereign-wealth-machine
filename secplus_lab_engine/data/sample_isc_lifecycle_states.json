@@ -1,0 +1,384 @@
+{
+  "_description": "Ironbark Example Logistics (fictional): SailPoint Identity Security Cloud tenant with two identity profiles fed by HR. Employees come from PeopleCore HR and have a complete set of lifecycle states; contractors come from VendorLink and their identity profile has gaps (a pre-hire state that grants production access, a leave state whose technical name is 'loa', a terminated state that only sends an email and no inactive state). Fourteen joiner, mover and leaver events arrived in today's HR aggregation.",
+  "today": "2026-11-06",
+  "identity_profiles": {
+    "Employees": {
+      "source": "PeopleCore HR",
+      "lifecycle_states": [
+        {
+          "name": "Pre-Hire",
+          "technical_name": "prehire",
+          "identity_state": "ACTIVE",
+          "grant_access_profiles": [
+            "Birthright - Onboarding Portal"
+          ],
+          "remove_access_profiles": [],
+          "enable_accounts": [],
+          "disable_accounts": [],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager"
+            ]
+          }
+        },
+        {
+          "name": "Active",
+          "technical_name": "active",
+          "identity_state": "ACTIVE",
+          "grant_access_profiles": [
+            "Birthright - All Staff"
+          ],
+          "remove_access_profiles": [],
+          "enable_accounts": "ALL",
+          "disable_accounts": [],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager",
+              "identity"
+            ]
+          }
+        },
+        {
+          "name": "Leave of Absence",
+          "technical_name": "leave",
+          "identity_state": "INACTIVE_SHORT_TERM",
+          "grant_access_profiles": [],
+          "remove_access_profiles": [],
+          "enable_accounts": [],
+          "disable_accounts": [
+            "Active Directory",
+            "Microsoft Entra ID"
+          ],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager"
+            ]
+          }
+        },
+        {
+          "name": "Terminated",
+          "technical_name": "terminated",
+          "identity_state": "INACTIVE_LONG_TERM",
+          "grant_access_profiles": [],
+          "remove_access_profiles": [
+            "Birthright - All Staff",
+            "Birthright - Onboarding Portal"
+          ],
+          "enable_accounts": [],
+          "disable_accounts": "ALL",
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager",
+              "admins"
+            ]
+          }
+        },
+        {
+          "name": "Inactive",
+          "technical_name": "inactive",
+          "identity_state": "INACTIVE_LONG_TERM",
+          "grant_access_profiles": [],
+          "remove_access_profiles": [
+            "Birthright - All Staff"
+          ],
+          "enable_accounts": [],
+          "disable_accounts": [
+            "Active Directory",
+            "Microsoft Entra ID"
+          ],
+          "notify": {
+            "enabled": false,
+            "recipients": []
+          }
+        }
+      ]
+    },
+    "Contractors": {
+      "source": "VendorLink Contractors",
+      "lifecycle_states": [
+        {
+          "name": "Pre-Hire",
+          "technical_name": "prehire",
+          "identity_state": "ACTIVE",
+          "grant_access_profiles": [
+            "Birthright - Onboarding Portal",
+            "Engineering - Production Support"
+          ],
+          "remove_access_profiles": [],
+          "enable_accounts": [
+            "Active Directory",
+            "GitHub Enterprise"
+          ],
+          "disable_accounts": [],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager"
+            ]
+          }
+        },
+        {
+          "name": "Active",
+          "technical_name": "active",
+          "identity_state": "ACTIVE",
+          "grant_access_profiles": [
+            "Birthright - Contractor"
+          ],
+          "remove_access_profiles": [],
+          "enable_accounts": "ALL",
+          "disable_accounts": [],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager"
+            ]
+          }
+        },
+        {
+          "name": "Leave of Absence",
+          "technical_name": "loa",
+          "identity_state": "INACTIVE_SHORT_TERM",
+          "grant_access_profiles": [],
+          "remove_access_profiles": [],
+          "enable_accounts": [],
+          "disable_accounts": "ALL",
+          "notify": {
+            "enabled": false,
+            "recipients": []
+          }
+        },
+        {
+          "name": "Terminated",
+          "technical_name": "terminated",
+          "identity_state": "INACTIVE_LONG_TERM",
+          "grant_access_profiles": [],
+          "remove_access_profiles": [],
+          "enable_accounts": [],
+          "disable_accounts": [],
+          "notify": {
+            "enabled": true,
+            "recipients": [
+              "manager"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "events": [
+    {
+      "id": "EV-01",
+      "identity": "Priya Natarajan",
+      "identity_profile": "Employees",
+      "event": "new_hire",
+      "previous_state": null,
+      "hr": {
+        "status": "active",
+        "start_date": "2026-11-23"
+      }
+    },
+    {
+      "id": "EV-02",
+      "identity": "Tomasz Wierzbicki",
+      "identity_profile": "Employees",
+      "event": "start_date_reached",
+      "previous_state": "prehire",
+      "hr": {
+        "status": "active",
+        "start_date": "2026-11-02"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-03",
+      "identity": "Adaeze Okonkwo",
+      "identity_profile": "Employees",
+      "event": "leave_of_absence",
+      "previous_state": "active",
+      "hr": {
+        "status": "leave",
+        "start_date": "2022-03-14"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID",
+        "Salesforce"
+      ]
+    },
+    {
+      "id": "EV-04",
+      "identity": "Callum Fitzgerald",
+      "identity_profile": "Employees",
+      "event": "termination",
+      "previous_state": "active",
+      "hr": {
+        "status": "terminated",
+        "start_date": "2021-06-01",
+        "end_date": "2026-11-04"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID",
+        "Salesforce"
+      ]
+    },
+    {
+      "id": "EV-05",
+      "identity": "Marisol Vega",
+      "identity_profile": "Employees",
+      "event": "termination",
+      "previous_state": "active",
+      "hr": {
+        "status": "active",
+        "start_date": "2023-09-11",
+        "end_date": "2026-10-31"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-06",
+      "identity": "Henrik Solberg",
+      "identity_profile": "Employees",
+      "event": "rehire",
+      "previous_state": "inactive",
+      "hr": {
+        "status": "active",
+        "start_date": "2026-11-02",
+        "end_date": "2025-06-30"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-07",
+      "identity": "Yusuf Demir",
+      "identity_profile": "Employees",
+      "event": "unknown_hr_status",
+      "previous_state": "active",
+      "hr": {
+        "status": "suspended_pending",
+        "start_date": "2020-01-06"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID",
+        "Salesforce"
+      ]
+    },
+    {
+      "id": "EV-08",
+      "identity": "Beatriz Carvalho",
+      "identity_profile": "Employees",
+      "event": "attribute_change",
+      "previous_state": "active",
+      "hr": {
+        "status": "active",
+        "start_date": "2024-04-15"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-09",
+      "identity": "Oskar Lindgren",
+      "identity_profile": "Employees",
+      "event": "post_termination",
+      "previous_state": "terminated",
+      "hr": {
+        "status": "terminated",
+        "start_date": "2019-02-04",
+        "end_date": "2026-09-15"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-10",
+      "identity": "Delphine Arsenault",
+      "identity_profile": "Employees",
+      "event": "termination",
+      "previous_state": "active",
+      "hr": {
+        "status": "active",
+        "start_date": "2022-08-01",
+        "end_date": "2026-11-06"
+      },
+      "accounts": [
+        "Active Directory",
+        "Microsoft Entra ID"
+      ]
+    },
+    {
+      "id": "EV-11",
+      "identity": "Kwame Asante",
+      "identity_profile": "Contractors",
+      "event": "new_hire",
+      "previous_state": null,
+      "hr": {
+        "status": "hired",
+        "start_date": "2026-12-01"
+      }
+    },
+    {
+      "id": "EV-12",
+      "identity": "Ingrid Haugen",
+      "identity_profile": "Contractors",
+      "event": "leave_of_absence",
+      "previous_state": "active",
+      "hr": {
+        "status": "leave",
+        "start_date": "2026-02-09"
+      },
+      "accounts": [
+        "Active Directory",
+        "GitHub Enterprise"
+      ]
+    },
+    {
+      "id": "EV-13",
+      "identity": "Rafael Quintero",
+      "identity_profile": "Contractors",
+      "event": "termination",
+      "previous_state": "active",
+      "hr": {
+        "status": "terminated",
+        "start_date": "2025-10-20",
+        "end_date": "2026-11-05"
+      },
+      "accounts": [
+        "Active Directory",
+        "GitHub Enterprise"
+      ]
+    },
+    {
+      "id": "EV-14",
+      "identity": "Mei-Ling Zhao",
+      "identity_profile": "Contractors",
+      "event": "unknown_hr_status",
+      "previous_state": "active",
+      "hr": {
+        "start_date": "2026-05-18"
+      },
+      "accounts": [
+        "Active Directory",
+        "GitHub Enterprise"
+      ]
+    }
+  ]
+}
