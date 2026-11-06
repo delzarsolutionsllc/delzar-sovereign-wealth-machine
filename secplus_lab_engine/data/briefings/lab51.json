@@ -1,0 +1,40 @@
+{
+  "lab": 51,
+  "ticket": "AUD-51208",
+  "type": "Audit finding",
+  "priority": "P2",
+  "requested_by": "Amara Osei, IAM Lead",
+  "title": "Decide 12 API access requests, check 15 admin actions against user levels and review tenant sign-in security before the audit",
+  "situation": "Larkspur Example Manufacturing runs SailPoint Identity Security Cloud (ISC). Before next month's audit, the identity team has a queue of 12 requests for Representational State Transfer (REST) API access from scripts, unattended services and an intranet portal. At the same time, 15 admin actions taken or attempted by staff need checking against their user levels, and the auditors want to see how people sign in: identity profile sign-in methods, pass-through authentication, multifactor authentication (MFA) for admins, Security Assertion Markup Language (SAML) single sign-on (SSO) with its emergency bypass, and session timeouts.",
+  "your_task": [
+    "For each API request, choose PERSONAL_ACCESS_TOKEN (a script acting as a named user), OAUTH_CLIENT_CREDENTIALS (an API client for a service), AUTHORIZATION_CODE (a web app acting for the signed-in user) or DENY, and say where the token is exchanged (the tenant's API host, /oauth/token).",
+    "Flag approved requests that ask for more scope than needed (sp:scopes:all where a narrower scope fits), personal access tokens (PATs) with no expiry or that outlive an owner who is leaving, and client secrets not kept in an approved vault.",
+    "Mark each admin action ALLOWED or DENIED from the person's user levels; Sub-Admins only act on sources tied to their governance groups, unknown user levels grant nothing and incompatible combinations are denied.",
+    "Review the sign-in setup and record findings: ADMIN_WITHOUT_MFA, PTA_SOURCE_UNHEALTHY, SIGNIN_METHOD_UNKNOWN, SSO_WITHOUT_BYPASS_PLAN, SESSION_TOO_LONG, or OK."
+  ],
+  "why_it_matters": "An API token is a key to the whole identity platform: a token with too much scope, no expiry or a leaver as owner is a quiet back door, and a secret in a code repository is a breach waiting to happen. User levels decide who can change sources, roles and security settings. If admins sign in without MFA, or SSO is turned on with no tested way around an identity provider outage, one stolen password or one outage can stop identity governance for the whole company.",
+  "done_when": [
+    "Every API request has a method, the scope to grant, the token URL and any flags, with the reasons.",
+    "Every admin action is ALLOWED or DENIED with the user level or governance group rule that decided it.",
+    "Every identity profile, elevated user, the SSO setup and the session settings have an outcome, and each finding has a fix."
+  ],
+  "glossary": {
+    "Personal access token (PAT)": "A client ID and secret a user creates for scripts; the tokens it gets carry that user's user levels. Up to 10 per user.",
+    "API client": "An OAuth 2.0 client an Admin creates under Security Settings > API Management for a service or application.",
+    "Client credentials grant": "The OAuth 2.0 flow where a service trades its client ID and secret for a token with no user context.",
+    "Authorization code grant": "The OAuth 2.0 flow where a web app sends the user to sign in and gets a token that acts as that user.",
+    "Scope": "A limit on which API endpoints a token can call, always inside what the user level allows; sp:scopes:all means everything the user level allows.",
+    "User level": "A set of ISC admin permissions such as Admin, Source Admin, Role Sub-Admin, Helpdesk, Cert Admin or Report Admin.",
+    "Governance group": "A group of identities; Sub-Admins only manage the sources tied to the governance groups they belong to.",
+    "Pass-through authentication (PTA)": "Signing in to ISC with the password of a directory source such as Active Directory.",
+    "Time-based one-time password (TOTP)": "A six-digit code from an authenticator app; ISC requires one for elevated users.",
+    "Emergency bypass": "Signing in at /login/login?prompt=true to skip the SSO identity provider, allowed for elevated users."
+  },
+  "job_roles": [
+    "SailPoint Identity Security Administrator",
+    "SailPoint Identity Security Engineer",
+    "IAM Security Administrator",
+    "Identity Integration Developer"
+  ],
+  "talking_point": "Reviewed 12 SailPoint ISC API access requests (4 personal access tokens, 2 API clients with client credentials, 1 authorization code web app, 5 denied) and flagged 4 approved ones for over-broad sp:scopes:all or manage scopes, a token with no expiry owned by a leaver and a secret stored in a code repository; checked 15 admin actions against user levels (7 allowed, 8 denied, including Sub-Admins outside their governance groups, an incompatible Role Admin + Source Sub-Admin assignment and an unknown user level); and found 7 sign-in issues across 18 items: 2 admins without MFA, 2 broken pass-through sources, 1 profile with no sign-in method, an SSO setup with only 1 usable emergency admin and 24-hour sessions."
+}
