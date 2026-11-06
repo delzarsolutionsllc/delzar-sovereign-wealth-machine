@@ -37,7 +37,7 @@
       "topic": "Adding and Configuring Authenticators",
       "stem": "An organization already uses Duo Security for second-factor checks on its VPN and wants Okta sign-ins to hand the second factor to the same Duo service. Which authenticator should the admin add?",
       "choices": [
-        "Custom OTP",
+        "Custom OTP authenticator",
         "Duo Security",
         "Okta Verify",
         "Temporary access code"
@@ -51,7 +51,7 @@
       "topic": "Adding and Configuring Authenticators",
       "stem": "After the Email authenticator is enabled, what does a user receive when Okta challenges them with it during sign-in?",
       "choices": [
-        "A push notification on the Okta Verify app",
+        "A push notification on the Okta Verify app on their phone",
         "A temporary password that replaces the user's current password",
         "A QR code used to register a security key",
         "A message with a verification link and a one-time code"
@@ -82,7 +82,7 @@
         "A Duo Security integration that registers each of the card readers",
         "A smart card identity provider that trusts the certificate chain",
         "An Okta Verify enrollment with biometrics",
-        "A dynamic network zone for the card reader IPs"
+        "A dynamic network zone that lists the IP addresses of the card readers"
       ],
       "answer": "A smart card identity provider that trusts the certificate chain",
       "explanation": "The Smart Card authenticator relies on a smart card identity provider that holds the trusted certificate chain used to validate PIV certificates. Network zones and Okta Verify do not validate card certificates."
@@ -94,7 +94,7 @@
       "stem": "An admin adds the Okta Verify authenticator and selects only Okta FastPass as a verification option. Users with iPhones ask why they cannot receive push notifications. What is the MOST likely reason?",
       "choices": [
         "Push notifications only work on Windows and macOS",
-        "The global session idle time is too short for push",
+        "The global session idle time is set too short for a push prompt to arrive",
         "Push notification was not selected as an Okta Verify verification option",
         "The Phone authenticator must be enabled before any Okta Verify push can work"
       ],
@@ -137,7 +137,7 @@
       "choices": [
         "They must confirm with a biometric or device PIN on the device",
         "They must type the six-digit code instead of approving a push prompt",
-        "They must answer a security question after every push",
+        "They must answer a security question after every push they approve",
         "An admin must approve each new Okta Verify enrollment"
       ],
       "answer": "They must confirm with a biometric or device PIN on the device",
@@ -150,7 +150,7 @@
       "stem": "Which statement about Okta FastPass is accurate in Okta Identity Engine?",
       "choices": [
         "It sends an SMS one-time code that the user types into the Sign-In Widget",
-        "It requires a hardware security key plugged into the computer",
+        "It requires a hardware security key plugged into the computer's USB port",
         "It is a phishing-resistant sign-in method provided through Okta Verify",
         "It is available only in orgs that run Classic Engine"
       ],
@@ -163,7 +163,7 @@
       "topic": "Okta Verify and Okta FastPass",
       "stem": "A user is prompted to set up Okta Verify while signing in on a desktop browser, and the app is already installed on the user's phone. What is the usual way to complete enrollment?",
       "choices": [
-        "Reply to an SMS that Okta sends to the user's phone",
+        "Reply to an SMS that Okta sends to the mobile number on the user's profile",
         "Email the help desk the code shown on the phone",
         "Wait for an admin to approve and activate the device in the Admin Console",
         "Scan the QR code shown in the Sign-In Widget with the Okta Verify app"
@@ -207,7 +207,7 @@
       "choices": [
         "Security > Authentication Policies, on the app's rules",
         "Security > Authenticators, on the Enrollment tab",
-        "Security > Global Session Policy, on a new rule",
+        "Security > Global Session Policy, on a new rule for the group",
         "Directory > Groups, on the group's settings"
       ],
       "answer": "Security > Authenticators, on the Enrollment tab",
@@ -220,7 +220,7 @@
       "stem": "Only members of the Finance group must enroll Okta Verify; everyone else may enroll it if they wish. What should the admin do?",
       "choices": [
         "Add a Finance enrollment policy with Okta Verify Required, ranked above the default",
-        "Edit the default enrollment policy to require Okta Verify for everyone",
+        "Edit the default enrollment policy so that Okta Verify is Required for every user in the org",
         "Add a global session policy rule that requires Okta Verify for all Finance group members",
         "Require Okta Verify in the Okta Dashboard authentication policy"
       ],
@@ -233,7 +233,7 @@
       "topic": "Authenticator Enrollment Policies",
       "stem": "Contractors need two weeks to install Okta Verify before it becomes mandatory, but the requirement must already be in place. Which enrollment policy setting meets this need?",
       "choices": [
-        "Mark Okta Verify as Optional and edit it later",
+        "Mark Okta Verify as Optional now and edit the policy again later",
         "A maximum global session lifetime of 14 days",
         "Mark Okta Verify as Disabled until the two-week deadline passes",
         "A grace period with an end date for the required authenticator"
@@ -262,7 +262,7 @@
       "stem": "A user belongs to two groups, and each group is assigned a different active authenticator enrollment policy. Which policy does Okta apply to the user?",
       "choices": [
         "The highest-priority policy assigned to one of the user's groups",
-        "The policy that requires the most authenticators",
+        "The policy that requires the larger number of authenticators to enroll",
         "A merge of the required authenticators from both of those policies",
         "The default policy, because the user matches two"
       ],
@@ -275,7 +275,7 @@
       "topic": "Authenticator Enrollment Policies",
       "stem": "Which statement about the default authenticator enrollment policy is accurate?",
       "choices": [
-        "It is deleted automatically when the first custom policy is created",
+        "It is deleted automatically when a custom policy is created",
         "It always takes priority over custom policies",
         "It cannot be deleted and covers users that no higher policy matches",
         "It can be assigned only to the Okta administrators group"
@@ -305,7 +305,7 @@
       "choices": [
         "Every authenticator must be Required",
         "Each authenticator needs its own grace period",
-        "The policy must be assigned to Everyone",
+        "The policy must be assigned to the Everyone group",
         "At least one authenticator must be Required"
       ],
       "answer": "At least one authenticator must be Required",
@@ -318,7 +318,7 @@
       "stem": "Security wants to stop users from enrolling new authenticators when they connect from outside the corporate network zone. What should the admin add?",
       "choices": [
         "A global session policy rule that denies sessions outside the zone",
-        "A password policy rule that blocks recovery outside the zone",
+        "A password policy rule that blocks self-service password recovery from outside the zone",
         "An enrollment policy rule for IPs not in the corporate zone that denies enrollment",
         "An app sign-in policy rule that requires Okta Verify for every user outside the zone"
       ],
@@ -334,7 +334,7 @@
         "The Sign-In Widget makes the user set up Okta Verify before continuing",
         "The user signs in normally and then gets an email reminder to enroll later",
         "The user is redirected to the help desk portal",
-        "The user's status changes to Pending user action"
+        "The user's account status changes to Pending user action until an admin acts"
       ],
       "answer": "The Sign-In Widget makes the user set up Okta Verify before continuing",
       "explanation": "A required authenticator with no grace period must be enrolled during the first sign-in where it is missing. User status does not change because of a missing authenticator."
@@ -361,7 +361,7 @@
       "choices": [
         "The Security Methods section of Settings in the End-User Dashboard",
         "The Profile Editor page for the Okta user profile",
-        "The Okta Verify authenticator page under Security > Authenticators",
+        "The Okta Verify page under Security > Authenticators",
         "The Sign On tab of the Okta Dashboard app"
       ],
       "answer": "The Security Methods section of Settings in the End-User Dashboard",
@@ -485,7 +485,7 @@
       "topic": "Factor Types and Assurance",
       "stem": "A security review flags the Phone authenticator using SMS as a weakness. What is the MAIN concern?",
       "choices": [
-        "SMS codes cannot be used for account recovery",
+        "SMS codes cannot be used at all for self-service account recovery",
         "SMS is classed as a knowledge factor rather than a possession factor",
         "SMS requires Okta Verify on the same phone",
         "The code can be intercepted or entered into a phishing page"
@@ -514,7 +514,7 @@
       "stem": "A user lost the phone that had Okta Verify and cannot sign in. What should the admin do so the user can set up Okta Verify on a new phone?",
       "choices": [
         "Deactivate and then reactivate the user account",
-        "Delete Okta Verify from Security > Authenticators",
+        "Delete the Okta Verify authenticator from Security > Authenticators",
         "Reset the user's Okta Verify authenticator in Directory > People",
         "Clear the user's sessions and then send the user a password reset email"
       ],
@@ -570,7 +570,7 @@
       "stem": "A user still has the old phone and wants to move Okta Verify to a new phone without contacting IT. What can the user do?",
       "choices": [
         "Edit the Okta Verify authenticator under Security > Authenticators to move it",
-        "Change the mobile phone attribute in Profile Editor",
+        "Update the mobile phone attribute on the Okta user profile in the Profile Editor",
         "Create a new Okta account for the new phone",
         "Remove and set up Okta Verify again from Settings in the End-User Dashboard"
       ],
@@ -655,7 +655,7 @@
       "choices": [
         "All matching rules are combined and the strictest setting of each wins",
         "The most recently edited rule is evaluated first",
-        "Rules are evaluated only after app sign-in policies",
+        "Rules are evaluated only after the app sign-in policies have been checked",
         "In priority order, and the first rule whose conditions match is used"
       ],
       "answer": "In priority order, and the first rule whose conditions match is used",
@@ -711,7 +711,7 @@
       "choices": [
         "IF user's IP is anywhere, THEN access is Denied, ranked last",
         "IF user's IP is in the blocked zone, THEN access is Denied, ranked first",
-        "IF user's IP is not in the blocked zone, THEN MFA is not required",
+        "IF user's IP is not in the blocked zone, THEN MFA is not required, ranked first",
         "IF user's IP is in the blocked zone, THEN MFA is required at every sign in"
       ],
       "answer": "IF user's IP is in the blocked zone, THEN access is Denied, ranked first",
@@ -780,7 +780,7 @@
       "stem": "An admin adds a rule with a Behavior is condition for sign-ins from a new location. Which pairing should the admin avoid?",
       "choices": [
         "Prompting for MFA at every sign in",
-        "Placing the rule above the catch-all rule",
+        "Placing the rule above the catch-all rule at the bottom of the policy",
         "Excluding the org's break-glass administrator account from the rule",
         "Prompting for MFA only when signing in with a new device cookie"
       ],
@@ -852,7 +852,7 @@
         "On every app the user opens at any point during the Okta session",
         "Only when the user's password expires",
         "When a new session is created or the user changes devices",
-        "Only on the first sign-in after enrollment"
+        "Only on the first sign-in after the user enrolls an authenticator"
       ],
       "answer": "When a new session is created or the user changes devices",
       "explanation": "The MFA lifetime is checked when a new Okta session is created or on a different device. App-level re-authentication is handled by authentication policies."
@@ -921,7 +921,7 @@
       "choices": [
         "Maximum Okta global session idle time set to 8 hours",
         "MFA lifetime set to 8 hours",
-        "Password expiration set to 8 hours",
+        "Password expiration in the password policy set to 8 hours",
         "Maximum Okta global session lifetime set to 8 hours"
       ],
       "answer": "Maximum Okta global session lifetime set to 8 hours",
@@ -948,7 +948,7 @@
       "stem": "Users ask to stay signed in after closing and reopening their browser. What must be true before the admin can set global session cookies to persist across browser sessions?",
       "choices": [
         "The Default Policy must be deleted first",
-        "Okta FastPass must be disabled for all users",
+        "Okta FastPass must be disabled in Okta Verify for all users first",
         "The usePersistentCookie option must be set through the Okta API",
         "The global session idle time must first be changed to No time limit"
       ],
@@ -975,7 +975,7 @@
       "topic": "Session Lifetime, Idle Time and Cookies",
       "stem": "Security wants Admin Console sessions to time out sooner than end-user Okta sessions. What is the BEST approach?",
       "choices": [
-        "Lower the idle time in the Default Rule for all users",
+        "Lower the maximum idle time in the Default Rule of the Default Policy for all users",
         "Set the Admin Console session timeout separately from the global session policy",
         "Add admins to a password policy with a short expiry",
         "Require Okta Verify in the authenticator enrollment policy assigned to every admin"
@@ -1019,7 +1019,7 @@
       "choices": [
         "The user reaches the app because an Okta session already exists for them",
         "The user is denied because the policies conflict",
-        "The global session is ended and the user starts over",
+        "The global session is ended and the user must start the sign-in over",
         "Okta prompts the user for Okta Verify before granting the app"
       ],
       "answer": "Okta prompts the user for Okta Verify before granting the app",

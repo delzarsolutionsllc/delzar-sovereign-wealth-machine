@@ -10,7 +10,7 @@
       "stem": "The marketing lead at Fabrikam must be able to create new catalogs for her department's resources and manage them herself. She must not hold any Microsoft Entra administrator role. What should you do?",
       "choices": [
         "Assign her the Identity Governance Administrator role",
-        "Make her a catalog owner of the General catalog",
+        "Make her a catalog owner of the General catalog for her department",
         "Add her to the Catalog creator role in entitlement management",
         "Assign her the Groups Administrator role so she can manage all groups"
       ],
@@ -53,7 +53,7 @@
       "choices": [
         "A list of the enterprise applications that are published through Application Proxy",
         "A container of resources and access packages with its own delegated owners",
-        "A report of each user's current group memberships and roles",
+        "A report of each user's current group memberships and assigned directory roles",
         "A Conditional Access template that grants access to app bundles"
       ],
       "answer": "A container of resources and access packages with its own delegated owners",
@@ -67,7 +67,7 @@
       "choices": [
         "Assign the catalog owner the Catalog reader role on the HR catalog",
         "Make the catalog owner an owner of the security group",
-        "Convert the security group to a Microsoft 365 group",
+        "Convert the security group to a Microsoft 365 group first",
         "Enable the catalog for external users"
       ],
       "answer": "Make the catalog owner an owner of the security group",
@@ -81,7 +81,7 @@
       "choices": [
         "For users in your directory: All users (including guests)",
         "For users not in your directory: All configured connected organizations",
-        "None (administrator direct assignments only)",
+        "None (administrator direct assignments only), with no self-service requests",
         "For users in your directory: All members (excluding guests)"
       ],
       "answer": "For users in your directory: All members (excluding guests)",
@@ -136,7 +136,7 @@
       "stem": "Approvers of the Research Data access package at Fabrikam need each requester to state a project code and an end date in the request. What should you configure in the access package policy?",
       "choices": [
         "A terms of use document that the requester must open and accept",
-        "A second approval stage assigned to the project leads",
+        "A second approval stage assigned to the project leads for each request",
         "Requestor information questions that the requester must answer",
         "A custom security attribute on each requester account"
       ],
@@ -359,7 +359,7 @@
       "topic": "Managing access requests and assignments",
       "stem": "When a user at Litware is granted the Field Sales access package, an Azure Logic Apps workflow must create the user's account in an external commission system. What should you configure?",
       "choices": [
-        "A Conditional Access policy that targets the Logic App",
+        "A Conditional Access policy that targets the Logic App's managed identity",
         "An app registration with a separate client secret created for each user",
         "A custom extension on the access package that calls the Logic App",
         "A connected organization for the commission system"
@@ -586,7 +586,7 @@
         "A new member account is created for the user",
         "The user is synchronized by cross-tenant synchronization",
         "The user is added to the directory as a B2B guest user",
-        "The request fails until the user is invited by hand"
+        "The request fails until the user is invited by hand as a guest"
       ],
       "answer": "The user is added to the directory as a B2B guest user",
       "explanation": "When a request from a user outside the directory is approved, entitlement management invites that user as a B2B guest and then grants the package. Cross-tenant synchronization is a separate feature that is configured between tenants."
@@ -696,7 +696,7 @@
       "choices": [
         "To detect sign-ins that come from anonymous IP addresses",
         "To regularly confirm that users still need their access",
-        "To approve user requests for new access packages",
+        "To approve user requests for new access packages and roles",
         "To block legacy authentication protocols for all users"
       ],
       "answer": "To regularly confirm that users still need their access",
@@ -765,7 +765,7 @@
       "stem": "Northwind Traders wants to review which users are eligible for or assigned to the Billing Reader role on an Azure subscription. Where should this review be created?",
       "choices": [
         "As a Teams + Groups review of the group that holds the subscription owners",
-        "As an access package review in entitlement management",
+        "As an access package review in entitlement management for the subscription",
         "As an Applications review of the Azure portal app",
         "In Privileged Identity Management for Azure resource roles"
       ],
@@ -793,7 +793,7 @@
       "stem": "Contoso must review which users are assigned to its Salesforce enterprise application, which uses user assignment. What should you select as what to review?",
       "choices": [
         "Applications, then the Salesforce enterprise application",
-        "Teams + Groups, then a group named Salesforce Users",
+        "Teams + Groups, then a group named Salesforce Users that you create",
         "Access packages, then the default catalog",
         "Microsoft Entra roles, then the Application Administrator role holders"
       ],
@@ -891,7 +891,7 @@
       "stem": "Several reviewers are assigned to the same stage of an access review, and two of them give different decisions for one user. Which decision is recorded?",
       "choices": [
         "The first decision submitted by any reviewer",
-        "The decision of the reviewer listed first",
+        "The decision of the reviewer listed first in the stage",
         "Deny, because the reviewers disagreed",
         "The last decision submitted by any reviewer"
       ],
@@ -974,7 +974,7 @@
       "topic": "Recurrence and completion settings",
       "stem": "Reviewers at Adatum want the review to suggest denying users who have not signed in recently. What should you enable in the review settings?",
       "choices": [
-        "Auto apply results to resource",
+        "Auto apply results to resource after the review ends",
         "Justification required",
         "The no sign-in decision helper for reviewers",
         "Additional content for the reviewer notification email"
@@ -1046,7 +1046,7 @@
       "choices": [
         "Stop the review and create a new one with a longer duration",
         "Send a reminder to the reviewers from the review",
-        "Reset all decisions in the review",
+        "Reset all decisions in the review and start it again",
         "Change the review to a self-review"
       ],
       "answer": "Send a reminder to the reviewers from the review",
@@ -1128,7 +1128,7 @@
       "topic": "Responding to and applying reviews",
       "stem": "A reviewer at Fabrikam agrees with every recommendation shown for the 200 users in her review. What should she do with the LEAST effort?",
       "choices": [
-        "Approve or deny each user one at a time",
+        "Approve or deny each user one at a time from the review list",
         "Download the users and send them to the administrator",
         "Accept the recommendations for the reviewed users",
         "Ask the administrator to stop the review"

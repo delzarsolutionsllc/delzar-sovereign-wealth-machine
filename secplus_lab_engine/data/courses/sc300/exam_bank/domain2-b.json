@@ -51,7 +51,7 @@
    "topic": "Risk detections and risk levels",
    "stem": "An analyst at Adatum sees an Atypical travel detection for a user who signed in from Chicago and then from Singapore within two hours. The detection appeared in the report some time after the second sign-in. What is the MOST likely reason for the delay?",
    "choices": [
-    "The sign-in risk policy held the event until the user completed multifactor authentication",
+    "The sign-in risk policy held the event until the user completed MFA",
     "The detection is written to the report only when the weekly digest email is enabled",
     "Atypical travel is an offline detection that is calculated after the sign-in completes",
     "Detections are published only after the user changes the password on the next sign-in"
@@ -207,7 +207,7 @@
    "stem": "Contoso already uses Conditional Access. It wants users who have not set up Microsoft Authenticator to be prompted to set it up during sign-in, with the LEAST administrative effort. What should you configure?",
    "choices": [
     "A registration campaign in the Authentication methods policy",
-    "A Temporary Access Pass for every user",
+    "A Temporary Access Pass for every user who has not set up the app",
     "Security defaults for the tenant",
     "Per-user multifactor authentication for each user who lacks the app"
    ],
@@ -470,7 +470,7 @@
    "topic": "Investigating risky sign-ins",
    "stem": "An analyst at Wingtip Toys must find out whether a risky sign-in was blocked or allowed after the user completed multifactor authentication. Where should the analyst look?",
    "choices": [
-    "The provisioning logs for the user's account",
+    "The provisioning logs recorded for the user's account in the tenant",
     "The audit log entries recorded for the user's account object",
     "The sign-in log entry's Conditional Access details",
     "The weekly digest email for the tenant"
@@ -501,7 +501,7 @@
     "The risk detection expired because no administrator reviewed it",
     "The user satisfied a policy control, such as MFA, that cleared the risk",
     "An administrator dismissed the user's risk after an investigation",
-    "A named location blocked the sign-in before it reached the requested application"
+    "A named location blocked the sign-in before it reached the app"
    ],
    "answer": "The user satisfied a policy control, such as MFA, that cleared the risk",
    "explanation": "Remediated means the risk was cleared by the user satisfying a policy control, such as MFA for sign-in risk or a secure password change for user risk. An administrator dismissal shows as Dismissed, a separate state."
@@ -582,7 +582,7 @@
    "topic": "Risky workload identities",
    "stem": "ID Protection shows the detection Unusual addition of credentials to an OAuth app for one of Proseware's service principals. What does this detection MOST likely indicate?",
    "choices": [
-    "The app's users signed in from an anonymous IP address during the last few days",
+    "The app's users signed in from an anonymous IP address",
     "The app's admin consent grant expired and was renewed automatically",
     "The app registration was renamed by its owner outside of business hours",
     "An attacker may have added a secret or certificate to keep access as the app"
@@ -661,7 +661,7 @@
    "choices": [
     "The health check in the client's advanced diagnostics",
     "The risky sign-ins report",
-    "The access reviews overview page",
+    "The access reviews overview page in Identity Governance",
     "The Conditional Access insights and reporting workbook"
    ],
    "answer": "The health check in the client's advanced diagnostics",
@@ -732,7 +732,7 @@
    "choices": [
     "Install two or more connectors in one connector group",
     "Create one connector group for each user group that needs access",
-    "Install a connector on every client device",
+    "Install a connector on every client device that needs access",
     "Install one connector on a domain controller"
    ],
    "answer": "Install two or more connectors in one connector group",
@@ -760,7 +760,7 @@
    "choices": [
     "Private Access connectors must accept inbound TCP 443 from the internet",
     "Private Access needs a separate VPN gateway instead of any connectors",
-    "The application proxy connectors must be uninstalled before Private Access can be used",
+    "Application proxy connectors must be removed before Private Access can be used",
     "The same private network connectors can serve application proxy and Private Access"
    ],
    "answer": "The same private network connectors can serve application proxy and Private Access",
@@ -772,7 +772,7 @@
    "topic": "Private network connectors",
    "stem": "A newly installed private network connector at Proseware shows as inactive. The server can reach the private apps. What is the MOST likely cause?",
    "choices": [
-    "Web content filtering blocks the connector's access to the published private apps",
+    "Web content filtering blocks the connector's access to the private apps",
     "The connector server is not a member of a connector group for guests",
     "A firewall or proxy blocks the connector's outbound connections to the service",
     "Users have not been assigned the Microsoft traffic forwarding profile"
@@ -802,7 +802,7 @@
    "choices": [
     "Create a named location for the finance server's IP address and mark it as trusted",
     "Add the finance server to the baseline security profile used by Internet Access",
-    "Target the Quick Access app with a Conditional Access policy that requires a compliant device",
+    "Target Quick Access with a Conditional Access policy that requires a compliant device",
     "Publish the finance server as a per-app access app and target it with Conditional Access"
    ],
    "answer": "Publish the finance server as a per-app access app and target it with Conditional Access",
@@ -817,7 +817,7 @@
     "A web category that is allowed or blocked for a group of users",
     "A private destination defined by an FQDN or IP range, ports and protocol",
     "A set of connectors that share the load for one datacenter",
-    "A group of users and devices that are assigned to the same Quick Access application"
+    "A group of users and devices assigned to the same Quick Access app"
    ],
    "answer": "A private destination defined by an FQDN or IP range, ports and protocol",
    "explanation": "An application segment defines the destination (FQDN, IP address or range), port and protocol that the client tunnels to private apps. A set of connectors is a connector group, not a segment."
@@ -858,7 +858,7 @@
    "choices": [
     "The file servers as allowed sites in a web content filtering policy",
     "The domain controllers' Kerberos and LDAP ports as application segments",
-    "The domain controllers as members of a private network connector group for the site",
+    "The domain controllers as members of a connector group for the site",
     "A remote network that connects each user's home router to the service"
    ],
    "answer": "The domain controllers' Kerberos and LDAP ports as application segments",
@@ -976,7 +976,7 @@
     "A trusted named location for the banking partner",
     "A custom bypass rule in the Internet Access profile",
     "An app segment for the bank in the Quick Access application",
-    "A block rule in the baseline security profile"
+    "A block rule for the bank in the baseline security profile"
    ],
    "answer": "A custom bypass rule in the Internet Access profile",
    "explanation": "Custom bypass rules in a forwarding profile tell the client not to tunnel matching destinations. A block rule would stop access to the site altogether instead of sending it direct."

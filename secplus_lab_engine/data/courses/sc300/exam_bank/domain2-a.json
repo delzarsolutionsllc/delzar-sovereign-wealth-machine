@@ -23,7 +23,7 @@
       "topic": "Authentication methods policy",
       "stem": "Fabrikam wants to make Microsoft Authenticator available only to a pilot group of IT staff before rolling it out to everyone. What should you do?",
       "choices": [
-        "Enable per-user MFA for each member of the pilot group",
+        "Enable legacy per-user MFA for each member of the pilot group",
         "Create a Conditional Access policy that requires MFA for the group",
         "Enable Authenticator for the pilot group in the methods policy",
         "Turn on security defaults and exclude users outside the pilot"
@@ -81,7 +81,7 @@
       "choices": [
         "A one-time code sent by text message that lets a user reset a forgotten password",
         "A time-limited passcode that satisfies strong authentication requirements",
-        "A guest invitation link that expires after it is redeemed",
+        "A guest invitation link that expires after it is redeemed by the guest",
         "A short-lived refresh token issued after MFA succeeds"
       ],
       "answer": "A time-limited passcode that satisfies strong authentication requirements",
@@ -136,7 +136,7 @@
       "stem": "Litware wants employees to sign in to Microsoft Entra ID directly with smart card certificates issued by its own PKI, without federating to AD FS. What should be configured FIRST?",
       "choices": [
         "Federate the domain to AD FS and enable certificate sign-in there",
-        "Enable password hash synchronization for all users",
+        "Enable password hash synchronization for all smart card users",
         "Require a compliant device in Conditional Access",
         "Add the issuing certificate authorities to Microsoft Entra ID"
       ],
@@ -222,7 +222,7 @@
         "The one-time code displayed to the user changes every thirty seconds",
         "The credential is scoped to the relying party it was created for",
         "The user must approve a push notification on a phone",
-        "The private key is stored safely in Microsoft Entra ID"
+        "The private key is stored safely in Microsoft Entra ID for each user"
       ],
       "answer": "The credential is scoped to the relying party it was created for",
       "explanation": "A passkey signs a challenge only for the origin it was registered with, so a look-alike site cannot use it. The private key stays on the authenticator; Microsoft Entra ID only holds the public key."
@@ -290,7 +290,7 @@
       "stem": "When self-service password reset is configured for users, what applies to administrator accounts regardless of those settings?",
       "choices": [
         "The same single-method policy that is configured for standard users",
-        "Self-service reset is always blocked for administrators",
+        "Self-service reset is always blocked for administrator accounts in the tenant",
         "A strong two-method policy that does not allow security questions",
         "Administrators may reset using security questions only"
       ],
@@ -332,7 +332,7 @@
       "stem": "Admins notice that many users registered SSPR phone numbers years ago that are no longer valid. They want users to periodically confirm their registered information. Which setting should they change?",
       "choices": [
         "The number of days before users must reconfirm their information",
-        "The number of methods required to reset a password",
+        "The number of authentication methods required to reset a password",
         "Notifying users when their password is reset",
         "Whether users can reset their password from the Windows sign-in screen"
       ],
@@ -375,7 +375,7 @@
       "choices": [
         "Reset the user's password and wait for it to sync",
         "Revoke the user's sessions to invalidate refresh tokens",
-        "Remove the user's Microsoft Entra ID P1 license",
+        "Remove the user's Microsoft Entra ID P1 and Microsoft 365 licenses",
         "Delete all of the user's registered authentication methods"
       ],
       "answer": "Revoke the user's sessions to invalidate refresh tokens",
@@ -640,7 +640,7 @@
       "choices": [
         "Target the app as a resource and require multifactor authentication for it",
         "Assign the policy to the workload identity with a location condition",
-        "Add the principal to a group and require a compliant device",
+        "Add the service principal to a group and require a compliant device for it",
         "Apply a sign-in frequency session control to the principal"
       ],
       "answer": "Assign the policy to the workload identity with a location condition",
@@ -823,7 +823,7 @@
         "The user had already satisfied the policy's grant controls in an earlier session",
         "The policy requires a P2 license that the user lacks",
         "The sign-in did not match the policy's assignments or conditions",
-        "Security defaults overrode the policy for the sign-in"
+        "Security defaults overrode the Conditional Access policy for the sign-in"
       ],
       "answer": "The sign-in did not match the policy's assignments or conditions",
       "explanation": "Not applied means the sign-in fell outside the policy's users, target resources or conditions, for example because of an exclusion. A satisfied grant control would show the policy as Success instead."
@@ -863,7 +863,7 @@
       "stem": "Only privileged access workstations, tagged with the value PAW in extensionAttribute1, may be used to reach the Microsoft admin portals. Which condition lets the policy identify these devices?",
       "choices": [
         "The device platforms condition set to Windows only",
-        "A named location containing the PAW subnet",
+        "A named location containing the PAW subnet's IP ranges",
         "A filter for devices rule on extensionAttribute1",
         "The client apps condition set to browser"
       ],
@@ -906,7 +906,7 @@
       "choices": [
         "Access tokens that all expire after five minutes so changes apply quickly",
         "Near real-time enforcement of critical events by supporting services",
-        "An MFA prompt for every user once an hour",
+        "An MFA prompt for every signed-in user once an hour on all supported services",
         "A monthly review of group memberships"
       ],
       "answer": "Near real-time enforcement of critical events by supporting services",
@@ -932,7 +932,7 @@
       "topic": "Continuous access evaluation",
       "stem": "Why can Microsoft Entra ID issue longer-lived access tokens to clients and services that support continuous access evaluation?",
       "choices": [
-        "The token is encrypted with the user's passkey",
+        "The token is encrypted with the user's passkey and the device's TPM key",
         "The service can revoke the token when a critical event occurs",
         "The client is asked for MFA again each time it presents the token",
         "The token is bound to a named location"
@@ -947,7 +947,7 @@
       "stem": "A user's account was disabled, but the user kept working in a third-party SaaS app for almost an hour afterwards. What is the MOST likely reason?",
       "choices": [
         "The app does not support CAE, so its token stays valid until expiry",
-        "CAE applies only to guest users from other tenants",
+        "CAE applies only to guest users who sign in from other organizations' tenants",
         "Disabling an account is not one of the critical events that CAE handles",
         "CAE requires every user to have a P2 license"
       ],
@@ -977,7 +977,7 @@
         "Require multifactor authentication on activation",
         "Require a Conditional Access authentication context",
         "Require ticket information and justification on activation",
-        "Allow permanent active assignment"
+        "Allow permanent active assignment of the Global Administrator role"
       ],
       "answer": "Require a Conditional Access authentication context",
       "explanation": "PIM role settings can require an authentication context, which links activation to a Conditional Access policy that demands phishing-resistant MFA and a compliant device. The basic MFA option on activation cannot check device compliance or method strength."
@@ -1060,7 +1060,7 @@
       "choices": [
         "Change their state and exclude users, but not delete them",
         "Delete them because they conflict with the custom policies you created",
-        "Nothing, because they are read-only and always on",
+        "Nothing, because they are read-only and always enforced on all users",
         "Rename them and change their grant controls freely"
       ],
       "answer": "Change their state and exclude users, but not delete them",

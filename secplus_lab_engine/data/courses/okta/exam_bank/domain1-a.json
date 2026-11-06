@@ -109,7 +109,7 @@
       "choices": [
         "An email address format, such as jane.doe@example.com",
         "A numeric employee ID with no letters or symbols",
-        "A down-level domain name followed by a backslash and the name",
+        "A NetBIOS domain name, a backslash and the name",
         "A first initial and last name with no domain part"
       ],
       "answer": "An email address format, such as jane.doe@example.com",
@@ -457,7 +457,7 @@
       "topic": "Profile Sourcing and User Imports",
       "stem": "A user imported from Active Directory has the wrong department. The field is read-only in Okta. What should the admin do?",
       "choices": [
-        "Remove the user from all groups, then edit the field in Okta",
+        "Remove the user from all groups, then edit the field in Okta directly",
         "Fix it in Active Directory and let the next import update Okta",
         "Change the user's type in Okta so the field becomes editable",
         "Create a custom attribute in Okta and enter the new department there"
@@ -500,7 +500,7 @@
       "stem": "An admin must load 300 contractors listed in a spreadsheet into Okta, and no directory holds them. Which approach is BEST?",
       "choices": [
         "Import users from a CSV file on the Directory > People page",
-        "Add each contractor one at a time from the Groups page",
+        "Add each contractor one at a time from the Directory > Groups page",
         "Upload the spreadsheet as a custom attribute in Profile Editor",
         "Create a group rule that reads the spreadsheet columns"
       ],
@@ -572,7 +572,7 @@
         "It is sourced from that app, not managed directly in Okta",
         "It can be edited freely in Okta like any Okta group",
         "It is controlled only by group rules that an admin creates in Okta",
-        "It is copied from the Everyone group every night"
+        "It is copied from the Everyone group every night by a scheduled job"
       ],
       "answer": "It is sourced from that app, not managed directly in Okta",
       "explanation": "Groups imported from an app are app groups whose membership comes from the source app. Okta groups are the ones whose members you manage directly in the Admin Console."
@@ -612,7 +612,7 @@
       "stem": "Which kind of group can an Okta admin add members to directly in the Admin Console?",
       "choices": [
         "The built-in Everyone group",
-        "A group imported from a connected app",
+        "A group imported from a connected cloud app",
         "A group imported from Active Directory",
         "An Okta-sourced group created in Okta"
       ],
@@ -754,7 +754,7 @@
         "The Sales group must first be assigned to an app",
         "The rule is still inactive and needs to be activated",
         "Group rules run only once a day at midnight",
-        "Each user has to sign out and back in before the rule applies"
+        "Users must sign in again before the rule applies"
       ],
       "answer": "The rule is still inactive and needs to be activated",
       "explanation": "A newly saved group rule is inactive by default and adds nobody until it is activated. Rules do not wait for an app assignment or a user sign-in."
@@ -1019,7 +1019,7 @@
       "choices": [
         "Remove the app assignment from the Analytics group",
         "Deactivate every user who is in the Analytics group",
-        "Delete the Analytics group and create it again",
+        "Delete the Analytics group and create it again without the app",
         "Suspend the reporting app for the whole org"
       ],
       "answer": "Remove the app assignment from the Analytics group",
@@ -1104,7 +1104,7 @@
         "Adding and removing users in those groups",
         "Creating new groups and new group rules",
         "Creating new users and resetting passwords",
-        "Assigning apps to the groups' members"
+        "Assigning apps to the groups' members directly"
       ],
       "answer": "Adding and removing users in those groups",
       "explanation": "Group Membership Administrators can view users and change membership of the groups in scope only. Creating groups and rules needs an Organization or Super Administrator."
@@ -1143,7 +1143,7 @@
       "topic": "Choosing Least-Privilege Roles",
       "stem": "A regional IT lead must create users, edit their profiles and deactivate them, but only for people in the EMEA group. Which assignment is BEST?",
       "choices": [
-        "Group Membership Administrator for the EMEA group",
+        "Group Membership Administrator for the EMEA group only",
         "Help Desk Administrator constrained to the EMEA group",
         "Organization Administrator for the whole org",
         "Group Administrator constrained to the EMEA group"
@@ -1158,7 +1158,7 @@
       "stem": "A project coordinator only needs to add and remove people in three project groups. Which role follows least privilege?",
       "choices": [
         "Group Membership Administrator for those three groups",
-        "Organization Administrator with a note to stay in scope",
+        "Organization Administrator, told to stay in scope",
         "Super Administrator for the duration of the project",
         "Group Administrator for those three groups"
       ],
@@ -1199,7 +1199,7 @@
       "topic": "Choosing Least-Privilege Roles",
       "stem": "A contractor will build and maintain group rules for the whole org. Which is the least-privileged standard role that allows this?",
       "choices": [
-        "Application Administrator",
+        "Application Administrator for all apps",
         "Group Membership Administrator",
         "Group Administrator",
         "Organization Administrator"
@@ -1255,7 +1255,7 @@
       "topic": "Assigning Roles to Users and Groups",
       "stem": "The service desk team changes often, and every member should hold the Help Desk Administrator role. What is the BEST way to manage this?",
       "choices": [
-        "Store the role name in a custom attribute",
+        "Store the role name in a custom user attribute",
         "Assign the role to each analyst one at a time",
         "Write a group rule that grants the role",
         "Assign the role to the Service Desk group"
@@ -1383,7 +1383,7 @@
       "choices": [
         "Group membership permissions do not apply to AD-sourced groups",
         "The delegated admin must also hold Super Administrator",
-        "The AD-sourced group must be converted into a resource set first",
+        "The AD group must first be converted into a resource set",
         "Custom roles can be scoped only to the Everyone group"
       ],
       "answer": "Group membership permissions do not apply to AD-sourced groups",
@@ -1454,7 +1454,7 @@
         "Add a Customizations resource for the Sales brand",
         "Add a Users resource for users from those two groups",
         "Add the Everyone group and an exclusion for other groups",
-        "Add an Applications resource for every Sales app"
+        "Add an Applications resource for every Sales app in the org"
       ],
       "answer": "Add a Users resource for users from those two groups",
       "explanation": "The Users resource can be limited to members of chosen groups, so user permissions act only on them. Applications and Customizations resources cover other kinds of objects."

@@ -121,7 +121,7 @@
       "topic": "Redirect URIs and platforms",
       "stem": "Users of a new Woodgrove Bank web app see a sign-in error stating that the reply URL in the request does not match the URLs configured for the app. What should you do?",
       "choices": [
-        "Turn on ID tokens for the implicit grant flow",
+        "Turn on ID tokens for the implicit grant flow on the Authentication page",
         "Register the exact URI the app sends as a redirect URI",
         "Grant tenant-wide admin consent to the app",
         "Change the supported account types to any organizational directory"
@@ -138,7 +138,7 @@
         "It is rejected because only localhost may use plain HTTP",
         "It is accepted for the Web platform but not for the SPA platform",
         "It is accepted once implicit grant is turned on",
-        "It is accepted only for multitenant registrations"
+        "It is accepted only for multitenant registrations that use the Web platform"
       ],
       "answer": "It is rejected because only localhost may use plain HTTP",
       "explanation": "Redirect URIs must use the HTTPS scheme; plain HTTP is allowed only for localhost during development. No platform or flow setting relaxes this for a public host name."
@@ -180,7 +180,7 @@
         "Add a client secret to the single-page app",
         "Move to the code flow with PKCE and turn off implicit grant",
         "Change the platform to Web and keep the implicit grant settings on",
-        "Change the supported account types to single tenant"
+        "Change the supported account types to single tenant to limit token exposure"
       ],
       "answer": "Move to the code flow with PKCE and turn off implicit grant",
       "explanation": "Microsoft recommends the authorization code flow with PKCE for single-page apps; implicit grant settings should then be cleared. A browser app cannot protect a client secret, so adding one does not help."
@@ -192,7 +192,7 @@
       "stem": "Adatum is registering an internal HR app that only its own employees will use. Which supported account type should you choose?",
       "choices": [
         "Accounts in this organizational directory only",
-        "Accounts in any organizational directory",
+        "Accounts in any organizational directory (multitenant)",
         "Any organizational directory and personal Microsoft accounts",
         "Personal Microsoft accounts only"
       ],
@@ -249,7 +249,7 @@
       "choices": [
         "Invite the consultants as B2B guest users in Contoso's tenant",
         "Change the app registration to multitenant",
-        "Add Fabrikam's tenant ID as a redirect URI",
+        "Add Fabrikam's tenant ID as a redirect URI on the app registration",
         "Add personal Microsoft accounts to the app's supported account types"
       ],
       "answer": "Invite the consultants as B2B guest users in Contoso's tenant",
@@ -305,7 +305,7 @@
       "choices": [
         "Create a new client secret and delete the unused one",
         "Read the secret value from the app manifest",
-        "Ask a Global Administrator to reveal the value",
+        "Ask a Global Administrator to reveal the value in the Entra admin center",
         "Recover the value from the directory audit log entry for the secret"
       ],
       "answer": "Create a new client secret and delete the unused one",
@@ -319,7 +319,7 @@
       "choices": [
         "A federated credential that trusts the cluster's issuer",
         "A client secret rotated through the cluster's secrets",
-        "The setting that allows public client flows",
+        "The setting that allows public client flows on the app registration",
         "A system-assigned managed identity added to the app registration"
       ],
       "answer": "A federated credential that trusts the cluster's issuer",
@@ -361,7 +361,7 @@
       "choices": [
         "It succeeds, because admin consent grants the app full directory access",
         "It succeeds after the user consents again",
-        "It fails until application permissions are added",
+        "It fails until application permissions are added and consented as well",
         "It fails, because the app is limited by the user's own rights"
       ],
       "answer": "It fails, because the app is limited by the user's own rights",
@@ -501,7 +501,7 @@
       "choices": [
         "Set Assignment required to Yes on the enterprise app",
         "Set the app to visible to users in My Apps",
-        "Add a front-channel logout URL to the app",
+        "Add a front-channel logout URL to the app registration's settings",
         "Change the supported account types to accounts in this directory only"
       ],
       "answer": "Set Assignment required to Yes on the enterprise app",
@@ -530,7 +530,7 @@
         "The nested group has more than one owner",
         "App role assignment does not follow nested group membership",
         "The app has no client secret configured",
-        "The app registration's display name is not unique in the tenant directory"
+        "The app registration's display name is not unique"
       ],
       "answer": "App role assignment does not follow nested group membership",
       "explanation": "Group-based assignment to applications applies only to direct members of the assigned group, so the nested group must be assigned on its own. Owners and credentials do not affect role claims."
@@ -646,7 +646,7 @@
       "stem": "What data does Microsoft Defender for Cloud Apps Cloud Discovery mainly analyze to find the cloud apps in use?",
       "choices": [
         "API activity from every SaaS app connected through app connectors",
-        "Microsoft Entra sign-in logs only",
+        "Microsoft Entra sign-in logs only, streamed to Log Analytics",
         "Traffic logs from firewalls, proxies and endpoints",
         "Intune device hardware inventory"
       ],
@@ -676,7 +676,7 @@
         "A log collector that the proxy forwards its logs to",
         "A weekly snapshot report uploaded by hand",
         "An app connector that reads the proxy appliance's management API",
-        "A session policy for all discovered apps"
+        "A session policy applied to all discovered apps in the tenant"
       ],
       "answer": "A log collector that the proxy forwards its logs to",
       "explanation": "A log collector, run as a Docker container, receives logs over syslog or FTP and uploads them for continuous reports. Manual snapshots do not give ongoing data."
@@ -757,7 +757,7 @@
       "topic": "App connectors",
       "stem": "Alpine Ski House must find files containing passport numbers that are already stored in its Box tenant, including files uploaded months ago. What should you do?",
       "choices": [
-        "Create a session policy that inspects downloads",
+        "Create a session policy that inspects downloads from Box for passport numbers",
         "Connect Box with an app connector and create a file policy",
         "Create a Cloud Discovery snapshot report from logs covering Box traffic",
         "Create an access policy for unmanaged devices"
@@ -774,7 +774,7 @@
         "A Salesforce account with admin rights to authorize API access",
         "A log collector that receives Salesforce traffic",
         "A Conditional Access policy using app control",
-        "A Defender for Endpoint integration with network protection in block mode"
+        "A Defender for Endpoint integration in block mode"
       ],
       "answer": "A Salesforce account with admin rights to authorize API access",
       "explanation": "The connector is authorized by an account in the app that has the permissions the API connection requires, typically an administrator. Log collectors and app control are separate, unrelated deployment paths."
@@ -828,7 +828,7 @@
       "stem": "Contoso must let users on unmanaged devices open SharePoint Online files in a browser but not download, print or sync them. The solution must not route sessions through a reverse proxy. What should you configure?",
       "choices": [
         "Conditional Access App Control with a session policy that blocks downloads",
-        "A grant control that requires a compliant device",
+        "A grant control that requires a compliant or hybrid joined device",
         "A Defender for Endpoint indicator for SharePoint",
         "SharePoint limited, web-only access for unmanaged devices"
       ],
@@ -913,7 +913,7 @@
       "choices": [
         "A Conditional Access policy using Conditional Access App Control",
         "An app connector for the app with all governance actions turned on",
-        "A Cloud Discovery continuous report for the app",
+        "A Cloud Discovery continuous report that includes the app's traffic",
         "An OAuth app policy that targets the app"
       ],
       "answer": "A Conditional Access policy using Conditional Access App Control",
@@ -998,7 +998,7 @@
         "A file policy that scans the app's stored files",
         "A session policy that protects files on download",
         "An access policy that blocks unmanaged devices",
-        "An activity policy that alerts when a user downloads many files at once"
+        "An activity policy for mass downloads"
       ],
       "answer": "A session policy that protects files on download",
       "explanation": "A session policy can inspect files at download time and apply a sensitivity label to them. A file policy works on files at rest and does not act at the moment of download."
@@ -1067,7 +1067,7 @@
       "choices": [
         "An app discovery policy filtered on risk score and number of users",
         "An OAuth app policy on permission level and community use",
-        "A session policy filtered on device tag",
+        "A session policy filtered on device tag and Google Workspace activity",
         "A file policy filtered on sharing level"
       ],
       "answer": "An OAuth app policy on permission level and community use",

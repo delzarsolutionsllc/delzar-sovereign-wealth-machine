@@ -11,7 +11,7 @@
    "choices": [
     "Limited access to properties and memberships of directory objects, the default level",
     "Same access as member users",
-    "Limited access, with guests blocked from joining Microsoft 365 groups",
+    "Limited access, with guests blocked from joining or creating Microsoft 365 groups",
     "Restricted to properties and memberships of their own directory objects"
    ],
    "answer": "Restricted to properties and memberships of their own directory objects",
@@ -67,7 +67,7 @@
    "choices": [
     "Send a bulk invitation to every supplier contact from a CSV file each month",
     "Create a cross-tenant synchronization configuration",
-    "Enable inbound B2B direct connect for all organizations",
+    "Enable inbound B2B direct connect for all external organizations by default",
     "Enable guest self-service sign-up and associate a user flow with the app"
    ],
    "answer": "Enable guest self-service sign-up and associate a user flow with the app",
@@ -81,7 +81,7 @@
    "choices": [
     "Anyone in the organization, including guests and non-admin members",
     "Only users assigned to specific admin roles",
-    "Member users and admin roles, but not guests",
+    "Member users and users assigned to admin roles, but never guest users",
     "No one, until an administrator turns on guest invitations for the tenant"
    ],
    "answer": "Anyone in the organization, including guests and non-admin members",
@@ -179,7 +179,7 @@
    "choices": [
     "Set the guest user access level to the same access as members",
     "Assign the contractor the Directory Readers role at the tenant scope",
-    "Reset the contractor's redemption status",
+    "Reset the contractor's redemption status and send a new invitation",
     "Change the contractor's userType property from Guest to Member"
    ],
    "answer": "Change the contractor's userType property from Guest to Member",
@@ -247,7 +247,7 @@
    "topic": "Cross-tenant access settings",
    "stem": "Contoso and Fabrikam use separate Microsoft Entra tenants. They want users from both companies to work in Microsoft Teams shared channels without creating guest accounts. What must be configured?",
    "choices": [
-    "B2B collaboration inbound settings in the Contoso tenant only",
+    "B2B collaboration inbound and outbound settings in the Contoso tenant only",
     "B2B direct connect inbound and outbound settings in both tenants",
     "A cross-tenant synchronization job from Fabrikam to Contoso",
     "SAML/WS-Fed identity provider federation set up between the two tenants"
@@ -262,7 +262,7 @@
    "stem": "Contoso's Conditional Access policy requires MFA for all guests. Users from Fabrikam already complete MFA in their own tenant and complain about being prompted twice. What should you configure in Contoso?",
    "choices": [
     "Inbound trust settings that accept MFA claims from the Fabrikam tenant",
-    "Outbound trust settings that accept MFA claims from Fabrikam",
+    "Outbound trust settings in Contoso that accept MFA claims from Fabrikam",
     "An exclusion for all guests in the Conditional Access policy",
     "Collaboration restrictions that allow invitations only to the Fabrikam domain"
    ],
@@ -375,7 +375,7 @@
    "choices": [
     "The userType attribute mapping in the synchronization configuration",
     "The guest user access level in the tenant's external collaboration settings",
-    "The scoping filter on the synchronization configuration",
+    "The scoping filter that selects users in the synchronization configuration",
     "The redemption status of each synchronized user"
    ],
    "answer": "The userType attribute mapping in the synchronization configuration",
@@ -460,7 +460,7 @@
     "When they sign up through a self-service sign-up user flow",
     "When they redeem an invitation sent by an admin",
     "When they join a Teams shared channel through B2B direct connect",
-    "When they are added by cross-tenant synchronization"
+    "When they are added to the tenant by cross-tenant synchronization"
    ],
    "answer": "When they sign up through a self-service sign-up user flow",
    "explanation": "Facebook is available as an identity provider only for self-service sign-up user flows. Invited users redeem with their Entra, Microsoft, Google, federated or one-time passcode identities instead."
@@ -612,7 +612,7 @@
    "choices": [
     "Create a new rule with higher precedence in the Synchronization Rules Editor",
     "Edit the matching out-of-box rule directly in the Synchronization Rules Editor",
-    "Change the attribute value in the Connect Sync database by using SQL",
+    "Change the attribute value directly in the Connect Sync database by using SQL",
     "Add a claim rule on the AD FS relying party trust"
    ],
    "answer": "Create a new rule with higher precedence in the Synchronization Rules Editor",
@@ -669,7 +669,7 @@
     "Configure a second server in staging mode",
     "Install provisioning agents on additional servers",
     "Move the configuration database to a SQL Server cluster",
-    "Install the Connect Health agent for sync"
+    "Install the Connect Health agent for sync on the agent server"
    ],
    "answer": "Install provisioning agents on additional servers",
    "explanation": "Cloud Sync supports several active provisioning agents for high availability, and the cloud service uses whichever is available. Staging mode is a Connect Sync concept and does not apply to Cloud Sync."
@@ -696,7 +696,7 @@
    "choices": [
     "Stop the Connect Sync scheduler until the Cloud Sync pilot has ended",
     "Scope both tools to the same OU for redundancy",
-    "Switch the Connect Sync server into staging mode",
+    "Switch the Connect Sync server into staging mode during the pilot",
     "Scope Cloud Sync to the new OU and exclude it from Connect Sync"
    ],
    "answer": "Scope Cloud Sync to the new OU and exclude it from Connect Sync",
@@ -739,7 +739,7 @@
     "The user's password encrypted with the tenant's public key",
     "The unmodified NTLM hash from AD DS",
     "A salted hash derived from the AD DS password hash",
-    "A Kerberos ticket issued by a domain controller"
+    "A Kerberos ticket issued by a domain controller for the user"
    ],
    "answer": "A salted hash derived from the AD DS password hash",
    "explanation": "Connect Sync applies a salt and a key derivation function to the existing AD DS hash, so neither the password nor the original hash leaves the network. Sending the raw NTLM hash would allow pass-the-hash attacks against the cloud copy."
@@ -835,7 +835,7 @@
    "stem": "Fabrikam uses pass-through authentication. Attackers trying passwords from the internet are locking out AD DS accounts. How should you configure Microsoft Entra smart lockout?",
    "choices": [
     "Set its lockout threshold higher than the AD DS lockout threshold",
-    "Set its threshold equal to the AD DS threshold",
+    "Set its lockout threshold exactly equal to the AD DS lockout threshold",
     "Turn it off and rely on the AD DS lockout policy",
     "Set its lockout threshold lower than the AD DS lockout threshold"
    ],
@@ -893,7 +893,7 @@
     "Add the Entra autologon URL to the Intranet zone by Group Policy",
     "Add the Entra autologon URL to the Restricted sites zone by Group Policy",
     "Enable password writeback in the Connect Sync wizard",
-    "Install additional pass-through authentication agents"
+    "Install additional pass-through authentication agents on the servers"
    ],
    "answer": "Add the Entra autologon URL to the Intranet zone by Group Policy",
    "explanation": "Browsers send Kerberos tickets only to sites in the Intranet zone, so the autologon URL must be placed there, usually by Group Policy. Putting it in Restricted sites would block it, and PTA agents do not affect silent sign-in."
@@ -947,7 +947,7 @@
    "stem": "Woodgrove Bank wants to use staged rollout to move a pilot group from AD FS to password hash synchronization. What must be in place BEFORE you add the group?",
    "choices": [
     "The federated domain converted to managed authentication for all users",
-    "The AD FS relying party trust removed",
+    "The AD FS relying party trust for Microsoft Entra ID removed first",
     "Password hash synchronization enabled with hashes synchronized",
     "Seamless SSO disabled in every forest"
    ],
