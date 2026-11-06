@@ -177,12 +177,12 @@
       "topic": "Authoritative Sources",
       "stem": "A team asks whether an Active Directory source should be authoritative. Which statement BEST reflects common practice?",
       "choices": [
-        "AD is usually non-authoritative, with HR as the authoritative source",
+        "AD is usually non-authoritative, with HR authoritative",
         "AD must always be the only authoritative source",
         "Every source in a tenant must be authoritative",
         "AD can be connected only if it is marked authoritative"
       ],
-      "answer": "AD is usually non-authoritative, with HR as the authoritative source",
+      "answer": "AD is usually non-authoritative, with HR authoritative",
       "explanation": "Treating HR as the authoritative source and correlating AD accounts to those identities is common practice, not a product rule: ISC lets any source, AD included, be authoritative when an identity profile is built on it. Nothing forces every source, or AD, to be authoritative."
     },
     {
@@ -194,9 +194,9 @@
         "An admin uploads a .csv file of accounts by hand",
         "Users sign in to the source through ISC single sign-on",
         "Approvers receive a ticket for each change",
-        "ISC connects to the system itself to aggregate and track changes"
+        "ISC reads changes from the system itself"
       ],
-      "answer": "ISC connects to the system itself to aggregate and track changes",
+      "answer": "ISC reads changes from the system itself",
       "explanation": "A direct connection uses connection details so ISC can read accounts, and often provision, without file uploads. A flat file connection relies on an imported file."
     },
     {
@@ -222,9 +222,9 @@
         "It requires an IQService host to import files",
         "It can reset user passwords through Password Manager",
         "It provisions accounts directly once a VA is attached",
-        "It is read only, so changes are fulfilled manually outside ISC"
+        "It is read only, so changes are made manually"
       ],
-      "answer": "It is read only, so changes are fulfilled manually outside ISC",
+      "answer": "It is read only, so changes are made manually",
       "explanation": "File-based sources are disconnected and read only, so provisioning becomes manual tasks for owners. They cannot reset passwords or provision directly."
     },
     {
@@ -236,9 +236,9 @@
         "Export on the Policy Violations page",
         "Download Correlation File on the Uncorrelated Accounts page",
         "Generate the Uncorrelated Accounts report",
-        "Download Account Schema on the source's Account Aggregation page"
+        "Download Account Schema on Account Aggregation"
       ],
-      "answer": "Download Account Schema on the source's Account Aggregation page",
+      "answer": "Download Account Schema on Account Aggregation",
       "explanation": "Download Account Schema gives a template matching the source's attributes. The correlation file lists uncorrelated accounts for manual linking."
     },
     {
@@ -318,11 +318,11 @@
       "stem": "A manager asks what a Quick Compliance connector provides compared with a deep governance connector. Which answer is accurate?",
       "choices": [
         "Direct database replication of identity attributes",
-        "Read-only account and entitlement aggregation with minimal setup",
+        "Read-only aggregation with minimal setup",
         "Automatic SoD blocking for the source's entitlements",
         "Full provisioning and password management on the source"
       ],
-      "answer": "Read-only account and entitlement aggregation with minimal setup",
+      "answer": "Read-only aggregation with minimal setup",
       "explanation": "Quick Compliance connectors support aggregation only, which suits visibility and certification. Deep governance connectors add provisioning, schema configuration and password settings."
     },
     {
@@ -612,9 +612,9 @@
         "It only works on flat file sources",
         "Identity attributes update only after a source reset",
         "The source owner must approve the new values first",
-        "It updates account data but does not sync identity attributes"
+        "It updates account data but not identity attributes"
       ],
-      "answer": "It updates account data but does not sync identity attributes",
+      "answer": "It updates account data but not identity attributes",
       "explanation": "Aggregating one account updates its account data but does not recalculate identity attributes or trigger provisioning. A later identity refresh handles that."
     },
     {
@@ -779,10 +779,10 @@
       "choices": [
         "Unlimited, until an admin cancels the schedule",
         "One, because recurrences need a monthly schedule",
-        "Two, at 2 PM and 10 PM, because daily recurrences end at midnight",
+        "Two, at 2 PM and 10 PM",
         "Three, at 2 PM, 10 PM and 6 AM"
       ],
-      "answer": "Two, at 2 PM and 10 PM, because daily recurrences end at midnight",
+      "answer": "Two, at 2 PM and 10 PM",
       "explanation": "Recurring daily schedules start at the chosen time and stop at midnight. A 2 PM start every 8 hours gives runs at 2 PM and 10 PM."
     },
     {
@@ -847,12 +847,12 @@
       "topic": "Scheduling and Running Aggregations",
       "stem": "A team aggregates a non-authoritative source every hour during business hours. Which change BEST follows SailPoint's guidance?",
       "choices": [
-        "Aggregate less often, about once a day and outside business hours",
+        "Aggregate daily, outside business hours",
         "Aggregate only when the source owner asks",
         "Aggregate every few minutes for fresher data",
         "Disable optimization on every scheduled run"
       ],
-      "answer": "Aggregate less often, about once a day and outside business hours",
+      "answer": "Aggregate daily, outside business hours",
       "explanation": "Best practice is to aggregate as infrequently as the business allows, rarely more than daily for non-authoritative sources, and outside business hours. Unoptimized runs add load."
     },
     {
@@ -864,9 +864,9 @@
         "Creating a new identity for every aggregated account",
         "Grouping entitlements into access profiles automatically",
         "Copying identity attributes onto every account on a source",
-        "Matching source accounts to identities by comparing attribute values"
+        "Matching accounts to identities by attribute values"
       ],
-      "answer": "Matching source accounts to identities by comparing attribute values",
+      "answer": "Matching accounts to identities by attribute values",
       "explanation": "Correlation compares account attributes with identity attributes and assigns the account when they match. Creating identities is the job of authoritative sources."
     },
     {
@@ -933,10 +933,10 @@
       "choices": [
         "Matching the account to the source owner",
         "Matching it to the newest identity in the tenant",
-        "Matching the account's Account Name to the identity's name attribute",
+        "Matching Account Name to the identity's name",
         "Matching the account's email to the manager's email"
       ],
-      "answer": "Matching the account's Account Name to the identity's name attribute",
+      "answer": "Matching Account Name to the identity's name",
       "explanation": "If configured criteria fail, ISC falls back to matching the Account Name attribute to the identity name, case-insensitively. This default is not configurable."
     },
     {
@@ -1179,10 +1179,10 @@
       "choices": [
         "The source's correlation criteria order",
         "The source owner assignment",
-        "The Percentage of Deleted Accounts Allowed threshold",
+        "The deletion percentage threshold",
         "The identity profile priority"
       ],
-      "answer": "The Percentage of Deleted Accounts Allowed threshold",
+      "answer": "The deletion percentage threshold",
       "explanation": "The deletion threshold cancels an aggregation that would delete more accounts than allowed. Correlation order and profile priority do not stop deletions."
     },
     {
@@ -1459,10 +1459,10 @@
       "choices": [
         "The source owner is cleared",
         "Identity profiles that use the source are deleted",
-        "Access profiles on the source are deleted and must be recreated",
+        "Its access profiles are deleted",
         "Aggregation schedules are removed"
       ],
-      "answer": "Access profiles on the source are deleted and must be recreated",
+      "answer": "Its access profiles are deleted",
       "explanation": "Removing entitlements also removes the source's access profiles. Aggregation schedules are retained after a reset."
     },
     {
@@ -1488,9 +1488,9 @@
         "The identity profile mapping preview",
         "The Policy Violations page filtered by level",
         "The Identities list filtered by lifecycle state",
-        "The Source Activity suggested search, narrowed to that source"
+        "The Source Activity suggested search"
       ],
-      "answer": "The Source Activity suggested search, narrowed to that source",
+      "answer": "The Source Activity suggested search",
       "explanation": "Search offers a Source Activity suggested search that can be narrowed to one source name. The other pages do not show source events."
     },
     {
@@ -1556,11 +1556,11 @@
       "stem": "An admin wants a weekly email of failed source events without logging in. What should they set up?",
       "choices": [
         "An SoD policy schedule with subscribers",
-        "A saved search with a subscription on the schedule",
+        "A subscription to a saved search",
         "A password sync group",
         "A source deletion threshold"
       ],
-      "answer": "A saved search with a subscription on the schedule",
+      "answer": "A subscription to a saved search",
       "explanation": "Saved searches can be subscribed to so results arrive by email on a schedule. SoD schedules report policy violations, not source events."
     },
     {
@@ -1654,11 +1654,11 @@
       "stem": "Aggregations fail intermittently with Connection Reset errors on a supported source. Which configuration can make ISC retry them automatically?",
       "choices": [
         "Enable delta aggregation on the source",
-        "Patch the retry error, wait time and retry count connector attributes",
+        "Patch the retry connector attributes",
         "Assign a governance group for source management",
         "Increase the Percentage of Deleted Accounts Allowed"
       ],
-      "answer": "Patch the retry error, wait time and retry count connector attributes",
+      "answer": "Patch the retry connector attributes",
       "explanation": "Supported sources treat some errors as retryable, and admins can add errors and tune wait time and retry count by patching connector attributes. Deletion thresholds and delta do not retry."
     },
     {

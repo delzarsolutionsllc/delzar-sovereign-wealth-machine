@@ -23,12 +23,12 @@
       "topic": "SoD Policy Types",
       "stem": "An administrator is reviewing the two kinds of SoD policy that the ISC policy API supports. Which pair names them correctly?",
       "choices": [
-        "Conflicting access based policies and general (search query based) policies",
+        "Conflicting access based policies and general policies",
         "Role policies and entitlement policies with separate limits",
         "Source policies and identity profile policies",
         "Preventive policies and detective policies"
       ],
-      "answer": "Conflicting access based policies and general (search query based) policies",
+      "answer": "Conflicting access based policies and general policies",
       "explanation": "The API types a policy as conflicting access based (two access lists) or general (defined by a search query). Preventive and detective describe how a policy is enforced, not separate policy objects."
     },
     {
@@ -138,9 +138,9 @@
         "The policy automatically copies List A into List B",
         "The policy runs but finds nothing until List B is filled",
         "The policy flags everyone holding any List A item",
-        "The policy will error until each list has at least one access item"
+        "The policy will error until each list has an access item"
       ],
-      "answer": "The policy will error until each list has at least one access item",
+      "answer": "The policy will error until each list has an access item",
       "explanation": "Documentation states that each access list needs at least one item to prevent errors. With nothing to compare against, the policy cannot evaluate conflicts."
     },
     {
@@ -191,12 +191,12 @@
       "topic": "Preventive SoD Enforcement",
       "stem": "An admin chooses Allow submission on an SoD policy. A user then requests access that conflicts with the policy. What happens?",
       "choices": [
-        "The request continues and is routed to the configured approvers",
+        "The request is routed to the configured approvers",
         "The request waits for the next scheduled policy run",
         "The request is converted into a certification campaign",
         "The request is cancelled before any approver sees it"
       ],
-      "answer": "The request continues and is routed to the configured approvers",
+      "answer": "The request is routed to the configured approvers",
       "explanation": "With Allow submission, conflicting requests are routed to approvers so a person can decide with the conflict in view. Automatic cancellation is the Block submission behaviour."
     },
     {
@@ -221,10 +221,10 @@
       "choices": [
         "Running a policy on a schedule to list existing violations",
         "Certifying violations in a later campaign",
-        "Checking requested access against policies before it is granted",
+        "Checking requests against policies before granting access",
         "Exporting the violations table for auditors"
       ],
-      "answer": "Checking requested access against policies before it is granted",
+      "answer": "Checking requests against policies before granting access",
       "explanation": "Preventive enforcement evaluates an access request before provisioning and can block or flag it. Scheduled runs, certifications and exports find or review violations that already exist."
     },
     {
@@ -233,12 +233,12 @@
       "topic": "Preventive SoD Enforcement",
       "stem": "An SoD policy is set to Block submission, but a user already held both conflicting entitlements before the policy was created. What should the admin expect?",
       "choices": [
-        "The existing conflict appears as a violation when the policy runs",
+        "The conflict appears as a violation when the policy runs",
         "The policy cannot be enabled until the conflict is removed",
         "The conflict is ignored because it predates the policy",
         "The policy removes one of the entitlements automatically"
       ],
-      "answer": "The existing conflict appears as a violation when the policy runs",
+      "answer": "The conflict appears as a violation when the policy runs",
       "explanation": "Blocking applies to new access requests. Access already held is found by running or scheduling the policy, which lists violations for owners to remediate or mitigate."
     },
     {
@@ -289,12 +289,12 @@
       "topic": "Policy Runs and Violations",
       "stem": "Subscribers to a scheduled SoD policy complain about emails when nothing was found. What can the admin change in the schedule?",
       "choices": [
-        "Turn off the toggle that sends an email when there are no violations",
+        "Turn off the email-when-no-violations toggle",
         "Remove the policy owner so no emails are sent",
         "Switch the policy to Allow submission",
         "Lower the policy risk level to Low"
       ],
-      "answer": "Turn off the toggle that sends an email when there are no violations",
+      "answer": "Turn off the email-when-no-violations toggle",
       "explanation": "The schedule includes a toggle for emailing when there are no violations. Owner, risk level and the access request option do not control empty-result emails."
     },
     {
@@ -361,10 +361,10 @@
       "choices": [
         "Lower the policy risk level so it stops reporting",
         "Delete the SoD policy until the migration ends",
-        "Mitigate the violation with a mitigating control and comments",
+        "Apply a mitigating control to the violation",
         "Remove the clerk from the identity profile for now"
       ],
-      "answer": "Mitigate the violation with a mitigating control and comments",
+      "answer": "Apply a mitigating control to the violation",
       "explanation": "Mitigating a violation applies a control that documents the accepted risk and can expire. Deleting or weakening the policy removes evidence and protection for everyone else."
     },
     {
@@ -374,11 +374,11 @@
       "stem": "An admin is creating a mitigating control for SoD exceptions. Which setting ensures accepted exceptions are reviewed again rather than lasting forever?",
       "choices": [
         "The policy's tags",
-        "The number of days before the control expires",
+        "Days until the control expires",
         "The policy's List B name",
         "The policy's External Reference URL"
       ],
-      "answer": "The number of days before the control expires",
+      "answer": "Days until the control expires",
       "explanation": "Controls include an expiration in days, so mitigations lapse and are reconsidered. Reference URLs, tags and list names are descriptive only."
     },
     {
@@ -473,10 +473,10 @@
       "choices": [
         "In the SoD policy's Policy Definition page",
         "In the source's Account Correlation settings",
-        "In a password policy under Admin > Password Mgmt > Policies",
+        "In a password policy's requirements",
         "In the identity profile's lifecycle states"
       ],
-      "answer": "In a password policy under Admin > Password Mgmt > Policies",
+      "answer": "In a password policy's requirements",
       "explanation": "The password dictionary is a password policy option. SoD rules, correlation and lifecycle states do not govern password content."
     },
     {
@@ -499,12 +499,12 @@
       "topic": "Password Policies and Sync Groups",
       "stem": "Before adding several sources to one sync group, what should the admin verify about the chosen password policy?",
       "choices": [
-        "That its rules are acceptable to every source in the group",
+        "That every member source accepts its rules",
         "That it was created by a source owner",
         "That it is the most recently created policy",
         "That it matches the identity profile priority order"
       ],
-      "answer": "That its rules are acceptable to every source in the group",
+      "answer": "That every member source accepts its rules",
       "explanation": "SailPoint advises verifying that the sync group's policy enforces requirements every member source accepts; otherwise users see errors changing passwords in the group. Who created the policy, its age and profile priority do not matter."
     },
     {
