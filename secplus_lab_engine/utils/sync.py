@@ -30,7 +30,7 @@ FORMAT = 1
 APP = "Delzar Certification Academy"
 MAX_SESSIONS = 50
 _ISO = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-_OBJ = re.compile(r"^[1-5]\.[1-9]$")
+_OBJ = re.compile(r"^\d{1,2}\.\d{1,2}$")
 _KEY = re.compile(r"^[\w.\-]{1,40}$")
 
 
@@ -70,7 +70,8 @@ def clean(raw) -> dict:
     for o, s in (raw.get("objectives") or {}).items() if isinstance(raw.get("objectives"), dict) else []:
         if _OBJ.match(str(o)) and isinstance(s, dict):
             a = _int(s.get("attempted"))
-            out["objectives"][o] = {"attempted": a, "correct": min(a, _int(s.get("correct")))}
+            if a:                       # an objective never attempted carries nothing worth keeping
+                out["objectives"][o] = {"attempted": a, "correct": min(a, _int(s.get("correct")))}
     for qid, c in (raw.get("srs") or {}).items() if isinstance(raw.get("srs"), dict) else []:
         if _KEY.match(str(qid)) and isinstance(c, dict) and _day(c.get("due")):
             out["srs"][qid] = {"due": c["due"], "interval_days": _int(c.get("interval_days"), 0, 3650),

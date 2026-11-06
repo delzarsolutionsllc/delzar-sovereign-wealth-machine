@@ -30,7 +30,7 @@ from functools import lru_cache
 
 SET_SIZE = 10
 MIN_LAST_SET = 5                      # a smaller remainder joins the previous set
-QUIZ_ID = re.compile(r"^([1-5]\.[1-9])-(set|t)(\d{1,2})$")
+QUIZ_ID = re.compile(r"^(\d{1,2}\.\d{1,2})-(set|t)(\d{1,2})$")
 OTHER_TOPIC = "Other"
 
 
@@ -40,7 +40,7 @@ def _objective_names() -> dict:
 
 
 def _sort_key(q: dict):
-    m = re.match(r"^D(\d)-(\d+)$", q["id"])
+    m = re.match(r"^D(\d{1,2})-(\d+)$", q["id"])
     return (0, int(m.group(1)), int(m.group(2)), "") if m else (1, 0, 0, q["id"])
 
 

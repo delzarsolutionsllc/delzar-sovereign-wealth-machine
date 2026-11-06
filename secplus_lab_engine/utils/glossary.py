@@ -39,7 +39,7 @@ GLOSSARY_DIR = course.data_dir("glossary")
 VIDEOS_FILE = GLOSSARY_DIR / "videos.json"
 SET_SIZE = 15
 MODES = {"acr": "Acronyms", "voc": "Vocabulary", "def": "Definitions"}
-QUIZ_ID = re.compile(r"^g([1-9])-(acr|voc|def)-(\d{1,2})$")
+QUIZ_ID = re.compile(r"^g(\d{1,2})-(acr|voc|def)-(\d{1,2})$")
 DOMAIN_NAMES = course.domain_names()
 
 
