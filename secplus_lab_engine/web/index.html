@@ -193,6 +193,10 @@ a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-co
 .countdown { border-left: 4px solid var(--accent); padding: 6px 12px; background: var(--sunken); border-radius: 6px; }
 .coursepick { display: flex; flex-direction: column; gap: 2px; font-size: .75rem; color: var(--muted); margin-top: 8px; }
 .coursepick select { font-size: .9rem; padding: 5px 8px; }
+.answerbox { width: 100%; min-height: 110px; padding: 10px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); font: inherit; resize: vertical; }
+.checklist { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.checklist label { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+.checklist input { margin-top: 4px; }
 .tm { font-size: .72rem; color: var(--muted); margin: 14px 0 0; line-height: 1.4; }
 @media (prefers-reduced-motion: no-preference) { .bar > i, .meter > i { transition: width .3s ease; } }
 </style>
@@ -215,9 +219,11 @@ a.chip { text-decoration: none; color: var(--accent); } a.chip:hover { border-co
       <a href="#exam" data-view="exam">Practice exam</a>
       <a href="#progress" data-view="progress">My progress</a>
       <a href="#career" data-view="career">IAM career &amp; portfolio</a>
+      <a href="#interview" data-view="interview">Interview prep</a>
     </nav>
     <div class="domains" id="domains"><p class="loading">Loading course…</p></div>
     <div class="mode" id="mode"></div>
+    <p class="tm" id="copyright">© 2026 Delzar Solutions LLC. All rights reserved. Licensed for personal study only; do not copy or share.</p>
     <p class="tm" id="tmnotice">Independent study project, not affiliated with or endorsed by CompTIA. CompTIA and Security+ are trademarks of CompTIA, Inc.; other names are trademarks of their owners.</p>
   </aside>
   <main class="main" id="main"><div class="wrap" id="view" tabindex="-1"><p class="loading">Loading course…</p></div></main>
@@ -1609,6 +1615,143 @@ async function viewCareer() {
       el("ul", {}, c.job_search.map(x => el("li", { text: x })))));
 }
 
+/* ------------------------------------------------------------------ interview prep (shared by every course) */
+const IV_KEY = "delzar-interview";
+const ivLoad = () => { try { return JSON.parse(localStorage.getItem(IV_KEY) || "{}") || {}; } catch { return {}; } };
+const ivSave = d => { try { localStorage.setItem(IV_KEY, JSON.stringify(d)); } catch { /* private window: scores just are not kept */ } };
+const IV = () => CATALOG.interview || { categories: [], roles: [], questions: [] };
+let ivTutor = null;   // is the in-app AI tutor (/api/tutor on the private hosted site) switched on?
+async function ivTutorOn() {
+  if (ivTutor !== null) return ivTutor;
+  ivTutor = false;
+  if (!/^https?:$/.test(location.protocol) || window.SECPLUS_BUNDLE) return ivTutor;
+  try { const r = await fetch("./api/tutor", { credentials: "same-origin" }); if (r.ok) ivTutor = Boolean((await r.json()).enabled); } catch { /* not hosted with the tutor */ }
+  return ivTutor;
+}
+const ivCat = id => (IV().categories.find(c => c.id === id) || { name: id }).name;
+
+function ivPick(n, { role, category } = {}) {
+  let qs = IV().questions.slice();
+  if (role) { const r = IV().roles.find(x => x.id === role); if (r) qs = qs.filter(q => r.focus.includes(q.category)); }
+  if (category) qs = qs.filter(q => q.category === category);
+  const seen = ivLoad();   // unseen first, then lowest score, shuffled within each band
+  const band = q => seen[q.id] == null ? -1 : seen[q.id].score;
+  qs = qs.map(q => [band(q), Math.random(), q]).sort((a, b) => a[0] - b[0] || a[1] - b[1]).map(x => x[2]);
+  const groups = {}; qs.forEach(q => (groups[q.category] = groups[q.category] || []).push(q));
+  const out = []; const keys = Object.keys(groups);
+  while (out.length < n && keys.some(k => groups[k].length)) for (const k of keys) if (groups[k].length && out.length < n) out.push(groups[k].shift());
+  return out;
+}
+
+function ivClaudePrompt(q, answer) {
+  return ["You are a senior IAM hiring manager running a mock interview. Grade my answer honestly.",
+    `Question (${ivCat(q.category)}, ${q.level} level): ${q.question}`,
+    "A strong answer covers: " + q.listen_for.join("; ") + ".",
+    "Red flags: " + q.red_flags.join("; ") + ".",
+    answer.trim() ? `My answer: ${answer.trim()}` : "Ask me the question, wait for my answer, then grade it.",
+    "Give: a score out of 5, what I covered, what I missed, one sentence I could add, then ask me one of these follow-ups: " + q.follow_ups.join(" | ")].join("\n");
+}
+
+async function viewInterview() {
+  markNav("interview"); setKeys(null);
+  const iv = IV(), seen = ivLoad();
+  const done = Object.keys(seen).length, total = iv.questions.length;
+  const avg = done ? (Object.values(seen).reduce((a, x) => a + x.score, 0) / done).toFixed(1) : null;
+  const labLink = n => CATALOG.labs.some(l => l.n === n) ? el("a", { href: `#lab-${n}`, text: `Lab ${n}` }) : el("span", { text: `Lab ${n}` });
+  put(view(),
+    el("section", { class: "panel" },
+      el("span", { class: "label", text: "Interview prep" }),
+      el("h1", { text: "Practise for an IAM job interview" }),
+      el("p", { text: `${total} original interview questions across ${iv.categories.length} areas. For each one: answer out loud or type, then see what interviewers listen for, a model answer, likely follow-ups and red flags. Rate yourself; weak and unseen questions come back first.` }),
+      el("p", { class: "muted", text: done ? `Practised ${done} of ${total} · self-rated average ${avg} / 5.` : "Nothing practised yet." }),
+      el("div", { class: "btns" },
+        el("button", { class: "btn primary", text: "Quick mock interview (6 questions)", onclick: () => ivRun(ivPick(6), "Mock interview") }))),
+    el("section", { class: "panel" }, el("h2", { text: "Interview for a specific role" }),
+      el("div", { class: "qcards" }, iv.roles.map(r => el("div", { class: "qcard" },
+        el("b", { text: r.name }), el("span", { class: "muted", text: r.what_you_do }),
+        el("span", { class: "score", text: "Certs: " + r.certs.join(", ") }),
+        el("span", { class: "score" }, "Talk about: ", r.labs.map(labLink).flatMap((x, i) => [i ? ", " : "", x])),
+        el("button", { class: "btn", text: "Mock interview for this role", onclick: () => ivRun(ivPick(6, { role: r.id }), r.name) }))))),
+    el("section", { class: "panel" }, el("h2", { text: "Practise one area" }),
+      el("div", { class: "qcards" }, iv.categories.map(c => {
+        const n = iv.questions.filter(q => q.category === c.id && seen[q.id]).length;
+        return el("div", { class: "qcard" + (n && n === c.count ? " done" : "") }, el("b", { text: c.name }), el("span", { class: "muted", text: c.about }),
+          el("span", { class: "score", text: `${n}/${c.count} practised` }),
+          el("button", { class: "btn", text: `Practise ${Math.min(5, c.count)}`, "aria-label": `Practise ${c.name}`, onclick: () => ivRun(ivPick(5, { category: c.id }), c.name) }));
+      }))),
+    el("section", { class: "panel" }, el("h2", { text: "Free AI grading with Claude" }),
+      el("p", { text: "After each answer, “Copy for Claude” copies a grading prompt with your answer and the scoring points. Paste it into claude.ai, or into the Claude app, which uses your own plan and needs no API key. For a full mock interview run by Claude, connect the academy's AI tutor (python main.py mcp) and use the mock_interview prompt." })));
+}
+
+function ivRun(qs, title) {
+  if (!qs.length) { announce("No interview questions here yet."); return; }
+  let i = 0; const scores = [];
+  const show = () => {
+    if (i >= qs.length) return finish();
+    const q = qs[i];
+    const box = el("textarea", { class: "answerbox", "aria-label": "Your answer", placeholder: "Type your answer, or say it out loud and leave this empty." });
+    const t0 = Date.now(), clock = el("span", { class: "timer", "aria-hidden": "true", text: "0:00" });
+    clearInterval(examTimer);
+    examTimer = setInterval(() => { const s = Math.floor((Date.now() - t0) / 1000); clock.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; clock.classList.toggle("low", s > 150); }, 1000);
+    const reveal = el("div", {});
+    const btn = el("button", { class: "btn primary", text: "Show what they listen for", onclick: () => { clearInterval(examTimer); btn.hidden = true; showKey(q, box.value, reveal); } });
+    put(view(),
+      el("section", { class: "panel" },
+        el("span", { class: "label", text: `${title} · question ${i + 1} of ${qs.length}` }),
+        el("div", { class: "chips" }, el("span", { class: "chip", text: ivCat(q.category) }), el("span", { class: "chip", text: q.level }), el("span", { class: "chip", text: q.kind })),
+        el("h1", { class: "prompt", text: q.question }),
+        el("p", { class: "muted" }, "Aim for 1-2 minutes, as in a real interview. Time: ", clock),
+        box, el("div", { class: "btns" }, btn, el("a", { class: "btn", href: "#interview", text: "End" }))),
+      reveal);
+    box.focus();
+  };
+  const showKey = (q, answer, into) => {
+    const checks = q.listen_for.map(pt => el("input", { type: "checkbox" }));
+    const aiOut = el("div", { "aria-live": "polite" });
+    const aiBtn = el("button", { class: "btn", hidden: true, text: "Grade with AI tutor", onclick: async () => {
+      if (!answer.trim()) { put(aiOut, el("p", { class: "notice", text: "Type your answer above first, then ask the AI tutor." })); return; }
+      aiBtn.disabled = true; put(aiOut, el("p", { class: "muted", text: "The AI tutor is reading your answer…" }));
+      try {
+        const r = await fetch("./api/tutor", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ qid: q.id, answer }) });
+        const d = await r.json();
+        put(aiOut, d.feedback ? el("div", { class: "verdict" }, el("b", { text: "AI tutor feedback" }), el("p", { style: "white-space: pre-wrap", text: d.feedback }))
+          : el("p", { class: "notice", text: d.error || "The AI tutor is not available." }));
+      } catch { put(aiOut, el("p", { class: "notice", text: "Could not reach the AI tutor." })); }
+      aiBtn.disabled = false; } });
+    ivTutorOn().then(on => { aiBtn.hidden = !on; });
+    put(into, el("section", { class: "panel" },
+      el("h2", { text: "What the interviewer listens for" }),
+      el("p", { class: "muted", text: "Tick each point your answer covered." }),
+      el("ul", { class: "checklist" }, q.listen_for.map((pt, k) => el("li", {}, el("label", {}, checks[k], el("span", { text: pt }))))),
+      el("h2", { text: "Model answer" }), el("p", { class: "verdict", text: q.model_answer }),
+      el("h2", { text: "Likely follow-ups" }), el("ul", {}, q.follow_ups.map(f => el("li", { text: f }))),
+      el("h2", { text: "Red flags" }), el("ul", {}, q.red_flags.map(f => el("li", { text: f }))),
+      q.labs && q.labs.length ? el("p", {}, "Practise it: ", q.labs.map(n => CATALOG.labs.some(l => l.n === n) ? el("a", { href: `#lab-${n}`, text: `Lab ${n}` }) : `Lab ${n}`).flatMap((x, k) => [k ? ", " : "", x])) : null,
+      el("div", { class: "btns" },
+        el("button", { class: "btn", text: "Copy for Claude", onclick: async () => {
+          const txt = ivClaudePrompt(q, answer);
+          try { await navigator.clipboard.writeText(txt); announce("Copied. Paste it into Claude."); }
+          catch { window.prompt("Copy this prompt for Claude:", txt); } } }),
+        el("a", { class: "btn", href: "https://claude.ai/new", target: "_blank", rel: "noopener", text: "Open Claude" }),
+        aiBtn,
+        el("button", { class: "btn primary", text: i + 1 < qs.length ? "Next question" : "Finish", onclick: () => {
+          const score = Math.round(5 * checks.filter(c => c.checked).length / checks.length);
+          const d = ivLoad(); d[q.id] = { score, day: new Date().toISOString().slice(0, 10) }; ivSave(d);
+          scores.push(score); i += 1; show(); window.scrollTo(0, 0); } })), aiOut));
+    const h = into.querySelector("h2"); if (h) { h.setAttribute("tabindex", "-1"); h.focus(); }
+  };
+  const finish = () => {
+    const avg = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : "n/a";
+    put(view(), el("section", { class: "panel" },
+      el("span", { class: "label", text: title }), el("h1", { text: `Done: ${avg} / 5 average` }),
+      el("ul", {}, qs.map((q, k) => el("li", {}, `${scores[k] ?? "-"} / 5 · `, el("span", { text: q.question })))),
+      el("p", { class: "muted", text: "Questions you scored low on come back first next time. Rehearse those answers out loud until they come easily." }),
+      el("div", { class: "btns" }, el("a", { class: "btn primary", href: "#interview", text: "Back to interview prep" }))));
+    view().querySelector("h1").focus?.();
+  };
+  show();
+}
+
 /* ------------------------------------------------------------------ course (Security+, SC-300, ...) */
 function applyCourse() {
   const c = C();
@@ -1650,6 +1793,7 @@ function route() {
   if (h === "review") return viewReview();
   if (h === "videos") return viewVideos();
   if (h === "career") return viewCareer();
+  if (h === "interview") return viewInterview();
   return viewHome();
 }
 

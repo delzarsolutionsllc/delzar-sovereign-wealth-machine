@@ -53,7 +53,8 @@ def _obj(props: dict, required=()) -> dict:
     return {"type": "object", "properties": props, "required": list(required), "additionalProperties": False}
 
 
-LAB = {"type": "integer", "minimum": 1, "maximum": 26, "description": "Lab number 1-26"}
+LAB = {"type": "integer", "minimum": 1, "maximum": 60, "description": "Lab number (see course_overview)"}
+IVQ = {"type": "string", "pattern": r"^IV-[A-Z]{3}-\d{3}$", "description": "Interview question id, e.g. IV-PRO-004"}
 OBJ = {"type": "string", "pattern": r"^\d{1,2}\.\d{1,2}$", "description": "Exam objective, e.g. 2.4"}
 QID = {"type": "string", "pattern": r"^[A-Z0-9]{1,4}-\d{3}$|^G-[a-z0-9-]{1,80}:(acr|voc|def)$", "description": "Question id, e.g. D2-014"}
 QUIZ = {"type": "string", "pattern": r"^\d{1,2}\.\d{1,2}-(set|t)\d{1,2}$|^g\d{1,2}-(acr|voc|def)-\d{1,2}$",
@@ -265,6 +266,29 @@ class Tutor:
         got = webapi.quiz_record(quiz, rows, self._day(), self.progress_path)
         return {"quiz": quiz, "score": got["quiz_score"]}
 
+    # interview prep ---------------------------------------------------------
+    def interview_roles(self) -> dict:
+        from utils import interview
+        return {"roles": list(interview.roles()),
+                "categories": [{"id": c["id"], "name": c["name"], "about": c["about"], "questions": c["count"]}
+                               for c in interview.catalog()["categories"]]}
+
+    def interview_start(self, count: int = 6, role: str | None = None, category: str | None = None,
+                        level: str | None = None, seed: int | None = None) -> dict:
+        from utils import interview
+        qs = interview.pick(count, category=category, level=level, role=role, seed=seed)
+        if not qs:
+            raise ValueError("no interview questions match those filters")
+        return {"questions": [interview.public(q) for q in qs],
+                "how": "Ask one question at a time, wait for the learner's full answer, then call interview_rubric for that id and grade it."}
+
+    def interview_rubric(self, qid: str) -> dict:
+        from utils import interview
+        q = interview.by_id().get(qid)
+        if q is None:
+            raise ValueError(f"unknown interview question {qid}")
+        return {k: q[k] for k in ("id", "question", "listen_for", "model_answer", "follow_ups", "red_flags", "labs")}
+
 
 TOOLS: dict[str, dict] = {
     "course_overview": {"description": "Exam target and countdown, the five domains, every objective with its topics, quizzes and labs.",
@@ -289,6 +313,15 @@ TOOLS: dict[str, dict] = {
                       "schema": _obj({"qid": QID, "correct": {"type": "boolean"}}, ["qid", "correct"])},
     "record_quiz": {"description": "Save a finished quiz's results to the learner's progress. Needs progress:write.",
                     "schema": _obj({"quiz": QUIZ, "results": {"type": "array", "maxItems": 20, "items": {"type": "object"}}}, ["quiz", "results"])},
+    "interview_roles": {"description": "IAM job roles (what the job is, what interviews focus on, which labs to talk about) and interview question categories.",
+                        "schema": _obj({})},
+    "interview_start": {"description": "A mock IAM job interview: questions WITHOUT the answer key, filtered by role, category or level.",
+                        "schema": _obj({"count": {"type": "integer", "minimum": 1, "maximum": 15},
+                                        "role": {"type": "string", "enum": ["analyst", "entra_admin", "okta_admin", "iga_engineer", "iam_engineer"]},
+                                        "category": {"type": "string", "enum": ["fundamentals", "protocols", "pam", "entra", "okta", "iga", "troubleshooting", "behavioral", "projects"]},
+                                        "level": {"type": "string", "enum": ["entry", "mid", "senior"]}, "seed": SEED})},
+    "interview_rubric": {"description": "After the learner answers: what interviewers listen for, a model answer, follow-ups and red flags for one interview question.",
+                         "schema": _obj({"qid": IVQ}, ["qid"])},
 }
 
 PROMPTS = {
@@ -297,8 +330,11 @@ PROMPTS = {
                 "text": "Quiz me on Security+ objective {objective}. Call list_quizzes for {objective}, start with the first concept quiz I have not passed (best below 85%), ask one question at a time, wait for my answer, then use check_answer and explain in plain English. At the end, give my score and the concept to revisit."},
     "plan_my_day": {"description": "A 30-minute study plan from my progress.", "arguments": [],
                     "text": "Look at progress_summary and course_overview, then plan 30 minutes of study for today: due reviews first, then one concept quiz for my weakest objective, then one lab to run. Explain why for each step."},
+    "mock_interview": {"description": "A mock IAM job interview with honest grading.",
+                       "arguments": [{"name": "role", "description": "analyst, entra_admin, okta_admin, iga_engineer or iam_engineer", "required": False}],
+                       "text": "Run a mock job interview for an IAM role ({role}; if blank, IAM Analyst). Call interview_roles, then interview_start with count 6 and that role. Ask ONE question at a time like a real hiring manager and wait for my full answer. Then call interview_rubric for that question and grade me out of 5: what I covered, what I missed, one sentence I could add, and ask one follow-up. Never show the model answer before I answer. At the end, give my average, my two weakest areas and which labs to practise before a real interview."},
     "explain_lab": {"description": "Walk me through a lab like a senior colleague.",
-                    "arguments": [{"name": "lab", "description": "Lab number 1-26", "required": True}],
+                    "arguments": [{"name": "lab", "description": "Lab number, e.g. 25", "required": True}],
                     "text": "Explain lab {lab} to me like a senior colleague on my first week: call get_lesson and run_lab for lab {lab}, describe the work ticket, walk through two decisions the engine made and why, and connect them to the exam objectives and to an IAM job."},
 }
 
