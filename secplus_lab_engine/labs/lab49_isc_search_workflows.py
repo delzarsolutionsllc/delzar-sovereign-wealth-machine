@@ -851,7 +851,7 @@ def parse_filter(text: str):
             return node
         left = operand()
         k, v = peek()
-        if k == "op" and v in ("==", "!=", ">", ">=", "<", "<=", "=~") | _WORD_OPS:
+        if k == "op" and v in {"==", "!=", ">", ">=", "<", "<=", "=~"} | _WORD_OPS:
             i += 1
             right = operand()
             if (v == "=~") != (right[0] == "regex"):
