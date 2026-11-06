@@ -79,10 +79,10 @@
    "topic": "User Level Capabilities",
    "stem": "An identity holds Source Admin, Role Admin and Cert Admin. They now need to change an identity profile's attribute mappings. What do they need?",
    "choices": [
-    "The Helpdesk user level added to their current set",
+    "The Helpdesk user level added to their current set of user levels",
     "The Admin user level, since identity profiles are Admin-only",
     "Ownership of the identity profile's authoritative source system",
-    "The Report Admin user level added to their current set"
+    "The Report Admin user level added to their current set of levels"
    ],
    "answer": "The Admin user level, since identity profiles are Admin-only",
    "explanation": "Identity profile configuration is available only to the Admin (org admin) user level. Owning the authoritative source or adding Helpdesk does not expose identity profiles."
@@ -149,7 +149,7 @@
    "topic": "Granting User Levels",
    "stem": "An auditor asks how the company periodically confirms that each administrative user level in the tenant is still justified. What is the BEST approach in Identity Security Cloud?",
    "choices": [
-    "Ask SailPoint support to send a list of tenant administrators",
+    "Ask SailPoint support to send a quarterly list of the tenant's administrators",
     "Export the browser sessions of every admin user each quarter",
     "Certify them, because user levels appear in certifications as entitlements",
     "Rely only on the tenant audit log, since user levels can never be certified"
@@ -165,7 +165,7 @@
    "choices": [
     "Grant Admin for a week, then remove it again",
     "Grant Source Admin so the analyst can manage the MFA source settings",
-    "Grant Report Admin so the analyst can see MFA reports",
+    "Grant Report Admin so the analyst can see MFA reset reports for users",
     "Grant the Helpdesk user level, which includes resetting MFA"
    ],
    "answer": "Grant the Helpdesk user level, which includes resetting MFA",
@@ -236,7 +236,7 @@
     "Roles hold access profiles and entitlements; access profiles hold entitlements",
     "Applications contain roles; roles contain only other roles",
     "Access profiles contain roles; roles contain entitlements from only one source each",
-    "Entitlements contain access profiles; roles contain applications"
+    "Entitlements contain access profiles; roles contain applications and their sources"
    ],
    "answer": "Roles hold access profiles and entitlements; access profiles hold entitlements",
    "explanation": "Entitlements are the base unit, access profiles group entitlements from one source and roles can include both access profiles and entitlements. The other statements invert this hierarchy."
@@ -250,7 +250,7 @@
     "Create an access application containing only that one group",
     "Configure the entitlement itself for access requests",
     "Add the group to every user's lifecycle state",
-    "Create a role with an identity list of all users"
+    "Create a role with an identity list of all users in the domain"
    ],
    "answer": "Configure the entitlement itself for access requests",
    "explanation": "Entitlements can be configured for direct access requests with their own review settings. A lifecycle state or an all-user role would grant it to everyone instead of on request."
@@ -275,7 +275,7 @@
    "topic": "Access Profiles",
    "stem": "An admin tries to create one access profile containing an Active Directory group and a ServiceNow role, but cannot add both. Why?",
    "choices": [
-    "Active Directory groups can only be placed in roles",
+    "Active Directory groups can only be placed in roles, not access profiles",
     "Access profiles can hold only one entitlement each",
     "ServiceNow entitlements must be added to access profiles through a workflow",
     "An access profile can contain entitlements from only one source"
@@ -347,7 +347,7 @@
    "choices": [
     "Admin > Access Model > Access Profiles, then Edit > Access Requests",
     "Admin > Identity Management > Identity Profiles, then Attribute Mappings",
-    "Admin > Global > Reports, then Access Request Activity",
+    "Admin > Global > Reports, then Access Request Activity for the profile",
     "Admin > Connections > Sources, then Account Schema"
    ],
    "answer": "Admin > Access Model > Access Profiles, then Edit > Access Requests",
@@ -361,7 +361,7 @@
    "choices": [
     "Create a certification campaign that grants it to each new hire automatically",
     "Add the access profile to the active lifecycle state's access profiles",
-    "Mark the access profile requestable and email all new hires",
+    "Mark the access profile requestable and email all new hires to ask for it",
     "Add the access profile to an application for new hires"
    ],
    "answer": "Add the access profile to the active lifecycle state's access profiles",
@@ -429,7 +429,7 @@
    "topic": "Roles",
    "stem": "An admin opens a user's role assignment to revoke it, but no Revoke Assignment option is offered. What is the MOST likely reason?",
    "choices": [
-    "The admin needs the Cert Admin user level to revoke",
+    "The admin needs the Cert Admin user level to revoke role assignments",
     "The role contains entitlements from more than one source system",
     "The role was assigned automatically by membership criteria",
     "The role is requestable and therefore locked"
@@ -474,7 +474,7 @@
     "The source must be disabled before an app is added",
     "The Applications page is available only to the Admin user level",
     "The Source Admin also needs the Report Admin user level to see the page",
-    "Applications can only be created by the source owner"
+    "Applications can only be created by the owner of the underlying source"
    ],
    "answer": "The Applications page is available only to the Admin user level",
    "explanation": "The Applications admin page requires the Admin user level; Source Admin covers sources and access profiles. Adding Report Admin would not expose it."
@@ -514,7 +514,7 @@
    "stem": "An access application appears in the Request Center, but users find nothing in it to request. What should the admin check FIRST?",
    "choices": [
     "Whether any requestable access profiles are added to the application",
-    "Whether every user has the Report Admin user level",
+    "Whether every user has the Report Admin user level to browse applications",
     "Whether a certification campaign has been started",
     "Whether the application has its own virtual appliance cluster assigned"
    ],
@@ -597,8 +597,8 @@
    "choices": [
     "A rule that maps source data to identity attributes",
     "An access right that an account has on a source",
-    "A bundle of access granted by job function",
-    "A set of people who approve access requests"
+    "A bundle of access granted to identities by job function",
+    "A set of people who approve access requests for a source"
    ],
    "answer": "An access right that an account has on a source",
    "explanation": "Entitlements are the access rights, such as groups or permissions, that accounts hold on sources. A job-function bundle is a role and a set of approvers is a governance group."
@@ -610,7 +610,7 @@
    "stem": "New Active Directory groups were created yesterday, but they do not yet appear in the Entitlements list with their descriptions. What should the admin run?",
    "choices": [
     "An identity refresh for every identity in the tenant",
-    "A certification campaign for the Active Directory source",
+    "A certification campaign for the Active Directory source's groups",
     "An entitlement aggregation for the Active Directory source",
     "A configuration hub backup and restore of the Active Directory source"
    ],
@@ -625,7 +625,7 @@
    "choices": [
     "Remove it from the source's account schema",
     "Run an account aggregation with the account deletion threshold turned off",
-    "Select Delete for it on the Entitlements page",
+    "Select Delete for it on the Entitlements page in Admin > Access Model",
     "Delete it on the source system, then run an entitlement aggregation"
    ],
    "answer": "Delete it on the source system, then run an entitlement aggregation",
@@ -653,8 +653,8 @@
    "choices": [
     "The source description replaces it at every aggregation",
     "The manual description is kept and is not overwritten",
-    "The aggregation fails until the description matches",
-    "Both descriptions are merged into one long value"
+    "The aggregation fails until the description matches the source",
+    "Both descriptions are merged into one long value on the entitlement"
    ],
    "answer": "The manual description is kept and is not overwritten",
    "explanation": "Aggregation replaces only blank or never-edited values, so manual edits made in the UI, the API or a CSV upload are preserved."
@@ -722,7 +722,7 @@
    "stem": "An admin must change the primary owner and make 300 entitlements requestable at once. What is the MOST efficient method in the UI?",
    "choices": [
     "Create an access profile that contains all 300 entitlements and edit it",
-    "Edit each entitlement one by one from the source page",
+    "Edit each entitlement one by one from the source's Entitlements tab",
     "Select them on the Entitlements page and use the bulk Actions menu",
     "Run an entitlement aggregation with a new owner value"
    ],
@@ -763,7 +763,7 @@
    "topic": "Entitlement Management",
    "stem": "An entitlement's primary owner is set. How can that owner take part in governance of the entitlement?",
    "choices": [
-    "As the approver of changes to the source's schema",
+    "As the approver of changes to the source's account schema and attributes",
     "As a configured reviewer for its access requests and certifications",
     "As the only person who can aggregate the source",
     "As the person who receives every provisioning error raised by its source"
@@ -792,7 +792,7 @@
    "stem": "In the standard criteria builder, an admin sets the Within Groups operator to AND and creates two groups. How are the groups combined?",
    "choices": [
     "With NOT, so identities matching the second group are excluded from it",
-    "With XOR, so exactly one group must match",
+    "With XOR, so exactly one group must match and the other must not",
     "With AND, so every criterion in both groups must match",
     "With OR, so meeting all criteria in either group qualifies"
    ],
@@ -806,9 +806,9 @@
    "stem": "An admin sets the Within Groups operator to OR and builds two groups of criteria. Which identities receive the role?",
    "choices": [
     "Those matching at least one criterion in each group",
-    "Those matching no criterion in the second group",
+    "Those matching no criterion in the second group at all",
     "Those matching every criterion in every group",
-    "Those matching any single criterion in either group"
+    "Those matching any single criterion in either of the groups"
    ],
    "answer": "Those matching at least one criterion in each group",
    "explanation": "With OR inside groups, the between-groups operator becomes AND. Identities must match one criterion from the first group and one from the second."
@@ -833,7 +833,7 @@
    "topic": "Role Membership Criteria",
    "stem": "A criterion uses the department attribute with Equals and the values Sales, Marketing and Support. How is it evaluated?",
    "choices": [
-    "Only the first value is used and the others are ignored",
+    "Only the first value is used and the others are ignored at evaluation",
     "The values are combined into one string to compare",
     "An identity matches if its department equals any one of the values",
     "An identity must have all three values present in its department attribute"
@@ -932,11 +932,11 @@
    "stem": "An admin removes an access profile from an enabled role, but identities keep the entitlements. What setting explains this?",
    "choices": [
     "The source is configured for delta aggregation",
-    "Role access removal propagation is not enabled",
+    "Role access removal propagation is off",
     "The role uses an identity list instead of criteria",
     "The access profile is not marked requestable"
    ],
-   "answer": "Role access removal propagation is not enabled",
+   "answer": "Role access removal propagation is off",
    "explanation": "Without role change propagation, removing access from a role definition does not deprovision it. With it enabled, identity processing removes it from holders of enabled roles."
   },
   {
@@ -945,7 +945,7 @@
    "topic": "Automated Assignment Processing",
    "stem": "HR aggregation changes Maria's department from Sales to Finance. How does her role membership update?",
    "choices": [
-    "Her manager must request the Finance role for her",
+    "Her manager must request the Finance role for her through the Request Center",
     "A certification campaign must revoke her Sales role before anything changes",
     "Identity processing re-evaluates role criteria and adds or removes roles",
     "Nothing changes until an admin edits her identity"
@@ -990,7 +990,7 @@
     "Whether the source's last account aggregation succeeded",
     "Whether the access profile is set to allow access requests",
     "Whether the access profile has more than one entitlement in it",
-    "Whether the users have the Report Admin user level"
+    "Whether the users have the Report Admin user level for the source"
    ],
    "answer": "Whether the access profile is set to allow access requests",
    "explanation": "Only access items configured for access requests appear in the Request Center; segments can also hide them. Aggregation status and number of entitlements do not control visibility."
@@ -1015,7 +1015,7 @@
    "topic": "Access Troubleshooting",
    "stem": "A role uses the criterion costCenter Equals 4410, but a user in that cost center did not get it. The role is enabled and processing has run. What should the admin check next?",
    "choices": [
-    "Whether the user has submitted a request for the role",
+    "Whether the user has submitted a request for the role and it was approved",
     "Whether the role owner is the user's manager",
     "Whether the role's description mentions the 4410 cost center in its text",
     "The user's costCenter attribute value and its identity profile mapping"
