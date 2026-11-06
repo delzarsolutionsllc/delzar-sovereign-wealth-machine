@@ -1,0 +1,575 @@
+{
+  "domain": "6",
+  "title": "SailPoint Engineer Domain 6 questions (6.2)",
+  "note": "Original questions written for Delzar Certification Academy. Not from exam dumps or commercial banks; not affiliated with SailPoint.",
+  "questions": [
+    {
+      "id": "D6-001",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "Month-end brings a surge of aggregations across many tenants while other activity stays flat. Which microservice advantage lets a SaaS platform absorb this BEST?",
+      "choices": [
+        "The aggregation services can be scaled out without scaling the whole platform",
+        "Every feature shares one process, so spare capacity is used automatically",
+        "All services share one database, so no extra capacity is needed",
+        "Aggregations can be paused until the platform is redeployed"
+      ],
+      "answer": "The aggregation services can be scaled out without scaling the whole platform",
+      "explanation": "Microservices scale independently, so only the busy service gets more instances. In a monolith the whole application would have to scale together."
+    },
+    {
+      "id": "D6-002",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "A defect causes the service that sends notification emails to crash repeatedly. In a well-designed microservice architecture, what is the expected impact?",
+      "choices": [
+        "Every service stops until the email service is restarted",
+        "All requests are rolled back to keep services consistent",
+        "The tenant switches into read-only mode until the fix is deployed",
+        "Emails are delayed while other services, such as access requests, keep working"
+      ],
+      "answer": "Emails are delayed while other services, such as access requests, keep working",
+      "explanation": "Fault isolation means a failing service degrades its own function without taking down unrelated services. A monolith is more likely to fail as a whole."
+    },
+    {
+      "id": "D6-003",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "A SaaS vendor wants to release fixes to its certification feature several times a week without taking the rest of the product offline. Which architecture property supports this?",
+      "choices": [
+        "All features are compiled into one deployable artifact",
+        "Releases are bundled into one quarterly upgrade window",
+        "Customers install updates on their own servers",
+        "Each microservice can be deployed independently of the others"
+      ],
+      "answer": "Each microservice can be deployed independently of the others",
+      "explanation": "Independent deployment lets a team ship one service without redeploying everything, which supports continuous delivery. A single artifact forces whole-product releases."
+    },
+    {
+      "id": "D6-004",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "SailPoint's current API paths follow the pattern /service/v1/action, with each service carrying its own version. Which microservice principle does this reflect?",
+      "choices": [
+        "All services must be upgraded together in one release",
+        "Services evolve and are versioned independently of each other",
+        "Clients must call one central endpoint for every operation",
+        "Every service shares one schema version"
+      ],
+      "answer": "Services evolve and are versioned independently of each other",
+      "explanation": "Versioning each service separately lets it change its contract on its own schedule without forcing others to move. It is the API-level view of independent deployment."
+    },
+    {
+      "id": "D6-005",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "An architect lists properties of microservice architectures. Which one is a trade-off rather than an advantage?",
+      "choices": [
+        "Independent scaling of busy services",
+        "More network calls between services, which require distributed monitoring and tracing",
+        "Isolation of failures to the affected service",
+        "Independent release cycles for each team"
+      ],
+      "answer": "More network calls between services, which require distributed monitoring and tracing",
+      "explanation": "Splitting a system into services adds inter-service network traffic and makes monitoring and debugging harder. The other three options are the usual benefits."
+    },
+    {
+      "id": "D6-006",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "Different engineering teams want to use the language and data store that best suit their service. What makes this practical in a microservice design?",
+      "choices": [
+        "All services share one code base and runtime",
+        "All services read and write the same database tables",
+        "Each team must use the same framework version",
+        "Services interact only through defined APIs or events, hiding their internals"
+      ],
+      "answer": "Services interact only through defined APIs or events, hiding their internals",
+      "explanation": "Because services expose only well-defined interfaces, each one can use its own technology stack. Shared tables or code bases would couple the teams again."
+    },
+    {
+      "id": "D6-007",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "Compared with a monolith, what is a key reason a microservice-based identity platform can add a new capability with less risk?",
+      "choices": [
+        "The new capability is deployed only when every other service is updated",
+        "The monolith's shared memory makes integration simpler",
+        "The new capability does not need any API",
+        "The capability can be built as a new service without changing unrelated code"
+      ],
+      "answer": "The capability can be built as a new service without changing unrelated code",
+      "explanation": "New services can be added beside existing ones and integrated through APIs, limiting the change's blast radius. In a monolith any change means rebuilding and redeploying the whole application."
+    },
+    {
+      "id": "D6-008",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "An integration must change only the description of an existing ISC object without resending the whole object. Which request style fits BEST?",
+      "choices": [
+        "PUT with only the description field in the body",
+        "PATCH with a JSON Patch body, sent as application/json-patch+json",
+        "POST with the full object to the collection",
+        "GET with the new description as a query parameter"
+      ],
+      "answer": "PATCH with a JSON Patch body, sent as application/json-patch+json",
+      "explanation": "PATCH with JSON Patch operations changes specific fields and leaves the rest untouched. A PUT replaces the whole resource, so omitted fields can be cleared or rejected."
+    },
+    {
+      "id": "D6-009",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A script updates an object with PUT but sends only two of its fields. The object loses several other settings. Why?",
+      "choices": [
+        "PUT only works when the object is first deleted",
+        "PUT merges fields but drops any that are null",
+        "PUT replaces the entire resource with the body that was sent",
+        "PUT is not supported by REST APIs"
+      ],
+      "answer": "PUT replaces the entire resource with the body that was sent",
+      "explanation": "PUT means replace: the body becomes the new representation of the resource. For partial changes, use PATCH."
+    },
+    {
+      "id": "D6-010",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A network timeout leaves a script unsure whether its last request reached the API. Which request is safe to repeat without creating a duplicate?",
+      "choices": [
+        "A POST that creates a new object",
+        "A DELETE of a specific object by its ID",
+        "A POST that submits a new access request",
+        "A POST that starts a new aggregation"
+      ],
+      "answer": "A DELETE of a specific object by its ID",
+      "explanation": "DELETE, like GET and PUT, is idempotent: repeating it leaves the same end state. Each POST shown creates something new, so repeating it can duplicate work."
+    },
+    {
+      "id": "D6-011",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A call that worked yesterday now returns HTTP 401 Unauthorized, while the same client gets data from other endpoints after fetching a new token. What is the MOST likely cause?",
+      "choices": [
+        "The access token used for the call had expired",
+        "The client lacks the scope for that endpoint",
+        "The requested object no longer exists",
+        "The request body was not valid JSON"
+      ],
+      "answer": "The access token used for the call had expired",
+      "explanation": "401 means authentication failed, typically a missing, invalid or expired token, and a fresh token solves it. A missing scope gives 403, and a missing object gives 404."
+    },
+    {
+      "id": "D6-012",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A personal access token authenticates successfully, but a call to create a source returns HTTP 403 Forbidden. What is the MOST likely cause?",
+      "choices": [
+        "The token has expired and must be refreshed",
+        "The source name contains spaces",
+        "The API is temporarily rate limiting the client",
+        "The token's user level or scopes do not allow creating sources"
+      ],
+      "answer": "The token's user level or scopes do not allow creating sources",
+      "explanation": "403 means the caller is authenticated but not authorized for the operation. Expired tokens give 401 and rate limiting gives 429."
+    },
+    {
+      "id": "D6-013",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A script sends GET for an identity using an ID copied from another tenant and receives HTTP 404 Not Found. What does this indicate?",
+      "choices": [
+        "No resource with that ID exists in the tenant being called",
+        "The token is missing from the Authorization header",
+        "The request is valid but is still being processed",
+        "The request was throttled by the API gateway"
+      ],
+      "answer": "No resource with that ID exists in the tenant being called",
+      "explanation": "404 means the requested resource could not be found at that path, which is expected for an ID from a different tenant. A missing token gives 401 and throttling gives 429."
+    },
+    {
+      "id": "D6-014",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "A script triggers a long-running operation and receives HTTP 202 Accepted. What should it do next?",
+      "choices": [
+        "Treat the operation as finished and successful",
+        "Resend the request because 202 means it was ignored",
+        "Track the returned task or status until the operation completes",
+        "Assume the operation failed and roll back"
+      ],
+      "answer": "Track the returned task or status until the operation completes",
+      "explanation": "202 means the request was accepted for asynchronous processing and is not finished yet. The script should poll the status it was given rather than resend it."
+    },
+    {
+      "id": "D6-015",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "A nightly integration must call ISC APIs with no person present. Which OAuth 2.0 flow fits?",
+      "choices": [
+        "Authorization code, requiring an administrator to sign in each night",
+        "Implicit flow, returning the token in the browser",
+        "Client credentials, exchanging a client ID and secret at the tenant's token endpoint",
+        "Basic authentication with an administrator's user name and password"
+      ],
+      "answer": "Client credentials, exchanging a client ID and secret at the tenant's token endpoint",
+      "explanation": "Client credentials is the machine-to-machine flow: the integration posts its client ID and secret to the token endpoint and receives an access token. Authorization code needs a user present."
+    },
+    {
+      "id": "D6-016",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "An engineer creates a personal access token to automate a task. Whose permissions does the token carry?",
+      "choices": [
+        "Those of the user who created it, further limited by the scopes chosen",
+        "Full tenant administrator rights, regardless of who created it",
+        "Only read access, because personal tokens cannot change data",
+        "The permissions of the source owner of each object called"
+      ],
+      "answer": "Those of the user who created it, further limited by the scopes chosen",
+      "explanation": "A personal access token acts as the identity that owns it, so it can never exceed that user's level, and scopes narrow it further. It is not an automatic administrator credential."
+    },
+    {
+      "id": "D6-017",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "How should a script present an ISC access token when calling the APIs?",
+      "choices": [
+        "As a query parameter named token in every URL",
+        "In the Authorization header as a Bearer token",
+        "In the request body of every GET request",
+        "As a cookie set by the Admin UI"
+      ],
+      "answer": "In the Authorization header as a Bearer token",
+      "explanation": "ISC APIs expect the OAuth access token in the Authorization: Bearer header. Tokens in URLs leak into logs and browser history."
+    },
+    {
+      "id": "D6-018",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "A long-running sync script begins getting 401 responses partway through each run. What is the BEST design fix?",
+      "choices": [
+        "Hard-code a token generated in the Admin UI into the script",
+        "Retry the same call with the same token until it succeeds",
+        "Switch to a user's password in each call",
+        "Request a new token with the client credentials when the current one expires"
+      ],
+      "answer": "Request a new token with the client credentials when the current one expires",
+      "explanation": "Access tokens are short-lived, so a robust client requests a fresh token when it expires. Retrying with an expired token will keep failing."
+    },
+    {
+      "id": "D6-019",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "A team is creating a personal access token for a reporting job that only reads identities and accounts. Which practice is BEST?",
+      "choices": [
+        "Grant every scope so the job never fails later",
+        "Share one token across all teams to reduce sprawl",
+        "Grant only the read scopes the job needs and store the secret in a vault",
+        "Paste the secret into the job's source code repository"
+      ],
+      "answer": "Grant only the read scopes the job needs and store the secret in a vault",
+      "explanation": "Least-privilege scopes limit what a leaked token can do, and a vault keeps the secret out of code. Shared, all-powerful tokens destroy accountability."
+    },
+    {
+      "id": "D6-020",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "An engineer is calling the ISC token endpoint for the client credentials flow. Which request is correct?",
+      "choices": [
+        "POST to the tenant's API host at /oauth/token with grant_type client_credentials",
+        "GET to the Admin UI home page with the secret in the URL",
+        "POST to the virtual appliance with the client secret",
+        "PUT to the search endpoint with the client ID in the body"
+      ],
+      "answer": "POST to the tenant's API host at /oauth/token with grant_type client_credentials",
+      "explanation": "Tokens are issued by the tenant's OAuth token endpoint on the API host. The VA and other API endpoints do not issue tokens."
+    },
+    {
+      "id": "D6-021",
+      "objective": "6.2",
+      "topic": "Pagination Filtering and Sorting",
+      "stem": "A script must list about 1,200 access profiles through a standard list endpoint. How should it page through them?",
+      "choices": [
+        "Use limit of up to 250 and increase offset until no more records return",
+        "Set limit to 1200 to get everything in one call",
+        "Call the endpoint repeatedly without parameters until the list changes",
+        "Use searchAfter on the list endpoint"
+      ],
+      "answer": "Use limit of up to 250 and increase offset until no more records return",
+      "explanation": "List endpoints return at most 250 records per page, so the script uses limit and offset to walk the collection. searchAfter is for the Search API."
+    },
+    {
+      "id": "D6-022",
+      "objective": "6.2",
+      "topic": "Pagination Filtering and Sorting",
+      "stem": "A developer calls a list endpoint with offset=1 and limit=20. Which records come back?",
+      "choices": [
+        "The second through the twenty-first record",
+        "The second page of twenty records",
+        "Records one through twenty, counting from one",
+        "Twenty records starting at a random position"
+      ],
+      "answer": "The second through the twenty-first record",
+      "explanation": "offset is record-based and zero-indexed, so offset=1 skips only the first record. It is not a page number."
+    },
+    {
+      "id": "D6-023",
+      "objective": "6.2",
+      "topic": "Pagination Filtering and Sorting",
+      "stem": "A dashboard needs the total number of identities matching a filter without downloading them all. What should the call include?",
+      "choices": [
+        "limit=0, then count the records returned",
+        "sorters=total, then read the first record",
+        "count=true, then read the X-Total-Count response header",
+        "offset=-1, then read the last record"
+      ],
+      "answer": "count=true, then read the X-Total-Count response header",
+      "explanation": "count=true returns the total size of the filtered collection in the X-Total-Count header. Because it costs performance, it should be sent only when the value is used."
+    },
+    {
+      "id": "D6-024",
+      "objective": "6.2",
+      "topic": "Pagination Filtering and Sorting",
+      "stem": "A script must list only the identities whose name starts with Raj, newest first. Which query parameters fit?",
+      "choices": [
+        "filters=name eq \"Raj*\" with sorters=created",
+        "filters=name sw \"Raj\" with sorters=-created",
+        "filters=name co \"Raj\" with sorters=+created",
+        "filters=startsWith(name, \"Raj\") with sorters=desc(created)"
+      ],
+      "answer": "filters=name sw \"Raj\" with sorters=-created",
+      "explanation": "sw is the starts-with operator, and a leading minus in sorters makes the sort descending. eq does an exact match, and co matches the text anywhere in the value."
+    },
+    {
+      "id": "D6-025",
+      "objective": "6.2",
+      "topic": "Pagination Filtering and Sorting",
+      "stem": "A filter value contains the # character, and the API returns unexpected results. What should the developer do?",
+      "choices": [
+        "Remove the filters parameter and sort instead",
+        "Wrap the whole URL in single quotation marks",
+        "URL-encode the character in the query string",
+        "Send the filter in an X-Filter header"
+      ],
+      "answer": "URL-encode the character in the query string",
+      "explanation": "Characters such as # and & have special meaning in URLs and must be encoded, for example # as %23. Otherwise the query string is cut short."
+    },
+    {
+      "id": "D6-026",
+      "objective": "6.2",
+      "topic": "Search API Usage",
+      "stem": "A script needs every identity in a tenant with 60,000 identities using the Search API. Which paging approach is recommended?",
+      "choices": [
+        "Increase offset by 10,000 for each call",
+        "Set limit to 60,000 in one request",
+        "Repeat the same query until the results stop changing",
+        "Sort by id and pass the last id from each page in searchAfter"
+      ],
+      "answer": "Sort by id and pass the last id from each page in searchAfter",
+      "explanation": "Search pagination uses sort on id with searchAfter set to the last record's id. Offset-based paging is not the recommended way to page through large search results."
+    },
+    {
+      "id": "D6-027",
+      "objective": "6.2",
+      "topic": "Search API Usage",
+      "stem": "A Search API call should return identities in the Finance department. Which request is correctly formed?",
+      "choices": [
+        "A GET with the query in the URL path and no request body",
+        "A POST with indices set to identities and a query such as attributes.department:Finance",
+        "A PUT with the identity IDs to search for in the body",
+        "A DELETE that removes every identity outside Finance"
+      ],
+      "answer": "A POST with indices set to identities and a query such as attributes.department:Finance",
+      "explanation": "Search is a POST whose JSON body names the indices and holds the query string. The other methods do not run searches."
+    },
+    {
+      "id": "D6-028",
+      "objective": "6.2",
+      "topic": "Search API Usage",
+      "stem": "An engineer needs identities across the tenant that hold a specific entitlement and are in a given department. Which API approach is MOST efficient?",
+      "choices": [
+        "List every identity, then fetch each identity's access one by one",
+        "One Search API query across the identities index",
+        "List every source and read each account separately",
+        "Export a CSV from each source and join the files by hand"
+      ],
+      "answer": "One Search API query across the identities index",
+      "explanation": "Search runs queries across indexed identity data in a single call. Walking every identity or account multiplies calls and quickly hits rate limits."
+    },
+    {
+      "id": "D6-029",
+      "objective": "6.2",
+      "topic": "Search API Usage",
+      "stem": "Immediately after an identity is updated, a Search API query does not yet show the new value, though a direct GET on the identity does. What is the MOST likely reason?",
+      "choices": [
+        "The Search API caches results for each client for one day",
+        "The identity was updated in a different tenant",
+        "The query used an operator that is not supported",
+        "The search index is updated shortly after the change, not instantly"
+      ],
+      "answer": "The search index is updated shortly after the change, not instantly",
+      "explanation": "Search reads an index that is refreshed after changes, so there can be a short delay, while direct object endpoints read the current record. Scripts that verify changes should allow for it."
+    },
+    {
+      "id": "D6-030",
+      "objective": "6.2",
+      "topic": "Search API Usage",
+      "stem": "What is the default number of records a Search API call returns per request when limit is not specified?",
+      "choices": [
+        "Up to 10,000 records",
+        "Up to 250 records",
+        "Up to 50 records",
+        "Up to 1,000 records"
+      ],
+      "answer": "Up to 10,000 records",
+      "explanation": "The Search endpoint defaults to and allows up to 10,000 records per page, unlike list endpoints, which allow 250. Larger result sets are paged with searchAfter."
+    },
+    {
+      "id": "D6-031",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "A bulk script receives HTTP 429 Too Many Requests. What is the correct client behaviour?",
+      "choices": [
+        "Retry immediately in a tight loop until the call succeeds",
+        "Wait for the number of seconds in the Retry-After header, then retry",
+        "Request a new token, because 429 means it expired",
+        "Switch to a different tenant to continue"
+      ],
+      "answer": "Wait for the number of seconds in the Retry-After header, then retry",
+      "explanation": "429 signals the rate limit was reached, and Retry-After gives the seconds to wait. A tight loop keeps the client throttled, and the token is still valid."
+    },
+    {
+      "id": "D6-032",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "Through the API gateway, what is SailPoint's default API rate limit?",
+      "choices": [
+        "100 requests per tenant every hour",
+        "10,000 requests per user every minute",
+        "100 requests per client ID and API version every 10 seconds",
+        "One request per second for each endpoint"
+      ],
+      "answer": "100 requests per client ID and API version every 10 seconds",
+      "explanation": "The documented default is 100 requests per client_id and API version per 10 seconds, with 429 returned when it is exceeded. Clients should be designed to stay inside it."
+    },
+    {
+      "id": "D6-033",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "A developer wants to call an endpoint marked experimental. What must each request include?",
+      "choices": [
+        "The X-SailPoint-Experimental header set to true",
+        "A query parameter named beta set to yes",
+        "A personal access token with the admin scope",
+        "A body field named experimental with the value true"
+      ],
+      "answer": "The X-SailPoint-Experimental header set to true",
+      "explanation": "Experimental endpoints require the X-SailPoint-Experimental header with the value true on each request; it is how the client opts in to experimental behaviour. Query parameters, scopes or body fields do not do this."
+    },
+    {
+      "id": "D6-034",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "A team is starting a new integration and sees Beta, V3, yearly versioned paths and the newer /service/v1/action paths. Which choice is BEST for long-term support?",
+      "choices": [
+        "Build against Beta, since it gets new features first",
+        "Build against V3, since it will never be deprecated",
+        "Build against the newer service-versioned paths",
+        "Mix all versions to spread the risk"
+      ],
+      "answer": "Build against the newer service-versioned paths",
+      "explanation": "SailPoint is deprecating Beta, V3 and yearly versions in favour of independent service versions, so new work should target the newer paths. Legacy versions have announced end-of-support dates."
+    },
+    {
+      "id": "D6-035",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "A nightly job makes thousands of small list calls and keeps hitting the rate limit. Which redesign BEST reduces throttling?",
+      "choices": [
+        "Create many API clients and rotate between them",
+        "Remove all waiting so the job finishes before the limit resets",
+        "Send every call with count=true",
+        "Use larger pages or Search queries so fewer calls retrieve the same data"
+      ],
+      "answer": "Use larger pages or Search queries so fewer calls retrieve the same data",
+      "explanation": "Fetching more data per call reduces request volume within the limit. Rotating clients to get around the limit is poor practice, and count=true adds load without reducing calls."
+    },
+    {
+      "id": "D6-036",
+      "objective": "6.2",
+      "topic": "API Versioning and Rate Limits",
+      "stem": "An engineer wants to automate ISC tasks in PowerShell without hand-building every HTTP request. What does SailPoint provide for this?",
+      "choices": [
+        "A built-in PowerShell console in the Admin UI",
+        "Direct database access for PowerShell scripts",
+        "A PowerShell SDK that wraps the ISC APIs",
+        "A PowerShell module that runs only on the virtual appliance"
+      ],
+      "answer": "A PowerShell SDK that wraps the ISC APIs",
+      "explanation": "SailPoint publishes SDKs, including one for PowerShell, along with a CLI, so scripts can call the APIs without building raw requests. There is no direct database access to a SaaS tenant."
+    },
+    {
+      "id": "D6-037",
+      "type": "order",
+      "objective": "6.2",
+      "topic": "API Authentication and Tokens",
+      "stem": "Put the steps of a client credentials integration with ISC in order.",
+      "items": [
+        "Create an API credential, such as a personal access token, with only the scopes needed",
+        "Post the client ID and secret to the tenant's token endpoint with grant_type client_credentials",
+        "Receive the access token in the response",
+        "Call the API with the token in the Authorization: Bearer header",
+        "Request a new token when the current one expires"
+      ],
+      "explanation": "The credential is created first, exchanged for a short-lived access token, and then the token is presented on each call. Expired tokens are replaced rather than reused."
+    },
+    {
+      "id": "D6-038",
+      "type": "match",
+      "objective": "6.2",
+      "topic": "REST Methods and Status Codes",
+      "stem": "Match each HTTP status code to what it tells an ISC API client.",
+      "pairs": [
+        {
+          "item": "HTTP 401 Unauthorized",
+          "match": "The token is missing, invalid or expired"
+        },
+        {
+          "item": "HTTP 403 Forbidden",
+          "match": "The caller is authenticated but lacks the rights or scopes"
+        },
+        {
+          "item": "HTTP 404 Not Found",
+          "match": "No resource exists at that path or ID"
+        },
+        {
+          "item": "HTTP 429 Too Many Requests",
+          "match": "The rate limit was hit; wait for Retry-After"
+        }
+      ],
+      "targets_extra": [
+        "The request was accepted for asynchronous processing"
+      ],
+      "explanation": "401 and 403 separate authentication from authorization, 404 means the target was not found, and 429 means throttling. Asynchronous acceptance is 202, which is not listed."
+    },
+    {
+      "id": "D6-039",
+      "type": "multi",
+      "objective": "6.2",
+      "topic": "Microservice Advantages",
+      "stem": "Which TWO are advantages of a microservice architecture over a monolith?",
+      "choices": [
+        "Each service can be scaled on its own",
+        "A failure in one service is less likely to stop the whole system",
+        "Fewer network calls between components",
+        "One shared database that makes schema changes simpler",
+        "A single deployment that releases every feature together"
+      ],
+      "answers": [
+        "Each service can be scaled on its own",
+        "A failure in one service is less likely to stop the whole system"
+      ],
+      "select": 2,
+      "explanation": "Independent scaling and fault isolation are core microservice benefits. Microservices add network calls, avoid one shared database and deploy independently, so the other options describe monoliths or trade-offs."
+    }
+  ]
+}

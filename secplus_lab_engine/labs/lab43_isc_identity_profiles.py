@@ -701,8 +701,12 @@ def _value_choices(answer: str, inputs, transform, key: str) -> list[str]:
     for v in [*inputs, plain, *_leaves(transform)]:
         if isinstance(v, str) and v.strip():
             pool |= {json.dumps(v), json.dumps(v.lower()), json.dumps(v.upper()), json.dumps(v.strip())}
-    pool.discard(answer)
-    return choices_with(answer, sorted(pool), key=key)
+    # Answers typed as text are matched without case, so keep one option per case-folded spelling.
+    folded: dict[str, str] = {}
+    for c in sorted(pool):
+        if c.casefold() != answer.casefold():
+            folded.setdefault(c.casefold(), c)
+    return choices_with(answer, sorted(folded.values()), key=key)
 
 
 def _interesting(r: PersonResult, attr: str) -> str | None:
