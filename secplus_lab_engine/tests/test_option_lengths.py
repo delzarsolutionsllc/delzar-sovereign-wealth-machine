@@ -13,7 +13,8 @@ import pytest
 from utils.loader import ROOT
 
 COURSES = ("sc300", "okta", "spadmin", "speng")
-FILES = sorted(p for c in COURSES for p in (ROOT / "data" / "courses" / c / "exam_bank").glob("domain*.json"))
+FILES = sorted([p for c in COURSES for p in (ROOT / "data" / "courses" / c / "exam_bank").glob("domain*.json")]
+               + list((ROOT / "data" / "exam_bank").glob("domain*.json")))          # Security+
 
 
 def ranks(path) -> dict:
@@ -32,7 +33,7 @@ def ranks(path) -> dict:
     return {k: 100 * v / n for k, v in counts.items()}
 
 
-@pytest.mark.parametrize("path", FILES, ids=lambda p: f"{p.parent.parent.name}/{p.name}")
+@pytest.mark.parametrize("path", FILES, ids=lambda p: f"{p.parent.parent.name if p.parent.name == 'exam_bank' and p.parent.parent.name != 'data' else 'secplus'}/{p.name}")
 def test_answer_length_gives_no_clue(path):
     r = ranks(path)
     assert 18 <= round(r[1]) <= 30, r

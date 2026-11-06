@@ -1,0 +1,88 @@
+{
+  "isc_api_security": {
+    "_note": "Lab 51 policy. Checked 2026-11 against developer.sailpoint.com (Authentication, Authorization) and documentation.sailpoint.com (Managing API Keys and Personal Access Tokens, User Level Permissions, User Level Access Matrix, Configuring Multifactor Authentication, Configuring Pass-Through Authentication, Configuring ... as a Service Provider, Configuring Session Lengths). Verified: token endpoint https://[tenant].api.identitynow.com/oauth/token and authorize endpoint https://[tenant].login.sailpoint.com/oauth/authorize; grant types CLIENT_CREDENTIALS, AUTHORIZATION_CODE, REFRESH_TOKEN; client credentials tokens carry no user context and most admin APIs answer 403 to them; API keys fail on role, entitlement and identity search when Data Segmentation is on; PATs act with the owner's user levels; up to 10 PATs per user, default expiry 6 months, blank = no expiry; sp:scopes:default and sp:scopes:all; the client secret is shown once; user levels, the incompatible combinations and the Sub-Admin governance-group scoping; elevated users (any level with the Admin menu) need a TOTP authenticator; SSO bypass with ?prompt=true for elevated users; PTA sources Active Directory, Microsoft Entra ID, OpenLDAP, SunOne; default sessions 12 hours maximum and 15 minutes idle. Simplified training values (not SailPoint numbers): which tasks need a user context, the narrow scope names other than idn:access-request:manage and idn:access-profile:read (they follow SailPoint's idn:<resource>:read|manage pattern but check each endpoint's specification), the approved secret stores, the 2-emergency-admin rule and the session limits the company sets itself.",
+    "token_url": "https://{tenant}.api.identitynow.com/oauth/token",
+    "authorize_url": "https://{tenant}.login.sailpoint.com/oauth/authorize",
+    "bypass_url": "https://{tenant}.identitynow.com/login/login?prompt=true",
+    "broad_scope": "sp:scopes:all",
+    "default_scope": "sp:scopes:default",
+    "max_pats_per_user": 10,
+    "default_pat_expiry_days": 182,
+    "approved_secret_stores": ["vault", "secrets_manager"],
+    "integration_types": {
+      "script": "a person's own script or tool, run as that person",
+      "service": "an unattended service integration with no person signed in",
+      "web_app": "a web application that calls the API on behalf of the user signed in to it"
+    },
+    "user_levels": {
+      "ORG_ADMIN": "Admin",
+      "SOURCE_ADMIN": "Source Admin",
+      "SOURCE_SUBADMIN": "Source Sub-Admin",
+      "ROLE_ADMIN": "Role Admin",
+      "ROLE_SUBADMIN": "Role Sub-Admin",
+      "HELPDESK": "Helpdesk",
+      "CERT_ADMIN": "Cert Admin",
+      "REPORT_ADMIN": "Report Admin",
+      "SOURCE_CONFIG_ASSIGNEE": "Source Configuration Assignee"
+    },
+    "sub_admin_levels": {"SOURCE_SUBADMIN": "source", "ROLE_SUBADMIN": "role"},
+    "incompatible_levels": [
+      ["ROLE_ADMIN", "SOURCE_SUBADMIN"],
+      ["ROLE_SUBADMIN", "SOURCE_ADMIN"],
+      ["ROLE_SUBADMIN", "ROLE_ADMIN"],
+      ["SOURCE_SUBADMIN", "SOURCE_ADMIN"],
+      ["SOURCE_ADMIN", "SOURCE_CONFIG_ASSIGNEE"]
+    ],
+    "non_org_admin_level_grantors": ["ROLE_ADMIN", "SOURCE_ADMIN"],
+    "actions": {
+      "edit_source": {"label": "create, configure or edit a source", "levels": ["ORG_ADMIN", "SOURCE_ADMIN", "SOURCE_SUBADMIN"]},
+      "manage_access_profile": {"label": "create or edit an access profile", "levels": ["ORG_ADMIN", "SOURCE_ADMIN", "SOURCE_SUBADMIN"]},
+      "edit_role": {"label": "create or edit a role", "levels": ["ORG_ADMIN", "ROLE_ADMIN", "ROLE_SUBADMIN"]},
+      "role_discovery": {"label": "use Role Discovery or Role Insights", "levels": ["ORG_ADMIN", "ROLE_ADMIN"]},
+      "read_identities": {"label": "list and view identities", "levels": ["ORG_ADMIN", "HELPDESK"]},
+      "reset_mfa": {"label": "reset another identity's MFA", "levels": ["ORG_ADMIN", "HELPDESK"]},
+      "set_lifecycle_state": {"label": "manually set an identity's lifecycle state", "levels": ["ORG_ADMIN"]},
+      "manage_campaigns": {"label": "create and manage certification campaigns", "levels": ["ORG_ADMIN", "CERT_ADMIN"]},
+      "search": {"label": "run Search across the organization's data", "levels": ["ORG_ADMIN", "CERT_ADMIN", "REPORT_ADMIN", "ROLE_ADMIN", "ROLE_SUBADMIN", "SOURCE_ADMIN", "SOURCE_SUBADMIN"]},
+      "download_reports": {"label": "save, subscribe to and download reports", "levels": ["ORG_ADMIN", "CERT_ADMIN", "REPORT_ADMIN", "ROLE_ADMIN", "ROLE_SUBADMIN", "SOURCE_ADMIN", "SOURCE_SUBADMIN"]},
+      "edit_identity_profile": {"label": "edit an identity profile", "levels": ["ORG_ADMIN"]},
+      "security_settings": {"label": "change Security Settings (API clients, SSO, MFA, sessions)", "levels": ["ORG_ADMIN"]},
+      "manage_virtual_appliances": {"label": "manage virtual appliances", "levels": ["ORG_ADMIN"]},
+      "manage_governance_groups": {"label": "manage governance groups", "levels": ["ORG_ADMIN"]},
+      "manage_policies": {"label": "manage separation-of-duties (SoD) policies", "levels": ["ORG_ADMIN"]},
+      "grant_user_levels": {"label": "grant or remove user levels", "levels": ["ORG_ADMIN"]},
+      "submit_access_request": {"label": "submit an access request in Request Center", "levels": ["ANY_IDENTITY"]}
+    },
+    "scoped_actions": {"edit_source": "source", "manage_access_profile": "source", "edit_role": "role"},
+    "api_tasks": {
+      "read_identities": {"label": "read identities for a report or SIEM feed", "action": "read_identities", "scope": "idn:identity:read", "user_context": false, "segmented": true},
+      "read_sources": {"label": "read source configuration and health", "action": "edit_source", "scope": "idn:sources:read", "user_context": false, "segmented": false},
+      "trigger_aggregation": {"label": "start an account aggregation", "action": "edit_source", "scope": "idn:sources:manage", "user_context": false, "segmented": false},
+      "edit_source": {"label": "change a source's configuration", "action": "edit_source", "scope": "idn:sources:manage", "user_context": false, "segmented": false},
+      "manage_roles": {"label": "create or update roles", "action": "edit_role", "scope": "idn:role:manage", "user_context": true, "segmented": false},
+      "read_access_profiles": {"label": "list access profiles", "action": "manage_access_profile", "scope": "idn:access-profile:read", "user_context": true, "segmented": false},
+      "submit_access_request": {"label": "submit an access request as the signed-in user", "action": "submit_access_request", "scope": "idn:access-request:manage", "user_context": true, "segmented": false},
+      "download_reports": {"label": "download a scheduled report", "action": "download_reports", "scope": "sp:scopes:all", "user_context": true, "segmented": false}
+    },
+    "pta_source_types": ["Active Directory", "Microsoft Entra ID", "OpenLDAP", "SunOne"],
+    "sign_in_methods": {
+      "USERNAME_PASSWORD": "users sign in with an ISC user name and password",
+      "PASS_THROUGH": "users sign in with the password of a directory source (pass-through authentication)",
+      "MFA": "users sign in and then confirm with a multifactor authentication method"
+    },
+    "min_emergency_admins": 2,
+    "max_session_hours": 12,
+    "max_idle_minutes": 30,
+    "default_session": {"max_session_hours": 12, "idle_minutes": 15},
+    "concepts": {
+      "personal access token": "A client ID and secret that a user creates for scripts; tokens issued from it carry that user's identity and user levels.",
+      "API client": "An OAuth 2.0 client an admin creates under Security Settings > API Management for an application or service integration.",
+      "client credentials grant": "An OAuth 2.0 flow where a service trades its client ID and secret for a token that has no user context.",
+      "authorization code grant": "An OAuth 2.0 flow where a web app sends the user to sign in and receives a token that acts as that user.",
+      "scope": "A label on a token or client that limits which endpoints it can call, always inside what the user level allows.",
+      "user level": "A set of admin permissions in ISC, such as Admin, Source Admin or Helpdesk; levels add up when combined.",
+      "Sub-Admin": "A Source or Role user level that only works on sources tied to the governance groups the person belongs to.",
+      "emergency bypass": "Signing in with ?prompt=true to skip the SSO identity provider, allowed for elevated users when the IdP is down."
+    }
+  }
+}
