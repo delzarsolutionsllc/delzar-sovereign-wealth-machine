@@ -163,7 +163,7 @@
    "topic": "Search Categories and Results",
    "stem": "An admin's identity search shows names and emails, but the reviewer also needs each identity's lifecycle state in the results. What is the BEST approach?",
    "choices": [
-    "Run one search per lifecycle state and merge the results",
+    "Run one search per lifecycle state value and merge the results",
     "Edit the identity profile to rename the attribute",
     "Open each identity to read the lifecycle state",
     "Add the lifecycle state attribute as a column in the results"
@@ -192,7 +192,7 @@
    "stem": "An account aggregation finished a minute ago, but a new account does not yet appear in search results. What is the MOST likely explanation?",
    "choices": [
     "Search only refreshes once every night",
-    "Accounts are indexed only when the next certification campaign generates",
+    "New accounts are indexed only when the next certification campaign generates",
     "Aggregated accounts are excluded from search by design",
     "The search index updates shortly after changes, so results can lag briefly"
    ],
@@ -263,10 +263,10 @@
    "choices": [
     "The colleague lacks the Helpdesk user level",
     "Saved searches appear only after a nightly refresh",
-    "Saved searches are visible only to the user who created them",
+    "Saved searches are visible only to their creator",
     "A second admin must approve it before it is shared"
    ],
-   "answer": "Saved searches are visible only to the user who created them",
+   "answer": "Saved searches are visible only to their creator",
    "explanation": "Saved searches belong to their creator. To share results with others, the creator can add them as subscribers to a subscription."
   },
   {
@@ -332,7 +332,7 @@
    "stem": "A team lead wants a report every Monday and Thursday at 8 AM local time. Which subscription settings meet this?",
    "choices": [
     "Choose the team's time zone, a weekly schedule, both days and 8 AM",
-    "Choose a daily schedule at 8 AM and ignore the extra emails",
+    "Choose a daily schedule at 8 AM and have the lead ignore the extra emails",
     "Choose a monthly schedule with day 1 and day 4",
     "Create a separate saved search for each of the two days"
    ],
@@ -348,9 +348,9 @@
     "Set a monthly schedule so the emails arrive less often",
     "Add a second subscriber to filter results",
     "Disable the subscription until results appear",
-    "Leave the option to send the report when no items match unchecked"
+    "Leave the send-when-no-items-match option unchecked"
    ],
-   "answer": "Leave the option to send the report when no items match unchecked",
+   "answer": "Leave the send-when-no-items-match option unchecked",
    "explanation": "The subscription has an option to send the report even when nothing matches; leaving it off suppresses empty emails. Disabling the subscription stops all emails."
   },
   {
@@ -429,12 +429,12 @@
    "topic": "Event and Account Activity Searches",
    "stem": "A user says the Active Directory account requested for them last week was never created. Where should the admin look FIRST?",
    "choices": [
-    "The identity profile's attribute mappings",
-    "The account activity for that request and its provisioning result",
+    "The identity profile's attribute mappings and their transforms",
+    "The account activity for that request and its result",
     "The source's correlation configuration",
     "The role membership criteria"
    ],
-   "answer": "The account activity for that request and its provisioning result",
+   "answer": "The account activity for that request and its result",
    "explanation": "Account activities track each requested change and the per-account provisioning outcome, including errors. Mappings and correlation are not where a failed create is recorded."
   },
   {
@@ -460,7 +460,7 @@
     "Search entitlements for the authentication source",
     "Search roles assigned in the past week",
     "Search events filtered to authentication actions and the date range",
-    "Search account activities for password changes in that week"
+    "Search account activities for password changes made during that week"
    ],
    "answer": "Search events filtered to authentication actions and the date range",
    "explanation": "Authentication actions are recorded as audit events (type:AUTH), which can be filtered by action, status and date. Entitlements and roles describe access, and account activities track changes made on sources."
@@ -471,12 +471,12 @@
    "topic": "Event and Account Activity Searches",
    "stem": "An admin wants a weekly list of provisioning actions that failed. Which approach is BEST?",
    "choices": [
-    "Save an account activity search for failures and subscribe to it weekly",
-    "Export all identities weekly and compare the files by hand",
+    "Save a search of failed account activities and subscribe weekly",
+    "Export all identities to CSV weekly and compare the files by hand",
     "Run a certification of all accounts each week",
     "Enable delta aggregation on every source"
    ],
-   "answer": "Save an account activity search for failures and subscribe to it weekly",
+   "answer": "Save a search of failed account activities and subscribe weekly",
    "explanation": "A saved search on failed account activities with a weekly subscription delivers the list automatically. Manual comparisons and certifications do not report failures."
   },
   {
@@ -499,7 +499,7 @@
    "topic": "Event and Account Activity Searches",
    "stem": "A helpdesk lead needs the status of an access request submitted for a user this morning. What should the lead check?",
    "choices": [
-    "The identity profile preview for the user",
+    "The identity profile preview for that user's attributes",
     "The transforms applied to the user",
     "The virtual appliance health page",
     "The account activity created for that access request"
@@ -634,11 +634,11 @@
    "stem": "A script's API call returns 401 Unauthorized after it ran fine this morning. What is the MOST likely cause?",
    "choices": [
     "The source is missing a recent aggregation",
-    "The access token has expired and a new one must be requested",
+    "The access token has expired",
     "The tenant's search index is rebuilding",
     "The identity profile has an unsaved change"
    ],
-   "answer": "The access token has expired and a new one must be requested",
+   "answer": "The access token has expired",
    "explanation": "Access tokens are short-lived, so a 401 after hours of success usually means the token expired. The script should request a fresh token."
   },
   {
@@ -675,12 +675,12 @@
    "topic": "Personal Access Tokens",
    "stem": "Which permissions does an API call made with a personal access token have?",
    "choices": [
-    "Full Admin rights, whatever the owner's user level",
+    "Full Admin rights, whatever user level the owner has",
     "Only read access to public data",
     "The rights of whoever last used the token",
-    "Those of the user who owns the token, limited to its scopes"
+    "The owner's rights, limited to the token's scopes"
    ],
-   "answer": "Those of the user who owns the token, limited to its scopes",
+   "answer": "The owner's rights, limited to the token's scopes",
    "explanation": "A personal access token acts as its owner, so calls get that user's rights within the scopes chosen. It never grants more than the owner has."
   },
   {
@@ -706,7 +706,7 @@
     "Delete the token so it can no longer be used",
     "Make the repository private",
     "Change the owner's sign-in password",
-    "Wait for the current access token to expire"
+    "Wait for the current access token to time out"
    ],
    "answer": "Delete the token so it can no longer be used",
    "explanation": "Deleting the token revokes it at once, so the leaked secret becomes useless. Hiding the repository does not remove copies already taken."
@@ -717,7 +717,7 @@
    "topic": "Personal Access Tokens",
    "stem": "How does a script use a personal access token to call the REST API?",
    "choices": [
-    "It sends the token secret as the Bearer value on each call",
+    "It sends the token secret directly as the Bearer value on each call",
     "It signs in to the Admin UI with the token name",
     "It uploads the token to the virtual appliance",
     "It exchanges the token's client ID and secret for an access token"
@@ -731,7 +731,7 @@
    "topic": "Personal Access Tokens",
    "stem": "A developer needs a personal access token for a script that only reads identities. What is the BEST practice?",
    "choices": [
-    "Grant sp:scopes:all so the script never fails",
+    "Grant sp:scopes:all so the script never fails later",
     "Share one token across every script",
     "Use an Admin colleague's token",
     "Limit the token's scopes to what the script needs"
@@ -816,7 +816,7 @@
    "stem": "An engineer with the Source Admin level is asked to build an event trigger subscription and cannot find the Event Triggers page. Why?",
    "choices": [
     "Source Admins must first run an aggregation",
-    "Event triggers run only on the virtual appliance",
+    "Event triggers are available only on the virtual appliance",
     "The engineer needs the Helpdesk level as well",
     "Event triggers and workflows require the Admin user level"
    ],
@@ -831,7 +831,7 @@
    "choices": [
     "SAML single sign-on with the tenant as the service provider",
     "A new delimited file source for passwords",
-    "Pass-through authentication to a flat file of passwords",
+    "Pass-through authentication to a flat file of user passwords",
     "A personal access token for each user"
    ],
    "answer": "SAML single sign-on with the tenant as the service provider",
@@ -899,12 +899,12 @@
    "topic": "Tenant Single Sign-On",
    "stem": "The corporate IdP is down and an Admin must still reach the tenant to make an urgent change. What should the organisation have planned?",
    "choices": [
-    "A shared admin password emailed to the whole team",
+    "A shared admin password emailed to the team so anyone can sign in",
     "Turning off all authentication during outages",
-    "An emergency admin sign-in that bypasses the IdP, protected by MFA",
+    "An emergency admin sign-in that bypasses the IdP, with MFA",
     "A personal access token used in the browser"
    ],
-   "answer": "An emergency admin sign-in that bypasses the IdP, protected by MFA",
+   "answer": "An emergency admin sign-in that bypasses the IdP, with MFA",
    "explanation": "A break-glass path that bypasses the IdP (the tenant sign-in page opened with ?prompt=true) lets admins work during an outage, and elevated users must still pass their registered authenticator (TOTP). Shared passwords and disabled authentication are unsafe."
   },
   {
@@ -927,7 +927,7 @@
    "topic": "Pass-Through Authentication",
    "stem": "How is a pass-through sign-in checked against an on-premises directory?",
    "choices": [
-    "The tenant checks a hashed copy synchronised to the cloud nightly",
+    "The tenant checks a hashed password copy synchronised to the cloud nightly",
     "The virtual appliance validates the credentials against the directory",
     "The user's browser connects directly to the domain controller",
     "SailPoint Support approves each sign-in"
@@ -942,11 +942,11 @@
    "stem": "Users who sign in with pass-through authentication suddenly cannot sign in, while SSO users are fine. What should the admin check FIRST?",
    "choices": [
     "The search subscription schedules",
-    "The health of the virtual appliances that serve the directory source",
+    "The health of the VAs serving the directory source",
     "The role membership criteria",
-    "The certification campaign deadlines"
+    "The certification campaign deadlines and reminders"
    ],
-   "answer": "The health of the virtual appliances that serve the directory source",
+   "answer": "The health of the VAs serving the directory source",
    "explanation": "Pass-through depends on the VA reaching the directory, so a VA or connectivity problem blocks those sign-ins. Searches and campaigns do not affect authentication."
   },
   {
@@ -984,7 +984,7 @@
    "stem": "Which users does Identity Security Cloud require to use MFA by default?",
    "choices": [
     "Only users who sign in after business hours",
-    "Only inactive identities that sign in from new devices",
+    "Only identities in the inactive lifecycle state on new devices",
     "Only users created by flat file sources",
     "Users with elevated user levels that give Admin menu access"
    ],
@@ -999,7 +999,7 @@
    "choices": [
     "Upload a photo ID to SailPoint Support",
     "Register an authenticator app that generates time-based codes",
-    "Answer a call placed by the virtual appliance to their phone",
+    "Answer a call placed by the virtual appliance to their desk phone",
     "Create a personal access token"
    ],
    "answer": "Register an authenticator app that generates time-based codes",
@@ -1135,12 +1135,12 @@
    "topic": "Monitoring Provisioning Activity",
    "stem": "An access request was approved yesterday, but the user still has no account on the target system. What should the admin review FIRST?",
    "choices": [
-    "The account activity for the request and its provisioning status",
+    "The account activity and its provisioning status",
     "The identity profile's priority setting",
     "The certification history for the user",
-    "The source's entitlement aggregation schedule"
+    "The source's entitlement aggregation schedule and last run"
    ],
-   "answer": "The account activity for the request and its provisioning status",
+   "answer": "The account activity and its provisioning status",
    "explanation": "The account activity shows whether provisioning succeeded, failed or is still pending, with any error. Priority and certification history do not explain a missing account."
   },
   {
@@ -1151,7 +1151,7 @@
    "choices": [
     "As manual work items assigned to the source owner",
     "As failed events that retry every hour",
-    "As entries in the next search subscription email",
+    "As entries in the next search subscription email to Admins",
     "As new uncorrelated accounts on the source"
    ],
    "answer": "As manual work items assigned to the source owner",
@@ -1166,7 +1166,7 @@
     "Run a daily certification of all accounts",
     "Schedule an hourly full aggregation",
     "Subscribe to the Provisioning Completed trigger and filter for failures",
-    "Give the operations team the Admin level to watch each source"
+    "Give the operations team the Admin user level so they can watch each source"
    ],
    "answer": "Subscribe to the Provisioning Completed trigger and filter for failures",
    "explanation": "The Provisioning Completed trigger fires after a provisioning action completes on a source, and its payload includes each account request's provisioning result and any errors, so a subscription filter can pass on only failures. Aggregations and certifications do not alert on failures."
@@ -1191,7 +1191,7 @@
    "topic": "Monitoring Provisioning Activity",
    "stem": "After an identity moves to a terminated lifecycle state, how can the admin confirm its accounts were actually disabled?",
    "choices": [
-    "Assume success, since the state change always disables accounts",
+    "Assume success, since a lifecycle state change always disables accounts",
     "Wait for the next quarterly certification",
     "Read the identity profile's transforms",
     "Check the account activities created by the lifecycle state change"
@@ -1205,12 +1205,12 @@
    "topic": "Monitoring Provisioning Activity",
    "stem": "When does the Provisioning Completed event trigger fire?",
    "choices": [
-    "Only when a new source passes its first connection test",
+    "Only when a newly created source passes its first connection test",
     "Only after a successful aggregation",
-    "After a provisioning action completes, whether it succeeded or failed",
+    "After provisioning finishes, whether it succeeded or failed",
     "Before any approval is collected"
    ],
-   "answer": "After a provisioning action completes, whether it succeeded or failed",
+   "answer": "After provisioning finishes, whether it succeeded or failed",
    "explanation": "It fires after a provisioning action completes on a source, and the payload includes the provisioning result for each account request and any errors. That is why subscribers can filter on failures."
   },
   {
@@ -1247,7 +1247,7 @@
    "topic": "Event Trigger Use Cases",
    "stem": "An external risk engine must approve or deny access requests before the normal approval process starts. Which kind of trigger supports this?",
    "choices": [
-    "A fire-and-forget trigger such as Identity Created",
+    "A fire-and-forget trigger such as Account Aggregation Completed",
     "A search subscription on access requests",
     "A request-response trigger such as Access Request Submitted",
     "A scheduled certification campaign"
@@ -1275,7 +1275,7 @@
    "topic": "Event Trigger Use Cases",
    "stem": "What is the difference between a fire-and-forget trigger and a request-response trigger?",
    "choices": [
-    "Only fire-and-forget triggers can post to an HTTP endpoint",
+    "Only fire-and-forget triggers can post their payloads to an HTTP endpoint",
     "Only request-response can be filtered",
     "Fire-and-forget triggers run only once a day",
     "Only request-response waits for the subscriber's reply to continue"
@@ -1317,7 +1317,7 @@
    "topic": "Event Trigger Subscriptions",
    "stem": "A subscription to Identity Attributes Changed should only fire for identities in the Sales department. What should the admin configure?",
    "choices": [
-    "A separate tenant just for the Sales department",
+    "A separate tenant for the Sales team with its own copy of the trigger",
     "A role for Sales with membership criteria",
     "A daily schedule on the trigger",
     "A filter on the subscription that matches the department value"
@@ -1334,7 +1334,7 @@
     "Wait for a real event in production",
     "Send a test invocation to the subscription",
     "Delete and recreate the trigger",
-    "Run a full aggregation on every source"
+    "Run a full aggregation to generate real events"
    ],
    "answer": "Send a test invocation to the subscription",
    "explanation": "A test invocation sends a sample payload to the subscriber without waiting for a real event. Waiting for production events risks bad data."
@@ -1443,7 +1443,7 @@
    "topic": "Workflow Components",
    "stem": "An action needs the ID of the identity from the event that started the workflow. How is this value referenced?",
    "choices": [
-    "By typing the identity's name into each step by hand",
+    "By typing the identity's name into each step of the workflow",
     "With a JSONPath variable such as $.trigger.identity.id",
     "With a SQL query against the tenant",
     "By reading it from the virtual appliance log"
@@ -1488,9 +1488,9 @@
     "The source's correlation configuration",
     "The identity's access profiles",
     "The search subscription email",
-    "The workflow's execution history and step details"
+    "The workflow's execution history"
    ],
-   "answer": "The workflow's execution history and step details",
+   "answer": "The workflow's execution history",
    "explanation": "Execution history shows each step's input, output and errors. Correlation and access profiles are unrelated to workflow runs."
   },
   {
@@ -1499,7 +1499,7 @@
    "topic": "Workflow Testing and Execution",
    "stem": "An admin wants to try a new workflow without waiting for a real identity to change. What should the admin do?",
    "choices": [
-    "Change a real executive's department in HR",
+    "Change a real executive's department in HR and wait",
     "Test the workflow with sample trigger input",
     "Turn off all other workflows",
     "Clone the tenant first"
@@ -1514,7 +1514,7 @@
    "stem": "A ticketing system must start a workflow by calling it. Which trigger type and setup does this require?",
    "choices": [
     "An external trigger with an OAuth client for the caller",
-    "An Identity Created event trigger subscription",
+    "An Identity Created event trigger that the ticketing system watches",
     "A scheduled trigger at midnight",
     "A search subscription on tickets"
    ],
@@ -1583,7 +1583,7 @@
    "topic": "Configuration Backup and Restore",
    "stem": "A bad change was deployed and the admin wants configuration back as it was in last week's backup. Which sequence is correct?",
    "choices": [
-    "Delete the live objects and wait for the weekly backup",
+    "Delete the live objects and wait for the next weekly backup",
     "Upload the backup to a virtual appliance",
     "Restore the backup directly with no draft",
     "Create a draft from the backup, review it, then deploy it"
